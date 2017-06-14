@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="edi_sandbox" schema="ecocom_dp" type="PostgreSQL - 9.2.19">
+   <tables>
+      <table name="dataset_summary" numRows="0" remarks="" schema="ecocom_dp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="dataset_summary_id" nullable="false" remarks="" size="10" type="int4">
+            <child column="dataset_summary_id" foreignKey="observation_dataset_summary_fk" implied="false" onDeleteCascade="false" table="observation"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="original_dataset_id" nullable="true" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="length_of_survey_years" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="3" name="number_of_years_sampled" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="17" id="4" name="std_dev_interval_betw_years" nullable="false" remarks="" size="17" type="float8"/>
+         <column autoUpdated="false" digits="0" id="5" name="max_num_taxa" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="17" id="6" name="geo_extent_bounding_box_m2" nullable="true" remarks="" size="17" type="float8"/>
+         <primaryKey column="dataset_summary_id" sequenceNumberInPK="1"/>
+         <index name="dataset_summary_pk" unique="true">
+            <column ascending="true" name="dataset_summary_id"/>
+         </index>
+      </table>
+      <table name="event" numRows="0" remarks="holds info about a sampling event, eg, conditions, weather, observers, etc" schema="ecocom_dp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="event_id" nullable="false" remarks="" size="10" type="int4">
+            <child column="event_id" foreignKey="observation_event_fk" implied="false" onDeleteCascade="false" table="observation"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="variable_name" nullable="true" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="value" nullable="true" remarks="" size="200" type="varchar"/>
+         <primaryKey column="event_id" sequenceNumberInPK="1"/>
+         <index name="event_pk" unique="true">
+            <column ascending="true" name="event_id"/>
+         </index>
+      </table>
+      <table name="observation" numRows="0" remarks="table holds all the primary obs, with links to taxa, locations, event, summary" schema="ecocom_dp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="observation_id" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="event_id" nullable="true" remarks="" size="10" type="int4">
+            <parent column="event_id" foreignKey="observation_event_fk" implied="false" onDeleteCascade="false" table="event"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="dataset_summary_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="dataset_summary_id" foreignKey="observation_dataset_summary_fk" implied="false" onDeleteCascade="false" table="dataset_summary"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="sampling_location_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="sampling_location_id" foreignKey="observation_sampling_location_fk" implied="false" onDeleteCascade="false" table="sampling_location"/>
+         </column>
+         <column autoUpdated="false" digits="6" id="4" name="observation_datetime" nullable="true" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="5" name="taxon_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="taxon_id" foreignKey="observation_taxon_fk" implied="false" onDeleteCascade="false" table="taxon"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="6" name="variable_name" nullable="false" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="17" id="7" name="value" nullable="false" remarks="" size="17" type="float8"/>
+         <column autoUpdated="false" digits="0" id="8" name="unit" nullable="false" remarks="" size="200" type="varchar"/>
+         <primaryKey column="observation_id" sequenceNumberInPK="1"/>
+         <index name="observation_pk" unique="true">
+            <column ascending="true" name="observation_id"/>
+         </index>
+      </table>
+      <table name="sampling_location" numRows="0" remarks="self-referencing; parent of a loc can be another loc" schema="ecocom_dp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="sampling_location_id" nullable="false" remarks="" size="10" type="int4">
+            <child column="sampling_location_id" foreignKey="observation_sampling_location_fk" implied="false" onDeleteCascade="false" table="observation"/>
+            <child column="parent_sampling_location_id" foreignKey="parent_sampling_location_fk" implied="false" onDeleteCascade="false" table="sampling_location"/>
+            <child column="sampling_location_id" foreignKey="sampling_location_ancillary_fk" implied="false" onDeleteCascade="false" table="sampling_location_ancillary"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="sampling_location_name" nullable="true" remarks="" size="500" type="varchar"/>
+         <column autoUpdated="false" digits="17" id="2" name="latitude" nullable="true" remarks="" size="17" type="float8"/>
+         <column autoUpdated="false" digits="17" id="3" name="longitude" nullable="true" remarks="" size="17" type="float8"/>
+         <column autoUpdated="false" digits="17" id="4" name="elevation" nullable="true" remarks="" size="17" type="float8"/>
+         <column autoUpdated="false" digits="0" id="5" name="parent_sampling_location_id" nullable="true" remarks="" size="10" type="int4">
+            <parent column="sampling_location_id" foreignKey="parent_sampling_location_fk" implied="false" onDeleteCascade="false" table="sampling_location"/>
+         </column>
+         <primaryKey column="sampling_location_id" sequenceNumberInPK="1"/>
+         <index name="sampling_location_pk" unique="true">
+            <column ascending="true" name="sampling_location_id"/>
+         </index>
+      </table>
+      <table name="sampling_location_ancillary" numRows="0" remarks="" schema="ecocom_dp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="sampling_location_ancillary_id" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="sampling_location_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="sampling_location_id" foreignKey="sampling_location_ancillary_fk" implied="false" onDeleteCascade="false" table="sampling_location"/>
+         </column>
+         <column autoUpdated="false" digits="6" id="2" name="datetime" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="3" name="variable_name" nullable="false" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="value" nullable="false" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="unit" nullable="true" remarks="" size="200" type="varchar"/>
+         <primaryKey column="sampling_location_ancillary_id" sequenceNumberInPK="1"/>
+         <index name="sampling_location_ancillary_pk" unique="true">
+            <column ascending="true" name="sampling_location_ancillary_id"/>
+         </index>
+      </table>
+      <table name="taxon" numRows="0" remarks="" schema="ecocom_dp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="taxon_id" nullable="false" remarks="" size="10" type="int4">
+            <child column="taxon_id" foreignKey="observation_taxon_fk" implied="false" onDeleteCascade="false" table="observation"/>
+            <child column="taxon_id" foreignKey="taxon_ancillary_fk" implied="false" onDeleteCascade="false" table="taxon_ancillary"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="taxon_level" nullable="true" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="taxon_name" nullable="false" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="authority_system" nullable="true" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="authority_taxon_id" nullable="true" remarks="" size="200" type="varchar"/>
+         <primaryKey column="taxon_id" sequenceNumberInPK="1"/>
+         <index name="taxon_pk" unique="true">
+            <column ascending="true" name="taxon_id"/>
+         </index>
+      </table>
+      <table name="taxon_ancillary" numRows="0" remarks="" schema="ecocom_dp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="taxon_ancillary_id" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="taxon_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="taxon_id" foreignKey="taxon_ancillary_fk" implied="false" onDeleteCascade="false" table="taxon"/>
+         </column>
+         <column autoUpdated="false" digits="6" id="2" name="datetime" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="3" name="variable_name" nullable="false" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="value" nullable="false" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="author" nullable="true" remarks="" size="200" type="varchar"/>
+         <primaryKey column="taxon_ancillary_id" sequenceNumberInPK="1"/>
+         <index name="taxon_ancillary_pk" unique="true">
+            <column ascending="true" name="taxon_ancillary_id"/>
+         </index>
+      </table>
+   </tables>
+</database>
