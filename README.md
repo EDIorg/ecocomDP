@@ -1,2 +1,2 @@
 # ecocomDP
-A data pattern for ecological community data.
+A dataset design pattern for ecological community data.
