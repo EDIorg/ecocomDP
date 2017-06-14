@@ -1,2 +1,2 @@
-# ecocomFM
-A flexible model for ecological community data.
+# ecocomDP
+A data pattern for ecological community data.
