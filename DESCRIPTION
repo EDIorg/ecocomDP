@@ -1,5 +1,5 @@
 Package: ecocomDP
-Title: The Ecological Community Data Pattern (ecocomDP)
+Title: The Ecological Community Data Pattern
 Version: 0.0.0.9000
 Authors@R: person("Colin", "Smith", email = "colin.smith@wisc.edu", role = c("aut", "cre"))
 Description: A collection of functions to translate your data to the Ecological 

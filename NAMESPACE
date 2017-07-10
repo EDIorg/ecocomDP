@@ -2,3 +2,4 @@
 
 export(import_templates)
 export(make_ecocomDP_tables)
+export(view_unit_dictionary)
