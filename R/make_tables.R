@@ -157,7 +157,7 @@
 #'     
 
 
-make_ecocomDP_tables <- function(path){
+make_tables <- function(path){
   
   
   
