@@ -1,1 +1,22 @@
-Instructions for completing the level-0 to level-1 mapping (i.e. map.txt).
+Instructions for mapping to the Ecological Community Data Pattern (ecocomDP)
+============================================================================
+
+Open the tab delimited map.txt file in a spread sheet editor. Fill out the blank fields of this spread sheet to map your data (L0) to the Ecological Community Data Pattern (L1). Non-blank fields belong to L1.
+
+Column definitions:
+-------------------
+L0_data_package_id - The data package ID associated with the data table file listed in L0_file_name. If no package ID exists, then supply a unique name. This can be a combination of alpha numeric values separated by periods or underscores.
+
+L0_file_name - Full data table name (e.g. data_table_name.csv), from the data package listed in L0_data_package_id, and providing the attribute in L0_attribute. Spaces between words must be replaced with underscores.
+
+L0_attribute - The attribute from L0_file_name that maps on to L1_attribute.
+
+L1_table - Name of the L1 data table.
+
+L1_attribute - The L1 attribute being mapped to from L0_attribute.
+
+L1_type - The type of value for the corresponding L1_attribute, and required of the L0_attribute.
+
+L1_default - 
+
+L1_comment - Notes about what the L1_attribute represents.
