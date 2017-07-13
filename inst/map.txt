@@ -6,7 +6,7 @@ L0_data_package_id	L0_file_name	L0_attribute	L1_table	L1_attribute	L1_type	L1_de
 			taxon	authority_taxon_id	varchar	null	"Identifier in the authority reference, e.g., an ITIS number"
 			taxon_ancillary	taxon_ancillary_id	int4		"identifier assigned to each unique entry, most likely code-generated."
 			taxon_ancillary	taxon_id	int4		Taxon_id from taxon table that links the tables
-			taxon_ancillary	datetime	timestamp		datetime value for this entry (may be automatic)
+			taxon_ancillary	datetime	timestamp		"datetime value for this entry (may be automatic) Must conform to one of these options: YYYY, YYYY-MM, YYYY-MM-DD"
 			taxon_ancillary	variable_name	varchar		"Variable name, e.g., ""life_history_stage"""
 			taxon_ancillary	value	varchar		"Variable value, e.g., ""juvenile"""
 			taxon_ancillary	author	varchar	null	"Observer identification, e.g, ""Jane Scientist"""
@@ -16,21 +16,9 @@ L0_data_package_id	L0_file_name	L0_attribute	L1_table	L1_attribute	L1_type	L1_de
 			sampling_location	longitude	float8	null	"Longitude of the sampling location in decimal degrees, datum =WGS84"
 			sampling_location	elevation	float8	null	Sampling location elevation in meters above sea level
 			sampling_location	parent_sampling_location_id	int4	null	Sampling_location_id from this table for the parent of this sampling location; indicates nested locations
-			sampling_location	sampling_location_id			
-			sampling_location	sampling_location_name			
-			sampling_location	latitude			
-			sampling_location	longitude			
-			sampling_location	elevation			
-			sampling_location	parent_sampling_location_id			
-			sampling_location	sampling_location_id			
-			sampling_location	sampling_location_name			
-			sampling_location	latitude			
-			sampling_location	longitude			
-			sampling_location	elevation			
-			sampling_location	parent_sampling_location_id			
 			sampling_location_ancillary	sampling_location_ancillary_id	int4		"identifier assigned to each unique entry, most likely code-generated."
 			sampling_location_ancillary	sampling_location_id	int4		Sampling_location_id from sampling_location table that links the tables
-			sampling_location_ancillary	datetime	timestamp		"Year or date associated with the ancillary information, e,g, date of a treatment or disturbance, etc."
+			sampling_location_ancillary	datetime	timestamp		"Year or date associated with the ancillary information, e,g, date of a treatment or disturbance, etc. Must conform to one of these options: YYYY, YYYY-MM, YYYY-MM-DD"
 			sampling_location_ancillary	variable_name	varchar		"Variable name, e.g., treatment, vegetation_description, history"
 			sampling_location_ancillary	value	varchar		"Variable value, e.g., burned, treeline, precommercial thin"
 			sampling_location_ancillary	unit	varchar	null	"Unit of measurement, optional"
@@ -48,7 +36,7 @@ L0_data_package_id	L0_file_name	L0_attribute	L1_table	L1_attribute	L1_type	L1_de
 			observation	event_id	int4	null	id from event table that links the tables
 			observation	dataset_summary_id	int4		Dataset_summary_id from the dataset_summary table that links the tables
 			observation	sampling_location_id	int4		Sampling_location_id from the sampling_location table that links the tables
-			observation	observation_datetime	timestamp	null	Date and time that the observation was made
+			observation	observation_datetime	timestamp	null	"Date and time that the observation was made. Must conform to one of these options: YYYY, YYYY-MM, YYYY-MM-DD"
 			observation	taxon_id	int4		Taxon_id from the taxon table that links the tables
 			observation	variable_name	varchar		Name of the variable being measured
 			observation	value	float8		Observation value
