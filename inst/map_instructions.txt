@@ -19,7 +19,7 @@ L1_attribute - The L1 attribute being mapped to from L0_attribute.
 
 L1_type - The type of value for the corresponding L1_attribute, and required of the L0_attribute.
 
-L1_default - 
+L1_default - Values listed as null can be empty or left out.
 
 L1_comment - Notes about what the L1_attribute represents.
 
