@@ -8,8 +8,8 @@ The ecocomDP is composed of 7 tables, which can be linked via their indexes, and
 
 table list and suggested population order, ie, parents first.
 
-|  order | table name 	|   required?	|   referencces 	| description |
-|--------|--------------|-------------|------------------------|------------------------|
+|  order | table name 	|   required?	|   references tables    | description            | example |
+|--------|--------------|-------------|------------------------|------------------------|---------------|
 |1.| sampling_location | yes
 |2.| taxon | yes
 |3.| event  | yes
@@ -20,15 +20,17 @@ table list and suggested population order, ie, parents first.
 
 
 _____
+Tables
+---
 Table: sampling_location
 ---
 Description:
 
 Columns
 
-|  column name 	|   type	|   required in table?	|  description 	| example  	|
-|---------------|---------|------------------------|--------------|-----------|
-| sampling_location_id | character | NOT NULL  	| | |
+|  column name 	|   type	|   required in table?	|  references cols 	| description | example |
+|---------------|---------|-----------------------|-------------------|--------------|---------|
+| sampling_location_id | character | yes  	| | |
 | sampling_location_name   	|  character  	|   	|   	|   	|
 |   latitude 	|  float 	|   	|   	|   	|
 |   longitude 	|  float 	|   	|   	|   	|
@@ -42,8 +44,8 @@ Description:
 
 Columns
 
-|  column name 	|   type	|   required in table?	|  description 	| example  	|
-|---	|---	|---	|---	|---	|
+|  column name 	|   type	|   required in table?	|  references cols 	| description | example |
+|---------------|---------|-----------------------|-------------------|--------------|---------|
 | taxon_id | character |  yes|  |
 |	taxon_rank | character | | 
 |	taxon_name | character |  yes| |
@@ -56,13 +58,13 @@ Table: event
 Description:
 Columns
 
-|  column name 	|   type	|   required in table?	|  description 	| example  	|
-|---	|---	|---	|---	|---	|  
-|event_record_id | character |NOT NULL,
-|	event_id | character |NOT NULL,
-|	variable_name |character |
-|	value | character |
-|	unit | character |
+|  column name 	|   type	|   required in table?	|  references cols 	| description | example |
+|---------------|---------|-----------------------|-------------------|--------------|---------| 
+|event_record_id | character |yes 	|   	|   	|   	|
+|	event_id | character |yes  	|   	|   	|   	|
+|	variable_name |character | 	|   	|   	|   	|
+|	value | character | 	|   	|   	|   	|
+|	unit | character | 	|   	|   	|   	|
 
 
 Table: observation
@@ -70,17 +72,17 @@ Table: observation
 Description:
 Columns
 
-|  column name 	|   type	|   required in table?	|  description 	| example  	|
-|---	|---	|---	|---	|---	|  
-|observation_id character varying(100) NOT NULL,
-|	event_id record_id character varying(100) NOT NULL,
-|	package_id character varying(100) NOT NULL,
-|	sampling_location_id character varying(100) NOT NULL,
-|	observation_datetime timestamp without time zone,
-|	taxon_id character varying(100) NOT NULL,
-|	variable_name character varying(200) NOT NULL,
-|	value character varying(200) NOT NULL,
-|	unit character varying(200) NOT NULL
+|  column name 	|   type	|   required in table?	|  references cols 	| description | example |
+|---------------|---------|-----------------------|-------------------|--------------|---------|  
+|observation_id | character |yes 	|   	|   	|   	|
+|	event_id record_id | character |yes 	|   	|   	|   	|
+|	package_id | character |yes 	|   	|   	|   	|,
+|	sampling_location_id character |yes 	|   	|   	|   	|
+|	observation_datetime | datetime | 	|   	|   	|   	|
+|	taxon_id | character |yes 	|   	|   	|   	|
+|	variable_name | character |yes 	|   	|   	|   	|
+|	value | character |yes 	|   	|   	|   	|
+|	unit | character | 	|   	|   	|   	|
 
 
 Table: sampling_location_ancillary 
@@ -88,14 +90,14 @@ Table: sampling_location_ancillary
 Description:
 Columns
 
-|  column name 	|   type	|   required in table?	|  description 	| example  	|
-|---	|---	|---	|---	|---	|  
-|sampling_location_ancillary_id character varying(100) NOT NULL,
-|    sampling_location_id character varying(100) NOT NULL,
-|    datetime timestamp without time zone NOT NULL, -- e.g. experimental treatment
-|    variable_name  character varying(200) NOT NULL,
-|    value  character varying(200) NOT NULL,
-|    unit  character varying(200)
+|  column name 	|   type	|   required in table?	|  references cols 	| description | example |
+|---------------|---------|-----------------------|-------------------|--------------|---------| 
+|sampling_location_ancillary_id character |yes 	|   	|   	|   	|
+|    sampling_location_id| character |yes 	|   	|   	|   	|
+|    datetime| timestamp  | 	|   	|   	|  experimental treatment date 	| 
+|    variable_name |  character |yes 	|   	|   	|   	|
+|    value | character |yes 	|   	|   	|   	|
+|    unit | character  | 	|   	|   	|   	|
 
 
 
@@ -104,14 +106,14 @@ Table: taxon_ancillary
 Description:
 Columns
 
-|  column name 	|   type	|   required in table?	|  description 	| example  	|
-|---	|---	|---	|---	|---	|      
-| taxon_ancillary_id character varying(100) NOT NULL,
-|	  taxon_id character varying(100) NOT NULL,
-|	  datetime timestamp without time zone NOT NULL,  -- mob: lookup, is timestamp right?
-|    variable_name  character varying(200) NOT NULL,
-|    value character varying(200) NOT NULL,
-|	  author character varying(200)
+|  column name 	|   type	|   required in table?	|  references cols 	| description | example |
+|---------------|---------|-----------------------|-------------------|--------------|---------|     
+| taxon_ancillary_id character |yes 	|   	|   	|   	|
+|	  taxon_id | character |yes 	|   	|   	|   	|
+|	  datetime| timestamp | 	|   	|   	|   	|
+|    variable_name | character |yes 	|   	|   	|   	|
+|    value | character |yes 	|   	|   	|   	|
+|	  author| character | 	|   	|   	|   	|
 
 
 Table: dataset_summary
@@ -119,13 +121,13 @@ Table: dataset_summary
 Description:
 Columns
 
-|  column name 	|   type	|   required in table?	|  description 	| example  	|
-|---	|---	|---	|---	|---	|  
-|package_id integer NOT NULL,
-|	original_package_id character varying(200),
-|	length_of_survey_years integer NOT NULL,
-|	number_of_years_sampled integer NOT NULL,
-|	std_dev_interval_betw_years float NOT NULL,
-|	max_num_taxa integer NOT NULL, 
-|	geo_extent_bounding_box_m2 float
+|  column name 	|   type	|   required in table?	|  references cols 	| description | example |
+|---------------|---------|-----------------------|-------------------|--------------|---------|
+|package_id | integer |yes 	|   	|   	|   	|
+|	original_package_id | character |yes 	|   	|   	|   	|
+|	length_of_survey_years | integer |yes 	|   	|   	|   	|
+|	number_of_years_sampled | integer |yes 	|   	|   	|   	|
+|	std_dev_interval_betw_years| float |yes 	|   	|   	|   	|
+|	max_num_taxa |integer |yes 	|   	|   	|   	|
+|	geo_extent_bounding_box_m2 |float | 	|   	|   	|   	|
 
