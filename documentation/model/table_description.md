@@ -5,6 +5,20 @@ Introduction
 The ecocom design pattern (ecocomDP) is planned to be a flexible intermediate for ecological community survey data. For information on the process see https://environmentaldatainitiative.org/resources/tools/dataset-design/
 
 The ecocomDP is composed of 7 tables, which can be linked via their indexes, and there are many mechanisms to accomplish this. This document describes the seven tables, and the contents (columns) of each. Examples can be found in the /examples/ directory. The graphic showing all seven data objects and their relationships was created from a relational database implementation (PostgreSQL, see the directory for more information). Of the seven, three are required (“observation”, “sampling_location”, “taxon”). The “dataset_summary” is populated from the “observation” table by code.   The sampling_location and taxon tables are each linked to an optional table for ancillary information.
+
+table list and suggested population order, ie, parents first.
+
+|  order | table name 	|   required?	|   referencces 	| description |
+|--------|--------------|-------------|------------------------|------------------------|
+|1.| sampling_location | yes
+|2.| taxon | yes
+|3.| event  | yes
+|4.| observation |no| sampling_location, taxon, event
+|5.| sampling_location_ancillary |no| sampling_location
+|6.| taxon_ancillary|no|  taxon
+|7.| dataset_summary|no|  observation
+
+
 _____
 Table: sampling_location
 ---
