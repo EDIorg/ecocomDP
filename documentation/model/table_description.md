@@ -11,9 +11,10 @@ Table: sampling_location
 Description:
 
 Columns
+
 |  column name 	|   type	|   required in table?	|  description 	| example  	|
-|---	|---	|---	|---	|---	|
-| sampling_location_id | character varying(100) NOT NULL  	|
+|---------------|---------|------------------------|--------------|-----------|
+| sampling_location_id | character varying(100) NOT NULL  	| | | |
 | sampling_location_name   	|  character varying(500), 	|   	|   	|   	|
 |   latitude 	|  float 	|   	|   	|   	|
 |   longitude 	|  float 	|   	|   	|   	|
@@ -26,6 +27,7 @@ Table: taxon
 Description: 
 
 Columns
+
 |  column name 	|   type	|   required in table?	|  description 	| example  	|
 |---	|---	|---	|---	|---	|
 | taxon_id | character |  yes|  |
@@ -39,6 +41,7 @@ Table: event
 ---
 Description:
 Columns
+
 |  column name 	|   type	|   required in table?	|  description 	| example  	|
 |---	|---	|---	|---	|---	|  
 |event_record_id character varying(100) NOT NULL,
@@ -52,6 +55,7 @@ Table: observation
 ---
 Description:
 Columns
+
 |  column name 	|   type	|   required in table?	|  description 	| example  	|
 |---	|---	|---	|---	|---	|  
 |observation_id character varying(100) NOT NULL,
@@ -69,6 +73,7 @@ Table: observation
 ---
 Description:
 Columns
+
 |  column name 	|   type	|   required in table?	|  description 	| example  	|
 |---	|---	|---	|---	|---	|  
 |observation_id character varying(100) NOT NULL,
@@ -86,6 +91,7 @@ Table: taxon_ancillary
 ---
 Description:
 Columns
+
 |  column name 	|   type	|   required in table?	|  description 	| example  	|
 |---	|---	|---	|---	|---	|      
 | taxon_ancillary_id character varying(100) NOT NULL,
@@ -100,6 +106,7 @@ Table: dataset_summary
 ---
 Description:
 Columns
+
 |  column name 	|   type	|   required in table?	|  description 	| example  	|
 |---	|---	|---	|---	|---	|  
 |package_id integer NOT NULL,
