@@ -14,12 +14,12 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  description 	| example  	|
 |---------------|---------|------------------------|--------------|-----------|
-| sampling_location_id | character varying(100) NOT NULL  	| | | |
-| sampling_location_name   	|  character varying(500), 	|   	|   	|   	|
+| sampling_location_id | character | NOT NULL  	| | |
+| sampling_location_name   	|  character  	|   	|   	|   	|
 |   latitude 	|  float 	|   	|   	|   	|
 |   longitude 	|  float 	|   	|   	|   	|
 |   elevation	|  float 	|   	|   	|   	|
-|   parent_sampling_location_id	|  character varying(100) 	|   	|   	|   	|
+|   parent_sampling_location_id	|  character  	|   	|   	|   	|
 
 
 Table: taxon
@@ -44,11 +44,11 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  description 	| example  	|
 |---	|---	|---	|---	|---	|  
-|event_record_id character varying(100) NOT NULL,
-|	event_id character varying(100) NOT NULL,
-|	variable_name character varying(200),
-|	value character varying(200),
-|	unit character varying(200)
+|event_record_id | character |NOT NULL,
+|	event_id | character |NOT NULL,
+|	variable_name |character |
+|	value | character |
+|	unit | character |
 
 
 Table: observation
@@ -69,22 +69,20 @@ Columns
 |	unit character varying(200) NOT NULL
 
 
-Table: observation
+Table: sampling_location_ancillary 
 ---
 Description:
 Columns
 
 |  column name 	|   type	|   required in table?	|  description 	| example  	|
 |---	|---	|---	|---	|---	|  
-|observation_id character varying(100) NOT NULL,
-|	event_id record_id character varying(100) NOT NULL,
-|	package_id character varying(100) NOT NULL,
-|	sampling_location_id character varying(100) NOT NULL,
-|	observation_datetime timestamp without time zone,
-|	taxon_id character varying(100) NOT NULL,
-|	variable_name character varying(200) NOT NULL,
-|	value character varying(200) NOT NULL,
-|	unit character varying(200) NOT NULL
+|sampling_location_ancillary_id character varying(100) NOT NULL,
+|    sampling_location_id character varying(100) NOT NULL,
+|    datetime timestamp without time zone NOT NULL, -- e.g. experimental treatment
+|    variable_name  character varying(200) NOT NULL,
+|    value  character varying(200) NOT NULL,
+|    unit  character varying(200)
+
 
 
 Table: taxon_ancillary
