@@ -30,12 +30,12 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|
-| sampling_location_id | character | yes  	| | |
+| sampling_location_id | character | yes  	      |     | |
 | sampling_location_name   	|  character  	|   	|   	|   	|
-|   latitude 	|  float 	|   	|   	|   	|
-|   longitude 	|  float 	|   	|   	|   	|
-|   elevation	|  float 	|   	|   	|   	|
-|   parent_sampling_location_id	|  character  	|   	|   	|   	|
+| latitude 	  |  float 	|   	                    |   	|   	|
+| longitude 	|  float 	|   	                    |   	|   	|
+| elevation	  |  float 	|   	                    |   	|   	|
+| parent_sampling_location_id	|  character |     	|   	|   	|
 
 
 Table: taxon
@@ -46,11 +46,11 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|
-| taxon_id | character |  yes|  |
-|	taxon_rank | character | | 
-|	taxon_name | character |  yes| |
-|	authority_system | character | | | 
-|	authority_taxon_id | character|  | |
+| taxon_id           | character |  yes           |  |
+|	taxon_rank         | character |                | 
+|	taxon_name         | character |  yes           | |
+|	authority_system   | character |                | | 
+|	authority_taxon_id | character |                | |
 
 
 Table: event
@@ -60,11 +60,11 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------| 
-|event_record_id | character |yes 	|   	|   	|   	|
-|	event_id | character |yes  	|   	|   	|   	|
-|	variable_name |character | 	|   	|   	|   	|
-|	value | character | 	|   	|   	|   	|
-|	unit | character | 	|   	|   	|   	|
+|event_record_id | character |yes|   	|   	|   	|
+|	event_id       | character |yes|   	|   	|   	|
+|	variable_name  |character  | 	 |   	|   	|   	|
+|	value          | character | 	 |   	|   	|   	|
+|	unit           | character | 	 |   	|   	|   	|
 
 
 Table: observation
@@ -74,15 +74,15 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|  
-|observation_id | character |yes 	|   	|   	|   	|
-|	event_id record_id | character |yes 	|   	|   	|   	|
-|	package_id | character |yes 	|   	|   	|   	|,
-|	sampling_location_id character |yes 	|   	|   	|   	|
-|	observation_datetime | datetime | 	|   	|   	|   	|
-|	taxon_id | character |yes 	|   	|   	|   	|
-|	variable_name | character |yes 	|   	|   	|   	|
-|	value | character |yes 	|   	|   	|   	|
-|	unit | character | 	|   	|   	|   	|
+|observation_id        | character |yes|   	|   	|   	|
+|	event_record_id      | character |yes| event_record.event_record_id 	|   	|   	|
+|	package_id           | character |yes|   	|   	|   	|
+|	sampling_location_id | character |yes| sampling_location.sampling_location_id  	|   	|   	|
+|	observation_datetime | datetime  | 	 |   	|date and time of the observation, ISO datetime |   	|
+|	taxon_id             | character |yes| taxon.taxon_id  	|   	|   	|
+|	variable_name        | character |yes|   	|   	|   	|
+|	value                | character |yes|   	|   	|   	|
+|	unit                 | character | 	 |   	|   	|   	|
 
 
 Table: sampling_location_ancillary 
@@ -92,12 +92,12 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------| 
-|sampling_location_ancillary_id character |yes 	|   	|   	|   	|
-|    sampling_location_id| character |yes 	|   	|   	|   	|
-|    datetime| timestamp  | 	|   	|   	|  experimental treatment date 	| 
-|    variable_name |  character |yes 	|   	|   	|   	|
-|    value | character |yes 	|   	|   	|   	|
-|    unit | character  | 	|   	|   	|   	|
+|sampling_location_ancillary_id | character |yes|   	|   	|   	|
+|sampling_location_id           | character |yes|sampling_location.sampling_location_id   	|   	|   	|
+|datetime                       | timestamp	|   |  | date and time of the ancillary info, ISO datetime	|  experimental treatment date 	| 
+|variable_name                  | character |yes|   	|   	|   	|
+|value                          | character |yes|   	|   	|   	|
+|unit                           | character | 	|   	|   	|   	|
 
 
 
@@ -108,12 +108,12 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|     
-| taxon_ancillary_id character |yes 	|   	|   	|   	|
-|	  taxon_id | character |yes 	|   	|   	|   	|
-|	  datetime| timestamp | 	|   	|   	|   	|
-|    variable_name | character |yes 	|   	|   	|   	|
-|    value | character |yes 	|   	|   	|   	|
-|	  author| character | 	|   	|   	|   	|
+| taxon_ancillary_id | character |yes|   	              |   	|   	|
+| taxon_id           | character |yes| taxon.taxon_id   	|   	|   	|
+|	datetime           | timestamp | 	 |   	              |   	|   	|
+| variable_name      | character |yes|   	              |   	|   	|
+| value              | character |yes|   	              |   	|   	|
+|author              | character | 	 |   	              |   	|   	|
 
 
 Table: dataset_summary
@@ -123,11 +123,11 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|
-|package_id | integer |yes 	|   	|   	|   	|
-|	original_package_id | character |yes 	|   	|   	|   	|
-|	length_of_survey_years | integer |yes 	|   	|   	|   	|
-|	number_of_years_sampled | integer |yes 	|   	|   	|   	|
-|	std_dev_interval_betw_years| float |yes 	|   	|   	|   	|
-|	max_num_taxa |integer |yes 	|   	|   	|   	|
-|	geo_extent_bounding_box_m2 |float | 	|   	|   	|   	|
+| package_id                  | integer   |yes| observation.package_id  	|  id of the L1 pkg (this package)	|   	|
+|	original_package_id         | character |yes|   	|   	 id of the L0 pkg (original, source)	| |
+|	length_of_survey_years      | integer   |yes|   	|   	|   	|
+|	number_of_years_sampled     | integer   |yes|   	|   	|   	|
+|	std_dev_interval_betw_years | float     |yes|   	|   	|   	|
+|	max_num_taxa                |integer    |yes|   	|   	|   	|
+|	geo_extent_bounding_box_m2  |float      | 	|   	|   	|   	|
 
