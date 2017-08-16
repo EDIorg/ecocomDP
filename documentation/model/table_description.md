@@ -31,11 +31,11 @@ Columns
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|
 | sampling_location_id | character | yes  	      |   NA|   | sbclter_abur_I |
-| sampling_location_name   	|  character  	|   	|   NA | 	|  Arroyo Burro Reef, transect I 	|
-| latitude 	  |  float 	|   	                    |   NA |	|  34.400275	|
-| longitude 	|  float 	|   	                    |   NA | 	| -119.7445915 |
-| elevation	  |  float 	|   	                    |   NA | 	| -15	|
-| parent_sampling_location_id	|  character |     	|   NA| 	|  sbclter_abur	|
+| sampling_location_name   	|  character  	| no 	|   NA | 	|  Arroyo Burro Reef, transect I 	|
+| latitude 	  |  float 	|   	no                  |   NA |	|  34.400275	|
+| longitude 	|  float 	|   	no                  |   NA | 	| -119.7445915 |
+| elevation	  |  float 	|   	np                  |   NA | 	| -15	|
+| parent_sampling_location_id	|  character | no  	|   NA| 	|  sbclter_abur	|
 
 
 Table: taxon
