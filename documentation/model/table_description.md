@@ -46,11 +46,11 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|
-| taxon_id           | character |  yes           |  |
-|	taxon_rank         | character |                | 
-|	taxon_name         | character |  yes           | |
-|	authority_system   | character |                | | 
-|	authority_taxon_id | character |                | |
+| taxon_id           | character |  yes           | NA | ID used in the dataset | sbclter_MAPY |  
+|	taxon_rank         | character |  no            | NA | rank of the organism | species |   
+|	taxon_name         | character |  yes           | NA | species name | M. pyrifera | 
+|	authority_system   | character |  no            | NA | name of the system assigning the ID | ITIS|  
+|	authority_taxon_id | character |  no            | NA | ID in that system |  11274|
 
 
 Table: event
