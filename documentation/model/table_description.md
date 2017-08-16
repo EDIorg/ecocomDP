@@ -24,7 +24,7 @@ Tables
 ---
 Table: sampling_location
 ---
-Description: basic info about a place (lon, lat, elev). table is self-referencing so that sites can be nested. example (for a transect) shows reference to another parent row.	
+Description: identifying info about a place (lon, lat, elev). table is self-referencing so that sites can be nested. example (for a transect) shows reference to another parent row.	
 
 Columns
 
@@ -40,7 +40,7 @@ Columns
 
 Table: taxon
 ---
-Description: 
+Description: identifying information about a taxon, eg, name, id and system.
 
 Columns
 
@@ -53,18 +53,18 @@ Columns
 |	authority_taxon_id | character |  no            | NA | ID in that system |  11274|
 
 
-Table: event
+Table: event 
 ---
-Description:
+Description: addition info about an observation event for context, eg, water depth, height of a tower, temperature of medium 
 Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------| 
-|event_record_id | character |yes|   	|   	|   	|
-|	event_id       | character |yes|   	|   	|   	|
-|	variable_name  |character  | 	 |   	|   	|   	|
-|	value          | character | 	 |   	|   	|   	|
-|	unit           | character | 	 |   	|   	|   	|
+|event_record_id | character |yes| NA	| a unique id for this record that can be reference in other tables   	|  4161	 	|
+|	event_id       | character |yes| NA	| the id of the event, may be repeated  	| 	TBE01JUN05  	|
+|	variable_name  |character  | no| NA	| variable measured  	|  depth  	|
+|	value          | character | no| NA	| value for variable  	|  5  	|
+|	unit           | character | no| NA	|  unit for variable 	|  m 	|
 
 
 Table: observation
