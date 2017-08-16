@@ -62,7 +62,7 @@ Columns
 |---------------|---------|-----------------------|-------------------|--------------|---------| 
 |event_record_id | character |yes| NA	| a unique id for this record that can be reference in other tables   	|  4161	 	|
 |	event_id       | character |yes| NA	| the id of the event, may be repeated  	| 	TBE01JUN05  	|
-|	variable_name  |character  | no| NA	| variable measured  	|  depth  	|
+|	variable_name  | character | no| NA| variable measured  	|  depth  	|
 |	value          | character | no| NA	| value for variable  	|  5  	|
 |	unit           | character | no| NA	|  unit for variable 	|  m 	|
 
@@ -75,14 +75,14 @@ Columns
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|  
 |observation_id        | character |yes|   	|   	|   	|
-|	event_record_id      | character |yes| event_record.event_record_id 	|   	|   	|
-|	package_id           | character |yes|   	|   	|   	|
-|	sampling_location_id | character |yes| sampling_location.sampling_location_id  	|   	|   	|
-|	observation_datetime | datetime  | 	 |   	|date and time of the observation, ISO datetime |   	|
-|	taxon_id             | character |yes| taxon.taxon_id  	|   	|   	|
-|	variable_name        | character |yes|   	|   	|   	|
-|	value                | character |yes|   	|   	|   	|
-|	unit                 | character | 	 |   	|   	|   	|
+|	event_record_id      | character |no| (table=event) event_record_id 	| a reference to ane event  	|   	|
+|	package_id           | character |yes|   	| the ID of this data package  	| edi.100001.1   	|
+|	sampling_location_id | character |yes| (table=sampling_location) sampling_location_id |  a reference to a location	|  sbc_ABUR_1 	|
+|	observation_datetime | datetime  | 	 |   	|date and time of the observation, ISO datetime | 2017-08-01T14:01-07  	|
+|	taxon_id             | character |yes| (table=taxon) taxon_id  	| reference to a taxon ID  	| sbclter_MAPY   	|
+|	variable_name        | character |yes|   	| variable that was measured  	|  NPP_carbon  	|
+|	value                | character |yes|   	| value for the variable  	| 7  	|
+|	unit                 | character | 	 |   	| unit for this variable  	|  kilogramPerMeterSquaredPerDay 	|
 
 
 Table: sampling_location_ancillary 
@@ -94,7 +94,7 @@ Columns
 |---------------|---------|-----------------------|-------------------|--------------|---------| 
 |sampling_location_ancillary_id | character |yes|   	|   	|   	|
 |sampling_location_id           | character |yes|sampling_location.sampling_location_id   	|   	|   	|
-|datetime                       | timestamp	|   |  | date and time of the ancillary info, ISO datetime	|  experimental treatment date 	| 
+|datetime                       | datetime	|   |  | date and time of the ancillary info, ISO datetime	|  experimental treatment date 	| 
 |variable_name                  | character |yes|   	|   	|   	|
 |value                          | character |yes|   	|   	|   	|
 |unit                           | character | 	|   	|   	|   	|
@@ -110,7 +110,7 @@ Columns
 |---------------|---------|-----------------------|-------------------|--------------|---------|     
 | taxon_ancillary_id | character |yes|   	              |   	|   	|
 | taxon_id           | character |yes| taxon.taxon_id   	|   	|   	|
-|	datetime           | timestamp | 	 |   	              |   	|   	|
+|	datetime           | datetime | 	 |   	              |   	|   	|
 | variable_name      | character |yes|   	              |   	|   	|
 | value              | character |yes|   	              |   	|   	|
 |author              | character | 	 |   	              |   	|   	|
