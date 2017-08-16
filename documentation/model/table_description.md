@@ -10,13 +10,14 @@ table list and suggested population order, ie, parents first.
 
 |  order | table name 	|   required?	|   references tables    | description            | example |
 |--------|--------------|-------------|------------------------|------------------------|---------------|
-|1.| sampling_location | yes
-|2.| taxon | yes
-|3.| event  | yes
-|4.| observation |no| sampling_location, taxon, event
-|5.| sampling_location_ancillary |no| sampling_location
-|6.| taxon_ancillary|no|  taxon
-|7.| dataset_summary|no|  observation
+|1.| sampling_location | yes | NA | lon, lat, elev |-119.7445915,34.400275, -15 | 
+ | 
+|2.| taxon | yes | NA | name, taxon-identifier from a system | M. pyrifera, ITIS, 11274| 
+|3.| event  | yes | NA | info about the sampling event | water depth, height of a tower, temperature of medium | 
+|4.| observation |no| sampling_location, taxon, event | the obs that are being analyzed |organism abundance, density |  
+|5.| sampling_location_ancillary |no| sampling_location | general info that does not change | See examples directory, lake area, depth of ocean |
+|6.| taxon_ancillary|no|  taxon | general info that does not change |  |
+|7.| dataset_summary|no|  observation | summary info calculated from incoming data. one line/dataset |See examples directory | 
 
 
 _____
