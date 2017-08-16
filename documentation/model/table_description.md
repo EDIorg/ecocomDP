@@ -24,18 +24,18 @@ Tables
 ---
 Table: sampling_location
 ---
-Description:
+Description: basic info about a place (lon, lat, elev). table is self-referencing so that sites can be nested. example (for a transect) shows reference to another parent row.	
 
 Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|
-| sampling_location_id | character | yes  	      |     | |
-| sampling_location_name   	|  character  	|   	|   	|   	|
-| latitude 	  |  float 	|   	                    |   	|   	|
-| longitude 	|  float 	|   	                    |   	|   	|
-| elevation	  |  float 	|   	                    |   	|   	|
-| parent_sampling_location_id	|  character |     	|   	|   	|
+| sampling_location_id | character | yes  	      |   NA|   | sbclter_abur_I |
+| sampling_location_name   	|  character  	|   	|   NA | 	|  Arroyo Burro Reef, transect I 	|
+| latitude 	  |  float 	|   	                    |   NA |	|  34.400275	|
+| longitude 	|  float 	|   	                    |   NA | 	| -119.7445915 |
+| elevation	  |  float 	|   	                    |   NA | 	| -15	|
+| parent_sampling_location_id	|  character |     	|   NA| 	|  sbclter_abur	|
 
 
 Table: taxon
