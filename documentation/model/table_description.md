@@ -87,33 +87,33 @@ Columns
 
 Table: sampling_location_ancillary 
 ---
-Description:
+Description: additional info about a place that does not change frequently, eg, lake area or depth, experimental treatment. (features that change frequently should be kept in the "event" table 
 Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------| 
 |sampling_location_ancillary_id | character |yes|   	|   	|   	|
-|sampling_location_id           | character |yes|sampling_location.sampling_location_id   	|   	|   	|
+|sampling_location_id           | character |yes|(table=sampling_location) sampling_location_id   	| Id of the location for reference	| sbclter_ABUR_1  	|
 |datetime                       | datetime	|   |  | date and time of the ancillary info, ISO datetime	|  experimental treatment date 	| 
-|variable_name                  | character |yes|   	|   	|   	|
-|value                          | character |yes|   	|   	|   	|
-|unit                           | character | 	|   	|   	|   	|
+|variable_name                  | character |yes|   	|  variable that was measured 	| treatment  	|
+|value                          | character |yes|   	|  value for the variable 	| kelp removal  	|
+|unit                           | character | 	|   	|  unit for this variable 	|   	|
 
 
 
 Table: taxon_ancillary
 ---
-Description:
+Description: additional info about an organism that does not change frequently, eg, trophic level  (features that change frequently are probably observations) 
 Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|     
 | taxon_ancillary_id | character |yes|   	              |   	|   	|
-| taxon_id           | character |yes| taxon.taxon_id   	|   	|   	|
-|	datetime           | datetime | 	 |   	              |   	|   	|
-| variable_name      | character |yes|   	              |   	|   	|
-| value              | character |yes|   	              |   	|   	|
-|author              | character | 	 |   	              |   	|   	|
+| taxon_id           | character |yes| (table = taxon) taxon_id   	|   	|   	|
+|	datetime           | datetime | 	 |   	              | date and time of the ancillary info, ISO datetime  	|   	|
+| variable_name      | character |yes|   	              |  variable that was measured  	|  trophic_level 	|
+| value              | character |yes|   	              |  value for the variable 	|   primary producer	|
+|author              | character | 	 |   	              | unit for this variable  	|   	|
 
 
 Table: dataset_summary
