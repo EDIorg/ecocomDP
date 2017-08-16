@@ -8,14 +8,14 @@ The ecocomDP is composed of 7 tables, which can be linked via their indexes, and
 
 table list and suggested population order, ie, parents first.
 
-|  order | table name 	|   required?	|   references tables    | description            | example content |
+|  order | table name 	|   required?	|   references tables    | description            | sample cols, examples   |
 |--------|--------------|-------------|------------------------|------------------------|---------------|
-|1.| sampling_location | yes | NA | lon, lat, elev |-119.7445915,34.400275, -15 | 
-|2.| taxon | yes | NA | name, taxon-identifier from a system | M. pyrifera, ITIS, 11274| 
-|3.| event  | yes | NA | info about the sampling event | water depth, height of a tower, temperature of medium | 
-|4.| observation |no| sampling_location, taxon, event | the obs that are being analyzed |organism abundance, density |  
-|5.| sampling_location_ancillary |no| sampling_location | general info about a place that does not change | See examples directory, lake area, depth of ocean |
-|6.| taxon_ancillary|no|  taxon | general info about an organism that does not change | phenotypic traits |
+|1.| sampling_location | yes | NA | basic info to identify a place | lon, lat, elev | 
+|2.| taxon | yes | NA | basic info to identify an organism | name, id from an external system | 
+|3.| event  | yes | NA | info about the sampling event, in long-format |  variable, value, unit | 
+|4.| observation |no| sampling_location, taxon, event | the obs that are being analyzed, eg, organism abundance or density | variable, value, unit|   
+|5.| sampling_location_ancillary |no| sampling_location | additional info about a place that does not change, eg, lake area, depth of ocean | See examples directory  |
+|6.| taxon_ancillary|no|  taxon | additonal info about an organism that does not change, eg, phenotypic traits | | 
 |7.| dataset_summary|no|  observation | summary info calculated from incoming data. one line/dataset |See examples directory | 
 
 
