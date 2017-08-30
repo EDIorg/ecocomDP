@@ -1,3 +1,4 @@
+event_record_id,event_id,variable_name,value,unit
 973,TBE01JUN05,sample_layer,Epilimnion,NA
 2360,TBE01JUN05,Accession_Number,ERP016854,NA
 3747,TBE01JUN05,subproject,Earth Microbiome Project,NA
