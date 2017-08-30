@@ -19,16 +19,16 @@ digraph "twoDegreesRelationshipsDiagram" {
   edge [
     arrowsize="0.8"
   ];
-  "observation":"dataset_summary_id":w -> "dataset_summary":"dataset_summary_id.type":e [arrowhead=none dir=back arrowtail=crowodot];
-  "observation":"event_id":w -> "event":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
+  "observation":"event_record_id":w -> "event":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
+  "observation":"package_id":w -> "dataset_summary":"package_id.type":e [arrowhead=none dir=back arrowtail=crowodot];
   "observation":"sampling_location_id":w -> "sampling_location":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
   "observation":"taxon_id":w -> "taxon":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
   "dataset_summary" [
     label=<
     <TABLE BORDER="2" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">dataset_summary</TD></TR>
-      <TR><TD PORT="dataset_summary_id" COLSPAN="2" BGCOLOR="#bed1b8" ALIGN="LEFT">dataset_summary_id</TD><TD PORT="dataset_summary_id.type" ALIGN="LEFT">int4[10]</TD></TR>
-      <TR><TD PORT="original_dataset_id" COLSPAN="2" ALIGN="LEFT">original_dataset_id</TD><TD PORT="original_dataset_id.type" ALIGN="LEFT">varchar[200]</TD></TR>
+      <TR><TD PORT="package_id" COLSPAN="2" BGCOLOR="#bed1b8" ALIGN="LEFT">package_id</TD><TD PORT="package_id.type" ALIGN="LEFT">varchar[100]</TD></TR>
+      <TR><TD PORT="original_package_id" COLSPAN="2" ALIGN="LEFT">original_package_id</TD><TD PORT="original_package_id.type" ALIGN="LEFT">varchar[200]</TD></TR>
       <TR><TD PORT="length_of_survey_years" COLSPAN="2" ALIGN="LEFT">length_of_survey_years</TD><TD PORT="length_of_survey_years.type" ALIGN="LEFT">int4[10]</TD></TR>
       <TR><TD PORT="number_of_years_sampled" COLSPAN="2" ALIGN="LEFT">number_of_years_sampled</TD><TD PORT="number_of_years_sampled.type" ALIGN="LEFT">int4[10]</TD></TR>
       <TR><TD PORT="std_dev_interval_betw_years" COLSPAN="2" ALIGN="LEFT">std_dev_interval_betw_years</TD><TD PORT="std_dev_interval_betw_years.type" ALIGN="LEFT">float8[17,17]</TD></TR>
@@ -54,8 +54,8 @@ digraph "twoDegreesRelationshipsDiagram" {
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">observation</TD></TR>
       <TR><TD PORT="observation_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">observation_id</TD></TR>
-      <TR><TD PORT="event_id" COLSPAN="3" ALIGN="LEFT">event_id</TD></TR>
-      <TR><TD PORT="dataset_summary_id" COLSPAN="3" ALIGN="LEFT">dataset_summary_id</TD></TR>
+      <TR><TD PORT="event_record_id" COLSPAN="3" ALIGN="LEFT">event_record_id</TD></TR>
+      <TR><TD PORT="package_id" COLSPAN="3" ALIGN="LEFT">package_id</TD></TR>
       <TR><TD PORT="sampling_location_id" COLSPAN="3" ALIGN="LEFT">sampling_location_id</TD></TR>
       <TR><TD PORT="observation_datetime" COLSPAN="3" ALIGN="LEFT">observation_datetime</TD></TR>
       <TR><TD PORT="taxon_id" COLSPAN="3" ALIGN="LEFT">taxon_id</TD></TR>

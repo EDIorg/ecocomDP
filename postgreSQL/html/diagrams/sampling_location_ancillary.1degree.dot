@@ -39,8 +39,8 @@ digraph "oneDegreeRelationshipsDiagram" {
     label=<
     <TABLE BORDER="2" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">sampling_location_ancillary</TD></TR>
-      <TR><TD PORT="sampling_location_ancillary_id" COLSPAN="2" BGCOLOR="#bed1b8" ALIGN="LEFT">sampling_location_ancillary_id</TD><TD PORT="sampling_location_ancillary_id.type" ALIGN="LEFT">int4[10]</TD></TR>
-      <TR><TD PORT="sampling_location_id" COLSPAN="2" ALIGN="LEFT">sampling_location_id</TD><TD PORT="sampling_location_id.type" ALIGN="LEFT">int4[10]</TD></TR>
+      <TR><TD PORT="sampling_location_ancillary_id" COLSPAN="2" BGCOLOR="#bed1b8" ALIGN="LEFT">sampling_location_ancillary_id</TD><TD PORT="sampling_location_ancillary_id.type" ALIGN="LEFT">varchar[100]</TD></TR>
+      <TR><TD PORT="sampling_location_id" COLSPAN="2" ALIGN="LEFT">sampling_location_id</TD><TD PORT="sampling_location_id.type" ALIGN="LEFT">varchar[100]</TD></TR>
       <TR><TD PORT="datetime" COLSPAN="2" ALIGN="LEFT">datetime</TD><TD PORT="datetime.type" ALIGN="LEFT">timestamp[29,6]</TD></TR>
       <TR><TD PORT="variable_name" COLSPAN="2" ALIGN="LEFT">variable_name</TD><TD PORT="variable_name.type" ALIGN="LEFT">varchar[200]</TD></TR>
       <TR><TD PORT="value" COLSPAN="2" ALIGN="LEFT">value</TD><TD PORT="value.type" ALIGN="LEFT">varchar[200]</TD></TR>

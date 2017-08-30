@@ -23,7 +23,7 @@ digraph "compactRelationshipsDiagram" {
     label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">dataset_summary</TD></TR>
-      <TR><TD PORT="dataset_summary_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">dataset_summary_id</TD></TR>
+      <TR><TD PORT="package_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">package_id</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
       <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
@@ -34,7 +34,7 @@ digraph "compactRelationshipsDiagram" {
     label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">event</TD></TR>
-      <TR><TD PORT="event_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">event_id</TD></TR>
+      <TR><TD PORT="event_record_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">event_record_id</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
       <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
     </TABLE>>
@@ -46,8 +46,8 @@ digraph "compactRelationshipsDiagram" {
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">observation</TD></TR>
       <TR><TD PORT="observation_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">observation_id</TD></TR>
-      <TR><TD PORT="event_id" COLSPAN="3" ALIGN="LEFT">event_id</TD></TR>
-      <TR><TD PORT="dataset_summary_id" COLSPAN="3" ALIGN="LEFT">dataset_summary_id</TD></TR>
+      <TR><TD PORT="event_record_id" COLSPAN="3" ALIGN="LEFT">event_record_id</TD></TR>
+      <TR><TD PORT="package_id" COLSPAN="3" ALIGN="LEFT">package_id</TD></TR>
       <TR><TD PORT="sampling_location_id" COLSPAN="3" ALIGN="LEFT">sampling_location_id</TD></TR>
       <TR><TD PORT="taxon_id" COLSPAN="3" ALIGN="LEFT">taxon_id</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
@@ -103,8 +103,8 @@ digraph "compactRelationshipsDiagram" {
     URL="tables/taxon_ancillary.html"
     tooltip="taxon_ancillary"
   ];
-  "observation":"dataset_summary_id":w -> "dataset_summary":"dataset_summary_id":e [arrowhead=none dir=back arrowtail=crowodot];
-  "observation":"event_id":w -> "event":"event_id":e [arrowhead=none dir=back arrowtail=crowodot];
+  "observation":"event_record_id":w -> "event":"event_record_id":e [arrowhead=none dir=back arrowtail=crowodot];
+  "observation":"package_id":w -> "dataset_summary":"package_id":e [arrowhead=none dir=back arrowtail=crowodot];
   "observation":"sampling_location_id":w -> "sampling_location":"sampling_location_id":e [arrowhead=none dir=back arrowtail=crowodot];
   "observation":"taxon_id":w -> "taxon":"taxon_id":e [arrowhead=none dir=back arrowtail=crowodot];
   "sampling_location":"parent_sampling_location_id":w -> "sampling_location":"sampling_location_id":e [arrowhead=none dir=back arrowtail=crowodot];

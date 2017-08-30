@@ -19,8 +19,8 @@ digraph "twoDegreesRelationshipsDiagram" {
   edge [
     arrowsize="0.8"
   ];
-  "observation":"dataset_summary_id":w -> "dataset_summary":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
-  "observation":"event_id":w -> "event":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
+  "observation":"event_record_id":w -> "event":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
+  "observation":"package_id":w -> "dataset_summary":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
   "observation":"sampling_location_id":w -> "sampling_location":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
   "observation":"taxon_id":w -> "taxon":"taxon_id.type":e [arrowhead=none dir=back arrowtail=crowodot];
   "taxon_ancillary":"taxon_id":w -> "taxon":"taxon_id.type":e [arrowhead=none dir=back arrowtail=crowodot];
@@ -49,8 +49,8 @@ digraph "twoDegreesRelationshipsDiagram" {
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">observation</TD></TR>
       <TR><TD PORT="observation_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">observation_id</TD></TR>
-      <TR><TD PORT="event_id" COLSPAN="3" ALIGN="LEFT">event_id</TD></TR>
-      <TR><TD PORT="dataset_summary_id" COLSPAN="3" ALIGN="LEFT">dataset_summary_id</TD></TR>
+      <TR><TD PORT="event_record_id" COLSPAN="3" ALIGN="LEFT">event_record_id</TD></TR>
+      <TR><TD PORT="package_id" COLSPAN="3" ALIGN="LEFT">package_id</TD></TR>
       <TR><TD PORT="sampling_location_id" COLSPAN="3" ALIGN="LEFT">sampling_location_id</TD></TR>
       <TR><TD PORT="observation_datetime" COLSPAN="3" ALIGN="LEFT">observation_datetime</TD></TR>
       <TR><TD PORT="taxon_id" COLSPAN="3" ALIGN="LEFT">taxon_id</TD></TR>
@@ -76,8 +76,8 @@ digraph "twoDegreesRelationshipsDiagram" {
     label=<
     <TABLE BORDER="2" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">taxon</TD></TR>
-      <TR><TD PORT="taxon_id" COLSPAN="2" BGCOLOR="#bed1b8" ALIGN="LEFT">taxon_id</TD><TD PORT="taxon_id.type" ALIGN="LEFT">int4[10]</TD></TR>
-      <TR><TD PORT="taxon_level" COLSPAN="2" ALIGN="LEFT">taxon_level</TD><TD PORT="taxon_level.type" ALIGN="LEFT">varchar[200]</TD></TR>
+      <TR><TD PORT="taxon_id" COLSPAN="2" BGCOLOR="#bed1b8" ALIGN="LEFT">taxon_id</TD><TD PORT="taxon_id.type" ALIGN="LEFT">varchar[100]</TD></TR>
+      <TR><TD PORT="taxon_rank" COLSPAN="2" ALIGN="LEFT">taxon_rank</TD><TD PORT="taxon_rank.type" ALIGN="LEFT">varchar[200]</TD></TR>
       <TR><TD PORT="taxon_name" COLSPAN="2" ALIGN="LEFT">taxon_name</TD><TD PORT="taxon_name.type" ALIGN="LEFT">varchar[200]</TD></TR>
       <TR><TD PORT="authority_system" COLSPAN="2" ALIGN="LEFT">authority_system</TD><TD PORT="authority_system.type" ALIGN="LEFT">varchar[200]</TD></TR>
       <TR><TD PORT="authority_taxon_id" COLSPAN="2" ALIGN="LEFT">authority_taxon_id</TD><TD PORT="authority_taxon_id.type" ALIGN="LEFT">varchar[200]</TD></TR>
