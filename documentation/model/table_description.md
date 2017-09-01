@@ -40,7 +40,7 @@ Columns
 
 Table: taxon
 ---
-Description: identifying information about a taxon, eg, name, id and system.
+Description: identifying information about a taxon, eg, name, id and system. When table is constructed, use a lookup service (eg, taxize) to find the ID assigned by a taxon system, like ITIS. 
 
 Columns
 
