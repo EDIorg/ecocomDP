@@ -56,6 +56,7 @@ Columns
 Table: event 
 ---
 Description: addition info about an observation event for context, eg, water depth, height of a tower, temperature of medium 
+
 Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
@@ -69,12 +70,13 @@ Columns
 
 Table: observation
 ---
-Description:
+Description: This is the core table - which holds the obs being analyzed, eg, organism abundance or density	
+
 Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|  
-|observation_id        | character |yes|   	|   	|   	|
+| observation_id       | character |yes|   	|   	|   	|
 |	event_record_id      | character |no| (table=event) event_record_id 	| a reference to ane event  	|   	|
 |	package_id           | character |yes|   	| the ID of this data package  	| edi.100001.1   	|
 |	sampling_location_id | character |yes| (table=sampling_location) sampling_location_id |  a reference to a location	|  sbc_ABUR_1 	|
@@ -88,6 +90,7 @@ Columns
 Table: sampling_location_ancillary 
 ---
 Description: additional info about a place that does not change frequently, eg, lake area or depth, experimental treatment. (features that change frequently should be kept in the "event" table 
+
 Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
@@ -104,6 +107,7 @@ Columns
 Table: taxon_ancillary
 ---
 Description: additional info about an organism that does not change frequently, eg, trophic level  (features that change frequently are probably observations) 
+
 Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
@@ -118,7 +122,8 @@ Columns
 
 Table: dataset_summary
 ---
-Description:
+Description: summary info about the dataset. some could be elevated to metadata to enhance discovery.
+
 Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
