@@ -128,7 +128,7 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|
-| package_id                  | integer   |yes| observation.package_id  	|  id of the L1 pkg (this package)	|  edi.100001.1 	|
+| package_id                  | character |yes| observation.package_id  	|  id of the L1 pkg (this package)	|  edi.100001.1 	|
 |	original_package_id         | character |yes|   	|   	 id of the L0 pkg (original, source)	| knb-lter-sbc.21.17 |
 |	length_of_survey_years      | integer   |yes|   	|   	| 17  	| 
 |	number_of_years_sampled     | integer   |yes|   	|   	| 17  	|
