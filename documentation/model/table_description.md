@@ -12,7 +12,7 @@ table list and suggested population order, ie, parents first.
 |--------|--------------|-------------|------------------------|------------------------|---------------|
 |1.| sampling_location | yes | NA | basic info to identify a place | lon, lat, elev | 
 |2.| taxon | yes | NA | basic info to identify an organism | name, id from an external system | 
-|3.| event  | yes | NA | info about the sampling event, in long-format |  variable, value, unit | 
+|3.| event  | no | NA | info about the sampling event, in long-format |  variable, value, unit | 
 |4.| observation |yes| sampling_location, taxon, event | the obs that are being analyzed, eg, organism abundance or density | variable, value, unit|   
 |5.| sampling_location_ancillary |no| sampling_location | additional info about a place that does not change, eg, lake area, depth of ocean | See examples directory  |
 |6.| taxon_ancillary|no|  taxon | additonal info about an organism that does not change, eg, phenotypic traits | | 
