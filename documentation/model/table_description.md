@@ -97,7 +97,7 @@ Columns
 |---------------|---------|-----------------------|-------------------|--------------|---------| 
 |sampling_location_ancillary_id | character |yes|   	|   	|   	|
 |sampling_location_id           | character |yes|(table=sampling_location) sampling_location_id   	| Id of the location for reference	| sbclter_ABUR_1  	|
-|datetime                       | datetime	|   |  | date and time of the ancillary info, ISO datetime	|  experimental treatment date 	| 
+|datetime                       | datetime	|no|  | date and time of the ancillary info, ISO datetime	|  experimental treatment date 	| 
 |variable_name                  | character |yes|   	|  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList) 	| treatment  	|
 |value                          | character |yes|   	|  value for the variable 	| kelp removal  	|
 |unit                           | character | 	|   	|  unit for this variable 	|   	|
