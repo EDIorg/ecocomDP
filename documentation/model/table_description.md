@@ -134,5 +134,5 @@ Columns
 |	number_of_years_sampled     | integer   |yes|   	|   	| 17  	|
 |	std_dev_interval_betw_years | float     |yes|   	|   	| 1.1  	|
 |	max_num_taxa                |integer    |yes|   	|   	| 1  	|
-|	geo_extent_bounding_box_m2  |float      | 	|   	|   	|  40 	|
+|	geo_extent_bounding_box_m2  |float      |no|   	|   	|  40 	|
 
