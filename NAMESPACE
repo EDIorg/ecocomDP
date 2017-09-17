@@ -3,4 +3,5 @@
 export(import_templates)
 export(make_eml)
 export(make_tables)
+export(validate_ecocomDP)
 export(view_unit_dictionary)
