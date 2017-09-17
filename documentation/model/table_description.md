@@ -12,11 +12,11 @@ table list and suggested population order, ie, parents first.
 |--------|--------------|-------------|------------------------|------------------------|---------------|
 |1.| sampling_location | yes | NA | basic info to identify a place | lon, lat, elev | 
 |2.| taxon | yes | NA | basic info to identify an organism | name, id from an external system | 
-|3.| event  | yes | NA | info about the sampling event, in long-format |  variable, value, unit | 
+|3.| event  | no | NA | info about the sampling event, in long-format |  variable, value, unit | 
 |4.| observation |yes| sampling_location, taxon, event | the obs that are being analyzed, eg, organism abundance or density | variable, value, unit|   
 |5.| sampling_location_ancillary |no| sampling_location | additional info about a place that does not change, eg, lake area, depth of ocean | See examples directory  |
 |6.| taxon_ancillary|no|  taxon | additonal info about an organism that does not change, eg, phenotypic traits | | 
-|7.| dataset_summary|no|  observation | summary info calculated from incoming data. one line/dataset |See examples directory | 
+|7.| dataset_summary|yes|  observation | summary info calculated from incoming data. one line/dataset |See examples directory | 
 
 
 _____
@@ -80,11 +80,11 @@ Columns
 |	event_record_id      | character |no| (table=event) event_record_id 	| a reference to ane event  	|   	|
 |	package_id           | character |yes|   	| the ID of this data package  	| edi.100001.1   	|
 |	sampling_location_id | character |yes| (table=sampling_location) sampling_location_id |  a reference to a location	|  sbc_ABUR_1 	|
-|	observation_datetime | datetime  | 	 |   	|date and time of the observation, ISO datetime | 2017-08-01T14:01-07  	|
+|	observation_datetime | datetime  |yes|   	|Date and time of the observation, following the ISO 8601 standard format YYYY-MM-DDThh:mm+-hh to the precision of datetime data| 2017-08-01 or 2017-08-01T14:01-07  	|
 |	taxon_id             | character |yes| (table=taxon) taxon_id  	| reference to a taxon ID  	| sbclter_MAPY   	|
 |	variable_name        | character |yes|   	| variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  NPP_carbon  	|
-|	value                | character |yes|   	| value for the variable  	| 7  	|
-|	unit                 | character | 	 |   	| unit for this variable  	|  kilogramPerMeterSquaredPerDay 	|
+|	value                | float |yes|   	| value for the variable  	| 7  	|
+|	unit                 | character |yes|   	| unit for this variable  	|  kilogramPerMeterSquaredPerDay 	|
 
 
 Table: sampling_location_ancillary 
@@ -97,10 +97,10 @@ Columns
 |---------------|---------|-----------------------|-------------------|--------------|---------| 
 |sampling_location_ancillary_id | character |yes|   	|   	|   	|
 |sampling_location_id           | character |yes|(table=sampling_location) sampling_location_id   	| Id of the location for reference	| sbclter_ABUR_1  	|
-|datetime                       | datetime	|   |  | date and time of the ancillary info, ISO datetime	|  experimental treatment date 	| 
+|datetime                       | datetime	|no|  | date and time of the ancillary info, ISO datetime	|  experimental treatment date 	| 
 |variable_name                  | character |yes|   	|  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList) 	| treatment  	|
 |value                          | character |yes|   	|  value for the variable 	| kelp removal  	|
-|unit                           | character | 	|   	|  unit for this variable 	|   	|
+|unit                           | character |no|   	|  unit for this variable 	|   	|
 
 
 
@@ -114,10 +114,10 @@ Columns
 |---------------|---------|-----------------------|-------------------|--------------|---------|     
 | taxon_ancillary_id | character |yes|   	              |   	|   	|
 | taxon_id           | character |yes| (table = taxon) taxon_id   	|   	|   	|
-|	datetime           | datetime | 	 |   	              | date and time of the ancillary info, ISO datetime  	|   	|
+|	datetime           | datetime |no|   	              | date and time of the ancillary info, ISO datetime  	|   	|
 | variable_name      | character |yes|   	              |  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  trophic_level 	|
 | value              | character |yes|   	              |  value for the variable 	|   primary producer	|
-|author              | character | 	 |   	              | unit for this variable  	|   	|
+|author              | character |no|   	              | unit for this variable  	|   	|
 
 
 Table: dataset_summary
@@ -134,5 +134,5 @@ Columns
 |	number_of_years_sampled     | integer   |yes|   	|   	| 17  	|
 |	std_dev_interval_betw_years | float     |yes|   	|   	| 1.1  	|
 |	max_num_taxa                |integer    |yes|   	|   	| 1  	|
-|	geo_extent_bounding_box_m2  |float      | 	|   	|   	|  40 	|
+|	geo_extent_bounding_box_m2  |float      |no|   	|   	|  40 	|
 
