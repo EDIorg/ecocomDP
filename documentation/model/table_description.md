@@ -83,7 +83,7 @@ Columns
 |	observation_datetime | datetime  |yes|   	|Date and time of the observation, following the ISO 8601 standard format YYYY-MM-DDThh:mm+-hh to the precision of datetime data| 2017-08-01 or 2017-08-01T14:01-07  	|
 |	taxon_id             | character |yes| (table=taxon) taxon_id  	| reference to a taxon ID  	| sbclter_MAPY   	|
 |	variable_name        | character |yes|   	| variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  NPP_carbon  	|
-|	value                | character |yes|   	| value for the variable  	| 7  	|
+|	value                | float |yes|   	| value for the variable  	| 7  	|
 |	unit                 | character | 	 |   	| unit for this variable  	|  kilogramPerMeterSquaredPerDay 	|
 
 
