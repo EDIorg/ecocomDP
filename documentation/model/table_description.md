@@ -114,7 +114,7 @@ Columns
 |---------------|---------|-----------------------|-------------------|--------------|---------|     
 | taxon_ancillary_id | character |yes|   	              |   	|   	|
 | taxon_id           | character |yes| (table = taxon) taxon_id   	|   	|   	|
-|	datetime           | datetime | 	 |   	              | date and time of the ancillary info, ISO datetime  	|   	|
+|	datetime           | datetime |no|   	              | date and time of the ancillary info, ISO datetime  	|   	|
 | variable_name      | character |yes|   	              |  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  trophic_level 	|
 | value              | character |yes|   	              |  value for the variable 	|   primary producer	|
 |author              | character | 	 |   	              | unit for this variable  	|   	|
