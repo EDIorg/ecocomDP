@@ -100,7 +100,7 @@ Columns
 |datetime                       | datetime	|no|  | date and time of the ancillary info, ISO datetime	|  experimental treatment date 	| 
 |variable_name                  | character |yes|   	|  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList) 	| treatment  	|
 |value                          | character |yes|   	|  value for the variable 	| kelp removal  	|
-|unit                           | character | 	|   	|  unit for this variable 	|   	|
+|unit                           | character |no|   	|  unit for this variable 	|   	|
 
 
 
