@@ -84,7 +84,7 @@ Columns
 |	taxon_id             | character |yes| (table=taxon) taxon_id  	| reference to a taxon ID  	| sbclter_MAPY   	|
 |	variable_name        | character |yes|   	| variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  NPP_carbon  	|
 |	value                | float |yes|   	| value for the variable  	| 7  	|
-|	unit                 | character | 	 |   	| unit for this variable  	|  kilogramPerMeterSquaredPerDay 	|
+|	unit                 | character |yes|   	| unit for this variable  	|  kilogramPerMeterSquaredPerDay 	|
 
 
 Table: sampling_location_ancillary 
