@@ -55,17 +55,17 @@ Columns
 
 Table: event 
 ---
-Description: addition info about an observation event for context, eg, water depth, height of a tower, temperature of medium 
+Description: ancillary information about an observation event for context. eg, water depth, height of a tower, temperature of medium 
 
 Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------| 
-|event_record_id | character |yes| NA	| a unique id for this record that can be reference in other tables   	|  4161	 	|
-|	event_id       | character |yes| NA	| the id of the event, may be repeated  	| 	TBE01JUN05  	|
-|	variable_name  | character | no| NA| variable measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  depth  	|
-|	value          | character | no| NA	| value for variable  	|  5  	|
-|	unit           | character | no| NA	|  unit for variable 	|  m 	|
+| record_id     | character |yes| NA	| a unique id for this record  	|  4161	 	|
+|	event_id      | character |yes| NA	| the id of the event         	| 	TBE01JUN05  	|
+|	variable_name | character | no| NA| variable measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  depth  	|
+|	value         | character | no| NA	| value for variable  	|  5  	|
+|	unit          | character | no| NA	|  unit for variable 	|  m 	|
 
 
 Table: observation
@@ -77,7 +77,7 @@ Columns
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|  
 | observation_id       | character |yes|   	|   	|   	|
-|	event_record_id      | character |no| (table=event) event_record_id 	| a reference to ane event  	|   	|
+|	event_id             | character |no*| (table=event) event_id 	| reference to an event (required if event table is used)  	|   	|
 |	package_id           | character |yes|   	| the ID of this data package  	| edi.100001.1   	|
 |	sampling_location_id | character |yes| (table=sampling_location) sampling_location_id |  a reference to a location	|  sbc_ABUR_1 	|
 |	observation_datetime | datetime  |yes|   	|Date and time of the observation, following the ISO 8601 standard format YYYY-MM-DDThh:mm+-hh to the precision of datetime data| 2017-08-01 or 2017-08-01T14:01-07  	|
