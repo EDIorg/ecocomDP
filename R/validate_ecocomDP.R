@@ -43,12 +43,49 @@ validate_ecocomDP <- function(path) {
   # Parameters ------------------------------------------------------------------
   
   datetime_iso8601 <- "%Y-%m-%d"
-  
+  dir_files <- list.files(path, recursive = T)
 
-  # Tables ----------------------------------------------------------------------
+  # Load validation criteria --------------------------------------------------
+  
+  print("Loading validation criteria ... ")
+  
+  criteria <- read.table(paste(path.package("ecocomDP"),
+                               "/validation_criteria.txt",
+                               sep = ""),
+                         header = T,
+                         sep = "\t",
+                         as.is = T,
+                         na.strings = "NA")
+  
+  valid_table_names <- unique(criteria$table)
+  
+  valid_column_names <- unique(criteria$column)
+  valid_column_names <- valid_column_names[!is.na(valid_column_names)]
+  
+  
+  
+  # Validate input ecocomDP to criteria ---------------------------------------
+  
+  print("Validating input ecocomDP:")
   
   # Validate table names
   
+  print("Table names ...")
+  
+  validate_table_names <- function(valid_table_names){
+    input_table_names <- dir_files[attr(regexpr(paste(valid_table_names, 
+                                                      collapse = "|"), 
+                                                dir_files),
+                                        "match.length")
+                                   != -1]
+    table_study_name <- gsub(paste(valid_table_names, collapse = "|"), "", input_table_names)
+    table_study_names <- unique(table_study_name)
+    if (length(table_study_names) > 1){
+      warning(paste("Inconsistencies found in study names of ecocomDP tables.\n",
+                    "Please ensure study names match."))
+    }
+  }
+
   # Report missing tables
   
   # Columns ---------------------------------------------------------------------
