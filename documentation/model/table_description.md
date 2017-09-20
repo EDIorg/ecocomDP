@@ -12,11 +12,11 @@ table list and suggested population order, ie, parents first.
 |--------|--------------|-------------|------------------------|------------------------|---------------|
 |1.| sampling_location | yes | NA | basic info to identify a place | lon, lat, elev | 
 |2.| taxon | yes | NA | basic info to identify an organism | name, id from an external system | 
-|3.| event  | no | NA | info about the sampling event, in long-format |  variable, value, unit | 
-|4.| observation |yes| sampling_location, taxon, event | the obs that are being analyzed, eg, organism abundance or density | variable, value, unit|   
-|5.| sampling_location_ancillary |no| sampling_location | additional info about a place that does not change, eg, lake area, depth of ocean | See examples directory  |
-|6.| taxon_ancillary|no|  taxon | additonal info about an organism that does not change, eg, phenotypic traits | | 
-|7.| dataset_summary|yes|  observation | summary info calculated from incoming data. one line/dataset |See examples directory | 
+|3.| event  | no | NA | additional info about the sampling event, in long-format |  variable, value, unit | 
+|4.| observation |yes| sampling_location, taxon, event | observations about taxa, that are being analyzed. Eg, organism abundance or density, or the data to compute density (count) | variable, value, unit |   
+|5.| sampling_location_ancillary |no| sampling_location | additional info about a place that does not change, in long format.Eg, sampling area, lake area, depth of ocean | variable, value, unit - See examples directory  |
+|6.| taxon_ancillary|no|  taxon | additonal info about an organism that does not change, in long format. Eg, phenotypic traits | variable, value, unit | 
+|7.| dataset_summary|yes|  observation | summary info calculated from incoming data. one line table |See examples directory | 
 
 
 _____
@@ -55,17 +55,17 @@ Columns
 
 Table: event 
 ---
-Description: addition info about an observation event for context, eg, water depth, height of a tower, temperature of medium 
+Description: ancillary information about an observation event for context. eg, water depth, height of a tower, temperature of medium 
 
 Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------| 
-|event_record_id | character |yes| NA	| a unique id for this record that can be reference in other tables   	|  4161	 	|
-|	event_id       | character |yes| NA	| the id of the event, may be repeated  	| 	TBE01JUN05  	|
-|	variable_name  | character | no| NA| variable measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  depth  	|
-|	value          | character | no| NA	| value for variable  	|  5  	|
-|	unit           | character | no| NA	|  unit for variable 	|  m 	|
+| record_id     | character |yes| NA	| a unique id for this record  	|  4161	 	|
+|	event_id      | character |yes| NA	| the id of the event         	| 	TBE01JUN05  	|
+|	variable_name | character | no| NA| variable measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  depth  	|
+|	value         | character | no| NA	| value for variable  	|  5  	|
+|	unit          | character | no| NA	|  unit for variable 	|  m 	|
 
 
 Table: observation
@@ -77,14 +77,14 @@ Columns
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|  
 | observation_id       | character |yes|   	|   	|   	|
-|	event_record_id      | character |no| (table=event) event_record_id 	| a reference to ane event  	|   	|
+|	event_id             | character |no*| (table=event) event_id 	| reference to an event (required if event table is used)  	|   	|
 |	package_id           | character |yes|   	| the ID of this data package  	| edi.100001.1   	|
 |	sampling_location_id | character |yes| (table=sampling_location) sampling_location_id |  a reference to a location	|  sbc_ABUR_1 	|
 |	observation_datetime | datetime  |yes|   	|Date and time of the observation, following the ISO 8601 standard format YYYY-MM-DDThh:mm+-hh to the precision of datetime data| 2017-08-01 or 2017-08-01T14:01-07  	|
 |	taxon_id             | character |yes| (table=taxon) taxon_id  	| reference to a taxon ID  	| sbclter_MAPY   	|
-|	variable_name        | character |yes|   	| variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  NPP_carbon  	|
+|	variable_name        | character |yes|   	| name of the variable measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  number_kelp_plants  	|
 |	value                | float |yes|   	| value for the variable  	| 7  	|
-|	unit                 | character |yes|   	| unit for this variable  	|  kilogramPerMeterSquaredPerDay 	|
+|	unit                 | character |yes|   	| unit for this variable  	|  numberPerMeterSquaredPerDay 	|
 
 
 Table: sampling_location_ancillary 
@@ -129,7 +129,7 @@ Columns
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|
 | package_id                  | character |yes| observation.package_id  	|  id of the L1 pkg (this package)	|  edi.100001.1 	|
-|	original_package_id         | character |yes|   	|   	 id of the L0 pkg (original, source)	| knb-lter-sbc.21.17 |
+|	original_package_id         | character |no|   	|   	 id of the L0 pkg (original, source)	| knb-lter-sbc.21.17 |
 |	length_of_survey_years      | integer   |yes|   	|   	| 17  	| 
 |	number_of_years_sampled     | integer   |yes|   	|   	| 17  	|
 |	std_dev_interval_betw_years | float     |yes|   	|   	| 1.1  	|
