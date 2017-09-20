@@ -2,8 +2,8 @@ table	column	class	required
 sampling_location	NA	NA	yes
 sampling_location	sampling_location_id	character	yes
 sampling_location	sampling_location_name	character	no
-sampling_location	latitude	numeric	yes
-sampling_location	longitude	numeric	yes
+sampling_location	latitude	numeric	no
+sampling_location	longitude	numeric	no
 sampling_location	elevation	numeric	no
 sampling_location	parent_sampling_location_id	character	no
 taxon	NA	NA	yes
@@ -13,7 +13,7 @@ taxon	taxon_name	character	yes
 taxon	authority_system	character	no
 taxon	authority_taxon_id	character	no
 event	NA	NA	no
-event	event_record_id	character	yes
+event	record_id	character	yes
 event	event_id	character	yes
 event	variable_name	character	no
 event	value	character	no
@@ -23,7 +23,7 @@ observation	observation_id	character	yes
 observation	event_record_id	character	no
 observation	package_id	character	yes
 observation	sampling_location_id	character	yes
-observation	observation_datetime	character	yes
+observation	observation_datetime	Date	yes
 observation	taxon_id	character	yes
 observation	variable_name	character	yes
 observation	value	numeric	yes
@@ -31,14 +31,14 @@ observation	unit	character	yes
 sampling_location_ancillary	NA	NA	no
 sampling_location_ancillary	sampling_location_ancillary_id	character	yes
 sampling_location_ancillary	sampling_location_id	character	yes
-sampling_location_ancillary	datetime	character	no
+sampling_location_ancillary	datetime	Date	no
 sampling_location_ancillary	variable_name	character	yes
 sampling_location_ancillary	value	character	yes
 sampling_location_ancillary	unit	character	no
 taxon_ancillary	NA	NA	no
 taxon_ancillary	taxon_ancillary_id	character	yes
 taxon_ancillary	taxon_id	character	yes
-taxon_ancillary	datetime	character	no
+taxon_ancillary	datetime	Date	no
 taxon_ancillary	variable_name	character	yes
 taxon_ancillary	value	character	yes
 taxon_ancillary	author	character	no
