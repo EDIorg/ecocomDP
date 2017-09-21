@@ -32,9 +32,9 @@ Columns
 |---------------|---------|-----------------------|-------------------|-------------|---------|
 | sampling_location_id | character | yes  	      |   NA|   | sbclter_abur_I |
 | sampling_location_name   	|  character  	| no 	|   NA | 	|  Arroyo Burro Reef, transect I 	|
-| latitude 	  |  float 	|   	no                  |   NA |	|  34.400275	|
-| longitude 	|  float 	|   	no                  |   NA | 	| -119.7445915 |
-| elevation	  |  float 	|   	np                  |   NA | 	| -15	|
+| latitude 	  |  float 	|   	no                  |   NA |Latitude in decimal degrees. Latitudes south of the equator are prefixed with a minus sign.|  34.400275	|
+| longitude 	|  float 	|   	no                  |   NA |Longitude in decimal degrees. Longitude west of the prime meridian is prefixed with a minus sign.| -119.7445915 |
+| elevation	  |  float 	|   	np                  |   NA |Elevation in meters.| -15	|
 | parent_sampling_location_id	|  character | no  	|   NA| 	|  sbclter_abur	|
 
 
