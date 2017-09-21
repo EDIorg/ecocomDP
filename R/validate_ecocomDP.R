@@ -13,7 +13,7 @@
 #'     A path to the dataset working directory containing \emph{only} ecocomDP 
 #'     tables. This directory should not contain anything else.
 #' @param delimiter
-#'     The field delimeter of ecocomDP tables. Can be comma or tab delimited 
+#'     The field delimiter of ecocomDP tables. Can be comma or tab delimited 
 #'     (i.e. "," or "\t")
 #'
 #' @return 
@@ -45,7 +45,7 @@ validate_ecocomDP <- function(path, delimiter) {
   
   # Arguments to function -----------------------------------------------------
   
-  #delimeter <- "\t" # Can be "," or "\t"
+  #delimiter <- "\t" # Can be "," or "\t"
   
   # Parameters ----------------------------------------------------------------
   
@@ -60,7 +60,7 @@ validate_ecocomDP <- function(path, delimiter) {
                                "/validation_criteria.txt",
                                sep = ""),
                          header = T,
-                         sep = delimeter,
+                         sep = delimiter,
                          as.is = T,
                          na.strings = "NA")
   
@@ -132,7 +132,7 @@ validate_ecocomDP <- function(path, delimiter) {
                                   dir_files[i],
                                   sep = ""),
                             header = T,
-                            sep = delimeter,
+                            sep = delimiter,
                             as.is = T,
                             na.strings = "NA")
       data_clean <- data_in[rowSums(is.na(data_in)) != ncol(data_in), ]
@@ -159,7 +159,7 @@ validate_ecocomDP <- function(path, delimiter) {
   #                                 dir_files[i],
   #                                 sep = ""),
   #                           header = T,
-  #                           sep = delimeter,
+  #                           sep = delimiter,
   #                           as.is = T,
   #                           na.strings = "NA")
   #     data_clean <- data_in[rowSums(is.na(data_in)) != ncol(data_in), ]
@@ -184,7 +184,7 @@ validate_ecocomDP <- function(path, delimiter) {
                                   dir_files[i],
                                   sep = ""),
                             header = T,
-                            sep = delimeter,
+                            sep = delimiter,
                             as.is = T,
                             na.strings = "NA")
       colnames_in <- colnames(data_in)
@@ -217,7 +217,7 @@ validate_ecocomDP <- function(path, delimiter) {
                                   table_in,
                                   sep = ""),
                             header = T,
-                            sep = delimeter,
+                            sep = delimiter,
                             as.is = T,
                             na.strings = "NA")
       required_column_names <- criteria$column[(!is.na(criteria$class)) & (criteria$table == table_names[i]) & (criteria$required == "yes")]
@@ -250,7 +250,7 @@ validate_ecocomDP <- function(path, delimiter) {
   #                                 table_in,
   #                                 sep = ""),
   #                           header = T,
-  #                           sep = delimeter,
+  #                           sep = delimiter,
   #                           as.is = T,
   #                           na.strings = "NA")
   #     colnames_in <- colnames(data_in)
@@ -364,7 +364,7 @@ validate_ecocomDP <- function(path, delimiter) {
                                   table_in,
                                   sep = ""),
                             header = T,
-                            sep = delimeter,
+                            sep = delimiter,
                             as.is = T,
                             na.strings = "NA")
       colnames_in <- colnames(data_in)
