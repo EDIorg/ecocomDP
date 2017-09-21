@@ -1,0 +1,11 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+record_id	A unique ID for this record.	character				
+observation_id	ID for the observation.	character				
+event_id	Reference to an event (required if event table is used).	character				
+package_id	The ID of this data package.	character				
+sampling_location_id	A reference to a location.	character				
+observation_datetime	Date and time of the observation.	Date		YYYY-MM-DD		
+taxon_id	ID from the taxon table.	character				
+variable_name	Name of the measured variable.	character				
+value	Value of the measured variable.	numeric	dimensionless		NA	Not available.
+unit	Unit of the measured variable.	character				
