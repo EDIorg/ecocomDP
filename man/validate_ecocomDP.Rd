@@ -15,7 +15,11 @@ tables. This directory should not contain anything else.}
 (i.e. "," or "\t")}
 }
 \value{
-A validation report printed in the console window of RStudio.
+A validation report printed in the console window of RStudio. This 
+    validator runs until it hits an error. You must address the reported
+    issues before continuing. Once all the validation checks have been 
+    passed, you will recieve a message "Congratulations! Your ecocomDP
+    has passed validation!"
 }
 \description{
 Once you've formatted a dataset to ecocomDP you will need to check that 
@@ -26,18 +30,22 @@ Once you've formatted a dataset to ecocomDP you will need to check that
 \details{
 Checks:
    \itemize{
-       \item \strong{Table names} Table names follow the ecocomDP 
-       convention \emph{studyName_ecocomDPTableName}.
-       \item \strong{Missing tables} Some tables are required. 
-       Missing tables are reported.
-       \item \strong{NULL columns} NULL columns take up space
-       and are not necessary for ecocomDP aggregation.
-       \item \strong{Column names} Column names must be correct to 
-       facilitate aggregation.
-       \item \strong{Missing columns} Some columns are required.
+       \item \strong{Table naming} Table names must follow the ecocomDP 
+       naming convention \emph{studyName_ecocomDPTableName}. Make sure table
+       names are consistent.
+       \item \strong{Required tables} Some tables are required. Add any 
+       missing tables.
+       \item \strong{NULL tables} NULL tables take up unnecessary space.
+       Delete these.
+       \item \strong{NULL columns} NULL columns take up unnecessary space.
+       Delete these.
+       \item \strong{Column names} Column names must be valid.
+       Adjust column names as required.
+       \item \strong{Required columns} Some columns are required.
+       Add missing columns.
        \item \strong{Column classes} Column classes must be correct.
-       \item \strong{datetime format} Date time format must follow ISO 8601,
-       specifically \emph{YYYY-MM-DDThh:mm+-hh}. Datetime reporting only use
+       \item \strong{Datetime format} Date time format must follow ISO 8601,
+       specifically \emph{YYYY-MM-DDThh:mm+-hh}. When reporting only use
        elements of this format required by the precision of the original 
        data.
    }
