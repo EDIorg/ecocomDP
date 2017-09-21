@@ -1,0 +1,6 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+record_id	A unique ID for this record.	character				
+event_id	The ID of the event.	character				
+variable_name	Name of the variable measured.	character				
+value	Value for the measured variable.	character				
+unit	Unit for the measured variable.	character				
