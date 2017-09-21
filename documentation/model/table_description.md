@@ -15,7 +15,7 @@ table list and suggested population order, ie, parents first.
 |3.| observation |yes| sampling_location, taxon, event | observations about taxa, that are being analyzed. Eg, organism abundance or density, or the data to compute density (count) | variable, value, unit | observation_id, event_id, package_id, sampling_location_id, observation_datetime, taxon_id, variable_name   | 
 |4.| event  | no | NA | additional info about the sampling event, in long-format |  variable, value, unit | event_id, variable_name  |
 |5.| sampling_location_ancillary |no| sampling_location | additional info about a place that does not change, in long format.Eg, sampling area, lake area, depth of ocean | variable, value, unit - See examples directory  | sampling_location_id, variable_name |
-|6.| taxon_ancillary|no|  taxon | additonal info about an organism that does not change, in long format. Eg, phenotypic traits | variable, value, unit | sampling_location_id, variable_name   |
+|6.| taxon_ancillary|no|  taxon | additonal info about an organism that does not change, in long format. Eg, phenotypic traits | variable, value, unit | taxon_id, variable_name   |
 |7.| dataset_summary|yes|  observation | summary info calculated from incoming data. one line table |See examples directory |   |
 
 
@@ -63,14 +63,14 @@ Columns
 |---------------|---------|-----------------------|-------------------|--------------|---------|  
 | record_id            | character |yes| NA	| a unique id for this record  	|  4161	 	|
 | observation_id       | character |yes|   	|   	|   	|
-|	event_id             | character |no*| (table=event) event_id 	| reference to an event (required if event table is used)  	|   	|
+|	event_id             | character |no*| (table = event) event_id 	| reference to an event (required if event table is used)  	|   	|
 |	package_id           | character |yes|   	| the ID of this data package  	| edi.100001.1   	|
-|	sampling_location_id | character |yes| (table=sampling_location) sampling_location_id |  a reference to a location	|  sbc_ABUR_1 	|
+|	sampling_location_id | character |yes| (table = sampling_location) sampling_location_id |  a reference to a location	|  sbc_ABUR_1 	|
 |	observation_datetime | datetime  |yes|   	|Date and time of the observation, following the ISO 8601 standard format YYYY-MM-DDThh:mm+-hh to the precision of datetime data| 2017-08-01 or 2017-08-01T14:01-07  	|
-|	taxon_id             | character |yes| (table=taxon) taxon_id  	| reference to a taxon ID  	| sbclter_MAPY   	|
-|	variable_name        | character |yes|   	| name of the variable measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  number_kelp_plants  	|
+|	taxon_id             | character |yes| (table = taxon) taxon_id  	| reference to a taxon ID  	| sbclter_MAPY   	|
+|	variable_name        | character |yes|   	| name of the variable measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  kelp_density  	|
 |	value                | float     |yes|   	| value for the variable  	| 7  	|
-|	unit                 | character |yes|   	| unit for this variable  	|  numberPerMeterSquaredPerDay 	|
+|	unit                 | character |yes|   	| unit for this variable  	|  numberPerMeterSquared 	|
 
 
 Table: event 
@@ -95,9 +95,9 @@ Description: additional info about a place that does not change frequently, eg, 
 Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
-|---------------|---------|-----------------------|-------------------|--------------|---------| 
+|---------------|---------|-----------------------|-------------------|-------------|---------| 
 |sampling_location_ancillary_id | character |yes|   	|   	|   	|
-|sampling_location_id           | character |yes|(table=sampling_location) sampling_location_id   	| Id of the location for reference	| sbclter_ABUR_1  	|
+|sampling_location_id           | character |yes|(table = sampling_location) sampling_location_id   	| Id of the location for reference	| sbclter_ABUR_1  	|
 |datetime                       | datetime	|no|  | date and time of the ancillary info, ISO datetime	|  experimental treatment date 	| 
 |variable_name                  | character |yes|   	|  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList) 	| treatment  	|
 |value                          | character |yes|   	|  value for the variable 	| kelp removal  	|
@@ -119,7 +119,7 @@ Columns
 |	datetime           | datetime  |no|   	              | date and time of the ancillary info, ISO datetime  	|   	|
 | variable_name      | character |yes|   	              |  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  trophic_level 	|
 | value              | character |yes|   	              |  value for the variable 	|   primary producer	|
-|author              | character |no|   	              | unit for this variable  	|   	|
+| unit              | character |no|   	              | unit for this variable  	|   	|
 
 
 Table: dataset_summary
@@ -130,7 +130,7 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|
-| package_id                  | character |yes| observation.package_id 	|  id of the L1 pkg (this package)	|  edi.100001.1 	|
+| package_id                  | character |yes| (table = observation) package_id 	|  id of the L1 pkg (this package)	|  edi.100001.1 	|
 |	original_package_id         | character |no|   	|  id of the L0 pkg (original, source) | knb-lter-sbc.21.17 |
 |	length_of_survey_years      | integer   |yes|   	|   	| 17  	| 
 |	number_of_years_sampled     | integer   |yes|   	|   	| 17  	|
