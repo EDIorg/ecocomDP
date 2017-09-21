@@ -4,12 +4,15 @@
 \alias{validate_ecocomDP}
 \title{Validate ecocomDP tables}
 \usage{
-validate_ecocomDP(path)
+validate_ecocomDP(path, delimiter)
     Run this function after ecocomDP creation and before making EML for it.
 }
 \arguments{
-\item{path}{A path to the dataset working directory containing ecocomDP tables. This
-directory should not contain an ecocomDP of another dataset.}
+\item{path}{A path to the dataset working directory containing \emph{only} ecocomDP 
+tables. This directory should not contain anything else.}
+
+\item{delimiter}{The field delimeter of ecocomDP tables. Can be comma or tab delimited 
+(i.e. "," or "\t")}
 }
 \value{
 A validation report printed in the console window of RStudio.
