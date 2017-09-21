@@ -20,7 +20,7 @@ event	value	character	no
 event	unit	character	no
 observation	NA	NA	yes
 observation	observation_id	character	yes
-observation	event_record_id	character	no
+observation	event_id	character	no
 observation	package_id	character	yes
 observation	sampling_location_id	character	yes
 observation	observation_datetime	Date	yes
