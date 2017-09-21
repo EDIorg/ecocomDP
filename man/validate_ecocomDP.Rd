@@ -11,7 +11,7 @@ validate_ecocomDP(path, delimiter)
 \item{path}{A path to the dataset working directory containing \emph{only} ecocomDP 
 tables. This directory should not contain anything else.}
 
-\item{delimiter}{The field delimeter of ecocomDP tables. Can be comma or tab delimited 
+\item{delimiter}{The field delimiter of ecocomDP tables. Can be comma or tab delimited 
 (i.e. "," or "\t")}
 }
 \value{
