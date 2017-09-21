@@ -1,0 +1,8 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+record_id	A unique identifier for this record.	character				
+taxon_ancillary_id	Identifier for the taxon ancillary.	character				
+taxon_id	Identifier from the taxon table.	character				
+datetime	Date and time of the ancillary information.	Date		YYYY-MM-DD		
+variable_name	The measured variable.	character				
+value	Value for the measured variable.	character				
+unit	Unit for the measured variable.	character				
