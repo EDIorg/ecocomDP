@@ -2,6 +2,6 @@ attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCo
 sampling_location_ancillary_id	Identifier of the sampling location ancillary.	character				
 sampling_location_id	Identifier of the location for reference.	character				
 datetime	Dtae and time of the ancillary information.	Date		YYYY-MM-DD		
-variable_name	Meaured variable.	character				
+variable_name	Meaured variable.	categorical				
 value	Value of the measured variable.	character				
 unit	Unit of the measured variable.	character				

@@ -6,6 +6,6 @@ package_id	The ID of this data package.	character
 sampling_location_id	A reference to a location.	character				
 observation_datetime	Date and time of the observation.	Date		YYYY-MM-DD		
 taxon_id	ID from the taxon table.	character				
-variable_name	Name of the measured variable.	character				
+variable_name	Name of the measured variable.	categorical				
 value	Value of the measured variable.	numeric	dimensionless		NA	Not available.
 unit	Unit of the measured variable.	character				
