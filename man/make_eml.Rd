@@ -4,32 +4,23 @@
 \alias{make_eml}
 \title{Make EML}
 \usage{
-make_eml(path, import.eml = FALSE)
+make_eml(path, parent.package.id, child.package.id)
 }
 \arguments{
-\item{path}{A path to the dataset working directory containing the completed 
-metadata templates, \emph{eml_configuration.R}, 
-\emph{datasetname_datatablename_catvars.txt} (if categorical variables 
-are present), and \emph{geographic_coverage.txt} (if reporting detailed 
-geographic coverage).}
+\item{path}{A path to the dataset working directory containing the validated 
+ecocomDP tables.}
 
-\item{import.eml}{If TRUE then EML for the raw dataset is read in from the working 
-directory and top level elements are used and data table specifc 
-elements are replaced with those for the ecocomDP tables.}
+\item{parent.package.id}{Identifier of parent data package (e.g. knb-lter-hfr.118.28).}
+
+\item{child.package.id}{Identifier of child data package (e.g. edi.53.1).}
 }
 \value{
-Validation results printed to the \emph{Console}.
-    
-    An EML metadata file written to the dataset working directory titled 
-    \emph{packageID.xml}.
+EML for the ecocomDP tables to the input path.
 }
 \description{
-Translate user supplied metadata into the EML schema for the Ecological 
-    Community Data Pattern (ecocomDP), validate the schema, and write to 
-    file.
+Make EML for an Ecological Community Data Pattern (ecocomDP) using 
+    elements from the parent data package.
 }
 \details{
-If validation fails, open the EML document in a .xml editor to identify 
-    the source of error. Often the error is small and quickly resolved with 
-    the aid of an editors schema congruence checker.
+Details.
 }
