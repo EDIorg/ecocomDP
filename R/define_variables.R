@@ -57,7 +57,17 @@ define_variables <- function(path, delimiter) {
   table_patterns <- c("observation\\b", "event\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b")
   table_names <- c("observation", "event", "sampling_location_ancillary", "taxon_ancillary")
   dir_files <- list.files(path)
-  tables_found <- grep(paste(table_patterns, collapse = "|"), dir_files, value = T)
+  table_names_found <- list()
+  tables_found <- list()
+  for (i in 1:length(table_patterns)){
+    tables_found[[i]] <- grep(table_patterns[i], dir_files, value = T)
+    if (!identical(tables_found[[i]], character(0))){
+      table_names_found[[i]] <- table_names[i]
+    }
+  }
+  tables_found <- unlist(tables_found)
+  table_names <- unlist(table_names_found)
+  
 
   # Issue warning
 
@@ -66,7 +76,7 @@ define_variables <- function(path, delimiter) {
   
   if (answer == "y"){
     
-    write_catvars <- function(tables_found, delimiter){
+    write_catvars <- function(tables_found, delimiter, table_names){
       
       for (i in 1:length(tables_found)){
         print(paste("Reading", tables_found[i]))
@@ -88,11 +98,12 @@ define_variables <- function(path, delimiter) {
         catvars[["attributeName"]] <- rep("variable_name", length(univars))
         catvars[["code"]] <- univars
         # Write catvars table
-        print(paste("Writing ", "catvars_", tables_found[i], sep = ""))
+        print(paste("Writing ", "catvars_", table_names[i], sep = ""))
         write.table(catvars,
                     paste(path,
                           "/",
-                          fname_table_catvars[i],
+                          "catvars_",
+                          table_names[i],
                           sep = ""),
                     sep = "\t",
                     row.names = F,
@@ -101,7 +112,8 @@ define_variables <- function(path, delimiter) {
         # Prompt the user to manually edit the catvars file and custom unit files.
         view_unit_dictionary()
         readline(
-          prompt = paste("Open", fname_table_catvars[i], "define factor codes, then save, close, and press <enter>."))
+          prompt = paste("Open ", "catvars_", table_names[i], " define factor codes, then save, close, and press <enter>.",
+                         sep = ""))
 
       }
     }
