@@ -89,11 +89,12 @@ define_variables <- function(path, delimiter) {
   tables_found <- unlist(tables_found)
   table_names <- unlist(table_names_found)
   
+  # Begin function ------------------------------------------------------------
 
   # Issue warning
 
   answer <- readline(
-    "Are you sure you want to build new categorical variable tables? This will overwrite your previous work! (y or n):  ")
+    "Are you sure you want to build new variable tables? This will overwrite your previous work! (y or n):  ")
   
   if (answer == "y"){
     
@@ -139,15 +140,16 @@ define_variables <- function(path, delimiter) {
                     row.names = F,
                     quote = F,
                     fileEncoding = "UTF-8")
-        # Prompt the user to manually edit the catvars file and custom unit files.
-        view_unit_dictionary()
-        readline(
-          prompt = paste("Open ", table_names[i], "_variables", ".txt,\n",
-                         " add definitions and units,\n", " then save, close, and press <enter>.",
-                         sep = ""))
-
       }
     }
+    write_catvars(tables_found, delimiter, table_names)
   }
+  # Prompt the user to manually edit the catvars file and custom unit files.
+  print("Open:")
+  for (i in 1:length(tables_found)){
+    print(paste("variables_", table_names[i], ".txt", sep = ""))
+  }
+  print(paste("add definitions and units then save, and close.",sep = ""))
+  view_unit_dictionary()
 }
 
