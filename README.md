@@ -2,6 +2,8 @@
 
 A dataset design pattern for ecological community data.
 
+## Getting Started
+
 We are developing an R package of tools to help:
 
 1. Create the ecocomDP tables.
@@ -9,19 +11,7 @@ We are developing an R package of tools to help:
 3. Make metadata, in the Ecological Metadata Language (EML), for a set of ecocomDP tables.
 4. Aggregate ecocomDP data packages and create/export views.
     
-These functions are in development and are not stable. Follow development in [projects](https://github.com/EDIorg/ecocomDP/projects). To install the R package:
-
-## Getting Started
-
-### Prerequisites
-
-To install the R code package f
-
-```
-# Install and load the devtools package
-install.packages("devtools")
-library(devtools)
-```
+These functions are in development and are not stable. Follow development in [projects](https://github.com/EDIorg/ecocomDP/projects).
 
 ### Installing
 
@@ -56,6 +46,3 @@ See also the list of contributors who participated in this project.
 ## License
 
 This project is licensed under the CC0 1.0 Universal (CC0 1.0) License - see the LICENSE.md file for details.
-
-
-
