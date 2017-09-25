@@ -19,13 +19,13 @@
 #'
 #' @return 
 #'     A tab delimited UTF-8 file in the ecocomDP working directory titled 
-#'     \emph{tablename_variables.txt} containing unique values 
+#'     \emph{variables_tablename.txt} containing unique values 
 #'     of attributes of class "categorical" which is translated and written 
 #'     to EML with \code{make_eml}.
 #'     
 #' @details 
 #'     This function overwrites any 
-#'     \emph{tablename_variables.txt} files you have created in the ecocomDP 
+#'     \emph{variables_tablename.txt} files you have created in the ecocomDP 
 #'     working directory. To prevent overwriting of these files, temporarily 
 #'     move them out of the working directory.
 #'     
@@ -100,11 +100,6 @@ define_variables <- function(path, delimiter) {
     
     print("Custom units template copied to working directory.")
     
-    file.copy(from = paste(path.package("ecocomDP"),
-                           "/custom_units.txt",
-                           sep = ""),
-              to = path)
-    
     write_catvars <- function(tables_found, delimiter, table_names){
       
       for (i in 1:length(tables_found)){
@@ -128,12 +123,12 @@ define_variables <- function(path, delimiter) {
         catvars[["attributeName"]] <- rep("variable_name", length(univars))
         catvars[["code"]] <- univars
         # Write catvars table
-        print(paste("Writing ", table_names[i], "_variables.txt", sep = ""))
+        print(paste("Writing ", "variables_", table_names[i], ".txt", sep = ""))
         write.table(catvars,
                     paste(path,
                           "/",
+                          "variables_",
                           table_names[i],
-                          "_variables",
                           ".txt",
                           sep = ""),
                     sep = "\t",
