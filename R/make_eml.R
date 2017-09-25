@@ -27,37 +27,30 @@
 #'
 
 
-make_eml <- function(path, parent.package.id, child.package.id) {
+make_eml <- function(path, parent.package.id, child.package.id, delimiter) {
   
-  # # Check arguments
-  # 
-  # if (missing(path)){
-  #   stop("Specify path to dataset working directory.")
-  # }
-  # 
-  # # Get system information
-  # 
-  # sysinfo <- Sys.info()["sysname"]
-  # if (sysinfo == "Darwin"){
-  #   os <- "mac"
-  # } else {
-  #   os <- "win"
-  # }
-  # 
-  # # Load the datasets configuration file
-  # 
-  # print("Loading configuration file ...")
-  # 
-  # source(paste(path, "/eml_configuration.R", sep = ""))
-  # 
-  # template <- paste(dataset_name,
-  #                   "_template.docx",
-  #                   sep = "")
-  # 
-  # # Compile attributes
-  # 
-  # attributes_in <- compile_attributes(path = path)
-  # 
+  # Check arguments
+
+  if (missing(path)){
+    stop("Specify path to dataset working directory.")
+  }
+  if (missing(parent.package.id)){
+    stop("Specify the parent data package ID.")
+  }
+  if (missing(path)){
+    stop("Specify the child data package ID.")
+  }
+  if (missing(path)){
+    stop("Specify the delimiter of child data tables.")
+  }
+  
+  # Parameters ----------------------------------------------------------------
+
+
+  # Compile attributes
+
+  attributes_in <- compile_attributes(path = path, delimiter = delimiter)
+
   # # Set file names
   # 
   # fname_abstract <- paste(path,
@@ -97,11 +90,14 @@ make_eml <- function(path, parent.package.id, child.package.id) {
   #     "_catvars.txt",
   #     sep = "")
   # }
-  # 
-  # # Initialize data entity storage (tables)
-  # 
-  # data_tables_stored <- list()
-  # 
+
+
+  
+  
+  # Initialize data entity storage (tables)
+
+  data_tables_stored <- list()
+
   # # Load helper function to set personnel roles
   # 
   # set_person <- function(info_row, person_role){
