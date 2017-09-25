@@ -75,13 +75,13 @@ define_variables <- function(path, delimiter) {
   
   # Parameters ----------------------------------------------------------------
   
-  table_patterns <- c("observation\\b", "event\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b")
-  table_names <- c("observation", "event", "sampling_location_ancillary", "taxon_ancillary")
+  table_patterns <- c("observation\\b", "event\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b", "summary\\b", "sampling_location\\b", "taxon\\b")
+  table_names <- c("observation", "event", "sampling_location_ancillary", "taxon_ancillary", "summary", "sampling_location", "taxon")
   dir_files <- list.files(path)
   table_names_found <- list()
   tables_found <- list()
   for (i in 1:length(table_patterns)){
-    tables_found[[i]] <- grep(table_patterns[i], dir_files, value = T)
+    tables_found[[i]] <- dir_files[grep(paste("^(?=.*", table_patterns[i], ")(?!.*variables)", sep = ""), dir_files, perl=TRUE)]
     if (!identical(tables_found[[i]], character(0))){
       table_names_found[[i]] <- table_names[i]
     }
