@@ -1,11 +1,14 @@
-#' Define categorical variables
+#' Define variables for ecocomDP tables
 #'
 #' @description  
-#'     Identify and define categorical variables of ecocomDP tables.
+#'     Variables of ecocomDP are stored as categorical variables in long format.
+#'     Use this function to identify unique variables and assign definitions 
+#'     and any associated units.
 #'
-#' @usage define_catvars(path)
+#' @usage define_variables(path, delimiter)
 #' 
-#'     Run this function to set variable definitions prior to running make_eml.
+#'     Run this function to define variables prior to creating EML with 
+#'     \code{make_eml}.
 #'
 #' @param path 
 #'     A path to the dataset working directory containing ecocomDP tables.
@@ -16,26 +19,44 @@
 #'
 #' @return 
 #'     A tab delimited UTF-8 file in the ecocomDP working directory titled 
-#'     \emph{tablename_catvars.txt} containing unique values 
+#'     \emph{tablename_variables.txt} containing unique values 
 #'     of attributes of class "categorical" which is translated and written 
 #'     to EML with \code{make_eml}.
 #'     
 #' @details 
 #'     This function overwrites any 
-#'     \emph{tablename_catvars.txt} files you have created in 
-#'     the ecocomDP working directory. To prevent overwriting of these files, 
-#'     temporarily move them out of the working directory.
+#'     \emph{tablename_variables.txt} files you have created in the ecocomDP 
+#'     working directory. To prevent overwriting of these files, temporarily 
+#'     move them out of the working directory.
 #'     
 #'     This function identifies "categorical" class attributes from the file 
-#'     \emph{attributes_tablename.txt} and extracts unique 
-#'     values of these attributes to the table for you to define. Do not define 
-#'     categorical variables with empty field contents. Delete these rows from 
-#'     this file.
+#'     \emph{attributes_tablename.txt} stored in the \emph{/inst/} directory of
+#'     the code package and extracts unique values of these attributes to the 
+#'     table for you to define. Do not define categorical variables with empty
+#'     field contents. Delete these rows from this file.
 #'     
 #'     When defining categorical variables with unit values, refer to the 
-#'     standard unit dictionary "name" column. Enter the unit name in the 
-#'     definition column of the categorical variables table. Note these values 
-#'     are case sensitive.
+#'     standard unit dictionary "name" column. The unit dictionary will be 
+#'     automatically opened when running this function. Enter the unit name in 
+#'     the unit column of the categorical variables table. Note these values 
+#'     are case sensitive. If you cannot find a unit in the dictionary, enter 
+#'     the unit in the tab delimited UTF-8 formatted file 
+#'     \emph{custom_units.txt} that has been automatically imported into your
+#'     working directory. Valid custom units must be convertible to SI Units 
+#'     (i.e. International System of Units). If it cannot be converted to SI 
+#'     then list it units column as "dimensionless". To create a custom unit 
+#'     define the:
+#'     \itemize{
+#'         \item \strong{id} This is equivalent to the unit name. Reference 
+#'         the standard unit dictionary formatting
+#'         \item \strong{unitType} The type of unit being defined.
+#'         Reference the dictionary for examples.
+#'         \item \strong{parentSI} The SI equivalent of the id you have entered.
+#'         \item \strong{multiplierToSI} This is the multiplier to convert 
+#'         from your custom unit to the SI unit equivalent.
+#'         \item \strong{description} A description of the custom unit. 
+#'         Reference the dictionary for examples.
+#'         }
 #'
 #' @export
 #'
@@ -76,6 +97,13 @@ define_variables <- function(path, delimiter) {
   
   if (answer == "y"){
     
+    print("Custom units template copied to working directory.")
+    
+    file.copy(from = paste(path.package("ecocomDP"),
+                           "/custom_units.txt",
+                           sep = ""),
+              to = path)
+    
     write_catvars <- function(tables_found, delimiter, table_names){
       
       for (i in 1:length(tables_found)){
@@ -94,16 +122,18 @@ define_variables <- function(path, delimiter) {
         catvars <- data.frame(attributeName = character(length(univars)),
                               code = character(length(univars)),
                               definition = character(length(univars)),
+                              units = character(length(univars)),
                               stringsAsFactors = F)
         catvars[["attributeName"]] <- rep("variable_name", length(univars))
         catvars[["code"]] <- univars
         # Write catvars table
-        print(paste("Writing ", "catvars_", table_names[i], sep = ""))
+        print(paste("Writing ", table_names[i], "_variables.txt", sep = ""))
         write.table(catvars,
                     paste(path,
                           "/",
-                          "catvars_",
                           table_names[i],
+                          "_variables",
+                          ".txt",
                           sep = ""),
                     sep = "\t",
                     row.names = F,
@@ -112,7 +142,8 @@ define_variables <- function(path, delimiter) {
         # Prompt the user to manually edit the catvars file and custom unit files.
         view_unit_dictionary()
         readline(
-          prompt = paste("Open ", "catvars_", table_names[i], " define factor codes, then save, close, and press <enter>.",
+          prompt = paste("Open ", table_names[i], "_variables", ".txt,\n",
+                         " add definitions and units,\n", " then save, close, and press <enter>.",
                          sep = ""))
 
       }
