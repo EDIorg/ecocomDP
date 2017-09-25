@@ -45,4 +45,4 @@ See also the list of contributors who participated in this project.
 
 ## License
 
-This project is licensed under the CC0 1.0 Universal (CC0 1.0) License - see the LICENSE.md file for details.
+This project is licensed under the [CC0 1.0 Universal (CC0 1.0)](https://creativecommons.org/publicdomain/zero/1.0/legalcode) License - see the LICENSE file for details.
