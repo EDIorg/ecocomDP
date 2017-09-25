@@ -1,8 +1,15 @@
 # ecocomDP
+### A dataset design pattern for ecological community data to facilitate synthesis and reuse
 
-A dataset design pattern for ecological community data.
+We know from experience that original, primary research data sets cannot be easily combined or synthesised until all data are completely understood and converted to a similar format. There are two approaches to achieving this data regularity: a) to prescribe the format before data collection starts, or b) to convert primary data into a flexible standard format for reuse. Prescribed formats are impossible to impose on research studies, so we take the second approach: define a flexible intermediate, and convert primary data to that model. The Ecological Community Data Pattern (ecocomDP) is the result of our examination of the needs of synthesis scientists using community survey data, and determination of the features of a flexible intermediate for these data.
+
+
+
+_Figure: Abstract view of dataset levels. A flexible intermediate (L1, middle) lies between datasets of primary observations (L0, left) and the aggregated views used by synthesis projects. If datasets are in a recognized format, EDI can create tools for some basic functions_
 
 ## Getting Started
+
+### Contents
 
 We are developing an R package of tools to help:
 
