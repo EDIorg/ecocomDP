@@ -35,28 +35,27 @@ import_templates <- function(path){
     stop("Specify path to dataset working directory.")
   }
   
-  # Begin function
+  # Import files that are not already in the directory
   
   value <- file.copy(from = paste(path.package("ecocomDP"),
-                                  "/map.txt",
+                                  "/additional_contact.txt",
                                   sep = ""),
                      to = path)
-  
   if (isTRUE(value)){
-    print("Importing map.txt ... ")
+    print("Importing additional_contact.txt ... ")
   } else {
-    print("map.txt already exists ... ")
+    print("additional_contact.txt already exists ... ")
   }
   
   value <- file.copy(from = paste(path.package("ecocomDP"),
-                                  "/map_instructions.txt",
+                                  "/custom_units.txt",
                                   sep = ""),
                      to = path)
-  
   if (isTRUE(value)){
-    print("Importing map_instructions.txt ... ")
+    print("Importing custom_units.txt ... ")
   } else {
-    print("map_instructions.txt already exists ... ")
+    print("custom_units.txt already exists ... ")
   }
+
   
 }
