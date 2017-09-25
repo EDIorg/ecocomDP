@@ -3,32 +3,25 @@
 # and reformats the attributes table.
 
 
-compile_attributes <- function(path){
+compile_attributes <- function(path, delimiter){
 
-  # Load configuration file
-
-  source(paste(path,
-               "/eml_configuration.R",
-               sep = ""))
+  # Set parameters ------------------------------------------------------------
   
-  template <- paste(dataset_name,
-                    "_template.docx",
-                    sep = "")
-  
-  # Set file names to be written 
-
-  fname_table_attributes <- c()
-
-  for (i in 1:length(table_names)){
-
-    fname_table_attributes[i] <- paste(
-      substr(table_names[i], 1, nchar(table_names[i]) - 4),
-      "_attributes.txt",
-      sep = "")
-
+  table_patterns <- c("observation\\b", "event\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b", "summary\\b", "sampling_location\\b", "taxon\\b")
+  table_names <- c("observation", "event", "sampling_location_ancillary", "taxon_ancillary", "summary", "sampling_location", "taxon")
+  dir_files <- list.files(path)
+  table_names_found <- list()
+  tables_found <- list()
+  for (i in 1:length(table_patterns)){
+    tables_found[[i]] <- dir_files[grep(paste("^(?=.*", table_patterns[i], ")(?!.*variables)", sep = ""), dir_files, perl=TRUE)]
+    if (!identical(tables_found[[i]], character(0))){
+      table_names_found[[i]] <- table_names[i]
+    }
   }
-
-  # Loop through data tables --------------------------------------------------
+  tables_found <- unlist(tables_found)
+  table_names <- unlist(table_names_found)
+  
+  # Loop through each table that is present -----------------------------------
   
   attributes_stored <- list()
 
@@ -37,55 +30,32 @@ compile_attributes <- function(path){
     print(paste("Compiling", table_names[i], "attributes ..."))
 
     # Read data table
-
-    if (field_delimeter[i] == "comma"){
-      
-      df_table <- read.table(
-        paste(path, "/", table_names[i], sep = ""),
-        header=TRUE,
-        sep=",",
-        quote="\"",
-        as.is=TRUE,
-        comment.char = "")
-      
-    } else if (field_delimeter[i] == "tab"){
-      
-      df_table <- read.table(
-        paste(path, "/", table_names[i], sep = ""),
-        header=TRUE,
-        sep="\t",
-        quote="\"",
-        as.is=TRUE,
-        comment.char = "")
-      
-    }
+    
+    df_table <- read.table(paste(path,
+                                "/",
+                                tables_found[i],
+                                sep = ""),
+                          header = T,
+                          sep = delimiter,
+                          as.is = T,
+                          na.strings = "NA")
     
     # Read attributes_draft table
     
-    df_attributes <- read.table(
-      paste(path, 
-            "/", 
-            substr(fname_table_attributes[i], 1, nchar(fname_table_attributes[i]) - 4),
-            ".txt",
-            sep = ""),
-      header=TRUE,
-      sep="\t",
-      quote="\"",
-      as.is=TRUE,
-      comment.char = "",
-      colClasses = rep("character", 7))
-    
-    colnames(df_attributes) <- c("attributeName",
-                                 "attributeDefinition",
-                                 "class",
-                                 "unit",
-                                 "dateTimeFormatString",
-                                 "missingValueCode",
-                                 "missingValueCodeExplanation")
+    df_attributes <- read.table(paste(path.package("ecocomDP"),
+                                      "/attributes_",
+                                      table_names[i],
+                                      ".txt",
+                                      sep = ""),
+                                header = T,
+                                sep = "\t",
+                                as.is = T,
+                                na.strings = "NA",
+                                colClasses = rep("character", 7))
     
     # Initialize outgoing attribute table 
 
-    rows <- ncol(df_table)
+    rows <- nrow(df_attributes)
     attributes <- data.frame(attributeName = character(rows),
                              formatString = character(rows),
                              unit = character(rows),
@@ -177,7 +147,7 @@ compile_attributes <- function(path){
     
     attributes$columnClasses[is_catvar] <- "factor"
 
-    # Set attribute definition (i.e. "definition")
+    # Set attribute definition
     
     use_i <- c(is_character, is_catvar)
     
