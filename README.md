@@ -56,7 +56,7 @@ We do not yet have any versions available. Stay tuned!
 
 ## Authors
 
-Several people have participated in this project. View the list of current team members and contributors [here]().
+Several people have participated in this project. View the list of current team members and contributors [here](https://github.com/EDIorg/ecocomDP/blob/master/AUTHORS.md).
 
 ## License
 
