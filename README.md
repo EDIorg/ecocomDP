@@ -1,5 +1,4 @@
-# ecocomDP
-### A dataset design pattern for ecological community data to facilitate synthesis and reuse
+# ecocomDP: A dataset design pattern for ecological community data to facilitate synthesis and reuse
 
 We know from experience that original, primary research data sets cannot be easily combined or synthesised until all data are completely understood and converted to a similar format. There are two approaches to achieving this data regularity: a) to prescribe the format before data collection starts, or b) to convert primary data into a flexible standard format for reuse. Prescribed formats are impossible to impose on research studies, so we take the second approach: define a flexible intermediate, and convert primary data to that model. The Ecological Community Data Pattern (ecocomDP) is the result of our examination of the needs of synthesis scientists using community survey data, and determination of the features of a flexible intermediate for these data.
 
@@ -11,18 +10,27 @@ _Figure: Abstract view of dataset levels. A flexible intermediate (L1, middle) l
 
 ### Contents
 
-We are developing an R package of tools to help:
+#### Model documentation
 
-1. Create the ecocomDP tables.
-2. Validate tables against the ecocomDP schema.
-3. Make metadata, in the Ecological Metadata Language (EML), for a set of ecocomDP tables.
-4. Aggregate ecocomDP data packages and create/export views.
-    
-These functions are in development and are not stable. Follow development in [projects](https://github.com/EDIorg/ecocomDP/projects).
+View table descriptions, relationships, and requriements [here](https://github.com/EDIorg/ecocomDP/tree/master/documentation/model).
+
+An example set of tables can be accessed [here](https://github.com/EDIorg/ecocomDP/tree/master/documentation/examples).
+
+#### Formatting guide
+
+The process of formatting a level-0 dataset to level-1 (ecocomDP) is variable and depends on several factors making a scripted solution difficult. However, we have identified some general steps that are helpful to follow in this process and have written up a set of instructions [here](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions).
+
+#### PostgreSQL
+
+A PostgreSQL implementation of ecocomDP can be found [here](https://github.com/EDIorg/ecocomDP/tree/master/postgreSQL).
+
+#### R package
+
+We are developing an R package of tools to do the following: (1) help format a level-0 dataset to ecocomDP, (2) validate tables against the ecocomDP schema, (3) make metadata in the Ecological Metadata Language (EML) for ecocomDP tables, (4) aggregate several ecocomDP data packages and create/export views. These functions are in development and are not yet stable. Follow development in [projects](https://github.com/EDIorg/ecocomDP/projects).
 
 ### Installing
 
-The ecocomDP R code package is available here on GitHub. To install you will need to install and load `devtools`.
+The ecocomDP R package is available here on GitHub. To install you will first need to install and load `devtools`.
 
 ```
 # Install and load devtools
@@ -36,11 +44,11 @@ library(devtools)
 
 ## Running the tests
 
-We have not yet drafted tests for this project.
+We have no tests yet.
 
 ## Contributing
 
-We are in the beginning phase of this project. Once it moves a little further along we will share details on our code of conduct, and the process for submitting pull requrests to us.
+This project is in the initial phase of development. Community contributions are welcome, but might be more effective once we solidify the ecocomDP design pattern a little more. Please reference our code conduct and contributing guidelines for submitting pull requrests to us.
 
 ## Versioning
 
