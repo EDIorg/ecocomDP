@@ -48,7 +48,7 @@ We have no tests yet.
 
 ## Contributing
 
-This project is in the initial phase of development. Community contributions are welcome, but might be more effective once we solidify the ecocomDP design pattern a little more. Please reference our code conduct and contributing guidelines for submitting pull requrests to us.
+This project is in the initial phase of development. Community contributions are welcome, but might be more effective once we solidify the ecocomDP design pattern a little more. Please reference our [code conduct](https://github.com/EDIorg/ecocomDP/blob/master/CODE_OF_CONDUCT.md) and contributing guidelines for submitting pull requrests to us.
 
 ## Versioning
 
