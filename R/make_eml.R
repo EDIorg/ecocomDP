@@ -27,457 +27,192 @@
 #'
 
 
-make_eml <- function(path, parent.package.id, child.package.id) {
+make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.id, author.system, intellectual.rights) {
   
-  # # Check arguments
-  # 
-  # if (missing(path)){
-  #   stop("Specify path to dataset working directory.")
-  # }
-  # 
-  # # Get system information
-  # 
-  # sysinfo <- Sys.info()["sysname"]
-  # if (sysinfo == "Darwin"){
-  #   os <- "mac"
-  # } else {
-  #   os <- "win"
-  # }
-  # 
-  # # Load the datasets configuration file
-  # 
-  # print("Loading configuration file ...")
-  # 
-  # source(paste(path, "/eml_configuration.R", sep = ""))
-  # 
-  # template <- paste(dataset_name,
-  #                   "_template.docx",
-  #                   sep = "")
-  # 
-  # # Compile attributes
-  # 
-  # attributes_in <- compile_attributes(path = path)
-  # 
-  # # Set file names
-  # 
-  # fname_abstract <- paste(path,
-  #                         "/",
-  #                         substr(template, 1, nchar(template) - 14),
-  #                         "_abstract.txt",
-  #                         sep = "")
-  # 
-  # fname_additional_info <- paste(path,
-  #                                "/",
-  #                                substr(template, 1, nchar(template) - 14),
-  #                                "_additional_info.txt",
-  #                                sep = "")
-  # 
-  # fname_personnel <- paste(path,
-  #                          "/",
-  #                          substr(template, 1, nchar(template) - 14),
-  #                          "_personnel.txt",
-  #                          sep = "")
-  # 
-  # fname_intellectual_rights <- paste(path,
-  #                                    "/",
-  #                                    substr(template, 1,
-  #                                           nchar(template) - 14),
-  #                                    "_intellectual_rights.txt", sep = "")
-  # 
-  # fname_methods <- paste(path,
-  #                        "/",
-  #                        substr(template, 1, nchar(template) - 14),
-  #                        "_methods.txt",
-  #                        sep = "")
-  # 
-  # fname_table_catvars <- c()
-  # for (i in 1:length(table_names)){
-  #   fname_table_catvars[i] <- paste(
-  #     substr(table_names[i], 1, nchar(table_names[i]) - 4),
-  #     "_catvars.txt",
-  #     sep = "")
-  # }
-  # 
-  # # Initialize data entity storage (tables)
-  # 
-  # data_tables_stored <- list()
-  # 
-  # # Load helper function to set personnel roles
-  # 
-  # set_person <- function(info_row, person_role){
-  #   
-  #   if (person_role == "contact"){
-  #     
-  #     individualName <- new(
-  #       "individualName",
-  #       givenName = trimws(personinfo[info_row,"givenName"]),
-  #       surName = trimws(personinfo[info_row,"surName"]))
-  #     
-  #     contact <- new(
-  #       "contact",
-  #       individualName = individualName,
-  #       organizationName = trimws(personinfo[info_row,"organizationName"]),
-  #       electronicMailAddress = trimws(personinfo[info_row,"electronicMailAddress"]))
-  #     
-  #     contact
-  #     
-  #   } else if (person_role == "creator"){
-  #     
-  #     individualName <- new(
-  #       "individualName",
-  #       givenName = trimws(personinfo[info_row,"givenName"]),
-  #       surName = trimws(personinfo[info_row,"surName"]))
-  #     
-  #     creator <- new(
-  #       "creator",
-  #       individualName = individualName,
-  #       organizationName = trimws(personinfo[info_row,"organizationName"]),
-  #       electronicMailAddress = trimws(personinfo[info_row,"electronicMailAddress"]))
-  #     
-  #     if (nchar(trimws(personinfo[info_row,"userId"])) == 19){
-  #       userId <- new("userId")
-  #       userId@directory <- new("xml_attribute", "http://orcid.org")
-  #       userId@.Data <- trimws(personinfo[info_row,"userId"])
-  #       creator@userId <- new("ListOfuserId", c(userId))
-  #     }
-  #     
-  #     creator
-  #     
-  #   } else if (person_role == "pi"){
-  #     
-  #     individualName <- new(
-  #       "individualName",
-  #       givenName = trimws(personinfo[info_row,"givenName"]),
-  #       surName = trimws(personinfo[info_row,"surName"]))
-  #     
-  #     principal_investigator <- as.person(
-  #       paste(
-  #         trimws(personinfo[info_row, "givenName"]),
-  #         " ",
-  #         trimws(personinfo[info_row, "surName"]),
-  #         " <",
-  #         trimws(personinfo[info_row, "electronicMailAddress"]),
-  #         ">",
-  #         sep = ""))
-  #     
-  #     rp_personnel <- as(principal_investigator, "personnel")
-  #     
-  #     if (nchar(trimws(personinfo[info_row,"userId"])) == 19){
-  #       
-  #       rp_userId <- new("userId")
-  #       rp_userId@directory <- new("xml_attribute", "http://orcid.org")
-  #       rp_userId@.Data <- paste("http://orcid.org/",
-  #                                trimws(personinfo[info_row, "userId"]),
-  #                                sep = "")
-  #       rp_personnel@userId <- new("ListOfuserId", c(rp_userId))
-  #       
-  #     }
-  #     
-  #     role <- new("role", "Principal Investigator")
-  #     rp_personnel@role <- new("ListOfrole", c(role))
-  #     
-  #     rp_personnel
-  #     
-  #   } else {
-  #     
-  #     individualName <- new(
-  #       "individualName",
-  #       givenName = trimws(personinfo[info_row,"givenName"]),
-  #       surName = trimws(personinfo[info_row,"surName"]))
-  #     
-  #     associated_party <- new(
-  #       "associatedParty",
-  #       individualName = individualName,
-  #       organizationName = trimws(personinfo[info_row,"organizationName"]),
-  #       electronicMailAddress = trimws(personinfo[info_row,"electronicMailAddress"]))
-  #     
-  #     if (nchar(trimws(personinfo[info_row,"userId"])) == 19){
-  #       userId <- new("userId")
-  #       userId@directory <- new("xml_attribute", "http://orcid.org")
-  #       userId@.Data <- trimws(personinfo[info_row,"userId"])
-  #       associated_party@userId <- new("ListOfuserId", c(userId))
-  #     }
-  #     
-  #     role <- new("role", trimws(personinfo[info_row,"role"]))
-  #     associated_party@role <- new("role", c(role))
-  #     
-  #     associated_party
-  #     
-  #   }
-  #   
-  # }
-  # 
-  # # Read personnel file
-  # 
-  # print("Read personnel file ...")
-  # 
-  # personinfo <- read.table(
-  #   fname_personnel,
-  #   header=TRUE,
-  #   sep="\t",
-  #   quote="\"",
-  #   as.is=TRUE,
-  #   comment.char = "",
-  #   colClasses = rep("character", 6))
-  # 
-  # colnames(personinfo) <- c("givenName",
-  #                           "surName",
-  #                           "organizationName",
-  #                           "electronicMailAddress",
-  #                           "userId",
-  #                           "role")
-  # 
-  # # Build modules--------------------------------------------------------------
-  # 
-  # print("Building EML:")
-  # 
-  # # Create EML
-  # 
-  # # Build eml-access module
-  # 
-  # print("access ...")
-  # 
-  # allow_principals <- c(paste("uid=",
-  #                             user_id,
-  #                             ",o=LTER,dc=ecoinformatics,dc=org",
-  #                             sep = ""),
-  #                       "public")
-  # 
-  # allow_permissions <- c("all",
-  #                        "read")
-  # 
-  # access_order <- "allowFirst"
-  # 
-  # access_scope <- "document"
-  # 
-  # access <- new("access",
-  #               scope = access_scope,
-  #               order = access_order,
-  #               authSystem = author_system)
-  # 
-  # allow <- list()
-  # for (i in 1:length(allow_principals)){
-  #   allow[[i]] <- new("allow",
-  #                     principal = allow_principals[i],
-  #                     permission = allow_permissions[i])
-  # }
-  # 
-  # access@allow <- new("ListOfallow",
-  #                     c(allow))
-  # 
-  # # Build dataset module
-  # 
-  # print("dataset ...")
-  # 
-  # dataset <- new("dataset",
-  #                title = dataset_title)
-  # 
-  # # Add creators
-  # 
-  # print("creators ...")
-  # 
-  # personinfo <- read.table(
-  #   paste(substr(fname_personnel, 1, nchar(fname_personnel) - 4),
-  #         ".txt",
-  #         sep = ""),
-  #   header = TRUE,
-  #   sep = "\t",
-  #   as.is = TRUE,
-  #   na.strings = "NA",
-  #   colClasses = "character")
-  # 
-  # useI <- which(personinfo$role == "creator")
-  # 
-  # creator_list <- list()
-  # for (j in 1:length(useI)){
-  #   creator_list[[j]] <- set_person(info_row = useI[j],
-  #                                   person_role = "creator")
-  # }
-  # 
-  # dataset@creator <- as(creator_list, "ListOfcreator")
-  # 
-  # # Add publicaton date
-  # 
-  # print("publication date ...")
-  # 
-  # dataset@pubDate <- as(format(Sys.time(), "%Y-%m-%d"), "pubDate")
-  # 
-  # # Add abstract
-  # 
-  # print("abstract ...")
-  # 
-  # dataset@abstract <- as(set_TextType(fname_abstract), "abstract")
-  # 
-  # # Add keywords
-  # 
-  # print("keywords ...")
-  # 
-  # dataset@keywordSet <- new("ListOfkeywordSet", c(new("keywordSet", keywords)))
-  # 
-  # # Add intellectual rights
-  # 
-  # print("intellectual rights ...")
-  # 
-  # dataset@intellectualRights <- as(
-  #   set_TextType(fname_intellectual_rights),
-  #   "intellectualRights")
-  # 
-  # # Add coverage
-  # 
-  # print("coverage ...")
-  # 
-  # dataset@coverage <- set_coverage(begin = begin_date,
-  #                                  end = end_date,
-  #                                  geographicDescription = geographic_location,
-  #                                  west = coordinate_west,
-  #                                  east = coordinate_east,
-  #                                  north = coordinate_north,
-  #                                  south = coordinate_south)
-  # 
-  # # Add maintenance
-  # 
-  # print("maintenance ...")
-  # 
-  # maintenance <- new("maintenance")
-  # maintenance@description <- as(maintenance_description, "description")
-  # dataset@maintenance <- maintenance
-  # 
-  # # Add contacts
-  # 
-  # print("contacts ...")
-  # 
-  # personinfo <- read.table(
-  #   paste(substr(fname_personnel, 1, nchar(fname_personnel) - 4),
-  #         ".txt",
-  #         sep = ""),
-  #   header = TRUE,
-  #   sep = "\t",
-  #   as.is = TRUE,
-  #   na.strings = "NA",
-  #   colClasses = "character")
-  # 
-  # useI <- which(personinfo$role == "contact")
-  # 
-  # contact_list <- list()
-  # for (j in 1:length(useI)){
-  #   contact_list[[j]] <- set_person(info_row = useI[j],
-  #                                   person_role = "contact")
-  # }
-  # 
-  # dataset@contact <- as(contact_list, "ListOfcontact")
-  # 
-  # # Add methods
-  # 
-  # print("methods ...")
-  # 
-  # dataset@methods <- set_methods(fname_methods)
-  # 
-  # if (file.exists(paste(path, "/", "geographic_coverage.txt", sep = ""))){
-  #   
-  #   print("sampling coordinates ...")
-  #   
-  #   df_geographic_coverage <- read.table(paste(path,
-  #                                              "/",
-  #                                              "geographic_coverage.txt",
-  #                                              sep = ""),
-  #                                        sep = "\t",
-  #                                        header = TRUE,
-  #                                        as.is = TRUE,
-  #                                        quote="",
-  #                                        na.strings = "NA",
-  #                                        colClasses = c("numeric","numeric","character"),
-  #                                        comment.char = "#",
-  #                                        fileEncoding = "UTF-8")
-  #   
-  #   df_geographic_coverage$latitude <- as.character(df_geographic_coverage$latitude)
-  #   
-  #   df_geographic_coverage$longitude <- as.character(df_geographic_coverage$longitude)
-  #   
-  #   df_geographic_coverage$site <- as.character(df_geographic_coverage$site)
-  #   
-  #   list_of_coverage <- list()
-  #   
-  #   for (i in 1:dim(df_geographic_coverage)[1]){
-  #     
-  #     coverage <- new("coverage")
-  #     
-  #     geographic_description <- new("geographicDescription", df_geographic_coverage$site[i])
-  #     
-  #     bounding_coordinates <- new("boundingCoordinates",
-  #                                 westBoundingCoordinate = df_geographic_coverage$longitude[i],
-  #                                 eastBoundingCoordinate = df_geographic_coverage$longitude[i],
-  #                                 northBoundingCoordinate = df_geographic_coverage$latitude[i],
-  #                                 southBoundingCoordinate = df_geographic_coverage$latitude[i])
-  #     
-  #     geographic_coverage <- new("geographicCoverage",
-  #                                geographicDescription = geographic_description,
-  #                                boundingCoordinates = bounding_coordinates)
-  #     
-  #     coverage@geographicCoverage <- as(list(geographic_coverage), "ListOfgeographicCoverage")
-  #     
-  #     list_of_coverage[[i]] <- coverage
-  #     
-  #   }
-  #   
-  #   sampling <- new("sampling")
-  #   
-  #   sampling@studyExtent@coverage <- as(list_of_coverage, "ListOfcoverage")
-  #   
-  #   sampling@samplingDescription <- as("Geographic coordinates of sampling sites", "samplingDescription")
-  #   
-  #   dataset@methods@sampling <- as(list(sampling), "ListOfsampling")
-  #   
-  # }
-  # 
-  # # Add project and funding
-  # 
-  # print("project and funding ...")
-  # 
-  # useI <- which(personinfo$role == "pi")
-  # 
-  # pi_list <- list()
-  # for (j in 1:length(useI)){
-  #   pi_list[[j]] <- set_person(info_row = useI[j],
-  #                              person_role = "pi")
-  # }
-  # 
-  # project <- new("project",
-  #                title = funding_title,
-  #                personnel = pi_list,
-  #                funding = funding_grants)
-  # 
-  # dataset@project <- project
-  # 
-  # # Add associated parties
-  # 
-  # print("associated parties ...")
-  # 
-  # useI <- which(personinfo$role != "pi" &
-  #                 personinfo$role != "creator" &
-  #                 personinfo$role != "contact")
-  # 
-  # if (length(useI) != 0){
-  #   associated_party_list <- list()
-  #   for (j in 1:length(useI)){
-  #     associated_party_list[[j]] <- set_person(info_row = useI[j],
-  #                                              person_role = "")
-  #   }
-  #   dataset@associatedParty <- as(associated_party_list, "ListOfassociatedParty")
-  # }
-  # 
-  # # Add additional information
-  # 
-  # print("additional info ...")
-  # 
-  # if (file.exists(fname_additional_info)){
-  #   
-  #   additional_info <- as(set_TextType(fname_additional_info), "additionalInfo")
-  #   
-  #   dataset@additionalInfo <- as(list(additional_info), "ListOfadditionalInfo")
-  #   
-  # }
-  # 
-  # 
+  # Check arguments
+
+  if (missing(path)){
+    stop("Specify path to dataset working directory.")
+  }
+  if (missing(parent.package.id)){
+    stop("Specify the parent data package ID.")
+  }
+  if (missing(child.package.id)){
+    stop("Specify the child data package ID.")
+  }
+  if (missing(delimiter)){
+    stop("Specify the delimiter of child data tables.")
+  }
+  if (missing(user.id)){
+    stop("Specify a user ID for the data package. Default to 'EDI' if unknown")
+  }
+  if (missing(author.system)){
+    stop("Specify an author system for the data package. Default to 'edi' if unknown")
+  }
+  
+  # Parameters ----------------------------------------------------------------
+
+  # Read in metadata
+  
+  pkg_prts <- unlist(strsplit(parent.package.id, split = ".", fixed = T))
+  scope <- pkg_prts[1]
+  identifier <- pkg_prts[2]
+  revision <- pkg_prts[3]
+  
+  xml_in <- read_eml(paste("http://pasta.lternet.edu/package/metadata/eml",
+                           "/",
+                           pkg_prts[1],
+                           "/",
+                           identifier,
+                           "/",
+                           revision,
+                           sep = ""))
+
+  # Compile attributes
+
+  attributes_in <- compile_attributes(path = path, delimiter = delimiter)
+  
+  # Initialize data entity storage (tables)
+
+  data_tables_stored <- list()
+  
+  # Modify elements -----------------------------------------------------------
+  
+  # Modify eml-access
+  
+  print("Modifying <access> ...")
+
+  allow_principals <- c(paste("uid=",
+                              user.id,
+                              ",o=LTER,dc=ecoinformatics,dc=org",
+                              sep = ""),
+                        "public")
+
+  allow_permissions <- c("all",
+                         "read")
+
+  access_order <- "allowFirst"
+
+  access_scope <- "document"
+
+  access <- new("access",
+                scope = access_scope,
+                order = access_order,
+                authSystem = author.system)
+
+  allow <- list()
+  for (i in 1:length(allow_principals)){
+    allow[[i]] <- new("allow",
+                      principal = allow_principals[i],
+                      permission = allow_permissions[i])
+  }
+
+  access@allow <- new("ListOfallow",
+                      c(allow))
+  
+  xml_in@access <- access
+
+  # Modify eml-creators
+
+  print("Modifying <creator> ...")
+  
+  personinfo <- read.table(paste(path,
+                               "/additional_contact.txt",
+                               sep = ""),
+                         header = T,
+                         sep = "\t",
+                         as.is = T,
+                         na.strings = "NA")
+  
+  individualName <- new(
+    "individualName",
+    givenName = trimws(personinfo["givenName"]),
+    surName = trimws(personinfo["surName"]))
+  
+  creator <- new(
+    "creator",
+    individualName = individualName,
+    organizationName = trimws(personinfo[["organizationName"]]),
+    electronicMailAddress = trimws(personinfo[["electronicMailAddress"]]))
+
+  xml_in@dataset@creator[[length(xml_in@dataset@creator)+1]] <- creator
+  
+  # Modify eml-contact
+  
+  print("Modifying <contact> ...")
+  
+  individualName <- new(
+    "individualName",
+    givenName = trimws(personinfo["givenName"]),
+    surName = trimws(personinfo["surName"]))
+  
+  contact <- new(
+    "creator",
+    individualName = individualName,
+    organizationName = trimws(personinfo[["organizationName"]]),
+    electronicMailAddress = trimws(personinfo[["electronicMailAddress"]]))
+  
+  xml_in@dataset@contact[[length(xml_in@dataset@contact)+1]] <- contact
+
+  # Modify eml-pubDate
+
+  print("Modifying <pubDate> ...")
+
+  xml_in@dataset@pubDate <- as(format(Sys.time(), "%Y-%m-%d"), "pubDate")
+
+  # Modify keywordSet
+  
+  print("Modifying <keywordSet> ...")
+  
+  keywords <- read.table(paste(path.package("ecocomDP"),
+                               "/controlled_vocabulary.csv",
+                               sep = ""),
+                         sep = ",",
+                         header = T,
+                         as.is = T)
+  
+  list_keywordSet <- xml_in@dataset@keywordSet
+  
+  list_keywordSet[[length(list_keywordSet)+1]] <- new("keywordSet",
+                                                      keyword = "ecocomDP")
+  
+  lter_keywordSet <- list()
+  use_i <- keywords[["keywordThesaurus"]] == "LTER Controlled Vocabulary"
+  keywords <- keywords[use_i, "keyword"]
+  for (i in 1:length(keywords)){
+    lter_keywordSet[[i]] <- as(keywords[i], "keyword")
+  }
+  
+  list_keywordSet[[length(list_keywordSet)+1]] <- new("keywordSet",
+                                                      lter_keywordSet,
+                                                      keywordThesaurus = "LTER Controlled Vocabulary")
+  xml_in@dataset@keywordSet <- list_keywordSet
+  
+  # Modify license
+  
+  if (intellectual.rights == "CC0"){
+    
+    print("Modifying <intellectualRights> to CC0 ...")
+    
+    xml_in@dataset@intellectualRights <- as(
+      set_TextType(paste(path.package("ecocomDP"),
+                         "/intellectual_rights_cc0_1.txt",
+                         sep = "")),
+      "intellectualRights")
+     
+  } else if (intellectual.rights == "CCBY"){
+    
+    print("Modifying <intellectualRights> to CCBY ...")
+    
+    xml_in@dataset@intellectualRights <- as(
+      set_TextType(paste(path.package("ecocomDP"),
+                         "/intellectual_rights_by_4.0.txt",
+                         sep = "")),
+      "intellectualRights")
+    
+  }
+  
+  
   # # Loop through tables -------------------------------------------------------
   # 
   # for (i in 1:length(table_names)){
