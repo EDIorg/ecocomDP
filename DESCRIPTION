@@ -10,6 +10,7 @@ Depends:
     dplyr (>= 0.5.0),
     tidyr (>= 0.6.1),
     EML (>= 1.0.3)
+    XML (>= 3.98)
 Imports: 
 Suggests:
     knitr,
