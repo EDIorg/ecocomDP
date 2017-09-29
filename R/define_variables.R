@@ -29,10 +29,9 @@
 #'     working directory. To prevent overwriting of these files, temporarily 
 #'     move them out of the working directory.
 #'     
-#'     This function identifies "categorical" class attributes from the file 
-#'     \emph{attributes_tablename.txt} stored in the \emph{/inst/} directory of
-#'     the code package and extracts unique values of these attributes to the 
-#'     table for you to define. Do not define categorical variables with empty
+#'     This function identifies unique variables listed in the ecocomDP tables
+#'     and writes them to a table (e.g. \emph{taxon_ancillary_variables}) for 
+#'     you to define. Do not define categorical variables with empty
 #'     field contents. Delete these rows from this file.
 #'     
 #'     When defining categorical variables with unit values, refer to the 
@@ -60,9 +59,6 @@
 #'
 #' @export
 #'
-#' @seealso 
-#'     \code{\link{make_eml}} to make an EML file and write to the working
-#'     directory.
 
 
 define_variables <- function(path, delimiter) {
@@ -101,48 +97,52 @@ define_variables <- function(path, delimiter) {
     print("Custom units template copied to working directory.")
     
     write_catvars <- function(tables_found, delimiter, table_names){
-      
+      tables_out <- list()
       for (i in 1:length(tables_found)){
-        print(paste("Reading", tables_found[i]))
-        data_in <- read.table(paste(path,
-                                    "/",
-                                    tables_found[i],
-                                    sep = ""),
-                              header = T,
-                              sep = delimiter,
-                              as.is = T,
-                              na.strings = "NA")
-        # Build the catvars table
-        print("Identifying categorical variables ...")
-        univars <- unique(data_in[["variable_name"]])
-        catvars <- data.frame(attributeName = character(length(univars)),
-                              code = character(length(univars)),
-                              definition = character(length(univars)),
-                              units = character(length(univars)),
-                              stringsAsFactors = F)
-        catvars[["attributeName"]] <- rep("variable_name", length(univars))
-        catvars[["code"]] <- univars
-        # Write catvars table
-        print(paste("Writing ", "variables_", table_names[i], ".txt", sep = ""))
-        write.table(catvars,
-                    paste(path,
-                          "/",
-                          "variables_",
-                          table_names[i],
-                          ".txt",
-                          sep = ""),
-                    sep = "\t",
-                    row.names = F,
-                    quote = F,
-                    fileEncoding = "UTF-8")
+        if ((table_names[i] == "observation")|(table_names[i] == "event")|(table_names[i] == "sampling_location_ancillary")|(table_names[i] == "taxon_ancillary")){
+          print(paste("Reading", tables_found[i]))
+          data_in <- read.table(paste(path,
+                                      "/",
+                                      tables_found[i],
+                                      sep = ""),
+                                header = T,
+                                sep = delimiter,
+                                as.is = T,
+                                na.strings = "NA")
+          # Build the catvars table
+          print("Identifying categorical variables ...")
+          univars <- unique(data_in[["variable_name"]])
+          catvars <- data.frame(attributeName = character(length(univars)),
+                                code = character(length(univars)),
+                                definition = character(length(univars)),
+                                units = character(length(univars)),
+                                stringsAsFactors = F)
+          catvars[["attributeName"]] <- rep("variable_name", length(univars))
+          catvars[["code"]] <- univars
+          # Write catvars table
+          print(paste("Writing ", "variables_", table_names[i], ".txt", sep = ""))
+          write.table(catvars,
+                      paste(path,
+                            "/",
+                            table_names[i],
+                            "_variables",
+                            ".txt",
+                            sep = ""),
+                      sep = "\t",
+                      row.names = F,
+                      quote = F,
+                      fileEncoding = "UTF-8") 
+          tables_out[[i]] <- table_names[i]
+        }
       }
     }
     write_catvars(tables_found, delimiter, table_names)
   }
   # Prompt the user to manually edit the catvars file and custom unit files.
+  tables_out <- unlist(tables_out)
   print("Open:")
-  for (i in 1:length(tables_found)){
-    print(paste("variables_", table_names[i], ".txt", sep = ""))
+  for (i in 1:length(tables_out)){
+    print(paste(tables_out[i], "_variables", ".txt", sep = ""))
   }
   print(paste("add definitions and units then save, and close.",sep = ""))
   view_unit_dictionary()
