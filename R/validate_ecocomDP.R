@@ -407,23 +407,25 @@ validate_ecocomDP <- function(path, delimiter) {
     msg <- list()
     for (i in 1:length(table_names_adjusted)){
       table_in <- grep(table_names_adjusted[i], dir_files, value = T)
-      data_in <- read.table(paste(path,
-                                  "/",
-                                  table_in,
-                                  sep = ""),
-                            header = T,
-                            sep = delimiter,
-                            as.is = T,
-                            na.strings = "NA")
-      colnames_in <- colnames(data_in)
-      coldatetime <- grep("datetime\\b", colnames_in, value = T)
-      len_date_in <- dim(na.omit(data_in[coldatetime]))[1]
-      dates <- as.Date(data_in[[coldatetime]], format = datetime_iso8601)
-      if (sum(is.na(dates)) > 0){
-        msg[[i]] <- paste("This table contains a datetime not in the required format:\n",
-                      table_in, "\n",
-                      "Remember the required format is:\n",
-                      "YYYY-MM-DD","\n")
+      if (!identical(table_in, character(0))){
+        data_in <- read.table(paste(path,
+                                    "/",
+                                    table_in,
+                                    sep = ""),
+                              header = T,
+                              sep = delimiter,
+                              as.is = T,
+                              na.strings = "NA")
+        colnames_in <- colnames(data_in)
+        coldatetime <- grep("datetime\\b", colnames_in, value = T)
+        len_date_in <- dim(na.omit(data_in[coldatetime]))[1]
+        dates <- as.Date(data_in[[coldatetime]], format = datetime_iso8601)
+        if (sum(is.na(dates)) > 0){
+          msg[[i]] <- paste("This table contains a datetime not in the required format:\n",
+                            table_in, "\n",
+                            "Remember the required format is:\n",
+                            "YYYY-MM-DD","\n")
+        }
       }
     }
     if (length(msg) > 0){
