@@ -10,12 +10,13 @@ import_templates(path)
 \item{path}{A path to the dataset working directory.}
 }
 \value{
-\emph{map.txt} A tab delimited UTF-8 text file to map level-0 to level-1
-    data. Open this file with a spreadsheet editor. and reference 
-    instructions for help.
+\emph{additional_contact.txt} A tab delimited UTF-8 text file in which 
+    to provide contact information of the person that created the ecocomDP
+    from a parent data package. This additional contact is added to the EML
+    of the ecocomDP along with the contacts of the parent data package.
     
-    \emph{map_instructions.txt} A UTF-8 text file containing instructions on
-    how to complete mapping of level-0 to level-1.
+    \emph{cusom_units.txt} A UTF-8 text file containing fields to fill out
+    for each custom unit that is found within the dataset.
 }
 \description{
 Create a working directory for your dataset then run this function to 

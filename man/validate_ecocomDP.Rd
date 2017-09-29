@@ -5,7 +5,8 @@
 \title{Validate ecocomDP tables}
 \usage{
 validate_ecocomDP(path, delimiter)
-    Run this function after ecocomDP creation and before making EML for it.
+    Run this function after creating an ecocomDP and before making EML for 
+    it.
 }
 \arguments{
 \item{path}{A path to the dataset working directory containing \emph{only} ecocomDP 
@@ -18,8 +19,7 @@ tables. This directory should not contain anything else.}
 A validation report printed in the console window of RStudio. This 
     validator runs until it hits an error. You must address the reported
     issues before continuing. Once all the validation checks have been 
-    passed, you will recieve a message "Congratulations! Your ecocomDP
-    has passed validation!"
+    passed, you will recieve a congradulatory message.
 }
 \description{
 Once you've formatted a dataset to ecocomDP you will need to check that 
@@ -31,8 +31,8 @@ Once you've formatted a dataset to ecocomDP you will need to check that
 Checks:
    \itemize{
        \item \strong{Table naming} Table names must follow the ecocomDP 
-       naming convention \emph{studyName_ecocomDPTableName}. Make sure table
-       names are consistent.
+       naming convention (i.e. \emph{studyName_ecocomDPTableName}). Make 
+       sure table names are consistent.
        \item \strong{Required tables} Some tables are required. Add any 
        missing tables.
        \item \strong{NULL tables} NULL tables take up unnecessary space.
