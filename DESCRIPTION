@@ -9,8 +9,8 @@ Depends:
     R (>= 3.2.5),
     dplyr (>= 0.5.0),
     tidyr (>= 0.6.1),
-    EML (>= 1.0.3)
-    XML (>= 3.98)
+    EML (>= 1.0.3),
+    XML (>= 3.98-1.6)
 Imports: 
 Suggests:
     knitr,
