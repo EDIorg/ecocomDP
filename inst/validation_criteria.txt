@@ -19,6 +19,7 @@ event	variable_name	character	no
 event	value	character	no
 event	unit	character	no
 observation	NA	NA	yes
+observation	record_id	character	yes
 observation	observation_id	character	yes
 observation	event_id	character	no
 observation	package_id	character	yes
@@ -36,11 +37,13 @@ sampling_location_ancillary	variable_name	character	yes
 sampling_location_ancillary	value	character	yes
 sampling_location_ancillary	unit	character	no
 taxon_ancillary	NA	NA	no
+taxon_ancillary	record_id	character	yes
 taxon_ancillary	taxon_ancillary_id	character	yes
 taxon_ancillary	taxon_id	character	yes
 taxon_ancillary	datetime	Date	no
 taxon_ancillary	variable_name	character	yes
 taxon_ancillary	value	character	yes
+taxon_ancillary	unit	character	no
 taxon_ancillary	author	character	no
 dataset_summary	NA	NA	yes
 dataset_summary	package_id	character	yes
