@@ -1,7 +1,25 @@
-# This is a helper function for make_eml.R. 
-# It compiles attributes, retrieves minimum and maximum values for numeric data
-# and reformats the attributes table.
-
+#' Compile attributes
+#'
+#' @description  
+#'     This is a helper function for make_eml.R. It compiles attributes, 
+#'     retrieves minimum and maximum values for numeric data and reformats the 
+#'     attributes table.
+#'
+#' @usage 
+#'     make_eml(path, parent.package.id, child.package.id)
+#'
+#' @param path 
+#'     A path to the dataset working directory containing the validated 
+#'     ecocomDP tables.
+#'     
+#' @param delimiter
+#'     The delimiter of input files. Can be comma (i.e. ",") or tab (i.e. "\t")
+#'
+#' @return 
+#'     Attributes formatted for make_eml.R
+#'     
+#' @export
+#'
 
 compile_attributes <- function(path, delimiter){
 
@@ -43,6 +61,7 @@ compile_attributes <- function(path, delimiter){
     # Read attributes_draft table
     
     df_attributes <- read.table(paste(path.package("ecocomDP"),
+                                      "/inst",
                                       "/attributes_",
                                       table_names[i],
                                       ".txt",
