@@ -27,7 +27,7 @@ observation	sampling_location_id	character	yes
 observation	observation_datetime	Date	yes
 observation	taxon_id	character	yes
 observation	variable_name	character	yes
-observation	value	numeric	yes
+observation	value	character	yes
 observation	unit	character	yes
 sampling_location_ancillary	NA	NA	no
 sampling_location_ancillary	sampling_location_ancillary_id	character	yes

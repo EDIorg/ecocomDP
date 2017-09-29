@@ -7,5 +7,5 @@ sampling_location_id	A reference to a location.	character
 observation_datetime	Date and time of the observation.	Date		YYYY-MM-DD		
 taxon_id	ID from the taxon table.	character				
 variable_name	Name of the measured variable.	categorical				
-value	Value of the measured variable.	numeric	dimensionless		NA	Not available.
+value	Value of the measured variable.	character				
 unit	Unit of the measured variable.	character				
