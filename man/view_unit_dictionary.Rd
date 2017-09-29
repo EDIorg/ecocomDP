@@ -7,7 +7,8 @@
 view_unit_dictionary()
 }
 \description{
-View the standard unit dictionary in the RStudio source window.
+View the standard unit dictionary of the Ecological Metadata Language
+    schema in the RStudio source window.
 }
 \details{
 Use the search field to find the unit of interest.

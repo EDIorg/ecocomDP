@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_eml.R
 \name{make_eml}
 \alias{make_eml}
-\title{Make EML}
+\title{Make EML (WARNING: this function is not yet functional)}
 \usage{
 make_eml(path, parent.package.id, child.package.id)
 }

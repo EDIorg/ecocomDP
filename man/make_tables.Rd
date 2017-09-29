@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_tables.R
 \name{make_tables}
 \alias{make_tables}
-\title{Make ecocomDP tables}
+\title{Make ecocomDP tables (WARNING: this function is not yet functional)}
 \usage{
 make_ecocomDP_tables(path)
 }
