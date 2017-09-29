@@ -1,4 +1,4 @@
-#' Clean taxon
+#' Clean taxon (WARNING: this function is not yet functional)
 #'
 #' @description  
 #'     Clean taxonomy data of level-0 dataset and export to file.

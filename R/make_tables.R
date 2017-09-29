@@ -1,4 +1,4 @@
-#' Make ecocomDP tables
+#' Make ecocomDP tables (WARNING: this function is not yet functional)
 #'
 #' @description  
 #'     Translate user supplied data tables to the Ecological Community Data

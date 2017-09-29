@@ -1,4 +1,4 @@
-#' Make EML
+#' Make EML (WARNING: this function is not yet functional)
 #'
 #' @description  
 #'     Make EML for an Ecological Community Data Pattern (ecocomDP) using 
