@@ -32,10 +32,9 @@ This function overwrites any
     working directory. To prevent overwriting of these files, temporarily 
     move them out of the working directory.
     
-    This function identifies "categorical" class attributes from the file 
-    \emph{attributes_tablename.txt} stored in the \emph{/inst/} directory of
-    the code package and extracts unique values of these attributes to the 
-    table for you to define. Do not define categorical variables with empty
+    This function identifies unique variables listed in the ecocomDP tables
+    and writes them to a table (e.g. \emph{taxon_ancillary_variables}) for 
+    you to define. Do not define categorical variables with empty
     field contents. Delete these rows from this file.
     
     When defining categorical variables with unit values, refer to the 
@@ -60,8 +59,4 @@ This function overwrites any
         \item \strong{description} A description of the custom unit. 
         Reference the dictionary for examples.
         }
-}
-\seealso{
-\code{\link{make_eml}} to make an EML file and write to the working
-    directory.
 }
