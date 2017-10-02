@@ -25,8 +25,8 @@ compile_attributes <- function(path, delimiter){
 
   # Set parameters ------------------------------------------------------------
   
-  table_patterns <- c("observation\\b", "event\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b", "summary\\b", "sampling_location\\b", "taxon\\b")
-  table_names <- c("observation", "event", "sampling_location_ancillary", "taxon_ancillary", "summary", "sampling_location", "taxon")
+  table_patterns <- c("observation\\b", "event\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b", "sampling_location\\b", "taxon\\b")
+  table_names <- c("observation", "event", "sampling_location_ancillary", "taxon_ancillary", "dataset_summary", "sampling_location", "taxon")
   dir_files <- list.files(path)
   table_names_found <- list()
   tables_found <- list()
@@ -71,6 +71,12 @@ compile_attributes <- function(path, delimiter){
                                 as.is = T,
                                 na.strings = "NA",
                                 colClasses = rep("character", 7))
+    
+    # Synchronize data table and attributes table
+    
+    use_i <- match(colnames(df_table), df_attributes[["attributeName"]])
+    
+    df_attributes <- df_attributes[use_i, ]
     
     # Initialize outgoing attribute table 
 
@@ -125,38 +131,42 @@ compile_attributes <- function(path, delimiter){
     attributes$minimum <- as.numeric(attributes$minimum)
     attributes$maximum <- as.numeric(attributes$maximum)
     
-    for (j in 1:length(is_numeric)){
-      
-      raw <- df_table[ ,is_numeric[j]]
-      
-      
-      if (attributes$missingValueCode[is_numeric[j]] != ""){
-        useI <- raw == attributes$missingValueCode[is_numeric[j]]
-        raw <- as.numeric(raw[!useI])
-      }
-      
-      
-      rounded <- floor(raw)
-      if (length(raw) - sum(raw == rounded, na.rm = T) > 0){
-        attributes$numberType[is_numeric[j]] <- "real"
-      } else if (min(raw, na.rm = T) > 0){
-        attributes$numberType[is_numeric[j]] <- "natural"
-      } else if (min(raw, na.rm = T) < 0){
-        attributes$numberType[is_numeric[j]] <- "integer"
-      } else {
-        attributes$numberType[is_numeric[j]] <- "whole"
-      }
-      
-      
-      attributes$minimum[is_numeric[j]] <- round(min(raw,
-                                                     na.rm = TRUE),
-                                                 digits = 2)
-      
-      attributes$maximum[is_numeric[j]] <- round(max(raw,
+    if (!identical(is_numeric, integer(0))){
+      for (j in 1:length(is_numeric)){
+        
+        raw <- df_table[ ,is_numeric[j]]
+        
+        
+        if (attributes$missingValueCode[is_numeric[j]] != ""){
+          useI <- raw == attributes$missingValueCode[is_numeric[j]]
+          raw <- as.numeric(raw[!useI])
+        }
+        
+        
+        rounded <- floor(raw)
+        if (length(raw) - sum(raw == rounded, na.rm = T) > 0){
+          attributes$numberType[is_numeric[j]] <- "real"
+        } else if (min(raw, na.rm = T) > 0){
+          attributes$numberType[is_numeric[j]] <- "natural"
+        } else if (min(raw, na.rm = T) < 0){
+          attributes$numberType[is_numeric[j]] <- "integer"
+        } else {
+          attributes$numberType[is_numeric[j]] <- "whole"
+        }
+        
+        
+        attributes$minimum[is_numeric[j]] <- round(min(raw,
                                                        na.rm = TRUE),
                                                    digits = 2)
-
+        
+        attributes$maximum[is_numeric[j]] <- round(max(raw,
+                                                       na.rm = TRUE),
+                                                   digits = 2)
+      }
+      
+      
     }
+    
     
     is_character <- which(attributes$columnClasses == "character") 
     is_catvar <- which(attributes$columnClasses == "categorical")
