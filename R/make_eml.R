@@ -1,4 +1,4 @@
-#' Make EML (WARNING: this function is not yet functional)
+#' Make EML
 #'
 #' @description  
 #'     Make EML for an Ecological Community Data Pattern (ecocomDP) using 
@@ -42,6 +42,37 @@
 #'     "CCBY" (https://creativecommons.org/licenses/by/4.0/legalcode), and no 
 #'     argument. No argument input indicates the license wil remain the same
 #'     as the parent data package.
+#'     
+#' @param access.url
+#'     This is the base URL that PASTA uses to access the ecocomDP tables.
+#'     For example, the base URL of a table that has a URL of 
+#'     https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride/gleon_chloride_concentrations.csv
+#'     would have a base URL of 
+#'     https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride.
+#'
+#' @details 
+#'     This script modifies elements of the parent data package EML. 
+#'     Specifically this script:
+#'     \itemize{
+#'         \item \strong{Modifies access} Modifies access based on user supplied
+#'         arguments.
+#'         \item \strong{Publicaton date} Changes the publication date to when 
+#'         the ecocomDP was created.
+#'         \item \strong{Keywords} Adds two keyword sets which include the 
+#'         key term "ecocomDP" and a set of keywords relevant to community data
+#'         from the LTER controlled vocabulary.
+#'         \item \strong{Intellectual rights} Updates the intellectual rights
+#'         according to user specified arguments.
+#'         \item \strong{Taxon coverage} This has not yet been implemented.
+#'         \item \strong{Contact} Adds the ecocomDP creator as a contact.
+#'         \item \strong{Provenance} Adds the provenance snippet from the 
+#'         parent data package.
+#'         \item \strong{Data tables} Adds data table elements for ecocomDP tables
+#'         present.
+#'         \item \strong{Formatting scripts} Adds formatting scripts used to 
+#'         create the ecocomDP as otherEntitie.
+#'     }
+
 #'
 #' @return 
 #'     An EML metadata file written to the dataset working directory titled 
@@ -51,7 +82,7 @@
 #'
 
 
-make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.id, author.system, intellectual.rights) {
+make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.id, author.system, intellectual.rights, access.url) {
   
   # Check arguments
 
@@ -73,6 +104,9 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
   if (missing(author.system)){
     stop("Specify an author system for the data package. Default to 'edi' if unknown")
   }
+  if (missing(access.url)){
+    stop("Specify an access URL for your ecocomDP tables.")
+  }
   
   # Parameters ----------------------------------------------------------------
 
@@ -92,6 +126,15 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
                            revision,
                            sep = ""))
 
+  # Get system information
+  
+  sysinfo <- Sys.info()["sysname"]
+  if (sysinfo == "Darwin"){
+    os <- "mac"
+  } else {
+    os <- "win"
+  }
+  
   # Compile attributes
 
   attributes_in <- compile_attributes(path = path, delimiter = delimiter)
@@ -136,31 +179,6 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
   
   xml_in@access <- access
 
-  # Modify eml-creators
-
-  print("Appending <creator> ...")
-  
-  personinfo <- read.table(paste(path,
-                               "/additional_contact.txt",
-                               sep = ""),
-                         header = T,
-                         sep = "\t",
-                         as.is = T,
-                         na.strings = "NA")
-  
-  individualName <- new(
-    "individualName",
-    givenName = trimws(personinfo["givenName"]),
-    surName = trimws(personinfo["surName"]))
-  
-  creator <- new(
-    "creator",
-    individualName = individualName,
-    organizationName = trimws(personinfo[["organizationName"]]),
-    electronicMailAddress = trimws(personinfo[["electronicMailAddress"]]))
-
-  xml_in@dataset@creator[[length(xml_in@dataset@creator)+1]] <- creator
-  
   # Modify eml-contact
   
   print("Appending <contact> ...")
@@ -171,7 +189,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
     surName = trimws(personinfo["surName"]))
   
   contact <- new(
-    "creator",
+    "contact",
     individualName = individualName,
     organizationName = trimws(personinfo[["organizationName"]]),
     electronicMailAddress = trimws(personinfo[["electronicMailAddress"]]))
@@ -189,7 +207,6 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
   print("Appending <keywordSet> ...")
   
   keywords <- read.table(paste(path.package("ecocomDP"),
-                               "/inst",
                                "/controlled_vocabulary.csv",
                                sep = ""),
                          sep = ",",
@@ -215,7 +232,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
   
   # Modify license
   
-  if (exists(intellectual.rights)){
+  if (exists("intellectual.rights")){
     if (intellectual.rights == "CC0"){
       print("Changing <intellectualRights> to CC0 ...")
       xml_in@dataset@intellectualRights <- as(
@@ -255,7 +272,21 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
   
   # Loop through tables -------------------------------------------------------
 
-  for (i in 1:length(table_names)){
+  table_patterns <- c("observation\\b", "event\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b", "sampling_location\\b", "taxon\\b")
+  table_names <- c("observation", "event", "sampling_location_ancillary", "taxon_ancillary", "dataset_summary", "sampling_location", "taxon")
+  dir_files <- list.files(path)
+  table_names_found <- list()
+  tables_found <- list()
+  for (i in 1:length(table_patterns)){
+    tables_found[[i]] <- dir_files[grep(paste("^(?=.*", table_patterns[i], ")(?!.*variables)", sep = ""), dir_files, perl=TRUE)]
+    if (!identical(tables_found[[i]], character(0))){
+      table_names_found[[i]] <- table_names[i]
+    }
+  }
+  tables_found <- unlist(tables_found)
+  table_names <- unlist(table_names_found)
+  
+  for (i in 1:length(tables_found)){
 
     print(paste(
       table_names[i],
@@ -265,37 +296,25 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
 
     # Read data table
 
-    if (field_delimeter[i] == "comma"){
-
-      df_table <- read.table(
-        paste(path, "/", table_names[i], sep = ""),
-        header=TRUE,
-        sep=",",
-        quote="\"",
-        as.is=TRUE,
-        comment.char = "")
-
-    } else if (field_delimeter[i] == "tab"){
-
-      df_table <- read.table(
-        paste(path, "/", table_names[i], sep = ""),
-        header=TRUE,
-        sep="\t",
-        quote="\"",
-        as.is=TRUE,
-        comment.char = "")
-
-    }
+    df_table <- read.table(
+      paste(path, "/", tables_found[i], sep = ""),
+      header=TRUE,
+      sep=delimiter,
+      quote="\"",
+      as.is=TRUE,
+      comment.char = "")
 
     # Read catvars file
 
-    if (!is.na(match(fname_table_catvars[i], list.files(path)))){
+    catvar <- grep(paste(table_names[i], "_variables.txt", sep = ""), dir_files, value = T)
+    
+    if (!identical(catvar, character(0))){
 
       catvars <- read.table(
         paste(
           path,
           "/",
-          fname_table_catvars[i], sep = ""),
+          catvar, sep = ""),
         header=TRUE,
         sep="\t",
         quote="\"",
@@ -367,30 +386,23 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
 
     # Set physical
 
-    if (field_delimeter[i] == "comma"){
-      fd <- ","
-    } else if (field_delimeter[i] == "tab"){
-      fd <- "\t"
+    if (delimiter == "\t"){
+      physical <- set_physical(tables_found[i],
+                               numHeaderLines = "1",
+                               recordDelimiter = "\\r\\n",
+                               attributeOrientation = "column",
+                               fieldDelimiter = "\\t",
+                               quoteCharacter = "\"")
+    } else if (delimiter == ","){
+      physical <- set_physical(tables_found[i],
+                               numHeaderLines = "1",
+                               recordDelimiter = "\\r\\n",
+                               attributeOrientation = "column",
+                               fieldDelimiter = ",",
+                               quoteCharacter = "\"")
     }
+    
 
-    if (nchar(quote_character[i]) > 0){
-
-      physical <- set_physical(table_names[i],
-                               numHeaderLines = num_header_lines[i],
-                               recordDelimiter = record_delimeter[i],
-                               attributeOrientation = attribute_orientation[i],
-                               fieldDelimiter = fd,
-                               quoteCharacter = quote_character[i])
-
-    } else {
-
-      physical <- set_physical(table_names[i],
-                               numHeaderLines = num_header_lines[i],
-                               recordDelimiter = record_delimeter[i],
-                               attributeOrientation = attribute_orientation[i],
-                               fieldDelimiter = fd)
-
-    }
 
 
 
@@ -400,29 +412,25 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
                            file.size(
                              paste(path,
                                    "/",
-                                   table_names[i],
+                                   tables_found[i],
                                    sep = ""))))
-
-    if (nchar(data_table_urls[i]) > 1){
-      distribution <- new("distribution",
-                          online = new("online",
-                                       url = data_table_urls[i]))
-    } else {
-      distribution <- new("distribution",
-                          offline = new("offline",
-                                        mediumName = storage_type[i]))
-    }
+    
+    
+    data_table_urls <- paste(access.url, "/", tables_found[i], sep = "") 
+                             
+    distribution <- new("distribution",
+                        online = new("online",
+                                     url = data_table_urls))
 
     physical@distribution <- new("ListOfdistribution",
                                  c(distribution))
-
 
     if (os == "mac"){
 
       command_certutil <- paste("md5 ",
                                 path,
                                 "/",
-                                table_names[i],
+                                tables_found[i],
                                 sep = "")
 
       certutil_output <- system(command_certutil, intern = T)
@@ -441,7 +449,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
       command_certutil <- paste("CertUtil -hashfile ",
                                 path,
                                 "\\",
-                                table_names[i],
+                                tables_found[i],
                                 " MD5",
                                 sep = "")
 
@@ -465,8 +473,8 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
     # Pull together information for the data table
 
     data_table <- new("dataTable",
-                      entityName = table_names[i],
-                      entityDescription = data_table_descriptions[i],
+                      entityName = tables_found[i],
+                      entityDescription = substr(tables_found[i], 1, nchar(tables_found[i])-4),
                       physical = physical,
                       attributeList = attributeList,
                       numberOfRecords = number_of_records)
@@ -474,88 +482,194 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
     data_tables_stored[[i]] <- data_table
 
   }
+
+
+  # Compile datatables --------------------------------------------------------
+
+  # Are custom units present in these tables?
+
+  if (file.exists(paste(path,"/","custom_units.txt",sep = ""))){
+
+    custom_units_df <- read.table(
+      paste(path,
+            "/",
+            "custom_units.txt",
+            sep = ""),
+      header = TRUE,
+      sep = "\t",
+      as.is = TRUE,
+      na.strings = "")
+
+    if (nrow(custom_units_df) < 1){
+      custom_units <- "no"
+    } else {
+      custom_units <- "yes"
+      unitsList <- set_unitList(custom_units_df)
+    }
+
+    # # Clean white spaces from custom_units and units_types
+    # 
+    # if (custom_units == "yes"){
+    # 
+    #   for (j in 1:ncol(custom_units_df)){
+    #     if (class(custom_units_df[ ,j]) == "character" ||
+    #         (class(custom_units_df[ ,j]) == "factor")){
+    #       custom_units_df[ ,j] <- trimws(custom_units_df[ ,j])
+    #     }
+    #   }
+    # 
+    #   unitsList <- set_unitList(custom_units_df)
+    # }
+
+
+  } else {
+
+    custom_units <- "no"
+
+  }
+
+  # Compile data tables
+
+  xml_in@dataset@dataTable <- new("ListOfdataTable",
+                                  data_tables_stored)
+  
+  # Build EML
+  
+  # print("Updating packageId ...")
   # 
-  # 
-  # # Compile datatables --------------------------------------------------------
-  # 
-  # # Are custom units present in these tables?
-  # 
-  # if (file.exists(paste(path,"/",substr(template, 1, nchar(template) - 14),"_custom_units.txt",sep = ""))){
-  #   
-  #   print("custom units ...")
-  #   
-  #   custom_units_df <- read.table(
-  #     paste(path,
-  #           "/",
-  #           substr(template, 1, nchar(template) - 14),
-  #           "_custom_units.txt",
-  #           sep = ""),
-  #     header = TRUE,
-  #     sep = "\t",
-  #     as.is = TRUE,
-  #     na.strings = "")
-  #   
-  #   if (nrow(custom_units_df) < 1){
-  #     custom_units <- "no"
-  #   } else {
-  #     custom_units <- "yes"
-  #   }
-  #   
-  #   # Clean white spaces from custom_units and units_types
-  #   
-  #   if (custom_units == "yes"){
-  #     
-  #     for (j in 1:ncol(custom_units_df)){
-  #       if (class(custom_units_df[ ,j]) == "character" ||
-  #           (class(custom_units_df[ ,j]) == "factor")){
-  #         custom_units_df[ ,j] <- trimws(custom_units_df[ ,j])
-  #       }
-  #     }
-  #     
-  #     unitsList <- set_unitList(custom_units_df)
-  #   }
-  #   
-  #   
-  # } else {
-  #   
-  #   custom_units <- "no"
-  #   
-  # }
-  # 
-  # 
-  # # Compile data tables
-  # 
-  # dataset@dataTable <- new("ListOfdataTable",
-  #                          data_tables_stored)
-  # 
-  # # Build EML
-  # 
-  # print("Compiling EML ...")
-  # 
-  # 
-  # if (custom_units == "yes"){
-  #   eml <- new("eml",
-  #              schemaLocation = "eml://ecoinformatics.org/eml-2.1.1  http://nis.lternet.edu/schemas/EML/eml-2.1.1/eml.xsd",
-  #              packageId = data_package_id,
-  #              system = root_system,
-  #              access = access,
-  #              dataset = dataset,
-  #              additionalMetadata = as(unitsList, "additionalMetadata"))
-  # } else {
-  #   eml <- new("eml",
-  #              schemaLocation = "eml://ecoinformatics.org/eml-2.1.1  http://nis.lternet.edu/schemas/EML/eml-2.1.1/eml.xsd",
-  #              packageId = data_package_id,
-  #              system = root_system,
-  #              access = access,
-  #              dataset = dataset)
-  # }
-  # 
-  # # Write EML
-  # 
-  # print("Writing EML ...")
-  # 
-  # write_eml(eml, paste(path, "/", data_package_id, ".xml", sep = ""))
-  # 
+  # xml_in@packageId@.Data <- child.package.id
+  
+  if (custom_units == "yes"){
+    
+    print("Adding <customUnits>")
+    
+    xml_in@additionalMetadata <- as(unitsList, "additionalMetadata")
+    
+  }
+  
+  # Add R code ------------------------------------------------------------------
+  
+  print("Adding formatting scripts as <otherEntity> ...")
+  
+  # Name of script files
+  
+  match_info <- regexpr("[^\\]*$", path)
+  directory_name <- substr(path, start = match_info[1], stop = nchar(path))
+  
+  files <- list.files(path = path)
+  
+  code_names <- files[attr(regexpr("*.R$", files), "match.length") != -1]
+  
+  list_of_other_entity <- list()
+  
+  for (i in 1:length(code_names)){
+    
+    # Create new other entity element
+    
+    other_entity <- new("otherEntity")
+    
+    # Add code file names
+    
+    other_entity@entityName <- code_names[i]
+    
+    # Add description
+    
+    code_description <- "Converts parent data package to ecocomDP (child data package)"
+    
+    other_entity@entityDescription <- code_description
+    
+    #  Build physical
+    
+    num_header_lines_code <- trimws(c("0"))
+    record_delimeter_code <- trimws(c("\\r\\n"))
+    attribute_orientation_code <- trimws(c("column"))
+    field_delimeter_code <- ","
+    quote_character <- trimws(c("\""))
+    code_urls <- paste(access.url, "/", code_names[i], sep = "")
+    entity_type_code <- "R code"
+    
+    physical <- set_physical(code_names[i],
+                             numHeaderLines = num_header_lines_code,
+                             recordDelimiter = record_delimeter_code,
+                             attributeOrientation = attribute_orientation_code,
+                             fieldDelimiter = field_delimeter_code,
+                             quoteCharacter = quote_character)
+    
+    physical@size <- new("size", unit = "bytes", as(as.character(file.size(paste(path, "\\", code_names[i], sep = ""))), "size"))
+    
+    distribution <- new("distribution",
+                        online = new("online",
+                                     url = code_urls))
+    
+    physical@distribution <- new("ListOfdistribution",
+                                 c(distribution))
+    
+    if (os == "mac"){
+      
+      command_certutil <- paste("md5 ",
+                                path,
+                                "/",
+                                code_names[i],
+                                sep = "")
+      
+      certutil_output <- system(command_certutil, intern = T)
+      
+      checksum_md5 <- gsub(".*= ", "", certutil_output)
+      
+      authentication <- new("authentication",
+                            method = "MD5",
+                            checksum_md5)
+      
+      physical@authentication <- as(list(authentication),
+                                    "ListOfauthentication")
+      
+    } else if (os == "win"){
+      
+      command_certutil <- paste("CertUtil -hashfile ",
+                                path,
+                                "\\",
+                                code_names[i],
+                                " MD5",
+                                sep = "")
+      
+      certutil_output <- system(command_certutil, intern = T)
+      
+      checksum_md5 <- gsub(" ", "", certutil_output[2])
+      
+      authentication <- new("authentication",
+                            method = "MD5",
+                            checksum_md5)
+      
+      physical@authentication <- as(list(authentication),
+                                    "ListOfauthentication")
+      
+    }
+    
+    other_entity@physical <- as(c(physical), "ListOfphysical")
+    
+    # Add entity type
+    
+    other_entity@entityType <- entity_type_code
+    
+    # Add other entity to list
+    
+    list_of_other_entity[[i]] <- other_entity
+    
+  }
+  
+  print("Adding formatting scripts as <otherEntity> ...")
+  
+  xml_in@dataset@otherEntity <- new("ListOfotherEntity",
+                                    list_of_other_entity)
+  
+  
+  
+  # Write EML
+
+  print("Writing to file ...")
+
+  write_eml(xml_in, paste(path, "/", child.package.id, ".xml", sep = ""))
+
   # # Validate EML
   # 
   # print("Validating EML ...")
@@ -563,15 +677,15 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
   # validation_result <- eml_validate(eml)
   # 
   # if (validation_result == "TRUE"){
-  #   
-  #   print("EML passed validation!")
-  #   
-  # } else {
-  #   
-  #   print("EML validaton failed. See warnings for details.")
-  #   
-  # }
   # 
+  #   print("EML passed validation!")
+  # 
+  # } else {
+  # 
+  #   print("EML validaton failed. See warnings for details.")
+  # 
+  # }
+
   
 }
 

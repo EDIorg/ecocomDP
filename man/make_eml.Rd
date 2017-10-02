@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_eml.R
 \name{make_eml}
 \alias{make_eml}
-\title{Make EML (WARNING: this function is not yet functional)}
+\title{Make EML}
 \usage{
 make_eml(path, parent.package.id, child.package.id, delimiter, user.id,
     author.system, intellectual.rights)
@@ -32,6 +32,12 @@ package. Valid arguments are "CCO" (https://creativecommons.org/publicdomain/zer
 "CCBY" (https://creativecommons.org/licenses/by/4.0/legalcode), and no 
 argument. No argument input indicates the license wil remain the same
 as the parent data package.}
+
+\item{access.url}{This is the base URL that PASTA uses to access the ecocomDP tables.
+For example, the base URL of a table that has a URL of 
+https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride/gleon_chloride_concentrations.csv
+would have a base URL of 
+https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride.}
 }
 \value{
 An EML metadata file written to the dataset working directory titled 
@@ -43,4 +49,27 @@ Make EML for an Ecological Community Data Pattern (ecocomDP) using
     support creation of data packages that are not already published in the
     LTER (Long-term Ecological Research) or EDI (Environmental Data 
     Initiative) data repositories.
+}
+\details{
+This script modifies elements of the parent data package EML. 
+    Specifically this script:
+    \itemize{
+        \item \strong{Modifies access} Modifies access based on user supplied
+        arguments.
+        \item \strong{Publicaton date} Changes the publication date to when 
+        the ecocomDP was created.
+        \item \strong{Keywords} Adds two keyword sets which include the 
+        key term "ecocomDP" and a set of keywords relevant to community data
+        from the LTER controlled vocabulary.
+        \item \strong{Intellectual rights} Updates the intellectual rights
+        according to user specified arguments.
+        \item \strong{Taxon coverage} This has not yet been implemented.
+        \item \strong{Contact} Adds the ecocomDP creator as a contact.
+        \item \strong{Provenance} Adds the provenance snippet from the 
+        parent data package.
+        \item \strong{Data tables} Adds data table elements for ecocomDP tables
+        present.
+        \item \strong{Formatting scripts} Adds formatting scripts used to 
+        create the ecocomDP as otherEntitie.
+    }
 }
