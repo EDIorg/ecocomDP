@@ -4,23 +4,43 @@
 \alias{make_eml}
 \title{Make EML (WARNING: this function is not yet functional)}
 \usage{
-make_eml(path, parent.package.id, child.package.id)
+make_eml(path, parent.package.id, child.package.id, delimiter, user.id,
+    author.system, intellectual.rights)
 }
 \arguments{
 \item{path}{A path to the dataset working directory containing the validated 
 ecocomDP tables.}
 
-\item{parent.package.id}{Identifier of parent data package (e.g. knb-lter-hfr.118.28).}
+\item{parent.package.id}{Identifier of parent data package in LTER or EDI data repository (e.g. 
+knb-lter-hfr.118.28).}
 
-\item{child.package.id}{Identifier of child data package (e.g. edi.53.1).}
+\item{child.package.id}{Identifier of child data package in LTER or EDI data repository (e.g. 
+edi.53.1). If you don't have a child.package.id then use the default
+"edi.100.1".}
+
+\item{delimiter}{Field delimiter of input dataset. Can be comma (i.e. ",") or tab 
+(i.e. "\t").}
+
+\item{user.id}{LTER or EDI ID of person publishing the ecocomDP data package. If you 
+don't have a user ID then use the default "EDI".}
+
+\item{author.system}{The author system the user.id is associated with. If you don't have an 
+author system specification use the default value "edi"}
+
+\item{intellectual.rights}{The intellectual rights license to be used with the child ecocomDP data
+package. Valid arguments are "CCO" (https://creativecommons.org/publicdomain/zero/1.0/legalcode),
+"CCBY" (https://creativecommons.org/licenses/by/4.0/legalcode), and no 
+argument. No argument input indicates the license wil remain the same
+as the parent data package.}
 }
 \value{
-EML for the ecocomDP tables to the input path.
+An EML metadata file written to the dataset working directory titled 
+    \emph{packageID.xml}.
 }
 \description{
 Make EML for an Ecological Community Data Pattern (ecocomDP) using 
-    elements from the parent data package.
-}
-\details{
-Details.
+    elements from the parent data package. This function does not yet 
+    support creation of data packages that are not already published in the
+    LTER (Long-term Ecological Research) or EDI (Environmental Data 
+    Initiative) data repositories.
 }
