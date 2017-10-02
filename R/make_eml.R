@@ -189,6 +189,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
   print("Appending <keywordSet> ...")
   
   keywords <- read.table(paste(path.package("ecocomDP"),
+                               "/inst",
                                "/controlled_vocabulary.csv",
                                sep = ""),
                          sep = ",",
@@ -214,26 +215,22 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
   
   # Modify license
   
-  if (intellectual.rights == "CC0"){
-    
-    print("Changing <intellectualRights> to CC0 ...")
-    
-    xml_in@dataset@intellectualRights <- as(
-      set_TextType(paste(path.package("ecocomDP"),
-                         "/intellectual_rights_cc0_1.txt",
-                         sep = "")),
-      "intellectualRights")
-     
-  } else if (intellectual.rights == "CCBY"){
-    
-    print("Changing <intellectualRights> to CCBY ...")
-    
-    xml_in@dataset@intellectualRights <- as(
-      set_TextType(paste(path.package("ecocomDP"),
-                         "/intellectual_rights_by_4.0.txt",
-                         sep = "")),
-      "intellectualRights")
-    
+  if (exists(intellectual.rights)){
+    if (intellectual.rights == "CC0"){
+      print("Changing <intellectualRights> to CC0 ...")
+      xml_in@dataset@intellectualRights <- as(
+        set_TextType(paste(path.package("ecocomDP"),
+                           "/intellectual_rights_cc0_1.txt",
+                           sep = "")),
+        "intellectualRights")
+    } else if (intellectual.rights == "CCBY"){
+      print("Changing <intellectualRights> to CCBY ...")
+      xml_in@dataset@intellectualRights <- as(
+        set_TextType(paste(path.package("ecocomDP"),
+                           "/intellectual_rights_by_4.0.txt",
+                           sep = "")),
+        "intellectualRights")
+    }
   }
   
   # Modify methods
