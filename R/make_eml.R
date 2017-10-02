@@ -2,26 +2,50 @@
 #'
 #' @description  
 #'     Make EML for an Ecological Community Data Pattern (ecocomDP) using 
-#'     elements from the parent data package.
+#'     elements from the parent data package. This function does not yet 
+#'     support creation of data packages that are not already published in the
+#'     LTER (Long-term Ecological Research) or EDI (Environmental Data 
+#'     Initiative) data repositories.
 #'
 #' @usage 
-#'     make_eml(path, parent.package.id, child.package.id)
+#'     make_eml(path, parent.package.id, child.package.id, delimiter, user.id,
+#'     author.system, intellectual.rights)
 #'
 #' @param path 
 #'     A path to the dataset working directory containing the validated 
 #'     ecocomDP tables.
 #'     
 #' @param parent.package.id
-#'     Identifier of parent data package (e.g. knb-lter-hfr.118.28).
+#'     Identifier of parent data package in LTER or EDI data repository (e.g. 
+#'     knb-lter-hfr.118.28).
 #'     
 #' @param child.package.id
-#'     Identifier of child data package (e.g. edi.53.1).
+#'     Identifier of child data package in LTER or EDI data repository (e.g. 
+#'     edi.53.1). If you don't have a child.package.id then use the default
+#'     "edi.100.1".
+#'     
+#' @param delimiter
+#'     Field delimiter of input dataset. Can be comma (i.e. ",") or tab 
+#'     (i.e. "\t").
+#'     
+#' @param user.id
+#'     LTER or EDI ID of person publishing the ecocomDP data package. If you 
+#'     don't have a user ID then use the default "EDI".
+#'     
+#' @param author.system
+#'     The author system the user.id is associated with. If you don't have an 
+#'     author system specification use the default value "edi"
+#'     
+#' @param intellectual.rights
+#'     The intellectual rights license to be used with the child ecocomDP data
+#'     package. Valid arguments are "CCO" (https://creativecommons.org/publicdomain/zero/1.0/legalcode),
+#'     "CCBY" (https://creativecommons.org/licenses/by/4.0/legalcode), and no 
+#'     argument. No argument input indicates the license wil remain the same
+#'     as the parent data package.
 #'
 #' @return 
-#'     EML for the ecocomDP tables to the input path.
-#'     
-#' @details 
-#'     Details.
+#'     An EML metadata file written to the dataset working directory titled 
+#'     \emph{packageID.xml}.
 #'
 #' @export
 #'
@@ -114,7 +138,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
 
   # Modify eml-creators
 
-  print("Modifying <creator> ...")
+  print("Appending <creator> ...")
   
   personinfo <- read.table(paste(path,
                                "/additional_contact.txt",
@@ -139,7 +163,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
   
   # Modify eml-contact
   
-  print("Modifying <contact> ...")
+  print("Appending <contact> ...")
   
   individualName <- new(
     "individualName",
@@ -156,13 +180,13 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
 
   # Modify eml-pubDate
 
-  print("Modifying <pubDate> ...")
+  print("Updating <pubDate> ...")
 
   xml_in@dataset@pubDate <- as(format(Sys.time(), "%Y-%m-%d"), "pubDate")
 
   # Modify keywordSet
   
-  print("Modifying <keywordSet> ...")
+  print("Appending <keywordSet> ...")
   
   keywords <- read.table(paste(path.package("ecocomDP"),
                                "/controlled_vocabulary.csv",
@@ -192,7 +216,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
   
   if (intellectual.rights == "CC0"){
     
-    print("Modifying <intellectualRights> to CC0 ...")
+    print("Changing <intellectualRights> to CC0 ...")
     
     xml_in@dataset@intellectualRights <- as(
       set_TextType(paste(path.package("ecocomDP"),
@@ -202,7 +226,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
      
   } else if (intellectual.rights == "CCBY"){
     
-    print("Modifying <intellectualRights> to CCBY ...")
+    print("Changing <intellectualRights> to CCBY ...")
     
     xml_in@dataset@intellectualRights <- as(
       set_TextType(paste(path.package("ecocomDP"),
@@ -212,228 +236,247 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
     
   }
   
+  # Modify methods
   
-  # # Loop through tables -------------------------------------------------------
-  # 
-  # for (i in 1:length(table_names)){
-  #   
-  #   print(paste(
-  #     table_names[i],
-  #     "data table ..."))
-  #   
-  #   attributes <- attributes_in[[1]][[i]]
-  #   
-  #   # Read data table
-  #   
-  #   if (field_delimeter[i] == "comma"){
-  #     
-  #     df_table <- read.table(
-  #       paste(path, "/", table_names[i], sep = ""),
-  #       header=TRUE,
-  #       sep=",",
-  #       quote="\"",
-  #       as.is=TRUE,
-  #       comment.char = "")
-  #     
-  #   } else if (field_delimeter[i] == "tab"){
-  #     
-  #     df_table <- read.table(
-  #       paste(path, "/", table_names[i], sep = ""),
-  #       header=TRUE,
-  #       sep="\t",
-  #       quote="\"",
-  #       as.is=TRUE,
-  #       comment.char = "")
-  #     
-  #   }
-  #   
-  #   # Read catvars file
-  #   
-  #   if (!is.na(match(fname_table_catvars[i], list.files(path)))){
-  #     
-  #     catvars <- read.table(
-  #       paste(
-  #         path,
-  #         "/",
-  #         fname_table_catvars[i], sep = ""),
-  #       header=TRUE,
-  #       sep="\t",
-  #       quote="\"",
-  #       as.is=TRUE,
-  #       comment.char = "")
-  #     
-  #     if (dim(catvars)[1] > 0){
-  #       
-  #       for (j in 1:dim(catvars)[2]){
-  #         catvars[ ,j] <- as.character(catvars[ ,j])
-  #       }
-  #       
-  #       non_blank_rows <- nrow(catvars) - sum(catvars$attributeName == "")
-  #       catvars <- catvars[1:non_blank_rows, 1:3]
-  #       
-  #       # Clean extraneous white spaces from catvars tables
-  #       
-  #       if (dim(catvars)[1] != 0){
-  #         for (j in 1:ncol(catvars)){
-  #           if (class(catvars[ ,j]) == "character" ||
-  #               (class(catvars[ ,j]) == "factor")){
-  #             catvars[ ,j] <- trimws(catvars[ ,j])
-  #           }
-  #         }
-  #       }
-  #       
-  #     }
-  #     
-  #     # Clean extraneous white spaces from attributes
-  #     
-  #     for (j in 1:ncol(attributes)){
-  #       if (class(attributes[ ,j]) == "character" ||
-  #           (class(attributes[ ,j]) == "factor")){
-  #         attributes[ ,j] <- trimws(attributes[ ,j])
-  #       }
-  #     }
-  #     
-  #     # Get the column classes into a vector
-  #     
-  #     col_classes <- attributes[ ,"columnClasses"]
-  #     
-  #     # Create the attributeList element
-  #     
-  #     attributeList <- set_attributes(attributes,
-  #                                     factors = catvars,
-  #                                     col_classes = col_classes)
-  #     
-  #   } else {
-  #     
-  #     # Clean extraneous white spaces from attributes
-  #     
-  #     for (j in 1:ncol(attributes)){
-  #       if (class(attributes[ ,j]) == "character" ||
-  #           (class(attributes[ ,j]) == "categorical")){
-  #         attributes[ ,j] <- trimws(attributes[ ,j])
-  #       }
-  #     }
-  #     
-  #     # Get the column classes into a vector
-  #     
-  #     col_classes <- attributes[ ,"columnClasses"]
-  #     
-  #     # Create the attributeList element
-  #     
-  #     attributeList <- set_attributes(attributes,
-  #                                     col_classes = col_classes)
-  #     
-  #   }
-  #   
-  #   # Set physical
-  #   
-  #   if (field_delimeter[i] == "comma"){
-  #     fd <- ","
-  #   } else if (field_delimeter[i] == "tab"){
-  #     fd <- "\t"
-  #   }
-  #   
-  #   if (nchar(quote_character[i]) > 0){
-  #     
-  #     physical <- set_physical(table_names[i],
-  #                              numHeaderLines = num_header_lines[i],
-  #                              recordDelimiter = record_delimeter[i],
-  #                              attributeOrientation = attribute_orientation[i],
-  #                              fieldDelimiter = fd,
-  #                              quoteCharacter = quote_character[i])
-  #     
-  #   } else {
-  #     
-  #     physical <- set_physical(table_names[i],
-  #                              numHeaderLines = num_header_lines[i],
-  #                              recordDelimiter = record_delimeter[i],
-  #                              attributeOrientation = attribute_orientation[i],
-  #                              fieldDelimiter = fd)
-  #     
-  #   }
-  #   
-  #   
-  #   
-  #   physical@size <- new("size",
-  #                        unit = "byte",
-  #                        as.character(
-  #                          file.size(
-  #                            paste(path,
-  #                                  "/",
-  #                                  table_names[i],
-  #                                  sep = ""))))
-  #   
-  #   if (nchar(data_table_urls[i]) > 1){
-  #     distribution <- new("distribution",
-  #                         online = new("online",
-  #                                      url = data_table_urls[i]))
-  #   } else {
-  #     distribution <- new("distribution",
-  #                         offline = new("offline",
-  #                                       mediumName = storage_type[i]))
-  #   }
-  #   
-  #   physical@distribution <- new("ListOfdistribution",
-  #                                c(distribution))
-  #   
-  #   
-  #   if (os == "mac"){
-  #     
-  #     command_certutil <- paste("md5 ",
-  #                               path,
-  #                               "/",
-  #                               table_names[i],
-  #                               sep = "")
-  #     
-  #     certutil_output <- system(command_certutil, intern = T)
-  #     
-  #     checksum_md5 <- gsub(".*= ", "", certutil_output)
-  #     
-  #     authentication <- new("authentication",
-  #                           method = "MD5",
-  #                           checksum_md5)
-  #     
-  #     physical@authentication <- as(list(authentication),
-  #                                   "ListOfauthentication")
-  #     
-  #   } else if (os == "win"){
-  #     
-  #     command_certutil <- paste("CertUtil -hashfile ",
-  #                               path,
-  #                               "\\",
-  #                               table_names[i],
-  #                               " MD5",
-  #                               sep = "")
-  #     
-  #     certutil_output <- system(command_certutil, intern = T)
-  #     
-  #     checksum_md5 <- gsub(" ", "", certutil_output[2])
-  #     
-  #     authentication <- new("authentication",
-  #                           method = "MD5",
-  #                           checksum_md5)
-  #     
-  #     physical@authentication <- as(list(authentication),
-  #                                   "ListOfauthentication")
-  #     
-  #   }
-  #   
-  #   # Get number of records
-  #   
-  #   number_of_records <- as.character(dim(df_table)[1])
-  #   
-  #   # Pull together information for the data table
-  #   
-  #   data_table <- new("dataTable",
-  #                     entityName = table_names[i],
-  #                     entityDescription = data_table_descriptions[i],
-  #                     physical = physical,
-  #                     attributeList = attributeList,
-  #                     numberOfRecords = number_of_records)
-  #   
-  #   data_tables_stored[[i]] <- data_table
-  #   
-  # }
+  print("Adding provenance ...")
+  
+  provenance <- read_eml(paste("https://pasta.lternet.edu/package/provenance/eml",
+                               "/",
+                               pkg_prts[1],
+                               "/",
+                               identifier,
+                               "/",
+                               revision,
+                               sep = ""))
+  
+  methods_step <- xml_in@dataset@methods@methodStep
+  
+  methods_step[[length(methods_step)+1]] <- provenance
+  
+  xml_in@dataset@methods@methodStep <- methods_step
+
+  
+  # Loop through tables -------------------------------------------------------
+
+  for (i in 1:length(table_names)){
+
+    print(paste(
+      table_names[i],
+      "data table ..."))
+
+    attributes <- attributes_in[[1]][[i]]
+
+    # Read data table
+
+    if (field_delimeter[i] == "comma"){
+
+      df_table <- read.table(
+        paste(path, "/", table_names[i], sep = ""),
+        header=TRUE,
+        sep=",",
+        quote="\"",
+        as.is=TRUE,
+        comment.char = "")
+
+    } else if (field_delimeter[i] == "tab"){
+
+      df_table <- read.table(
+        paste(path, "/", table_names[i], sep = ""),
+        header=TRUE,
+        sep="\t",
+        quote="\"",
+        as.is=TRUE,
+        comment.char = "")
+
+    }
+
+    # Read catvars file
+
+    if (!is.na(match(fname_table_catvars[i], list.files(path)))){
+
+      catvars <- read.table(
+        paste(
+          path,
+          "/",
+          fname_table_catvars[i], sep = ""),
+        header=TRUE,
+        sep="\t",
+        quote="\"",
+        as.is=TRUE,
+        comment.char = "")
+
+      if (dim(catvars)[1] > 0){
+
+        for (j in 1:dim(catvars)[2]){
+          catvars[ ,j] <- as.character(catvars[ ,j])
+        }
+
+        non_blank_rows <- nrow(catvars) - sum(catvars$attributeName == "")
+        catvars <- catvars[1:non_blank_rows, 1:3]
+
+        # Clean extraneous white spaces from catvars tables
+
+        if (dim(catvars)[1] != 0){
+          for (j in 1:ncol(catvars)){
+            if (class(catvars[ ,j]) == "character" ||
+                (class(catvars[ ,j]) == "factor")){
+              catvars[ ,j] <- trimws(catvars[ ,j])
+            }
+          }
+        }
+
+      }
+
+      # Clean extraneous white spaces from attributes
+
+      for (j in 1:ncol(attributes)){
+        if (class(attributes[ ,j]) == "character" ||
+            (class(attributes[ ,j]) == "factor")){
+          attributes[ ,j] <- trimws(attributes[ ,j])
+        }
+      }
+
+      # Get the column classes into a vector
+
+      col_classes <- attributes[ ,"columnClasses"]
+
+      # Create the attributeList element
+
+      attributeList <- set_attributes(attributes,
+                                      factors = catvars,
+                                      col_classes = col_classes)
+
+    } else {
+
+      # Clean extraneous white spaces from attributes
+
+      for (j in 1:ncol(attributes)){
+        if (class(attributes[ ,j]) == "character" ||
+            (class(attributes[ ,j]) == "categorical")){
+          attributes[ ,j] <- trimws(attributes[ ,j])
+        }
+      }
+
+      # Get the column classes into a vector
+
+      col_classes <- attributes[ ,"columnClasses"]
+
+      # Create the attributeList element
+
+      attributeList <- set_attributes(attributes,
+                                      col_classes = col_classes)
+
+    }
+
+    # Set physical
+
+    if (field_delimeter[i] == "comma"){
+      fd <- ","
+    } else if (field_delimeter[i] == "tab"){
+      fd <- "\t"
+    }
+
+    if (nchar(quote_character[i]) > 0){
+
+      physical <- set_physical(table_names[i],
+                               numHeaderLines = num_header_lines[i],
+                               recordDelimiter = record_delimeter[i],
+                               attributeOrientation = attribute_orientation[i],
+                               fieldDelimiter = fd,
+                               quoteCharacter = quote_character[i])
+
+    } else {
+
+      physical <- set_physical(table_names[i],
+                               numHeaderLines = num_header_lines[i],
+                               recordDelimiter = record_delimeter[i],
+                               attributeOrientation = attribute_orientation[i],
+                               fieldDelimiter = fd)
+
+    }
+
+
+
+    physical@size <- new("size",
+                         unit = "byte",
+                         as.character(
+                           file.size(
+                             paste(path,
+                                   "/",
+                                   table_names[i],
+                                   sep = ""))))
+
+    if (nchar(data_table_urls[i]) > 1){
+      distribution <- new("distribution",
+                          online = new("online",
+                                       url = data_table_urls[i]))
+    } else {
+      distribution <- new("distribution",
+                          offline = new("offline",
+                                        mediumName = storage_type[i]))
+    }
+
+    physical@distribution <- new("ListOfdistribution",
+                                 c(distribution))
+
+
+    if (os == "mac"){
+
+      command_certutil <- paste("md5 ",
+                                path,
+                                "/",
+                                table_names[i],
+                                sep = "")
+
+      certutil_output <- system(command_certutil, intern = T)
+
+      checksum_md5 <- gsub(".*= ", "", certutil_output)
+
+      authentication <- new("authentication",
+                            method = "MD5",
+                            checksum_md5)
+
+      physical@authentication <- as(list(authentication),
+                                    "ListOfauthentication")
+
+    } else if (os == "win"){
+
+      command_certutil <- paste("CertUtil -hashfile ",
+                                path,
+                                "\\",
+                                table_names[i],
+                                " MD5",
+                                sep = "")
+
+      certutil_output <- system(command_certutil, intern = T)
+
+      checksum_md5 <- gsub(" ", "", certutil_output[2])
+
+      authentication <- new("authentication",
+                            method = "MD5",
+                            checksum_md5)
+
+      physical@authentication <- as(list(authentication),
+                                    "ListOfauthentication")
+
+    }
+
+    # Get number of records
+
+    number_of_records <- as.character(dim(df_table)[1])
+
+    # Pull together information for the data table
+
+    data_table <- new("dataTable",
+                      entityName = table_names[i],
+                      entityDescription = data_table_descriptions[i],
+                      physical = physical,
+                      attributeList = attributeList,
+                      numberOfRecords = number_of_records)
+
+    data_tables_stored[[i]] <- data_table
+
+  }
   # 
   # 
   # # Compile datatables --------------------------------------------------------
