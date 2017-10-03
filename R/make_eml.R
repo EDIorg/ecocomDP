@@ -183,6 +183,14 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
   
   print("Appending <contact> ...")
   
+  personinfo <- read.table(paste(path,
+                                 "/additional_contact.txt",
+                                 sep = ""),
+                           header = T,
+                           sep = "\t",
+                           as.is = T,
+                           na.strings = "NA")
+  
   individualName <- new(
     "individualName",
     givenName = trimws(personinfo["givenName"]),
@@ -548,6 +556,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
   }
   
   # Add R code ------------------------------------------------------------------
+  # This section needs to accomodate other code types.
   
   print("Adding formatting scripts as <otherEntity> ...")
   
@@ -562,129 +571,153 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
   
   list_of_other_entity <- list()
   
-  for (i in 1:length(code_names)){
+  if (!identical(code_names, character(0))){
     
-    # Create new other entity element
-    
-    other_entity <- new("otherEntity")
-    
-    # Add code file names
-    
-    other_entity@entityName <- code_names[i]
-    
-    # Add description
-    
-    code_description <- "Converts parent data package to ecocomDP (child data package)"
-    
-    other_entity@entityDescription <- code_description
-    
-    #  Build physical
-    
-    num_header_lines_code <- trimws(c("0"))
-    record_delimeter_code <- trimws(c("\\r\\n"))
-    attribute_orientation_code <- trimws(c("column"))
-    field_delimeter_code <- ","
-    quote_character <- trimws(c("\""))
-    code_urls <- paste(access.url, "/", code_names[i], sep = "")
-    entity_type_code <- "R code"
-    
-    physical <- set_physical(code_names[i],
-                             numHeaderLines = num_header_lines_code,
-                             recordDelimiter = record_delimeter_code,
-                             attributeOrientation = attribute_orientation_code,
-                             fieldDelimiter = field_delimeter_code,
-                             quoteCharacter = quote_character)
-    
-    physical@size <- new("size", unit = "bytes", as(as.character(file.size(paste(path, "\\", code_names[i], sep = ""))), "size"))
-    
-    distribution <- new("distribution",
-                        online = new("online",
-                                     url = code_urls))
-    
-    physical@distribution <- new("ListOfdistribution",
-                                 c(distribution))
-    
-    if (os == "mac"){
+    for (i in 1:length(code_names)){
       
-      command_certutil <- paste("md5 ",
-                                path,
-                                "/",
-                                code_names[i],
-                                sep = "")
+      # Create new other entity element
       
-      certutil_output <- system(command_certutil, intern = T)
+      other_entity <- new("otherEntity")
       
-      checksum_md5 <- gsub(".*= ", "", certutil_output)
+      # Add code file names
       
-      authentication <- new("authentication",
-                            method = "MD5",
-                            checksum_md5)
+      other_entity@entityName <- code_names[i]
       
-      physical@authentication <- as(list(authentication),
-                                    "ListOfauthentication")
+      # Add description
       
-    } else if (os == "win"){
+      code_description <- "Converts parent data package to ecocomDP (child data package)"
       
-      command_certutil <- paste("CertUtil -hashfile ",
-                                path,
-                                "\\",
-                                code_names[i],
-                                " MD5",
-                                sep = "")
+      other_entity@entityDescription <- code_description
       
-      certutil_output <- system(command_certutil, intern = T)
+      #  Build physical
       
-      checksum_md5 <- gsub(" ", "", certutil_output[2])
+      num_header_lines_code <- trimws(c("0"))
+      record_delimeter_code <- trimws(c("\\r\\n"))
+      attribute_orientation_code <- trimws(c("column"))
+      field_delimeter_code <- ","
+      quote_character <- trimws(c("\""))
+      code_urls <- paste(access.url, "/", code_names[i], sep = "")
+      entity_type_code <- "R code"
       
-      authentication <- new("authentication",
-                            method = "MD5",
-                            checksum_md5)
+      physical <- set_physical(code_names[i],
+                               numHeaderLines = num_header_lines_code,
+                               recordDelimiter = record_delimeter_code,
+                               attributeOrientation = attribute_orientation_code,
+                               fieldDelimiter = field_delimeter_code,
+                               quoteCharacter = quote_character)
       
-      physical@authentication <- as(list(authentication),
-                                    "ListOfauthentication")
+      physical@size <- new("size", unit = "bytes", as(as.character(file.size(paste(path, "\\", code_names[i], sep = ""))), "size"))
+      
+      distribution <- new("distribution",
+                          online = new("online",
+                                       url = code_urls))
+      
+      physical@distribution <- new("ListOfdistribution",
+                                   c(distribution))
+      
+      if (os == "mac"){
+        
+        command_certutil <- paste("md5 ",
+                                  path,
+                                  "/",
+                                  code_names[i],
+                                  sep = "")
+        
+        certutil_output <- system(command_certutil, intern = T)
+        
+        checksum_md5 <- gsub(".*= ", "", certutil_output)
+        
+        authentication <- new("authentication",
+                              method = "MD5",
+                              checksum_md5)
+        
+        physical@authentication <- as(list(authentication),
+                                      "ListOfauthentication")
+        
+      } else if (os == "win"){
+        
+        command_certutil <- paste("CertUtil -hashfile ",
+                                  path,
+                                  "\\",
+                                  code_names[i],
+                                  " MD5",
+                                  sep = "")
+        
+        certutil_output <- system(command_certutil, intern = T)
+        
+        checksum_md5 <- gsub(" ", "", certutil_output[2])
+        
+        authentication <- new("authentication",
+                              method = "MD5",
+                              checksum_md5)
+        
+        physical@authentication <- as(list(authentication),
+                                      "ListOfauthentication")
+        
+      }
+      
+      other_entity@physical <- as(c(physical), "ListOfphysical")
+      
+      # Add entity type
+      
+      other_entity@entityType <- entity_type_code
+      
+      # Add other entity to list
+      
+      list_of_other_entity[[i]] <- other_entity
       
     }
     
-    other_entity@physical <- as(c(physical), "ListOfphysical")
+    print("Adding formatting scripts as <otherEntity> ...")
     
-    # Add entity type
-    
-    other_entity@entityType <- entity_type_code
-    
-    # Add other entity to list
-    
-    list_of_other_entity[[i]] <- other_entity
+    xml_in@dataset@otherEntity <- new("ListOfotherEntity",
+                                      list_of_other_entity)
     
   }
   
-  print("Adding formatting scripts as <otherEntity> ...")
-  
-  xml_in@dataset@otherEntity <- new("ListOfotherEntity",
-                                    list_of_other_entity)
   
   
+  # Recompile EML
+  
+  if (custom_units == "yes"){
+    eml <- new("eml",
+               schemaLocation = "eml://ecoinformatics.org/eml-2.1.1  http://nis.lternet.edu/schemas/EML/eml-2.1.1/eml.xsd",
+               packageId = child.package.id,
+               system = author.system,
+               access = xml_in@access,
+               dataset = xml_in@dataset,
+               additionalMetadata = xml_in@additionalMetadata)
+    
+  } else {
+    eml <- new("eml",
+               schemaLocation = "eml://ecoinformatics.org/eml-2.1.1  http://nis.lternet.edu/schemas/EML/eml-2.1.1/eml.xsd",
+               packageId = child.package.id,
+               system = author.system,
+               access = xml_in@access,
+               dataset = xml_in@dataset)
+  }
   
   # Write EML
 
   print("Writing to file ...")
 
-  write_eml(xml_in, paste(path, "/", child.package.id, ".xml", sep = ""))
+  write_eml(eml, paste(path, "/", child.package.id, ".xml", sep = ""))
 
-  # # Validate EML
-  # 
-  # print("Validating EML ...")
-  # 
-  # validation_result <- eml_validate(eml)
-  # 
-  # if (validation_result == "TRUE"){
-  # 
-  #   print("EML passed validation!")
-  # 
-  # } else {
-  # 
-  #   print("EML validaton failed. See warnings for details.")
-  # 
-  # }
+  # Validate EML
+
+  print("Validating EML ...")
+
+  validation_result <- eml_validate(eml)
+
+  if (validation_result == "TRUE"){
+
+    print("EML passed validation!")
+
+  } else {
+
+    print("EML validaton failed. See warnings for details.")
+
+  }
 
   
 }
