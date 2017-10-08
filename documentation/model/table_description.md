@@ -13,9 +13,9 @@ table list and suggested population order, ie, parents first.
 |1.| location | yes | NA | basic info to identify a place | lon, lat, elev |  location_id | 
 |2.| taxon | yes | NA | basic info to identify an organism | name, id from an external system |  taxon_id |
 |3.| observation |yes| location, taxon | observations about taxa, that are being analyzed. Eg, organism abundance or density, or the data to compute density (count) | variable, value, unit | observation_id, package_id, location_id, observation_datetime, taxon_id, variable_name   | 
-|4.| location_ancillary |no| location | additional info about a place that does not change, in long format.Eg, sampling area, lake area, depth of ocean | variable, value, unit - See examples directory  | location_id, variable_name |
-|5.| taxon_ancillary|no|  taxon | additonal info about an organism that does not change, in long format. Eg, phenotypic traits | variable, value, unit | taxon_id, variable_name   |
-|6.| observation_ancillary  | no | NA | additional info about the sampling event (not related to taxa or locations, in long-format. additional cols for describing the measurement which can be controlled.  |  entity, characteristic, variable, value, unit | observation_ancillary_id, variable_name  |
+|4.| location_ancillary |no| location | additional info about a place that does not change, in long format. | variable, value, unit sampling area, lake area, depth of ocean | location_id, variable_name |
+|5.| taxon_ancillary|no|  taxon | additonal info about an organism that does not change, in long format | variable, value, unit | phenotypic traits | taxon_id, variable_name   |
+|6.| observation_ancillary  | no | NA | additional info about the sampling event (not related to taxa or locations) in long-format.  |  entity, characteristic, variable_name, value, unit | observation_ancillary_id, entity, characteristic, variable_name  |
 |7.| dataset_summary|yes|  observation | summary info calculated from incoming data. one line table |See examples directory |   |
 
 
