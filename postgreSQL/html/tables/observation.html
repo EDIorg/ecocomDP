@@ -91,28 +91,28 @@
  <td class='detail' align='center'></td>
  <td class='detail' align='center'></td>
  <td class='detail'></td>
- <td class='detail'></td>
+ <td class='detail'>
+  <table border='0' width='100%' cellspacing='0' cellpadding='0'>
+   <tr class='relative even' valign='top'>
+    <td class='relatedTable detail' title="observation_ancillary.observation_id refs observation.observation_id via observation_ancillary_fk"><a href='observation_ancillary.html'>observation_ancillary</a><span class='relatedKey'>.observation_id</span>
+    </td>
+    <td class='constraint detail'>observation_ancillary_fk<span title='Restrict delete:
+ Parent cannot be deleted if children exist'>&nbsp;R</span></td>
+   </tr>
+  </table>
+</td>
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
 <tr class='odd'>
- <td class='detail'>event_record_id</td>
+ <td class='detail'>event_id</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>100</td>
  <td class='detail' align='center'></td>
  <td class='detail' align='center'></td>
  <td class='detail'></td>
  <td class='detail'></td>
- <td class='detail'>
-  <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative odd' valign='top'>
-    <td class='relatedTable detail' title="observation.event_record_id refs event.event_record_id via observation_event_record_fk"><a href='event.html'>event</a><span class='relatedKey'>.event_record_id</span>
-    </td>
-    <td class='constraint detail'>observation_event_record_fk<span title='Restrict delete:
- Parent cannot be deleted if children exist'>&nbsp;R</span></td>
-   </tr>
-  </table>
- </td>
+ <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
 <tr class='even'>
@@ -136,7 +136,7 @@
  <td class='comment detail'></td>
 </tr>
 <tr class='odd'>
- <td class='detail'>sampling_location_id</td>
+ <td class='detail'>location_id</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>100</td>
  <td class='detail' align='center'></td>
@@ -146,9 +146,9 @@
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
    <tr class='relative odd' valign='top'>
-    <td class='relatedTable detail' title="observation.sampling_location_id refs sampling_location.sampling_location_id via observation_sampling_location_fk"><a href='sampling_location.html'>sampling_location</a><span class='relatedKey'>.sampling_location_id</span>
+    <td class='relatedTable detail' title="observation.location_id refs location.location_id via observation_location_fk"><a href='location.html'>location</a><span class='relatedKey'>.location_id</span>
     </td>
-    <td class='constraint detail'>observation_sampling_location_fk<span title='Restrict delete:
+    <td class='constraint detail'>observation_location_fk<span title='Restrict delete:
  Parent cannot be deleted if children exist'>&nbsp;R</span></td>
    </tr>
   </table>
@@ -220,7 +220,7 @@
  <td class='comment detail'></td>
 </tr>
 </table>
-<p title='9 columns'>Table contained 0 rows at Wed Aug 16 14:05 PDT 2017<p/>
+<p title='9 columns'>Table contained 0 rows at Sun Oct 08 15:14 PDT 2017<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
@@ -246,21 +246,21 @@
 <br><form action='get'><b>Close relationships</b><span class='degrees' id='degrees' title='Detail diminishes with increased separation from observation'>
 &nbsp;within <label for='oneDegree'><input type='radio' name='degrees' id='oneDegree' checked>one</label>  <label for='twoDegrees'><input type='radio' name='degrees' id='twoDegrees'>two degrees</label> of separation</span><b>:</b></form>
 <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="observation.html" title="observation" alt="" coords="280,273,567,568">
-<area shape="rect" id="node2" href="event.html" title="event" alt="" coords="54,5,187,193">
-<area shape="rect" id="node3" href="dataset_summary.html" title="dataset_summary" alt="" coords="5,211,236,449">
-<area shape="rect" id="node4" href="sampling_location.html" title="sampling_location" alt="" coords="13,467,228,681">
-<area shape="rect" id="node5" href="taxon.html" title="taxon" alt="" coords="47,699,195,887">
+<area shape="rect" id="node1" href="observation.html" title="observation" alt="" coords="280,183,567,477">
+<area shape="rect" id="node2" href="location.html" title="location" alt="" coords="47,262,195,475">
+<area shape="rect" id="node3" href="dataset_summary.html" title="dataset_summary" alt="" coords="5,5,236,244">
+<area shape="rect" id="node4" href="taxon.html" title="taxon" alt="" coords="47,493,195,681">
+<area shape="rect" id="node5" href="observation_ancillary.html" title="observation_ancillary" alt="" coords="611,160,796,399">
 </map>
   <a name='diagram'><img id='oneDegreeImg' src='../diagrams/observation.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
 <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="observation.html" title="observation" alt="" coords="280,157,567,452">
-<area shape="rect" id="node2" href="event.html" title="event" alt="" coords="54,5,187,193">
-<area shape="rect" id="node3" href="dataset_summary.html" title="dataset_summary" alt="" coords="5,211,236,449">
-<area shape="rect" id="node4" href="sampling_location.html" title="sampling_location" alt="" coords="13,467,228,681">
-<area shape="rect" id="node5" href="taxon.html" title="taxon" alt="" coords="47,699,195,887">
-<area shape="rect" id="node6" href="sampling_location_ancillary.html" title="sampling_location_ancillary" alt="" coords="319,469,527,556">
-<area shape="rect" id="node7" href="taxon_ancillary.html" title="taxon_ancillary" alt="" coords="360,697,487,784">
+<area shape="rect" id="node1" href="location_ancillary.html" title="location_ancillary" alt="" coords="353,340,494,427">
+<area shape="rect" id="node2" href="location.html" title="location" alt="" coords="47,275,195,489">
+<area shape="rect" id="node3" href="observation.html" title="observation" alt="" coords="280,28,567,323">
+<area shape="rect" id="node4" href="dataset_summary.html" title="dataset_summary" alt="" coords="5,19,236,257">
+<area shape="rect" id="node5" href="taxon.html" title="taxon" alt="" coords="47,507,195,695">
+<area shape="rect" id="node6" href="observation_ancillary.html" title="observation_ancillary" alt="" coords="611,5,796,244">
+<area shape="rect" id="node7" href="taxon_ancillary.html" title="taxon_ancillary" alt="" coords="360,505,487,592">
 </map>
 
   <a name='diagram'><img id='twoDegreesImg' src='../diagrams/observation.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
