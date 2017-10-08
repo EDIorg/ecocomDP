@@ -12,12 +12,12 @@ created original from pgdump, edited. see personal notes.
 
 /*
 table population order - suggested (ie, parents first).
-1. sampling_location
+1. location
 2. taxon
-3. event
-4. observation (refs sampling_location, taxon, event)
-5. sampling_location_ancillary (refs sampling_location)
-6. taxon_ancillary (refs taxon)
+3. observation (refs location, taxon)
+4. location_ancillary (refs location)
+5. taxon_ancillary (refs taxon)
+6. observation_ancillary (refs observation)
 7. dataset_summary (refs observation)
 
 */
@@ -40,14 +40,14 @@ SET default_with_oids = false;
 */
 
 
--- DROP TABLE "ecocom_dp".sampling_location;
-CREATE TABLE "ecocom_dp".sampling_location (
-	sampling_location_id character varying(100) NOT NULL,
-	sampling_location_name character varying(500),
+-- DROP TABLE "ecocom_dp".location;
+CREATE TABLE "ecocom_dp".location (
+	location_id character varying(100) NOT NULL,
+	location_name character varying(500),
 	latitude float,
 	longitude float,
 	elevation float, -- relative to sealevel
-	parent_sampling_location_id character varying(100) 
+	parent_location_id character varying(100) 
 );
 
 -- DROP TABLE "ecocom_dp".taxon;
@@ -59,21 +59,12 @@ CREATE TABLE "ecocom_dp".taxon (
 	authority_taxon_id character varying(200)
 );
 
--- DROP TABLE "ecocom_dp".event;
-CREATE TABLE "ecocom_dp".event (
-  event_record_id character varying(100) NOT NULL,
-	event_id character varying(100) NOT NULL,
-	variable_name character varying(200),
-	value character varying(200),
-	unit character varying(200)
-);
-
 -- DROP TABLE "ecocom_dp".observation;
 CREATE TABLE "ecocom_dp".observation (
 	observation_id character varying(100) NOT NULL,
-	event_record_id character varying(100) NOT NULL,
+	event_id character varying(100) NOT NULL,
 	package_id character varying(100) NOT NULL,
-	sampling_location_id character varying(100) NOT NULL,
+	location_id character varying(100) NOT NULL,
 	observation_datetime timestamp without time zone,
 	taxon_id character varying(100) NOT NULL,
 	variable_name character varying(200) NOT NULL,
@@ -81,10 +72,10 @@ CREATE TABLE "ecocom_dp".observation (
 	unit character varying(200) NOT NULL
 );
 
--- DROP TABLE "ecocom_dp".sampling_location_ancillary;
-CREATE TABLE "ecocom_dp".sampling_location_ancillary (
-    sampling_location_ancillary_id character varying(100) NOT NULL,
-    sampling_location_id character varying(100) NOT NULL,
+-- DROP TABLE "ecocom_dp".location_ancillary;
+CREATE TABLE "ecocom_dp".location_ancillary (
+    location_ancillary_id character varying(100) NOT NULL,
+    location_id character varying(100) NOT NULL,
     datetime timestamp without time zone NOT NULL, -- e.g. experimental treatment
     variable_name  character varying(200) NOT NULL,
     value  character varying(200) NOT NULL,
@@ -93,12 +84,24 @@ CREATE TABLE "ecocom_dp".sampling_location_ancillary (
 
 -- DROP TABLE "ecocom_dp".taxon_ancillary;
 CREATE TABLE "ecocom_dp".taxon_ancillary (
+    record_id character varying(100) NOT NULL,
     taxon_ancillary_id character varying(100) NOT NULL,
 	  taxon_id character varying(100) NOT NULL,
 	  datetime timestamp without time zone NOT NULL,  
     variable_name  character varying(200) NOT NULL,
     value character varying(200) NOT NULL,
 	  author character varying(200)
+);
+
+-- DROP TABLE "ecocom_dp".observation_ancillary; 
+CREATE TABLE "ecocom_dp".observation_ancillary (
+  observation_ancillary_id character varying(100) NOT NULL,
+	observation_id character varying(100) NOT NULL,
+	measured_entity character varying(200) NOT NULL,
+	characteristic character varying(200) NOT NULL,
+	variable_name character varying(200),
+	value character varying(200),
+	unit character varying(200)
 );
 
 -- DROP TABLE "ecocom_dp".dataset_summary;
@@ -113,20 +116,25 @@ CREATE TABLE "ecocom_dp".dataset_summary (
 
 );
 
+
+
+
+
+
 ALTER TABLE "ecocom_dp".observation OWNER TO mob;
 COMMENT ON TABLE "ecocom_dp".observation IS 'table holds all the primary obs, with links to taxa, locations, event, summary';
 
-ALTER TABLE "ecocom_dp".sampling_location OWNER TO mob;
-COMMENT ON TABLE "ecocom_dp".sampling_location IS 'self-referencing; parent of a loc can be another loc';
+ALTER TABLE "ecocom_dp".location OWNER TO mob;
+COMMENT ON TABLE "ecocom_dp".location IS 'self-referencing; parent of a loc can be another loc';
 
 ALTER TABLE "ecocom_dp".taxon OWNER TO mob;
 
-ALTER TABLE "ecocom_dp".event OWNER TO mob;
-COMMENT ON TABLE "ecocom_dp".event IS 'holds info about a sampling event, eg, conditions, weather, observers, etc';
+ALTER TABLE "ecocom_dp".observation_ancillary OWNER TO mob;
+COMMENT ON TABLE "ecocom_dp".observation_ancillary IS 'holds other info about a sampling event, eg, conditions, weather, observers, etc';
 
 ALTER TABLE "ecocom_dp".taxon_ancillary OWNER TO mob;
 
-ALTER TABLE "ecocom_dp".sampling_location_ancillary OWNER TO mob;
+ALTER TABLE "ecocom_dp".location_ancillary OWNER TO mob;
 
 ALTER TABLE "ecocom_dp".dataset_summary OWNER TO mob;
 
@@ -136,14 +144,14 @@ ALTER TABLE "ecocom_dp".dataset_summary OWNER TO mob;
 ALTER TABLE ONLY "ecocom_dp".observation
     ADD CONSTRAINT observation_pk PRIMARY KEY (observation_id);
 
-ALTER TABLE ONLY "ecocom_dp".sampling_location
-    ADD CONSTRAINT sampling_location_pk PRIMARY KEY (sampling_location_id);
+ALTER TABLE ONLY "ecocom_dp".location
+    ADD CONSTRAINT location_pk PRIMARY KEY (location_id);
 
 ALTER TABLE ONLY "ecocom_dp".taxon
     ADD CONSTRAINT taxon_pk PRIMARY KEY (taxon_id);
 
-ALTER  TABLE ONLY "ecocom_dp".sampling_location_ancillary
-    ADD CONSTRAINT sampling_location_ancillary_pk PRIMARY KEY (sampling_location_ancillary_id);
+ALTER  TABLE ONLY "ecocom_dp".location_ancillary
+    ADD CONSTRAINT location_ancillary_pk PRIMARY KEY (location_ancillary_id);
 
 ALTER TABLE ONLY "ecocom_dp".taxon_ancillary
     ADD CONSTRAINT taxon_ancillary_pk PRIMARY KEY (taxon_ancillary_id);
@@ -151,36 +159,34 @@ ALTER TABLE ONLY "ecocom_dp".taxon_ancillary
 ALTER TABLE ONLY "ecocom_dp".dataset_summary
     ADD CONSTRAINT dataset_summary_pk PRIMARY KEY (package_id);
 
-ALTER TABLE ONLY "ecocom_dp".event
-    ADD CONSTRAINT event_pk PRIMARY KEY (event_record_id);
-
+ALTER TABLE ONLY "ecocom_dp".observation_ancillary
+    ADD CONSTRAINT observation_ancillary_pk PRIMARY KEY (observation_ancillary_id);
 
 
 /* add FK constraints
 */
 -- observation refs sampling_loc, taxon, event
 ALTER TABLE ONLY "ecocom_dp".observation
-    ADD CONSTRAINT observation_sampling_location_fk FOREIGN KEY (sampling_location_id) REFERENCES "ecocom_dp".sampling_location (sampling_location_id) MATCH SIMPLE     
+    ADD CONSTRAINT observation_location_fk FOREIGN KEY (location_id) REFERENCES "ecocom_dp".location (location_id) MATCH SIMPLE     
     ON UPDATE CASCADE;
 ALTER TABLE ONLY "ecocom_dp".observation
     ADD CONSTRAINT observation_taxon_fk FOREIGN KEY (taxon_id) REFERENCES "ecocom_dp".taxon (taxon_id) MATCH SIMPLE     
     ON UPDATE CASCADE;
-ALTER TABLE ONLY "ecocom_dp".observation
-    ADD CONSTRAINT observation_event_record_fk FOREIGN KEY (event_record_id) REFERENCES "ecocom_dp".event (event_record_id) MATCH SIMPLE
-    ON UPDATE CASCADE;
+-- ALTER TABLE ONLY "ecocom_dp".observation
+--    ADD CONSTRAINT observation_event_fk FOREIGN KEY (event_id) REFERENCES "ecocom_dp".event (event_id) MATCH SIMPLE
+--    ON UPDATE CASCADE;
 ALTER TABLE ONLY "ecocom_dp".observation
     ADD CONSTRAINT observation_package_fk FOREIGN KEY (package_id) REFERENCES "ecocom_dp".dataset_summary (package_id) MATCH SIMPLE
     ON UPDATE CASCADE;
-
-
---sampling_location (self-referencing)
-ALTER TABLE ONLY "ecocom_dp".sampling_location
-    ADD CONSTRAINT parent_sampling_location_fk FOREIGN KEY (parent_sampling_location_id) REFERENCES "ecocom_dp".sampling_location (sampling_location_id) MATCH SIMPLE     
+    
+--location (self-referencing)
+ALTER TABLE ONLY "ecocom_dp".location
+    ADD CONSTRAINT parent_location_fk FOREIGN KEY (parent_location_id) REFERENCES "ecocom_dp".location (location_id) MATCH SIMPLE     
     ON UPDATE CASCADE;  
 
--- sampling_location_ancillary refs sampling_loc
-ALTER TABLE ONLY "ecocom_dp".sampling_location_ancillary
-    ADD CONSTRAINT sampling_location_ancillary_fk FOREIGN KEY (sampling_location_id) REFERENCES "ecocom_dp".sampling_location (sampling_location_id) MATCH SIMPLE     
+-- location_ancillary refs sampling_loc
+ALTER TABLE ONLY "ecocom_dp".location_ancillary
+    ADD CONSTRAINT location_ancillary_fk FOREIGN KEY (location_id) REFERENCES "ecocom_dp".location (location_id) MATCH SIMPLE     
     ON UPDATE CASCADE;
   
 -- taxon_ancillary refs taxon
@@ -188,6 +194,15 @@ ALTER TABLE ONLY "ecocom_dp".taxon_ancillary
     ADD CONSTRAINT taxon_ancillary_fk FOREIGN KEY (taxon_id) REFERENCES "ecocom_dp".taxon (taxon_id) MATCH SIMPLE     
     ON UPDATE CASCADE;
 
+-- observation_ancillary refs observation
+ALTER TABLE ONLY "ecocom_dp".observation_ancillary
+    ADD CONSTRAINT observation_ancillary_fk FOREIGN KEY (observation_id) REFERENCES "ecocom_dp".observation (observation_id) MATCH SIMPLE     
+    ON UPDATE CASCADE;
+
+
+-- uniq constraints:
+ALTER TABLE ONLY "ecocom_dp".observation_ancillary
+   ADD CONSTRAINT observation_ancillary_uniq UNIQUE (observation_id, measured_entity, characteristic, variable_name);
 
 /*
 set perms
@@ -198,19 +213,19 @@ GRANT ALL ON SCHEMA "ecocom_dp" TO mob;
 GRANT USAGE ON SCHEMA "ecocom_dp" TO read_only_user;
 
 GRANT SELECT ON TABLE "ecocom_dp".observation TO read_only_user;
-GRANT SELECT ON TABLE "ecocom_dp".sampling_location TO read_only_user;
+GRANT SELECT ON TABLE "ecocom_dp".location TO read_only_user;
 GRANT SELECT ON TABLE "ecocom_dp".taxon TO read_only_user;
-GRANT SELECT ON TABLE "ecocom_dp".sampling_location_ancillary TO read_only_user;
+GRANT SELECT ON TABLE "ecocom_dp".location_ancillary TO read_only_user;
 GRANT SELECT ON TABLE "ecocom_dp".taxon_ancillary TO read_only_user;
 GRANT SELECT ON TABLE "ecocom_dp".dataset_summary TO read_only_user;
-GRANT SELECT ON TABLE "ecocom_dp".event TO read_only_user;
+GRANT SELECT ON TABLE "ecocom_dp".observation_ancillary TO read_only_user;
 
 
 GRANT ALL ON TABLE "ecocom_dp".observation TO mob;
-GRANT ALL ON TABLE "ecocom_dp".sampling_location TO mob;
+GRANT ALL ON TABLE "ecocom_dp".location TO mob;
 GRANT ALL ON TABLE "ecocom_dp".taxon TO mob;
-GRANT ALL ON TABLE "ecocom_dp".sampling_location_ancillary TO mob;
+GRANT ALL ON TABLE "ecocom_dp".location_ancillary TO mob;
 GRANT ALL ON TABLE "ecocom_dp".taxon_ancillary TO mob;
 GRANT ALL ON TABLE "ecocom_dp".dataset_summary TO mob;
-GRANT ALL ON TABLE "ecocom_dp".event TO mob;
+GRANT ALL ON TABLE "ecocom_dp".observation_ancillary TO mob;
 
