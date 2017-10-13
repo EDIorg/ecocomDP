@@ -6,31 +6,27 @@
 \usage{
 clean_taxon(path, parent.package.id, table.name, taxon.col)
 
-    Run this function to clean up the taxonomy data of an input dataset
-    prior to running this information through the Integrated Taxonomic 
-    Information System (ITIS) to obtain rank values and a Taxonomic Serial
-    Number.
+    Run this function after making ecocomDP tables, which includes a draft
+    version of the taxon table.
 }
 \arguments{
 \item{path}{A path to the dataset working directory where the clean taxon table will
 be exported.}
 
-\item{parent.package.id}{Identifier of parent data package (e.g. knb-lter-hfr.118.28).}
+\item{delimiter}{Delimiter of taxon table in the working directory. Can be comma (",") or
+tab ("\t").}
 
-\item{table.name}{Full name of table from which the taxonomy data is stored.}
-
-\item{taxon.col}{Column names containing the taxonomy data.}
+\item{cleaning.step}{Step in the data cleaning process. Can be L0, L1, L2, L3, L4.}
 }
 \value{
-A tab delimited UTF-8 file in the ecocomDP working directory titled 
-    \emph{taxon_clean.txt} containing clean taxon names that can then be
-    used to query ITIS.
+A tab delimited UTF-8 file in the ecocomDP working directory appended
+    with a title corresponding with the cleaning step level.
 }
 \description{
 Clean taxonomy data of level-0 dataset and export to file.
 }
 \details{
-This function overwrites
-    \emph{taxon_clean.txt} files you have created in the ecocomDP 
-    working directory.
+This function fails out if tables created with this workflow already
+    exist in the working director. Remove these files or rename to allow 
+    the function to continue.
 }
