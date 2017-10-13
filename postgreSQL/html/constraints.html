@@ -54,9 +54,23 @@
 </thead>
 <tbody>
   <tr class='even'>
-  <td class='detail'>observation_event_record_fk</td>
-  <td class='detail'><a href='tables/observation.html'>observation</a>.event_record_id</td>
-  <td class='detail'><a href='tables/event.html'>event</a>.event_record_id</td>
+  <td class='detail'>location_ancillary_fk</td>
+  <td class='detail'><a href='tables/location_ancillary.html'>location_ancillary</a>.location_id</td>
+  <td class='detail'><a href='tables/location.html'>location</a>.location_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
+  <td class='detail'>observation_ancillary_fk</td>
+  <td class='detail'><a href='tables/observation_ancillary.html'>observation_ancillary</a>.observation_id</td>
+  <td class='detail'><a href='tables/observation.html'>observation</a>.observation_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='even'>
+  <td class='detail'>observation_location_fk</td>
+  <td class='detail'><a href='tables/observation.html'>observation</a>.location_id</td>
+  <td class='detail'><a href='tables/location.html'>location</a>.location_id</td>
   <td class='detail'><span title='Restrict delete:
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>
@@ -68,30 +82,16 @@
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>
   <tr class='even'>
-  <td class='detail'>observation_sampling_location_fk</td>
-  <td class='detail'><a href='tables/observation.html'>observation</a>.sampling_location_id</td>
-  <td class='detail'><a href='tables/sampling_location.html'>sampling_location</a>.sampling_location_id</td>
-  <td class='detail'><span title='Restrict delete:
- Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
- </tr>
-  <tr class='odd'>
   <td class='detail'>observation_taxon_fk</td>
   <td class='detail'><a href='tables/observation.html'>observation</a>.taxon_id</td>
   <td class='detail'><a href='tables/taxon.html'>taxon</a>.taxon_id</td>
   <td class='detail'><span title='Restrict delete:
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>
-  <tr class='even'>
-  <td class='detail'>parent_sampling_location_fk</td>
-  <td class='detail'><a href='tables/sampling_location.html'>sampling_location</a>.parent_sampling_location_id</td>
-  <td class='detail'><a href='tables/sampling_location.html'>sampling_location</a>.sampling_location_id</td>
-  <td class='detail'><span title='Restrict delete:
- Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
- </tr>
   <tr class='odd'>
-  <td class='detail'>sampling_location_ancillary_fk</td>
-  <td class='detail'><a href='tables/sampling_location_ancillary.html'>sampling_location_ancillary</a>.sampling_location_id</td>
-  <td class='detail'><a href='tables/sampling_location.html'>sampling_location</a>.sampling_location_id</td>
+  <td class='detail'>parent_location_fk</td>
+  <td class='detail'><a href='tables/location.html'>location</a>.parent_location_id</td>
+  <td class='detail'><a href='tables/location.html'>location</a>.location_id</td>
   <td class='detail'><span title='Restrict delete:
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>

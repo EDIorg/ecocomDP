@@ -1,7 +1,7 @@
-observation
 taxon_ancillary
-sampling_location_ancillary
-sampling_location
-event
+observation_ancillary
+location_ancillary
+observation
+location
 dataset_summary
 taxon

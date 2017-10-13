@@ -38,6 +38,7 @@ digraph "oneDegreeRelationshipsDiagram" {
     label=<
     <TABLE BORDER="2" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">taxon_ancillary</TD></TR>
+      <TR><TD PORT="record_id" COLSPAN="2" ALIGN="LEFT">record_id</TD><TD PORT="record_id.type" ALIGN="LEFT">varchar[100]</TD></TR>
       <TR><TD PORT="taxon_ancillary_id" COLSPAN="2" BGCOLOR="#bed1b8" ALIGN="LEFT">taxon_ancillary_id</TD><TD PORT="taxon_ancillary_id.type" ALIGN="LEFT">varchar[100]</TD></TR>
       <TR><TD PORT="taxon_id" COLSPAN="2" ALIGN="LEFT">taxon_id</TD><TD PORT="taxon_id.type" ALIGN="LEFT">varchar[100]</TD></TR>
       <TR><TD PORT="datetime" COLSPAN="2" ALIGN="LEFT">datetime</TD><TD PORT="datetime.type" ALIGN="LEFT">timestamp[29,6]</TD></TR>
