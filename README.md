@@ -38,7 +38,7 @@ install.packages("devtools")
 library(devtools)
 
 # Install and load the ecocomDP
-install_github("EDIorg/ecocomDP)
+install_github("EDIorg/ecocomDP")
 library(devtools)
 ```
 
