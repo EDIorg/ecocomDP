@@ -4,10 +4,10 @@
 \alias{import_templates}
 \title{Import ecocomDP template files}
 \usage{
-import_templates(data.path)
+import_templates(data.path = "")
 }
 \arguments{
-\item{data.path}{A path to the dataset working directory.}
+\item{data.path}{A path to the dataset working directory entered as a character string.}
 }
 \value{
 \emph{additional_contact.txt} A tab delimited UTF-8 text file in which 

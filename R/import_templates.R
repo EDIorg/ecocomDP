@@ -4,10 +4,10 @@
 #'     Imports template files utilized in the ecocomDP creation process.
 #'
 #' @usage 
-#'     import_templates(data.path)
+#'     import_templates(data.path = "")
 #'
 #' @param data.path
-#'     A path to the dataset working directory.
+#'     A path to the dataset working directory entered as a character string.
 #'
 #' @return 
 #'     \emph{additional_contact.txt} A tab delimited UTF-8 text file in which 
