@@ -1,60 +1,71 @@
-#' Make EML
+#' Make EML for an ecocomDP
 #'
 #' @description  
-#'     Make EML for an Ecological Community Data Pattern (ecocomDP) using 
-#'     elements from the parent data package. This function does not yet 
-#'     support creation of data packages that are not already published in the
-#'     LTER (Long-term Ecological Research) or EDI (Environmental Data 
-#'     Initiative) data repositories.
+#'     Makes EML for an Ecological Community Data Pattern (ecocomDP).
 #'
 #' @usage 
-#'     make_eml(path, parent.package.id, child.package.id, delimiter, user.id,
-#'     author.system, intellectual.rights)
+#'     make_eml(data.path = "", code.path = "", parent.package.id = "", 
+#'     child.package.id = "", sep = "", user.id = "", author.system = "", 
+#'     intellectual.rights = "", access.url = "")
 #'
-#' @param path 
-#'     A path to the dataset working directory containing the validated 
-#'     ecocomDP tables.
-#'     
+#' @param data.path 
+#'     A character string specifying the path to the dataset working directory 
+#'     containing the validated ecocomDP tables.
+#' @param code.path
+#'     A character string specifying the path to the directory containing the 
+#'     scripts used in processing the L0 data to the L1 data.
 #' @param parent.package.id
-#'     Identifier of parent data package in LTER or EDI data repository (e.g. 
-#'     knb-lter-hfr.118.28).
-#'     
+#'     A character string specifying the identifier of parent data package in the 
+#'     EDI data repository (e.g. "knb-lter-hfr.118.28").
 #' @param child.package.id
-#'     Identifier of child data package in LTER or EDI data repository (e.g. 
-#'     edi.53.1). If you don't have a child.package.id then use the default
-#'     "edi.100.1".
-#'     
-#' @param delimiter
-#'     Field delimiter of input dataset. Can be comma (i.e. ",") or tab 
-#'     (i.e. "\t").
-#'     
+#'     A character string specifying the identifier of child data package in 
+#'     the EDI data repository (e.g. "edi.53.1"). If you don't have a 
+#'     child.package.id then query EDI for one 
+#'     (info@environmentaldatainitiative.org).
+#' @param sep
+#'     The field separator string. Values within each row of ecocomDP tables
+#'     are separated by this string. Valid options are "," or "\t".
 #' @param user.id
-#'     LTER or EDI ID of person publishing the ecocomDP data package. If you 
-#'     don't have a user ID then use the default "EDI".
-#'     
+#'     A character string specifying the LTER or EDI ID of person publishing 
+#'     the ecocomDP data package (e.g. "EDI"). If you don't have a user ID then 
+#'     query EDI for one (info@environmentaldatainitiative.org).
 #' @param author.system
-#'     The author system the user.id is associated with. If you don't have an 
-#'     author system specification use the default value "edi"
-#'     
+#'     A character string specifying the author system the user.id is associated 
+#'     with (e.g. "edi"). If you don't have an author system specification use 
+#'     then query EDI for one (info@environmentaldatainitiative.org).
 #' @param intellectual.rights
-#'     The intellectual rights license to be used with the child ecocomDP data
-#'     package. Valid arguments are "CCO" (https://creativecommons.org/publicdomain/zero/1.0/legalcode),
+#'     A character string specifying the intellectual rights license to be used 
+#'     with the child ecocomDP data package. Valid arguments are "CCO" 
+#'     (https://creativecommons.org/publicdomain/zero/1.0/legalcode),
 #'     "CCBY" (https://creativecommons.org/licenses/by/4.0/legalcode), and no 
-#'     argument. No argument input indicates the license wil remain the same
+#'     argument. No input argument indicates the license wil remain the same
 #'     as the parent data package.
-#'     
 #' @param access.url
-#'     This is the base URL that PASTA uses to access the ecocomDP tables.
-#'     For example, the base URL of a table that has a URL of 
+#'     A character string specifying the base URL that PASTA uses to upload the 
+#'     ecocomDP tables and associated processing scripts. For example, the base 
+#'     URL of a table that has a URL of 
 #'     https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride/gleon_chloride_concentrations.csv
-#'     would have a base URL of 
+#'     has a base URL of 
 #'     https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride.
 #'
+#' @return 
+#'     An EML metadata file written to the dataset working directory titled 
+#'     \emph{packageID.xml}.
+#'
 #' @details 
-#'     This script modifies elements of the parent data package EML. 
-#'     Specifically this script:
+#'     Make and validate EML for an Ecological Community Data Pattern 
+#'     (ecocomDP) using elements from the parent data package. This function 
+#'     does not yet support creation of data packages that are not already 
+#'     published in the EDI (Environmental Data Initiative) data repository.
+#'     
+#'     Run \code{make_eml} after you have completed \emph{addtional_contact.txt},
+#'     \emph{custom_units.txt} (if you're ecocomDP has custom units), and have
+#'     provided definitions for variables listed in the ecocomDP tables. Use 
+#'     \code{define_variables} to identify and define variables.
+#' 
+#'     This script modifies elements of the parent data package EML:
 #'     \itemize{
-#'         \item \strong{Modifies access} Modifies access based on user supplied
+#'         \item \strong{Access} Modifies access based on user supplied
 #'         arguments.
 #'         \item \strong{Publicaton date} Changes the publication date to when 
 #'         the ecocomDP was created.
@@ -72,22 +83,24 @@
 #'         \item \strong{Formatting scripts} Adds formatting scripts used to 
 #'         create the ecocomDP as otherEntitie.
 #'     }
-
 #'
-#' @return 
-#'     An EML metadata file written to the dataset working directory titled 
-#'     \emph{packageID.xml}.
+#' @seealso \code{\link{import_templates}} to import ecocomDP templates.
+#' @seealso \code{\link{define_variables}} to identify and define variables 
+#'     listed in ecocomDP tables.
 #'
 #' @export
 #'
 
 
-make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.id, author.system, intellectual.rights, access.url) {
+make_eml <- function(data.path, code.path, parent.package.id, child.package.id, sep, user.id, author.system, intellectual.rights, access.url) {
   
   # Check arguments
 
-  if (missing(path)){
+  if (missing(data.path)){
     stop("Specify path to dataset working directory.")
+  }
+  if (missing(code.path)){
+    stop("Specify path to the code directory.")
   }
   if (missing(parent.package.id)){
     stop("Specify the parent data package ID.")
@@ -95,8 +108,8 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
   if (missing(child.package.id)){
     stop("Specify the child data package ID.")
   }
-  if (missing(delimiter)){
-    stop("Specify the delimiter of child data tables.")
+  if (missing(sep)){
+    stop("Specify the field delimiter of the ecocomDP tables.")
   }
   if (missing(user.id)){
     stop("Specify a user ID for the data package. Default to 'EDI' if unknown")
@@ -137,7 +150,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
   
   # Compile attributes
 
-  attributes_in <- compile_attributes(path = path, delimiter = delimiter)
+  attributes_in <- compile_attributes(path = data.path, delimiter = sep)
   
   # Initialize data entity storage (tables)
 
@@ -183,7 +196,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
   
   print("Appending <contact> ...")
   
-  personinfo <- read.table(paste(path,
+  personinfo <- read.table(paste(data.path,
                                  "/additional_contact.txt",
                                  sep = ""),
                            header = T,
@@ -282,7 +295,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
 
   table_patterns <- c("observation\\b", "event\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b", "sampling_location\\b", "taxon\\b")
   table_names <- c("observation", "event", "sampling_location_ancillary", "taxon_ancillary", "dataset_summary", "sampling_location", "taxon")
-  dir_files <- list.files(path)
+  dir_files <- list.files(data.path)
   table_names_found <- list()
   tables_found <- list()
   for (i in 1:length(table_patterns)){
@@ -305,9 +318,9 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
     # Read data table
 
     df_table <- read.table(
-      paste(path, "/", tables_found[i], sep = ""),
+      paste(data.path, "/", tables_found[i], sep = ""),
       header=TRUE,
-      sep=delimiter,
+      sep=sep,
       quote="\"",
       as.is=TRUE,
       comment.char = "")
@@ -320,7 +333,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
 
       catvars <- read.table(
         paste(
-          path,
+          data.path,
           "/",
           catvar, sep = ""),
         header=TRUE,
@@ -394,14 +407,14 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
 
     # Set physical
 
-    if (delimiter == "\t"){
+    if (sep == "\t"){
       physical <- set_physical(tables_found[i],
                                numHeaderLines = "1",
                                recordDelimiter = "\\r\\n",
                                attributeOrientation = "column",
                                fieldDelimiter = "\\t",
                                quoteCharacter = "\"")
-    } else if (delimiter == ","){
+    } else if (sep == ","){
       physical <- set_physical(tables_found[i],
                                numHeaderLines = "1",
                                recordDelimiter = "\\r\\n",
@@ -418,7 +431,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
                          unit = "byte",
                          as.character(
                            file.size(
-                             paste(path,
+                             paste(data.path,
                                    "/",
                                    tables_found[i],
                                    sep = ""))))
@@ -436,7 +449,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
     if (os == "mac"){
 
       command_certutil <- paste("md5 ",
-                                path,
+                                data.path,
                                 "/",
                                 tables_found[i],
                                 sep = "")
@@ -455,7 +468,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
     } else if (os == "win"){
 
       command_certutil <- paste("CertUtil -hashfile ",
-                                path,
+                                data.path,
                                 "\\",
                                 tables_found[i],
                                 " MD5",
@@ -496,10 +509,10 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
 
   # Are custom units present in these tables?
 
-  if (file.exists(paste(path,"/","custom_units.txt",sep = ""))){
+  if (file.exists(paste(data.path,"/","custom_units.txt",sep = ""))){
 
     custom_units_df <- read.table(
-      paste(path,
+      paste(data.path,
             "/",
             "custom_units.txt",
             sep = ""),
@@ -562,10 +575,10 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
   
   # Name of script files
   
-  match_info <- regexpr("[^\\]*$", path)
-  directory_name <- substr(path, start = match_info[1], stop = nchar(path))
+  match_info <- regexpr("[^\\]*$", code.path)
+  directory_name <- substr(code.path, start = match_info[1], stop = nchar(code.path))
   
-  files <- list.files(path = path)
+  files <- list.files(path = code.path)
   
   code_names <- files[attr(regexpr("*.R$", files), "match.length") != -1]
   
@@ -606,7 +619,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
                                fieldDelimiter = field_delimeter_code,
                                quoteCharacter = quote_character)
       
-      physical@size <- new("size", unit = "bytes", as(as.character(file.size(paste(path, "\\", code_names[i], sep = ""))), "size"))
+      physical@size <- new("size", unit = "bytes", as(as.character(file.size(paste(code.path, "\\", code_names[i], sep = ""))), "size"))
       
       distribution <- new("distribution",
                           online = new("online",
@@ -618,7 +631,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
       if (os == "mac"){
         
         command_certutil <- paste("md5 ",
-                                  path,
+                                  code.path,
                                   "/",
                                   code_names[i],
                                   sep = "")
@@ -637,7 +650,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
       } else if (os == "win"){
         
         command_certutil <- paste("CertUtil -hashfile ",
-                                  path,
+                                  code.path,
                                   "\\",
                                   code_names[i],
                                   " MD5",
@@ -701,7 +714,7 @@ make_eml <- function(path, parent.package.id, child.package.id, delimiter, user.
 
   print("Writing to file ...")
 
-  write_eml(eml, paste(path, "/", child.package.id, ".xml", sep = ""))
+  write_eml(eml, paste(data.path, "/", child.package.id, ".xml", sep = ""))
 
   # Validate EML
 

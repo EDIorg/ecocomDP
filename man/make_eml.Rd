@@ -2,41 +2,50 @@
 % Please edit documentation in R/make_eml.R
 \name{make_eml}
 \alias{make_eml}
-\title{Make EML}
+\title{Make EML for an ecocomDP}
 \usage{
-make_eml(path, parent.package.id, child.package.id, delimiter, user.id,
-    author.system, intellectual.rights)
+make_eml(data.path = "", code.path = "", parent.package.id = "", 
+    child.package.id = "", sep = "", user.id = "", author.system = "", 
+    intellectual.rights = "", access.url = "")
 }
 \arguments{
-\item{path}{A path to the dataset working directory containing the validated 
-ecocomDP tables.}
+\item{data.path}{A character string specifying the path to the dataset working directory 
+containing the validated ecocomDP tables.}
 
-\item{parent.package.id}{Identifier of parent data package in LTER or EDI data repository (e.g. 
-knb-lter-hfr.118.28).}
+\item{code.path}{A character string specifying the path to the directory containing the 
+scripts used in processing the L0 data to the L1 data.}
 
-\item{child.package.id}{Identifier of child data package in LTER or EDI data repository (e.g. 
-edi.53.1). If you don't have a child.package.id then use the default
-"edi.100.1".}
+\item{parent.package.id}{A character string specifying the identifier of parent data package in the 
+EDI data repository (e.g. "knb-lter-hfr.118.28").}
 
-\item{delimiter}{Field delimiter of input dataset. Can be comma (i.e. ",") or tab 
-(i.e. "\t").}
+\item{child.package.id}{A character string specifying the identifier of child data package in 
+the EDI data repository (e.g. "edi.53.1"). If you don't have a 
+child.package.id then query EDI for one 
+(info@environmentaldatainitiative.org).}
 
-\item{user.id}{LTER or EDI ID of person publishing the ecocomDP data package. If you 
-don't have a user ID then use the default "EDI".}
+\item{sep}{The field separator string. Values within each row of ecocomDP tables
+are separated by this string. Valid options are "," or "\t".}
 
-\item{author.system}{The author system the user.id is associated with. If you don't have an 
-author system specification use the default value "edi"}
+\item{user.id}{A character string specifying the LTER or EDI ID of person publishing 
+the ecocomDP data package (e.g. "EDI"). If you don't have a user ID then 
+query EDI for one (info@environmentaldatainitiative.org).}
 
-\item{intellectual.rights}{The intellectual rights license to be used with the child ecocomDP data
-package. Valid arguments are "CCO" (https://creativecommons.org/publicdomain/zero/1.0/legalcode),
+\item{author.system}{A character string specifying the author system the user.id is associated 
+with (e.g. "edi"). If you don't have an author system specification use 
+then query EDI for one (info@environmentaldatainitiative.org).}
+
+\item{intellectual.rights}{A character string specifying the intellectual rights license to be used 
+with the child ecocomDP data package. Valid arguments are "CCO" 
+(https://creativecommons.org/publicdomain/zero/1.0/legalcode),
 "CCBY" (https://creativecommons.org/licenses/by/4.0/legalcode), and no 
-argument. No argument input indicates the license wil remain the same
+argument. No input argument indicates the license wil remain the same
 as the parent data package.}
 
-\item{access.url}{This is the base URL that PASTA uses to access the ecocomDP tables.
-For example, the base URL of a table that has a URL of 
+\item{access.url}{A character string specifying the base URL that PASTA uses to upload the 
+ecocomDP tables and associated processing scripts. For example, the base 
+URL of a table that has a URL of 
 https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride/gleon_chloride_concentrations.csv
-would have a base URL of 
+has a base URL of 
 https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride.}
 }
 \value{
@@ -44,17 +53,22 @@ An EML metadata file written to the dataset working directory titled
     \emph{packageID.xml}.
 }
 \description{
-Make EML for an Ecological Community Data Pattern (ecocomDP) using 
-    elements from the parent data package. This function does not yet 
-    support creation of data packages that are not already published in the
-    LTER (Long-term Ecological Research) or EDI (Environmental Data 
-    Initiative) data repositories.
+Makes EML for an Ecological Community Data Pattern (ecocomDP).
 }
 \details{
-This script modifies elements of the parent data package EML. 
-    Specifically this script:
+Make and validate EML for an Ecological Community Data Pattern 
+    (ecocomDP) using elements from the parent data package. This function 
+    does not yet support creation of data packages that are not already 
+    published in the EDI (Environmental Data Initiative) data repository.
+    
+    Run \code{make_eml} after you have completed \emph{addtional_contact.txt},
+    \emph{custom_units.txt} (if you're ecocomDP has custom units), and have
+    provided definitions for variables listed in the ecocomDP tables. Use 
+    \code{define_variables} to identify and define variables.
+
+    This script modifies elements of the parent data package EML:
     \itemize{
-        \item \strong{Modifies access} Modifies access based on user supplied
+        \item \strong{Access} Modifies access based on user supplied
         arguments.
         \item \strong{Publicaton date} Changes the publication date to when 
         the ecocomDP was created.
@@ -72,4 +86,10 @@ This script modifies elements of the parent data package EML.
         \item \strong{Formatting scripts} Adds formatting scripts used to 
         create the ecocomDP as otherEntitie.
     }
+}
+\seealso{
+\code{\link{import_templates}} to import ecocomDP templates.
+
+\code{\link{define_variables}} to identify and define variables 
+    listed in ecocomDP tables.
 }
