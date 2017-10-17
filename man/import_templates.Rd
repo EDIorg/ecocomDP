@@ -2,12 +2,12 @@
 % Please edit documentation in R/import_templates.R
 \name{import_templates}
 \alias{import_templates}
-\title{Import templates for ecocomDP}
+\title{Import ecocomDP template files}
 \usage{
-import_templates(path)
+import_templates(data.path)
 }
 \arguments{
-\item{path}{A path to the dataset working directory.}
+\item{data.path}{A path to the dataset working directory.}
 }
 \value{
 \emph{additional_contact.txt} A tab delimited UTF-8 text file in which 
@@ -19,11 +19,11 @@ import_templates(path)
     for each custom unit that is found within the dataset.
 }
 \description{
-Create a working directory for your dataset then run this function to 
-    import templates. Use these templates to map level-0 data (raw) to 
-    level-1 (ecocomDP), as well as provide metadata for your dataset.
+Imports template files utilized in the ecocomDP creation process.
 }
 \details{
-If template files already exist in the working directory, new templates 
-    will not be imported.
+This function should be run at the beginning of the ecocomDP creation 
+    process. Make a working directory for your dataset then run this function 
+    to import template files. If template files already exist in the working 
+    directory, new templates will not be imported.
 }
