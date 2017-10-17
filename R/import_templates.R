@@ -1,14 +1,12 @@
-#' Import templates for ecocomDP
+#' Import ecocomDP template files
 #'
 #' @description  
-#'     Create a working directory for your dataset then run this function to 
-#'     import templates. Use these templates to map level-0 data (raw) to 
-#'     level-1 (ecocomDP), as well as provide metadata for your dataset.
+#'     Imports template files utilized in the ecocomDP creation process.
 #'
 #' @usage 
-#'     import_templates(path)
+#'     import_templates(data.path)
 #'
-#' @param path 
+#' @param data.path
 #'     A path to the dataset working directory.
 #'
 #' @return 
@@ -21,18 +19,20 @@
 #'     for each custom unit that is found within the dataset.
 #'     
 #' @details 
-#'     If template files already exist in the working directory, new templates 
-#'     will not be imported.
+#'     This function should be run at the beginning of the ecocomDP creation 
+#'     process. Make a working directory for your dataset then run this function 
+#'     to import template files. If template files already exist in the working 
+#'     directory, new templates will not be imported.
 #'     
 #' @export     
 #'     
 
 
-import_templates <- function(path){
+import_templates <- function(data.path){
   
   # Check arguments
   
-  if (missing(path)){
+  if (missing(data.path)){
     stop("Specify path to dataset working directory.")
   }
   
@@ -41,7 +41,7 @@ import_templates <- function(path){
   value <- file.copy(from = paste(path.package("ecocomDP"),
                                   "/additional_contact.txt",
                                   sep = ""),
-                     to = path)
+                     to = data.path)
   if (isTRUE(value)){
     print("Importing additional_contact.txt ... ")
   } else {
@@ -51,7 +51,7 @@ import_templates <- function(path){
   value <- file.copy(from = paste(path.package("ecocomDP"),
                                   "/custom_units.txt",
                                   sep = ""),
-                     to = path)
+                     to = data.path)
   if (isTRUE(value)){
     print("Importing custom_units.txt ... ")
   } else {
