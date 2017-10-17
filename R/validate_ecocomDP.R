@@ -65,7 +65,7 @@ validate_ecocomDP <- function(path, delimiter) {
                                "/validation_criteria.txt",
                                sep = ""),
                          header = T,
-                         sep = delimiter,
+                         sep = "\t",
                          as.is = T,
                          na.strings = "NA")
   
@@ -194,7 +194,7 @@ validate_ecocomDP <- function(path, delimiter) {
       if (!identical(null_cols, character(0))){
         msg[[i]] <- paste("This table has NULL columns:\n",
                           table_in,"\n",
-                          "NULL columns found:\n",
+                          "NULL columns found. Consider removing these:\n",
                           paste(null_cols, collapse = "\n"),"\n")
       }
     }
@@ -203,7 +203,7 @@ validate_ecocomDP <- function(path, delimiter) {
       stop("See above message for details", call. = F)
     }
   }
-  report_null_columns(dir_files, delimiter, valid_table_names, table_names)
+  report_null_columns(dir_files, delimiter, table_names, valid_table_names)
   
   
   # Validate column names
@@ -230,7 +230,7 @@ validate_ecocomDP <- function(path, delimiter) {
         if (sum(is.na(index)) > 0){
           for (j in 1:length(invalid_column_names)){
             msg[[j]] <- paste("This file contains invalid column names:\n",
-                              dir_files[i], "\n",
+                              table_in, "\n",
                               "Invalid column name:\n",
                               invalid_column_names[j], "\n")
           }
@@ -288,152 +288,152 @@ validate_ecocomDP <- function(path, delimiter) {
 
   # Validate column vector classes
   
-  print("Column classes ...")
+  # print("Column classes ...")
+  # 
+  # table_names_adjusted <- c("sampling_location\\b", "taxon\\b", "event\\b", "observation\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b")
+  # validate_column_classes <- function(dir_files, table_names_adjusted){
+  #   msg <- list()
+  #   for (i in 1:length(table_names_adjusted)){
+  #     table_in <- grep(table_names_adjusted[i], dir_files, value = T)
+  #     if (!identical(table_in, character(0))){
+  #     
+  #       data_in <- read.table(paste(path,
+  #                                   "/",
+  #                                   table_in,
+  #                                   sep = ""),
+  #                             header = T,
+  #                             sep = delimiter,
+  #                             as.is = T,
+  #                             na.strings = "NA")
+  #       colnames_in <- colnames(data_in)
+  #       found_column_classes <- unname(unlist(lapply(data_in, class)))
+  #       colnames_expected <- criteria$column[(!is.na(criteria$class)) & (criteria$table == table_names[i])]
+  #       required_column_classes <- criteria$class[(!is.na(criteria$class)) & (criteria$table == table_names[i])]
+  #       index <- match(colnames_in, colnames_expected)
+  #       required_column_classes <- required_column_classes[index]
+  #       rcci <- required_column_classes
+  #       fcci <- found_column_classes
+  #       ncci <- colnames_in
+  #       msg2 <- list()
+  #       for (j in 1:length(ncci)){
+  #         if ((rcci[j] == "character") & (fcci[j] == "integer")){
+  #           
+  #         } else if ((rcci[j] == "character") & (fcci[j] == "numeric")){
+  #           
+  #         } else if ((rcci[j] == "character") & (fcci[j] == "Date")){
+  #           
+  #         } else if ((rcci[j] == "integer") & (fcci[j] == "character")){
+  #           msg2[[j]] <- paste("This table has an incorrect column class:\n",
+  #                              table_in, "\n",
+  #                              "Column in question:\n",
+  #                              ncci[j], "\n",
+  #                              "Column class found:\n",
+  #                              fcci[j], "\n",
+  #                              "Column class required:\n",
+  #                              rcci[j], "\n")
+  #         } else if ((rcci[j] == "integer") & (fcci[j] == "numeric")){
+  #           msg2[[j]] <- paste("This table has an incorrect column class:\n",
+  #                              table_in, "\n",
+  #                              "Column in question:\n",
+  #                              ncci[j], "\n",
+  #                              "Column class found:\n",
+  #                              fcci[j], "\n",
+  #                              "Column class required:\n",
+  #                              rcci[j], "\n")
+  #         } else if ((rcci[j] == "integer") & (fcci[j] == "Date")){
+  #           msg2[[j]] <- paste("This table has an incorrect column class:\n",
+  #                              table_in, "\n",
+  #                              "Column in question:\n",
+  #                              ncci[j], "\n",
+  #                              "Column class found:\n",
+  #                              fcci[j], "\n",
+  #                              "Column class required:\n",
+  #                              rcci[j], "\n")
+  #         } else if ((rcci[j] == "numeric") & (fcci[j] == "character")){
+  #           msg2[[j]] <- paste("This table has an incorrect column class:\n",
+  #                              table_in, "\n",
+  #                              "Column in question:\n",
+  #                              ncci[j], "\n",
+  #                              "Column class found:\n",
+  #                              fcci[j], "\n",
+  #                              "Column class required:\n",
+  #                              rcci[j], "\n")
+  #         } else if ((rcci[j] == "numeric") & (fcci[j] == "Date")){
+  #           msg2[[j]] <- paste("This table has an incorrect column class:\n",
+  #                              table_in, "\n",
+  #                              "Column in question:\n",
+  #                              ncci[j], "\n",
+  #                              "Column class found:\n",
+  #                              fcci[j], "\n",
+  #                              "Column class required:\n",
+  #                              rcci[j], "\n")
+  #         } else if ((rcci[j] == "Date") & (fcci[j] == "numeric")){
+  #           msg2[[j]] <- paste("This table has an incorrect column class:\n",
+  #                              table_in, "\n",
+  #                              "Column in question:\n",
+  #                              ncci[j], "\n",
+  #                              "Column class found:\n",
+  #                              fcci[j], "\n",
+  #                              "Column class required:\n",
+  #                              rcci[j], "\n")
+  #         } else if ((rcci[j] == "Date") & (fcci[j] == "integer")){
+  #           msg2[[j]] <- paste("This table has an incorrect column class:\n",
+  #                              table_in, "\n",
+  #                              "Column in question:\n",
+  #                              ncci[j], "\n",
+  #                              "Column class found:\n",
+  #                              fcci[j], "\n",
+  #                              "Column class required:\n",
+  #                              rcci[j], "\n")
+  #         }
+  #       }
+  #     }
+  #     msg[[i]] <- msg2
+  #   }
+  #   if (length(unlist(msg)) > 0){
+  #     cat("\n",unlist(msg))
+  #     stop("See above message for details", call. = F)
+  #   }
+  # }
+  # validate_column_classes(dir_files, table_names_adjusted)
   
-  table_names_adjusted <- c("sampling_location\\b", "taxon\\b", "event\\b", "observation\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b")
-  validate_column_classes <- function(dir_files, table_names_adjusted){
-    msg <- list()
-    for (i in 1:length(table_names_adjusted)){
-      table_in <- grep(table_names_adjusted[i], dir_files, value = T)
-      if (!identical(table_in, character(0))){
-      
-        data_in <- read.table(paste(path,
-                                    "/",
-                                    table_in,
-                                    sep = ""),
-                              header = T,
-                              sep = delimiter,
-                              as.is = T,
-                              na.strings = "NA")
-        colnames_in <- colnames(data_in)
-        found_column_classes <- unname(unlist(lapply(data_in, class)))
-        colnames_expected <- criteria$column[(!is.na(criteria$class)) & (criteria$table == table_names[i])]
-        required_column_classes <- criteria$class[(!is.na(criteria$class)) & (criteria$table == table_names[i])]
-        index <- match(colnames_in, colnames_expected)
-        required_column_classes <- required_column_classes[index]
-        rcci <- required_column_classes
-        fcci <- found_column_classes
-        ncci <- colnames_in
-        msg2 <- list()
-        for (j in 1:length(ncci)){
-          if ((rcci[j] == "character") & (fcci[j] == "integer")){
-            
-          } else if ((rcci[j] == "character") & (fcci[j] == "numeric")){
-            
-          } else if ((rcci[j] == "character") & (fcci[j] == "Date")){
-            
-          } else if ((rcci[j] == "integer") & (fcci[j] == "character")){
-            msg2[[j]] <- paste("This table has an incorrect column class:\n",
-                               table_in, "\n",
-                               "Column in question:\n",
-                               ncci[j], "\n",
-                               "Column class found:\n",
-                               fcci[j], "\n",
-                               "Column class required:\n",
-                               rcci[j], "\n")
-          } else if ((rcci[j] == "integer") & (fcci[j] == "numeric")){
-            msg2[[j]] <- paste("This table has an incorrect column class:\n",
-                               table_in, "\n",
-                               "Column in question:\n",
-                               ncci[j], "\n",
-                               "Column class found:\n",
-                               fcci[j], "\n",
-                               "Column class required:\n",
-                               rcci[j], "\n")
-          } else if ((rcci[j] == "integer") & (fcci[j] == "Date")){
-            msg2[[j]] <- paste("This table has an incorrect column class:\n",
-                               table_in, "\n",
-                               "Column in question:\n",
-                               ncci[j], "\n",
-                               "Column class found:\n",
-                               fcci[j], "\n",
-                               "Column class required:\n",
-                               rcci[j], "\n")
-          } else if ((rcci[j] == "numeric") & (fcci[j] == "character")){
-            msg2[[j]] <- paste("This table has an incorrect column class:\n",
-                               table_in, "\n",
-                               "Column in question:\n",
-                               ncci[j], "\n",
-                               "Column class found:\n",
-                               fcci[j], "\n",
-                               "Column class required:\n",
-                               rcci[j], "\n")
-          } else if ((rcci[j] == "numeric") & (fcci[j] == "Date")){
-            msg2[[j]] <- paste("This table has an incorrect column class:\n",
-                               table_in, "\n",
-                               "Column in question:\n",
-                               ncci[j], "\n",
-                               "Column class found:\n",
-                               fcci[j], "\n",
-                               "Column class required:\n",
-                               rcci[j], "\n")
-          } else if ((rcci[j] == "Date") & (fcci[j] == "numeric")){
-            msg2[[j]] <- paste("This table has an incorrect column class:\n",
-                               table_in, "\n",
-                               "Column in question:\n",
-                               ncci[j], "\n",
-                               "Column class found:\n",
-                               fcci[j], "\n",
-                               "Column class required:\n",
-                               rcci[j], "\n")
-          } else if ((rcci[j] == "Date") & (fcci[j] == "integer")){
-            msg2[[j]] <- paste("This table has an incorrect column class:\n",
-                               table_in, "\n",
-                               "Column in question:\n",
-                               ncci[j], "\n",
-                               "Column class found:\n",
-                               fcci[j], "\n",
-                               "Column class required:\n",
-                               rcci[j], "\n")
-          }
-        }
-      }
-      msg[[i]] <- msg2
-    }
-    if (length(unlist(msg)) > 0){
-      cat("\n",unlist(msg))
-      stop("See above message for details", call. = F)
-    }
-  }
-  validate_column_classes(dir_files, table_names_adjusted)
   
-  
-  # Validate datetime format
-  
-  print("Check datetime format ...")
-  
-  table_names_adjusted <- c("observation\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b")
-  check_datetime_format <- function(dir_files, table_names_adjusted, delimiter){
-    msg <- list()
-    for (i in 1:length(table_names_adjusted)){
-      table_in <- grep(table_names_adjusted[i], dir_files, value = T)
-      if (!identical(table_in, character(0))){
-        data_in <- read.table(paste(path,
-                                    "/",
-                                    table_in,
-                                    sep = ""),
-                              header = T,
-                              sep = delimiter,
-                              as.is = T,
-                              na.strings = "NA")
-        colnames_in <- colnames(data_in)
-        coldatetime <- grep("datetime\\b", colnames_in, value = T)
-        len_date_in <- dim(na.omit(data_in[coldatetime]))[1]
-        dates <- as.Date(data_in[[coldatetime]], format = datetime_iso8601)
-        if (sum(is.na(dates)) > 0){
-          msg[[i]] <- paste("This table contains a datetime not in the required format:\n",
-                            table_in, "\n",
-                            "Remember the required format is:\n",
-                            "YYYY-MM-DD","\n")
-        }
-      }
-    }
-    if (length(msg) > 0){
-      cat("\n",unlist(msg))
-      stop("See above message for details", call. = F)
-    }
-  }
-  check_datetime_format(dir_files, table_names_adjusted, delimiter)
+  # # Validate datetime format
+  # 
+  # print("Check datetime format ...")
+  # 
+  # table_names_adjusted <- c("observation\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b")
+  # check_datetime_format <- function(dir_files, table_names_adjusted, delimiter){
+  #   msg <- list()
+  #   for (i in 1:length(table_names_adjusted)){
+  #     table_in <- grep(table_names_adjusted[i], dir_files, value = T)
+  #     if (!identical(table_in, character(0))){
+  #       data_in <- read.table(paste(path,
+  #                                   "/",
+  #                                   table_in,
+  #                                   sep = ""),
+  #                             header = T,
+  #                             sep = delimiter,
+  #                             as.is = T,
+  #                             na.strings = "NA")
+  #       colnames_in <- colnames(data_in)
+  #       coldatetime <- grep("datetime\\b", colnames_in, value = T)
+  #       len_date_in <- dim(na.omit(data_in[coldatetime]))[1]
+  #       dates <- as.Date(data_in[[coldatetime]], format = datetime_iso8601)
+  #       if (sum(is.na(dates)) > 0){
+  #         msg[[i]] <- paste("This table contains a datetime not in the required format:\n",
+  #                           table_in, "\n",
+  #                           "Remember the required format is:\n",
+  #                           "YYYY-MM-DD","\n")
+  #       }
+  #     }
+  #   }
+  #   if (length(msg) > 0){
+  #     cat("\n",unlist(msg))
+  #     stop("See above message for details", call. = F)
+  #   }
+  # }
+  # check_datetime_format(dir_files, table_names_adjusted, delimiter)
   
   
   # Validation complete
