@@ -2,52 +2,54 @@
 % Please edit documentation in R/define_variables.R
 \name{define_variables}
 \alias{define_variables}
-\title{Define variables for ecocomDP tables}
+\title{Define ecocomDP variables}
 \usage{
-define_variables(path, delimiter)
-
-    Run this function to define variables prior to creating EML with 
-    \code{make_eml}.
+define_variables(data.path, sep)
 }
 \arguments{
-\item{path}{A path to the dataset working directory containing ecocomDP tables.}
+\item{data.path}{A path to the dataset working directory containing ecocomDP tables.}
 
-\item{delimiter}{The field delimiter of ecocomDP tables. Can be comma or tab delimited 
-(i.e. "," or "\t")}
+\item{sep}{The field separator string. Values within each row of ecocomDP tables
+are separated by this string. Valid options are "," or "\t".}
 }
 \value{
-A tab delimited UTF-8 file in the ecocomDP working directory titled 
-    \emph{variables_tablename.txt} containing unique values 
-    of attributes of class "categorical" which is translated and written 
-    to EML with \code{make_eml}.
+A tab delimited UTF-8 file in the dataset working directory titled 
+    \emph{ecocomDPtablename_variables.txt} with fields:
+    \itemize{
+        \item \strong{attributeName} Name of the variable field from the
+        an ecocomDP table.
+        \item \strong{code} Unique variable names detected in an ecocomDP 
+        table.
+        \item \strong{definition} A field for users to supply definitions 
+        for variables listed in the code field.
+        \item \strong{units} A field for users to supply the units for each 
+        defined variable.
+    }
 }
 \description{
-Variables of ecocomDP are stored as categorical variables in long format.
-    Use this function to identify unique variables and assign definitions 
-    and any associated units.
+This function identifies unique variables listed in the ecocomDP tables
+    and writes them to tables for you to provide definitions and units for.
 }
 \details{
-This function overwrites any 
-    \emph{variables_tablename.txt} files you have created in the ecocomDP 
-    working directory. To prevent overwriting of these files, temporarily 
-    move them out of the working directory.
+Run this function after you have created and validated ecocomDP tables but
+    prior to create EML with \code{make_eml}. 
+
+    Variables of ecocomDP tables are stored in long format. Use 
+    \code{define_variables} to identify unique variables and assign 
+    definitions and associated units.
     
-    This function identifies unique variables listed in the ecocomDP tables
-    and writes them to a table (e.g. \emph{taxon_ancillary_variables}) for 
-    you to define. Do not define categorical variables with empty
-    field contents. Delete these rows from this file.
-    
-    When defining categorical variables with unit values, refer to the 
-    standard unit dictionary "name" column. The unit dictionary will be 
-    automatically opened when running this function. Enter the unit name in 
-    the unit column of the categorical variables table. Note these values 
-    are case sensitive. If you cannot find a unit in the dictionary, enter 
-    the unit in the tab delimited UTF-8 formatted file 
-    \emph{custom_units.txt} that has been automatically imported into your
-    working directory. Valid custom units must be convertible to SI Units 
-    (i.e. International System of Units). If it cannot be converted to SI 
-    then list it units column as "dimensionless". To create a custom unit 
-    define the:
+    Refer to the standard unit dictionary when selecting units. Open the 
+    standard unit dictionary by calling \code{view_unit_dictionary}. Search 
+    for a unit and enter the value listed in the \emph{name} field of the 
+    dictionary into the \emph{units} field of 
+    \emph{ecocomDPtablename_variables.txt}. NOTE these values are case 
+    sensitive. If you cannot find the unit you are looking for, enter the 
+    unit in the tab delimited UTF-8 formatted file \emph{custom_units.txt} 
+    that is imported into your dataset working directory when calling 
+    \code{import_templates}. Valid custom units must be convertible to SI 
+    Units (i.e. International System of Units). If it cannot be converted to
+    SI then list it in the units field as "dimensionless". To create a 
+    custom unit define the:
     \itemize{
         \item \strong{id} This is equivalent to the unit name. Reference 
         the standard unit dictionary formatting
@@ -59,4 +61,9 @@ This function overwrites any
         \item \strong{description} A description of the custom unit. 
         Reference the dictionary for examples.
         }
+}
+\seealso{
+\code{\link{import_templates}} to import ecocomDP templates.
+
+\code{\link{make_eml}} to make EML for an ecocomDP.
 }
