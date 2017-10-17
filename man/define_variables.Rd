@@ -4,10 +4,11 @@
 \alias{define_variables}
 \title{Define ecocomDP variables}
 \usage{
-define_variables(data.path, sep)
+define_variables(data.path = "", sep = "")
 }
 \arguments{
-\item{data.path}{A path to the dataset working directory containing ecocomDP tables.}
+\item{data.path}{A character string specifying a path to the dataset working directory 
+containing ecocomDP tables.}
 
 \item{sep}{The field separator string. Values within each row of ecocomDP tables
 are separated by this string. Valid options are "," or "\t".}

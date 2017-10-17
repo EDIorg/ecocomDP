@@ -4,10 +4,11 @@
 #'     This function identifies unique variables listed in the ecocomDP tables
 #'     and writes them to tables for you to provide definitions and units for.
 #'
-#' @usage define_variables(data.path, sep)
+#' @usage define_variables(data.path = "", sep = "")
 #'
 #' @param data.path 
-#'     A path to the dataset working directory containing ecocomDP tables.
+#'     A character string specifying a path to the dataset working directory 
+#'     containing ecocomDP tables.
 #' @param sep
 #'     The field separator string. Values within each row of ecocomDP tables
 #'     are separated by this string. Valid options are "," or "\t".
