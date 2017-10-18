@@ -41,7 +41,7 @@ with the child ecocomDP data package. Valid arguments are "CCO"
 argument. No input argument indicates the license wil remain the same
 as the parent data package.}
 
-\item{access.url}{A character string specifying the base URL that PASTA uses to upload the 
+\item{access.url}{(Not required) A character string specifying the base URL that PASTA uses to upload the 
 ecocomDP tables and associated processing scripts. For example, the base 
 URL of a table that has a URL of 
 https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride/gleon_chloride_concentrations.csv

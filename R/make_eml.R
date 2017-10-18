@@ -41,7 +41,7 @@
 #'     argument. No input argument indicates the license wil remain the same
 #'     as the parent data package.
 #' @param access.url
-#'     A character string specifying the base URL that PASTA uses to upload the 
+#'     (Not required) A character string specifying the base URL that PASTA uses to upload the 
 #'     ecocomDP tables and associated processing scripts. For example, the base 
 #'     URL of a table that has a URL of 
 #'     https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride/gleon_chloride_concentrations.csv
@@ -116,9 +116,6 @@ make_eml <- function(data.path, code.path, parent.package.id, child.package.id, 
   }
   if (missing(author.system)){
     stop("Specify an author system for the data package. Default to 'edi' if unknown")
-  }
-  if (missing(access.url)){
-    stop("Specify an access URL for your ecocomDP tables.")
   }
   
   # Parameters ----------------------------------------------------------------
