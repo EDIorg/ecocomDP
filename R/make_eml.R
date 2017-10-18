@@ -433,15 +433,18 @@ make_eml <- function(data.path, code.path, parent.package.id, child.package.id, 
                                    tables_found[i],
                                    sep = ""))))
     
+    if (exists(access.url)){
+      
+      data_table_urls <- paste(access.url, "/", tables_found[i], sep = "") 
+      
+      distribution <- new("distribution",
+                          online = new("online",
+                                       url = data_table_urls))
+      
+      physical@distribution <- new("ListOfdistribution",
+                                   c(distribution))
     
-    data_table_urls <- paste(access.url, "/", tables_found[i], sep = "") 
-                             
-    distribution <- new("distribution",
-                        online = new("online",
-                                     url = data_table_urls))
-
-    physical@distribution <- new("ListOfdistribution",
-                                 c(distribution))
+      }
 
     if (os == "mac"){
 
