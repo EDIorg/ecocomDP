@@ -61,8 +61,7 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|  
-| record_id            | character |yes| NA	| a unique id for this record  	|  4161	 	|
-| observation_id       | character |yes|   	|   	|   	|
+| observation_id         | character |yes|   	|  a unique id for this record      |  4161   	|
 |	package_id           | character |yes|   	| the ID of this data package  	| edi.100001.1   	|
 |	location_id | character |yes| (table = location) location_id |  a reference to a location	|  sbc_ABUR_1 	|
 |	observation_datetime | datetime  |yes|   	|Date and time of the observation, following the ISO 8601 standard format YYYY-MM-DDThh:mm+-hh to the precision of datetime data| 2017-08-01 or 2017-08-01T14:01-07  	|
@@ -79,12 +78,12 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|-------------|---------| 
-|location_ancillary_id | character |yes|   	|   	|   	|
+|location_ancillary_id | character |yes|          |   	|   	|
 |location_id           | character |yes|(table = location) location_id   	| Id of the location for reference	| sbclter_ABUR_1  	|
-|datetime                       | datetime	|no|  | date and time of the ancillary info, ISO datetime	|  experimental treatment date 	| 
-|variable_name                  | character |yes|   	|  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList) 	| treatment  	|
-|value                          | character |yes|   	|  value for the variable 	| kelp removal  	|
-|unit                           | character |no|   	|  unit for this variable 	|   	|
+|datetime              | datetime  |no |          | date and time of the ancillary info, ISO datetime	|  experimental treatment date 	| 
+|variable_name         | character |yes|   	      |  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList) 	| treatment  	|
+|value                 | character |yes|   	      |  value for the variable 	| kelp removal  	|
+|unit                  | character |no |   	      |  unit for this variable 	|   	|
 
 
 
@@ -96,13 +95,12 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|     
-| record_id          | character |yes| NA | a unique id for this record | auto-generated |  
-| taxon_ancillary_id | character |yes|   	              |   	|   	|
+| taxon_ancillary_id | character |yes|            |   	|   	|
 | taxon_id           | character |yes| (table = taxon) taxon_id   	|   	|   	|
-|	datetime           | datetime  |no|   	              | date and time of the ancillary info, ISO datetime  	|   	|
-| variable_name      | character |yes|   	              |  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  trophic_level 	|
-| value              | character |yes|   	              |  value for the variable 	|   primary producer	|
-| unit               | character |no|   	              | unit for this variable  	|   	|
+|	datetime           | datetime |no|            | date and time of the ancillary info, ISO datetime  	|   	|
+| variable_name      | character |yes|            |  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  trophic_level 	|
+| value              | character |yes|            |  value for the variable 	|   primary producer	|
+| unit               | character |no |            | unit for this variable  	|   	|
 
 
 
