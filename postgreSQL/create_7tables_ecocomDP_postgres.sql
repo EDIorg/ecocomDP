@@ -84,7 +84,6 @@ CREATE TABLE "ecocom_dp".location_ancillary (
 
 -- DROP TABLE "ecocom_dp".taxon_ancillary;
 CREATE TABLE "ecocom_dp".taxon_ancillary (
-    record_id character varying(100) NOT NULL,
     taxon_ancillary_id character varying(100) NOT NULL,
 	  taxon_id character varying(100) NOT NULL,
 	  datetime timestamp without time zone NOT NULL,  
@@ -97,8 +96,6 @@ CREATE TABLE "ecocom_dp".taxon_ancillary (
 CREATE TABLE "ecocom_dp".observation_ancillary (
   observation_ancillary_id character varying(100) NOT NULL,
 	observation_id character varying(100) NOT NULL,
-	measured_entity character varying(200) NOT NULL,
-	characteristic character varying(200) NOT NULL,
 	variable_name character varying(200),
 	value character varying(200),
 	unit character varying(200)
@@ -202,7 +199,13 @@ ALTER TABLE ONLY "ecocom_dp".observation_ancillary
 
 -- uniq constraints:
 ALTER TABLE ONLY "ecocom_dp".observation_ancillary
-   ADD CONSTRAINT observation_ancillary_uniq UNIQUE (observation_id, measured_entity, characteristic, variable_name);
+   ADD CONSTRAINT observation_ancillary_uniq UNIQUE (observation_id, variable_name);
+
+ALTER TABLE ONLY "ecocom_dp".location_ancillary
+   ADD CONSTRAINT location_ancillary_uniq UNIQUE (location_id, datetime, variable_name);
+
+ALTER TABLE ONLY "ecocom_dp".taxon_ancillary
+   ADD CONSTRAINT taxon_ancillary_uniq UNIQUE (taxon_id, datetime, variable_name);
 
 /*
 set perms

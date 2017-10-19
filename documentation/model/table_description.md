@@ -116,8 +116,6 @@ Columns
 |---------------|----------|-----------------------|-------------------|--------------|---------| 
 |	observation_ancillary_id | character |yes| NA	| the id of the observation_ancillary, a row or record identifier 	| 	TBE01JUN05  	|
 |	observation_id           | character |yes| NA	| (table = obsewrvation) observation_id                         	| 	  	|
-|	measured_entity          | character |yes| NA	| the thing that was measured, not a taxon or location         	| 	water  	|
-|	characteristic           | character |yes| NA	| the characteristic of that entity          	| 	depth  	|
 |	variable_name            | character |yes| NA | variable measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  sample_z  	|
 |	value                    | character | no| NA	| value for variable  	|  5  	|
 |	unit                     | character | no| NA	|  unit for variable 	|  m 	|
