@@ -15,7 +15,7 @@ table list and suggested population order, ie, parents first.
 |3.| observation |yes| location, taxon | observations about taxa, that are being analyzed. Eg, organism abundance or density, or the data to compute density (count) | variable, value, unit | observation_id, package_id, location_id, observation_datetime, taxon_id, variable_name   | 
 |4.| location_ancillary |no| location | additional info about a place that does not change, in long format. | variable, value, unit (sampling area, lake area, depth of ocean) | location_id, datetime, variable_name |
 |5.| taxon_ancillary|no|  taxon | additonal info about an organism that does not change, in long format | variable, value, unit (phenotypic traits) | taxon_id, date_time, variable_name   |
-|6.| observation_ancillary  | no | NA | additional info about the sampling event (not related to taxa or locations) in long-format  |  variable_name, value, unit | observation_id, variable_name  |
+|6.| observation_ancillary  | no | observation | additional info about the sampling event (not related to taxa or locations) in long-format  |  variable_name, value, unit | observation_id, variable_name  |
 |7.| dataset_summary|yes|  observation | summary info calculated from incoming data. one line table |See examples directory |   |
 
 
@@ -115,7 +115,7 @@ Columns
 |  column name 	|   type	 |   required in table?	|  references cols 	| description | example |
 |---------------|----------|-----------------------|-------------------|--------------|---------| 
 |	observation_ancillary_id | character |yes| NA	| the id of the observation_ancillary, a row or record identifier 	| 	TBE01JUN05  	|
-|	observation_id           | character |yes| NA	| (table = obsewrvation) observation_id                         	| 	  	|
+|	observation_id           | character |yes| NA	| (table = observation) observation_id                         	| 	  	|
 |	variable_name            | character |yes| NA | variable measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  sample_z  	|
 |	value                    | character | no| NA	| value for variable  	|  5  	|
 |	unit                     | character | no| NA	|  unit for variable 	|  m 	|
