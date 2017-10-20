@@ -113,7 +113,7 @@ Columns
 |  column name 	|   type	 |   required in table?	|  references cols 	| description | example |
 |---------------|----------|-----------------------|-------------------|--------------|---------| 
 |	observation_ancillary_id | character |yes| NA	| the id of the observation_ancillary, a row or record identifier 	| 	TBE01JUN05  	|
-|	observation_id           | character |yes| NA	| (table = observation) observation_id                         	| 	  	|
+|	observation_id           | character |yes| (table = observation) observation_id |                   	| 	  	|
 |	variable_name            | character |yes| NA | variable measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  sample_z  	|
 |	value                    | character | no| NA	| value for variable  	|  5  	|
 |	unit                     | character | no| NA	|  unit for variable 	|  m 	|
