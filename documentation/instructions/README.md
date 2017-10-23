@@ -2,8 +2,8 @@
 
 Introduction
 ---
-The ecocom design pattern (ecocomDP) is a flexible intermediate for ecological community survey data.  For information on the entire process, including community workshops see https://environmentaldatainitiative.org/resources/tools/dataset-design/
-Most datasets in this design pattern will be created by reformatting an existing incoming data set. We call the incoming dataset "Level 0" L0. The data package in ecodomDP, then, is called Level 1 (L1). For the most part, reformatting is customized for each L0 dataset. The following resources are available to help with scripting the process. 
+The ecocom design pattern (ecocomDP) is a flexible intermediate for ecological community survey data.  For information on the entire process, including community workshops see https://environmentaldatainitiative.org/resources/tools/dataset-design/.
+Most datasets in this design pattern will be created by reformatting an existing incoming data set. We call the incoming dataset "Level 0", or L0. The data package in ecodomDP, then, is called Level 1 (L1). Generally reformatting must be customized for each L0 dataset. The following resources are available to help with scripting the reformatting process. 
 
 Resources
 ---
