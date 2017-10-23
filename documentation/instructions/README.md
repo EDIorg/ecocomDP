@@ -12,11 +12,11 @@ Resources
 * Reformatting or creating ecocomDP tables:
     * [General instructions with notes](table-creation.md) 
     * Detailed descriptions of the tables and relationships: [model documentation](../../model)
-    * [Templates to assist in planning a converstion from your Level 0 data to this design pattern](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/template-mapping.md)
-    * [Taxonomic lookup services to help align species names, and confirm ids](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/taxon-cleaning.md)
+    * [Templates to assist in planning a converstion from your Level 0 data to this design pattern](template-mapping.md)
+    * [Taxonomic lookup services to help align species names, and confirm ids](taxon-cleaning.md)
 * Checking table structure:
-    *  [Structural QC for the final 7 tables](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/table-validation.md)
+    *  [Structural QC for the final 7 tables](table-validation.md)
 
 * Creating EML Metadata 
-    * Detailed info about [creating EML metadata for a group of tables in this design pattern](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/eml-creation.md)
+    * Detailed info about [creating EML metadata for a group of tables in this design pattern](eml-creation.md)
 
