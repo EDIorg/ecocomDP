@@ -13,27 +13,27 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="403pt"
-   height="722pt"
-   viewBox="0.00 0.00 402.95 721.70"
-   id="svg6185"
+   width="513pt"
+   height="625pt"
+   viewBox="0.00 0.00 513.00 624.70"
+   id="svg3621"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="ecocomDP.svg">
+   sodipodi:docname="relationships.real.large_temp1.svg">
   <metadata
-     id="metadata6675">
+     id="metadata4127">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs6673" />
+     id="defs4125" />
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -43,1175 +43,1199 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1587"
-     inkscape:window-height="1009"
-     id="namedview6671"
+     inkscape:window-width="1612"
+     inkscape:window-height="996"
+     id="namedview4123"
      showgrid="false"
-     inkscape:zoom="0.93"
-     inkscape:cx="-190.34397"
-     inkscape:cy="558.73131"
-     inkscape:window-x="194"
-     inkscape:window-y="23"
+     inkscape:zoom="1.11232"
+     inkscape:cx="316.21098"
+     inkscape:cy="453.78738"
+     inkscape:window-x="95"
+     inkscape:window-y="6"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg6185"
-     inkscape:snap-global="false" />
+     inkscape:current-layer="svg3621" />
   <g
      class="node"
      id="node1"
-     transform="translate(425.45313,714.5004)"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90">
+     transform="translate(451.52434,679.51215)">
     <title
-       id="title6195">dataset_summary</title>
+       id="title3631">dataset_summary</title>
     <g
        id="a_node1">
       <a
          xlink:href="tables/dataset_summary.html"
-         id="a6198"
-         xlink:title="dataset_summary">
+         xlink:title="dataset_summary"
+         id="a3634">
         <polygon
            style="fill:#ffffff;stroke:none"
-           id="polygon6200"
-           points="25.9514,-555.7 182.951,-555.7 182.951,-384.7 25.9514,-384.7 25.9514,-384.7 " />
+           id="polygon3636"
+           points="165,-384.7 8,-384.7 8,-384.7 8,-555.7 165,-555.7 " />
         <polygon
            style="fill:#9bab96;stroke:none"
-           id="polygon6202"
-           points="26.4514,-555.2 183.451,-555.2 183.451,-536.2 26.4514,-536.2 26.4514,-536.2 " />
+           id="polygon3638"
+           points="165.5,-536.2 8.5,-536.2 8.5,-536.2 8.5,-555.2 165.5,-555.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6204"
-           points="26.4514,-555.2 183.451,-555.2 183.451,-536.2 26.4514,-536.2 26.4514,-536.2 " />
+           id="polygon3640"
+           points="165.5,-536.2 8.5,-536.2 8.5,-536.2 8.5,-555.2 165.5,-555.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6206"
+           id="text3642"
            font-size="11.00"
            y="-542.29999"
-           x="61.2495">dataset_summary</text>
+           x="43.2981">dataset_summary</text>
         <polygon
            style="fill:#bed1b8;stroke:none"
-           id="polygon6208"
-           points="26.4514,-536.2 183.451,-536.2 183.451,-517.2 26.4514,-517.2 26.4514,-517.2 " />
+           id="polygon3644"
+           points="165.5,-517.2 8.5,-517.2 8.5,-517.2 8.5,-536.2 165.5,-536.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6210"
-           points="26.4514,-536.2 183.451,-536.2 183.451,-517.2 26.4514,-517.2 26.4514,-517.2 " />
+           id="polygon3646"
+           points="165.5,-517.2 8.5,-517.2 8.5,-517.2 8.5,-536.2 165.5,-536.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6212"
+           id="text3648"
            font-size="11.00"
            y="-523.29999"
-           x="29.451401">package_id</text>
+           x="11.5">package_id</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6214"
-           points="26.4514,-517.2 183.451,-517.2 183.451,-498.2 26.4514,-498.2 26.4514,-498.2 " />
+           id="polygon3650"
+           points="165.5,-498.2 8.5,-498.2 8.5,-498.2 8.5,-517.2 165.5,-517.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6216"
+           id="text3652"
            font-size="11.00"
            y="-504.29999"
-           x="29.451401">original_package_id</text>
+           x="11.5">original_package_id</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6218"
-           points="26.4514,-498.2 183.451,-498.2 183.451,-479.2 26.4514,-479.2 26.4514,-479.2 " />
+           id="polygon3654"
+           points="165.5,-479.2 8.5,-479.2 8.5,-479.2 8.5,-498.2 165.5,-498.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6220"
+           id="text3656"
            font-size="11.00"
            y="-485.29999"
-           x="29.451401">length_of_survey_years</text>
+           x="11.5">length_of_survey_years</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6222"
-           points="26.4514,-479.2 183.451,-479.2 183.451,-460.2 26.4514,-460.2 26.4514,-460.2 " />
+           id="polygon3658"
+           points="165.5,-460.2 8.5,-460.2 8.5,-460.2 8.5,-479.2 165.5,-479.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6224"
+           id="text3660"
            font-size="11.00"
            y="-466.29999"
-           x="29.451401">number_of_years_sampled</text>
+           x="11.5">number_of_years_sampled</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6226"
-           points="26.4514,-460.2 183.451,-460.2 183.451,-441.2 26.4514,-441.2 26.4514,-441.2 " />
+           id="polygon3662"
+           points="165.5,-441.2 8.5,-441.2 8.5,-441.2 8.5,-460.2 165.5,-460.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6228"
+           id="text3664"
            font-size="11.00"
            y="-447.29999"
-           x="29.451401">std_dev_interval_betw_years</text>
+           x="11.5">std_dev_interval_betw_years</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6230"
-           points="26.4514,-441.2 183.451,-441.2 183.451,-422.2 26.4514,-422.2 26.4514,-422.2 " />
+           id="polygon3666"
+           points="165.5,-422.2 8.5,-422.2 8.5,-422.2 8.5,-441.2 165.5,-441.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6232"
+           id="text3668"
            font-size="11.00"
            y="-428.29999"
-           x="29.451401">max_num_taxa</text>
+           x="11.5">max_num_taxa</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6234"
-           points="26.4514,-422.2 183.451,-422.2 183.451,-403.2 26.4514,-403.2 26.4514,-403.2 " />
+           id="polygon3670"
+           points="165.5,-403.2 8.5,-403.2 8.5,-403.2 8.5,-422.2 165.5,-422.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6236"
+           id="text3672"
            font-size="11.00"
            y="-409.29999"
-           x="29.444099">geo_extent_bounding_box_m2</text>
+           x="11.4927">geo_extent_bounding_box_m2</text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6238"
-           points="26.4514,-403.2 81.4514,-403.2 81.4514,-384.2 26.4514,-384.2 26.4514,-384.2 " />
+           id="polygon3674"
+           points="63.5,-384.2 8.5,-384.2 8.5,-384.2 8.5,-403.2 63.5,-403.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6240"
-           points="26.4514,-403.2 81.4514,-403.2 81.4514,-384.2 26.4514,-384.2 26.4514,-384.2 " />
+           id="polygon3676"
+           points="63.5,-384.2 8.5,-384.2 8.5,-384.2 8.5,-403.2 63.5,-403.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6242"
+           id="text3678"
            font-size="11.00"
            y="-390.29999"
-           x="29.451401"> </text>
+           x="11.5"> </text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6244"
-           points="81.4514,-403.2 140.451,-403.2 140.451,-384.2 81.4514,-384.2 81.4514,-384.2 " />
+           id="polygon3680"
+           points="122.5,-384.2 63.5,-384.2 63.5,-384.2 63.5,-403.2 122.5,-403.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6246"
-           points="81.4514,-403.2 140.451,-403.2 140.451,-384.2 81.4514,-384.2 81.4514,-384.2 " />
+           id="polygon3682"
+           points="122.5,-384.2 63.5,-384.2 63.5,-384.2 63.5,-403.2 122.5,-403.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6248"
+           id="text3684"
            font-size="11.00"
            y="-390.29999"
-           x="105.062">0 rows</text>
+           x="87.110497">0 rows</text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6250"
-           points="140.451,-403.2 183.451,-403.2 183.451,-384.2 140.451,-384.2 140.451,-384.2 " />
+           id="polygon3686"
+           points="165.5,-384.2 122.5,-384.2 122.5,-384.2 122.5,-403.2 165.5,-403.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6252"
-           points="140.451,-403.2 183.451,-403.2 183.451,-384.2 140.451,-384.2 140.451,-384.2 " />
+           id="polygon3688"
+           points="165.5,-384.2 122.5,-384.2 122.5,-384.2 122.5,-403.2 165.5,-403.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6254"
+           id="text3690"
            font-size="11.00"
            y="-390.29999"
-           x="164.85699">1 &gt;</text>
+           x="146.905">1 &gt;</text>
       </a>
     </g>
   </g>
   <g
      class="node"
      id="node2"
-     transform="translate(-163.97911,717.7)"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90">
+     transform="translate(84,515.1)">
     <title
-       id="title6257">event</title>
+       id="title3693">location</title>
     <g
        id="a_node2">
       <a
-         xlink:href="tables/event.html"
-         id="a6260"
-         xlink:title="event">
+         xlink:href="tables/location.html"
+         xlink:title="location"
+         id="a3696">
         <polygon
            style="fill:#ffffff;stroke:none"
-           id="polygon6262"
-           points="62.4514,-576.7 62.4514,-709.7 146.451,-709.7 146.451,-576.7 62.4514,-576.7 " />
+           id="polygon3698"
+           points="134,-345.2 134,-193.2 39,-193.2 39,-193.2 39,-345.2 " />
         <polygon
            style="fill:#9bab96;stroke:none"
-           id="polygon6264"
-           points="62.4514,-690.2 62.4514,-709.2 146.451,-709.2 146.451,-690.2 62.4514,-690.2 " />
+           id="polygon3700"
+           points="134.5,-345.2 134.5,-326.2 39.5,-326.2 39.5,-326.2 39.5,-345.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6266"
-           points="62.4514,-690.2 62.4514,-709.2 146.451,-709.2 146.451,-690.2 62.4514,-690.2 " />
+           id="polygon3702"
+           points="134.5,-345.2 134.5,-326.2 39.5,-326.2 39.5,-326.2 39.5,-345.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6268"
+           id="text3704"
            font-size="11.00"
-           y="-696.29999"
-           x="91.000603">event</text>
+           y="-332.29999"
+           x="68.050797">location</text>
         <polygon
            style="fill:#bed1b8;stroke:none"
-           id="polygon6270"
-           points="62.4514,-671.2 62.4514,-690.2 146.451,-690.2 146.451,-671.2 62.4514,-671.2 " />
+           id="polygon3706"
+           points="134.5,-326.2 134.5,-307.2 39.5,-307.2 39.5,-307.2 39.5,-326.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6272"
-           points="62.4514,-671.2 62.4514,-690.2 146.451,-690.2 146.451,-671.2 62.4514,-671.2 " />
+           id="polygon3708"
+           points="134.5,-326.2 134.5,-307.2 39.5,-307.2 39.5,-307.2 39.5,-326.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6274"
+           id="text3710"
            font-size="11.00"
-           y="-677.29999"
-           x="65.023598">record_id</text>
+           y="-313.29999"
+           x="42.5">location_id</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6276"
-           points="62.4514,-652.2 62.4514,-671.2 146.451,-671.2 146.451,-652.2 62.4514,-652.2 " />
+           id="polygon3712"
+           points="134.5,-307.2 134.5,-288.2 39.5,-288.2 39.5,-288.2 39.5,-307.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6278"
+           id="text3714"
            font-size="11.00"
-           y="-658.29999"
-           x="65.451401">event_id</text>
+           y="-294.29999"
+           x="42.5">location_name</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6280"
-           points="62.4514,-633.2 62.4514,-652.2 146.451,-652.2 146.451,-633.2 62.4514,-633.2 " />
+           id="polygon3716"
+           points="134.5,-288.2 134.5,-269.2 39.5,-269.2 39.5,-269.2 39.5,-288.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6282"
+           id="text3718"
            font-size="11.00"
-           y="-639.29999"
-           x="65.451401">variable_name</text>
+           y="-275.29999"
+           x="42.5">latitude</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6284"
-           points="62.4514,-614.2 62.4514,-633.2 146.451,-633.2 146.451,-614.2 62.4514,-614.2 " />
+           id="polygon3720"
+           points="134.5,-269.2 134.5,-250.2 39.5,-250.2 39.5,-250.2 39.5,-269.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6286"
+           id="text3722"
            font-size="11.00"
-           y="-620.29999"
-           x="65.451401">value</text>
+           y="-256.29999"
+           x="42.5">longitude</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6288"
-           points="62.4514,-595.2 62.4514,-614.2 146.451,-614.2 146.451,-595.2 62.4514,-595.2 " />
+           id="polygon3724"
+           points="134.5,-250.2 134.5,-231.2 39.5,-231.2 39.5,-231.2 39.5,-250.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6290"
+           id="text3726"
            font-size="11.00"
-           y="-601.29999"
-           x="65.451401">unit</text>
+           y="-237.3"
+           x="42.5">elevation</text>
+        <polygon
+           style="fill:none;stroke:#000000"
+           id="polygon3728"
+           points="134.5,-231.2 134.5,-212.2 39.5,-212.2 39.5,-212.2 39.5,-231.2 " />
+        <text
+           style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
+           id="text3730"
+           font-size="11.00"
+           y="-218.3"
+           x="42.068802">parent_location_id</text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6292"
-           points="62.4514,-576.2 62.4514,-595.2 80.4514,-595.2 80.4514,-576.2 62.4514,-576.2 " />
+           id="polygon3732"
+           points="67.5,-212.2 67.5,-193.2 39.5,-193.2 39.5,-193.2 39.5,-212.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6294"
-           points="62.4514,-576.2 62.4514,-595.2 80.4514,-595.2 80.4514,-576.2 62.4514,-576.2 " />
+           id="polygon3734"
+           points="67.5,-212.2 67.5,-193.2 39.5,-193.2 39.5,-193.2 39.5,-212.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6296"
+           id="text3736"
            font-size="11.00"
-           y="-582.29999"
-           x="65.451401"> </text>
+           y="-199.3"
+           x="42.5">&lt; 1</text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6298"
-           points="80.4514,-576.2 80.4514,-595.2 121.451,-595.2 121.451,-576.2 80.4514,-576.2 " />
+           id="polygon3738"
+           points="109.5,-212.2 109.5,-193.2 67.5,-193.2 67.5,-193.2 67.5,-212.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6300"
-           points="80.4514,-576.2 80.4514,-595.2 121.451,-595.2 121.451,-576.2 80.4514,-576.2 " />
+           id="polygon3740"
+           points="109.5,-212.2 109.5,-193.2 67.5,-193.2 67.5,-193.2 67.5,-212.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6302"
+           id="text3742"
            font-size="11.00"
-           y="-582.29999"
-           x="86.061897">0 rows</text>
+           y="-199.3"
+           x="74.110497">0 rows</text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6304"
-           points="121.451,-576.2 121.451,-595.2 146.451,-595.2 146.451,-576.2 121.451,-576.2 " />
+           id="polygon3744"
+           points="134.5,-212.2 134.5,-193.2 109.5,-193.2 109.5,-193.2 109.5,-212.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6306"
-           points="121.451,-576.2 121.451,-595.2 146.451,-595.2 146.451,-576.2 121.451,-576.2 " />
+           id="polygon3746"
+           points="134.5,-212.2 134.5,-193.2 109.5,-193.2 109.5,-193.2 109.5,-212.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6308"
+           id="text3748"
            font-size="11.00"
-           y="-582.29999"
-           x="127.857">1 &gt;</text>
+           y="-199.3"
+           x="115.905">3 &gt;</text>
       </a>
     </g>
   </g>
   <g
+     class="edge"
+     id="edge1"
+     transform="translate(84,515.1)">
+    <title
+       id="title3751">location:parent_location_id:w-&gt;location:location_id:e</title>
+    <path
+       style="fill:none;stroke:#000000"
+       inkscape:connector-curvature="0"
+       id="path3753"
+       d="M 28.5896,-231.076 C -5.2816,-270.686 2.17383,-362.2 87,-362.2 c 93,0 93,14 47.5,45" />
+    <polygon
+       style="fill:#000000;stroke:#000000"
+       id="polygon3755"
+       points="36.5345,-223.884 39.5,-221.2 39.5,-221.2 39.5,-221.2 36.5345,-223.884 37.084,-218.531 33.569,-226.569 33.569,-226.569 33.569,-226.569 41.916,-223.869 " />
+    <circle
+       style="fill:none;stroke:#000000"
+       r="3.2000101"
+       id="ellipse3757"
+       cy="-228.716"
+       cx="31.196699" />
+  </g>
+  <g
      class="node"
      id="node3"
-     transform="translate(4,717.7)"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90">
+     transform="translate(-250.75926,512.54626)">
     <title
-       id="title6311">observation</title>
+       id="title3760">location_ancillary</title>
     <g
        id="a_node3">
-      <polygon
-         points="253.951,-384.7 253.951,-384.7 253.951,-593.7 364.951,-593.7 364.951,-384.7 "
-         id="polygon6316"
-         style="fill:#ffffff;stroke:none" />
-      <polygon
-         points="254.451,-574.2 254.451,-574.2 254.451,-593.2 365.451,-593.2 365.451,-574.2 "
-         id="polygon6318"
-         style="fill:#9bab96;stroke:none" />
-      <polygon
-         points="254.451,-574.2 254.451,-574.2 254.451,-593.2 365.451,-593.2 365.451,-574.2 "
-         id="polygon6320"
-         style="fill:none;stroke:#000000" />
-      <text
-         x="281.52701"
-         y="-580.29999"
-         font-size="11.00"
-         id="text6322"
-         style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start">observation</text>
-      <polygon
-         points="254.451,-555.2 254.451,-555.2 254.451,-574.2 365.451,-574.2 365.451,-555.2 "
-         id="polygon6324"
-         style="fill:#bed1b8;stroke:none" />
-      <polygon
-         points="254.451,-555.2 254.451,-555.2 254.451,-574.2 365.451,-574.2 365.451,-555.2 "
-         id="polygon6326"
-         style="fill:none;stroke:#000000" />
-      <text
-         x="257.45099"
-         y="-561.29999"
-         font-size="11.00"
-         id="text6328"
-         style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start">observation_id</text>
-      <polygon
-         points="254.451,-536.2 254.451,-536.2 254.451,-555.2 365.451,-555.2 365.451,-536.2 "
-         id="polygon6330"
-         style="fill:none;stroke:#000000" />
-      <text
-         x="257.45099"
-         y="-542.29999"
-         font-size="11.00"
-         id="text6332"
-         style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start">event_id</text>
-      <polygon
-         points="254.451,-517.2 254.451,-517.2 254.451,-536.2 365.451,-536.2 365.451,-517.2 "
-         id="polygon6334"
-         style="fill:none;stroke:#000000" />
-      <text
-         x="257.45099"
-         y="-523.29999"
-         font-size="11.00"
-         id="text6336"
-         style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start">package_id</text>
-      <polygon
-         points="254.451,-498.2 254.451,-498.2 254.451,-517.2 365.451,-517.2 365.451,-498.2 "
-         id="polygon6338"
-         style="fill:none;stroke:#000000" />
-      <text
-         x="257.45099"
-         y="-504.29999"
-         font-size="11.00"
-         id="text6340"
-         style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start">sampling_location_id</text>
-      <polygon
-         points="254.451,-479.2 254.451,-479.2 254.451,-498.2 365.451,-498.2 365.451,-479.2 "
-         id="polygon6342"
-         style="fill:none;stroke:#000000" />
-      <text
-         x="257.38101"
-         y="-485.29999"
-         font-size="11.00"
-         id="text6344"
-         style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start">observation_datetime</text>
-      <polygon
-         points="254.451,-460.2 254.451,-460.2 254.451,-479.2 365.451,-479.2 365.451,-460.2 "
-         id="polygon6346"
-         style="fill:none;stroke:#000000" />
-      <text
-         x="257.45099"
-         y="-466.29999"
-         font-size="11.00"
-         id="text6348"
-         style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start">taxon_id</text>
-      <polygon
-         points="254.451,-441.2 254.451,-441.2 254.451,-460.2 365.451,-460.2 365.451,-441.2 "
-         id="polygon6350"
-         style="fill:none;stroke:#000000" />
-      <text
-         x="257.45099"
-         y="-447.29999"
-         font-size="11.00"
-         id="text6352"
-         style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start">variable_name</text>
-      <polygon
-         points="254.451,-422.2 254.451,-422.2 254.451,-441.2 365.451,-441.2 365.451,-422.2 "
-         id="polygon6354"
-         style="fill:none;stroke:#000000" />
-      <text
-         x="257.45099"
-         y="-428.29999"
-         font-size="11.00"
-         id="text6356"
-         style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start">value</text>
-      <polygon
-         points="254.451,-403.2 254.451,-403.2 254.451,-422.2 365.451,-422.2 365.451,-403.2 "
-         id="polygon6358"
-         style="fill:none;stroke:#000000" />
-      <text
-         x="257.45099"
-         y="-409.29999"
-         font-size="11.00"
-         id="text6360"
-         style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start">unit</text>
-      <polygon
-         points="254.451,-384.2 254.451,-384.2 254.451,-403.2 295.451,-403.2 295.451,-384.2 "
-         id="polygon6362"
-         style="fill:#f7f7f7;stroke:none" />
-      <polygon
-         points="254.451,-384.2 254.451,-384.2 254.451,-403.2 295.451,-403.2 295.451,-384.2 "
-         id="polygon6364"
-         style="fill:none;stroke:#000000" />
-      <text
-         x="257.45099"
-         y="-390.29999"
-         font-size="11.00"
-         id="text6366"
-         style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start">&lt; 4</text>
-      <polygon
-         points="295.451,-384.2 295.451,-384.2 295.451,-403.2 343.451,-403.2 343.451,-384.2 "
-         id="polygon6368"
-         style="fill:#f7f7f7;stroke:none" />
-      <polygon
-         points="295.451,-384.2 295.451,-384.2 295.451,-403.2 343.451,-403.2 343.451,-384.2 "
-         id="polygon6370"
-         style="fill:none;stroke:#000000" />
-      <text
-         x="308.06201"
-         y="-390.29999"
-         font-size="11.00"
-         id="text6372"
-         style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start">0 rows</text>
-      <polygon
-         points="343.451,-384.2 343.451,-384.2 343.451,-403.2 365.451,-403.2 365.451,-384.2 "
-         id="polygon6374"
-         style="fill:#f7f7f7;stroke:none" />
-      <polygon
-         points="343.451,-384.2 343.451,-384.2 343.451,-403.2 365.451,-403.2 365.451,-384.2 "
-         id="polygon6376"
-         style="fill:none;stroke:#000000" />
-      <text
-         x="356.33801"
-         y="-390.29999"
-         font-size="11.00"
-         id="text6378"
-         style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"> </text>
+      <a
+         xlink:href="tables/location_ancillary.html"
+         xlink:title="location_ancillary"
+         id="a3763">
+        <polygon
+           style="fill:#ffffff;stroke:none"
+           id="polygon3765"
+           points="322,-363.2 322,-211.2 217,-211.2 217,-211.2 217,-363.2 " />
+        <polygon
+           style="fill:#9bab96;stroke:none"
+           id="polygon3767"
+           points="322.5,-363.2 322.5,-344.2 217.5,-344.2 217.5,-344.2 217.5,-363.2 " />
+        <polygon
+           style="fill:none;stroke:#000000"
+           id="polygon3769"
+           points="322.5,-363.2 322.5,-344.2 217.5,-344.2 217.5,-344.2 217.5,-363.2 " />
+        <text
+           style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
+           id="text3771"
+           font-size="11.00"
+           y="-350.29999"
+           x="227.82899">location_ancillary</text>
+        <polygon
+           style="fill:#bed1b8;stroke:none"
+           id="polygon3773"
+           points="322.5,-344.2 322.5,-325.2 217.5,-325.2 217.5,-325.2 217.5,-344.2 " />
+        <polygon
+           style="fill:none;stroke:#000000"
+           id="polygon3775"
+           points="322.5,-344.2 322.5,-325.2 217.5,-325.2 217.5,-325.2 217.5,-344.2 " />
+        <text
+           style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
+           id="text3777"
+           font-size="11.00"
+           y="-331.29999"
+           x="220.493">location_ancillary_id</text>
+        <polygon
+           style="fill:#f4f7da;stroke:none"
+           id="polygon3779"
+           points="322.5,-325.2 322.5,-306.2 217.5,-306.2 217.5,-306.2 217.5,-325.2 " />
+        <polygon
+           style="fill:none;stroke:#000000"
+           id="polygon3781"
+           points="322.5,-325.2 322.5,-306.2 217.5,-306.2 217.5,-306.2 217.5,-325.2 " />
+        <text
+           style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
+           id="text3783"
+           font-size="11.00"
+           y="-312.29999"
+           x="220.5">location_id</text>
+        <polygon
+           style="fill:#f4f7da;stroke:none"
+           id="polygon3785"
+           points="322.5,-306.2 322.5,-287.2 217.5,-287.2 217.5,-287.2 217.5,-306.2 " />
+        <polygon
+           style="fill:none;stroke:#000000"
+           id="polygon3787"
+           points="322.5,-306.2 322.5,-287.2 217.5,-287.2 217.5,-287.2 217.5,-306.2 " />
+        <text
+           style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
+           id="text3789"
+           font-size="11.00"
+           y="-293.29999"
+           x="220.5">datetime</text>
+        <polygon
+           style="fill:#f4f7da;stroke:none"
+           id="polygon3791"
+           points="322.5,-287.2 322.5,-268.2 217.5,-268.2 217.5,-268.2 217.5,-287.2 " />
+        <polygon
+           style="fill:none;stroke:#000000"
+           id="polygon3793"
+           points="322.5,-287.2 322.5,-268.2 217.5,-268.2 217.5,-268.2 217.5,-287.2 " />
+        <text
+           style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
+           id="text3795"
+           font-size="11.00"
+           y="-274.29999"
+           x="220.5">variable_name</text>
+        <polygon
+           style="fill:none;stroke:#000000"
+           id="polygon3797"
+           points="322.5,-268.2 322.5,-249.2 217.5,-249.2 217.5,-249.2 217.5,-268.2 " />
+        <text
+           style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
+           id="text3799"
+           font-size="11.00"
+           y="-255.3"
+           x="220.5">value</text>
+        <polygon
+           style="fill:none;stroke:#000000"
+           id="polygon3801"
+           points="322.5,-249.2 322.5,-230.2 217.5,-230.2 217.5,-230.2 217.5,-249.2 " />
+        <text
+           style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
+           id="text3803"
+           font-size="11.00"
+           y="-236.3"
+           x="220.5">unit</text>
+        <polygon
+           style="fill:#f7f7f7;stroke:none"
+           id="polygon3805"
+           points="255.5,-230.2 255.5,-211.2 217.5,-211.2 217.5,-211.2 217.5,-230.2 " />
+        <polygon
+           style="fill:none;stroke:#000000"
+           id="polygon3807"
+           points="255.5,-230.2 255.5,-211.2 217.5,-211.2 217.5,-211.2 217.5,-230.2 " />
+        <text
+           style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
+           id="text3809"
+           font-size="11.00"
+           y="-217.3"
+           x="220.5">&lt; 1</text>
+        <polygon
+           style="fill:#f7f7f7;stroke:none"
+           id="polygon3811"
+           points="301.5,-230.2 301.5,-211.2 255.5,-211.2 255.5,-211.2 255.5,-230.2 " />
+        <polygon
+           style="fill:none;stroke:#000000"
+           id="polygon3813"
+           points="301.5,-230.2 301.5,-211.2 255.5,-211.2 255.5,-211.2 255.5,-230.2 " />
+        <text
+           style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
+           id="text3815"
+           font-size="11.00"
+           y="-217.3"
+           x="266.11099">0 rows</text>
+        <polygon
+           style="fill:#f7f7f7;stroke:none"
+           id="polygon3817"
+           points="322.5,-230.2 322.5,-211.2 301.5,-211.2 301.5,-211.2 301.5,-230.2 " />
+        <polygon
+           style="fill:none;stroke:#000000"
+           id="polygon3819"
+           points="322.5,-230.2 322.5,-211.2 301.5,-211.2 301.5,-211.2 301.5,-230.2 " />
+        <text
+           style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
+           id="text3821"
+           font-size="11.00"
+           y="-217.3"
+           x="313.38599"> </text>
+      </a>
     </g>
   </g>
   <g
      class="edge"
      id="edge2"
-     transform="matrix(-1.1527309,0,0,-0.99713619,662.77624,-335.1902)"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90">
+     transform="matrix(-0.85830687,0,0,1.0061499,257.47272,517.04461)">
     <title
-       id="title6381">observation:package_id:w-&gt;dataset_summary:package_id:e</title>
+       id="title3824">location_ancillary:location_id:w-&gt;location:location_id:e</title>
     <path
        style="fill:none;stroke:#000000"
        inkscape:connector-curvature="0"
-       id="path6383"
-       d="m 238.881,-527.2 c -19.594,0 -29.273,0 -54.43,0" />
-    <polygon
-       style="fill:#000000;stroke:#000000"
-       id="polygon6385"
-       points="249.451,-527.2 253.451,-523.6 245.451,-527.2 245.451,-527.2 245.451,-527.2 253.451,-530.8 249.451,-527.2 253.451,-527.2 253.451,-527.2 253.451,-527.2 " />
-    <circle
-       style="fill:none;stroke:#000000"
-       r="3.2"
-       id="ellipse6387"
-       cy="-527.20001"
-       cx="242.25101" />
-  </g>
-  <g
-     class="edge"
-     id="edge1"
-     transform="matrix(1.1052851,0,0,0.87628626,-22.735097,650.59409)"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90">
-    <title
-       id="title6390">observation:event_record_id:w-&gt;event:event_record_id:e</title>
-    <path
-       style="fill:none;stroke:#000000"
-       inkscape:connector-curvature="0"
-       id="path6392"
-       d="M 239.097,-548.108 C 173.79824,-549.2379 92.655916,-691.44713 5.8226252,-678.25539"
+       id="path3826"
+       d="m 202.076,-316.26 c -24.844,-0.215 -14.13032,0.48964 -44.78932,0.48964"
        sodipodi:nodetypes="cc" />
     <polygon
        style="fill:#000000;stroke:#000000"
-       id="polygon6394"
-       points="253.451,-546.2 253.451,-546.2 249.486,-546.727 252.977,-542.631 245.521,-547.254 245.521,-547.254 245.521,-547.254 253.926,-549.769 249.486,-546.727 253.451,-546.2 " />
+       id="polygon3828"
+       points="212.5,-316.217 216.485,-312.6 208.5,-316.233 208.5,-316.233 208.5,-316.233 216.515,-319.8 212.5,-316.217 216.5,-316.2 216.5,-316.2 216.5,-316.2 " />
     <circle
        style="fill:none;stroke:#000000"
        r="3.2"
-       id="ellipse6396"
-       cy="-547.67603"
-       cx="242.349" />
+       id="ellipse3830"
+       cy="-316.246"
+       cx="205.3" />
   </g>
   <g
      class="node"
      id="node4"
-     transform="translate(6.8383579,527.46126)"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90">
+     transform="translate(83.335916,700.43757)">
     <title
-       id="title6399">sampling_location</title>
+       id="title3833">observation</title>
     <g
        id="a_node4">
       <a
-         xlink:href="tables/sampling_location.html"
-         id="a6402"
-         xlink:title="sampling_location">
+         xlink:href="tables/observation.html"
+         xlink:title="observation"
+         id="a3836">
         <polygon
            style="fill:#ffffff;stroke:none"
-           id="polygon6404"
-           points="31.9514,-193.2 31.9514,-193.2 31.9514,-345.2 176.951,-345.2 176.951,-193.2 " />
+           id="polygon3838"
+           points="214,-384.7 214,-593.7 325,-593.7 325,-384.7 214,-384.7 " />
         <polygon
            style="fill:#9bab96;stroke:none"
-           id="polygon6406"
-           points="32.4514,-326.2 32.4514,-326.2 32.4514,-345.2 177.451,-345.2 177.451,-326.2 " />
+           id="polygon3840"
+           points="214.5,-574.2 214.5,-593.2 325.5,-593.2 325.5,-574.2 214.5,-574.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6408"
-           points="32.4514,-326.2 32.4514,-326.2 32.4514,-345.2 177.451,-345.2 177.451,-326.2 " />
+           id="polygon3842"
+           points="214.5,-574.2 214.5,-593.2 325.5,-593.2 325.5,-574.2 214.5,-574.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6410"
+           id="text3844"
            font-size="11.00"
-           y="-332.29999"
-           x="60.943199">sampling_location</text>
+           y="-580.29999"
+           x="241.575">observation</text>
         <polygon
            style="fill:#bed1b8;stroke:none"
-           id="polygon6412"
-           points="32.4514,-307.2 32.4514,-307.2 32.4514,-326.2 177.451,-326.2 177.451,-307.2 " />
+           id="polygon3846"
+           points="214.5,-555.2 214.5,-574.2 325.5,-574.2 325.5,-555.2 214.5,-555.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6414"
-           points="32.4514,-307.2 32.4514,-307.2 32.4514,-326.2 177.451,-326.2 177.451,-307.2 " />
+           id="polygon3848"
+           points="214.5,-555.2 214.5,-574.2 325.5,-574.2 325.5,-555.2 214.5,-555.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6416"
+           id="text3850"
            font-size="11.00"
-           y="-313.29999"
-           x="35.451401">sampling_location_id</text>
+           y="-561.29999"
+           x="217.5">observation_id</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6418"
-           points="32.4514,-288.2 32.4514,-288.2 32.4514,-307.2 177.451,-307.2 177.451,-288.2 " />
+           id="polygon3852"
+           points="214.5,-536.2 214.5,-555.2 325.5,-555.2 325.5,-536.2 214.5,-536.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6420"
+           id="text3854"
            font-size="11.00"
-           y="-294.29999"
-           x="35.451401">sampling_location_name</text>
+           y="-542.29999"
+           x="217.5">event_id</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6422"
-           points="32.4514,-269.2 32.4514,-269.2 32.4514,-288.2 177.451,-288.2 177.451,-269.2 " />
+           id="polygon3856"
+           points="214.5,-517.2 214.5,-536.2 325.5,-536.2 325.5,-517.2 214.5,-517.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6424"
+           id="text3858"
            font-size="11.00"
-           y="-275.29999"
-           x="35.451401">latitude</text>
+           y="-523.29999"
+           x="217.5">package_id</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6426"
-           points="32.4514,-250.2 32.4514,-250.2 32.4514,-269.2 177.451,-269.2 177.451,-250.2 " />
+           id="polygon3860"
+           points="214.5,-498.2 214.5,-517.2 325.5,-517.2 325.5,-498.2 214.5,-498.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6428"
+           id="text3862"
            font-size="11.00"
-           y="-256.29999"
-           x="35.451401">longitude</text>
+           y="-504.29999"
+           x="217.5">location_id</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6430"
-           points="32.4514,-231.2 32.4514,-231.2 32.4514,-250.2 177.451,-250.2 177.451,-231.2 " />
+           id="polygon3864"
+           points="214.5,-479.2 214.5,-498.2 325.5,-498.2 325.5,-479.2 214.5,-479.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6432"
+           id="text3866"
            font-size="11.00"
-           y="-237.3"
-           x="35.451401">elevation</text>
+           y="-485.29999"
+           x="217.42999">observation_datetime</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6434"
-           points="32.4514,-212.2 32.4514,-212.2 32.4514,-231.2 177.451,-231.2 177.451,-212.2 " />
+           id="polygon3868"
+           points="214.5,-460.2 214.5,-479.2 325.5,-479.2 325.5,-460.2 214.5,-460.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6436"
+           id="text3870"
            font-size="11.00"
-           y="-218.3"
-           x="34.961201">parent_sampling_location_id</text>
+           y="-466.29999"
+           x="217.5">taxon_id</text>
+        <polygon
+           style="fill:none;stroke:#000000"
+           id="polygon3872"
+           points="214.5,-441.2 214.5,-460.2 325.5,-460.2 325.5,-441.2 214.5,-441.2 " />
+        <text
+           style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
+           id="text3874"
+           font-size="11.00"
+           y="-447.29999"
+           x="217.5">variable_name</text>
+        <polygon
+           style="fill:none;stroke:#000000"
+           id="polygon3876"
+           points="214.5,-422.2 214.5,-441.2 325.5,-441.2 325.5,-422.2 214.5,-422.2 " />
+        <text
+           style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
+           id="text3878"
+           font-size="11.00"
+           y="-428.29999"
+           x="217.5">value</text>
+        <polygon
+           style="fill:none;stroke:#000000"
+           id="polygon3880"
+           points="214.5,-403.2 214.5,-422.2 325.5,-422.2 325.5,-403.2 214.5,-403.2 " />
+        <text
+           style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
+           id="text3882"
+           font-size="11.00"
+           y="-409.29999"
+           x="217.5">unit</text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6438"
-           points="32.4514,-193.2 32.4514,-193.2 32.4514,-212.2 85.4514,-212.2 85.4514,-193.2 " />
+           id="polygon3884"
+           points="214.5,-384.2 214.5,-403.2 250.5,-403.2 250.5,-384.2 214.5,-384.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6440"
-           points="32.4514,-193.2 32.4514,-193.2 32.4514,-212.2 85.4514,-212.2 85.4514,-193.2 " />
+           id="polygon3886"
+           points="214.5,-384.2 214.5,-403.2 250.5,-403.2 250.5,-384.2 214.5,-384.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6442"
+           id="text3888"
            font-size="11.00"
-           y="-199.3"
-           x="35.451401">&lt; 1</text>
+           y="-390.29999"
+           x="217.5">&lt; 3</text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6444"
-           points="85.4514,-193.2 85.4514,-193.2 85.4514,-212.2 139.451,-212.2 139.451,-193.2 " />
+           id="polygon3890"
+           points="250.5,-384.2 250.5,-403.2 296.5,-403.2 296.5,-384.2 250.5,-384.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6446"
-           points="85.4514,-193.2 85.4514,-193.2 85.4514,-212.2 139.451,-212.2 139.451,-193.2 " />
+           id="polygon3892"
+           points="250.5,-384.2 250.5,-403.2 296.5,-403.2 296.5,-384.2 250.5,-384.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6448"
+           id="text3894"
            font-size="11.00"
-           y="-199.3"
-           x="104.062">0 rows</text>
+           y="-390.29999"
+           x="261.11099">0 rows</text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6450"
-           points="139.451,-193.2 139.451,-193.2 139.451,-212.2 177.451,-212.2 177.451,-193.2 " />
+           id="polygon3896"
+           points="296.5,-384.2 296.5,-403.2 325.5,-403.2 325.5,-384.2 296.5,-384.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6452"
-           points="139.451,-193.2 139.451,-193.2 139.451,-212.2 177.451,-212.2 177.451,-193.2 " />
+           id="polygon3898"
+           points="296.5,-384.2 296.5,-403.2 325.5,-403.2 325.5,-384.2 296.5,-384.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6454"
+           id="text3900"
            font-size="11.00"
-           y="-199.3"
-           x="158.85699">3 &gt;</text>
+           y="-390.29999"
+           x="306.905">1 &gt;</text>
       </a>
     </g>
   </g>
   <g
      class="edge"
-     id="edge3"
-     transform="matrix(1.1028752,0,0,0.8985531,-19.546139,701.88918)"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90">
+     id="edge4"
+     transform="matrix(1.0290824,0,0,0.99898279,78.55807,717.84514)">
     <title
-       id="title6457">observation:sampling_location_id:w-&gt;sampling_location:sampling_location_id:e</title>
+       id="title3903">observation:package_id:w-&gt;dataset_summary:package_id:e</title>
     <path
        style="fill:none;stroke:#000000"
        inkscape:connector-curvature="0"
-       id="path6459"
-       d="M 238.982,-506.184 C 174.53,-485.771 264.128,-317.2 178.451,-317.2" />
+       id="path3905"
+       d="m 198.896,-527.2 -61.1156,7.1995"
+       sodipodi:nodetypes="cc" />
     <polygon
        style="fill:#000000;stroke:#000000"
-       id="polygon6461"
-       points="253.451,-508.2 249.49,-507.648 253.948,-504.634 245.528,-507.096 245.528,-507.096 245.528,-507.096 252.955,-511.766 249.49,-507.648 253.451,-508.2 253.451,-508.2 " />
+       id="polygon3907"
+       points="205.5,-527.2 205.5,-527.2 213.5,-530.8 209.5,-527.2 213.5,-527.2 213.5,-527.2 213.5,-527.2 209.5,-527.2 213.5,-523.6 205.5,-527.2 " />
     <circle
        style="fill:none;stroke:#000000"
        r="3.2"
-       id="ellipse6463"
-       cy="-506.655"
-       cx="242.35899" />
+       id="ellipse3909"
+       cy="-527.20001"
+       cx="202.3" />
+  </g>
+  <g
+     class="edge"
+     id="edge3"
+     transform="matrix(1.0006406,0,0,-0.85696155,83.887584,-300.00692)">
+    <title
+       id="title3912">observation:location_id:w-&gt;location:location_id:e</title>
+    <path
+       style="fill:none;stroke:#000000"
+       inkscape:connector-curvature="0"
+       id="path3914"
+       d="m 199.012,-506.314 c -38.08857,2.12096 -27.38809,107.09476 -77.76343,114.37791 -83.913923,12.13209 -91.288591,2.99478 -118.7177094,7.25076"
+       sodipodi:nodetypes="csc" />
+    <polygon
+       style="fill:#000000;stroke:#000000"
+       id="polygon3916"
+       points="205.567,-507.167 213.035,-511.77 209.533,-507.684 213.5,-508.2 213.5,-508.2 213.5,-508.2 209.533,-507.684 213.965,-504.63 205.567,-507.167 205.567,-507.167 " />
+    <circle
+       style="fill:none;stroke:#000000"
+       r="3.2"
+       id="ellipse3918"
+       cy="-506.754"
+       cx="202.394" />
   </g>
   <g
      class="node"
      id="node6"
-     transform="translate(22.113885,557.59943)"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90">
+     transform="translate(84,523.1)">
     <title
-       id="title6466">taxon</title>
+       id="title3921">taxon</title>
     <g
        id="a_node6">
       <a
          xlink:href="tables/taxon.html"
-         id="a6469"
-         xlink:title="taxon">
+         xlink:title="taxon"
+         id="a3924">
         <polygon
            style="fill:#ffffff;stroke:none"
-           id="polygon6471"
-           points="56.9514,-38.7 56.9514,-38.7 56.9514,-171.7 151.951,-171.7 151.951,-38.7 " />
+           id="polygon3926"
+           points="39,-38.7 39,-38.7 39,-171.7 134,-171.7 134,-38.7 " />
         <polygon
            style="fill:#9bab96;stroke:none"
-           id="polygon6473"
-           points="57.4514,-152.2 57.4514,-152.2 57.4514,-171.2 152.451,-171.2 152.451,-152.2 " />
+           id="polygon3928"
+           points="39.5,-152.2 39.5,-152.2 39.5,-171.2 134.5,-171.2 134.5,-152.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6475"
-           points="57.4514,-152.2 57.4514,-152.2 57.4514,-171.2 152.451,-171.2 152.451,-152.2 " />
+           id="polygon3930"
+           points="39.5,-152.2 39.5,-152.2 39.5,-171.2 134.5,-171.2 134.5,-152.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6477"
+           id="text3932"
            font-size="11.00"
            y="-158.3"
-           x="91.500603">taxon</text>
+           x="73.549202">taxon</text>
         <polygon
            style="fill:#bed1b8;stroke:none"
-           id="polygon6479"
-           points="57.4514,-133.2 57.4514,-133.2 57.4514,-152.2 152.451,-152.2 152.451,-133.2 " />
+           id="polygon3934"
+           points="39.5,-133.2 39.5,-133.2 39.5,-152.2 134.5,-152.2 134.5,-133.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6481"
-           points="57.4514,-133.2 57.4514,-133.2 57.4514,-152.2 152.451,-152.2 152.451,-133.2 " />
+           id="polygon3936"
+           points="39.5,-133.2 39.5,-133.2 39.5,-152.2 134.5,-152.2 134.5,-133.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6483"
+           id="text3938"
            font-size="11.00"
            y="-139.3"
-           x="60.451401">taxon_id</text>
+           x="42.5">taxon_id</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6485"
-           points="57.4514,-114.2 57.4514,-114.2 57.4514,-133.2 152.451,-133.2 152.451,-114.2 " />
+           id="polygon3940"
+           points="39.5,-114.2 39.5,-114.2 39.5,-133.2 134.5,-133.2 134.5,-114.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6487"
+           id="text3942"
            font-size="11.00"
            y="-120.3"
-           x="60.451401">taxon_rank</text>
+           x="42.5">taxon_rank</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6489"
-           points="57.4514,-95.2 57.4514,-95.2 57.4514,-114.2 152.451,-114.2 152.451,-95.2 " />
+           id="polygon3944"
+           points="39.5,-95.2 39.5,-95.2 39.5,-114.2 134.5,-114.2 134.5,-95.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6491"
+           id="text3946"
            font-size="11.00"
            y="-101.3"
-           x="60.451401">taxon_name</text>
+           x="42.5">taxon_name</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6493"
-           points="57.4514,-76.2 57.4514,-76.2 57.4514,-95.2 152.451,-95.2 152.451,-76.2 " />
+           id="polygon3948"
+           points="39.5,-76.2 39.5,-76.2 39.5,-95.2 134.5,-95.2 134.5,-76.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6495"
+           id="text3950"
            font-size="11.00"
            y="-82.300003"
-           x="60.451401">authority_system</text>
+           x="42.5">authority_system</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6497"
-           points="57.4514,-57.2 57.4514,-57.2 57.4514,-76.2 152.451,-76.2 152.451,-57.2 " />
+           id="polygon3952"
+           points="39.5,-57.2 39.5,-57.2 39.5,-76.2 134.5,-76.2 134.5,-57.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6499"
+           id="text3954"
            font-size="11.00"
            y="-63.299999"
-           x="60.019699">authority_taxon_id</text>
+           x="42.068298">authority_taxon_id</text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6501"
-           points="57.4514,-38.2 57.4514,-38.2 57.4514,-57.2 81.4514,-57.2 81.4514,-38.2 " />
+           id="polygon3956"
+           points="39.5,-38.2 39.5,-38.2 39.5,-57.2 63.5,-57.2 63.5,-38.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6503"
-           points="57.4514,-38.2 57.4514,-38.2 57.4514,-57.2 81.4514,-57.2 81.4514,-38.2 " />
+           id="polygon3958"
+           points="39.5,-38.2 39.5,-38.2 39.5,-57.2 63.5,-57.2 63.5,-38.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6505"
+           id="text3960"
            font-size="11.00"
            y="-44.299999"
-           x="60.451401"> </text>
+           x="42.5"> </text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6507"
-           points="81.4514,-38.2 81.4514,-38.2 81.4514,-57.2 125.451,-57.2 125.451,-38.2 " />
+           id="polygon3962"
+           points="63.5,-38.2 63.5,-38.2 63.5,-57.2 107.5,-57.2 107.5,-38.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6509"
-           points="81.4514,-38.2 81.4514,-38.2 81.4514,-57.2 125.451,-57.2 125.451,-38.2 " />
+           id="polygon3964"
+           points="63.5,-38.2 63.5,-38.2 63.5,-57.2 107.5,-57.2 107.5,-38.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6511"
+           id="text3966"
            font-size="11.00"
            y="-44.299999"
-           x="90.061897">0 rows</text>
+           x="72.110497">0 rows</text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6513"
-           points="125.451,-38.2 125.451,-38.2 125.451,-57.2 152.451,-57.2 152.451,-38.2 " />
+           id="polygon3968"
+           points="107.5,-38.2 107.5,-38.2 107.5,-57.2 134.5,-57.2 134.5,-38.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6515"
-           points="125.451,-38.2 125.451,-38.2 125.451,-57.2 152.451,-57.2 152.451,-38.2 " />
+           id="polygon3970"
+           points="107.5,-38.2 107.5,-38.2 107.5,-57.2 134.5,-57.2 134.5,-38.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6517"
+           id="text3972"
            font-size="11.00"
            y="-44.299999"
-           x="133.85699">2 &gt;</text>
+           x="115.905">2 &gt;</text>
       </a>
     </g>
   </g>
   <g
      class="edge"
      id="edge5"
-     transform="matrix(0.99589976,0,0,1.0000122,6.8386152,527.4648)"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90">
+     transform="translate(84,700.98654)">
     <title
-       id="title6529">sampling_location:parent_sampling_location_id:w-&gt;sampling_location:sampling_location_id:e</title>
+       id="title3975">observation:taxon_id:w-&gt;taxon:taxon_id:e</title>
     <path
        style="fill:none;stroke:#000000"
        inkscape:connector-curvature="0"
-       id="path6531"
-       d="M 20.9702,-230.319 C -17.7175,-269.507 -8.41773,-362.2 104.951,-362.2 c 123.5,0 123.5,14 72.5,45" />
+       id="path3977"
+       d="m 199.621,-464.59 c -42.346,32.662 4.95474,58.16624 -20.86726,111.21624 -10.524,21.621 -19.92695,33.24626 -43.97295,33.24626"
+       sodipodi:nodetypes="csc" />
     <polygon
        style="fill:#000000;stroke:#000000"
-       id="polygon6533"
-       points="26.187,-226.176 34.6905,-224.019 29.3192,-223.688 32.4514,-221.2 32.4514,-221.2 32.4514,-221.2 29.3192,-223.688 30.2123,-218.381 26.187,-226.176 26.187,-226.176 " />
+       id="polygon3979"
+       points="213.5,-469.2 213.5,-469.2 213.5,-469.2 209.704,-467.939 214.635,-465.784 205.908,-466.678 205.908,-466.678 205.908,-466.678 212.365,-472.616 209.704,-467.939 " />
     <circle
        style="fill:none;stroke:#000000"
        r="3.2000101"
-       id="ellipse6535"
-       cy="-228.166"
-       cx="23.681299" />
+       id="ellipse3981"
+       cy="-465.66901"
+       cx="202.871" />
   </g>
   <g
      class="node"
      id="node5"
-     transform="translate(-406.719,531.26294)"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90">
+     transform="translate(-410.01794,591.36176)">
     <title
-       id="title6538">sampling_location_ancillary</title>
+       id="title3984">observation_ancillary</title>
     <g
        id="a_node5">
       <a
-         xlink:href="tables/sampling_location_ancillary.html"
-         id="a6541"
-         xlink:title="sampling_location_ancillary">
+         xlink:href="tables/observation_ancillary.html"
+         xlink:title="observation_ancillary"
+         id="a3987">
         <polygon
            style="fill:#ffffff;stroke:none"
-           id="polygon6543"
-           points="231.951,-211.2 231.951,-363.2 386.951,-363.2 386.951,-211.2 231.951,-211.2 " />
+           id="polygon3989"
+           points="497,-612.7 497,-479.7 374,-479.7 374,-479.7 374,-612.7 " />
         <polygon
            style="fill:#9bab96;stroke:none"
-           id="polygon6545"
-           points="232.451,-344.2 232.451,-363.2 387.451,-363.2 387.451,-344.2 232.451,-344.2 " />
+           id="polygon3991"
+           points="497.5,-612.2 497.5,-593.2 374.5,-593.2 374.5,-593.2 374.5,-612.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6547"
-           points="232.451,-344.2 232.451,-363.2 387.451,-363.2 387.451,-344.2 232.451,-344.2 " />
+           id="polygon3993"
+           points="497.5,-612.2 497.5,-593.2 374.5,-593.2 374.5,-593.2 374.5,-612.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6549"
+           id="text3995"
            font-size="11.00"
-           y="-350.29999"
-           x="242.72099">sampling_location_ancillary</text>
+           y="-599.29999"
+           x="384.353">observation_ancillary</text>
         <polygon
            style="fill:#bed1b8;stroke:none"
-           id="polygon6551"
-           points="232.451,-325.2 232.451,-344.2 387.451,-344.2 387.451,-325.2 232.451,-325.2 " />
+           id="polygon3997"
+           points="497.5,-593.2 497.5,-574.2 374.5,-574.2 374.5,-574.2 374.5,-593.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6553"
-           points="232.451,-325.2 232.451,-344.2 387.451,-344.2 387.451,-325.2 232.451,-325.2 " />
+           id="polygon3999"
+           points="497.5,-593.2 497.5,-574.2 374.5,-574.2 374.5,-574.2 374.5,-593.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6555"
+           id="text4001"
            font-size="11.00"
-           y="-331.29999"
-           x="235.386">sampling_location_ancillary_id</text>
+           y="-580.29999"
+           x="377.01801">observation_ancillary_id</text>
+        <polygon
+           style="fill:#f4f7da;stroke:none"
+           id="polygon4003"
+           points="497.5,-574.2 497.5,-555.2 374.5,-555.2 374.5,-555.2 374.5,-574.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6557"
-           points="232.451,-306.2 232.451,-325.2 387.451,-325.2 387.451,-306.2 232.451,-306.2 " />
+           id="polygon4005"
+           points="497.5,-574.2 497.5,-555.2 374.5,-555.2 374.5,-555.2 374.5,-574.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6559"
+           id="text4007"
            font-size="11.00"
-           y="-312.29999"
-           x="235.451">sampling_location_id</text>
+           y="-561.29999"
+           x="377.5">observation_id</text>
+        <polygon
+           style="fill:#f4f7da;stroke:none"
+           id="polygon4009"
+           points="497.5,-555.2 497.5,-536.2 374.5,-536.2 374.5,-536.2 374.5,-555.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6561"
-           points="232.451,-287.2 232.451,-306.2 387.451,-306.2 387.451,-287.2 232.451,-287.2 " />
+           id="polygon4011"
+           points="497.5,-555.2 497.5,-536.2 374.5,-536.2 374.5,-536.2 374.5,-555.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6563"
+           id="text4013"
            font-size="11.00"
-           y="-293.29999"
-           x="235.451">datetime</text>
+           y="-542.29999"
+           x="377.5">variable_name</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6565"
-           points="232.451,-268.2 232.451,-287.2 387.451,-287.2 387.451,-268.2 232.451,-268.2 " />
+           id="polygon4015"
+           points="497.5,-536.2 497.5,-517.2 374.5,-517.2 374.5,-517.2 374.5,-536.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6567"
+           id="text4017"
            font-size="11.00"
-           y="-274.29999"
-           x="235.451">variable_name</text>
+           y="-523.29999"
+           x="377.5">value</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6569"
-           points="232.451,-249.2 232.451,-268.2 387.451,-268.2 387.451,-249.2 232.451,-249.2 " />
+           id="polygon4019"
+           points="497.5,-517.2 497.5,-498.2 374.5,-498.2 374.5,-498.2 374.5,-517.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6571"
+           id="text4021"
            font-size="11.00"
-           y="-255.3"
-           x="235.451">value</text>
-        <polygon
-           style="fill:none;stroke:#000000"
-           id="polygon6573"
-           points="232.451,-230.2 232.451,-249.2 387.451,-249.2 387.451,-230.2 232.451,-230.2 " />
-        <text
-           style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6575"
-           font-size="11.00"
-           y="-236.3"
-           x="235.451">unit</text>
+           y="-504.29999"
+           x="377.5">unit</text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6577"
-           points="232.451,-211.2 232.451,-230.2 295.451,-230.2 295.451,-211.2 232.451,-211.2 " />
+           id="polygon4023"
+           points="421.5,-498.2 421.5,-479.2 374.5,-479.2 374.5,-479.2 374.5,-498.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6579"
-           points="232.451,-211.2 232.451,-230.2 295.451,-230.2 295.451,-211.2 232.451,-211.2 " />
+           id="polygon4025"
+           points="421.5,-498.2 421.5,-479.2 374.5,-479.2 374.5,-479.2 374.5,-498.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6581"
+           id="text4027"
            font-size="11.00"
-           y="-217.3"
-           x="235.451">&lt; 1</text>
+           y="-485.29999"
+           x="377.5">&lt; 1</text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6583"
-           points="295.451,-211.2 295.451,-230.2 354.451,-230.2 354.451,-211.2 295.451,-211.2 " />
+           id="polygon4029"
+           points="472.5,-498.2 472.5,-479.2 421.5,-479.2 421.5,-479.2 421.5,-498.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6585"
-           points="295.451,-211.2 295.451,-230.2 354.451,-230.2 354.451,-211.2 295.451,-211.2 " />
+           id="polygon4031"
+           points="472.5,-498.2 472.5,-479.2 421.5,-479.2 421.5,-479.2 421.5,-498.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6587"
+           id="text4033"
            font-size="11.00"
-           y="-217.3"
-           x="319.06201">0 rows</text>
+           y="-485.29999"
+           x="437.11099">0 rows</text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6589"
-           points="354.451,-211.2 354.451,-230.2 387.451,-230.2 387.451,-211.2 354.451,-211.2 " />
+           id="polygon4035"
+           points="497.5,-498.2 497.5,-479.2 472.5,-479.2 472.5,-479.2 472.5,-498.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6591"
-           points="354.451,-211.2 354.451,-230.2 387.451,-230.2 387.451,-211.2 354.451,-211.2 " />
+           id="polygon4037"
+           points="497.5,-498.2 497.5,-479.2 472.5,-479.2 472.5,-479.2 472.5,-498.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6593"
+           id="text4039"
            font-size="11.00"
-           y="-217.3"
-           x="378.33801"> </text>
+           y="-485.29999"
+           x="488.38599"> </text>
       </a>
     </g>
   </g>
   <g
      class="edge"
      id="edge6"
-     transform="matrix(-1.0470679,0,0,0.99837136,224.3282,531.00598)"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90">
+     transform="matrix(-1.0668582,0,0,0.9976876,807.08197,735.82633)">
     <title
-       id="title6596">sampling_location_ancillary:sampling_location_id:w-&gt;sampling_location:sampling_location_id:e</title>
+       id="title4042">observation_ancillary:observation_id:w-&gt;observation:observation_id:e</title>
     <path
        style="fill:none;stroke:#000000"
        inkscape:connector-curvature="0"
-       id="path6598"
-       d="m 216.942,-316.348 c -12.936,-0.278 -20.637,-0.852 -38.491,-0.852" />
+       id="path4044"
+       d="m 358.896,-565.2 c -10.462,0 -17.382,0 -32.396,0" />
     <polygon
        style="fill:#000000;stroke:#000000"
-       id="polygon6600"
-       points="223.452,-316.281 231.488,-319.8 227.452,-316.241 231.451,-316.2 231.451,-316.2 231.451,-316.2 227.452,-316.241 231.415,-312.6 223.452,-316.281 223.452,-316.281 " />
+       id="polygon4046"
+       points="373.5,-565.2 373.5,-565.2 373.5,-565.2 369.5,-565.2 373.5,-561.6 365.5,-565.2 365.5,-565.2 365.5,-565.2 373.5,-568.8 369.5,-565.2 " />
     <circle
        style="fill:none;stroke:#000000"
        r="3.2"
-       id="ellipse6602"
-       cy="-316.314"
-       cx="220.252" />
+       id="ellipse4048"
+       cy="-565.20001"
+       cx="362.29999" />
   </g>
   <g
      class="node"
      id="node7"
-     transform="translate(-372.91675,559.6809)"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90">
+     transform="translate(-259.94753,525.09609)">
     <title
-       id="title6605">taxon_ancillary</title>
+       id="title4051">taxon_ancillary</title>
     <g
        id="a_node7">
       <a
          xlink:href="tables/taxon_ancillary.html"
-         id="a6608"
-         xlink:title="taxon_ancillary">
+         xlink:title="taxon_ancillary"
+         id="a4054">
         <polygon
            style="fill:#ffffff;stroke:none"
-           id="polygon6610"
-           points="262.451,-38.2 262.451,-190.2 356.451,-190.2 356.451,-38.2 262.451,-38.2 " />
+           id="polygon4056"
+           points="222.5,-38.2 222.5,-38.2 222.5,-190.2 316.5,-190.2 316.5,-38.2 " />
         <polygon
            style="fill:#9bab96;stroke:none"
-           id="polygon6612"
-           points="262.451,-171.2 262.451,-190.2 356.451,-190.2 356.451,-171.2 262.451,-171.2 " />
+           id="polygon4058"
+           points="222.5,-171.2 222.5,-171.2 222.5,-190.2 316.5,-190.2 316.5,-171.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6614"
-           points="262.451,-171.2 262.451,-190.2 356.451,-190.2 356.451,-171.2 262.451,-171.2 " />
+           id="polygon4060"
+           points="222.5,-171.2 222.5,-171.2 222.5,-190.2 316.5,-190.2 316.5,-171.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6616"
+           id="text4062"
            font-size="11.00"
            y="-177.3"
-           x="272.77899">taxon_ancillary</text>
+           x="232.827">taxon_ancillary</text>
         <polygon
            style="fill:#bed1b8;stroke:none"
-           id="polygon6618"
-           points="262.451,-152.2 262.451,-171.2 356.451,-171.2 356.451,-152.2 262.451,-152.2 " />
+           id="polygon4064"
+           points="222.5,-152.2 222.5,-152.2 222.5,-171.2 316.5,-171.2 316.5,-152.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6620"
-           points="262.451,-152.2 262.451,-171.2 356.451,-171.2 356.451,-152.2 262.451,-152.2 " />
+           id="polygon4066"
+           points="222.5,-152.2 222.5,-152.2 222.5,-171.2 316.5,-171.2 316.5,-152.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6622"
+           id="text4068"
            font-size="11.00"
            y="-158.3"
-           x="265.44299">taxon_ancillary_id</text>
+           x="225.492">taxon_ancillary_id</text>
+        <polygon
+           style="fill:#f4f7da;stroke:none"
+           id="polygon4070"
+           points="222.5,-133.2 222.5,-133.2 222.5,-152.2 316.5,-152.2 316.5,-133.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6624"
-           points="262.451,-133.2 262.451,-152.2 356.451,-152.2 356.451,-133.2 262.451,-133.2 " />
+           id="polygon4072"
+           points="222.5,-133.2 222.5,-133.2 222.5,-152.2 316.5,-152.2 316.5,-133.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6626"
+           id="text4074"
            font-size="11.00"
            y="-139.3"
-           x="265.45099">taxon_id</text>
+           x="225.5">taxon_id</text>
+        <polygon
+           style="fill:#f4f7da;stroke:none"
+           id="polygon4076"
+           points="222.5,-114.2 222.5,-114.2 222.5,-133.2 316.5,-133.2 316.5,-114.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6628"
-           points="262.451,-114.2 262.451,-133.2 356.451,-133.2 356.451,-114.2 262.451,-114.2 " />
+           id="polygon4078"
+           points="222.5,-114.2 222.5,-114.2 222.5,-133.2 316.5,-133.2 316.5,-114.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6630"
+           id="text4080"
            font-size="11.00"
            y="-120.3"
-           x="265.45099">datetime</text>
+           x="225.5">datetime</text>
+        <polygon
+           style="fill:#f4f7da;stroke:none"
+           id="polygon4082"
+           points="222.5,-95.2 222.5,-95.2 222.5,-114.2 316.5,-114.2 316.5,-95.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6632"
-           points="262.451,-95.2 262.451,-114.2 356.451,-114.2 356.451,-95.2 262.451,-95.2 " />
+           id="polygon4084"
+           points="222.5,-95.2 222.5,-95.2 222.5,-114.2 316.5,-114.2 316.5,-95.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6634"
+           id="text4086"
            font-size="11.00"
            y="-101.3"
-           x="265.45099">variable_name</text>
+           x="225.5">variable_name</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6636"
-           points="262.451,-76.2 262.451,-95.2 356.451,-95.2 356.451,-76.2 262.451,-76.2 " />
+           id="polygon4088"
+           points="222.5,-76.2 222.5,-76.2 222.5,-95.2 316.5,-95.2 316.5,-76.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6638"
+           id="text4090"
            font-size="11.00"
            y="-82.300003"
-           x="265.45099">value</text>
+           x="225.5">value</text>
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6640"
-           points="262.451,-57.2 262.451,-76.2 356.451,-76.2 356.451,-57.2 262.451,-57.2 " />
+           id="polygon4092"
+           points="222.5,-57.2 222.5,-57.2 222.5,-76.2 316.5,-76.2 316.5,-57.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6642"
+           id="text4094"
            font-size="11.00"
            y="-63.299999"
-           x="265.45099">author</text>
+           x="225.5">author</text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6644"
-           points="262.451,-38.2 262.451,-57.2 294.451,-57.2 294.451,-38.2 262.451,-38.2 " />
+           id="polygon4096"
+           points="222.5,-38.2 222.5,-38.2 222.5,-57.2 254.5,-57.2 254.5,-38.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6646"
-           points="262.451,-38.2 262.451,-57.2 294.451,-57.2 294.451,-38.2 262.451,-38.2 " />
+           id="polygon4098"
+           points="222.5,-38.2 222.5,-38.2 222.5,-57.2 254.5,-57.2 254.5,-38.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6648"
+           id="text4100"
            font-size="11.00"
            y="-44.299999"
-           x="265.45099">&lt; 1</text>
+           x="225.5">&lt; 1</text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6650"
-           points="294.451,-38.2 294.451,-57.2 338.451,-57.2 338.451,-38.2 294.451,-38.2 " />
+           id="polygon4102"
+           points="254.5,-38.2 254.5,-38.2 254.5,-57.2 298.5,-57.2 298.5,-38.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6652"
-           points="294.451,-38.2 294.451,-57.2 338.451,-57.2 338.451,-38.2 294.451,-38.2 " />
+           id="polygon4104"
+           points="254.5,-38.2 254.5,-38.2 254.5,-57.2 298.5,-57.2 298.5,-38.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6654"
+           id="text4106"
            font-size="11.00"
            y="-44.299999"
-           x="303.06201">0 rows</text>
+           x="263.11099">0 rows</text>
         <polygon
            style="fill:#f7f7f7;stroke:none"
-           id="polygon6656"
-           points="338.451,-38.2 338.451,-57.2 356.451,-57.2 356.451,-38.2 338.451,-38.2 " />
+           id="polygon4108"
+           points="298.5,-38.2 298.5,-38.2 298.5,-57.2 316.5,-57.2 316.5,-38.2 " />
         <polygon
            style="fill:none;stroke:#000000"
-           id="polygon6658"
-           points="338.451,-38.2 338.451,-57.2 356.451,-57.2 356.451,-38.2 338.451,-38.2 " />
+           id="polygon4110"
+           points="298.5,-38.2 298.5,-38.2 298.5,-57.2 316.5,-57.2 316.5,-38.2 " />
         <text
            style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
-           id="text6660"
+           id="text4112"
            font-size="11.00"
            y="-44.299999"
-           x="347.33801"> </text>
+           x="307.38599"> </text>
       </a>
     </g>
   </g>
   <g
      class="edge"
      id="edge7"
-     transform="matrix(-0.8778576,0,0,-1.0048817,213.06547,272.58184)"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90">
+     transform="matrix(-0.79284509,0,0,1.0090908,232.4297,524.4018)">
     <title
-       id="title6663">taxon_ancillary:taxon_id:w-&gt;taxon:taxon_id:e</title>
+       id="title4115">taxon_ancillary:taxon_id:w-&gt;taxon:taxon_id:e</title>
     <path
        style="fill:none;stroke:#000000"
        inkscape:connector-curvature="0"
-       id="path6665"
-       d="m 246.899,-143.2 c -36.503,0 -50.698,0 -93.448,0" />
+       id="path4117"
+       d="m 206.916,-143.2 -68.6946,2.13821"
+       sodipodi:nodetypes="cc" />
     <polygon
        style="fill:#000000;stroke:#000000"
-       id="polygon6667"
-       points="261.451,-143.2 261.451,-143.2 257.451,-143.2 261.451,-139.6 253.451,-143.2 253.451,-143.2 253.451,-143.2 261.451,-146.8 257.451,-143.2 261.451,-143.2 " />
+       id="polygon4119"
+       points="221.5,-146.8 217.5,-143.2 221.5,-143.2 221.5,-143.2 221.5,-143.2 217.5,-143.2 221.5,-139.6 213.5,-143.2 213.5,-143.2 213.5,-143.2 " />
     <circle
        style="fill:none;stroke:#000000"
        r="3.2"
-       id="ellipse6669"
+       id="ellipse4121"
        cy="-143.2"
-       cx="250.25101" />
+       cx="210.3" />
   </g>
-  <image
-     y="205.6413"
-     x="-258.46255"
-     id="image7130"
-     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAALCAYAAACJQCjbAAAABHNCSVQICAgIfAhkiAAAAmVJREFU WIXtlr9LemEUxp/Te71CZg5Jv6acrtBoQyQSTi1hoBA1REMRNQn+Bf4JQXNES7TVFIXk6NTQEldp iEhbrmEgdsW8PA3B5Rtf5duSX7j0GV/ec3gfHs5zXtne3ubDwwN2d3eRSqWg6zq+g2maKBQKeH5+ RigUQjweRyKRgIh8q/6XntRxcHBATdMIgKFQiLlcjnd3d+xHo9Hg6uoqRYSGYXBpaYlzc3NUSjEW i9E0zb61v/wTCyRZKpU4MTFBABQRAmAsFuPh4SGbzaZ7+/39nQsLC5yenub19fWXTvf395yfn+f4 +Difnp4GK8M7fBpCkpZlMZlMUinlGuPz+ajrOjOZDAuFAo+OjigivLm56dnt9fWVU1NT3NraGpgC j2HJ+fk5Ly4uAACO4+D09BStVgsiApIAAF3X0el0EAwGMTo6itvbW4TD4Z4hmM1mcXJygvX19YGE rpfw+/22Zts2Go2Ge6iUAoAvhjiOg6GhIbTbbQQCAby8vPQ1xOfzodvtolqt/rwCjzE8PCxuZL29 vXFzc9PdIQCo6zpFhIuLizw+Pub+/j6VUiyXyz3nzbZtRiIRrq2tDWjCPcfnDqlUKoxGo+7uEBFO Tk4yn8/z8fHRvW3bNmdnZ2kYxl8/sXq9zuXlZQaDQVYqlcHK8A4Wzs7OGAgECICapjGdTvPq6oqO 4/SsqNVqTCQSVEoxmUxyZ2eHKysrHBkZ4czMDEul0oA1eApLUqkUTdPE3t4eNjY2+u6GPyGJYrGI y8tLVKtVjI2NIR6PI51Ow+/3/3DSepq6lMvliGEY3f/9kl8AAM4H2XEEt6Cu5zoAAAAASUVORK5C YII= "
-     style="image-rendering:optimizeSpeed;fill:none;opacity:0.984"
-     preserveAspectRatio="none"
-     height="7.9387999"
-     width="71.389"
-     transform="scale(-1,1)"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90" />
 </svg>
