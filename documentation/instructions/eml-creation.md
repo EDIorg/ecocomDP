@@ -2,7 +2,7 @@
 
 Introduction
 ---
-After the ecocomDP tables are created and validated, you will need to create an EML metadata record for them, and create a "data package" for a repository. Because the tables are standarized, a few R functions makes creating EML relatively quick. As this design pattern has been undergoing review, these R functions may not be up to date. Please check with info@environmentaldatarepository.org for the latest information.
+After the ecocomDP tables are created and validated, you will need to create an EML metadata record for them, and create a "data package" for a repository. Because the tables are standarized, a few R functions will generate table-level metadata relatively quickly, although you may need to add additional high-level metadata. As this design pattern has been undergoing review, these R functions may not be up to date. Please check with info@environmentaldatarepository.org for the latest information.
 
 Using the R package
 ---
