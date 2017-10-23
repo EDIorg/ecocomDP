@@ -10,7 +10,7 @@ Resources
 
 
 * Reformatting or creating ecocomDP tables:
-    * [General instructions with notes](../table-creation.md) 
+    * [General instructions with notes](table-creation.md) 
     * Detailed descriptions of the tables and relationships: [model documentation](../../model)
     * [Templates to assist in planning a converstion from your Level 0 data to this design pattern](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/template-mapping.md)
     * [Taxonomic lookup services to help align species names, and confirm ids](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/taxon-cleaning.md)
