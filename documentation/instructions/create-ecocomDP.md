@@ -2,15 +2,8 @@
 
 Introduction
 ---
-The ecocom design pattern (ecocomDP) is a flexible intermediate for ecological community survey data. 
-For information on the process see https://environmentaldatainitiative.org/resources/tools/dataset-design/
 
-This document contains guidelines for creating tables in this design pattern. Other resources are available
-* Detailed descriptions of the tables and relationships in the model: ../model
-* [Detailed info about creating EML metadata for a group of tables in this design pattern](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/eml-creation.md)
-* [Templates to assist in planning a converstion from your Level 0 data to this design pattern](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/template-mapping.md)
-* [Taxonomic lookup services help align species names, and confirm ids](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/taxon-cleaning.md)
-* [Structural QC for the final 7 tables](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/table-validation.md)
+This document contains guidelines for creating tables in this design pattern. Other resources are available [ link back to readme.]
 
 General guidelines
 ---
