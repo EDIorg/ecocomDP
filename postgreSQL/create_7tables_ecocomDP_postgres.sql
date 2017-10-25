@@ -62,7 +62,6 @@ CREATE TABLE "ecocom_dp".taxon (
 -- DROP TABLE "ecocom_dp".observation;
 CREATE TABLE "ecocom_dp".observation (
 	observation_id character varying(100) NOT NULL,
-	event_id character varying(100) NOT NULL,
 	package_id character varying(100) NOT NULL,
 	location_id character varying(100) NOT NULL,
 	observation_datetime timestamp without time zone,
@@ -162,7 +161,7 @@ ALTER TABLE ONLY "ecocom_dp".observation_ancillary
 
 /* add FK constraints
 */
--- observation refs sampling_loc, taxon, event
+-- observation refs sampling_loc, taxon, summary
 ALTER TABLE ONLY "ecocom_dp".observation
     ADD CONSTRAINT observation_location_fk FOREIGN KEY (location_id) REFERENCES "ecocom_dp".location (location_id) MATCH SIMPLE     
     ON UPDATE CASCADE;
