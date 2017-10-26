@@ -28,7 +28,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -62,7 +62,7 @@
      inkscape:window-height="1021"
      id="namedview4483"
      showgrid="false"
-     inkscape:zoom="0.64681662"
+     inkscape:zoom="1.2936332"
      inkscape:cx="220.07839"
      inkscape:cy="502.16936"
      inkscape:window-x="216"
@@ -79,8 +79,8 @@
        id="a_node1">
       <a
          xlink:href="tables/dataset_summary.html"
-         xlink:title="dataset_summary"
-         id="a3943">
+         id="a3943"
+         xlink:title="dataset_summary">
         <polygon
            style="fill:#ffffff;stroke:none"
            id="polygon3945"
@@ -228,8 +228,8 @@
        id="a_node3">
       <a
          xlink:href="tables/location.html"
-         xlink:title="location"
-         id="a4047">
+         id="a4047"
+         xlink:title="location">
         <polygon
            style="fill:#ffffff;stroke:none"
            id="polygon4049"
@@ -360,18 +360,19 @@
   <g
      class="edge"
      id="edge1"
-     transform="translate(183.2,755.7)">
+     transform="matrix(-0.89018401,0,0,1.0003303,353.71108,756.41437)">
     <title
        id="title4102">location:parent_location_id:w-&gt;location:location_id:e</title>
     <path
        style="fill:none;stroke:#000000"
        inkscape:connector-curvature="0"
        id="path4104"
-       d="M 28.4543,-230.823 C -6.80209,-270.294 0.621094,-362.2 87,-362.2 c 94.5,0 94.5,14 47.5,45" />
+       d="M 28.4543,-230.823 C 6.4144789,-245.35848 3.3739492,-254.31749 5.0250729,-269.46863 8.0720088,-297.42809 16.160738,-308.01641 40.715125,-314.72717"
+       sodipodi:nodetypes="csc" />
     <polygon
        style="fill:#000000;stroke:#000000"
        id="polygon4106"
-       points="41.8647,-223.914 36.4839,-223.827 39.5,-221.2 39.5,-221.2 39.5,-221.2 36.4839,-223.827 37.1353,-218.486 33.4679,-226.455 33.4679,-226.455 33.4679,-226.455 " />
+       points="39.5,-221.2 36.4839,-223.827 37.1353,-218.486 33.4679,-226.455 33.4679,-226.455 33.4679,-226.455 41.8647,-223.914 36.4839,-223.827 39.5,-221.2 39.5,-221.2 " />
     <circle
        style="fill:none;stroke:#000000"
        r="3.2000101"
@@ -389,8 +390,8 @@
        id="a_node4">
       <a
          xlink:href="tables/location_ancillary.html"
-         xlink:title="location_ancillary"
-         id="a4114">
+         id="a4114"
+         xlink:title="location_ancillary">
         <polygon
            style="fill:#ffffff;stroke:none"
            id="polygon4116"
@@ -562,8 +563,8 @@
        id="a_node5">
       <a
          xlink:href="tables/observation.html"
-         xlink:title="observation"
-         id="a4187">
+         id="a4187"
+         xlink:title="observation">
         <polygon
            style="fill:#ffffff;stroke:none"
            id="polygon4189"
@@ -793,8 +794,8 @@
        id="a_node7">
       <a
          xlink:href="tables/taxon.html"
-         xlink:title="taxon"
-         id="a4284">
+         id="a4284"
+         xlink:title="taxon">
         <polygon
            style="fill:#ffffff;stroke:none"
            id="polygon4286"
@@ -945,8 +946,8 @@
        id="a_node6">
       <a
          xlink:href="tables/observation_ancillary.html"
-         xlink:title="observation_ancillary"
-         id="a4347">
+         id="a4347"
+         xlink:title="observation_ancillary">
         <polygon
            style="fill:#ffffff;stroke:none"
            id="polygon4349"
@@ -1105,8 +1106,8 @@
        id="a_node8">
       <a
          xlink:href="tables/taxon_ancillary.html"
-         xlink:title="taxon_ancillary"
-         id="a4414">
+         id="a4414"
+         xlink:title="taxon_ancillary">
         <polygon
            style="fill:#ffffff;stroke:none"
            id="polygon4416"
