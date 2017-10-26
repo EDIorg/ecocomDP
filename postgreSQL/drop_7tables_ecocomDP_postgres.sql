@@ -15,4 +15,6 @@ DROP TABLE "ecocom_dp".location;
 DROP TABLE "ecocom_dp".dataset_summary;
 DROP TABLE "ecocom_dp".taxon;
 
-
+/* this table is a stub, that will not be included in csv implementations. 
+It is necessary for sql implementations though, to connect obs and obs_ancillary. */
+DROP TABLE "ecocom_dp".event;
