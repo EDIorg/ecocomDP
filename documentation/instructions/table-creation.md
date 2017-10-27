@@ -141,7 +141,7 @@ Column notes
 |  column name  |   type    | required |  references cols   | note |
 |---------------|-----------|----------|--------------------|-------|  
 |observation_ancillary_id | char |yes| NA	|  	|
-|event_id       | char    |yes| observation.event_id	| required if the table is present, for the many:many relationship with observation	  	|
+|event_id       | char    |yes| observation.event_id	| participates in the the many:many relationship with observation	  	|
 |variable_name            | char |yes| NA | in EML metadata, these should be code-def pairs (enumeratedList)  		|
 |value                    | char | no| NA	|note that typing is char, to accomodate strings|
 |unit                     | char | no| NA	|   	|
