@@ -140,16 +140,16 @@ define_variables <- function(data.path, sep) {
           tables_out[[i]] <- table_names[i]
         }
       }
+      # Prompt the user to manually edit the catvars file and custom unit files.
+      tables_out <- unlist(tables_out)
+      print("Open:")
+      for (i in 1:length(tables_out)){
+        print(paste(tables_out[i], "_variables", ".txt", sep = ""))
+      }
+      print(paste("add definitions and units then save, and close.",sep = ""))
+      view_unit_dictionary()
     }
     write_catvars(tables_found, sep, table_names)
   }
-  # Prompt the user to manually edit the catvars file and custom unit files.
-  tables_out <- unlist(tables_out)
-  print("Open:")
-  for (i in 1:length(tables_out)){
-    print(paste(tables_out[i], "_variables", ".txt", sep = ""))
-  }
-  print(paste("add definitions and units then save, and close.",sep = ""))
-  view_unit_dictionary()
 }
 
