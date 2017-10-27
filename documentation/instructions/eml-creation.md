@@ -24,4 +24,6 @@ library(devtools)
 
 3. Define ecocomDP variables and assign units with `define_variables`. Consult function documentation for more information.
 
-4. Create ecocomDP EML with `make_eml`. See function documentation for more information.
+4. Validate your ecocomDP tables relative to the model ecocomDP [following these instructions](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/table-validation.md).
+
+5. Create ecocomDP EML with `make_eml`. See function documentation for more information.
