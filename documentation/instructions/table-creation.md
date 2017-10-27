@@ -78,7 +78,7 @@ Column notes
 |  column name 	|   type	| required |  references cols 	| note |
 |---------------|-----------|----------|-------------------|-------|  
 |observation_id       |char |yes       |NA    	|most likely, will not be in the L0 data, so autogenerate after table is populated	|
-|event_id             |char |no        | observation_ancillary.event_id     |       |
+|event_id             |char |no        | observation_ancillary.event_id     | required if the observation_ancillary table is used      |
 |package_id           |char |yes       | NA  	|   	|
 |location_id          |char |yes       |location.location_id |   	|
 |observation_datetime |datetime  |yes  |NA   	|ISO preferred 	    |
