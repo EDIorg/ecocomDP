@@ -20,8 +20,10 @@ install_github("EDIorg/ecocomDP")
 library(devtools)
 ```
 
-2. Import and complete template files to provide additional metadata to the ecocomDP EML. Use the function `import_templates` and consult the function documentation for more information.
+2. Validate your ecocomDP tables relative to the model ecocomDP [following these instructions](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/table-validation.md).
 
-3. Define ecocomDP variables and assign units with `define_variables`. Consult function documentation for more information.
+3. Import and complete template files to provide additional metadata to the ecocomDP EML. Use the function `import_templates` and consult the function documentation for more information.
 
-4. Create ecocomDP EML with `make_eml`. See function documentation for more information.
+4. Define ecocomDP variables and assign units with `define_variables`. Consult function documentation for more information.
+
+5. Create ecocomDP EML with `make_eml`. See function documentation for more information.
