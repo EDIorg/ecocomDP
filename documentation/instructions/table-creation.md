@@ -78,6 +78,7 @@ Column notes
 |  column name 	|   type	| required |  references cols 	| note |
 |---------------|-----------|----------|-------------------|-------|  
 |observation_id       |char |yes       |NA    	|most likely, will not be in the L0 data, so autogenerate after table is populated	|
+|event_id             |char |no        | observation_ancillary.event_id     |       |
 |package_id           |char |yes       | NA  	|   	|
 |location_id          |char |yes       |location.location_id |   	|
 |observation_datetime |datetime  |yes  |NA   	|ISO preferred 	    |
@@ -128,14 +129,19 @@ Table: observation_ancillary
 ---
 Description: ancillary information about an observational event for context, but that are not about the organism or sampling location. Examples: water depth, height of a tower, temperature of medium. 
 
-There is no datatime field in the observation_ancillary table. Since it is context for the observation, it will inherit observation datetimes.
+This table can hold a variety of measurements, and the relationship to the observation table is "many-to-many", that is, there may be many core observation and many ancillary observations collected during the same event (unlike the relationships in the other two ancillary-table pairs, which are one-to-many). For this reason, the relationship linking the event_id in the two tables is depicted graphically with a dotted line [see ecocomDP.png](ecocomDP.png).  
+
+There is no datatime field in the observation_ancillary table. Since it is context for the observation, and happening at the same time, it will inherit observation datetimes.
+
+Recommendations for handling or joining observation and observation_ancillary can be found on the [table merging](../table_merging.md) page.
+
 
 Column notes
 
 |  column name  |   type    | required |  references cols   | note |
 |---------------|-----------|----------|--------------------|-------|  
 |observation_ancillary_id | char |yes| NA	|  	|
-|observation_id           | char |yes| NA	| observation.observation_id                         	| 	  	|
+|event_id           | char |yes| NA	| observation.event_id                         	| 	  	|
 |variable_name            | char |yes| NA | in EML metadata, these should be code-def pairs (enumeratedList)  		|
 |value                    | char | no| NA	|note that typing is char, to accomodate strings|
 |unit                     | char | no| NA	|   	|
@@ -143,7 +149,8 @@ Column notes
 
 Table: dataset_summary
 ---
-Description: summary info about the dataset. some could be elevated to metadata to enhance discovery.
+Description: summary info about the dataset. This is a one-line table that can be created by a utility function after the other tables are finished.
+For this function, see: [link TBD]().
 
 Columns
 
