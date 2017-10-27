@@ -112,9 +112,7 @@ Table: observation_ancillary
 ---
 Description: ancillary information about an observational event for context, but that are not about the organism or sampling location. Examples: water depth, height of a tower, temperature of medium. These are very often "environmental driver" data in analyses.
 
-This table can hold a variety of measurements, and the relationship to the "observation" table is "many-to-many", that is, there may be many core observation and many ancillary observations collected during the same event (unlike the relationships in the other two ancillary-table pairs, which are one-to-many). For this reason, the relationship linking the event_id in the two tables is depicted graphically with a dotted line [see ecocomDP.png](ecocomDP.png)). 
-
-Recommendations for handling or joining these tables can be found in the [instructions](../instructions).
+This table can hold a variety of measurements, and the relationship to the observation table is "many-to-many", that is, there may be many core observation and many ancillary observations collected during the same event (unlike the relationships in the other two ancillary-table pairs, which are one-to-many). For this reason, the relationship linking the event_id in the two tables is depicted graphically with a dotted line [see ecocomDP.png](ecocomDP.png)). Recommendations for handling or joining observation and observation_ancillary can be found in the [instructions](../instructions).
 
 Columns
 
