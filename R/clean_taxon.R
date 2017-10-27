@@ -14,7 +14,7 @@
 #'     
 #' @param delimiter
 #'     Delimiter of taxon table in the working directory. Can be comma (",") or
-#'     tab ("\t").
+#'     tab ("\\t").
 #'     
 #' @param cleaning.step
 #'     Step in the data cleaning process. Can be L0, L1, L2, L3, L4.

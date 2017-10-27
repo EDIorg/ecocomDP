@@ -16,7 +16,7 @@
 #'     
 #' @param delimiter
 #'     The field delimiter of ecocomDP tables. Can be comma or tab delimited 
-#'     (i.e. "," or "\t")
+#'     (i.e. "," or "\\t")
 #'
 #' @return 
 #'     A validation report printed in the console window of RStudio. This 

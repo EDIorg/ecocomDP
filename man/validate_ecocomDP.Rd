@@ -13,7 +13,7 @@ validate_ecocomDP(path, delimiter)
 tables. This directory should not contain anything else.}
 
 \item{delimiter}{The field delimiter of ecocomDP tables. Can be comma or tab delimited 
-(i.e. "," or "\t")}
+(i.e. "," or "\\t")}
 }
 \value{
 A validation report printed in the console window of RStudio. This 

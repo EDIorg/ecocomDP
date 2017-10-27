@@ -14,7 +14,7 @@ clean_taxon(path, parent.package.id, table.name, taxon.col)
 be exported.}
 
 \item{delimiter}{Delimiter of taxon table in the working directory. Can be comma (",") or
-tab ("\t").}
+tab ("\\t").}
 
 \item{cleaning.step}{Step in the data cleaning process. Can be L0, L1, L2, L3, L4.}
 }

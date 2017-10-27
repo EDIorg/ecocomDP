@@ -13,7 +13,7 @@
 #'     ecocomDP tables.
 #'     
 #' @param delimiter
-#'     The delimiter of input files. Can be comma (i.e. ",") or tab (i.e. "\t")
+#'     The delimiter of input files. Can be comma (i.e. ",") or tab (i.e. "\\t")
 #'
 #' @return 
 #'     Attributes formatted for make_eml.R

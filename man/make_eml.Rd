@@ -24,7 +24,7 @@ child.package.id then query EDI for one
 (info@environmentaldatainitiative.org).}
 
 \item{sep}{The field separator string. Values within each row of ecocomDP tables
-are separated by this string. Valid options are "," or "\t".}
+are separated by this string. Valid options are "," or "\\t".}
 
 \item{user.id}{A character string specifying the LTER or EDI ID of person publishing 
 the ecocomDP data package (e.g. "EDI"). If you don't have a user ID then 

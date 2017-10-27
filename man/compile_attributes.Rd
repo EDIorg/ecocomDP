@@ -10,7 +10,7 @@ make_eml(path, parent.package.id, child.package.id)
 \item{path}{A path to the dataset working directory containing the validated 
 ecocomDP tables.}
 
-\item{delimiter}{The delimiter of input files. Can be comma (i.e. ",") or tab (i.e. "\t")}
+\item{delimiter}{The delimiter of input files. Can be comma (i.e. ",") or tab (i.e. "\\t")}
 }
 \value{
 Attributes formatted for make_eml.R
