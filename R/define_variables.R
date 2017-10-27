@@ -73,6 +73,10 @@ define_variables <- function(data.path, sep) {
   if (missing(data.path)){
     stop("Specify path to dataset working directory.")
   }
+  if (missing(sep)){
+    stop("Specify field separator.")
+  }
+  
   
   # Parameters ----------------------------------------------------------------
   
