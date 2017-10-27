@@ -11,7 +11,7 @@ define_variables(data.path = "", sep = "")
 containing ecocomDP tables.}
 
 \item{sep}{The field separator string. Values within each row of ecocomDP tables
-are separated by this string. Valid options are "," or "\t".}
+are separated by this string. Valid options are "," or "\\t".}
 }
 \value{
 A tab delimited UTF-8 file in the dataset working directory titled 

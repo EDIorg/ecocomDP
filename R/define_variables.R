@@ -11,7 +11,7 @@
 #'     containing ecocomDP tables.
 #' @param sep
 #'     The field separator string. Values within each row of ecocomDP tables
-#'     are separated by this string. Valid options are "," or "\t".
+#'     are separated by this string. Valid options are "," or "\\t".
 #'
 #' @return 
 #'     A tab delimited UTF-8 file in the dataset working directory titled 
