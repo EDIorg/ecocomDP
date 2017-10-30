@@ -17,7 +17,7 @@ library(devtools)
 
 # Install and load the ecocomDP
 install_github("EDIorg/ecocomDP")
-library(devtools)
+library(ecocomDP)
 ```
 
 2. Validate your ecocomDP tables relative to the model ecocomDP [following these instructions](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/table-validation.md).
