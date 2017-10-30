@@ -16,7 +16,7 @@ library(devtools)
 
 # Install and load the ecocomDP
 install_github("EDIorg/ecocomDP")
-library(devtools)
+library(ecocomDP)
 ```
 
 2. Run the `validate_ecocomDP` function. Consult function documentation for use.
