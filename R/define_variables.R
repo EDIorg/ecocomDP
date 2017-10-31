@@ -80,8 +80,8 @@ define_variables <- function(data.path, sep) {
   
   # Parameters ----------------------------------------------------------------
   
-  table_patterns <- c("observation\\b", "event\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b", "summary\\b", "sampling_location\\b", "taxon\\b")
-  table_names <- c("observation", "event", "sampling_location_ancillary", "taxon_ancillary", "summary", "sampling_location", "taxon")
+  table_patterns <- c("observation\\b", "event\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b", "summary\\b", "location\\b", "taxon\\b")
+  table_names <- c("observation", "event", "sampling_location_ancillary", "taxon_ancillary", "summary", "location", "taxon")
   dir_files <- list.files(data.path)
   table_names_found <- list()
   tables_found <- list()

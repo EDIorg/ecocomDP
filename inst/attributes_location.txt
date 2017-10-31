@@ -1,0 +1,7 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+location_id	Identifier assigned to each unique entry.	character				
+location_name	Sampling location full name.	character				
+latitude	Latitude of the sampling location in decimal degrees. Latitudes south of the equator are negative.	numeric	degree		NA	Not available.
+longitude	Longitude of the sampling location in decimal degrees. Longitudes west of the prime meridian are negative.	numeric	degree		NA	Not available.
+elevation	Sampling location elevation in meters relative to sea level. Above sea level is positive. Below sea level is negative.	numeric	meter		NA	Not available.
+parent_location_id	Sampling location identifier from this table for the parent of this sampling location. Presence indicates nested locations.	character				

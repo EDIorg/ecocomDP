@@ -70,12 +70,12 @@ validate_ecocomDP <- function(path, delimiter) {
                          na.strings = "NA")
   
   valid_table_names <- paste(unique(criteria$table), "\\b", sep = "")
-  table_names <- c("sampling_location", "taxon", "event", "observation", "sampling_location_ancillary", "taxon_ancillary", "dataset_summary")
+  table_names <- c("location", "taxon", "event", "observation", "sampling_location_ancillary", "taxon_ancillary", "dataset_summary")
   required_table_names <- criteria$table[(is.na(criteria$class)) & (criteria$required == "yes")]
   valid_column_names <- unique(criteria$column)
   valid_column_names <- valid_column_names[!is.na(valid_column_names)]
-  required_table_names_adjusted <- c("sampling_location\\b", "taxon\\b", "observation\\b", "dataset_summary\\b")
-  table_names_adjusted <- c("sampling_location\\b", "taxon\\b", "event\\b", "observation\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b")
+  required_table_names_adjusted <- c("location\\b", "taxon\\b", "observation\\b", "dataset_summary\\b")
+  table_names_adjusted <- c("location\\b", "taxon\\b", "event\\b", "observation\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b")
   
   # Validate input ecocomDP to criteria listed in /inst/ ----------------------
   
@@ -169,7 +169,7 @@ validate_ecocomDP <- function(path, delimiter) {
 
   print("Check for NULL columns ...")
 
-  table_names <- c("sampling_location", "taxon", "event", "observation", "sampling_location_ancillary", "taxon_ancillary", "dataset_summary")
+  table_names <- c("location", "taxon", "event", "observation", "sampling_location_ancillary", "taxon_ancillary", "dataset_summary")
   report_null_columns <- function(dir_files, delimiter, table_names, valid_table_names){
     msg <- list()
     input_table_names <- dir_files[attr(regexpr(paste(valid_table_names, 
