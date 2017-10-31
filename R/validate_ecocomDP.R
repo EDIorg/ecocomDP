@@ -66,12 +66,12 @@ validate_ecocomDP <- function(data.path, sep) {
                          na.strings = "NA")
   
   valid_table_names <- paste(unique(criteria$table), "\\b", sep = "")
-  table_names <- c("location", "taxon", "event", "observation", "location_ancillary", "taxon_ancillary", "dataset_summary")
+  table_names <- c("location", "taxon", "observation", "location_ancillary", "taxon_ancillary", "observation_ancillary", "dataset_summary")
   required_table_names <- criteria$table[(is.na(criteria$class)) & (criteria$required == "yes")]
   valid_column_names <- unique(criteria$column)
   valid_column_names <- valid_column_names[!is.na(valid_column_names)]
   required_table_names_adjusted <- c("location\\b", "taxon\\b", "observation\\b", "dataset_summary\\b")
-  table_names_adjusted <- c("location\\b", "taxon\\b", "event\\b", "observation\\b", "location_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b")
+  table_names_adjusted <- c("location\\b", "taxon\\b", "observation\\b", "location_ancillary\\b", "taxon_ancillary\\b", "observation_ancillary\\b", "dataset_summary\\b")
   
   # Validate input ecocomDP to criteria listed in /inst/ ----------------------
   
@@ -257,7 +257,7 @@ validate_ecocomDP <- function(data.path, sep) {
                               as.is = T,
                               na.strings = "NA")
         required_column_names <- criteria$column[(!is.na(criteria$class)) & (criteria$table == table_names[i]) & (criteria$required == "yes")]
-        if ((table_names[i] == "observation") & (!identical(grep(table_names_adjusted[3], dir_files, value = T), character(0)))){
+        if ((table_names[i] == "observation") & (!identical(grep("observation_ancillary\\b", dir_files, value = T), character(0)))){
           required_column_names <- c(required_column_names, "event_id")
         }
         colnames_in <- colnames(data_in)
