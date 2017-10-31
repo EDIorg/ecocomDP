@@ -31,7 +31,7 @@ Description: identifying information about a place (lonitude, latitude, elevatio
 
 Columns
 
-|  column name 	|   type	|   required in table?	|  references cols 	| description | example |
+|  column name 	|   type	|   not NULL required?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|-------------|---------|
 | location_id | character | yes  	      |   NA| Identifier assigned to each unique entry. | sbclter_abur_I |
 | location_name   	|  character  	| no 	|   NA | Sampling location full name.	|  Arroyo Burro Reef, transect I 	|
@@ -47,7 +47,7 @@ Description: identifying information about a taxon, eg, name, id and system. Whe
 
 Columns
 
-|  column name 	|   type	| required in table? |  references cols 	| description | example |
+|  column name 	|   type	| not NULL required? |  references cols 	| description | example |
 |---------------|---------|--------------------|-------------------|--------------|---------|
 | taxon_id           | character |  yes        | NA | ID used in the dataset | sbclter_MAPY |  
 |	taxon_rank         | character |  no         | NA | Rank of the organism | species |   
@@ -58,14 +58,14 @@ Columns
 
 Table: observation
 ---
-Description: This is the core table - which holds the observations being analyzed, eg, organism abundance or density. Observations must be linked to a taxon
+Description: This is the core table - which holds the observations being analyzed, eg, organism abundance or density. Observations must be linked to a taxon and to a location. Linking to ancillary observations (via event_id) is optional, and event_id is required to be populated only if the observation_ancillary table is created.
 
 Columns
 
-|  column name 	|   type	|   required in table?	|  references cols 	| description | example |
+|  column name 	|   type	|   not NULL required?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|  
 | observation_id         | character |yes|   	|  A unique id for this record      |  4161   	|
-| event_id             | character |yes|(table = observation_ancillary) event_id    | The ID of the sampling event   | 2009mar03_dive1      |
+| event_id             | character |yes|(table = observation_ancillary) event_id    | The ID of the sampling event, required if observation_ancillary table is included   | 2009mar03_dive1      |
 | package_id           | character |yes|(table = summary) package_id   	| The ID of this data package  	| edi.100001.1   	|
 | location_id | character |yes| (table = location) location_id |  A reference to a location	|  sbc_ABUR_1 	|
 | observation_datetime | datetime  |yes|   	|Date and time of the observation, following the ISO 8601 standard format YYYY-MM-DDThh:mm+-hh to the precision of datetime data| 2017-08-01 or 2017-08-01T14:01-07  	|
@@ -80,9 +80,9 @@ Description: additional information about a place that does not change frequentl
 
 Columns
 
-|  column name 	|   type	|   required in table?	|  references cols 	| description | example |
+|  column name 	|   type	|   not NULL required?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|-------------|---------| 
-|location_ancillary_id | character |yes|          |   	|  a unique id for this record 	|
+|location_ancillary_id | character |yes|          |   Identifier of the sampling location ancillary.	|   	|
 |location_id           | character |yes|(table = location) location_id   	| Id of the location for reference	| sbclter_ABUR_1  	|
 |datetime              | datetime  |no |          | date and time of the ancillary info, ISO datetime	|  experimental treatment date 	| 
 |variable_name         | character |yes|   	      |  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList) 	| treatment  	|
@@ -97,14 +97,15 @@ Description: additional info about an organism that does not change frequently, 
 
 Columns
 
-|  column name 	|   type	|   required in table?	|  references cols 	| description | example |
+|  column name 	|   type	|   not NULL required?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|     
 | taxon_ancillary_id | character |yes|            | a unique id for this record  	|   	|
-| taxon_id           | character |yes| (table = taxon) taxon_id   	|   	|   	|
+| taxon_id           | character |yes| (table = taxon) taxon_id   	|  The ID of the taxon table. 	|   	|
 | datetime           | datetime |no|            | date and time of the ancillary info, ISO datetime  	|   	|
 | variable_name      | character |yes|            |  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  trophic_level 	|
 | value              | character |yes|            |  value for the variable 	|   primary producer	|
 | unit               | character |no |            | unit for this variable  	|   	|
+| author             | character | no |           | Author associated with taxon identification for this dataset |    |
 
 
 
@@ -116,7 +117,7 @@ This table can hold a variety of measurements, and the relationship to the obser
 
 Columns
 
-|  column name 	|   type	 |   required in table?	|  references cols 	| description | example |
+|  column name 	|   type	 |   not NULL required?	|  references cols 	| description | example |
 |---------------|----------|-----------------------|-------------------|--------------|---------| 
 | observation_ancillary_id | character |yes| NA	| the id of the observation_ancillary, a row or record identifier 	| 	TBE01JUN05  	|
 | event_id             | character |yes|(table = observation) event_id    | the ID of the sampling event   | 2009mar03_dive1      |
@@ -131,13 +132,13 @@ Description: summary info about the dataset. Information could be elevated to me
 
 Columns
 
-|  column name 	|   type	|   required in table?	|  references cols 	| description | example |
+|  column name 	|   type	|   not NULL required?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|
 | package_id                  | character |yes| (table = observation) package_id 	|  id of the L1 pkg (this package)	|  edi.100001.1 	|
 | original_package_id         | character |no|   	|  id of the L0 pkg (original, source) | knb-lter-sbc.21.17 |
-| length_of_survey_years      | integer   |yes|   	|   	| 17  	| 
-| number_of_years_sampled     | integer   |yes|   	|   	| 17  	|
-| std_dev_interval_betw_years | float     |yes|   	|   	| 1.1  	|
-| max_num_taxa                |integer    |yes|   	|   	| 1  	|
-| geo_extent_bounding_box_m2  |float      |no|   	|   	|  40 	|
+| length_of_survey_years      | integer   |yes|   	|   Number of years the study has been ongoing.	| 17  	| 
+| number_of_years_sampled     | integer   |yes|   	|   Number of years within the period of the study that samples were taken.	| 17  	|
+| std_dev_interval_betw_years | float     |yes|   	|  Standard deviation of the interval between sampling events. 	| 1.1  	|
+| max_num_taxa                |integer    |yes|   	|  Number of unique values in the taxon table. 	| 1  	|
+| geo_extent_bounding_box_m2  |float      |no|   	|   Area of the study location.	|  40 	|
 
