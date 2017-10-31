@@ -62,7 +62,7 @@ Description: This is the core table - which holds the observations being analyze
 
 Columns
 
-|  column name 	|   type	|   required in table?	|  references cols 	| description | example |
+|  column name 	|   type	|   not NULL required?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|  
 | observation_id         | character |yes|   	|  A unique id for this record      |  4161   	|
 | event_id             | character |yes*|(table = observation_ancillary) event_id    | The ID of the sampling event, required if observation_ancillary table is included   | 2009mar03_dive1      |
@@ -80,7 +80,7 @@ Description: additional information about a place that does not change frequentl
 
 Columns
 
-|  column name 	|   type	|   required in table?	|  references cols 	| description | example |
+|  column name 	|   type	|   not NULL required?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|-------------|---------| 
 |location_ancillary_id | character |yes|          |   	|  a unique id for this record 	|
 |location_id           | character |yes|(table = location) location_id   	| Id of the location for reference	| sbclter_ABUR_1  	|
@@ -97,7 +97,7 @@ Description: additional info about an organism that does not change frequently, 
 
 Columns
 
-|  column name 	|   type	|   required in table?	|  references cols 	| description | example |
+|  column name 	|   type	|   not NULL required?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|     
 | taxon_ancillary_id | character |yes|            | a unique id for this record  	|   	|
 | taxon_id           | character |yes| (table = taxon) taxon_id   	|   	|   	|
@@ -116,7 +116,7 @@ This table can hold a variety of measurements, and the relationship to the obser
 
 Columns
 
-|  column name 	|   type	 |   required in table?	|  references cols 	| description | example |
+|  column name 	|   type	 |   not NULL required?	|  references cols 	| description | example |
 |---------------|----------|-----------------------|-------------------|--------------|---------| 
 | observation_ancillary_id | character |yes| NA	| the id of the observation_ancillary, a row or record identifier 	| 	TBE01JUN05  	|
 | event_id             | character |yes|(table = observation) event_id    | the ID of the sampling event   | 2009mar03_dive1      |
@@ -131,7 +131,7 @@ Description: summary info about the dataset. Information could be elevated to me
 
 Columns
 
-|  column name 	|   type	|   required in table?	|  references cols 	| description | example |
+|  column name 	|   type	|   not NULL required?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|
 | package_id                  | character |yes| (table = observation) package_id 	|  id of the L1 pkg (this package)	|  edi.100001.1 	|
 | original_package_id         | character |no|   	|  id of the L0 pkg (original, source) | knb-lter-sbc.21.17 |
