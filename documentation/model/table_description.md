@@ -33,12 +33,12 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|-------------|---------|
-| location_id | character | yes  	      |   NA|   | sbclter_abur_I |
-| location_name   	|  character  	| no 	|   NA | 	|  Arroyo Burro Reef, transect I 	|
+| location_id | character | yes  	      |   NA| Identifier assigned to each unique entry. | sbclter_abur_I |
+| location_name   	|  character  	| no 	|   NA | Sampling location full name.	|  Arroyo Burro Reef, transect I 	|
 | latitude 	  |  float 	|   	no                  |   NA |Latitude in decimal degrees. Latitudes south of the equator are negative.|  34.400275	|
 | longitude 	|  float 	|   	no                  |   NA |Longitude in decimal degrees. Longitudes west of the prime meridian are negative.| -119.7445915 |
-| elevation	  |  float 	|   	np                  |   NA |Elevation in meters.| -15	|
-| parent_location_id	|  character | no  	|   NA| 	|  sbclter_abur	|
+| elevation	  |  float 	|   	np                  |   NA |Sampling location elevation in meters relative to sea level. Above sea level is positive. Below sea level is negative.| -15	|
+| parent_location_id	|  character | no  	|   NA| Sampling location identifier from this table for the parent of this sampling location. Presence indicates nested locations.	|  sbclter_abur	|
 
 
 Table: taxon
@@ -50,10 +50,10 @@ Columns
 |  column name 	|   type	| required in table? |  references cols 	| description | example |
 |---------------|---------|--------------------|-------------------|--------------|---------|
 | taxon_id           | character |  yes        | NA | ID used in the dataset | sbclter_MAPY |  
-|	taxon_rank         | character |  no         | NA | rank of the organism | species |   
-|	taxon_name         | character |  yes        | NA | species name | M. pyrifera | 
-|	authority_system   | character |  no         | NA | name of the system assigning the ID | ITIS|  
-|	authority_taxon_id | character |  no         | NA | ID in that system |  11274|
+|	taxon_rank         | character |  no         | NA | Rank of the organism | species |   
+|	taxon_name         | character |  yes        | NA | Species name | M. pyrifera | 
+|	authority_system   | character |  no         | NA | Name of the system assigning the taxon ID | ITIS|  
+|	authority_taxon_id | character |  no         | NA | ID in the authority system |  11274|
 
 
 Table: observation
@@ -64,10 +64,10 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|  
-| observation_id         | character |yes|   	|  a unique id for this record      |  4161   	|
-| event_id             | character |yes|(table = observation_ancillary) event_id    | the ID of the sampling event   | 2009mar03_dive1      |
-| package_id           | character |yes|(table = summary) package_id   	| the ID of this data package  	| edi.100001.1   	|
-| location_id | character |yes| (table = location) location_id |  a reference to a location	|  sbc_ABUR_1 	|
+| observation_id         | character |yes|   	|  A unique id for this record      |  4161   	|
+| event_id             | character |yes|(table = observation_ancillary) event_id    | The ID of the sampling event   | 2009mar03_dive1      |
+| package_id           | character |yes|(table = summary) package_id   	| The ID of this data package  	| edi.100001.1   	|
+| location_id | character |yes| (table = location) location_id |  A reference to a location	|  sbc_ABUR_1 	|
 | observation_datetime | datetime  |yes|   	|Date and time of the observation, following the ISO 8601 standard format YYYY-MM-DDThh:mm+-hh to the precision of datetime data| 2017-08-01 or 2017-08-01T14:01-07  	|
 | taxon_id             | character |yes| (table = taxon) taxon_id  	| reference to a taxon ID  	| sbclter_MAPY   	|
 | variable_name        | character |yes|   	| name of the variable measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  kelp_density  	|
