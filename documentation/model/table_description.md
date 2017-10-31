@@ -31,7 +31,7 @@ Description: identifying information about a place (lonitude, latitude, elevatio
 
 Columns
 
-|  column name 	|   type	|   required in table?	|  references cols 	| description | example |
+|  column name 	|   type	|   not NULL required?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|-------------|---------|
 | location_id | character | yes  	      |   NA| Identifier assigned to each unique entry. | sbclter_abur_I |
 | location_name   	|  character  	| no 	|   NA | Sampling location full name.	|  Arroyo Burro Reef, transect I 	|
@@ -47,7 +47,7 @@ Description: identifying information about a taxon, eg, name, id and system. Whe
 
 Columns
 
-|  column name 	|   type	| required in table? |  references cols 	| description | example |
+|  column name 	|   type	| not NULL required? |  references cols 	| description | example |
 |---------------|---------|--------------------|-------------------|--------------|---------|
 | taxon_id           | character |  yes        | NA | ID used in the dataset | sbclter_MAPY |  
 |	taxon_rank         | character |  no         | NA | Rank of the organism | species |   
