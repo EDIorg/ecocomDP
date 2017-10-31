@@ -105,6 +105,7 @@ Columns
 | variable_name      | character |yes|            |  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  trophic_level 	|
 | value              | character |yes|            |  value for the variable 	|   primary producer	|
 | unit               | character |no |            | unit for this variable  	|   	|
+| author             | character | no |           | Author associated with taxon identification for this dataset |    |
 
 
 
