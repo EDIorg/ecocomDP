@@ -290,8 +290,8 @@ make_eml <- function(data.path, code.path, parent.package.id, child.package.id, 
   
   # Loop through tables -------------------------------------------------------
 
-  table_patterns <- c("observation\\b", "event\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b", "location\\b", "taxon\\b")
-  table_names <- c("observation", "event", "sampling_location_ancillary", "taxon_ancillary", "dataset_summary", "location", "taxon")
+  table_patterns <- c("observation\\b", "event\\b", "location_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b", "location\\b", "taxon\\b")
+  table_names <- c("observation", "event", "location_ancillary", "taxon_ancillary", "dataset_summary", "location", "taxon")
   dir_files <- list.files(data.path)
   table_names_found <- list()
   tables_found <- list()

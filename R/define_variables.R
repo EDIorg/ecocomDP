@@ -80,8 +80,8 @@ define_variables <- function(data.path, sep) {
   
   # Parameters ----------------------------------------------------------------
   
-  table_patterns <- c("observation\\b", "event\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b", "summary\\b", "location\\b", "taxon\\b")
-  table_names <- c("observation", "event", "sampling_location_ancillary", "taxon_ancillary", "summary", "location", "taxon")
+  table_patterns <- c("observation\\b", "event\\b", "location_ancillary\\b", "taxon_ancillary\\b", "summary\\b", "location\\b", "taxon\\b")
+  table_names <- c("observation", "event", "location_ancillary", "taxon_ancillary", "summary", "location", "taxon")
   dir_files <- list.files(data.path)
   table_names_found <- list()
   tables_found <- list()
@@ -108,7 +108,7 @@ define_variables <- function(data.path, sep) {
     write_catvars <- function(tables_found, sep, table_names){
       tables_out <- list()
       for (i in 1:length(tables_found)){
-        if ((table_names[i] == "observation")|(table_names[i] == "event")|(table_names[i] == "sampling_location_ancillary")|(table_names[i] == "taxon_ancillary")){
+        if ((table_names[i] == "observation")|(table_names[i] == "event")|(table_names[i] == "location_ancillary")|(table_names[i] == "taxon_ancillary")){
           print(paste("Reading", tables_found[i]))
           data_in <- read.table(paste(data.path,
                                       "/",
