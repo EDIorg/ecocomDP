@@ -6,15 +6,15 @@
 #'     dataset is valid and can be combined with other datasets in the ecocomDP
 #'     with the aggregate_ecocomDP function.
 #'
-#' @usage validate_ecocomDP(path, delimiter)
+#' @usage validate_ecocomDP(data.path, sep)
 #'     Run this function after creating an ecocomDP and before making EML for 
 #'     it.
 #' 
-#' @param path 
+#' @param data.path 
 #'     A path to the dataset working directory containing \emph{only} ecocomDP 
 #'     tables. This directory should not contain anything else.
 #'     
-#' @param delimiter
+#' @param sep
 #'     The field delimiter of ecocomDP tables. Can be comma or tab delimited 
 #'     (i.e. "," or "\\t")
 #'
@@ -50,12 +50,12 @@
 #' @export
 #'
 
-validate_ecocomDP <- function(path, delimiter) {
+validate_ecocomDP <- function(data.path, sep) {
   
   # Parameters ----------------------------------------------------------------
   
   datetime_iso8601 <- "%Y-%m-%d"
-  dir_files <- list.files(path, recursive = F)
+  dir_files <- list.files(data.path, recursive = F)
 
   # Load validation criteria --------------------------------------------------
   
@@ -133,7 +133,7 @@ validate_ecocomDP <- function(path, delimiter) {
   
   print("Checking for NULL tables ...")
   
-  report_null_tables <- function(dir_files, delimiter, valid_table_names){
+  report_null_tables <- function(dir_files, sep, valid_table_names){
     msg <- list()
     input_table_names <- dir_files[attr(regexpr(paste(valid_table_names, 
                                                       collapse = "|"), 
@@ -141,12 +141,12 @@ validate_ecocomDP <- function(path, delimiter) {
                                         "match.length")
                                    != -1]
     for (i in 1:length(input_table_names)){
-      data_in <- read.table(paste(path,
+      data_in <- read.table(paste(data.path,
                                   "/",
                                   input_table_names[i],
                                   sep = ""),
                             header = T,
-                            sep = delimiter,
+                            sep = sep,
                             as.is = T,
                             na.strings = "NA")
       data_clean <- data_in[rowSums(is.na(data_in)) != ncol(data_in), ]
@@ -160,7 +160,7 @@ validate_ecocomDP <- function(path, delimiter) {
       }
     }
   }
-  report_null_tables(dir_files, delimiter, valid_table_names)
+  report_null_tables(dir_files, sep, valid_table_names)
   
   
   # Columns ---------------------------------------------------------------------
@@ -170,7 +170,7 @@ validate_ecocomDP <- function(path, delimiter) {
   print("Check for NULL columns ...")
 
   table_names <- c("location", "taxon", "event", "observation", "location_ancillary", "taxon_ancillary", "dataset_summary")
-  report_null_columns <- function(dir_files, delimiter, table_names, valid_table_names){
+  report_null_columns <- function(dir_files, sep, table_names, valid_table_names){
     msg <- list()
     input_table_names <- dir_files[attr(regexpr(paste(valid_table_names, 
                                                       collapse = "|"), 
@@ -179,12 +179,12 @@ validate_ecocomDP <- function(path, delimiter) {
                                    != -1]
     for (i in 1:length(input_table_names)){
       table_in <- grep(input_table_names[i], dir_files, value = T)
-      data_in <- read.table(paste(path,
+      data_in <- read.table(paste(data.path,
                                   "/",
                                   table_in,
                                   sep = ""),
                             header = T,
-                            sep = delimiter,
+                            sep = sep,
                             as.is = T,
                             na.strings = "NA")
       output <-sapply(data_in, function(x)all(is.na(x)))
@@ -203,24 +203,24 @@ validate_ecocomDP <- function(path, delimiter) {
       stop("See above message for details", call. = F)
     }
   }
-  report_null_columns(dir_files, delimiter, table_names, valid_table_names)
+  report_null_columns(dir_files, sep, table_names, valid_table_names)
   
   
   # Validate column names
   
   print("Check column names ...")
   
-  report_invalid_column_names <- function(dir_files, valid_column_names, delimiter, valid_table_names, table_names){
+  report_invalid_column_names <- function(dir_files, valid_column_names, sep, valid_table_names, table_names){
     msg <- list()
     for (i in 1:length(table_names_adjusted)){
       table_in <- grep(table_names_adjusted[i], dir_files, value = T)
       if (!identical(table_in, character(0))){
-        data_in <- read.table(paste(path,
+        data_in <- read.table(paste(data.path,
                                     "/",
                                     table_in,
                                     sep = ""),
                               header = T,
-                              sep = delimiter,
+                              sep = sep,
                               as.is = T,
                               na.strings = "NA")
         colnames_in <- colnames(data_in)
@@ -240,24 +240,24 @@ validate_ecocomDP <- function(path, delimiter) {
       }
     }
   }
-  report_invalid_column_names(dir_files, valid_column_names, delimiter)
+  report_invalid_column_names(dir_files, valid_column_names, sep)
   
   
   # Report requried columns that are missing
 
   print("Check for required columns that are missing ...")
 
-  report_required_columns_missing <- function(dir_files, table_names_adjusted, table_names, delimiter){
+  report_required_columns_missing <- function(dir_files, table_names_adjusted, table_names, sep){
     msg <- list()
     for (i in 1:length(table_names_adjusted)){
       table_in <- grep(table_names_adjusted[i], dir_files, value = T)
       if (!identical(table_in, character(0))){
-        data_in <- read.table(paste(path,
+        data_in <- read.table(paste(data.path,
                                     "/",
                                     table_in,
                                     sep = ""),
                               header = T,
-                              sep = delimiter,
+                              sep = sep,
                               as.is = T,
                               na.strings = "NA")
         required_column_names <- criteria$column[(!is.na(criteria$class)) & (criteria$table == table_names[i]) & (criteria$required == "yes")]
@@ -283,7 +283,7 @@ validate_ecocomDP <- function(path, delimiter) {
       stop("See above message for details", call. = F)
     }
   }
-  report_required_columns_missing(dir_files, table_names_adjusted, table_names, delimiter)
+  report_required_columns_missing(dir_files, table_names_adjusted, table_names, sep)
 
 
   # Validate column vector classes
@@ -297,12 +297,12 @@ validate_ecocomDP <- function(path, delimiter) {
   #     table_in <- grep(table_names_adjusted[i], dir_files, value = T)
   #     if (!identical(table_in, character(0))){
   #     
-  #       data_in <- read.table(paste(path,
+  #       data_in <- read.table(paste(data.path,
   #                                   "/",
   #                                   table_in,
   #                                   sep = ""),
   #                             header = T,
-  #                             sep = delimiter,
+  #                             sep = sep,
   #                             as.is = T,
   #                             na.strings = "NA")
   #       colnames_in <- colnames(data_in)
@@ -403,17 +403,17 @@ validate_ecocomDP <- function(path, delimiter) {
   # print("Check datetime format ...")
   # 
   # table_names_adjusted <- c("observation\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b")
-  # check_datetime_format <- function(dir_files, table_names_adjusted, delimiter){
+  # check_datetime_format <- function(dir_files, table_names_adjusted, sep){
   #   msg <- list()
   #   for (i in 1:length(table_names_adjusted)){
   #     table_in <- grep(table_names_adjusted[i], dir_files, value = T)
   #     if (!identical(table_in, character(0))){
-  #       data_in <- read.table(paste(path,
+  #       data_in <- read.table(paste(data.path,
   #                                   "/",
   #                                   table_in,
   #                                   sep = ""),
   #                             header = T,
-  #                             sep = delimiter,
+  #                             sep = sep,
   #                             as.is = T,
   #                             na.strings = "NA")
   #       colnames_in <- colnames(data_in)
@@ -433,7 +433,7 @@ validate_ecocomDP <- function(path, delimiter) {
   #     stop("See above message for details", call. = F)
   #   }
   # }
-  # check_datetime_format(dir_files, table_names_adjusted, delimiter)
+  # check_datetime_format(dir_files, table_names_adjusted, sep)
   
   
   # Validation complete
