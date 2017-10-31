@@ -1,0 +1,6 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+observation_ancillary_id	"The ID of the observation_ancillary, a row or record ID."	character				
+event_id	The ID of the sampling event. References the event_id field of the observation table.	character				
+variable_name	Meaured variable.	categorical				
+value	Value of the measured variable.	character				
+unit	Unit of the measured variable.	character				
