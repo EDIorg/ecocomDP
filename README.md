@@ -39,7 +39,7 @@ library(devtools)
 
 # Install and load the ecocomDP
 install_github("EDIorg/ecocomDP")
-library(devtools)
+library(ecocomDP)
 ```
 
 ## Running the tests
