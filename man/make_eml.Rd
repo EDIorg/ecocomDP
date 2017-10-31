@@ -47,6 +47,30 @@ URL of a table that has a URL of
 https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride/gleon_chloride_concentrations.csv
 has a base URL of 
 https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride.}
+
+\item{datetime.format}{Enter the date time format 
+string used throughout your ecocomDP tables. 
+Valid date time formats are a combination of date, time, and time 
+zone strings.
+\itemize{
+    \item \strong{Date format strings:} YYYY-MM-DD; where YYYY is year, MM is 
+    month, DD is day of month.
+    \item \strong{Time format strings:} hh:mm:ss.sss, hhmmss.sss,
+    hh:mm:ss, hhmmss, hh:mm, hhmm, hh; where hh is hour (in 24 hr
+    clock), mm is minute, ss is second, and ss.sss is decimal 
+    second.
+    \item\strong{Time zone format strings:} Z, +hh:mm, +hhmm, +hh,
+    -hh:mm, -hhmm, -hh; where Z (capitalized) is Coordinated 
+    Universal Time, and + and - denote times ahead and behind UTC
+    respectively.
+}
+If reporting a date without time, use the date format 
+string. If reporting a date and time, select the date and one time 
+format string and combine with a single space (e.g. 
+YYYY-MM-DD hh:mm) or with a "T" (e.g. YYYY-MM-DDThh:mm). If 
+reporting a date and time, it is recommended that a time zone 
+specifier be appended without a space (e.g. YYYY-MM-DD hh:mm-hh:mm, 
+or YYYY-MM-DDThh:mm-hh:mm).}
 }
 \value{
 An EML metadata file written to the dataset working directory titled 

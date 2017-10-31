@@ -40,9 +40,5 @@ Checks:
        \item \strong{Required columns} Some columns are required.
        Add missing columns.
        \item \strong{Column classes} Column classes must be correct.
-       \item \strong{Datetime format} Date time format must follow ISO 8601,
-       specifically \emph{YYYY-MM-DDThh:mm+-hh}. When reporting only use
-       elements of this format required by the precision of the original 
-       data.
    }
 }
