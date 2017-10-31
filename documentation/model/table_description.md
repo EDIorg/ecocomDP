@@ -50,10 +50,10 @@ Columns
 |  column name 	|   type	| required in table? |  references cols 	| description | example |
 |---------------|---------|--------------------|-------------------|--------------|---------|
 | taxon_id           | character |  yes        | NA | ID used in the dataset | sbclter_MAPY |  
-|	taxon_rank         | character |  no         | NA | rank of the organism | species |   
-|	taxon_name         | character |  yes        | NA | species name | M. pyrifera | 
-|	authority_system   | character |  no         | NA | name of the system assigning the ID | ITIS|  
-|	authority_taxon_id | character |  no         | NA | ID in that system |  11274|
+|	taxon_rank         | character |  no         | NA | Rank of the organism | species |   
+|	taxon_name         | character |  yes        | NA | Species name | M. pyrifera | 
+|	authority_system   | character |  no         | NA | Name of the system assigning the taxon ID | ITIS|  
+|	authority_taxon_id | character |  no         | NA | ID in the authority system |  11274|
 
 
 Table: observation
