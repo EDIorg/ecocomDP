@@ -47,6 +47,29 @@
 #'     https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride/gleon_chloride_concentrations.csv
 #'     has a base URL of 
 #'     https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride.
+#' @param datetime.format Enter the date time format 
+#'         string used throughout your ecocomDP tables. 
+#'         Valid date time formats are a combination of date, time, and time 
+#'         zone strings.
+#'         \itemize{
+#'             \item \strong{Date format strings:} YYYY-MM-DD; where YYYY is year, MM is 
+#'             month, DD is day of month.
+#'             \item \strong{Time format strings:} hh:mm:ss.sss, hhmmss.sss,
+#'             hh:mm:ss, hhmmss, hh:mm, hhmm, hh; where hh is hour (in 24 hr
+#'             clock), mm is minute, ss is second, and ss.sss is decimal 
+#'             second.
+#'             \item\strong{Time zone format strings:} Z, +hh:mm, +hhmm, +hh,
+#'             -hh:mm, -hhmm, -hh; where Z (capitalized) is Coordinated 
+#'             Universal Time, and + and - denote times ahead and behind UTC
+#'             respectively.
+#'         }
+#'         If reporting a date without time, use the date format 
+#'         string. If reporting a date and time, select the date and one time 
+#'         format string and combine with a single space (e.g. 
+#'         YYYY-MM-DD hh:mm) or with a "T" (e.g. YYYY-MM-DDThh:mm). If 
+#'         reporting a date and time, it is recommended that a time zone 
+#'         specifier be appended without a space (e.g. YYYY-MM-DD hh:mm-hh:mm, 
+#'         or YYYY-MM-DDThh:mm-hh:mm).
 #'
 #' @return 
 #'     An EML metadata file written to the dataset working directory titled 
@@ -92,7 +115,7 @@
 #'
 
 
-make_eml <- function(data.path, code.path, parent.package.id, child.package.id, sep, user.id, author.system, intellectual.rights, access.url) {
+make_eml <- function(data.path, code.path, parent.package.id, child.package.id, sep, user.id, author.system, intellectual.rights, access.url, datetime.format) {
   
   # Check arguments
 
@@ -116,6 +139,9 @@ make_eml <- function(data.path, code.path, parent.package.id, child.package.id, 
   }
   if (missing(author.system)){
     stop("Specify an author system for the data package. Default to 'edi' if unknown")
+  }
+  if (missing(datetime.format)){
+    stop("Specify a datetime format used throughout tables of this ecocomDP.")
   }
   
   # Parameters ----------------------------------------------------------------
@@ -145,9 +171,14 @@ make_eml <- function(data.path, code.path, parent.package.id, child.package.id, 
     os <- "win"
   }
   
-  # Compile attributes
+  # Compile attributes and add datetime.format string
 
   attributes_in <- compile_attributes(path = data.path, delimiter = sep)
+  
+  for (i in 1:length(attributes_in[[1]])){
+    use_i <- attributes_in[[1]][[i]]$columnClasses == "Date"
+    attributes_in[[1]][[i]]$formatString[use_i] <- datetime.format
+  }
   
   # Initialize data entity storage (tables)
 
