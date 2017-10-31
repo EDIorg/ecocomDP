@@ -32,10 +32,6 @@
 #'        sure table names are consistent.
 #'        \item \strong{Required tables} Some tables are required. Add any 
 #'        missing tables.
-#'        \item \strong{NULL tables} NULL tables take up unnecessary space.
-#'        Delete these.
-#'        \item \strong{NULL columns} NULL columns take up unnecessary space.
-#'        Delete these.
 #'        \item \strong{Column names} Column names must be valid.
 #'        Adjust column names as required.
 #'        \item \strong{Required columns} Some columns are required.
@@ -129,81 +125,81 @@ validate_ecocomDP <- function(data.path, sep) {
   }
   report_missing_tables(dir_files, required_table_names_adjusted, required_table_names)
   
-  # Remove NULL tables
-  
-  print("Checking for NULL tables ...")
-  
-  report_null_tables <- function(dir_files, sep, valid_table_names){
-    msg <- list()
-    input_table_names <- dir_files[attr(regexpr(paste(valid_table_names, 
-                                                      collapse = "|"), 
-                                                dir_files),
-                                        "match.length")
-                                   != -1]
-    for (i in 1:length(input_table_names)){
-      data_in <- read.table(paste(data.path,
-                                  "/",
-                                  input_table_names[i],
-                                  sep = ""),
-                            header = T,
-                            sep = sep,
-                            as.is = T,
-                            na.strings = "NA")
-      data_clean <- data_in[rowSums(is.na(data_in)) != ncol(data_in), ]
-      data_dim <- dim(data_clean)
-      if (data_dim[1] == 0){
-        msg[[1]] <- paste("This file does not contain any data:\n",
-                      input_table_names[i], "\n",
-                      "Remove this table.")
-        cat("\n", unlist(msg))
-        stop("See above message for details", call. = F)
-      }
-    }
-  }
-  report_null_tables(dir_files, sep, valid_table_names)
+  # # Remove NULL tables
+  # 
+  # print("Checking for NULL tables ...")
+  # 
+  # report_null_tables <- function(dir_files, sep, valid_table_names){
+  #   msg <- list()
+  #   input_table_names <- dir_files[attr(regexpr(paste(valid_table_names, 
+  #                                                     collapse = "|"), 
+  #                                               dir_files),
+  #                                       "match.length")
+  #                                  != -1]
+  #   for (i in 1:length(input_table_names)){
+  #     data_in <- read.table(paste(data.path,
+  #                                 "/",
+  #                                 input_table_names[i],
+  #                                 sep = ""),
+  #                           header = T,
+  #                           sep = sep,
+  #                           as.is = T,
+  #                           na.strings = "NA")
+  #     data_clean <- data_in[rowSums(is.na(data_in)) != ncol(data_in), ]
+  #     data_dim <- dim(data_clean)
+  #     if (data_dim[1] == 0){
+  #       msg[[1]] <- paste("This file does not contain any data:\n",
+  #                     input_table_names[i], "\n",
+  #                     "Remove this table.")
+  #       cat("\n", unlist(msg))
+  #       stop("See above message for details", call. = F)
+  #     }
+  #   }
+  # }
+  # report_null_tables(dir_files, sep, valid_table_names)
   
   
   # Columns ---------------------------------------------------------------------
 
-  # Remove NULL columns
-
-  print("Check for NULL columns ...")
-
-  table_names <- c("location", "taxon", "event", "observation", "location_ancillary", "taxon_ancillary", "dataset_summary")
-  report_null_columns <- function(dir_files, sep, table_names, valid_table_names){
-    msg <- list()
-    input_table_names <- dir_files[attr(regexpr(paste(valid_table_names, 
-                                                      collapse = "|"), 
-                                                dir_files),
-                                        "match.length")
-                                   != -1]
-    for (i in 1:length(input_table_names)){
-      table_in <- grep(input_table_names[i], dir_files, value = T)
-      data_in <- read.table(paste(data.path,
-                                  "/",
-                                  table_in,
-                                  sep = ""),
-                            header = T,
-                            sep = sep,
-                            as.is = T,
-                            na.strings = "NA")
-      output <-sapply(data_in, function(x)all(is.na(x)))
-      data_in_names <- names(output)
-      data_in_logic <- unname(unlist(output))
-      null_cols <- data_in_names[data_in_logic]
-      if (!identical(null_cols, character(0))){
-        msg[[i]] <- paste("This table has NULL columns:\n",
-                          table_in,"\n",
-                          "NULL columns found. Consider removing these:\n",
-                          paste(null_cols, collapse = "\n"),"\n")
-      }
-    }
-    if (length(msg) > 0){
-      cat("\n",unlist(msg))
-      stop("See above message for details", call. = F)
-    }
-  }
-  report_null_columns(dir_files, sep, table_names, valid_table_names)
+  # # Remove NULL columns
+  # 
+  # print("Check for NULL columns ...")
+  # 
+  # table_names <- c("location", "taxon", "event", "observation", "location_ancillary", "taxon_ancillary", "dataset_summary")
+  # report_null_columns <- function(dir_files, sep, table_names, valid_table_names){
+  #   msg <- list()
+  #   input_table_names <- dir_files[attr(regexpr(paste(valid_table_names, 
+  #                                                     collapse = "|"), 
+  #                                               dir_files),
+  #                                       "match.length")
+  #                                  != -1]
+  #   for (i in 1:length(input_table_names)){
+  #     table_in <- grep(input_table_names[i], dir_files, value = T)
+  #     data_in <- read.table(paste(data.path,
+  #                                 "/",
+  #                                 table_in,
+  #                                 sep = ""),
+  #                           header = T,
+  #                           sep = sep,
+  #                           as.is = T,
+  #                           na.strings = "NA")
+  #     output <-sapply(data_in, function(x)all(is.na(x)))
+  #     data_in_names <- names(output)
+  #     data_in_logic <- unname(unlist(output))
+  #     null_cols <- data_in_names[data_in_logic]
+  #     if (!identical(null_cols, character(0))){
+  #       msg[[i]] <- paste("This table has NULL columns:\n",
+  #                         table_in,"\n",
+  #                         "NULL columns found. Consider removing these:\n",
+  #                         paste(null_cols, collapse = "\n"),"\n")
+  #     }
+  #   }
+  #   if (length(msg) > 0){
+  #     cat("\n",unlist(msg))
+  #     stop("See above message for details", call. = F)
+  #   }
+  # }
+  # report_null_columns(dir_files, sep, table_names, valid_table_names)
   
   
   # Validate column names

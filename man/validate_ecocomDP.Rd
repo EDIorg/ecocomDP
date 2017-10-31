@@ -4,15 +4,15 @@
 \alias{validate_ecocomDP}
 \title{Validate ecocomDP tables}
 \usage{
-validate_ecocomDP(path, delimiter)
+validate_ecocomDP(data.path, sep)
     Run this function after creating an ecocomDP and before making EML for 
     it.
 }
 \arguments{
-\item{path}{A path to the dataset working directory containing \emph{only} ecocomDP 
+\item{data.path}{A path to the dataset working directory containing \emph{only} ecocomDP 
 tables. This directory should not contain anything else.}
 
-\item{delimiter}{The field delimiter of ecocomDP tables. Can be comma or tab delimited 
+\item{sep}{The field delimiter of ecocomDP tables. Can be comma or tab delimited 
 (i.e. "," or "\\t")}
 }
 \value{
@@ -35,10 +35,6 @@ Checks:
        sure table names are consistent.
        \item \strong{Required tables} Some tables are required. Add any 
        missing tables.
-       \item \strong{NULL tables} NULL tables take up unnecessary space.
-       Delete these.
-       \item \strong{NULL columns} NULL columns take up unnecessary space.
-       Delete these.
        \item \strong{Column names} Column names must be valid.
        Adjust column names as required.
        \item \strong{Required columns} Some columns are required.
