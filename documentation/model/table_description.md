@@ -33,12 +33,12 @@ Columns
 
 |  column name 	|   type	|   required in table?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|-------------|---------|
-| location_id | character | yes  	      |   NA|   | sbclter_abur_I |
-| location_name   	|  character  	| no 	|   NA | 	|  Arroyo Burro Reef, transect I 	|
+| location_id | character | yes  	      |   NA| Identifier assigned to each unique entry. | sbclter_abur_I |
+| location_name   	|  character  	| no 	|   NA | Sampling location full name.	|  Arroyo Burro Reef, transect I 	|
 | latitude 	  |  float 	|   	no                  |   NA |Latitude in decimal degrees. Latitudes south of the equator are negative.|  34.400275	|
 | longitude 	|  float 	|   	no                  |   NA |Longitude in decimal degrees. Longitudes west of the prime meridian are negative.| -119.7445915 |
-| elevation	  |  float 	|   	np                  |   NA |Elevation in meters.| -15	|
-| parent_location_id	|  character | no  	|   NA| 	|  sbclter_abur	|
+| elevation	  |  float 	|   	np                  |   NA |Sampling location elevation in meters relative to sea level. Above sea level is positive. Below sea level is negative.| -15	|
+| parent_location_id	|  character | no  	|   NA| Sampling location identifier from this table for the parent of this sampling location. Presence indicates nested locations.	|  sbclter_abur	|
 
 
 Table: taxon
