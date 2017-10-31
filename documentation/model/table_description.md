@@ -135,9 +135,9 @@ Columns
 |---------------|---------|-----------------------|-------------------|--------------|---------|
 | package_id                  | character |yes| (table = observation) package_id 	|  id of the L1 pkg (this package)	|  edi.100001.1 	|
 | original_package_id         | character |no|   	|  id of the L0 pkg (original, source) | knb-lter-sbc.21.17 |
-| length_of_survey_years      | integer   |yes|   	|   	| 17  	| 
-| number_of_years_sampled     | integer   |yes|   	|   	| 17  	|
-| std_dev_interval_betw_years | float     |yes|   	|   	| 1.1  	|
-| max_num_taxa                |integer    |yes|   	|   	| 1  	|
-| geo_extent_bounding_box_m2  |float      |no|   	|   	|  40 	|
+| length_of_survey_years      | integer   |yes|   	|   Number of years the study has been ongoing.	| 17  	| 
+| number_of_years_sampled     | integer   |yes|   	|   Number of years within the period of the study that samples were taken.	| 17  	|
+| std_dev_interval_betw_years | float     |yes|   	|  Standard deviation of the interval between sampling events. 	| 1.1  	|
+| max_num_taxa                |integer    |yes|   	|  Number of unique values in the taxon table. 	| 1  	|
+| geo_extent_bounding_box_m2  |float      |no|   	|   Area of the study location.	|  40 	|
 
