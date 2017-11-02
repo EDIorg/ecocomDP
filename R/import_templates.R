@@ -15,6 +15,10 @@
 #'     from a parent data package. This additional contact is added to the EML
 #'     of the ecocomDP along with the contacts of the parent data package.
 #'     
+#'     \emph{additional_provenance.txt} A UTF-8 text file containing fields to 
+#'     fill out to provide provenance of a parent data package that does not 
+#'     exist in the EDI data repository.
+#'     
 #'     \emph{cusom_units.txt} A UTF-8 text file containing fields to fill out
 #'     for each custom unit that is found within the dataset.
 #'     
@@ -46,6 +50,16 @@ import_templates <- function(data.path){
     print("Importing additional_contact.txt ... ")
   } else {
     print("additional_contact.txt already exists ... ")
+  }
+  
+  value <- file.copy(from = paste(path.package("ecocomDP"),
+                                  "/additional_provenance.txt",
+                                  sep = ""),
+                     to = data.path)
+  if (isTRUE(value)){
+    print("Importing additional_provenance.txt ... ")
+  } else {
+    print("additional_provenance.txt already exists ... ")
   }
   
   value <- file.copy(from = paste(path.package("ecocomDP"),
