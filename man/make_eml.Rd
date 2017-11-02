@@ -15,11 +15,19 @@ containing the validated ecocomDP tables.}
 \item{code.path}{A character string specifying the path to the directory containing the 
 scripts used in processing the L0 data to the L1 data.}
 
-\item{parent.package.id}{A character string specifying the identifier of parent data package in the 
-EDI data repository (e.g. "knb-lter-hfr.118.28").}
+\item{eml.path}{A character string specifying the path to the directory containing the
+EML file of the parent data package. This argument is required if the EML is 
+not located in the EDI data repository.}
 
-\item{child.package.id}{A character string specifying the identifier of child data package in 
-the EDI data repository (e.g. "edi.53.1"). If you don't have a 
+\item{parent.package.id}{A character string specifying the identifier of parent data package 
+stored in the EDI data repository (e.g. "knb-lter-hfr.118.28"), or a 
+character string specifying the file name of the parent data package EML
+stored at eml.path. If the latter, do not include a file extension. The 
+identifier will be used to read in the respective EML file from the EDI
+data repository or from the eml.path.}
+
+\item{child.package.id}{A character string specifying the identifier of child data package to be
+uploaded to the EDI data repository (e.g. "edi.53.1"). If you don't have a 
 child.package.id then query EDI for one 
 (info@environmentaldatainitiative.org).}
 
@@ -48,22 +56,22 @@ https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride/gleon_ch
 has a base URL of 
 https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride.}
 
-\item{datetime.format}{Enter the date time format 
-string used throughout your ecocomDP tables. 
-Valid date time formats are a combination of date, time, and time 
-zone strings.
-\itemize{
-    \item \strong{Date format strings:} YYYY-MM-DD; where YYYY is year, MM is 
-    month, DD is day of month.
-    \item \strong{Time format strings:} hh:mm:ss.sss, hhmmss.sss,
-    hh:mm:ss, hhmmss, hh:mm, hhmm, hh; where hh is hour (in 24 hr
-    clock), mm is minute, ss is second, and ss.sss is decimal 
-    second.
-    \item\strong{Time zone format strings:} Z, +hh:mm, +hhmm, +hh,
-    -hh:mm, -hhmm, -hh; where Z (capitalized) is Coordinated 
-    Universal Time, and + and - denote times ahead and behind UTC
-    respectively.
-}
+\item{datetime.format}{A character string specifying the date time format 
+ string used throughout your ecocomDP tables. 
+ Valid date time formats are a combination of date, time, and time 
+ zone strings.
+     \itemize{
+         \item \strong{Date format strings:} YYYY-MM-DD; where YYYY is year, MM is 
+         month, DD is day of month.
+         \item \strong{Time format strings:} hh:mm:ss.sss, hhmmss.sss,
+         hh:mm:ss, hhmmss, hh:mm, hhmm, hh; where hh is hour (in 24 hr
+         clock), mm is minute, ss is second, and ss.sss is decimal 
+         second.
+         \item\strong{Time zone format strings:} Z, +hh:mm, +hhmm, +hh,
+         -hh:mm, -hhmm, -hh; where Z (capitalized) is Coordinated 
+         Universal Time, and + and - denote times ahead and behind UTC
+         respectively.
+     }
 If reporting a date without time, use the date format 
 string. If reporting a date and time, select the date and one time 
 format string and combine with a single space (e.g. 
@@ -71,6 +79,11 @@ YYYY-MM-DD hh:mm) or with a "T" (e.g. YYYY-MM-DDThh:mm). If
 reporting a date and time, it is recommended that a time zone 
 specifier be appended without a space (e.g. YYYY-MM-DD hh:mm-hh:mm, 
 or YYYY-MM-DDThh:mm-hh:mm).}
+
+\item{code.file.extension}{A character string specifying the extension of the processing script(s) 
+used to create this ecocomDP. For example, enter ".R" if the processing script(s)
+are written in the R, or enter ".py" if the processing script(s) are
+written in Python.}
 }
 \value{
 An EML metadata file written to the dataset working directory titled 
@@ -81,16 +94,29 @@ Makes EML for an Ecological Community Data Pattern (ecocomDP).
 }
 \details{
 Make and validate EML for an Ecological Community Data Pattern 
-    (ecocomDP) using elements from the parent data package. This function 
-    does not yet support creation of data packages that are not already 
-    published in the EDI (Environmental Data Initiative) data repository.
+    (ecocomDP) using elements from the parent data package and additional 
+    user supplied metadata.
     
-    Run \code{make_eml} after you have completed \emph{addtional_contact.txt},
-    \emph{custom_units.txt} (if you're ecocomDP has custom units), and have
-    provided definitions for variables listed in the ecocomDP tables. Use 
-    \code{define_variables} to identify and define variables.
+    Run \code{make_eml} after you have:
+    \itemize{
+        \item Validated your ecocomDP with \code{validate_ecocomDP}.
+        \item Imported and completed template files to provide additional 
+        metadata to the ecocomDP EML. Run \code{import_templates} to import
+        template files, \emph{addtional_contact.txt} (adds you as an 
+        additional contact for this ecocomDP), \emph{custom_units.txt} 
+        (adds any custom units you need to report for your ecocomDP), 
+        \emph{provenance_metadata.txt} (adds provenance metadata to your 
+        ecocomDP if the parent data package does not originate from the EDI
+        data repository).
+        \item Defined variables contained in your ecocomDP using 
+        \code{define_variables}.
+    }
 
-    This script modifies elements of the parent data package EML:
+    This function uses elements of the parent data package EML to create EML
+    for the ecocomDP. Since ecocomDP is a fixed format, this function calls
+    on boiler plate table attributes of the R package inst/ directory and 
+    imports the metadata of the parent data package. Some new information is
+    added to the parent data package EML as specified below.
     \itemize{
         \item \strong{Access} Modifies access based on user supplied
         arguments.
@@ -104,14 +130,17 @@ Make and validate EML for an Ecological Community Data Pattern
         \item \strong{Taxon coverage} This has not yet been implemented.
         \item \strong{Contact} Adds the ecocomDP creator as a contact.
         \item \strong{Provenance} Adds the provenance snippet from the 
-        parent data package.
+        parent data package with general description of how the ecocomDP was
+        created.
         \item \strong{Data tables} Adds data table elements for ecocomDP tables
         present.
         \item \strong{Formatting scripts} Adds formatting scripts used to 
-        create the ecocomDP as otherEntitie.
+        create the ecocomDP as otherEntity.
     }
 }
 \seealso{
+\code{\link{validate_ecocomDP}} to validate your ecocomDP.
+
 \code{\link{import_templates}} to import ecocomDP templates.
 
 \code{\link{define_variables}} to identify and define variables 

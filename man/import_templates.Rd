@@ -15,6 +15,10 @@ import_templates(data.path = "")
     from a parent data package. This additional contact is added to the EML
     of the ecocomDP along with the contacts of the parent data package.
     
+    \emph{additional_provenance.txt} A UTF-8 text file containing fields to 
+    fill out to provide provenance of a parent data package that does not 
+    exist in the EDI data repository.
+    
     \emph{cusom_units.txt} A UTF-8 text file containing fields to fill out
     for each custom unit that is found within the dataset.
 }
