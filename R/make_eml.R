@@ -14,12 +14,20 @@
 #' @param code.path
 #'     A character string specifying the path to the directory containing the 
 #'     scripts used in processing the L0 data to the L1 data.
+#' @param eml.path
+#'     A character string specifying the path to the directory containing the
+#'     EML file of the parent data package. This argument is required if the EML is 
+#'     not located in the EDI data repository.
 #' @param parent.package.id
-#'     A character string specifying the identifier of parent data package in the 
-#'     EDI data repository (e.g. "knb-lter-hfr.118.28").
+#'     A character string specifying the identifier of parent data package 
+#'     stored in the EDI data repository (e.g. "knb-lter-hfr.118.28"), or a 
+#'     character string specifying the file name of the parent data package EML
+#'     stored at eml.path. If the latter, do not include a file extension. The 
+#'     identifier will be used to read in the respective EML file from the EDI
+#'     data repository or from the eml.path.
 #' @param child.package.id
-#'     A character string specifying the identifier of child data package in 
-#'     the EDI data repository (e.g. "edi.53.1"). If you don't have a 
+#'     A character string specifying the identifier of child data package to be
+#'     uploaded to the EDI data repository (e.g. "edi.53.1"). If you don't have a 
 #'     child.package.id then query EDI for one 
 #'     (info@environmentaldatainitiative.org).
 #' @param sep
@@ -47,10 +55,11 @@
 #'     https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride/gleon_chloride_concentrations.csv
 #'     has a base URL of 
 #'     https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride.
-#' @param datetime.format Enter the date time format 
-#'         string used throughout your ecocomDP tables. 
-#'         Valid date time formats are a combination of date, time, and time 
-#'         zone strings.
+#' @param datetime.format 
+#'     A character string specifying the date time format 
+#'     string used throughout your ecocomDP tables. 
+#'     Valid date time formats are a combination of date, time, and time 
+#'     zone strings.
 #'         \itemize{
 #'             \item \strong{Date format strings:} YYYY-MM-DD; where YYYY is year, MM is 
 #'             month, DD is day of month.
@@ -63,13 +72,18 @@
 #'             Universal Time, and + and - denote times ahead and behind UTC
 #'             respectively.
 #'         }
-#'         If reporting a date without time, use the date format 
-#'         string. If reporting a date and time, select the date and one time 
-#'         format string and combine with a single space (e.g. 
-#'         YYYY-MM-DD hh:mm) or with a "T" (e.g. YYYY-MM-DDThh:mm). If 
-#'         reporting a date and time, it is recommended that a time zone 
-#'         specifier be appended without a space (e.g. YYYY-MM-DD hh:mm-hh:mm, 
-#'         or YYYY-MM-DDThh:mm-hh:mm).
+#'    If reporting a date without time, use the date format 
+#'    string. If reporting a date and time, select the date and one time 
+#'    format string and combine with a single space (e.g. 
+#'    YYYY-MM-DD hh:mm) or with a "T" (e.g. YYYY-MM-DDThh:mm). If 
+#'    reporting a date and time, it is recommended that a time zone 
+#'    specifier be appended without a space (e.g. YYYY-MM-DD hh:mm-hh:mm, 
+#'    or YYYY-MM-DDThh:mm-hh:mm).
+#' @param code.file.extension
+#'    A character string specifying the extension of the processing script(s) 
+#'    used to create this ecocomDP. For example, enter ".R" if the processing script(s)
+#'    are written in the R, or enter ".py" if the processing script(s) are
+#'    written in Python.
 #'
 #' @return 
 #'     An EML metadata file written to the dataset working directory titled 
@@ -77,16 +91,29 @@
 #'
 #' @details 
 #'     Make and validate EML for an Ecological Community Data Pattern 
-#'     (ecocomDP) using elements from the parent data package. This function 
-#'     does not yet support creation of data packages that are not already 
-#'     published in the EDI (Environmental Data Initiative) data repository.
+#'     (ecocomDP) using elements from the parent data package and additional 
+#'     user supplied metadata.
 #'     
-#'     Run \code{make_eml} after you have completed \emph{addtional_contact.txt},
-#'     \emph{custom_units.txt} (if you're ecocomDP has custom units), and have
-#'     provided definitions for variables listed in the ecocomDP tables. Use 
-#'     \code{define_variables} to identify and define variables.
+#'     Run \code{make_eml} after you have:
+#'     \itemize{
+#'         \item Validated your ecocomDP with \code{validate_ecocomDP}.
+#'         \item Imported and completed template files to provide additional 
+#'         metadata to the ecocomDP EML. Run \code{import_templates} to import
+#'         template files, \emph{addtional_contact.txt} (adds you as an 
+#'         additional contact for this ecocomDP), \emph{custom_units.txt} 
+#'         (adds any custom units you need to report for your ecocomDP), 
+#'         \emph{provenance_metadata.txt} (adds provenance metadata to your 
+#'         ecocomDP if the parent data package does not originate from the EDI
+#'         data repository).
+#'         \item Defined variables contained in your ecocomDP using 
+#'         \code{define_variables}.
+#'     }
 #' 
-#'     This script modifies elements of the parent data package EML:
+#'     This function uses elements of the parent data package EML to create EML
+#'     for the ecocomDP. Since ecocomDP is a fixed format, this function calls
+#'     on boiler plate table attributes of the R package inst/ directory and 
+#'     imports the metadata of the parent data package. Some new information is
+#'     added to the parent data package EML as specified below.
 #'     \itemize{
 #'         \item \strong{Access} Modifies access based on user supplied
 #'         arguments.
@@ -100,13 +127,15 @@
 #'         \item \strong{Taxon coverage} This has not yet been implemented.
 #'         \item \strong{Contact} Adds the ecocomDP creator as a contact.
 #'         \item \strong{Provenance} Adds the provenance snippet from the 
-#'         parent data package.
+#'         parent data package with general description of how the ecocomDP was
+#'         created.
 #'         \item \strong{Data tables} Adds data table elements for ecocomDP tables
 #'         present.
 #'         \item \strong{Formatting scripts} Adds formatting scripts used to 
-#'         create the ecocomDP as otherEntitie.
+#'         create the ecocomDP as otherEntity.
 #'     }
 #'
+#' @seealso \code{\link{validate_ecocomDP}} to validate your ecocomDP.
 #' @seealso \code{\link{import_templates}} to import ecocomDP templates.
 #' @seealso \code{\link{define_variables}} to identify and define variables 
 #'     listed in ecocomDP tables.
@@ -115,9 +144,9 @@
 #'
 
 
-make_eml <- function(data.path, code.path, parent.package.id, child.package.id, sep, user.id, author.system, intellectual.rights, access.url, datetime.format) {
+make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.package.id, sep, user.id, author.system, intellectual.rights, access.url, datetime.format, code.file.extension) {
   
-  # Check arguments
+  # Check arguments and input requirements ------------------------------------
 
   if (missing(data.path)){
     stop("Specify path to dataset working directory.")
@@ -143,24 +172,70 @@ make_eml <- function(data.path, code.path, parent.package.id, child.package.id, 
   if (missing(datetime.format)){
     stop("Specify a datetime format used throughout tables of this ecocomDP.")
   }
+  if (missing(code.file.extension)){
+    stop("Specify the code file extension.")
+  }
   
-  # Parameters ----------------------------------------------------------------
+  # Specify which code files were used (if more than one exists)
+  
+  (code_files_found <- data.frame(files = list.files(code.path, 
+                                                    pattern = paste("\\",
+                                                                    code.file.extension,
+                                                                    "$",
+                                                                    sep = "")),
+                                 stringsAsFactors = F))
+  if (length(code_files_found$files) > 1){
+    print("Which of the above listed code files were used to create this ecocomDP?")
+    answer <- readline("Enter respective row numbers. Separate each entry with a comma and no space (e.g. 3,12): ")
+    code_files <- code_files_found$files[as.integer(unlist(strsplit(answer, ",")))]
+  }
+  if (!exists("code_files")){
+    stop("No code files were found at the specified code.path. Add files to code.path or revise code.path.")
+  }
+  
+  # Specify which .xml file is the parent EML (if more than one .xml file exists)
+  
+  if (!missing(eml.path)){
+    xml_files_found <- data.frame(files = list.files(eml.path, pattern = "\\.xml$"),
+                                  stringsAsFactors = F)
+    if (length(xml_files_found$files) > 1){
+      print(xml_files_found)
+      print("Which of the above listed .xml files are the parent EML of this ecocomDP?")
+      answer <- readline("Enter the row numbers and separate each entry with a comma and no space (e.g. 3,12): ")
+      parent_eml_file <- xml_files_found$files[as.integer(unlist(strsplit(answer, ",")))]
+    } else {
+      if (length(list.files(eml.path, pattern = paste(parent.package.id, ".xml", sep = ""))) == 1){
+        parent_eml_file <- paste(parent.package.id, ".xml", sep = "")
+      }
+    }
+    if (!exists("parent_eml_file")){
+      stop("No .xml files were found at the specified eml.path. Add .xml files to eml.path or revise eml.path. Alternatively you may have entered parent.package.id incorrectly.")
+    }
+  }
+    
+  # Parameterize --------------------------------------------------------------
 
   # Read in metadata
   
-  pkg_prts <- unlist(strsplit(parent.package.id, split = ".", fixed = T))
-  scope <- pkg_prts[1]
-  identifier <- pkg_prts[2]
-  revision <- pkg_prts[3]
-  
-  xml_in <- read_eml(paste("http://pasta.lternet.edu/package/metadata/eml",
-                           "/",
-                           pkg_prts[1],
-                           "/",
-                           identifier,
-                           "/",
-                           revision,
-                           sep = ""))
+  if (!missing(eml.path)){
+    xml_in <- read_eml(paste(eml.path,
+                             "/",
+                             parent_eml_file,
+                             sep = ""))
+  } else {
+    pkg_prts <- unlist(strsplit(parent.package.id, split = ".", fixed = T))
+    scope <- pkg_prts[1]
+    identifier <- pkg_prts[2]
+    revision <- pkg_prts[3]
+    xml_in <- read_eml(paste("http://pasta.lternet.edu/package/metadata/eml",
+                             "/",
+                             pkg_prts[1],
+                             "/",
+                             identifier,
+                             "/",
+                             revision,
+                             sep = ""))
+  }
 
   # Get system information
   
@@ -184,7 +259,7 @@ make_eml <- function(data.path, code.path, parent.package.id, child.package.id, 
 
   data_tables_stored <- list()
   
-  # Modify elements -----------------------------------------------------------
+  # Modify elements of parent EML ---------------------------------------------
   
   # Modify eml-access
   
@@ -301,7 +376,60 @@ make_eml <- function(data.path, code.path, parent.package.id, child.package.id, 
   
   # Modify methods
   
-  print("Adding provenance ...")
+  additional_provenance_file <- paste(data.path,
+                                      "/",
+                                      "additional_provenance.txt",
+                                      sep = "")
+  
+  # if (file.exists(additional_provenance_file)){
+  #   
+  #   # Check for file content
+  #   
+  #   additional_provenance <- read.table(additional_provenance_file,
+  #                                       header=TRUE,
+  #                                       sep = "\t",
+  #                                       quote="\"",
+  #                                       as.is=TRUE,
+  #                                       comment.char = "")
+  #   
+  #   if (file_is_not_empty){
+  #     
+  #     print("Adding provenance from additional_provenance.txt ...")
+  #     
+  #     provenance <- read_eml(additional_provenance_file)
+  #     
+  #     methods_step <- xml_in@dataset@methods@methodStep
+  #     
+  #     methods_step[[length(methods_step)+1]] <- provenance
+  #     
+  #     xml_in@dataset@methods@methodStep <- methods_step
+  #     
+  #   } else {
+  #     
+  #     # If empty then import PASTA provenance
+  #     
+  #   }
+  # 
+  # } else {
+  #   
+  #   # Import PASTA provenance (identical to above)
+  #   
+  #   provenance <- read_eml(paste("https://pasta.lternet.edu/package/provenance/eml",
+  #                                "/",
+  #                                pkg_prts[1],
+  #                                "/",
+  #                                identifier,
+  #                                "/",
+  #                                revision,
+  #                                sep = ""))
+  #   
+  #   methods_step <- xml_in@dataset@methods@methodStep
+  #   
+  #   methods_step[[length(methods_step)+1]] <- provenance
+  #   
+  #   xml_in@dataset@methods@methodStep <- methods_step
+  #   
+  # }
   
   provenance <- read_eml(paste("https://pasta.lternet.edu/package/provenance/eml",
                                "/",
@@ -318,8 +446,7 @@ make_eml <- function(data.path, code.path, parent.package.id, child.package.id, 
   
   xml_in@dataset@methods@methodStep <- methods_step
 
-  
-  # Loop through tables -------------------------------------------------------
+  # Make EML for ecocomDP tables  ---------------------------------------------
 
   table_patterns <- c("observation\\b", "observation_ancillary\\b", "location_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b", "location\\b", "taxon\\b")
   table_names <- c("observation", "observation_ancillary", "location_ancillary", "taxon_ancillary", "dataset_summary", "location", "taxon")
@@ -464,7 +591,7 @@ make_eml <- function(data.path, code.path, parent.package.id, child.package.id, 
                                    tables_found[i],
                                    sep = ""))))
     
-    if (exists(access.url)){
+    if (exists("access.url")){
       
       data_table_urls <- paste(access.url, "/", tables_found[i], sep = "") 
       
@@ -475,7 +602,15 @@ make_eml <- function(data.path, code.path, parent.package.id, child.package.id, 
       physical@distribution <- new("ListOfdistribution",
                                    c(distribution))
     
-      }
+    } else {
+      
+      distribution <- new("distribution",
+                          offline = new("offline",
+                                       mediumName = "Hard drive"))
+      
+      physical@distribution <- new("ListOfdistribution",
+                                   c(distribution))
+    }
 
     if (os == "mac"){
 
@@ -599,25 +734,15 @@ make_eml <- function(data.path, code.path, parent.package.id, child.package.id, 
     
   }
   
-  # Add R code ------------------------------------------------------------------
-  # This section needs to accomodate other code types.
+  # Add processing scripts ----------------------------------------------------
   
-  print("Adding formatting scripts as <otherEntity> ...")
-  
-  # Name of script files
-  
-  match_info <- regexpr("[^\\]*$", code.path)
-  directory_name <- substr(code.path, start = match_info[1], stop = nchar(code.path))
-  
-  files <- list.files(path = code.path)
-  
-  code_names <- files[attr(regexpr("*.R$", files), "match.length") != -1]
+  print("Adding processing scripts as <otherEntity> ...")
   
   list_of_other_entity <- list()
   
-  if (!identical(code_names, character(0))){
+  if (!identical(code_files, character(0))){
     
-    for (i in 1:length(code_names)){
+    for (i in 1:length(code_files)){
       
       # Create new other entity element
       
@@ -625,11 +750,11 @@ make_eml <- function(data.path, code.path, parent.package.id, child.package.id, 
       
       # Add code file names
       
-      other_entity@entityName <- code_names[i]
+      other_entity@entityName <- code_files[i]
       
       # Add description
       
-      code_description <- "Converts parent data package to ecocomDP (child data package)"
+      code_description <- "A script that converts parent data package to ecocomDP (child data package)"
       
       other_entity@entityDescription <- code_description
       
@@ -640,31 +765,38 @@ make_eml <- function(data.path, code.path, parent.package.id, child.package.id, 
       attribute_orientation_code <- trimws(c("column"))
       field_delimeter_code <- ","
       quote_character <- trimws(c("\""))
-      code_urls <- paste(access.url, "/", code_names[i], sep = "")
-      entity_type_code <- "R code"
+      entity_type_code <- "Processing script"
       
-      physical <- set_physical(code_names[i],
+      physical <- set_physical(code_files[i],
                                numHeaderLines = num_header_lines_code,
                                recordDelimiter = record_delimeter_code,
                                attributeOrientation = attribute_orientation_code,
                                fieldDelimiter = field_delimeter_code,
                                quoteCharacter = quote_character)
       
-      physical@size <- new("size", unit = "bytes", as(as.character(file.size(paste(code.path, "\\", code_names[i], sep = ""))), "size"))
+      physical@size <- new("size", unit = "bytes", as(as.character(file.size(paste(code.path, "/", code_files[i], sep = ""))), "size"))
       
-      distribution <- new("distribution",
-                          online = new("online",
-                                       url = code_urls))
-      
-      physical@distribution <- new("ListOfdistribution",
-                                   c(distribution))
+      if (exists("access.url")){
+        code_urls <- paste(access.url, "/", code_files[i], sep = "") 
+        distribution <- new("distribution",
+                            online = new("online",
+                                         url = code_urls))
+        physical@distribution <- new("ListOfdistribution",
+                                     c(distribution))
+      } else {
+        distribution <- new("distribution",
+                            offline = new("offline",
+                                          mediumName = "Hard drive"))
+        physical@distribution <- new("ListOfdistribution",
+                                     c(distribution))
+      }
       
       if (os == "mac"){
         
         command_certutil <- paste("md5 ",
                                   code.path,
                                   "/",
-                                  code_names[i],
+                                  code_files[i],
                                   sep = "")
         
         certutil_output <- system(command_certutil, intern = T)
@@ -683,7 +815,7 @@ make_eml <- function(data.path, code.path, parent.package.id, child.package.id, 
         command_certutil <- paste("CertUtil -hashfile ",
                                   code.path,
                                   "\\",
-                                  code_names[i],
+                                  code_files[i],
                                   " MD5",
                                   sep = "")
         
@@ -743,7 +875,7 @@ make_eml <- function(data.path, code.path, parent.package.id, child.package.id, 
   
   # Write EML
 
-  print("Writing to file ...")
+  print("Writing EML to file ...")
 
   write_eml(eml, paste(data.path, "/", child.package.id, ".xml", sep = ""))
 
