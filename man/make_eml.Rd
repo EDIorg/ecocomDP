@@ -4,9 +4,10 @@
 \alias{make_eml}
 \title{Make EML for an ecocomDP}
 \usage{
-make_eml(data.path = "", code.path = "", parent.package.id = "", 
-    child.package.id = "", sep = "", user.id = "", author.system = "", 
-    intellectual.rights = "", access.url = "")
+make_eml(data.path = "", code.path = "", eml.path = "", 
+    parent.package.id = "", child.package.id = "", sep = "", user.id = "", 
+    author.system = "", intellectual.rights = "", access.url = "",
+    datetime.format = "", code.file.extension = "")
 }
 \arguments{
 \item{data.path}{A character string specifying the path to the dataset working directory 

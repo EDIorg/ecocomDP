@@ -17,7 +17,8 @@ import_templates(data.path = "")
     
     \emph{additional_provenance.txt} A UTF-8 text file containing fields to 
     fill out to provide provenance of a parent data package that does not 
-    exist in the EDI data repository.
+    exist in the EDI data repository. All columns of this file must be 
+    completed.
     
     \emph{cusom_units.txt} A UTF-8 text file containing fields to fill out
     for each custom unit that is found within the dataset.

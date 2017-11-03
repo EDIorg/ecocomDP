@@ -4,9 +4,10 @@
 #'     Makes EML for an Ecological Community Data Pattern (ecocomDP).
 #'
 #' @usage 
-#'     make_eml(data.path = "", code.path = "", parent.package.id = "", 
-#'     child.package.id = "", sep = "", user.id = "", author.system = "", 
-#'     intellectual.rights = "", access.url = "")
+#'     make_eml(data.path = "", code.path = "", eml.path = "", 
+#'     parent.package.id = "", child.package.id = "", sep = "", user.id = "", 
+#'     author.system = "", intellectual.rights = "", access.url = "",
+#'     datetime.format = "", code.file.extension = "")
 #'
 #' @param data.path 
 #'     A character string specifying the path to the dataset working directory 
@@ -178,16 +179,18 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.pa
   
   # Specify which code files were used (if more than one exists)
   
-  (code_files_found <- data.frame(files = list.files(code.path, 
+  code_files_found <- data.frame(files = list.files(code.path, 
                                                     pattern = paste("\\",
                                                                     code.file.extension,
                                                                     "$",
                                                                     sep = "")),
-                                 stringsAsFactors = F))
+                                 stringsAsFactors = F)
   if (length(code_files_found$files) > 1){
+    print.data.frame(code_files_found)
     print("Which of the above listed code files were used to create this ecocomDP?")
     answer <- readline("Enter respective row numbers. Separate each entry with a comma and no space (e.g. 3,12): ")
     code_files <- code_files_found$files[as.integer(unlist(strsplit(answer, ",")))]
+    print(paste("You selected ...", code_files))
   }
   if (!exists("code_files")){
     stop("No code files were found at the specified code.path. Add files to code.path or revise code.path.")
@@ -199,10 +202,11 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.pa
     xml_files_found <- data.frame(files = list.files(eml.path, pattern = "\\.xml$"),
                                   stringsAsFactors = F)
     if (length(xml_files_found$files) > 1){
-      print(xml_files_found)
+      print.data.frame(xml_files_found)
       print("Which of the above listed .xml files are the parent EML of this ecocomDP?")
-      answer <- readline("Enter the row numbers and separate each entry with a comma and no space (e.g. 3,12): ")
+      answer <- readline("Enter the row number: ")
       parent_eml_file <- xml_files_found$files[as.integer(unlist(strsplit(answer, ",")))]
+      print(paste("You selected ...", parent_eml_file))
     } else {
       if (length(list.files(eml.path, pattern = paste(parent.package.id, ".xml", sep = ""))) == 1){
         parent_eml_file <- paste(parent.package.id, ".xml", sep = "")
@@ -212,21 +216,26 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.pa
       stop("No .xml files were found at the specified eml.path. Add .xml files to eml.path or revise eml.path. Alternatively you may have entered parent.package.id incorrectly.")
     }
   }
+  
+  # Deconstruct parent package ID
+  
+  pkg_prts <- unlist(strsplit(parent.package.id, split = ".", fixed = T))
+  scope <- pkg_prts[1]
+  identifier <- pkg_prts[2]
+  revision <- pkg_prts[3]
     
   # Parameterize --------------------------------------------------------------
 
   # Read in metadata
   
   if (!missing(eml.path)){
+    
     xml_in <- read_eml(paste(eml.path,
                              "/",
                              parent_eml_file,
                              sep = ""))
   } else {
-    pkg_prts <- unlist(strsplit(parent.package.id, split = ".", fixed = T))
-    scope <- pkg_prts[1]
-    identifier <- pkg_prts[2]
-    revision <- pkg_prts[3]
+
     xml_in <- read_eml(paste("http://pasta.lternet.edu/package/metadata/eml",
                              "/",
                              pkg_prts[1],
@@ -374,77 +383,104 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.pa
     }
   }
   
-  # Modify methods
+  # Add provenance metadata
   
   additional_provenance_file <- paste(data.path,
                                       "/",
                                       "additional_provenance.txt",
                                       sep = "")
   
-  # if (file.exists(additional_provenance_file)){
-  #   
-  #   # Check for file content
-  #   
-  #   additional_provenance <- read.table(additional_provenance_file,
-  #                                       header=TRUE,
-  #                                       sep = "\t",
-  #                                       quote="\"",
-  #                                       as.is=TRUE,
-  #                                       comment.char = "")
-  #   
-  #   if (file_is_not_empty){
-  #     
-  #     print("Adding provenance from additional_provenance.txt ...")
-  #     
-  #     provenance <- read_eml(additional_provenance_file)
-  #     
-  #     methods_step <- xml_in@dataset@methods@methodStep
-  #     
-  #     methods_step[[length(methods_step)+1]] <- provenance
-  #     
-  #     xml_in@dataset@methods@methodStep <- methods_step
-  #     
-  #   } else {
-  #     
-  #     # If empty then import PASTA provenance
-  #     
-  #   }
-  # 
-  # } else {
-  #   
-  #   # Import PASTA provenance (identical to above)
-  #   
-  #   provenance <- read_eml(paste("https://pasta.lternet.edu/package/provenance/eml",
-  #                                "/",
-  #                                pkg_prts[1],
-  #                                "/",
-  #                                identifier,
-  #                                "/",
-  #                                revision,
-  #                                sep = ""))
-  #   
-  #   methods_step <- xml_in@dataset@methods@methodStep
-  #   
-  #   methods_step[[length(methods_step)+1]] <- provenance
-  #   
-  #   xml_in@dataset@methods@methodStep <- methods_step
-  #   
-  # }
-  
-  provenance <- read_eml(paste("https://pasta.lternet.edu/package/provenance/eml",
-                               "/",
-                               pkg_prts[1],
-                               "/",
-                               identifier,
-                               "/",
-                               revision,
-                               sep = ""))
-  
-  methods_step <- xml_in@dataset@methods@methodStep
-  
-  methods_step[[length(methods_step)+1]] <- provenance
-  
-  xml_in@dataset@methods@methodStep <- methods_step
+  if (file.exists(additional_provenance_file)){
+
+    # Check for file content
+
+    additional_provenance <- read.table(additional_provenance_file,
+                                        header=TRUE,
+                                        sep = "\t",
+                                        quote="\"",
+                                        as.is=TRUE,
+                                        comment.char = "")
+    ncol_expected <- ncol(additional_provenance)
+    
+    ncol_found <- ncol(as.data.frame(additional_provenance[,colSums(is.na(additional_provenance))<nrow(additional_provenance)]))
+
+    if (ncol_found == ncol_expected){
+
+      print("Adding provenance from additional_provenance.txt ...")
+
+      # provenance <- read_eml(additional_provenance_file)
+      # 
+      # methods_step <- xml_in@dataset@methods@methodStep
+      # 
+      # methods_step[[length(methods_step)+1]] <- provenance
+      # 
+      # xml_in@dataset@methods@methodStep <- methods_step
+
+    } else {
+
+      # Import provenance from PASTA (identical to below)
+      
+      provenance <- read_eml(paste("https://pasta.lternet.edu/package/provenance/eml",
+                                   "/",
+                                   pkg_prts[1],
+                                   "/",
+                                   identifier,
+                                   "/",
+                                   revision,
+                                   sep = ""))
+      
+      additional_metadata <- read.table(paste(path.package("ecocomDP"),
+                                              "/additional_provenance.txt",
+                                              sep = ""),
+                                        header = T,
+                                        sep = "\t",
+                                        as.is = T,
+                                        na.strings = "NA")
+      
+      provenance@description <- as(
+        set_TextType(text = additional_provenance$methodDescription),
+        "description")
+
+      methods_step <- xml_in@dataset@methods@methodStep
+      
+      methods_step[[length(methods_step)+1]] <- provenance
+      
+      xml_in@dataset@methods@methodStep <- methods_step
+
+    }
+
+  } else {
+
+    # Import provenance from PASTA (identical to above)
+
+    provenance <- read_eml(paste("https://pasta.lternet.edu/package/provenance/eml",
+                                 "/",
+                                 pkg_prts[1],
+                                 "/",
+                                 identifier,
+                                 "/",
+                                 revision,
+                                 sep = ""))
+    
+    additional_metadata <- read.table(paste(path.package("ecocomDP"),
+                                            "/additional_provenance.txt",
+                                            sep = ""),
+                                      header = T,
+                                      sep = "\t",
+                                      as.is = T,
+                                      na.strings = "NA")
+    
+    provenance@description <- as(
+      set_TextType(text = additional_provenance$methodDescription),
+      "description")
+    
+    methods_step <- xml_in@dataset@methods@methodStep
+    
+    methods_step[[length(methods_step)+1]] <- provenance
+    
+    xml_in@dataset@methods@methodStep <- methods_step
+
+  }
 
   # Make EML for ecocomDP tables  ---------------------------------------------
 
