@@ -404,7 +404,8 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.pa
                                         sep = "\t",
                                         quote="\"",
                                         as.is=TRUE,
-                                        comment.char = "")
+                                        comment.char = "",
+                                        fill = T)
     ncol_expected <- ncol(additional_provenance)
     
     ncol_found <- ncol(as.data.frame(additional_provenance[,colSums(is.na(additional_provenance))<nrow(additional_provenance)]))
