@@ -170,9 +170,9 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.pa
   if (missing(author.system)){
     stop("Specify an author system for the data package. Default to 'edi' if unknown")
   }
-  if (missing(intellectual.rights)){
-    int.rts <- "no change"
-  }
+  # if (missing(intellectual.rights)){
+  #   int.rts <- "no change"
+  # }
   if (missing(datetime.format)){
     stop("Specify a datetime format used throughout tables of this ecocomDP.")
   }
@@ -370,9 +370,7 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.pa
   
   # Modify license
   
-  if (int.rts != "no change"){
-    
-  } else {
+  if (!missing(intellectual.rights)){
     if (intellectual.rights == "CC0"){
       print("Changing <intellectualRights> to CC0 ...")
       xml_in@dataset@intellectualRights <- as(
