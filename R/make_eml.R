@@ -191,6 +191,8 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.pa
     answer <- readline("Enter respective row numbers. Separate each entry with a comma and no space (e.g. 3,12): ")
     code_files <- code_files_found$files[as.integer(unlist(strsplit(answer, ",")))]
     print(paste("You selected ...", code_files))
+  } else if (length(code_files_found$files) == 1){
+    code_files <- code_files_found$files[1]
   }
   if (!exists("code_files")){
     stop("No code files were found at the specified code.path. Add files to code.path or revise code.path.")
