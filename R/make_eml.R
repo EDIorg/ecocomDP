@@ -633,7 +633,7 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.pa
                                    tables_found[i],
                                    sep = ""))))
     
-    if (exists("access.url")){
+    if (!missing(access.url)){
       
       data_table_urls <- paste(access.url, "/", tables_found[i], sep = "") 
       
