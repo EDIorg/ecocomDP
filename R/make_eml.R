@@ -818,7 +818,7 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.pa
       
       physical@size <- new("size", unit = "bytes", as(as.character(file.size(paste(code.path, "/", code_files[i], sep = ""))), "size"))
       
-      if (exists("access.url")){
+      if (!missing(access.url)){
         code_urls <- paste(access.url, "/", code_files[i], sep = "") 
         distribution <- new("distribution",
                             online = new("online",
