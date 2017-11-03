@@ -61,7 +61,7 @@ compile_attributes <- function(path, delimiter){
     # Read attributes_draft table
     
     df_attributes <- read.table(paste(path.package("ecocomDP"),
-                                      "\attributes_",
+                                      "/attributes_",
                                       table_names[i],
                                       ".txt",
                                       sep = ""),
