@@ -87,8 +87,8 @@
 #'    written in Python.
 #'
 #' @return 
-#'     An EML metadata file written to the dataset working directory titled 
-#'     \emph{packageID.xml}.
+#'     An EML metadata file written to the location specified by 
+#'     \emph{data.path} titled \emph{packageID.xml}.
 #'
 #' @details 
 #'     Make and validate EML for an Ecological Community Data Pattern 
@@ -309,6 +309,12 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.pa
   
   xml_in@access <- access
 
+  # Remove alternate identifier
+  
+  print("Removing <alternateIdentifier> ...")
+  
+  xml_in@dataset@alternateIdentifier@.Data <- NULL
+  
   # Modify eml-contact
   
   print("Appending <contact> ...")
@@ -796,26 +802,31 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.pa
       
       # Add description
       
-      code_description <- "A script that converts parent data package to ecocomDP (child data package)"
+      code_description <- "A script that converts a parent data package to the ecocomDP (child data package)"
       
       other_entity@entityDescription <- code_description
       
       #  Build physical
       
-      num_header_lines_code <- trimws(c("0"))
-      record_delimeter_code <- trimws(c("\\r\\n"))
-      attribute_orientation_code <- trimws(c("column"))
-      field_delimeter_code <- ","
-      quote_character <- trimws(c("\""))
-      entity_type_code <- "Processing script"
+      physical <- new("physical",
+                      objectName = code_files[i])
       
-      physical <- set_physical(code_files[i],
-                               numHeaderLines = num_header_lines_code,
-                               recordDelimiter = record_delimeter_code,
-                               attributeOrientation = attribute_orientation_code,
-                               fieldDelimiter = field_delimeter_code,
-                               quoteCharacter = quote_character)
-      
+      if (!missing(code.file.extension)){
+        if (code.file.extension == ".R"){
+          format_name <- "application/R"
+          entity_type <- "text/x-rsrc"
+        } else if (code.file.extension == ".m"){
+          format_name <- "application/MATLAB"
+          entity_type <- "text/x-matlab"
+        } else if (code.file.extension == ".py"){
+          format_name <- "application/Python"
+          entity_type <- "text/x-python"
+        }
+        physical@dataFormat@externallyDefinedFormat@formatName <- format_name
+      } else {
+        physical@dataFormat@externallyDefinedFormat@formatName <- "unknown"
+      }
+
       physical@size <- new("size", unit = "bytes", as(as.character(file.size(paste(code.path, "/", code_files[i], sep = ""))), "size"))
       
       if (!missing(access.url)){
@@ -878,7 +889,12 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.pa
       
       # Add entity type
       
-      other_entity@entityType <- entity_type_code
+      if (!missing(code.file.extension)){
+        other_entity@entityType <- entity_type
+      } else {
+        other_entity@entityType <- "unknown"
+      }
+      
       
       # Add other entity to list
       
