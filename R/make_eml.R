@@ -309,11 +309,11 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.pa
   
   xml_in@access <- access
 
-  # Remove alternate identifier
-  
-  print("Removing <alternateIdentifier> ...")
-  
-  xml_in@dataset@alternateIdentifier@.Data <- NULL
+  # # Remove alternate identifier
+  # 
+  # print("Removing <alternateIdentifier> ...")
+  # 
+  # xml_in@dataset@alternateIdentifier <- NULL
   
   # Modify eml-contact
   
