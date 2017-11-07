@@ -50,7 +50,7 @@ Columns
 |  column name 	|   type	| not NULL required? |  references cols 	| description | example |
 |---------------|---------|--------------------|-------------------|--------------|---------|
 | taxon_id           | character |  yes        | NA | ID used in the dataset | sbclter_MAPY |  
-|	taxon_rank         | character |  no         | NA | Rank of the organism | species |   
+|	taxon_rank         | character |  no         | NA | Taxonomic rank of the organism name | species |   
 |	taxon_name         | character |  yes        | NA | Species name | M. pyrifera | 
 |	authority_system   | character |  no         | NA | Name of the system assigning the taxon ID | ITIS|  
 |	authority_taxon_id | character |  no         | NA | ID in the authority system |  11274|
