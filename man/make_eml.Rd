@@ -87,8 +87,8 @@ are written in the R, or enter ".py" if the processing script(s) are
 written in Python.}
 }
 \value{
-An EML metadata file written to the dataset working directory titled 
-    \emph{packageID.xml}.
+An EML metadata file written to the location specified by 
+    \emph{data.path} titled \emph{packageID.xml}.
 }
 \description{
 Makes EML for an Ecological Community Data Pattern (ecocomDP).
