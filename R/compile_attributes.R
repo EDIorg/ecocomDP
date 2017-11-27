@@ -141,26 +141,32 @@ compile_attributes <- function(path, delimiter){
           raw <- as.numeric(raw[!useI])
         }
         
-        
-        rounded <- floor(raw)
-        if (length(raw) - sum(raw == rounded, na.rm = T) > 0){
-          attributes$numberType[is_numeric[j]] <- "real"
-        } else if (min(raw, na.rm = T) > 0){
-          attributes$numberType[is_numeric[j]] <- "natural"
-        } else if (min(raw, na.rm = T) < 0){
-          attributes$numberType[is_numeric[j]] <- "integer"
+        if (sum(is.na(raw)) == length(raw)){
+          attributes$minimum[is_numeric[j]] <- NA
+          
+          attributes$maximum[is_numeric[j]] <- NA
         } else {
-          attributes$numberType[is_numeric[j]] <- "whole"
+          rounded <- floor(raw)
+          if (length(raw) - sum(raw == rounded, na.rm = T) > 0){
+            attributes$numberType[is_numeric[j]] <- "real"
+          } else if (min(raw, na.rm = T) > 0){
+            attributes$numberType[is_numeric[j]] <- "natural"
+          } else if (min(raw, na.rm = T) < 0){
+            attributes$numberType[is_numeric[j]] <- "integer"
+          } else {
+            attributes$numberType[is_numeric[j]] <- "whole"
+          }
+          
+          attributes$minimum[is_numeric[j]] <- round(min(raw,
+                                                         na.rm = TRUE),
+                                                     digits = 2)
+          
+          attributes$maximum[is_numeric[j]] <- round(max(raw,
+                                                         na.rm = TRUE),
+                                                     digits = 2)
+          
         }
         
-        
-        attributes$minimum[is_numeric[j]] <- round(min(raw,
-                                                       na.rm = TRUE),
-                                                   digits = 2)
-        
-        attributes$maximum[is_numeric[j]] <- round(max(raw,
-                                                       na.rm = TRUE),
-                                                   digits = 2)
       }
       
       
