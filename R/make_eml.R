@@ -20,12 +20,14 @@
 #'     EML file of the parent data package. This argument is required if the EML is 
 #'     not located in the EDI data repository.
 #' @param parent.package.id
-#'     A character string specifying the identifier of parent data package 
+#'     A character string specifying the identifier of the parent data package 
 #'     stored in the EDI data repository (e.g. "knb-lter-hfr.118.28"), or a 
 #'     character string specifying the file name of the parent data package EML
-#'     stored at eml.path. If the latter, do not include a file extension. The 
-#'     identifier will be used to read in the respective EML file from the EDI
-#'     data repository or from the eml.path.
+#'     stored at eml.path. If the latter, AND if the provenance metadata 
+#'     exists in the EDI data repository, make sure your local copy of the EML 
+#'     file name matches that in the EDI data repository. Do not include a file 
+#'     extension. The identifier will be used to read in the respective EML file 
+#'     from the EDI data repository or from the eml.path.
 #' @param child.package.id
 #'     A character string specifying the identifier of child data package to be
 #'     uploaded to the EDI data repository (e.g. "edi.53.1"). If you don't have a 
@@ -145,7 +147,7 @@
 #'
 
 
-make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.package.id, sep, user.id, author.system, intellectual.rights, access.url, datetime.format, code.file.extension) {
+make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.package.id, sep, user.id, author.system, intellectual.rights, access.url, datetime.format, code.file.extension){
   
   # Check arguments and input requirements ------------------------------------
 
