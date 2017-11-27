@@ -142,9 +142,10 @@ compile_attributes <- function(path, delimiter){
         }
         
         if (sum(is.na(raw)) == length(raw)){
-          attributes$minimum[is_numeric[j]] <- NA
           
-          attributes$maximum[is_numeric[j]] <- NA
+          attributes <- attributes[eval(parse(text = paste("-",
+                                         as.character(is_numeric[j]),
+                                         sep = ""))), ]
         } else {
           rounded <- floor(raw)
           if (length(raw) - sum(raw == rounded, na.rm = T) > 0){
