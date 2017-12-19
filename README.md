@@ -12,51 +12,58 @@ _Figure: Abstract view of dataset levels. A flexible intermediate (L1, middle) l
 
 #### Model documentation
 
-View table descriptions, relationships, and requriements [here](https://github.com/EDIorg/ecocomDP/tree/master/documentation/model).
+[View table descriptions, relationships, and requriements.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/model)
 
-An example set of tables can be accessed [here](https://github.com/EDIorg/ecocomDP/tree/master/documentation/examples).
+[An example set of tables can be accessed.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/examples)
 
 #### Formatting guide
 
-The process of formatting a level-0 dataset to level-1 (ecocomDP) is variable and depends on several factors making a scripted solution difficult. However, we have identified some general steps that are helpful to follow in this process and have written up a set of instructions [here](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions).
+The process of formatting a level-0 dataset to level-1 (ecocomDP) is variable and depends on several factors making a scripted solution difficult. However, we have identified some general steps that are helpful to follow in this process and [have written up a set of instructions as a guide](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions).
 
 #### PostgreSQL
 
-A PostgreSQL implementation of ecocomDP can be found [here](https://github.com/EDIorg/ecocomDP/tree/master/postgreSQL).
+[A PostgreSQL implementation of ecocomDP can be found here](https://github.com/EDIorg/ecocomDP/tree/master/postgreSQL).
 
 #### R package
 
-We are developing an R package of tools to do the following: (1) help format a level-0 dataset to ecocomDP, (2) validate tables against the ecocomDP schema, (3) make metadata in the Ecological Metadata Language (EML) for ecocomDP tables, (4) aggregate several ecocomDP data packages and create/export views. These functions are in development and are not yet stable. Follow development in [projects](https://github.com/EDIorg/ecocomDP/projects).
+We're developing an R package to do the following:
+1. Help format a level-0 dataset to the ecocomDP (in development).
+2. Validate tables against the ecocomDP schema (in development).
+3. Make metadata for the ecocomDP tables in the Ecological Metadata Language (EML; completed).
+4. Aggregate all data packages in the ecocomDP format and create/export views (in development). 
 
-### Installing
-
-The ecocomDP R package is available here on GitHub. To install you will first need to install and load `devtools`.
-
+The ecocomDP R package is available here on GitHub. Installation requires `devtools`.
 ```
 # Install and load devtools
 install.packages("devtools")
 library(devtools)
 
-# Install and load the ecocomDP
+# Install and load ecocomDP
 install_github("EDIorg/ecocomDP")
 library(ecocomDP)
 ```
 
+Instructions for using the `ecocomDP` R package to:
+* [Clean your taxonomy data](https://github.com/EDIorg/taxonomyCleanr/blob/master/documentation/instructions.md)
+* [Check table structure](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/table-validation.md)
+* [Create EML metadata for an ecocomDP](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/eml-creation.md) 
+
+
 ## Running the tests
 
-We have no tests yet.
+Coming soon!
 
 ## Contributing
 
-This project is in the initial phase of development. Community contributions are welcome, but might be more effective once we solidify the ecocomDP design pattern a little more. Please reference our [code conduct](https://github.com/EDIorg/ecocomDP/blob/master/CODE_OF_CONDUCT.md) and [contributing guidelines](https://github.com/EDIorg/ecocomDP/blob/master/CONTRIBUTING.md) for submitting pull requrests to us.
+Community contributions are welcome. Please reference our [code conduct](https://github.com/EDIorg/ecocomDP/blob/master/CODE_OF_CONDUCT.md) and [contributing guidelines](https://github.com/EDIorg/ecocomDP/blob/master/CONTRIBUTING.md) for submitting pull requrests to us.
 
 ## Versioning
 
-We do not yet have any versions available. Stay tuned!
+We have not yet versioned this project.
 
 ## Authors
 
-Several people have participated in this project. View the list of current team members and contributors [here](https://github.com/EDIorg/ecocomDP/blob/master/AUTHORS.md).
+[Several people have contributed to this project](https://github.com/EDIorg/ecocomDP/blob/master/AUTHORS.md). We welcome you to join us.
 
 ## License
 
