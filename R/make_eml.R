@@ -147,7 +147,10 @@
 #'
 
 
-make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.package.id, sep, user.id, author.system, intellectual.rights, access.url, datetime.format, code.file.extension){
+make_eml <- function(data.path, code.path, eml.path, parent.package.id, 
+                     child.package.id, sep, user.id, author.system, 
+                     intellectual.rights, access.url, datetime.format, 
+                     code.file.extension){
   
   # Check arguments and input requirements ------------------------------------
 
@@ -913,6 +916,68 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id, child.pa
     
   }
   
+  # Adjust title and abstract
+  
+  if (!missing(eml.path)){
+    
+    metadata <- xmlParse(paste0(eml.path,
+                                "/",
+                                parent_eml_file),
+                         encoding = "UTF-8")
+    
+  } else {
+    
+    metadata <- xmlParse(paste("http://pasta.lternet.edu/package/metadata/eml",
+                               "/",
+                               scope,
+                               "/",
+                               identifier,
+                               "/",
+                               revision,
+                               sep = ""),
+                         encoding = "UTF-8")
+    
+  }
+  
+  title <- unlist(
+    xmlApply(metadata["//dataset/title"], 
+             xmlValue)
+  )
+  
+  abstract <- unlist(
+    xmlApply(metadata["//dataset/abstract/para"], 
+             xmlValue)
+  )
+  
+  message('Adjusting <title>')
+  
+  title <- new("title",
+               paste0(title, ' (Reformatted to ecocomDP Design Pattern)'))
+  xml_in@dataset@title <- as(list(title), "ListOftitle")
+  
+  # Adjust abstract
+  
+  message('Adjusting <abstract>')
+  
+  lns <- paste0('This data package is formatted according to the "ecocomDP", a data package design pattern for ecological community surveys, and data from studies of composition and biodiversity. For more information on the ecocomDP project, contact EDI or see https://environmentaldatainitiative.org.',
+           '\n',
+           '\n',
+           'This Level 1 data package was derived from the Level 0 data package found here: ',
+           paste0('https://portal.edirepository.org/nis/mapbrowse?scope=',
+                  scope,
+                  '&identifier=',
+                  identifier,
+                  '&revision=',
+                  revision),
+           '\n',
+           '\n',
+           'The abstract below was extracted from the Level 0 data package and is included for context:',
+           '\n',
+           '\n',
+           paste0(abstract, collapse = "\n\n"))
+  
+  abstract <- as(set_TextType(text = lns), "abstract")
+  xml_in@dataset@abstract <- abstract
   
   
   # Recompile EML
