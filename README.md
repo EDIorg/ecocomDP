@@ -10,15 +10,13 @@ _Figure: Abstract view of dataset levels. A flexible intermediate (L1, middle) l
 
 ### Contents
 
-#### Model documentation
+#### Documentation
 
-[View table descriptions, relationships, and requriements.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/model)
+[Table descriptions, relationships, and requriements.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/model)
 
-[An example set of tables can be accessed.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/examples)
+[An example set of ecocomDP tables.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/examples)
 
-#### Formatting guide
-
-The process of formatting a level-0 dataset to level-1 (ecocomDP) is variable and depends on several factors making a scripted solution difficult. However, we have identified some general steps that are helpful to follow in this process and [have written up a set of instructions as a guide](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions).
+[Instructions for creating an ecocomDP](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions)
 
 #### PostgreSQL
 
@@ -43,11 +41,7 @@ install_github("EDIorg/ecocomDP")
 library(ecocomDP)
 ```
 
-Instructions for using the `ecocomDP` R package to:
-* [Clean your taxonomy data](https://github.com/EDIorg/taxonomyCleanr/blob/master/documentation/instructions.md)
-* [Check table structure](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/table-validation.md)
-* [Create EML metadata for an ecocomDP](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/eml-creation.md) 
-
+Instructions for using the `ecocomDP` R package are incorporated in the [instructions for creating an ecocomDP](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions)
 
 ## Running the tests
 
