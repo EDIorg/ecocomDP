@@ -10,6 +10,7 @@ Depends:
     dplyr (>= 0.5.0),
     tidyr (>= 0.6.1),
     EML (>= 1.0.3),
+    stringr (>= 1.2.0),
     XML (>= 3.98-1.6)
 Imports: 
 Suggests:
