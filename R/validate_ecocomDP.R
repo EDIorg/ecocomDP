@@ -1,57 +1,81 @@
 #' Validate ecocomDP tables
 #'
 #' @description  
-#'     Once you've formatted a dataset to ecocomDP you will need to check that 
-#'     it complies with the data pattern standard. This process ensures your 
-#'     dataset is valid and can be combined with other datasets in the ecocomDP
-#'     with the aggregate_ecocomDP function.
+#'     Once you've formatted a dataset to the ecocomDP (L1) you will need to 
+#'     check that it complies with the data pattern standard. This process 
+#'     ensures your L1 is valid and can be combined with other L1 with the 
+#'     \code{aggregate_ecocomDP} function.
 #'
 #' @usage validate_ecocomDP(data.path, sep)
-#'     Run this function after creating an ecocomDP and before making EML for 
-#'     it.
 #' 
 #' @param data.path 
-#'     A path to the dataset working directory containing \emph{only} ecocomDP 
-#'     tables. This directory should not contain anything else.
+#'     A character string specifying the path to the directory containing L1
+#'     tables.
 #'     
-#' @param sep
-#'     The field delimiter of ecocomDP tables. Can be comma or tab delimited 
-#'     (i.e. "," or "\\t")
+#' @param datetime.format.string
+#'     A character string specifying the datetime format string used in your
+#'     L1 tables.
 #'
 #' @return 
-#'     A validation report printed in the console window of RStudio. This 
-#'     validator runs until it hits an error. You must address the reported
-#'     issues before continuing. Once all the validation checks have been 
-#'     passed, you will recieve a congradulatory message.
+#'     A validation report printed in the console window of RStudio. The 
+#'     validation checks run until an error is encountered. You must address 
+#'     errors before continuing to the next check. Once all validation checks 
+#'     have successfully completed, you will be notified with a congratulatory 
+#'     message.
 #'          
 #' @details 
-#'    Checks:
+#' 
+#'     Run this function after creating a L1 and before making EML for it.
+#' 
+#'    Validation checks performed by this function:
 #'    \itemize{
-#'        \item \strong{Table naming} Table names must follow the ecocomDP 
-#'        naming convention (i.e. \emph{studyName_ecocomDPTableName}). Make 
-#'        sure table names are consistent.
-#'        \item \strong{Required tables} Some tables are required. Add any 
-#'        missing tables.
-#'        \item \strong{Column names} Column names must be valid.
-#'        Adjust column names as required.
-#'        \item \strong{Required columns} Some columns are required.
-#'        Add missing columns.
-#'        \item \strong{Column classes} Column classes must be correct.
+#'        \item \strong{Table names} Table names must follow the ecocomDP 
+#'        naming convention (i.e. \emph{studyName_ecocomDPTableName.ext}, e.g. 
+#'        \emph{gleon_chloride_observation.csv}). 
+#'        \item \strong{Required tables are present} Some L1 tables are 
+#'        required, others are not.
+#'        \item \strong{Column names} Column names must be those specified by
+#'        the data pattern.
+#'        \item \strong{Presence of required columns} Some columns are 
+#'        required, others are not.
+#'        \item \strong{Column classes} Column classes must match the 
+#'        ecocomDP specification.
+#'        \item \strong{Datetime format string} Datetime values should match
+#'        the input datetime.format.string parameter.
 #'    }
 #'         
 #' @export
 #'
 
-validate_ecocomDP <- function(data.path, sep) {
+validate_ecocomDP <- function(data.path, datetime.format.string) {
   
-  # Parameters ----------------------------------------------------------------
   
-  datetime_iso8601 <- "%Y-%m-%d"
-  dir_files <- list.files(data.path, recursive = F)
+  # Check arguments and parameterize ------------------------------------------
+  
+  if (missing(data.path)){
+    stop('Input argument "data.path" is missing! Specify path to your ecocomDP tables.')
+  }
+  if (missing(datetime.format.string)){
+    stop('Input argument "datetime.format.string" is missing! Specify the datetime format string used in your ecocomDP tables.')
+  }
+  
+  # Validate path
+  
+  validate_path(data.path)
+  
+  # Detect operating system
+  
+  os <- detect_os()
+  
+  # Misc.
+  
+  dir_files <- list.files(data.path, 
+                          recursive = F)
 
+  
   # Load validation criteria --------------------------------------------------
   
-  print("Loading validation criteria ... ")
+  message("Loading validation criteria ")
   
   criteria <- read.table(paste(path.package("ecocomDP"),
                                "/validation_criteria.txt",
@@ -61,107 +85,85 @@ validate_ecocomDP <- function(data.path, sep) {
                          as.is = T,
                          na.strings = "NA")
   
-  valid_table_names <- paste(unique(criteria$table), "\\b", sep = "")
-  table_names <- c("location", "taxon", "observation", "location_ancillary", "taxon_ancillary", "observation_ancillary", "dataset_summary")
-  required_table_names <- criteria$table[(is.na(criteria$class)) & (criteria$required == "yes")]
-  valid_column_names <- unique(criteria$column)
-  valid_column_names <- valid_column_names[!is.na(valid_column_names)]
-  required_table_names_adjusted <- c("location\\b", "taxon\\b", "observation\\b", "dataset_summary\\b")
-  table_names_adjusted <- c("location\\b", "taxon\\b", "observation\\b", "location_ancillary\\b", "taxon_ancillary\\b", "observation_ancillary\\b", "dataset_summary\\b")
+  column_names <- unique(criteria$column[!is.na(criteria$column)])
   
-  # Validate input ecocomDP to criteria listed in /inst/ ----------------------
+  table_names <- unique(criteria$table)
   
-  print("Validating ecocomDP ...")
+  table_names_regexpr <- paste0("_",
+                                table_names,
+                                "\\b")
   
-  # Check table naming criteria
+  table_names_required <- criteria$table[(is.na(criteria$class))
+                                         & (criteria$required == "yes")]
   
-  print("Checking table names ...")
+  table_names_required_regexpr <- paste0("_",
+                                         table_names_required,
+                                         "\\b")
   
-  validate_table_names <- function(dir_files, valid_table_names){
+  
+  # Validate file naming convention -------------------------------------------
+  
+  message("Checking table names")
+  
+  validate_table_names <- function(dir.files, name.pattern){
     msg <- list()
-    input_table_names <- dir_files[attr(regexpr(paste(valid_table_names, 
+    tables <- dir.files[attr(regexpr(paste(name.pattern, 
                                                       collapse = "|"), 
-                                                dir_files),
+                                                dir.files),
                                         "match.length")
                                    != -1]
-    table_study_name <- gsub(paste(valid_table_names, collapse = "|"), "", input_table_names)
-    table_study_names <- unique(table_study_name)
-    if (length(table_study_names) > 1){
-      msg[[1]] <- paste("Inconsistencies found in study names of ecocomDP tables.\n",
-                      "Please ensure study names match for all tables.\n",
-                      "Here are the unique study names found:\n")
-      for (i in 1:length(table_study_names)){
-        msg[[i+1]] <- paste(table_study_names[i], "\n")
-      }
-      cat("\n",unlist(msg))
-      stop("See above message for details", call. = F)
+    study_names <- unique(gsub(paste(name.pattern, 
+                                     collapse = "|"), 
+                               "", tables))
+    study_names <- str_replace(study_names, "\\.[:alnum:]*$", replacement = "")
+    if (length(study_names) > 1){
+      stop(paste("\n",
+                 "More than one study name found in your ecocomDP tables.\n",
+                 "Only one study name is allowed.\n",
+                 "Here are the unique study names found:\n",
+                 paste(study_names, collapse = ", ")),
+           call. = F)
     }
-    
   }
-  validate_table_names(dir_files, valid_table_names)
+  validate_table_names(dir.files = dir_files, name.pattern = table_names_regexpr)
 
   
-  # Report missing tables that are required
+  # Report required tables that are missing -----------------------------------
   
-  print("Checking for required tables ...")
+  message("Checking for required tables")
   
-  report_missing_tables <- function(dir_files, required_table_names_adjusted, required_table_names){
-    msg <- list()
-    for (i in 1:length(required_table_names_adjusted)){
-      table_in <- grep(required_table_names_adjusted[i], dir_files, value = T)
+  report_missing_tables <- function(dir.files, name.pattern){
+    missing_tables <- c()
+    tables <- dir.files[attr(regexpr(paste(name.pattern, 
+                                           collapse = "|"), 
+                                     dir.files),
+                             "match.length")
+                        != -1]
+    for (i in 1:length(name.pattern)){
+      table_in <- grep(name.pattern[i], tables, value = T)
       if (identical(table_in, character(0))){
-        msg[[i]] <- paste("This table is required but is missing:\n",
-                          required_table_names[i], "\n")
+        missing_tables[i] <- str_sub(name.pattern[i], 2, nchar(name.pattern[i])-2)
       }
     }
-    if (length(msg) > 0){
-      cat("\n",unlist(msg))
-      stop("See above message for details", call. = F)
+    if (!identical(missing_tables, NULL)){
+      missing_tables <- missing_tables[!is.na(missing_tables)]
+      stop(paste("\n",
+                 "One or more required tables are missing.\n",
+                 "These are the missing tables:\n",
+                 paste(missing_tables, collapse = ", ")))
     }
   }
-  report_missing_tables(dir_files, required_table_names_adjusted, required_table_names)
+  report_missing_tables(dir.files = dir_files, name.pattern = table_names_required_regexpr)
   
-  # Remove NULL tables
-
-  print("Checking for NULL tables ...")
-
-  report_null_tables <- function(dir_files, sep, valid_table_names){
-    msg <- list()
-    input_table_names <- dir_files[attr(regexpr(paste(valid_table_names,
-                                                      collapse = "|"),
-                                                dir_files),
-                                        "match.length")
-                                   != -1]
-    for (i in 1:length(input_table_names)){
-      data_in <- read.table(paste(data.path,
-                                  "/",
-                                  input_table_names[i],
-                                  sep = ""),
-                            header = T,
-                            sep = sep,
-                            as.is = T,
-                            na.strings = "NA")
-      data_clean <- data_in[rowSums(is.na(data_in)) != ncol(data_in), ]
-      data_dim <- dim(data_clean)
-      if (data_dim[1] == 0){
-        msg[[1]] <- paste("This file does not contain any data:\n",
-                      input_table_names[i], "\n",
-                      "Remove this table.")
-        cat("\n", unlist(msg))
-        stop("See above message for details", call. = F)
-      }
-    }
-  }
-  report_null_tables(dir_files, sep, valid_table_names)
   
-  # Validate column names
+  # Validate column names -----------------------------------------------------
   
-  print("Check column names ...")
+  print("Checking column names")
   
-  report_invalid_column_names <- function(dir_files, valid_column_names, sep, valid_table_names, table_names){
-    msg <- list()
-    for (i in 1:length(table_names_adjusted)){
-      table_in <- grep(table_names_adjusted[i], dir_files, value = T)
+  report_invalid_column_names <- function(dir.files, expected.col.names, name.pattern){
+    # msg <- list()
+    for (i in 1:length(name.pattern)){
+      table_in <- grep(name.pattern[i], dir.files, value = T)
       if (!identical(table_in, character(0))){
         data_in <- read.table(paste(data.path,
                                     "/",
@@ -172,7 +174,7 @@ validate_ecocomDP <- function(data.path, sep) {
                               as.is = T,
                               na.strings = "NA")
         colnames_in <- colnames(data_in)
-        index <- match(colnames_in, valid_column_names)
+        index <- match(colnames_in, expected.col.names)
         index_2 <- 1:length(index)
         invalid_column_names <- colnames_in[index_2[is.na(index)]]
         if (sum(is.na(index)) > 0){
@@ -188,17 +190,17 @@ validate_ecocomDP <- function(data.path, sep) {
       }
     }
   }
-  report_invalid_column_names(dir_files, valid_column_names, sep)
+  report_invalid_column_names(dir.files, expected.col.names = column_names)
   
   
   # Report requried columns that are missing
 
   print("Check for required columns that are missing ...")
 
-  report_required_columns_missing <- function(dir_files, table_names_adjusted, table_names, sep){
+  report_required_columns_missing <- function(dir_files, table_names_regexpr, table_names, sep){
     msg <- list()
-    for (i in 1:length(table_names_adjusted)){
-      table_in <- grep(table_names_adjusted[i], dir_files, value = T)
+    for (i in 1:length(table_names_regexpr)){
+      table_in <- grep(table_names_regexpr[i], dir_files, value = T)
       if (!identical(table_in, character(0))){
         data_in <- read.table(paste(data.path,
                                     "/",
@@ -231,18 +233,18 @@ validate_ecocomDP <- function(data.path, sep) {
       stop("See above message for details", call. = F)
     }
   }
-  report_required_columns_missing(dir_files, table_names_adjusted, table_names, sep)
+  report_required_columns_missing(dir_files, table_names_regexpr, table_names, sep)
 
 
   # Validate column vector classes
   
   # print("Column classes ...")
   # 
-  # table_names_adjusted <- c("sampling_location\\b", "taxon\\b", "event\\b", "observation\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b")
-  # validate_column_classes <- function(dir_files, table_names_adjusted){
+  # table_names_regexpr <- c("sampling_location\\b", "taxon\\b", "event\\b", "observation\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b")
+  # validate_column_classes <- function(dir_files, table_names_regexpr){
   #   msg <- list()
-  #   for (i in 1:length(table_names_adjusted)){
-  #     table_in <- grep(table_names_adjusted[i], dir_files, value = T)
+  #   for (i in 1:length(table_names_regexpr)){
+  #     table_in <- grep(table_names_regexpr[i], dir_files, value = T)
   #     if (!identical(table_in, character(0))){
   #     
   #       data_in <- read.table(paste(data.path,
@@ -343,18 +345,18 @@ validate_ecocomDP <- function(data.path, sep) {
   #     stop("See above message for details", call. = F)
   #   }
   # }
-  # validate_column_classes(dir_files, table_names_adjusted)
+  # validate_column_classes(dir_files, table_names_regexpr)
   
   
   # # Validate datetime format
   # 
   # print("Check datetime format ...")
   # 
-  # table_names_adjusted <- c("observation\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b")
-  # check_datetime_format <- function(dir_files, table_names_adjusted, sep){
+  # table_names_regexpr <- c("observation\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b")
+  # check_datetime_format <- function(dir_files, table_names_regexpr, sep){
   #   msg <- list()
-  #   for (i in 1:length(table_names_adjusted)){
-  #     table_in <- grep(table_names_adjusted[i], dir_files, value = T)
+  #   for (i in 1:length(table_names_regexpr)){
+  #     table_in <- grep(table_names_regexpr[i], dir_files, value = T)
   #     if (!identical(table_in, character(0))){
   #       data_in <- read.table(paste(data.path,
   #                                   "/",
@@ -381,7 +383,7 @@ validate_ecocomDP <- function(data.path, sep) {
   #     stop("See above message for details", call. = F)
   #   }
   # }
-  # check_datetime_format(dir_files, table_names_adjusted, sep)
+  # check_datetime_format(dir_files, table_names_regexpr, sep)
   
   
   # Validation complete
