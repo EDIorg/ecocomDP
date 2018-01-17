@@ -15,11 +15,11 @@ Below is the table list and suggested population order, ie, parents first.
 |--------|--------------|-------------|------------------------|------------------------|-------------------------|--------------------|
 |1.| location | yes | NA | basic info to identify a place | lon, lat, elev |  location_id | 
 |2.| taxon | yes | NA | basic info to identify an organism | name, id from an external system |  taxon_id |
-|3.| observation |yes| location, taxon | observations about taxa, that are being analyzed. Eg, organism abundance or density, or the data to compute density (count) | variable, value, unit | observation_id, package_id, location_id, observation_datetime, taxon_id, variable_name   | 
+|3.| observation |yes| location, taxon, observation_ancillary, dataset_summary | observations about taxa, that are being analyzed. Eg, organism abundance or density, or the data to compute density (count) | variable, value, unit | observation_id, package_id, location_id, observation_datetime, taxon_id, variable_name   | 
 |4.| location_ancillary |no| location | additional info about a place that does not change, in long format. | variable, value, unit (sampling area, lake area, depth of ocean) | location_id, datetime, variable_name |
 |5.| taxon_ancillary|no|  taxon | additonal info about an organism that does not change, in long format | variable, value, unit (phenotypic traits) | taxon_id, date_time, variable_name   |
 |6.| observation_ancillary  | no | observation | additional info about the sampling event (not related to taxa or locations) in long-format  |  variable_name, value, unit | event_id, variable_name  |
-|7.| dataset_summary|yes|  observation | summary info calculated from incoming data. one line table |See examples directory |   |
+|7.| dataset_summary|yes|  NA | summary info calculated from incoming data. one line table |See examples directory |   |
 
 
 _____
