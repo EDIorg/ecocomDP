@@ -32,11 +32,11 @@
 #'        \item \strong{Table names} Table names must follow the ecocomDP 
 #'        naming convention (i.e. \emph{studyName_ecocomDPTableName.ext}, e.g. 
 #'        \emph{gleon_chloride_observation.csv}). 
-#'        \item \strong{Required tables are present} Some L1 tables are 
+#'        \item \strong{Required tables} Some L1 tables are 
 #'        required, others are not.
 #'        \item \strong{Column names} Column names must be those specified by
 #'        the data pattern.
-#'        \item \strong{Presence of required columns} Some columns are 
+#'        \item \strong{Required columns} Some columns are 
 #'        required, others are not.
 #'        \item \strong{Column classes} Column classes must match the 
 #'        ecocomDP specification.
@@ -158,54 +158,56 @@ validate_ecocomDP <- function(data.path, datetime.format.string) {
   
   # Validate column names -----------------------------------------------------
   
-  print("Checking column names")
+  message("Checking column names")
   
   report_invalid_column_names <- function(dir.files, expected.col.names, name.pattern){
-    # msg <- list()
     for (i in 1:length(name.pattern)){
       table_in <- grep(name.pattern[i], dir.files, value = T)
       if (!identical(table_in, character(0))){
-        data_in <- read.table(paste(data.path,
-                                    "/",
-                                    table_in,
-                                    sep = ""),
-                              header = T,
-                              sep = sep,
-                              as.is = T,
-                              na.strings = "NA")
-        colnames_in <- colnames(data_in)
+        sep <- detect_delimeter(path = data.path,
+                                data.files = table_in,
+                                os = os)
+        data <- read.table(paste0(data.path,
+                                  "/",
+                                  table_in),
+                           header = T,
+                           sep = sep,
+                           as.is = T,
+                           na.strings = "NA")
+        colnames_in <- colnames(data)
         index <- match(colnames_in, expected.col.names)
         index_2 <- 1:length(index)
         invalid_column_names <- colnames_in[index_2[is.na(index)]]
         if (sum(is.na(index)) > 0){
-          for (j in 1:length(invalid_column_names)){
-            msg[[j]] <- paste("This file contains invalid column names:\n",
-                              table_in, "\n",
-                              "Invalid column name:\n",
-                              invalid_column_names[j], "\n")
-          }
-          cat("\n",unlist(msg))
-          stop("See above message for details", call. = F)
+          stop(paste("\n",
+                     "This table:.\n",
+                     table_in, "\n",
+                     "contains these invalid column names:\n",
+                     paste(invalid_column_names, collapse = ", ")))
         }
       }
     }
   }
-  report_invalid_column_names(dir.files, expected.col.names = column_names)
+  report_invalid_column_names(dir.files = dir_files, 
+                              expected.col.names = column_names,
+                              name.pattern = table_names_regexpr)
   
   
-  # Report requried columns that are missing
+  # Report requried columns that are missing ----------------------------------
 
-  print("Check for required columns that are missing ...")
+  message("Checking for required columns")
 
-  report_required_columns_missing <- function(dir_files, table_names_regexpr, table_names, sep){
-    msg <- list()
-    for (i in 1:length(table_names_regexpr)){
-      table_in <- grep(table_names_regexpr[i], dir_files, value = T)
+  report_required_columns_missing <- function(dir.files, name.pattern, col.names){
+    # msg <- list()
+    for (i in 1:length(name.pattern)){
+      table_in <- grep(name.pattern[i], dir.files, value = T)
       if (!identical(table_in, character(0))){
-        data_in <- read.table(paste(data.path,
-                                    "/",
-                                    table_in,
-                                    sep = ""),
+        sep <- detect_delimeter(path = data.path,
+                                data.files = table_in,
+                                os = os)
+        data_in <- read.table(paste0(data.path,
+                                     "/",
+                                     table_in),
                               header = T,
                               sep = sep,
                               as.is = T,
@@ -233,7 +235,7 @@ validate_ecocomDP <- function(data.path, datetime.format.string) {
       stop("See above message for details", call. = F)
     }
   }
-  report_required_columns_missing(dir_files, table_names_regexpr, table_names, sep)
+  report_required_columns_missing(dir_files, name.pattern, table_names)
 
 
   # Validate column vector classes
