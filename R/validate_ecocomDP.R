@@ -180,7 +180,7 @@ validate_ecocomDP <- function(data.path, datetime.format.string) {
         invalid_column_names <- colnames_in[index_2[is.na(index)]]
         if (sum(is.na(index)) > 0){
           stop(paste("\n",
-                     "This table:.\n",
+                     "This table:\n",
                      table_in, "\n",
                      "contains these invalid column names:\n",
                      paste(invalid_column_names, collapse = ", ")))
@@ -198,7 +198,6 @@ validate_ecocomDP <- function(data.path, datetime.format.string) {
   message("Checking for required columns")
 
   report_required_columns_missing <- function(dir.files, name.pattern, col.names){
-    # msg <- list()
     for (i in 1:length(name.pattern)){
       table_in <- grep(name.pattern[i], dir.files, value = T)
       if (!identical(table_in, character(0))){
@@ -212,184 +211,96 @@ validate_ecocomDP <- function(data.path, datetime.format.string) {
                               sep = sep,
                               as.is = T,
                               na.strings = "NA")
-        required_column_names <- criteria$column[(!is.na(criteria$class)) & (criteria$table == table_names[i]) & (criteria$required == "yes")]
-        if ((table_names[i] == "observation") & (!identical(grep("observation_ancillary\\b", dir_files, value = T), character(0)))){
-          required_column_names <- c(required_column_names, "event_id")
-        }
-        colnames_in <- colnames(data_in)
-        index <- match(required_column_names, colnames_in)
-        index2 <- 1:length(index)
-        missing_column_names <- required_column_names[index2[is.na(index)]]
-        if (sum(is.na(index)) > 0){
-          for (j in 1:length(missing_column_names)){
-            msg[[i+j]] <- paste("This table is missing required columns:\n",
-                                table_in, "\n",
-                                "Missing column name:\n",
-                                missing_column_names[j],"\n")
-          }
+        use_i <- criteria$table %in% substr(name.pattern[i], 2, nchar(name.pattern[i]) - 2)
+        use_i2 <- criteria$required == "yes"
+        use_i3 <- (use_i == T) & (use_i2 == T) 
+        required_column_names <- criteria$column[use_i3]
+        required_column_names <- required_column_names[!is.na(criteria$column[use_i3])]
+        found_column_names <- colnames(data_in)
+        use_i <- required_column_names %in% found_column_names
+        missing_column_names <- required_column_names[!use_i]
+        if (sum(use_i) < length(use_i)){
+          stop(paste("\n",
+                     "This table:\n",
+                     table_in, "\n",
+                     "is missing these required columns:\n",
+                     paste(missing_column_names, collapse = ", ")))
         }
       }
     }
-    if (length(unlist(msg)) > 0){
-      cat("\n",unlist(msg))
-      stop("See above message for details", call. = F)
+  }
+  report_required_columns_missing(dir.files = dir_files, 
+                                  name.pattern = table_names_regexpr, 
+                                  col.names = column_names)
+  
+
+  # Report incorrect column classes -------------------------------------------
+  
+  message("Checking column classes")
+
+  validate_column_classes <- function(dir.files, name.pattern){
+    for (i in 1:length(name.pattern)){
+      table_in <- grep(table_names_regexpr[i], dir.files, value = T)
+      if (!identical(table_in, character(0))){
+        sep <- detect_delimeter(path = data.path,
+                                data.files = table_in,
+                                os = os)
+        data_in <- read.table(paste(data.path,
+                                    "/",
+                                    table_in,
+                                    sep = ""),
+                              header = T,
+                              sep = sep,
+                              as.is = T,
+                              na.strings = "NA")
+        found_column_names <- colnames(data_in)
+        found_column_classes <- unname(unlist(lapply(data_in, class)))
+        found_numeric_classes <- (found_column_classes == "numeric") | (found_column_classes == "integer")
+        found_column_classes[found_numeric_classes] <- "numeric"
+        found_column_criteria <- data.frame(colname = found_column_names,
+                                            colclass = found_column_classes,
+                                            stringsAsFactors = F)
+        expected_column_names <- criteria$column[(!is.na(criteria$class)) & (criteria$table == table_names[i])]
+        expected_column_classes <- criteria$class[(!is.na(criteria$class)) & (criteria$table == table_names[i])]
+        expected_numeric_classes <- (expected_column_classes == "numeric") | (expected_column_classes == "integer")
+        expected_column_criteria <- data.frame(colname = expected_column_names,
+                                               colclass = expected_column_classes,
+                                               stringsAsFactors = F)
+        use_i <- expected_column_criteria$colclass == "Date"
+        if (sum(use_i) > 0){
+          expected_column_criteria$colclass[use_i] <- "character"
+        }
+        use_i <- expected_column_criteria$colclass == "character"
+        if (sum(use_i > 0)){
+          found_column_criteria$colclass[use_i] <- "character"
+        }
+        use_i <- match(found_column_criteria$colname,
+                       expected_column_criteria$colname)
+        use_i <- found_column_criteria$colclass == expected_column_criteria$colclass[use_i]
+        if (sum(!use_i) > 0){
+          stop(paste("\n",
+                     "This table:\n",
+                     table_in, "\n",
+                     "contains these columns:\n",
+                     paste(found_column_criteria$colname[!use_i], collapse  = ", "), "\n",
+                     "with these incorrect column classes:\n",
+                     paste(found_column_criteria$colclass[!use_i], collapse = ", "), "\n",
+                     "The correct classes for these columns are:\n",
+                     paste(expected_column_criteria$colclass[!use_i], collapse = ", ")))                                                    
+        }
+      }
     }
   }
-  report_required_columns_missing(dir_files, name.pattern, table_names)
-
-
-  # Validate column vector classes
-  
-  # print("Column classes ...")
-  # 
-  # table_names_regexpr <- c("sampling_location\\b", "taxon\\b", "event\\b", "observation\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b")
-  # validate_column_classes <- function(dir_files, table_names_regexpr){
-  #   msg <- list()
-  #   for (i in 1:length(table_names_regexpr)){
-  #     table_in <- grep(table_names_regexpr[i], dir_files, value = T)
-  #     if (!identical(table_in, character(0))){
-  #     
-  #       data_in <- read.table(paste(data.path,
-  #                                   "/",
-  #                                   table_in,
-  #                                   sep = ""),
-  #                             header = T,
-  #                             sep = sep,
-  #                             as.is = T,
-  #                             na.strings = "NA")
-  #       colnames_in <- colnames(data_in)
-  #       found_column_classes <- unname(unlist(lapply(data_in, class)))
-  #       colnames_expected <- criteria$column[(!is.na(criteria$class)) & (criteria$table == table_names[i])]
-  #       required_column_classes <- criteria$class[(!is.na(criteria$class)) & (criteria$table == table_names[i])]
-  #       index <- match(colnames_in, colnames_expected)
-  #       required_column_classes <- required_column_classes[index]
-  #       rcci <- required_column_classes
-  #       fcci <- found_column_classes
-  #       ncci <- colnames_in
-  #       msg2 <- list()
-  #       for (j in 1:length(ncci)){
-  #         if ((rcci[j] == "character") & (fcci[j] == "integer")){
-  #           
-  #         } else if ((rcci[j] == "character") & (fcci[j] == "numeric")){
-  #           
-  #         } else if ((rcci[j] == "character") & (fcci[j] == "Date")){
-  #           
-  #         } else if ((rcci[j] == "integer") & (fcci[j] == "character")){
-  #           msg2[[j]] <- paste("This table has an incorrect column class:\n",
-  #                              table_in, "\n",
-  #                              "Column in question:\n",
-  #                              ncci[j], "\n",
-  #                              "Column class found:\n",
-  #                              fcci[j], "\n",
-  #                              "Column class required:\n",
-  #                              rcci[j], "\n")
-  #         } else if ((rcci[j] == "integer") & (fcci[j] == "numeric")){
-  #           msg2[[j]] <- paste("This table has an incorrect column class:\n",
-  #                              table_in, "\n",
-  #                              "Column in question:\n",
-  #                              ncci[j], "\n",
-  #                              "Column class found:\n",
-  #                              fcci[j], "\n",
-  #                              "Column class required:\n",
-  #                              rcci[j], "\n")
-  #         } else if ((rcci[j] == "integer") & (fcci[j] == "Date")){
-  #           msg2[[j]] <- paste("This table has an incorrect column class:\n",
-  #                              table_in, "\n",
-  #                              "Column in question:\n",
-  #                              ncci[j], "\n",
-  #                              "Column class found:\n",
-  #                              fcci[j], "\n",
-  #                              "Column class required:\n",
-  #                              rcci[j], "\n")
-  #         } else if ((rcci[j] == "numeric") & (fcci[j] == "character")){
-  #           msg2[[j]] <- paste("This table has an incorrect column class:\n",
-  #                              table_in, "\n",
-  #                              "Column in question:\n",
-  #                              ncci[j], "\n",
-  #                              "Column class found:\n",
-  #                              fcci[j], "\n",
-  #                              "Column class required:\n",
-  #                              rcci[j], "\n")
-  #         } else if ((rcci[j] == "numeric") & (fcci[j] == "Date")){
-  #           msg2[[j]] <- paste("This table has an incorrect column class:\n",
-  #                              table_in, "\n",
-  #                              "Column in question:\n",
-  #                              ncci[j], "\n",
-  #                              "Column class found:\n",
-  #                              fcci[j], "\n",
-  #                              "Column class required:\n",
-  #                              rcci[j], "\n")
-  #         } else if ((rcci[j] == "Date") & (fcci[j] == "numeric")){
-  #           msg2[[j]] <- paste("This table has an incorrect column class:\n",
-  #                              table_in, "\n",
-  #                              "Column in question:\n",
-  #                              ncci[j], "\n",
-  #                              "Column class found:\n",
-  #                              fcci[j], "\n",
-  #                              "Column class required:\n",
-  #                              rcci[j], "\n")
-  #         } else if ((rcci[j] == "Date") & (fcci[j] == "integer")){
-  #           msg2[[j]] <- paste("This table has an incorrect column class:\n",
-  #                              table_in, "\n",
-  #                              "Column in question:\n",
-  #                              ncci[j], "\n",
-  #                              "Column class found:\n",
-  #                              fcci[j], "\n",
-  #                              "Column class required:\n",
-  #                              rcci[j], "\n")
-  #         }
-  #       }
-  #     }
-  #     msg[[i]] <- msg2
-  #   }
-  #   if (length(unlist(msg)) > 0){
-  #     cat("\n",unlist(msg))
-  #     stop("See above message for details", call. = F)
-  #   }
-  # }
-  # validate_column_classes(dir_files, table_names_regexpr)
+  validate_column_classes(dir.files = dir_files, name.pattern = table_names_regexpr)
   
   
-  # # Validate datetime format
-  # 
-  # print("Check datetime format ...")
-  # 
-  # table_names_regexpr <- c("observation\\b", "sampling_location_ancillary\\b", "taxon_ancillary\\b")
-  # check_datetime_format <- function(dir_files, table_names_regexpr, sep){
-  #   msg <- list()
-  #   for (i in 1:length(table_names_regexpr)){
-  #     table_in <- grep(table_names_regexpr[i], dir_files, value = T)
-  #     if (!identical(table_in, character(0))){
-  #       data_in <- read.table(paste(data.path,
-  #                                   "/",
-  #                                   table_in,
-  #                                   sep = ""),
-  #                             header = T,
-  #                             sep = sep,
-  #                             as.is = T,
-  #                             na.strings = "NA")
-  #       colnames_in <- colnames(data_in)
-  #       coldatetime <- grep("datetime\\b", colnames_in, value = T)
-  #       len_date_in <- dim(na.omit(data_in[coldatetime]))[1]
-  #       dates <- as.Date(data_in[[coldatetime]], format = datetime_iso8601)
-  #       if (sum(is.na(dates)) > 0){
-  #         msg[[i]] <- paste("This table contains a datetime not in the required format:\n",
-  #                           table_in, "\n",
-  #                           "Remember the required format is:\n",
-  #                           "YYYY-MM-DD","\n")
-  #       }
-  #     }
-  #   }
-  #   if (length(msg) > 0){
-  #     cat("\n",unlist(msg))
-  #     stop("See above message for details", call. = F)
-  #   }
-  # }
-  # check_datetime_format(dir_files, table_names_regexpr, sep)
+  # Validate table IDs --------------------------------------------------------
   
   
-  # Validation complete
-  print("Congratulations! Your ecocomDP has passed validation!")
+  # Validation complete -------------------------------------------------------
+  
+  message(paste('Congratulations! Your ecocomDP tables have passed validation!\n',
+                'Now make metadata for it with the "make_eml" function'))
   
   
 }
