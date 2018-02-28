@@ -143,3 +143,28 @@ Columns
 | max_num_taxa                |integer    |yes|   	|  Number of unique values in the taxon table. 	| 1  	|
 | geo_extent_bounding_box_m2  |float      |no|   	|   Area of the study location.	|  40 	|
 
+
+
+
+Table: variable_mappings 
+---
+Description: Information linking a variable_name used in a data table to an external definition
+
+This optional table holds mappings (or relations) between variable names in the data tables and measurement definitions external to the data package. This table has multiple uses: 
+
+- provides definitions for variables in the datasets (more extensive than might be found in metadata) 
+- code can use this table to  to create EML code-definition pairs or annotations in metadata
+- a single column in a data talbe may have multiple mappings, by including multiple rows for it
+
+Columns
+
+|  column name 	|   type	 |   not NULL required?	|  references cols 	| description | example |
+|---------------|----------|-----------------------|-------------------|--------------|---------| 
+| table_name    | character |yes| NA	| the name of the table holding this variable 	| 	my_observation  	|
+| variable_name | character |yes| observation.variable_name, observation_ancillary.variable_name, taxon_ancillary.variable_name, location_ancillary.variable_name | the variable name in another data table  	|  sample_z  	|
+| mapped_system | character | no| NA	| system defining this variable_name  	|  BODC  	|
+| mapped_id     | character | no| NA	| id of the definition in that system 	|  12345 	|
+| mapped_label  | character | no| NA	| label for this variable in that mapped system  	|  depth  	|
+
+
+
