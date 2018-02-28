@@ -154,7 +154,7 @@ This optional table holds mappings (or relations) between variable names in the 
 
 - provides definitions for variables in the datasets (more extensive than might be found in metadata) 
 - code can use this table to  to create EML code-definition pairs or annotations in metadata
-- a single column in a data talbe may have multiple mappings, by including multiple rows for it
+- a single column in a data table may have mappings to multiple dictionaries, by including multiple rows for it
 
 Columns
 
