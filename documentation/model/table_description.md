@@ -20,7 +20,7 @@ Below is the table list and suggested population order, ie, parents first.
 |5.| taxon_ancillary|no|  taxon | additonal info about an organism that does not change, in long format | variable, value, unit (phenotypic traits) | taxon_id, date_time, variable_name   |
 |6.| observation_ancillary  | no | observation | additional info about the sampling event (not related to taxa or locations) in long-format  |  variable_name, value, unit | event_id, variable_name  |
 |7.| dataset_summary|yes|  NA | summary info calculated from incoming data. one line table |See examples directory |   |
-|8.| variable_mappings| no |  observation, observation_ancillary, taxon_ancillary, location_ancillary | mappings from variable names in tables to external dictionaries | table_name, variable_name, mapped_system, mapped_id, mapped_label | NA   |
+|8.| variable_mappings| no |  ONE OF: observation, observation_ancillary, taxon_ancillary, OR location_ancillary | mappings from variable names in tables to external dictionaries | table_name, variable_name, mapped_system, mapped_id, mapped_label | NA   |
 
 
 _____
@@ -161,7 +161,7 @@ Columns
 |  column name 	|   type	 |   not NULL required?	|  references cols 	| description | example |
 |---------------|----------|-----------------------|-------------------|--------------|---------| 
 | table_name    | character |yes| NA	| the name of the table holding this variable 	| 	my_observation  	|
-| variable_name | character |yes| observation.variable_name, observation_ancillary.variable_name, taxon_ancillary.variable_name, location_ancillary.variable_name | the variable name in another data table  	|  sample_z  	|
+| variable_name | character |yes| ONE OF: observation.variable_name, observation_ancillary.variable_name, taxon_ancillary.variable_name, OR location_ancillary.variable_name | the variable name in another data table  	|  sample_z  	|
 | mapped_system | character | no| NA	| system defining this variable_name  	|  BODC  	|
 | mapped_id     | character | no| NA	| id of the definition in that system 	|  12345 	|
 | mapped_label  | character | no| NA	| label for this variable in that mapped system  	|  depth  	|
