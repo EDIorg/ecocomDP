@@ -1,0 +1,6 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+table_name	The name of the table holding this variable.	character				
+variable_name	The variable name in anothre data table.	character				
+mapped_system	System defining this variable_name.	character				
+mapped_id	ID of the definition in that system.	character				
+mapped_label	Label for this variable in that mapped system.	character				
