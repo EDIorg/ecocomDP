@@ -25,8 +25,8 @@ compile_attributes <- function(path, delimiter){
 
   # Set parameters ------------------------------------------------------------
   
-  table_patterns <- c("observation\\b", "observation_ancillary\\b", "location_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b", "location\\b", "taxon\\b")
-  table_names <- c("observation", "observation_ancillary", "location_ancillary", "taxon_ancillary", "dataset_summary", "location", "taxon")
+  table_patterns <- c("observation\\b", "observation_ancillary\\b", "location_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b", "location\\b", "taxon\\b", "variable_mappings\\b")
+  table_names <- c("observation", "observation_ancillary", "location_ancillary", "taxon_ancillary", "dataset_summary", "location", "taxon", "variable_mappings\\b")
   dir_files <- list.files(path)
   table_names_found <- list()
   tables_found <- list()
