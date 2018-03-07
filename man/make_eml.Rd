@@ -130,7 +130,10 @@ Make and validate EML for an Ecological Community Data Pattern
         from the LTER controlled vocabulary.
         \item \strong{Intellectual rights} Updates the intellectual rights
         according to user specified arguments.
-        \item \strong{Taxon coverage} This has not yet been implemented.
+        \item \strong{Taxon coverage} Adds taxonomicCoverage if user 
+        supplied taxonomicCoverage.xml is in the dataset working directory. 
+        Create taxonomicCoverage.xml with the taxonomyCleanr R package 
+        (https://github.com/EDIorg/taxonomyCleanr).
         \item \strong{Contact} Adds the ecocomDP creator as a contact.
         \item \strong{Provenance} Adds the provenance snippet from the 
         parent data package with general description of how the ecocomDP was

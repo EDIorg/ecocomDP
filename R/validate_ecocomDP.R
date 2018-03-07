@@ -36,8 +36,7 @@
 #'        required, others are not.
 #'        \item \strong{Column classes} Column classes must match the 
 #'        ecocomDP specification.
-#'        \item \strong{Datetime format string} Datetime values should match
-#'        the input datetime.format.string parameter.
+#'        \item \strong{Relational IDs} Relational IDs should be unique.
 #'    }
 #'         
 #' @export
