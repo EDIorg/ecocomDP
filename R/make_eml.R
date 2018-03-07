@@ -127,7 +127,10 @@
 #'         from the LTER controlled vocabulary.
 #'         \item \strong{Intellectual rights} Updates the intellectual rights
 #'         according to user specified arguments.
-#'         \item \strong{Taxon coverage} This has not yet been implemented.
+#'         \item \strong{Taxon coverage} Adds taxonomicCoverage if user 
+#'         supplied taxonomicCoverage.xml is in the dataset working directory. 
+#'         Create taxonomicCoverage.xml with the taxonomyCleanr R package 
+#'         (https://github.com/EDIorg/taxonomyCleanr).
 #'         \item \strong{Contact} Adds the ecocomDP creator as a contact.
 #'         \item \strong{Provenance} Adds the provenance snippet from the 
 #'         parent data package with general description of how the ecocomDP was
@@ -195,10 +198,10 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
                                  stringsAsFactors = F)
   if (length(code_files_found$files) > 1){
     print.data.frame(code_files_found)
-    print("Which of the above listed code files were used to create this ecocomDP?")
+    message("Which of the above listed code files were used to create this ecocomDP?")
     answer <- readline("Enter respective row numbers. Separate each entry with a comma and no space (e.g. 3,12): ")
     code_files <- code_files_found$files[as.integer(unlist(strsplit(answer, ",")))]
-    print(paste("You selected ...", code_files))
+    message(paste("You selected ...", code_files))
   } else if (length(code_files_found$files) == 1){
     code_files <- code_files_found$files[1]
   }
@@ -213,10 +216,10 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
                                   stringsAsFactors = F)
     if (length(xml_files_found$files) > 1){
       print.data.frame(xml_files_found)
-      print("Which of the above listed .xml files are the parent EML of this ecocomDP?")
+      message("Which of the above listed .xml files are the parent EML of this ecocomDP?")
       answer <- readline("Enter the row number: ")
       parent_eml_file <- xml_files_found$files[as.integer(unlist(strsplit(answer, ",")))]
-      print(paste("You selected ...", parent_eml_file))
+      message(paste("You selected ...", parent_eml_file))
     } else {
       if (length(list.files(eml.path, pattern = paste(parent.package.id, ".xml", sep = ""))) == 1){
         parent_eml_file <- paste(parent.package.id, ".xml", sep = "")
@@ -280,9 +283,11 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   
   # Modify elements of parent EML ---------------------------------------------
   
+  message('Modifying elements of parent EML:')
+  
   # Modify eml-access
   
-  print("Modifying <access> ...")
+  message("Changing <access>")
 
   allow_principals <- c(paste("uid=",
                               user.id,
@@ -316,15 +321,23 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
 
   # Remove alternate identifier
 
-  print("Removing <alternateIdentifier> ...")
+  message("Removing <alternateIdentifier>")
 
   null_alternate_identifier <- list(NULL)
   
   xml_in@dataset@alternateIdentifier <- as(null_alternate_identifier, "ListOfalternateIdentifier")
   
+  # Add taxonomicCoverage
+  
+  if (file.exists(paste(data.path, "/", "taxonomicCoverage.xml", sep = ""))){
+    message("Adding <taxonomicCoverage>")
+    taxonomic_coverage <- read_eml(paste(data.path, "/", "taxonomicCoverage.xml", sep = ""))
+    xml_in@dataset@coverage@taxonomicCoverage <- as(list(taxonomic_coverage), "ListOftaxonomicCoverage")
+  }
+  
   # Modify eml-contact
   
-  print("Appending <contact> ...")
+  message("Adding to <contact>")
   
   personinfo <- read.table(paste(data.path,
                                  "/additional_contact.txt",
@@ -349,13 +362,13 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
 
   # Modify eml-pubDate
 
-  print("Updating <pubDate> ...")
+  message("Updating <pubDate>")
 
   xml_in@dataset@pubDate <- as(format(Sys.time(), "%Y-%m-%d"), "pubDate")
 
   # Modify keywordSet
   
-  print("Appending <keywordSet> ...")
+  message("Adding to <keywordSet>")
   
   keywords <- read.table(paste(path.package("ecocomDP"),
                                "/controlled_vocabulary.csv",
@@ -385,14 +398,14 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   
   if (!missing(intellectual.rights)){
     if (intellectual.rights == "CC0"){
-      print("Changing <intellectualRights> to CC0 ...")
+      message("Changing <intellectualRights> to CC0")
       xml_in@dataset@intellectualRights <- as(
         set_TextType(paste(path.package("ecocomDP"),
                            "/intellectual_rights_cc0_1.txt",
                            sep = "")),
         "intellectualRights")
     } else if (intellectual.rights == "CCBY"){
-      print("Changing <intellectualRights> to CCBY ...")
+      message("Changing <intellectualRights> to CCBY")
       xml_in@dataset@intellectualRights <- as(
         set_TextType(paste(path.package("ecocomDP"),
                            "/intellectual_rights_by_4.0.txt",
@@ -425,7 +438,7 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
 
     if (ncol_found == ncol_expected){
 
-      print("Adding provenance from additional_provenance.txt ...")
+      message("Adding provenance from additional_provenance.txt")
 
       # provenance <- read_eml(additional_provenance_file)
       # 
@@ -519,7 +532,7 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   
   for (i in 1:length(tables_found)){
 
-    print(paste(
+    message(paste(
       table_names[i],
       "data table ..."))
 
@@ -783,7 +796,7 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   
   if (custom_units == "yes"){
     
-    print("Adding <customUnits>")
+    message("Adding <customUnits>")
     
     xml_in@additionalMetadata <- as(unitsList, "additionalMetadata")
     
@@ -791,7 +804,7 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   
   # Add processing scripts ----------------------------------------------------
   
-  print("Adding processing scripts as <otherEntity> ...")
+  message("Adding processing scripts to <otherEntity>")
   
   list_of_other_entity <- list()
   
@@ -909,7 +922,7 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
       
     }
     
-    print("Adding formatting scripts as <otherEntity> ...")
+    message("Adding formatting scripts as <otherEntity>")
     
     xml_in@dataset@otherEntity <- new("ListOfotherEntity",
                                       list_of_other_entity)
@@ -1002,23 +1015,23 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   
   # Write EML
 
-  print("Writing EML to file ...")
+  message("Writing EML to file")
 
   write_eml(eml, paste(data.path, "/", child.package.id, ".xml", sep = ""))
 
   # Validate EML
 
-  print("Validating EML ...")
+  message("Validating EML")
 
   validation_result <- eml_validate(eml)
 
   if (validation_result == "TRUE"){
 
-    print("EML passed validation!")
+    message("EML passed validation!")
 
   } else {
 
-    print("EML validaton failed. See warnings for details.")
+    message("EML validaton failed. See warnings for details.")
 
   }
 

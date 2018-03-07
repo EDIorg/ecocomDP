@@ -41,11 +41,13 @@ compile_attributes <- function(path, delimiter){
   
   # Loop through each table that is present -----------------------------------
   
+  message('Compiling table attributes:')
+  
   attributes_stored <- list()
 
   for (i in 1:length(table_names)){
 
-    print(paste("Compiling", table_names[i], "attributes ..."))
+    message(table_names[i])
 
     # Read data table
     
