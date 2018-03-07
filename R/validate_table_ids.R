@@ -26,7 +26,7 @@
 #' @export
 #'
 
-validate_ecocomDP <- function(data.path) {
+validate_table_ids <- function(data.path) {
   
   
   # Check arguments and parameterize ------------------------------------------
