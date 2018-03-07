@@ -5,7 +5,7 @@
 \alias{validate_ecocomDP}
 \title{Validate ecocomDP tables}
 \usage{
-validate_ecocomDP(data.path, sep)
+validate_ecocomDP(data.path)
 
 validate_table_ids(data.path)
 }
