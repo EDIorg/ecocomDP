@@ -85,7 +85,7 @@ validate_column_presence <- function(data.path, criteria){
       use_i3 <- (use_i == T) & (use_i2 == T) 
       required_column_names <- criteria$column[use_i3]
       required_column_names <- required_column_names[!is.na(criteria$column[use_i3])]
-      found_column_names <- colnames(data_in)
+      found_column_names <- colnames(data)
       use_i <- required_column_names %in% found_column_names
       missing_column_names <- required_column_names[!use_i]
       if (sum(use_i) < length(use_i)){
