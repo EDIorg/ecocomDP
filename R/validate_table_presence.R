@@ -65,7 +65,7 @@ validate_table_presence <- function(data.path, criteria){
   
   # Report required tables that are missing -----------------------------------
   
-  message("Checking for required tables")
+  message("Checking for required tables ...")
   
   missing_tables <- c()
   tables <- dir_files[attr(regexpr(paste(table_names_required_regexpr, 
@@ -90,7 +90,7 @@ validate_table_presence <- function(data.path, criteria){
 
   # Send validation notice ----------------------------------------------------
   
-  message('Required tables are present')
+  message('... required tables are present')
   
   
 }

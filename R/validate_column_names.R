@@ -65,7 +65,7 @@ validate_column_names <- function(data.path, criteria) {
   
   # Validate column names -----------------------------------------------------
   
-  message("Checking column names")
+  message("Checking column names ...")
   
   for (i in 1:length(table_names_regexpr)){
     table_in <- grep(table_names_regexpr[i], dir_files, value = T)
@@ -98,6 +98,6 @@ validate_column_names <- function(data.path, criteria) {
 
   # Send validation notice ----------------------------------------------------
   
-  message('Column names are valid')
+  message('... column names are valid')
 
 }

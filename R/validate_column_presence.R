@@ -64,7 +64,7 @@ validate_column_presence <- function(data.path, criteria){
   
   # Validate column presence ----------------------------------
   
-  message("Checking for required columns")
+  message("Checking for required columns ...")
   
   for (i in 1:length(table_names_regexpr)){
     table_in <- grep(table_names_regexpr[i], dir_files, value = T)
@@ -101,6 +101,6 @@ validate_column_presence <- function(data.path, criteria){
   
   # Send validation notice ----------------------------------------------------
   
-  message('Required columns are present')
+  message('... required columns are present')
   
 }

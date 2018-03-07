@@ -78,6 +78,8 @@ validate_ecocomDP <- function(data.path) {
                          as.is = T,
                          na.strings = "NA")
   
+  message("Validating:")
+  
   # Validate table names ------------------------------------------------------
   
   validate_table_names(data.path = data.path,

@@ -63,7 +63,7 @@ validate_table_names <- function(data.path, criteria) {
   
   # Validate file naming convention -------------------------------------------
   
-  message("Checking table names")
+  message("Checking table names ...")
   
   msg <- list()
   tables <- dir_files[attr(regexpr(paste(table_names_regexpr, 
@@ -87,6 +87,6 @@ validate_table_names <- function(data.path, criteria) {
   
   # Send validation notice ----------------------------------------------------
   
-  message('Table names are valid')
+  message('... table names are valid')
   
 }
