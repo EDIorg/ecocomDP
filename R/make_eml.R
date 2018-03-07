@@ -533,8 +533,9 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   for (i in 1:length(tables_found)){
 
     message(paste(
+      "Adding",
       table_names[i],
-      "data table ..."))
+      "<dataTable>"))
 
     attributes <- attributes_in[[1]][[i]]
 
