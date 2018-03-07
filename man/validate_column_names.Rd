@@ -2,24 +2,23 @@
 % Please edit documentation in R/validate_column_names.R
 \name{validate_column_names}
 \alias{validate_column_names}
-\title{Validate column names of ecocomDP tables}
+\title{Validate table column names}
 \usage{
 validate_column_names(data.path)
 }
 \arguments{
 \item{data.path}{A character string specifying the path to the directory containing L1
 tables.}
+
+\item{criteria}{A data frame of the validation criteria located in 
+/inst/validation_criteria.txt.}
 }
 \value{
-A validation report printed in the RStudio console window. The 
-    validation check runs until an error is encountered. You must address 
-    errors of one table before the next table is checked. Once all 
-    tables have been checked you will be notified with a congratulatory 
-    message.
+A validation report printed in the RStudio console window.
 }
 \description{
 This function ensures that the column names of your ecocomDP (L1) tables 
-    are correct.
+    are valid.
 }
 \details{
 The full suite of L1 validation checks are performed by the 

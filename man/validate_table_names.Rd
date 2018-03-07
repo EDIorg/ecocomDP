@@ -8,21 +8,20 @@
 \usage{
 load_validation_criteria(data.path)
 
-validate_table_names(data.path)
+validate_table_names(data.path, criteria)
 }
 \arguments{
 \item{data.path}{A character string specifying the path to the directory containing L1
 tables.}
 
+\item{criteria}{A data frame of the validation criteria located in 
+/inst/validation_criteria.txt.}
+
 \item{data.path}{A character string specifying the path to the directory containing L1
 tables.}
 }
 \value{
-A validation report printed in the RStudio console window. The 
-    validation check runs until an error is encountered. You must address 
-    errors of one table before the next table is checked. Once all 
-    tables have been checked you will be notified with a congratulatory 
-    message.
+A validation report printed in the RStudio console window.
 }
 \description{
 Load criteria against which user supplied ecocomDP tables are validated.

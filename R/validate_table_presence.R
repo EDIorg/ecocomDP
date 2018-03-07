@@ -1,22 +1,20 @@
-#' Validate presence of ecocomDP tables
+#' Validate table presence
 #'
 #' @description  
-#'     This function ensures that your ecocomDP (L1) tables include all 
-#'     required tables (i.e. \emph{location, taxon, observation, 
-#'     dataset_summary}).
+#'     This function checks for missing ecocomDP (L1) tables. Required tables
+#'     include location, taxon, observation, dataset_summary.
 #'
-#' @usage validate_table_presence(data.path)
+#' @usage validate_table_presence(data.path, criteria)
 #' 
 #' @param data.path 
 #'     A character string specifying the path to the directory containing L1
 #'     tables.
+#' @param criteria
+#'     A data frame of the validation criteria located in 
+#'     /inst/validation_criteria.txt.
 #'
 #' @return 
-#'     A validation report printed in the RStudio console window. The 
-#'     validation check runs until an error is encountered. You must address 
-#'     errors of one table before the next table is checked. Once all 
-#'     tables have been checked you will be notified with a congratulatory 
-#'     message.
+#'     A validation report printed in the RStudio console window.
 #'          
 #' @details 
 #' 
@@ -29,13 +27,16 @@
 #' @export
 #'
 
-validate_table_presence <- function(data.path) {
+validate_table_presence <- function(data.path, criteria){
   
   
   # Check arguments and parameterize ------------------------------------------
   
   if (missing(data.path)){
     stop('Input argument "data.path" is missing! Specify path to your ecocomDP tables.')
+  }
+  if (missing(criteria)){
+    stop('Input argument "criteria" is missing! Specify the validation criteria for the ecocomDP tables.')
   }
   
   # Validate path
@@ -53,24 +54,6 @@ validate_table_presence <- function(data.path) {
   
   
   # Load validation criteria --------------------------------------------------
-  
-  message("Loading validation criteria")
-  
-  criteria <- read.table(paste(path.package("ecocomDP"),
-                               "/validation_criteria.txt",
-                               sep = ""),
-                         header = T,
-                         sep = "\t",
-                         as.is = T,
-                         na.strings = "NA")
-  
-  column_names <- unique(criteria$column[!is.na(criteria$column)])
-  
-  table_names <- unique(criteria$table)
-  
-  table_names_regexpr <- paste0("_",
-                                table_names,
-                                "\\b")
   
   table_names_required <- criteria$table[(is.na(criteria$class))
                                          & (criteria$required == "yes")]
@@ -107,7 +90,7 @@ validate_table_presence <- function(data.path) {
 
   # Send validation notice ----------------------------------------------------
   
-  message('Required tables are accounted for')
+  message('Required tables are present')
   
   
 }

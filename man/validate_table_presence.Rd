@@ -2,25 +2,23 @@
 % Please edit documentation in R/validate_table_presence.R
 \name{validate_table_presence}
 \alias{validate_table_presence}
-\title{Validate presence of ecocomDP tables}
+\title{Validate table presence}
 \usage{
-validate_table_presence(data.path)
+validate_table_presence(data.path, criteria)
 }
 \arguments{
 \item{data.path}{A character string specifying the path to the directory containing L1
 tables.}
+
+\item{criteria}{A data frame of the validation criteria located in 
+/inst/validation_criteria.txt.}
 }
 \value{
-A validation report printed in the RStudio console window. The 
-    validation check runs until an error is encountered. You must address 
-    errors of one table before the next table is checked. Once all 
-    tables have been checked you will be notified with a congratulatory 
-    message.
+A validation report printed in the RStudio console window.
 }
 \description{
-This function ensures that your ecocomDP (L1) tables include all 
-    required tables (i.e. \emph{location, taxon, observation, 
-    dataset_summary}).
+This function checks for missing ecocomDP (L1) tables. Required tables
+    include location, taxon, observation, dataset_summary.
 }
 \details{
 The full suite of L1 validation checks are performed by the 

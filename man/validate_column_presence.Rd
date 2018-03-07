@@ -4,22 +4,21 @@
 \alias{validate_column_presence}
 \title{Validate column presence}
 \usage{
-validate_column_presence(data.path)
+validate_column_presence(data.path, criteria)
 }
 \arguments{
 \item{data.path}{A character string specifying the path to the directory containing L1
 tables.}
+
+\item{criteria}{A data frame of the validation criteria located in 
+/inst/validation_criteria.txt.}
 }
 \value{
-A validation report printed in the console window of RStudio. The 
-    validation checks run until an error is encountered. You must address 
-    errors before continuing to the next check. Once all validation checks 
-    have successfully completed, you will be notified with a congratulatory 
-    message.
+A validation report printed in the console window of RStudio.
 }
 \description{
-This function ensures that your ecocomDP (L1) tables contain 
-    required columns.
+This function ensures that your ecocomDP (L1) tables contain required 
+    columns.
 }
 \details{
 The full suite of L1 validation checks are performed by the 

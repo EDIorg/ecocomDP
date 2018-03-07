@@ -1,21 +1,20 @@
-#' Validate column names of ecocomDP tables
+#' Validate table column names
 #'
 #' @description  
 #'     This function ensures that the column names of your ecocomDP (L1) tables 
-#'     are correct.
+#'     are valid.
 #'
 #' @usage validate_column_names(data.path)
 #' 
 #' @param data.path 
 #'     A character string specifying the path to the directory containing L1
 #'     tables.
+#' @param criteria
+#'     A data frame of the validation criteria located in 
+#'     /inst/validation_criteria.txt.
 #'
 #' @return 
-#'     A validation report printed in the RStudio console window. The 
-#'     validation check runs until an error is encountered. You must address 
-#'     errors of one table before the next table is checked. Once all 
-#'     tables have been checked you will be notified with a congratulatory 
-#'     message.
+#'     A validation report printed in the RStudio console window.
 #'          
 #' @details 
 #' 
@@ -28,13 +27,16 @@
 #' @export
 #'
 
-validate_column_names <- function(data.path) {
+validate_column_names <- function(data.path, criteria) {
   
   
   # Check arguments and parameterize ------------------------------------------
   
   if (missing(data.path)){
     stop('Input argument "data.path" is missing! Specify path to your ecocomDP tables.')
+  }
+  if (missing(criteria)){
+    stop('Input argument "criteria" is missing! Specify the validation criteria for the ecocomDP tables.')
   }
 
   # Validate path
@@ -53,16 +55,6 @@ validate_column_names <- function(data.path) {
   
   # Load validation criteria --------------------------------------------------
   
-  message("Loading validation criteria ")
-  
-  criteria <- read.table(paste(path.package("ecocomDP"),
-                               "/validation_criteria.txt",
-                               sep = ""),
-                         header = T,
-                         sep = "\t",
-                         as.is = T,
-                         na.strings = "NA")
-  
   column_names <- unique(criteria$column[!is.na(criteria$column)])
   
   table_names <- unique(criteria$table)
@@ -70,14 +62,6 @@ validate_column_names <- function(data.path) {
   table_names_regexpr <- paste0("_",
                                 table_names,
                                 "\\b")
-  
-  table_names_required <- criteria$table[(is.na(criteria$class))
-                                         & (criteria$required == "yes")]
-  
-  table_names_required_regexpr <- paste0("_",
-                                         table_names_required,
-                                         "\\b")
-
   
   # Validate column names -----------------------------------------------------
   
@@ -95,7 +79,8 @@ validate_column_names <- function(data.path) {
                          header = T,
                          sep = sep,
                          as.is = T,
-                         na.strings = "NA")
+                         quote = "\"",
+                         comment.char = "#")
       colnames_in <- colnames(data)
       index <- match(colnames_in, column_names)
       index_2 <- 1:length(index)

@@ -13,18 +13,16 @@ validate_table_ids(data.path)
 \item{data.path}{A character string specifying the path to the directory containing L1
 tables.}
 
-\item{datetime.format.string}{A character string specifying the datetime format string used in your
-L1 tables.}
-
 \item{data.path}{A character string specifying the path to the directory containing L1
 tables.}
 }
 \value{
-A validation report printed in the console window of RStudio. The 
-    validation checks run until an error is encountered. You must address 
-    errors before continuing to the next check. Once all validation checks 
-    have successfully completed, you will be notified with a congratulatory 
-    message.
+A validation report to the RStudio console window. When an issue is 
+    encountered a message will be displayed with recommendations for fixing
+    it. Each issue must be resolved before the next check will be implemented.
+    Once all validation checks have been passed, you will be notified with 
+    a congratulatory message and you can move on to creating EML metadata with
+    \code{make_eml}.
 
 A validation report printed in the console window of RStudio. The 
     validation checks run until an error is encountered. You must address 
@@ -33,10 +31,9 @@ A validation report printed in the console window of RStudio. The
     message.
 }
 \description{
-Once you've formatted a dataset to the ecocomDP (L1) you will need to 
-    check that it complies with the data pattern standard. This process 
-    ensures your L1 is valid and can be combined with other L1 with the 
-    \code{aggregate_ecocomDP} function.
+Once you've created an ecocomDP (L1) you will need to check that it 
+    is accurately formatted. This validation process ensures your L1 is 
+    correct and can be combined with other L1.
 
 This function ensures that your ecocomDP (L1) tables contain valid 
     relational IDs (keys).

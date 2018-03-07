@@ -1,21 +1,20 @@
 #' Validate column presence
 #'
 #' @description  
-#'     This function ensures that your ecocomDP (L1) tables contain 
-#'     required columns.
+#'     This function ensures that your ecocomDP (L1) tables contain required 
+#'     columns.
 #'
-#' @usage validate_column_presence(data.path)
+#' @usage validate_column_presence(data.path, criteria)
 #' 
 #' @param data.path 
 #'     A character string specifying the path to the directory containing L1
 #'     tables.
+#' @param criteria
+#'     A data frame of the validation criteria located in 
+#'     /inst/validation_criteria.txt.
 #'
 #' @return 
-#'     A validation report printed in the console window of RStudio. The 
-#'     validation checks run until an error is encountered. You must address 
-#'     errors before continuing to the next check. Once all validation checks 
-#'     have successfully completed, you will be notified with a congratulatory 
-#'     message.
+#'     A validation report printed in the console window of RStudio.
 #'          
 #' @details 
 #'    The full suite of L1 validation checks are performed by the 
@@ -26,13 +25,16 @@
 #' @export
 #'
 
-validate_column_presence <- function(data.path) {
+validate_column_presence <- function(data.path, criteria){
   
   
   # Check arguments and parameterize ------------------------------------------
   
   if (missing(data.path)){
     stop('Input argument "data.path" is missing! Specify path to your ecocomDP tables.')
+  }
+  if (missing(criteria)){
+    stop('Input argument "criteria" is missing! Specify the validation criteria for the ecocomDP tables.')
   }
   
   # Validate path
@@ -51,16 +53,6 @@ validate_column_presence <- function(data.path) {
   
   # Load validation criteria --------------------------------------------------
   
-  message("Loading validation criteria ")
-  
-  criteria <- read.table(paste(path.package("ecocomDP"),
-                               "/validation_criteria.txt",
-                               sep = ""),
-                         header = T,
-                         sep = "\t",
-                         as.is = T,
-                         na.strings = "NA")
-  
   column_names <- unique(criteria$column[!is.na(criteria$column)])
   
   table_names <- unique(criteria$table)
@@ -69,12 +61,6 @@ validate_column_presence <- function(data.path) {
                                 table_names,
                                 "\\b")
   
-  table_names_required <- criteria$table[(is.na(criteria$class))
-                                         & (criteria$required == "yes")]
-  
-  table_names_required_regexpr <- paste0("_",
-                                         table_names_required,
-                                         "\\b")
   
   # Validate column presence ----------------------------------
   
@@ -92,7 +78,9 @@ validate_column_presence <- function(data.path) {
                             header = T,
                             sep = sep,
                             as.is = T,
-                            na.strings = "NA")
+                            na.strings = "NA",
+                            comment.char = "#",
+                            quote = "\'")
       use_i <- criteria$table %in% substr(table_names_regexpr[i], 2, nchar(table_names_regexpr[i]) - 2)
       use_i2 <- criteria$required == "yes"
       use_i3 <- (use_i == T) & (use_i2 == T) 
@@ -113,6 +101,6 @@ validate_column_presence <- function(data.path) {
   
   # Send validation notice ----------------------------------------------------
   
-  message('Required columns are accounted for')
+  message('Required columns are present')
   
 }
