@@ -72,15 +72,14 @@ validate_column_presence <- function(data.path, criteria){
       sep <- detect_delimeter(path = data.path,
                               data.files = table_in,
                               os = os)
-      data_in <- read.table(paste0(data.path,
-                                   "/",
-                                   table_in),
-                            header = T,
-                            sep = sep,
-                            as.is = T,
-                            na.strings = "NA",
-                            comment.char = "#",
-                            quote = "\'")
+      data <- read.table(paste0(data.path,
+                                "/",
+                                table_in),
+                         header = T,
+                         sep = sep,
+                         as.is = T,
+                         quote = "\"",
+                         comment.char = "")
       use_i <- criteria$table %in% substr(table_names_regexpr[i], 2, nchar(table_names_regexpr[i]) - 2)
       use_i2 <- criteria$required == "yes"
       use_i3 <- (use_i == T) & (use_i2 == T) 

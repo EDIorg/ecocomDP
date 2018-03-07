@@ -80,7 +80,7 @@ validate_column_names <- function(data.path, criteria) {
                          sep = sep,
                          as.is = T,
                          quote = "\"",
-                         comment.char = "#")
+                         comment.char = "")
       colnames_in <- colnames(data)
       index <- match(colnames_in, column_names)
       index_2 <- 1:length(index)
