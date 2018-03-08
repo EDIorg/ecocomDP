@@ -4,41 +4,41 @@
 \alias{validate_ecocomDP}
 \title{Validate ecocomDP tables}
 \usage{
-validate_ecocomDP(data.path, sep)
-    Run this function after creating an ecocomDP and before making EML for 
-    it.
+validate_ecocomDP(data.path)
 }
 \arguments{
-\item{data.path}{A path to the dataset working directory containing \emph{only} ecocomDP 
-tables. This directory should not contain anything else.}
-
-\item{sep}{The field delimiter of ecocomDP tables. Can be comma or tab delimited 
-(i.e. "," or "\\t")}
+\item{data.path}{A character string specifying the path to the directory containing L1
+tables.}
 }
 \value{
-A validation report printed in the console window of RStudio. This 
-    validator runs until it hits an error. You must address the reported
-    issues before continuing. Once all the validation checks have been 
-    passed, you will recieve a congradulatory message.
+A validation report to the RStudio console window. When an issue is 
+    encountered a message will be displayed with recommendations for fixing
+    it. Each issue must be resolved before the next check will be implemented.
+    Once all validation checks have been passed, you will be notified with 
+    a congratulatory message and you can move on to creating EML metadata with
+    \code{make_eml}.
 }
 \description{
-Once you've formatted a dataset to ecocomDP you will need to check that 
-    it complies with the data pattern standard. This process ensures your 
-    dataset is valid and can be combined with other datasets in the ecocomDP
-    with the aggregate_ecocomDP function.
+Once you've created an ecocomDP (L1) you will need to check that it 
+    is accurately formatted. This validation process ensures your L1 is 
+    correct and can be combined with other L1.
 }
 \details{
-Checks:
+Run this function after creating a L1 and before making EML for it.
+
+   Validation checks performed by this function:
    \itemize{
-       \item \strong{Table naming} Table names must follow the ecocomDP 
-       naming convention (i.e. \emph{studyName_ecocomDPTableName}). Make 
-       sure table names are consistent.
-       \item \strong{Required tables} Some tables are required. Add any 
-       missing tables.
-       \item \strong{Column names} Column names must be valid.
-       Adjust column names as required.
-       \item \strong{Required columns} Some columns are required.
-       Add missing columns.
-       \item \strong{Column classes} Column classes must be correct.
+       \item \strong{Table names} Table names must follow the ecocomDP 
+       naming convention (i.e. \emph{studyName_ecocomDPTableName.ext}, e.g. 
+       \emph{gleon_chloride_observation.csv}). 
+       \item \strong{Required tables} Some L1 tables are 
+       required, others are not.
+       \item \strong{Column names} Column names must be those specified by
+       the data pattern.
+       \item \strong{Required columns} Some columns are 
+       required, others are not.
+       \item \strong{Column classes} Column classes must match the 
+       ecocomDP specification.
+       \item \strong{Relational IDs} Relational IDs should be unique.
    }
 }
