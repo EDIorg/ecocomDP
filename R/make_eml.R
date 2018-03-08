@@ -380,7 +380,8 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   list_keywordSet <- xml_in@dataset@keywordSet
   
   list_keywordSet[[length(list_keywordSet)+1]] <- new("keywordSet",
-                                                      keyword = "ecocomDP")
+                                                      keyword = "ecocomDP",
+                                                      keywordThesaurus = "Environmental Data Initiative Controlled Vocabulary")
   
   lter_keywordSet <- list()
   use_i <- keywords[["keywordThesaurus"]] == "LTER Controlled Vocabulary"
