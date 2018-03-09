@@ -287,35 +287,27 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   
   # Modify eml-access
   
-  message("Changing <access>")
+  message("Adding to <access>")
 
-  allow_principals <- c(paste("uid=",
-                              user.id,
-                              ",o=LTER,dc=ecoinformatics,dc=org",
-                              sep = ""),
-                        "public")
-
-  allow_permissions <- c("all",
-                         "read")
-
-  access_order <- "allowFirst"
-
-  access_scope <- "document"
-
-  access <- new("access",
-                scope = access_scope,
-                order = access_order,
-                authSystem = author.system)
-
-  allow <- list()
-  for (i in 1:length(allow_principals)){
-    allow[[i]] <- new("allow",
-                      principal = allow_principals[i],
-                      permission = allow_permissions[i])
+  allow <- xml_in@access@allow
+  
+  list_of_allow <- as(c(new("allow",
+                            principal = paste("uid=",user.id,
+                                              ",o=LTER,dc=ecoinformatics,dc=org",
+                                              sep = ""),
+                            permission = "all")),
+                      "ListOfallow")
+  
+  for (i in 1:length(allow)){
+    list_of_allow[[i+1]] <- allow[[i]]
   }
-
-  access@allow <- new("ListOfallow",
-                      c(allow))
+  
+  access <- new("access",
+                scope = "document",
+                order = "allowFirst",
+                authSystem = author.system)
+  
+  access@allow <- list_of_allow
   
   xml_in@access <- access
 
