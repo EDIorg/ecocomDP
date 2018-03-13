@@ -19,10 +19,10 @@ digraph "twoDegreesRelationshipsDiagram" {
   edge [
     arrowsize="0.8"
   ];
+  "observation":"event_id":w -> "event":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
   "observation":"location_id":w -> "location":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
   "observation":"package_id":w -> "dataset_summary":"elipses":e [arrowhead=none dir=back arrowtail=crowodot];
   "observation":"taxon_id":w -> "taxon":"taxon_id.type":e [arrowhead=none dir=back arrowtail=crowodot];
-  "observation_ancillary":"elipses":w -> "observation":"observation_id":e [arrowhead=none dir=back arrowtail=crowodot];
   "taxon_ancillary":"taxon_id":w -> "taxon":"taxon_id.type":e [arrowhead=none dir=back arrowtail=crowodot];
   "dataset_summary" [
     label=<
@@ -33,6 +33,16 @@ digraph "twoDegreesRelationshipsDiagram" {
     </TABLE>>
     URL="dataset_summary.html"
     tooltip="dataset_summary"
+  ];
+  "event" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">event</TD></TR>
+      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">  </TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">2 &gt;</TD></TR>
+    </TABLE>>
+    URL="event.html"
+    tooltip="event"
   ];
   "location" [
     label=<
@@ -57,20 +67,10 @@ digraph "twoDegreesRelationshipsDiagram" {
       <TR><TD PORT="variable_name" COLSPAN="3" ALIGN="LEFT">variable_name</TD></TR>
       <TR><TD PORT="value" COLSPAN="3" ALIGN="LEFT">value</TD></TR>
       <TR><TD PORT="unit" COLSPAN="3" ALIGN="LEFT">unit</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 3</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 4</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
     </TABLE>>
     URL="observation.html"
     tooltip="observation"
-  ];
-  "observation_ancillary" [
-    label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
-      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">observation_ancillary</TD></TR>
-      <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
-    </TABLE>>
-    URL="observation_ancillary.html"
-    tooltip="observation_ancillary"
   ];
   "taxon" [
     label=<
@@ -90,11 +90,10 @@ digraph "twoDegreesRelationshipsDiagram" {
     label=<
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">taxon_ancillary</TD></TR>
-      <TR><TD PORT="record_id" COLSPAN="3" ALIGN="LEFT">record_id</TD></TR>
       <TR><TD PORT="taxon_ancillary_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">taxon_ancillary_id</TD></TR>
-      <TR><TD PORT="taxon_id" COLSPAN="3" ALIGN="LEFT">taxon_id</TD></TR>
-      <TR><TD PORT="datetime" COLSPAN="3" ALIGN="LEFT">datetime</TD></TR>
-      <TR><TD PORT="variable_name" COLSPAN="3" ALIGN="LEFT">variable_name</TD></TR>
+      <TR><TD PORT="taxon_id" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">taxon_id</TD></TR>
+      <TR><TD PORT="datetime" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">datetime</TD></TR>
+      <TR><TD PORT="variable_name" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">variable_name</TD></TR>
       <TR><TD PORT="value" COLSPAN="3" ALIGN="LEFT">value</TD></TR>
       <TR><TD PORT="author" COLSPAN="3" ALIGN="LEFT">author</TD></TR>
       <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
