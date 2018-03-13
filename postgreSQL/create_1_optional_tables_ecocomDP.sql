@@ -45,32 +45,31 @@ SET default_with_oids = false;
 it can be linked to any of 4 different tables, in a many:many. so we would have needed 
 4 stubs. so in postgres, no linkages are shown. 
 */
---DROP TABLE "ecocom__dp.variable_mappings;
-CREATE TABLE "ecocom_dp".variable_mappings (
+-- DROP TABLE "ecocom_dp".variable_mappings;
+
+CREATE TABLE "ecocom_dp".variable_mapping (
+    variable_mapping_id character varying(100) NOT NULL,
     table_name character varying(200) NOT NULL,
     variable_name character varying(100) NOT NULL,
     mapped_system  character varying(200),
     mapped_id  character varying(200),
     mapped_label  character varying(200)
-
-
 );
 
-ALTER TABLE "ecocom_dp".variable_mappings OWNER TO mob;
-COMMENT ON TABLE "ecocom_dp".variable_mappings IS 'table holds definitions of variable_names that were used in any of these 4 tables: observation, observation_ancillary, taxon_ancillary, location_ancillary.';
+ALTER TABLE "ecocom_dp".variable_mapping OWNER TO mob;
+COMMENT ON TABLE "ecocom_dp".variable_mapping IS 'table holds definitions of variable_names that were used in any of these 4 tables: observation, observation_ancillary, taxon_ancillary, location_ancillary.';
 
-/* add PK constraints */
--- CONSIDER an ID like the other tables for the PK.
-ALTER TABLE ONLY "ecocom_dp".variable_mappings
-    ADD CONSTRAINT observation_pk PRIMARY KEY (table_name, variable_name, mapped_system, mapped_id);
+/* add PK constraint */
+ALTER TABLE ONLY "ecocom_dp".variable_mapping
+    ADD CONSTRAINT variable_mapping_pk PRIMARY KEY (variable_mapping_id);
 
-/* uniq constraints */
-ALTER TABLE ONLY "ecocom_dp".variable_mappings
-   ADD CONSTRAINT taxon_ancillary_uniq UNIQUE (table_name, variable_name, mapped_system, mapped_id);
+/* uniq constraint  */
+ALTER TABLE ONLY "ecocom_dp".variable_mapping
+   ADD CONSTRAINT variable_mapping_uniq UNIQUE (table_name, variable_name, mapped_system, mapped_id);
 
 /*
 set perms
 */
 
-GRANT SELECT ON TABLE "ecocom_dp".variable_mappings TO read_only_user;
-GRANT ALL ON TABLE "ecocom_dp".variable_mappings TO mob;
+GRANT SELECT ON TABLE "ecocom_dp".variable_mapping TO read_only_user;
+GRANT ALL ON TABLE "ecocom_dp".variable_mapping TO mob;
