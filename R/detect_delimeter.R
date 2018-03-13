@@ -95,7 +95,15 @@ detect_delimeter <- function(path, data.files, os){
       file_ext <- substr(data.file, 
                          nchar(data.file)-3,
                          nchar(data.file))
-      if ((delim.guess == ",") & (file_ext == ".txt")){
+      if (is.null(delim.guess)){
+        message(paste("I'm having trouble identifying the field delimeter of ", data.file,
+                      ". Enter the field delimeter of this file.",
+                      ' Valid options are:  ,  \\t  ;  |', sep = ""))
+        answer <- readline('ENTER here: ')
+        if (answer == "\\t"){
+          answer <- "\t"
+        }
+      } else if ((delim.guess == ",") & (file_ext == ".txt")){
         message(paste("I'm having trouble identifying the field delimeter of ", data.file,
                       ". Enter the field delimeter of this file.",
                       ' Valid options are:  ,  \\t  ;  |', sep = ""))
