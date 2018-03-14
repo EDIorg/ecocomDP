@@ -52,7 +52,7 @@ Columns
 |---------------|---------|--------------------|-------------------|--------------|---------|
 | taxon_id           | character |  yes        | NA | ID used in the dataset | sbclter_MAPY |  
 |	taxon_rank         | character |  no         | NA | Taxonomic rank of the organism name | species |   
-|	taxon_name         | character |  yes        | NA | Species name | M. pyrifera | 
+|	taxon_name         | character |  yes        | NA | Taxonomic name of the organism | M. pyrifera | 
 |	authority_system   | character |  no         | NA | Name of the system assigning the taxon ID | ITIS|  
 |	authority_taxon_id | character |  no         | NA | ID in the authority system |  11274|
 
@@ -94,7 +94,7 @@ Columns
 
 Table: taxon_ancillary
 ---
-Description: additional info about an organism that does not change frequently, eg, trophic level. Teatures that change frequently are probably observations. Ancillary observations are linked through the taxon_id, and one taxon_id may have many ancillary observations about it.
+Description: additional info about an organism that does not change frequently, e.g., trophic level. Features that change frequently are probably observations. Ancillary observations are linked through the taxon_id, and one taxon_id may have many ancillary observations about it.
 
 Columns
 
