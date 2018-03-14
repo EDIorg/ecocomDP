@@ -94,7 +94,7 @@ Columns
 
 Table: taxon_ancillary
 ---
-Description: additional info about an organism that does not change frequently, eg, trophic level. Teatures that change frequently are probably observations. Ancillary observations are linked through the taxon_id, and one taxon_id may have many ancillary observations about it.
+Description: additional info about an organism that does not change frequently, e.g., trophic level. Features that change frequently are probably observations. Ancillary observations are linked through the taxon_id, and one taxon_id may have many ancillary observations about it.
 
 Columns
 
