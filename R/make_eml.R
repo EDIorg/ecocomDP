@@ -339,18 +339,24 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
                            as.is = T,
                            na.strings = "NA")
   
-  individualName <- new(
-    "individualName",
-    givenName = trimws(personinfo["givenName"]),
-    surName = trimws(personinfo["surName"]))
+  if (nrow(personinfo) >= 1){
+    
+    individualName <- new(
+      "individualName",
+      givenName = trimws(personinfo["givenName"]),
+      surName = trimws(personinfo["surName"]))
+    
+    contact <- new(
+      "contact",
+      individualName = individualName,
+      organizationName = trimws(personinfo[["organizationName"]]),
+      electronicMailAddress = trimws(personinfo[["electronicMailAddress"]]))
+    
+    xml_in@dataset@contact[[length(xml_in@dataset@contact)+1]] <- contact
+    
+  }
   
-  contact <- new(
-    "contact",
-    individualName = individualName,
-    organizationName = trimws(personinfo[["organizationName"]]),
-    electronicMailAddress = trimws(personinfo[["electronicMailAddress"]]))
   
-  xml_in@dataset@contact[[length(xml_in@dataset@contact)+1]] <- contact
 
   # Modify eml-pubDate
 
