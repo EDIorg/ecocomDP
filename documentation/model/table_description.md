@@ -5,7 +5,7 @@ Introduction
 The ecocom design pattern (ecocomDP) is planned to be a flexible intermediate for ecological community survey data. 
 For information on the process see https://environmentaldatainitiative.org/resources/tools/dataset-design/
 
-The ecocomDP is composed of 7 tables, which can be linked via identifiers. This document describes the seven tables, and  the contents (columns) of each. Examples can be found in the /examples/ directory. The graphic showing all seven data objects and their relationships was created from a relational database implementation (PostgreSQL, see the top-level directory of that name for DDL). Of the seven, three are required (“observation”, “location”, “taxon”). The “dataset_summary” is populated from the “observation” table by code.   
+The ecocomDP is composed of 8 tables, which can be linked via identifiers. This document describes the tables and their contents (columns). Examples of tables can be found in the /examples/ directory. The graphic showing all data objects and their relationships was created from a relational database implementation (PostgreSQL, see the top-level directory of that name for DDL). Three tables are required (“observation”, “location”, “taxon”). The “dataset_summary” is populated from the “observation” table by code.  Two tables hold links to external resources: taxon, and variable_mappings. The taxon table is specifically designed to hold lookup-info from a service such as ITIS. The variable_mappings table hold URIs and lables for external measurement dictionaries.  
 
 Each main table has an optional ancillary table for additional information. These are included because primary research typically includes related measurements which may be of interest during anlaysis. 
 
@@ -52,7 +52,7 @@ Columns
 |---------------|---------|--------------------|-------------------|--------------|---------|
 | taxon_id           | character |  yes        | NA | ID used in the dataset | sbclter_MAPY |  
 |	taxon_rank         | character |  no         | NA | Taxonomic rank of the organism name | species |   
-|	taxon_name         | character |  yes        | NA | Species name | M. pyrifera | 
+|	taxon_name         | character |  yes        | NA | Taxonomic name of the organism | M. pyrifera | 
 |	authority_system   | character |  no         | NA | Name of the system assigning the taxon ID | ITIS|  
 |	authority_taxon_id | character |  no         | NA | ID in the authority system |  11274|
 
@@ -94,7 +94,7 @@ Columns
 
 Table: taxon_ancillary
 ---
-Description: additional info about an organism that does not change frequently, eg, trophic level. Teatures that change frequently are probably observations. Ancillary observations are linked through the taxon_id, and one taxon_id may have many ancillary observations about it.
+Description: additional info about an organism that does not change frequently, e.g., trophic level. Features that change frequently are probably observations. Ancillary observations are linked through the taxon_id, and one taxon_id may have many ancillary observations about it.
 
 Columns
 

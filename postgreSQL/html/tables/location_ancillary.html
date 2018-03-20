@@ -17,6 +17,7 @@
  <ul>
   <li><a href='../index.html' title='All tables and views in the schema'>Tables</a></li>
   <li><a href='../relationships.html' title='Diagram of table relationships'>Relationships</a></li>
+  <li><a href='../utilities.html' title='View of tables with neither parents nor children'>Utility&nbsp;Tables</a></li>
   <li><a href='../constraints.html' title='Useful for diagnosing error messages that just give constraint name or number'>Constraints</a></li>
   <li><a href='../anomalies.html' title="Things that might not be quite right">Anomalies</a></li>
   <li><a href='../columns.byTable.html' title="All of the columns in the schema">Columns</a></li>
@@ -83,7 +84,7 @@
 </tr>
 </thead>
 <tbody valign='top'>
-<tr class='odd'>
+<tr class='even'>
  <td class='primaryKey' title='Primary Key'>location_ancillary_id</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>100</td>
@@ -94,8 +95,8 @@
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
- <td class='detail'>location_id</td>
+<tr class='odd'>
+ <td class='indexedColumn' title='Indexed'>location_id</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>100</td>
  <td class='detail' align='center'></td>
@@ -104,7 +105,7 @@
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative even' valign='top'>
+   <tr class='relative odd' valign='top'>
     <td class='relatedTable detail' title="location_ancillary.location_id refs location.location_id via location_ancillary_fk"><a href='location.html'>location</a><span class='relatedKey'>.location_id</span>
     </td>
     <td class='constraint detail'>location_ancillary_fk<span title='Restrict delete:
@@ -114,8 +115,8 @@
  </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
- <td class='detail'>datetime</td>
+<tr class='even'>
+ <td class='indexedColumn' title='Indexed'>datetime</td>
  <td class='detail'>timestamp</td>
  <td class='detail' align='right'>29,6</td>
  <td class='detail' align='center'></td>
@@ -125,8 +126,8 @@
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
- <td class='detail'>variable_name</td>
+<tr class='odd'>
+ <td class='indexedColumn' title='Indexed'>variable_name</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>200</td>
  <td class='detail' align='center'></td>
@@ -136,7 +137,7 @@
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>value</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>200</td>
@@ -147,7 +148,7 @@
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>unit</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>200</td>
@@ -159,7 +160,7 @@
  <td class='comment detail'></td>
 </tr>
 </table>
-<p title='6 columns'>Table contained 0 rows at Sun Oct 08 15:14 PDT 2017<p/>
+<p title='6 columns'>Table contained 0 rows at Tue Mar 13 15:28 PDT 2018<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
@@ -179,6 +180,12 @@
   <td class='detail' style='text-align:left;'><span title='Ascending'>Asc</span></td>
   <td class='constraint' style='text-align:left;'>location_ancillary_pk</td>
  </tr>
+ <tr>
+  <td class='indexedColumn'>location_id + datetime + variable_name</td>
+  <td class='detail'>Must be unique</td>
+  <td class='detail' style='text-align:left;'><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
+  <td class='constraint' style='text-align:left;'>location_ancillary_uniq</td>
+ </tr>
 </table>
 </div>
 <table width='100%' border='0'><tr><td class='container'>
@@ -192,7 +199,7 @@
 <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
 <area shape="rect" id="node1" href="location_ancillary.html" title="location_ancillary" alt="" coords="197,5,476,224">
 <area shape="rect" id="node2" href="location.html" title="location" alt="" coords="5,139,153,352">
-<area shape="rect" id="node3" href="observation.html" title="observation" alt="" coords="273,242,401,329">
+<area shape="rect" id="node3" href="observation.html" title="observation" alt="" coords="279,242,395,329">
 </map>
 
   <a name='diagram'><img id='twoDegreesImg' src='../diagrams/location_ancillary.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>

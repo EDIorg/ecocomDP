@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="edi_sandbox" schema="ecocom_dp" type="PostgreSQL - 9.2.19">
+<database name="edi_sandbox" schema="ecocom_dp" type="PostgreSQL - 9.2.24">
    <tables>
       <table name="dataset_summary" numRows="0" remarks="" schema="ecocom_dp" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="package_id" nullable="false" remarks="" size="100" type="varchar">
@@ -14,6 +14,17 @@
          <primaryKey column="package_id" sequenceNumberInPK="1"/>
          <index name="dataset_summary_pk" unique="true">
             <column ascending="true" name="package_id"/>
+         </index>
+      </table>
+      <table name="event" numRows="0" remarks="" schema="ecocom_dp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="event_id" nullable="false" remarks="" size="100" type="varchar">
+            <child column="event_id" foreignKey="observation_event_fk" implied="false" onDeleteCascade="false" table="observation"/>
+            <child column="event_id" foreignKey="observation_ancillary_event_fk" implied="false" onDeleteCascade="false" table="observation_ancillary"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="event_name" nullable="true" remarks="" size="100" type="varchar"/>
+         <primaryKey column="event_id" sequenceNumberInPK="1"/>
+         <index name="event_pk" unique="true">
+            <column ascending="true" name="event_id"/>
          </index>
       </table>
       <table name="location" numRows="0" remarks="self-referencing; parent of a loc can be another loc" schema="ecocom_dp" type="TABLE">
@@ -47,12 +58,17 @@
          <index name="location_ancillary_pk" unique="true">
             <column ascending="true" name="location_ancillary_id"/>
          </index>
+         <index name="location_ancillary_uniq" unique="true">
+            <column ascending="true" name="location_id"/>
+            <column ascending="true" name="datetime"/>
+            <column ascending="true" name="variable_name"/>
+         </index>
       </table>
       <table name="observation" numRows="0" remarks="table holds all the primary obs, with links to taxa, locations, event, summary" schema="ecocom_dp" type="TABLE">
-         <column autoUpdated="false" digits="0" id="0" name="observation_id" nullable="false" remarks="" size="100" type="varchar">
-            <child column="observation_id" foreignKey="observation_ancillary_fk" implied="false" onDeleteCascade="false" table="observation_ancillary"/>
+         <column autoUpdated="false" digits="0" id="0" name="observation_id" nullable="false" remarks="" size="100" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="event_id" nullable="true" remarks="" size="100" type="varchar">
+            <parent column="event_id" foreignKey="observation_event_fk" implied="false" onDeleteCascade="false" table="event"/>
          </column>
-         <column autoUpdated="false" digits="0" id="1" name="event_id" nullable="false" remarks="" size="100" type="varchar"/>
          <column autoUpdated="false" digits="0" id="2" name="package_id" nullable="false" remarks="" size="100" type="varchar">
             <parent column="package_id" foreignKey="observation_package_fk" implied="false" onDeleteCascade="false" table="dataset_summary"/>
          </column>
@@ -73,22 +89,18 @@
       </table>
       <table name="observation_ancillary" numRows="0" remarks="holds other info about a sampling event, eg, conditions, weather, observers, etc" schema="ecocom_dp" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="observation_ancillary_id" nullable="false" remarks="" size="100" type="varchar"/>
-         <column autoUpdated="false" digits="0" id="1" name="observation_id" nullable="false" remarks="" size="100" type="varchar">
-            <parent column="observation_id" foreignKey="observation_ancillary_fk" implied="false" onDeleteCascade="false" table="observation"/>
+         <column autoUpdated="false" digits="0" id="1" name="event_id" nullable="true" remarks="" size="100" type="varchar">
+            <parent column="event_id" foreignKey="observation_ancillary_event_fk" implied="false" onDeleteCascade="false" table="event"/>
          </column>
-         <column autoUpdated="false" digits="0" id="2" name="measured_entity" nullable="false" remarks="" size="200" type="varchar"/>
-         <column autoUpdated="false" digits="0" id="3" name="characteristic" nullable="false" remarks="" size="200" type="varchar"/>
-         <column autoUpdated="false" digits="0" id="4" name="variable_name" nullable="true" remarks="" size="200" type="varchar"/>
-         <column autoUpdated="false" digits="0" id="5" name="value" nullable="true" remarks="" size="200" type="varchar"/>
-         <column autoUpdated="false" digits="0" id="6" name="unit" nullable="true" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="variable_name" nullable="true" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="value" nullable="true" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="unit" nullable="true" remarks="" size="200" type="varchar"/>
          <primaryKey column="observation_ancillary_id" sequenceNumberInPK="1"/>
          <index name="observation_ancillary_pk" unique="true">
             <column ascending="true" name="observation_ancillary_id"/>
          </index>
          <index name="observation_ancillary_uniq" unique="true">
-            <column ascending="true" name="observation_id"/>
-            <column ascending="true" name="measured_entity"/>
-            <column ascending="true" name="characteristic"/>
+            <column ascending="true" name="event_id"/>
             <column ascending="true" name="variable_name"/>
          </index>
       </table>
@@ -107,18 +119,40 @@
          </index>
       </table>
       <table name="taxon_ancillary" numRows="0" remarks="" schema="ecocom_dp" type="TABLE">
-         <column autoUpdated="false" digits="0" id="0" name="record_id" nullable="false" remarks="" size="100" type="varchar"/>
-         <column autoUpdated="false" digits="0" id="1" name="taxon_ancillary_id" nullable="false" remarks="" size="100" type="varchar"/>
-         <column autoUpdated="false" digits="0" id="2" name="taxon_id" nullable="false" remarks="" size="100" type="varchar">
+         <column autoUpdated="false" digits="0" id="0" name="taxon_ancillary_id" nullable="false" remarks="" size="100" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="taxon_id" nullable="false" remarks="" size="100" type="varchar">
             <parent column="taxon_id" foreignKey="taxon_ancillary_fk" implied="false" onDeleteCascade="false" table="taxon"/>
          </column>
-         <column autoUpdated="false" digits="6" id="3" name="datetime" nullable="false" remarks="" size="29" type="timestamp"/>
-         <column autoUpdated="false" digits="0" id="4" name="variable_name" nullable="false" remarks="" size="200" type="varchar"/>
-         <column autoUpdated="false" digits="0" id="5" name="value" nullable="false" remarks="" size="200" type="varchar"/>
-         <column autoUpdated="false" digits="0" id="6" name="author" nullable="true" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="6" id="2" name="datetime" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="3" name="variable_name" nullable="false" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="value" nullable="false" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="author" nullable="true" remarks="" size="200" type="varchar"/>
          <primaryKey column="taxon_ancillary_id" sequenceNumberInPK="1"/>
          <index name="taxon_ancillary_pk" unique="true">
             <column ascending="true" name="taxon_ancillary_id"/>
+         </index>
+         <index name="taxon_ancillary_uniq" unique="true">
+            <column ascending="true" name="taxon_id"/>
+            <column ascending="true" name="datetime"/>
+            <column ascending="true" name="variable_name"/>
+         </index>
+      </table>
+      <table name="variable_mapping" numRows="0" remarks="table holds definitions of variable_names that were used in any of these 4 tables: observation, observation_ancillary, taxon_ancillary, location_ancillary." schema="ecocom_dp" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="variable_mapping_id" nullable="false" remarks="" size="100" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="1" name="table_name" nullable="false" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="2" name="variable_name" nullable="false" remarks="" size="100" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="mapped_system" nullable="true" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="mapped_id" nullable="true" remarks="" size="200" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="mapped_label" nullable="true" remarks="" size="200" type="varchar"/>
+         <primaryKey column="variable_mapping_id" sequenceNumberInPK="1"/>
+         <index name="variable_mapping_pk" unique="true">
+            <column ascending="true" name="variable_mapping_id"/>
+         </index>
+         <index name="variable_mapping_uniq" unique="true">
+            <column ascending="true" name="table_name"/>
+            <column ascending="true" name="variable_name"/>
+            <column ascending="true" name="mapped_system"/>
+            <column ascending="true" name="mapped_id"/>
          </index>
       </table>
    </tables>

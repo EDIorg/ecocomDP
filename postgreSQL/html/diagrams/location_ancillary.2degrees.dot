@@ -41,9 +41,9 @@ digraph "twoDegreesRelationshipsDiagram" {
     <TABLE BORDER="2" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">location_ancillary</TD></TR>
       <TR><TD PORT="location_ancillary_id" COLSPAN="2" BGCOLOR="#bed1b8" ALIGN="LEFT">location_ancillary_id</TD><TD PORT="location_ancillary_id.type" ALIGN="LEFT">varchar[100]</TD></TR>
-      <TR><TD PORT="location_id" COLSPAN="2" ALIGN="LEFT">location_id</TD><TD PORT="location_id.type" ALIGN="LEFT">varchar[100]</TD></TR>
-      <TR><TD PORT="datetime" COLSPAN="2" ALIGN="LEFT">datetime</TD><TD PORT="datetime.type" ALIGN="LEFT">timestamp[29,6]</TD></TR>
-      <TR><TD PORT="variable_name" COLSPAN="2" ALIGN="LEFT">variable_name</TD><TD PORT="variable_name.type" ALIGN="LEFT">varchar[200]</TD></TR>
+      <TR><TD PORT="location_id" COLSPAN="2" BGCOLOR="#f4f7da" ALIGN="LEFT">location_id</TD><TD PORT="location_id.type" ALIGN="LEFT">varchar[100]</TD></TR>
+      <TR><TD PORT="datetime" COLSPAN="2" BGCOLOR="#f4f7da" ALIGN="LEFT">datetime</TD><TD PORT="datetime.type" ALIGN="LEFT">timestamp[29,6]</TD></TR>
+      <TR><TD PORT="variable_name" COLSPAN="2" BGCOLOR="#f4f7da" ALIGN="LEFT">variable_name</TD><TD PORT="variable_name.type" ALIGN="LEFT">varchar[200]</TD></TR>
       <TR><TD PORT="value" COLSPAN="2" ALIGN="LEFT">value</TD><TD PORT="value.type" ALIGN="LEFT">varchar[200]</TD></TR>
       <TR><TD PORT="unit" COLSPAN="2" ALIGN="LEFT">unit</TD><TD PORT="unit.type" ALIGN="LEFT">varchar[200]</TD></TR>
       <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 &gt;</TD></TR>
@@ -56,7 +56,7 @@ digraph "twoDegreesRelationshipsDiagram" {
     <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">observation</TD></TR>
       <TR><TD PORT="elipses" COLSPAN="3" ALIGN="LEFT">...</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 3</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">1 &gt;</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 4</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
     </TABLE>>
     URL="observation.html"
     tooltip="observation"

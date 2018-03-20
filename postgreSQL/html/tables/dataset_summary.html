@@ -17,6 +17,7 @@
  <ul>
   <li><a href='../index.html' title='All tables and views in the schema'>Tables</a></li>
   <li><a href='../relationships.html' title='Diagram of table relationships'>Relationships</a></li>
+  <li><a href='../utilities.html' title='View of tables with neither parents nor children'>Utility&nbsp;Tables</a></li>
   <li><a href='../constraints.html' title='Useful for diagnosing error messages that just give constraint name or number'>Constraints</a></li>
   <li><a href='../anomalies.html' title="Things that might not be quite right">Anomalies</a></li>
   <li><a href='../columns.byTable.html' title="All of the columns in the schema">Columns</a></li>
@@ -83,7 +84,7 @@
 </tr>
 </thead>
 <tbody valign='top'>
-<tr class='even'>
+<tr class='odd'>
  <td class='primaryKey' title='Primary Key'>package_id</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>100</td>
@@ -92,7 +93,7 @@
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative even' valign='top'>
+   <tr class='relative odd' valign='top'>
     <td class='relatedTable detail' title="observation.package_id refs dataset_summary.package_id via observation_package_fk"><a href='observation.html'>observation</a><span class='relatedKey'>.package_id</span>
     </td>
     <td class='constraint detail'>observation_package_fk<span title='Restrict delete:
@@ -103,7 +104,7 @@
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>original_package_id</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>200</td>
@@ -114,7 +115,7 @@
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>length_of_survey_years</td>
  <td class='detail'>int4</td>
  <td class='detail' align='right'>10</td>
@@ -125,7 +126,7 @@
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>number_of_years_sampled</td>
  <td class='detail'>int4</td>
  <td class='detail' align='right'>10</td>
@@ -136,7 +137,7 @@
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>std_dev_interval_betw_years</td>
  <td class='detail'>float8</td>
  <td class='detail' align='right'>17,17</td>
@@ -147,7 +148,7 @@
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>max_num_taxa</td>
  <td class='detail'>int4</td>
  <td class='detail' align='right'>10</td>
@@ -158,7 +159,7 @@
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>geo_extent_bounding_box_m2</td>
  <td class='detail'>float8</td>
  <td class='detail' align='right'>17,17</td>
@@ -170,7 +171,7 @@
  <td class='comment detail'></td>
 </tr>
 </table>
-<p title='7 columns'>Table contained 0 rows at Sun Oct 08 15:14 PDT 2017<p/>
+<p title='7 columns'>Table contained 0 rows at Tue Mar 13 15:28 PDT 2018<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
@@ -201,11 +202,11 @@
 </map>
   <a name='diagram'><img id='oneDegreeImg' src='../diagrams/dataset_summary.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
 <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="observation.html" title="observation" alt="" coords="375,192,544,481">
-<area shape="rect" id="node2" href="location.html" title="location" alt="" coords="104,267,232,353">
-<area shape="rect" id="node3" href="dataset_summary.html" title="dataset_summary" alt="" coords="5,5,331,249">
-<area shape="rect" id="node4" href="taxon.html" title="taxon" alt="" coords="110,371,226,457">
-<area shape="rect" id="node5" href="observation_ancillary.html" title="observation_ancillary" alt="" coords="588,191,755,277">
+<area shape="rect" id="node1" href="observation.html" title="observation" alt="" coords="375,179,544,468">
+<area shape="rect" id="node2" href="event.html" title="event" alt="" coords="110,5,226,92">
+<area shape="rect" id="node3" href="location.html" title="location" alt="" coords="104,371,232,457">
+<area shape="rect" id="node4" href="dataset_summary.html" title="dataset_summary" alt="" coords="5,109,331,353">
+<area shape="rect" id="node5" href="taxon.html" title="taxon" alt="" coords="110,475,226,561">
 </map>
 
   <a name='diagram'><img id='twoDegreesImg' src='../diagrams/dataset_summary.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>

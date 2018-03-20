@@ -1,7 +1,9 @@
+event
 taxon
 dataset_summary
 location
-observation
 location_ancillary
 observation_ancillary
 taxon_ancillary
+observation
+variable_mapping
