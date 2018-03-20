@@ -379,9 +379,9 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   
   edi_keywordSet <- list()
   use_i <- keywords[["keywordThesaurus"]] == "EDI Controlled Vocabulary"
-  keywords <- keywords[use_i, "keyword"]
-  for (i in 1:length(keywords)){
-    edi_keywordSet[[i]] <- as(keywords[i], "keyword")
+  keywords_list <- keywords[use_i, "keyword"]
+  for (i in 1:length(keywords_list)){
+    edi_keywordSet[[i]] <- as(keywords_list[i], "keyword")
   }
   
   list_keywordSet[[length(list_keywordSet)+1]] <- new("keywordSet",
@@ -390,9 +390,9 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   
   lter_keywordSet <- list()
   use_i <- keywords[["keywordThesaurus"]] == "LTER Controlled Vocabulary"
-  keywords <- keywords[use_i, "keyword"]
-  for (i in 1:length(keywords)){
-    lter_keywordSet[[i]] <- as(keywords[i], "keyword")
+  keywords_list <- keywords[use_i, "keyword"]
+  for (i in 1:length(keywords_list)){
+    lter_keywordSet[[i]] <- as(keywords_list[i], "keyword")
   }
   
   list_keywordSet[[length(list_keywordSet)+1]] <- new("keywordSet",
@@ -615,6 +615,9 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
 
     } else {
 
+      # !!! Tables containing factors should not pass through this section !!!
+      # !!! Update this ASAP !!!
+      
       # Clean extraneous white spaces from attributes
 
       for (j in 1:ncol(attributes)){
@@ -628,6 +631,10 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
 
       col_classes <- attributes[ ,"columnClasses"]
 
+      # !!! This code should be replace by something more targeted
+      col_classes[col_classes == "factor"] <- "character"
+      # !!!
+      
       # Create the attributeList element
 
       attributeList <- set_attributes(attributes,
