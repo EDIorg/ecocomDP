@@ -287,35 +287,27 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   
   # Modify eml-access
   
-  message("Changing <access>")
+  message("Adding to <access>")
 
-  allow_principals <- c(paste("uid=",
-                              user.id,
-                              ",o=LTER,dc=ecoinformatics,dc=org",
-                              sep = ""),
-                        "public")
-
-  allow_permissions <- c("all",
-                         "read")
-
-  access_order <- "allowFirst"
-
-  access_scope <- "document"
-
-  access <- new("access",
-                scope = access_scope,
-                order = access_order,
-                authSystem = author.system)
-
-  allow <- list()
-  for (i in 1:length(allow_principals)){
-    allow[[i]] <- new("allow",
-                      principal = allow_principals[i],
-                      permission = allow_permissions[i])
+  allow <- xml_in@access@allow
+  
+  list_of_allow <- as(c(new("allow",
+                            principal = paste("uid=",user.id,
+                                              ",o=LTER,dc=ecoinformatics,dc=org",
+                                              sep = ""),
+                            permission = "all")),
+                      "ListOfallow")
+  
+  for (i in 1:length(allow)){
+    list_of_allow[[i+1]] <- allow[[i]]
   }
-
-  access@allow <- new("ListOfallow",
-                      c(allow))
+  
+  access <- new("access",
+                scope = "document",
+                order = "allowFirst",
+                authSystem = author.system)
+  
+  access@allow <- list_of_allow
   
   xml_in@access <- access
 
@@ -347,18 +339,24 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
                            as.is = T,
                            na.strings = "NA")
   
-  individualName <- new(
-    "individualName",
-    givenName = trimws(personinfo["givenName"]),
-    surName = trimws(personinfo["surName"]))
+  if (nrow(personinfo) >= 1){
+    
+    individualName <- new(
+      "individualName",
+      givenName = trimws(personinfo["givenName"]),
+      surName = trimws(personinfo["surName"]))
+    
+    contact <- new(
+      "contact",
+      individualName = individualName,
+      organizationName = trimws(personinfo[["organizationName"]]),
+      electronicMailAddress = trimws(personinfo[["electronicMailAddress"]]))
+    
+    xml_in@dataset@contact[[length(xml_in@dataset@contact)+1]] <- contact
+    
+  }
   
-  contact <- new(
-    "contact",
-    individualName = individualName,
-    organizationName = trimws(personinfo[["organizationName"]]),
-    electronicMailAddress = trimws(personinfo[["electronicMailAddress"]]))
   
-  xml_in@dataset@contact[[length(xml_in@dataset@contact)+1]] <- contact
 
   # Modify eml-pubDate
 
@@ -379,14 +377,22 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   
   list_keywordSet <- xml_in@dataset@keywordSet
   
+  edi_keywordSet <- list()
+  use_i <- keywords[["keywordThesaurus"]] == "EDI Controlled Vocabulary"
+  keywords_list <- keywords[use_i, "keyword"]
+  for (i in 1:length(keywords_list)){
+    edi_keywordSet[[i]] <- as(keywords_list[i], "keyword")
+  }
+  
   list_keywordSet[[length(list_keywordSet)+1]] <- new("keywordSet",
-                                                      keyword = "ecocomDP")
+                                                      edi_keywordSet,
+                                                      keywordThesaurus = "EDI Controlled Vocabulary")
   
   lter_keywordSet <- list()
   use_i <- keywords[["keywordThesaurus"]] == "LTER Controlled Vocabulary"
-  keywords <- keywords[use_i, "keyword"]
-  for (i in 1:length(keywords)){
-    lter_keywordSet[[i]] <- as(keywords[i], "keyword")
+  keywords_list <- keywords[use_i, "keyword"]
+  for (i in 1:length(keywords_list)){
+    lter_keywordSet[[i]] <- as(keywords_list[i], "keyword")
   }
   
   list_keywordSet[[length(list_keywordSet)+1]] <- new("keywordSet",
@@ -609,6 +615,9 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
 
     } else {
 
+      # !!! Tables containing factors should not pass through this section !!!
+      # !!! Update this ASAP !!!
+      
       # Clean extraneous white spaces from attributes
 
       for (j in 1:ncol(attributes)){
@@ -622,6 +631,10 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
 
       col_classes <- attributes[ ,"columnClasses"]
 
+      # !!! This code should be replace by something more targeted
+      col_classes[col_classes == "factor"] <- "character"
+      # !!!
+      
       # Create the attributeList element
 
       attributeList <- set_attributes(attributes,
