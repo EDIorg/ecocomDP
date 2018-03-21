@@ -188,6 +188,17 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
     stop("Specify the code file extension.")
   }
   
+  # Validate arguments --------------------------------------------------------
+  
+  # Extract code.file.extension from user input. 
+  # Accomodate some variance in user input.
+  
+  match_info <- regexpr("\\.[^\\.]*$", code.file.extension)
+  code.file.extension <- substr(code.file.extension, start = match_info[1], stop = nchar(code.file.extension)) 
+  
+  
+  # ---------------------------------------------------------------------------
+  
   # Specify which code files were used (if more than one exists)
   
   code_files_found <- data.frame(files = list.files(code.path, 
@@ -674,18 +685,18 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
                                    sep = ""))))
     
     if (!missing(access.url)){
-      
-      data_table_urls <- paste(access.url, "/", tables_found[i], sep = "") 
-      
+
+      data_table_urls <- paste(access.url, "/", tables_found[i], sep = "")
+
       distribution <- new("distribution",
                           online = new("online",
                                        url = data_table_urls))
-      
+
       physical@distribution <- new("ListOfdistribution",
                                    c(distribution))
-    
+
     } else {
-      
+
       distribution <- new("distribution",
                           offline = new("offline",
                                        mediumName = "Hard drive"))

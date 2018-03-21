@@ -51,14 +51,25 @@ compile_attributes <- function(path, delimiter){
 
     # Read data table
     
-    df_table <- read.table(paste(path,
-                                "/",
-                                tables_found[i],
-                                sep = ""),
-                          header = T,
-                          sep = delimiter,
-                          as.is = T,
-                          na.strings = "NA")
+    if (delimiter == ","){
+      
+      df_table <- read.csv(paste(path,
+                                 "/",
+                                 tables_found[i],
+                                 sep = ""))
+      
+    } else {
+      
+      df_table <- read.table(paste(path,
+                                   "/",
+                                   tables_found[i],
+                                   sep = ""),
+                             header = T,
+                             sep = delimiter,
+                             as.is = T,
+                             na.strings = "NA") 
+      
+    }
     
     # Read attributes_draft table
     
@@ -145,9 +156,9 @@ compile_attributes <- function(path, delimiter){
         
         if (sum(is.na(raw)) == length(raw)){
           
-          attributes <- attributes[eval(parse(text = paste("-",
-                                         as.character(is_numeric[j]),
-                                         sep = ""))), ]
+          attributes$columnClasses[is_numeric[j]] <- "character"
+          attributes$unit[is_numeric[j]] <- ""
+          
         } else {
           rounded <- floor(raw)
           if (length(raw) - sum(raw == rounded, na.rm = T) > 0){
