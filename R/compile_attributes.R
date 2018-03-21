@@ -51,14 +51,25 @@ compile_attributes <- function(path, delimiter){
 
     # Read data table
     
-    df_table <- read.table(paste(path,
-                                "/",
-                                tables_found[i],
-                                sep = ""),
-                          header = T,
-                          sep = delimiter,
-                          as.is = T,
-                          na.strings = "NA")
+    if (delimiter == ","){
+      
+      df_table <- read.csv(paste(path,
+                                 "/",
+                                 tables_found[i],
+                                 sep = ""))
+      
+    } else {
+      
+      df_table <- read.table(paste(path,
+                                   "/",
+                                   tables_found[i],
+                                   sep = ""),
+                             header = T,
+                             sep = delimiter,
+                             as.is = T,
+                             na.strings = "NA") 
+      
+    }
     
     # Read attributes_draft table
     
