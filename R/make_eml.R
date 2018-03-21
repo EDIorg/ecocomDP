@@ -685,18 +685,18 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
                                    sep = ""))))
     
     if (!missing(access.url)){
-      
-      data_table_urls <- paste(access.url, "/", tables_found[i], sep = "") 
-      
+
+      data_table_urls <- paste(access.url, "/", tables_found[i], sep = "")
+
       distribution <- new("distribution",
                           online = new("online",
                                        url = data_table_urls))
-      
+
       physical@distribution <- new("ListOfdistribution",
                                    c(distribution))
-    
+
     } else {
-      
+
       distribution <- new("distribution",
                           offline = new("offline",
                                        mediumName = "Hard drive"))
