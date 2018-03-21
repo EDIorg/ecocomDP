@@ -13,8 +13,7 @@ Depends:
     stringr (>= 1.2.0),
     stringi (>= 1.1.5),
     reader (>= 1.0.6),
-    XML (>= 3.98-1.6),
-    popler (>= 0.0.0.9001)
+    XML (>= 3.98-1.6)
 Imports: 
 Suggests:
     knitr,
