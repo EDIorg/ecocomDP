@@ -10,8 +10,8 @@ https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-cap&identifier=627
 1. use the location table.
 1. Put the name of the polygon at the hightest level site (i.e., it has no parent site), e.g, siteId = polygonName
 1. Each boundary point for the polygon is also a site. 
-  - Name it with polygonName_kmlTagName
-  - Give it a parent polygonName
+    1. Name it with polygonName_kmlTagName
+    1. Give it a parent polygonName
   
 ## Example location table
 
