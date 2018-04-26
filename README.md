@@ -18,6 +18,8 @@ _Figure: Abstract view of dataset levels. A flexible intermediate (L1, middle) l
 
 [Instructions for creating an ecocomDP](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions)
 
+[List of datasets to be converted to ecocomDP.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/processing_queue). This list includeds datasets that have been converted, but is not exhaustive. To find all ecocomDP, search the EDI data repository for 'ecocomDP'.
+
 #### PostgreSQL
 
 [A PostgreSQL implementation of ecocomDP can be found here](https://github.com/EDIorg/ecocomDP/tree/master/postgreSQL).
