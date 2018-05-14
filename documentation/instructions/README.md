@@ -39,7 +39,7 @@ After the L1 tables have been validated, you will need to define their categoric
 
 ### Step 7: Make EML metadata for your L1 tables
 
-After the L1 tables have been validated and categorical variables defined, you can make an EML metadata record for them to complete the data package for upload to the EDI data repository. Because L1 tables are standardized, the `make_eml` function will generate most of the EML automatically, however you will need to supply some additional information.
+After the L1 tables have been validated and categorical variables defined, you can make an EML metadata record for them to complete the data package for upload to the EDI data repository. Before running the `make_eml` function run `import_templates` (enter `?import_templates` in the RStudio console to see required arguments.  Because L1 tables are standardized, the `make_eml` function will generate most of the EML automatically, however you will need to supply some additional information.
 
 ### Step 8: Upload your data package to the EDI repository
 
