@@ -1,39 +1,1 @@
-system,identifier_L0 (package ID),identifier_L1 (package ID),creator_L1 (first and last name),"status (underway, complete )","priority (1=high, 2=low)",notes
-edi,knb-lter-ntl.349.2,knb-lter-ntl.344.2,Corinna Gries,complete,,
-edi,knb-lter-cap.41.13,,,,1,CAP recommended
-edi,knb-lter-cap.643.1,,,,1,CAP recommended
-edi,knb-lter-cap.641.3,,,,1,CAP recommended
-edi,knb-lter-cap.652.2,,,,1,CAP recommended
-edi,knb-lter-cap.653.2,,,,1,CAP recommended
-edi,knb-lter-cap.632.5,,,,1,CAP recommended
-edi,knb-lter-ntl.346.2,knb-lter-ntl.346.2,Corinna Gries,complete,,Meta-communities requested
-edi,knb-lter-ntl.345.1,knb-lter-ntl.345.1,Corinna Gries,complete,,Meta-communities requested
-edi,knb-lter-ntl.349.2,knb-lter-ntl.344.2,Corinna Gries,complete,,Meta-communities requested
-edi,knb-lter-mcr.7.28,,Colin Smith,underway,1,Meta-communities requested
-edi,knb-lter-mcr.6.55,edi.125.1,Corinna Gries,complete,,Meta-communities requested (but note that they have the previous revision listed).
-edi,knb-lter-cdr.386.5,edi.124.3,Colin Smith,complete,,Meta-communities requested
-edi,knb-lter-cap.46.13,,Colin Smith,underway,1,Meta-communities requested
-edi,knb-lter-hfr.118.27,,Colin Smith,underway,1,Meta-communities requested
-edi,knb-lter-cap.627.2,,Colin Smith,underway,1,Meta-communities requested
-edi,knb-lter-jrn.2100007001.13,,,,2,
-edi,knb-lter-bes.543.170,,Colin Smith,underway,1,Meta-communities requested
-edi,knb-lter-vcr.106.25,,,,2,
-edi,knb-lter-vcr.166.15,,,,2,
-edi,knb-lter-vcr.67.17,,,,2,
-edi,knb-lter-ntl.14.18,,Corinna Gries,underway,,
-edi,knb-lter-ntl.11.24,,,,,
-edi,knb-lter-ntl.355.4,,,,,
-edi,knb-lter-ntl.251.2,,,,,
-edi,knb-lter-ntl.37.14,,,,,
-edi,knb-lter-ntl.61.3,,,,,
-edi,knb-lter-ntl.271.3,,,,,
-edi,knb-lter-ntl.3.22,,,,,
-edi,knb-lter-sbc.17.30,,Li Kui,waiting for cleaned update; synchrony WG requested,2,
-edi,knb-lter-sbc.15.25,,Li Kui,waiting for cleaned update; synchrony WG requested,2,
-edi,knb-lter-sbc.19.23,,Li Kui,waiting for cleaned update; synchrony WG requested,2,
-edi,knb-lter-sbc.28.23,,Li Kui,underway,2,
-edi,knb-lter-sbc.30.15,,Li Kui,underway,2,
-edi,knb-lter-sbc.34.13,,Li Kui,underway,2,
-edi,knb-lter-mcr.8.28,,,,2,
-edi,knb-lter-mcr.4.33,,,,2,
-edi,knb-lter-sbc.50.4,,Li Kui,after abundance datasts cleaned;synchrony WG requested,2,
+system,identifier_L0 (package ID),identifier_L1 (package ID),creator_L1 (first and last name),"status (underway, complete )","priority (1=high, 2=low)",notesedi,knb-lter-ntl.349.2,knb-lter-ntl.344.2,Corinna Gries,complete,,edi,knb-lter-cap.41.13,,,,1,CAP recommendededi,knb-lter-cap.643.1,,,,1,CAP recommendededi,knb-lter-cap.641.3,,,,1,CAP recommendededi,knb-lter-cap.652.2,,,,1,CAP recommendededi,knb-lter-cap.653.2,,,,1,CAP recommendededi,knb-lter-cap.632.5,,,,1,CAP recommendededi,knb-lter-ntl.346.2,knb-lter-ntl.346.2,Corinna Gries,complete,,Meta-communities requestededi,knb-lter-ntl.345.1,knb-lter-ntl.345.1,Corinna Gries,complete,,Meta-communities requestededi,knb-lter-ntl.349.2,knb-lter-ntl.344.2,Corinna Gries,complete,,Meta-communities requestededi,knb-lter-mcr.7.28,,Colin Smith,underway,1,Meta-communities requestededi,knb-lter-mcr.6.55,edi.125.1,Corinna Gries,complete,,Meta-communities requested (but note that they have the previous revision listed).edi,knb-lter-cdr.386.5,edi.124.3,Colin Smith,complete,,Meta-communities requestededi,knb-lter-cap.46.13,,Colin Smith,underway,1,Meta-communities requestededi,knb-lter-hfr.118.27,,Colin Smith,underway,1,Meta-communities requestededi,knb-lter-cap.627.2,,Colin Smith,underway,1,Meta-communities requestededi,knb-lter-jrn.2100007001.13,,,,2,edi,knb-lter-bes.543.170,edi.191.1,Colin Smith,complete,1,Meta-communities requestededi,knb-lter-vcr.106.25,,,,2,edi,knb-lter-vcr.166.15,,,,2,edi,knb-lter-vcr.67.17,,,,2,edi,knb-lter-ntl.14.18,,Corinna Gries,underway,,edi,knb-lter-ntl.11.24,,,,,edi,knb-lter-ntl.355.4,,,,,edi,knb-lter-ntl.251.2,,,,,edi,knb-lter-ntl.37.14,,,,,edi,knb-lter-ntl.61.3,,,,,edi,knb-lter-ntl.271.3,,,,,edi,knb-lter-ntl.3.22,,,,,edi,knb-lter-sbc.17.30,,Li Kui,waiting for cleaned update; synchrony WG requested,2,edi,knb-lter-sbc.15.25,,Li Kui,waiting for cleaned update; synchrony WG requested,2,edi,knb-lter-sbc.19.23,,Li Kui,waiting for cleaned update; synchrony WG requested,2,edi,knb-lter-sbc.28.23,,Li Kui,underway,2,edi,knb-lter-sbc.30.15,,Li Kui,underway,2,edi,knb-lter-sbc.34.13,,Li Kui,underway,2,edi,knb-lter-mcr.8.28,,,,2,edi,knb-lter-mcr.4.33,,,,2,edi,knb-lter-sbc.50.4,,Li Kui,after abundance datasts cleaned;synchrony WG requested,2,
