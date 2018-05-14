@@ -18,7 +18,10 @@ _Figure: Abstract view of dataset levels. A flexible intermediate (L1, middle) l
 
 [Instructions for creating an ecocomDP](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions)
 
-[List of datasets to be converted to ecocomDP.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/processing_queue). This list includeds datasets that have been converted, but is not exhaustive. To find all ecocomDP, search the EDI data repository for 'ecocomDP'.
+[List of datasets to be converted to ecocomDP.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/processing_queue). This list includeds datasets that have been converted, but is not exhaustive. 
+
+[Datasets converted to ecocomDP, available from EDI](https://portal.edirepository.org:443/nis/simpleSearch?defType=edismax&q=ecocomDP&fq=-scope:ecotrends&fq=-scope:lter-landsat*&fl=id,packageid,title,author,organization,pubdate,coordinates&debug=false) To find all ecocomDP datasets, enter "ecocomDP' in the 'simple search' box in the EDI data repository.
+
 
 #### PostgreSQL
 
