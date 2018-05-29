@@ -5,7 +5,7 @@
 \title{Make location table}
 \usage{
 make_location(x, cols = c('site', 'nested_level_1', 'nested_level_2', 
-    'etc.' ))
+    'etc.', kml = NULL, col = NULL))
 }
 \arguments{
 \item{x}{A data frame containing sampling location names (in columns) for each 
@@ -19,10 +19,17 @@ nested within 'site', 'transect' is nested within 'habitat', and
 be supplied as:
 
 cols = c('site', 'habitat','transect', 'quadrat')}
+
+\item{kml}{A data object (simple feature collection) created with the `st_read``
+function of the `sf`` (simple features) R package.}
 }
 \value{
 A data frame of the location table.
 }
 \description{
 Make a data frame of the location table.
+}
+\note{
+The arguments 'kml' and 'col' only accept single inputs. I.e. does 
+    not support kml data for more than one col.
 }
