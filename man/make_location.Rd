@@ -21,7 +21,10 @@ be supplied as:
 cols = c('site', 'habitat','transect', 'quadrat')}
 
 \item{kml}{A data object (simple feature collection) created with the `st_read``
-function of the `sf`` (simple features) R package.}
+function of the `sf`` (simple features) R package. This data object
+contains a field called 'Name'. Values listed in this field must match
+the corresponding values listed in the data frame (x) and specified in
+'cols'.}
 }
 \value{
 A data frame of the location table.

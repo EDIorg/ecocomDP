@@ -21,7 +21,10 @@
 #'     cols = c('site', 'habitat','transect', 'quadrat')
 #' @param kml
 #'     A data object (simple feature collection) created with the `st_read``
-#'     function of the `sf`` (simple features) R package.
+#'     function of the `sf`` (simple features) R package. This data object
+#'     contains a field called 'Name'. Values listed in this field must match
+#'     the corresponding values listed in the data frame (x) and specified in
+#'     'cols'.
 #' @col
 #'     A character string indicating the column name specified in the input
 #'     argument 'cols' to which the data in the kml object corresponds to.
@@ -390,6 +393,22 @@ make_location <- function(x, cols, kml = NULL, col = NULL){
       location_table,
       location_poly
     )
+    
+  } else {
+    
+    # Create column: location_id
+    
+    location_table$location_id <- paste0(
+      'lo_',
+      location_table$location_id
+    )
+    
+    location_table$parent_location_id <- paste0(
+      'lo_',
+      location_table$parent_location_id
+    )
+    
+    location_table$parent_location_id[location_table$parent_location_id == 'lo_NA'] <- NA_character_ 
     
   }
 
