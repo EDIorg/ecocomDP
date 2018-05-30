@@ -408,6 +408,7 @@ make_location <- function(x, cols, kml = NULL, col = NULL){
       location_table$parent_location_id
     )
     
+
     location_table$parent_location_id[location_table$parent_location_id == 'lo_NA'] <- NA_character_ 
     
   }
