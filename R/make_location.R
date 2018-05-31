@@ -60,7 +60,7 @@ make_location <- function(x, cols, kml = NULL, col = NULL){
   col_i <- match(
     cols,
     colnames(
-      data
+      x
     )
   )
   
@@ -82,8 +82,8 @@ make_location <- function(x, cols, kml = NULL, col = NULL){
     
     # Make keys in observation table for linking to the location table.
     
-    data$keys <- apply( 
-      data[ , col_i],
+    x$keys <- apply( 
+      x[ , col_i],
       1,
       paste,
       collapse = "_"
@@ -94,9 +94,9 @@ make_location <- function(x, cols, kml = NULL, col = NULL){
     
     k <- length(col_i)
     
-    df[[k]] <- data[ , col_i]
+    df[[k]] <- x[ , col_i]
     
-    df[[k]]$key <- data$keys
+    df[[k]]$key <- x$keys
     
     df[[k]] <- unique.data.frame(
       df[[k]]
@@ -118,13 +118,13 @@ make_location <- function(x, cols, kml = NULL, col = NULL){
     
     if (length(col_i) > 1){
       
-      col_names <- colnames(data[ , col_i])
+      col_names <- colnames(x[ , col_i])
       
       for (j in ((length(col_i)) - 1):1){
         
         # Create table of next coarser spatial scale
         
-        df[[j]] <- data[ , col_i[1:j]]
+        df[[j]] <- x[ , col_i[1:j]]
         
         # Get unique elements of this table
         
