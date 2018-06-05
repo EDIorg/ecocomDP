@@ -163,8 +163,8 @@ Columns
 | variable_mapping_id  | character |yes| NA	| the id of the variable mapping, a row or record identifier  	| 	1  	|
 | table_name           | character |yes| NA	| the name of the table holding this variable 	| 	my_observation  	|
 | variable_name        | character |yes| ONE OF: observation.variable_name, observation_ancillary.variable_name, taxon_ancillary.variable_name, OR location_ancillary.variable_name | the variable name in another data table  	|  sample_z  	|
-| mapped_system        | character | no| NA	| system defining this variable_name  	|  CF_standard_names  	|
-| mapped_id     | character | no| NA	| id of the definition in that system 	| depth 	|
+| mapped_system        | character | no| NA	| system defining this variable_name  	|  NERC  	|
+| mapped_id     | character | no| NA	| id of the definition in that system 	| SDN:P07::CFSN0721 	|
 | mapped_label  | character | no| NA	| label for this variable in that mapped system  	|  depth  	|
 
 
