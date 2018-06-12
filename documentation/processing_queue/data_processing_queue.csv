@@ -1,10 +1,10 @@
 system,identifier_L0 (package ID),identifier_L1 (package ID),creator_L1 (first and last name),"status (underway, complete )","priority (1=high, 2=low)",notes
 edi,knb-lter-ntl.349.2,knb-lter-ntl.344.2,Corinna Gries,complete,,
 edi,knb-lter-cap.41.13,edi.196.1,Will Rosenthal,underway,1,CAP recommended
-edi,knb-lter-cap.643.1,edi.203,Will Rosenthal,underway,1,CAP recommended
-edi,knb-lter-cap.641.3,edi.204,Will Rosenthal,underway,1,CAP recommended
-edi,knb-lter-cap.652.2,edi.205,Will Rosenthal,underway,1,CAP recommended
-edi,knb-lter-cap.653.2,edi.211,Will Rosenthal,underway,1,CAP recommended
+edi,knb-lter-cap.643.1,edi.203.1,Will Rosenthal,underway,1,CAP recommended
+edi,knb-lter-cap.641.3,edi.204.1,Will Rosenthal,underway,1,CAP recommended
+edi,knb-lter-cap.652.2,edi.205.1,Will Rosenthal,underway,1,CAP recommended
+edi,knb-lter-cap.653.2,edi.211.1,Will Rosenthal,underway,1,CAP recommended
 edi,knb-lter-cap.632.5,,,,1,CAP recommended
 edi,knb-lter-ntl.346.2,knb-lter-ntl.346.2,Corinna Gries,complete,,Meta-communities requested
 edi,knb-lter-ntl.345.1,knb-lter-ntl.345.1,Corinna Gries,complete,,Meta-communities requested
