@@ -4,6 +4,7 @@
 * Corinna Gries
 * Kristin Vanderbilt
 * Colin Smith (maintainer)
+* Will Rosenthal (contributor)
 
 ### Thanks!
 
