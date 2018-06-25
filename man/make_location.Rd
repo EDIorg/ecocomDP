@@ -25,6 +25,11 @@ function of the `sf`` (simple features) R package. This data object
 contains a field called 'Name'. Values listed in this field must match
 the corresponding values listed in the data frame (x) and specified in
 'cols'.}
+
+\item{col}{A character string indicating the column name specified in the input
+argument 'cols' to which the data in the kml object corresponds to.
+E.g., if the kml corresponds with with the column named 'site' then
+enter 'site' for the col argument.}
 }
 \value{
 A data frame of the location table.

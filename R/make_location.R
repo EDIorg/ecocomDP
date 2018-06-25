@@ -25,7 +25,7 @@
 #'     contains a field called 'Name'. Values listed in this field must match
 #'     the corresponding values listed in the data frame (x) and specified in
 #'     'cols'.
-#' @col
+#' @param col
 #'     A character string indicating the column name specified in the input
 #'     argument 'cols' to which the data in the kml object corresponds to.
 #'     E.g., if the kml corresponds with with the column named 'site' then
@@ -415,7 +415,6 @@ make_location <- function(x, cols, kml = NULL, col = NULL){
 
     
   location_table
-  
-  
+
   
 }
