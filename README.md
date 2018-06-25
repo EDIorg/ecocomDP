@@ -1,6 +1,6 @@
 # ecocomDP: A dataset design pattern for ecological community data to facilitate synthesis and reuse
 
-We know from experience that original, primary research data sets cannot be easily combined or synthesised until all data are completely understood and converted to a similar format. There are two approaches to achieving this data regularity: a) to prescribe the format before data collection starts, or b) to convert primary data into a flexible standard format for reuse. Prescribed formats are impossible to impose on research studies, so we take the second approach: define a flexible intermediate, and convert primary data to that model. The Ecological Community Data Pattern (ecocomDP) is the result of our examination of the needs of synthesis scientists using community survey data, and determination of the features of a flexible intermediate for these data.
+With the almost forty year existence of the Long-term Ecological Research (LTER) Network and other networks worldwide, a diverse array of long-term observational and experimental data is becoming increasingly available. A number of data repositories are making the data accessible and the accompanying detailed metadata allow meaningful reuse, repurpose and integration with other data. However, in synthesis research the largest time investment is still in discovering, cleaning and combining primary datasets until all data are completely understood and converted to a similar format. There are two approaches to achieving this data regularity: a) to prescribe the format before data collection starts, or b) to convert primary data into a flexible standard format for reuse. Prescribed formats have rarely been successful due to a wide range of ecosystems represented, original research questions that drive collection, and varying sampling and analysis methods. Hence, we took the second approach: define a flexible intermediate data model, and convert primary data to it. In the context of the Environmental Data Initiative’s data repository, this allows us to maintain the original dataset, which is most convenient for answering the original research questions (and does not interfere with depositors' existing practices), add a conversion script in R to reformat the data into the intermediary format and make this available to synthesis research as Level 1 datasets. This pre-harmonization step may be accomplished by data managers because the dataset still contains all original information without aggregation, filtering or cleaning necessary for targeted research questions. Although the data are still distributed into distinct datasets, they can easily be discovered and converted into other formats.
 
 ![](https://github.com/EDIorg/ecocomDP/blob/master/documentation/images/ecocom_dp_workflow_cut.png)
 
@@ -17,6 +17,11 @@ _Figure: Abstract view of dataset levels. A flexible intermediate (L1, middle) l
 [An example set of ecocomDP tables.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/examples)
 
 [Instructions for creating an ecocomDP](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions)
+
+[List of datasets to be converted to ecocomDP.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/processing_queue). This list includeds datasets that have been converted, but is not exhaustive. 
+
+[Datasets converted to ecocomDP, available from EDI](https://portal.edirepository.org:443/nis/simpleSearch?defType=edismax&q=ecocomDP&fq=-scope:ecotrends&fq=-scope:lter-landsat*&fl=id,packageid,title,author,organization,pubdate,coordinates&debug=false) To find all ecocomDP datasets, enter "ecocomDP' in the 'simple search' box in the EDI data repository.
+
 
 #### PostgreSQL
 

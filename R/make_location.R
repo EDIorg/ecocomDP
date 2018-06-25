@@ -5,12 +5,11 @@
 #'
 #' @usage 
 #'     make_location(x, cols = c('site', 'nested_level_1', 'nested_level_2', 
-#'     'etc.' ))
+#'     'etc.', kml = NULL, col = NULL))
 #'
 #' @param x
 #'     A data frame containing sampling location names (in columns) for each 
 #'     observation (rows).
-#'     
 #' @param cols
 #'     A list of columns in x containing sampling location data. The list 
 #'     order should reflect the hierarchical arrangement of sampling locations.
@@ -20,6 +19,21 @@
 #'     be supplied as:
 #'     
 #'     cols = c('site', 'habitat','transect', 'quadrat')
+#' @param kml
+#'     A data object (simple feature collection) created with the `st_read``
+#'     function of the `sf`` (simple features) R package. This data object
+#'     contains a field called 'Name'. Values listed in this field must match
+#'     the corresponding values listed in the data frame (x) and specified in
+#'     'cols'.
+#' @param col
+#'     A character string indicating the column name specified in the input
+#'     argument 'cols' to which the data in the kml object corresponds to.
+#'     E.g., if the kml corresponds with with the column named 'site' then
+#'     enter 'site' for the col argument.
+#'     
+#' @note 
+#'     The arguments 'kml' and 'col' only accept single inputs. I.e. does 
+#'     not support kml data for more than one col.
 #'
 #' @return 
 #'     A data frame of the location table.
@@ -27,9 +41,7 @@
 #' @export
 #'
 
-
-
-make_location <- function(x, cols){
+make_location <- function(x, cols, kml = NULL, col = NULL){
 
   # Check arguments -----------------------------------------------------------
   
@@ -48,7 +60,7 @@ make_location <- function(x, cols){
   col_i <- match(
     cols,
     colnames(
-      data
+      x
     )
   )
   
@@ -70,8 +82,8 @@ make_location <- function(x, cols){
     
     # Make keys in observation table for linking to the location table.
     
-    data$keys <- apply( 
-      data[ , col_i],
+    x$keys <- apply( 
+      x[ , col_i],
       1,
       paste,
       collapse = "_"
@@ -82,9 +94,9 @@ make_location <- function(x, cols){
     
     k <- length(col_i)
     
-    df[[k]] <- data[ , col_i]
+    df[[k]] <- x[ , col_i]
     
-    df[[k]]$key <- data$keys
+    df[[k]]$key <- x$keys
     
     df[[k]] <- unique.data.frame(
       df[[k]]
@@ -106,13 +118,13 @@ make_location <- function(x, cols){
     
     if (length(col_i) > 1){
       
-      col_names <- colnames(data[ , col_i])
+      col_names <- colnames(x[ , col_i])
       
       for (j in ((length(col_i)) - 1):1){
         
         # Create table of next coarser spatial scale
         
-        df[[j]] <- data[ , col_i[1:j]]
+        df[[j]] <- x[ , col_i[1:j]]
         
         # Get unique elements of this table
         
@@ -261,10 +273,148 @@ make_location <- function(x, cols){
       parent_location_id,
       stringsAsFactors = F
     )
-    
+
   }
   
-  
-  
+  if (!missing(kml)){
+    
+    if (missing(col)){
+      stop('Input argument "col" is missing! Specify the spatial level your kml data correspond with.')
+    }
+    
+    use_i <- match(
+      location_table$location_name,
+      kml$Name
+    )
+    
+    use_i <- use_i[!is.na(use_i)]
+    
+    r <- length(
+      unlist(
+        kml$geometry
+      )
+    )/2
+    
+    location_id <- c()
+    location_name <- c()
+    latitude <- c()
+    longitude <- c()
+    elevation <- c()
+    parent_location_id <- c()
+    
+    for (i in 1:length(use_i)){
+      
+      location_name <- c(
+        location_name,
+        paste0(
+          as.character(kml$Name[use_i[i]]),
+          '_outerBoundaryls_',
+          seq(
+            (length(unlist(kml$geometry[use_i[i]]))/2)
+          )
+        )                 
+      )
+      
+      poly_coord <- unlist(
+        kml$geometry[use_i[i]]
+      )
+      
+      longitude <- c(
+        longitude,
+        poly_coord[1:(length(poly_coord)/2)]
+      )
+      
+      latitude <- c(
+        latitude,
+        poly_coord[((length(poly_coord)/2)+1):length(poly_coord)]
+      )
+      
+      elevation <- c(
+        elevation,
+        rep(
+          NA,
+          length(poly_coord)/2
+        )
+      )
+      
+      index <- location_table$location_name == as.character(kml$Name[use_i[i]])
+      
+      parent_location_id <- c(
+        parent_location_id,
+        rep(
+          location_table$location_id[index],
+          length(unlist(kml$geometry[use_i[i]]))/2
+        )
+      ) 
+      
+    }
+    
+    location_id <- paste0(
+      'lo_p_',
+      seq(
+        length(
+          location_name
+        )
+      )
+    )
+    
+    location_poly <- data.frame(
+      location_id,
+      location_name,
+      latitude,
+      longitude,
+      elevation,
+      parent_location_id,
+      stringsAsFactors = F
+    )
+    
+    location_poly$parent_location_id <- paste0(
+      'lo_',
+      location_poly$parent_location_id
+    )
+    
+    # Create column: location_id
+    
+    location_table$location_id <- paste0(
+      'lo_',
+      location_table$location_id
+    )
+    
+    location_table$parent_location_id <- paste0(
+      'lo_',
+      location_table$parent_location_id
+    )
+    
+    location_table$parent_location_id[location_table$parent_location_id == 'lo_NA'] <- NA_character_ 
+    
+    # Append location table and polygon nested table
+    
+    location_table <- rbind(
+      location_table,
+      location_poly
+    )
+    
+  } else {
+    
+    # Create column: location_id
+    
+    location_table$location_id <- paste0(
+      'lo_',
+      location_table$location_id
+    )
+    
+    location_table$parent_location_id <- paste0(
+      'lo_',
+      location_table$parent_location_id
+    )
+    
+
+    location_table$parent_location_id[location_table$parent_location_id == 'lo_NA'] <- NA_character_ 
+    
+  }
+
+    
+  location_table
+
   
 }

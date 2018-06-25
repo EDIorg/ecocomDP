@@ -17,6 +17,7 @@
  <ul>
   <li><a href='../index.html' title='All tables and views in the schema'>Tables</a></li>
   <li><a href='../relationships.html' title='Diagram of table relationships'>Relationships</a></li>
+  <li><a href='../utilities.html' title='View of tables with neither parents nor children'>Utility&nbsp;Tables</a></li>
   <li><a href='../constraints.html' title='Useful for diagnosing error messages that just give constraint name or number'>Constraints</a></li>
   <li><a href='../anomalies.html' title="Things that might not be quite right">Anomalies</a></li>
   <li><a href='../columns.byTable.html' title="All of the columns in the schema">Columns</a></li>
@@ -83,7 +84,7 @@
 </tr>
 </thead>
 <tbody valign='top'>
-<tr class='odd'>
+<tr class='even'>
  <td class='primaryKey' title='Primary Key'>taxon_id</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>100</td>
@@ -92,13 +93,13 @@
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative odd' valign='top'>
+   <tr class='relative even' valign='top'>
     <td class='relatedTable detail' title="observation.taxon_id refs taxon.taxon_id via observation_taxon_fk"><a href='observation.html'>observation</a><span class='relatedKey'>.taxon_id</span>
     </td>
     <td class='constraint detail'>observation_taxon_fk<span title='Restrict delete:
  Parent cannot be deleted if children exist'>&nbsp;R</span></td>
    </tr>
-   <tr class='relative odd' valign='top'>
+   <tr class='relative even' valign='top'>
     <td class='relatedTable detail' title="taxon_ancillary.taxon_id refs taxon.taxon_id via taxon_ancillary_fk"><a href='taxon_ancillary.html'>taxon_ancillary</a><span class='relatedKey'>.taxon_id</span>
     </td>
     <td class='constraint detail'>taxon_ancillary_fk<span title='Restrict delete:
@@ -109,7 +110,7 @@
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>taxon_rank</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>200</td>
@@ -120,7 +121,7 @@
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>taxon_name</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>200</td>
@@ -131,7 +132,7 @@
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>authority_system</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>200</td>
@@ -142,7 +143,7 @@
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>authority_taxon_id</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>200</td>
@@ -154,7 +155,7 @@
  <td class='comment detail'></td>
 </tr>
 </table>
-<p title='5 columns'>Table contained 0 rows at Sun Oct 08 15:14 PDT 2017<p/>
+<p title='5 columns'>Table contained 0 rows at Tue Mar 13 15:28 PDT 2018<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
@@ -181,17 +182,17 @@
 &nbsp;within <label for='oneDegree'><input type='radio' name='degrees' id='oneDegree' checked>one</label>  <label for='twoDegrees'><input type='radio' name='degrees' id='twoDegrees'>two degrees</label> of separation</span><b>:</b></form>
 <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
 <area shape="rect" id="node1" href="observation.html" title="observation" alt="" coords="292,5,461,295">
-<area shape="rect" id="node2" href="taxon.html" title="taxon" alt="" coords="5,245,248,439">
-<area shape="rect" id="node3" href="taxon_ancillary.html" title="taxon_ancillary" alt="" coords="303,312,450,551">
+<area shape="rect" id="node2" href="taxon.html" title="taxon" alt="" coords="5,233,248,427">
+<area shape="rect" id="node3" href="taxon_ancillary.html" title="taxon_ancillary" alt="" coords="303,313,450,526">
 </map>
   <a name='diagram'><img id='oneDegreeImg' src='../diagrams/taxon.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
 <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="observation.html" title="observation" alt="" coords="292,7,461,296">
-<area shape="rect" id="node2" href="location.html" title="location" alt="" coords="63,121,191,208">
-<area shape="rect" id="node3" href="dataset_summary.html" title="dataset_summary" alt="" coords="54,17,199,104">
-<area shape="rect" id="node4" href="taxon.html" title="taxon" alt="" coords="5,273,248,467">
-<area shape="rect" id="node5" href="observation_ancillary.html" title="observation_ancillary" alt="" coords="505,5,672,92">
-<area shape="rect" id="node6" href="taxon_ancillary.html" title="taxon_ancillary" alt="" coords="303,313,450,552">
+<area shape="rect" id="node1" href="observation.html" title="observation" alt="" coords="292,60,461,349">
+<area shape="rect" id="node2" href="event.html" title="event" alt="" coords="69,5,185,92">
+<area shape="rect" id="node3" href="location.html" title="location" alt="" coords="63,213,191,300">
+<area shape="rect" id="node4" href="dataset_summary.html" title="dataset_summary" alt="" coords="54,109,199,196">
+<area shape="rect" id="node5" href="taxon.html" title="taxon" alt="" coords="5,353,248,547">
+<area shape="rect" id="node6" href="taxon_ancillary.html" title="taxon_ancillary" alt="" coords="303,367,450,581">
 </map>
 
   <a name='diagram'><img id='twoDegreesImg' src='../diagrams/taxon.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>

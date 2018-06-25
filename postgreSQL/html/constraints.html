@@ -14,6 +14,7 @@
  <ul>
   <li><a href='index.html' title='All tables and views in the schema'>Tables</a></li>
   <li><a href='relationships.html' title='Diagram of table relationships'>Relationships</a></li>
+  <li><a href='utilities.html' title='View of tables with neither parents nor children'>Utility&nbsp;Tables</a></li>
   <li id='current'><a href='constraints.html' title='Useful for diagnosing error messages that just give constraint name or number'>Constraints</a></li>
   <li><a href='anomalies.html' title="Things that might not be quite right">Anomalies</a></li>
   <li><a href='columns.byTable.html' title="All of the columns in the schema">Columns</a></li>
@@ -31,7 +32,7 @@
 <div class='indent'>
 <table width='100%'>
 <tr><td class='container' valign='bottom'><b>
-7 Foreign Key Constraints:</b>
+8 Foreign Key Constraints:</b>
 </td><td class='container' align='right'>
 <table>
   <tr><td class='container' align='right' valign='top'><a href='http://sourceforge.net' target='_blank'><img src='http://sourceforge.net/sflogo.php?group_id=137197&amp;type=1' alt='SourceForge.net' border='0' height='31' width='88'></a></td></tr>
@@ -61,41 +62,48 @@
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>
   <tr class='odd'>
-  <td class='detail'>observation_ancillary_fk</td>
-  <td class='detail'><a href='tables/observation_ancillary.html'>observation_ancillary</a>.observation_id</td>
-  <td class='detail'><a href='tables/observation.html'>observation</a>.observation_id</td>
+  <td class='detail'>observation_ancillary_event_fk</td>
+  <td class='detail'><a href='tables/observation_ancillary.html'>observation_ancillary</a>.event_id</td>
+  <td class='detail'><a href='tables/event.html'>event</a>.event_id</td>
   <td class='detail'><span title='Restrict delete:
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>
   <tr class='even'>
+  <td class='detail'>observation_event_fk</td>
+  <td class='detail'><a href='tables/observation.html'>observation</a>.event_id</td>
+  <td class='detail'><a href='tables/event.html'>event</a>.event_id</td>
+  <td class='detail'><span title='Restrict delete:
+ Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
+ </tr>
+  <tr class='odd'>
   <td class='detail'>observation_location_fk</td>
   <td class='detail'><a href='tables/observation.html'>observation</a>.location_id</td>
   <td class='detail'><a href='tables/location.html'>location</a>.location_id</td>
   <td class='detail'><span title='Restrict delete:
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>
-  <tr class='odd'>
+  <tr class='even'>
   <td class='detail'>observation_package_fk</td>
   <td class='detail'><a href='tables/observation.html'>observation</a>.package_id</td>
   <td class='detail'><a href='tables/dataset_summary.html'>dataset_summary</a>.package_id</td>
   <td class='detail'><span title='Restrict delete:
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>
-  <tr class='even'>
+  <tr class='odd'>
   <td class='detail'>observation_taxon_fk</td>
   <td class='detail'><a href='tables/observation.html'>observation</a>.taxon_id</td>
   <td class='detail'><a href='tables/taxon.html'>taxon</a>.taxon_id</td>
   <td class='detail'><span title='Restrict delete:
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>
-  <tr class='odd'>
+  <tr class='even'>
   <td class='detail'>parent_location_fk</td>
   <td class='detail'><a href='tables/location.html'>location</a>.parent_location_id</td>
   <td class='detail'><a href='tables/location.html'>location</a>.location_id</td>
   <td class='detail'><span title='Restrict delete:
  Parent cannot be deleted if children exist'>Restrict delete&nbsp;</span></td>
  </tr>
-  <tr class='even'>
+  <tr class='odd'>
   <td class='detail'>taxon_ancillary_fk</td>
   <td class='detail'><a href='tables/taxon_ancillary.html'>taxon_ancillary</a>.taxon_id</td>
   <td class='detail'><a href='tables/taxon.html'>taxon</a>.taxon_id</td>

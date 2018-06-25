@@ -17,6 +17,7 @@
  <ul>
   <li><a href='../index.html' title='All tables and views in the schema'>Tables</a></li>
   <li><a href='../relationships.html' title='Diagram of table relationships'>Relationships</a></li>
+  <li><a href='../utilities.html' title='View of tables with neither parents nor children'>Utility&nbsp;Tables</a></li>
   <li><a href='../constraints.html' title='Useful for diagnosing error messages that just give constraint name or number'>Constraints</a></li>
   <li><a href='../anomalies.html' title="Things that might not be quite right">Anomalies</a></li>
   <li><a href='../columns.byTable.html' title="All of the columns in the schema">Columns</a></li>
@@ -84,7 +85,7 @@
 </tr>
 </thead>
 <tbody valign='top'>
-<tr class='odd'>
+<tr class='even'>
  <td class='primaryKey' title='Primary Key'>observation_ancillary_id</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>100</td>
@@ -95,49 +96,27 @@
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
- <td class='indexedColumn' title='Indexed'>observation_id</td>
+<tr class='odd'>
+ <td class='indexedColumn' title='Indexed'>event_id</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>100</td>
+ <td class='detail' align='center' title='nullable'>&nbsp;&radic;&nbsp;</td>
  <td class='detail' align='center'></td>
- <td class='detail' align='center'></td>
- <td class='detail'></td>
+ <td class='detail' align='right'>null</td>
  <td class='detail'></td>
  <td class='detail'>
   <table border='0' width='100%' cellspacing='0' cellpadding='0'>
-   <tr class='relative even' valign='top'>
-    <td class='relatedTable detail' title="observation_ancillary.observation_id refs observation.observation_id via observation_ancillary_fk"><a href='observation.html'>observation</a><span class='relatedKey'>.observation_id</span>
+   <tr class='relative odd' valign='top'>
+    <td class='relatedTable detail' title="observation_ancillary.event_id refs event.event_id via observation_ancillary_event_fk"><a href='event.html'>event</a><span class='relatedKey'>.event_id</span>
     </td>
-    <td class='constraint detail'>observation_ancillary_fk<span title='Restrict delete:
+    <td class='constraint detail'>observation_ancillary_event_fk<span title='Restrict delete:
  Parent cannot be deleted if children exist'>&nbsp;R</span></td>
    </tr>
   </table>
  </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
- <td class='indexedColumn' title='Indexed'>measured_entity</td>
- <td class='detail'>varchar</td>
- <td class='detail' align='right'>200</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='center'></td>
- <td class='detail'></td>
- <td class='detail'></td>
- <td class='detail'> </td>
- <td class='comment detail'></td>
-</tr>
 <tr class='even'>
- <td class='indexedColumn' title='Indexed'>characteristic</td>
- <td class='detail'>varchar</td>
- <td class='detail' align='right'>200</td>
- <td class='detail' align='center'></td>
- <td class='detail' align='center'></td>
- <td class='detail'></td>
- <td class='detail'></td>
- <td class='detail'> </td>
- <td class='comment detail'></td>
-</tr>
-<tr class='odd'>
  <td class='indexedColumn' title='Indexed'>variable_name</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>200</td>
@@ -148,7 +127,7 @@
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='even'>
+<tr class='odd'>
  <td class='detail'>value</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>200</td>
@@ -159,7 +138,7 @@
  <td class='detail'> </td>
  <td class='comment detail'></td>
 </tr>
-<tr class='odd'>
+<tr class='even'>
  <td class='detail'>unit</td>
  <td class='detail'>varchar</td>
  <td class='detail' align='right'>200</td>
@@ -171,17 +150,18 @@
  <td class='comment detail'></td>
 </tr>
 </table>
-<p title='7 columns'>Table contained 0 rows at Sun Oct 08 15:14 PDT 2017<p/>
+<p title='5 columns'>Table contained 0 rows at Tue Mar 13 15:28 PDT 2018<p/>
 </td></tr></table>
 <div class='indent'>
 <b>Indexes:</b>
-<table class='dataTable' border='1' rules='groups'><colgroup><colgroup><colgroup><colgroup>
+<table class='dataTable' border='1' rules='groups'><colgroup><colgroup><colgroup><colgroup><colgroup>
 <thead>
  <tr>
   <th>Column(s)</th>
   <th>Type</th>
   <th>Sort</th>
   <th class='constraint' style='text-align:left;'>Constraint Name</th>
+  <th>Anomalies</th>
  </tr>
 </thead>
 <tbody>
@@ -190,12 +170,14 @@
   <td class='detail'>Primary key</td>
   <td class='detail' style='text-align:left;'><span title='Ascending'>Asc</span></td>
   <td class='constraint' style='text-align:left;'>observation_ancillary_pk</td>
+  <td>&nbsp;</td>
  </tr>
  <tr>
-  <td class='indexedColumn'>observation_id + measured_entity + characteristic + variable_name</td>
+  <td class='indexedColumn'>event_id + variable_name</td>
   <td class='detail'>Must be unique</td>
-  <td class='detail' style='text-align:left;'><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
+  <td class='detail' style='text-align:left;'><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
   <td class='constraint' style='text-align:left;'>observation_ancillary_uniq</td>
+  <td class='detail'>These unique columns are also nullable</td>
  </tr>
 </table>
 </div>
@@ -203,16 +185,14 @@
 <br><form action='get'><b>Close relationships</b><span class='degrees' id='degrees' title='Detail diminishes with increased separation from observation_ancillary'>
 &nbsp;within <label for='oneDegree'><input type='radio' name='degrees' id='oneDegree' checked>one</label>  <label for='twoDegrees'><input type='radio' name='degrees' id='twoDegrees'>two degrees</label> of separation</span><b>:</b></form>
 <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="observation_ancillary.html" title="observation_ancillary" alt="" coords="219,5,499,249">
-<area shape="rect" id="node2" href="observation.html" title="observation" alt="" coords="5,33,175,323">
+<area shape="rect" id="node1" href="observation_ancillary.html" title="observation_ancillary" alt="" coords="165,5,445,199">
+<area shape="rect" id="node2" href="event.html" title="event" alt="" coords="5,34,121,146">
 </map>
   <a name='diagram'><img id='oneDegreeImg' src='../diagrams/observation_ancillary.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>
 <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="observation.html" title="observation" alt="" coords="195,35,364,324">
-<area shape="rect" id="node2" href="location.html" title="location" alt="" coords="14,109,142,196">
-<area shape="rect" id="node3" href="dataset_summary.html" title="dataset_summary" alt="" coords="5,5,151,92">
-<area shape="rect" id="node4" href="taxon.html" title="taxon" alt="" coords="20,213,136,300">
-<area shape="rect" id="node5" href="observation_ancillary.html" title="observation_ancillary" alt="" coords="408,7,688,251">
+<area shape="rect" id="node1" href="observation.html" title="observation" alt="" coords="247,5,363,92">
+<area shape="rect" id="node2" href="event.html" title="event" alt="" coords="5,73,121,185">
+<area shape="rect" id="node3" href="observation_ancillary.html" title="observation_ancillary" alt="" coords="165,109,445,303">
 </map>
 
   <a name='diagram'><img id='twoDegreesImg' src='../diagrams/observation_ancillary.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>

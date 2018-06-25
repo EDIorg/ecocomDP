@@ -19,32 +19,18 @@ digraph "oneDegreeRelationshipsDiagram" {
   edge [
     arrowsize="0.8"
   ];
-  "event_ancillary":"event_id":w -> "event":"event_id.type":e [arrowhead=none dir=back arrowtail=crowodot];
   "observation":"event_id":w -> "event":"event_id.type":e [arrowhead=none dir=back arrowtail=crowodot];
+  "observation_ancillary":"event_id":w -> "event":"event_id.type":e [arrowhead=none dir=back arrowtail=crowodot];
   "event" [
     label=<
     <TABLE BORDER="2" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
       <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">event</TD></TR>
       <TR><TD PORT="event_id" COLSPAN="2" BGCOLOR="#bed1b8" ALIGN="LEFT">event_id</TD><TD PORT="event_id.type" ALIGN="LEFT">varchar[100]</TD></TR>
-      <TR><TD PORT="event_name" COLSPAN="2" ALIGN="LEFT">event_name</TD><TD PORT="event_name.type" ALIGN="LEFT">varchar[200]</TD></TR>
+      <TR><TD PORT="event_name" COLSPAN="2" ALIGN="LEFT">event_name</TD><TD PORT="event_name.type" ALIGN="LEFT">varchar[100]</TD></TR>
       <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 0</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">2 &gt;</TD></TR>
     </TABLE>>
     URL="event.html"
     tooltip="event"
-  ];
-  "event_ancillary" [
-    label=<
-    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
-      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">event_ancillary</TD></TR>
-      <TR><TD PORT="event_ancillary_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">event_ancillary_id</TD></TR>
-      <TR><TD PORT="event_id" COLSPAN="3" ALIGN="LEFT">event_id</TD></TR>
-      <TR><TD PORT="variable_name" COLSPAN="3" ALIGN="LEFT">variable_name</TD></TR>
-      <TR><TD PORT="value" COLSPAN="3" ALIGN="LEFT">value</TD></TR>
-      <TR><TD PORT="unit" COLSPAN="3" ALIGN="LEFT">unit</TD></TR>
-      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
-    </TABLE>>
-    URL="event_ancillary.html"
-    tooltip="event_ancillary"
   ];
   "observation" [
     label=<
@@ -53,7 +39,7 @@ digraph "oneDegreeRelationshipsDiagram" {
       <TR><TD PORT="observation_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">observation_id</TD></TR>
       <TR><TD PORT="event_id" COLSPAN="3" ALIGN="LEFT">event_id</TD></TR>
       <TR><TD PORT="package_id" COLSPAN="3" ALIGN="LEFT">package_id</TD></TR>
-      <TR><TD PORT="sampling_location_id" COLSPAN="3" ALIGN="LEFT">sampling_location_id</TD></TR>
+      <TR><TD PORT="location_id" COLSPAN="3" ALIGN="LEFT">location_id</TD></TR>
       <TR><TD PORT="observation_datetime" COLSPAN="3" ALIGN="LEFT">observation_datetime</TD></TR>
       <TR><TD PORT="taxon_id" COLSPAN="3" ALIGN="LEFT">taxon_id</TD></TR>
       <TR><TD PORT="variable_name" COLSPAN="3" ALIGN="LEFT">variable_name</TD></TR>
@@ -63,5 +49,19 @@ digraph "oneDegreeRelationshipsDiagram" {
     </TABLE>>
     URL="observation.html"
     tooltip="observation"
+  ];
+  "observation_ancillary" [
+    label=<
+    <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#ffffff">
+      <TR><TD COLSPAN="3" BGCOLOR="#9bab96" ALIGN="CENTER">observation_ancillary</TD></TR>
+      <TR><TD PORT="observation_ancillary_id" COLSPAN="3" BGCOLOR="#bed1b8" ALIGN="LEFT">observation_ancillary_id</TD></TR>
+      <TR><TD PORT="event_id" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">event_id</TD></TR>
+      <TR><TD PORT="variable_name" COLSPAN="3" BGCOLOR="#f4f7da" ALIGN="LEFT">variable_name</TD></TR>
+      <TR><TD PORT="value" COLSPAN="3" ALIGN="LEFT">value</TD></TR>
+      <TR><TD PORT="unit" COLSPAN="3" ALIGN="LEFT">unit</TD></TR>
+      <TR><TD ALIGN="LEFT" BGCOLOR="#f7f7f7">&lt; 1</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#f7f7f7">  </TD></TR>
+    </TABLE>>
+    URL="observation_ancillary.html"
+    tooltip="observation_ancillary"
   ];
 }

@@ -5,7 +5,7 @@ Introduction
 The ecocom design pattern (ecocomDP) is planned to be a flexible intermediate for ecological community survey data. 
 For information on the process see https://environmentaldatainitiative.org/resources/tools/dataset-design/
 
-The ecocomDP is composed of 7 tables, which can be linked via identifiers. This document describes the seven tables, and  the contents (columns) of each. Examples can be found in the /examples/ directory. The graphic showing all seven data objects and their relationships was created from a relational database implementation (PostgreSQL, see the top-level directory of that name for DDL). Of the seven, three are required (“observation”, “location”, “taxon”). The “dataset_summary” is populated from the “observation” table by code.   
+The ecocomDP is composed of 8 tables, which can be linked via identifiers. This document describes the tables and their contents (columns). Examples of tables can be found in the /examples/ directory. The graphic showing all data objects and their relationships was created from a relational database implementation (PostgreSQL, see the top-level directory of that name for DDL). Three tables are required (“observation”, “location”, “taxon”). The “dataset_summary” is populated from the “observation” table by code.  Two tables hold links to external resources: taxon, and variable_mappings. The taxon table is specifically designed to hold lookup-info from a service such as ITIS. The variable_mappings table hold URIs and lables for external measurement dictionaries.  
 
 Each main table has an optional ancillary table for additional information. These are included because primary research typically includes related measurements which may be of interest during anlaysis. 
 
@@ -15,11 +15,12 @@ Below is the table list and suggested population order, ie, parents first.
 |--------|--------------|-------------|------------------------|------------------------|-------------------------|--------------------|
 |1.| location | yes | NA | basic info to identify a place | lon, lat, elev |  location_id | 
 |2.| taxon | yes | NA | basic info to identify an organism | name, id from an external system |  taxon_id |
-|3.| observation |yes| location, taxon | observations about taxa, that are being analyzed. Eg, organism abundance or density, or the data to compute density (count) | variable, value, unit | observation_id, package_id, location_id, observation_datetime, taxon_id, variable_name   | 
+|3.| observation |yes| location, taxon, observation_ancillary, dataset_summary | observations about taxa, that are being analyzed. Eg, organism abundance or density, or the data to compute density (count) | variable, value, unit | observation_id, package_id, location_id, observation_datetime, taxon_id, variable_name   | 
 |4.| location_ancillary |no| location | additional info about a place that does not change, in long format. | variable, value, unit (sampling area, lake area, depth of ocean) | location_id, datetime, variable_name |
 |5.| taxon_ancillary|no|  taxon | additonal info about an organism that does not change, in long format | variable, value, unit (phenotypic traits) | taxon_id, date_time, variable_name   |
 |6.| observation_ancillary  | no | observation | additional info about the sampling event (not related to taxa or locations) in long-format  |  variable_name, value, unit | event_id, variable_name  |
-|7.| dataset_summary|yes|  observation | summary info calculated from incoming data. one line table |See examples directory |   |
+|7.| dataset_summary|yes|  NA | summary info calculated from incoming data. one line table |See examples directory |   |
+|8.| variable_mappings| no |  ONE OF: observation, observation_ancillary, taxon_ancillary, OR location_ancillary | mappings from variable names in tables to external dictionaries | table_name, variable_name, mapped_system, mapped_id, mapped_label | NA   |
 
 
 _____
@@ -51,7 +52,7 @@ Columns
 |---------------|---------|--------------------|-------------------|--------------|---------|
 | taxon_id           | character |  yes        | NA | ID used in the dataset | sbclter_MAPY |  
 |	taxon_rank         | character |  no         | NA | Taxonomic rank of the organism name | species |   
-|	taxon_name         | character |  yes        | NA | Species name | M. pyrifera | 
+|	taxon_name         | character |  yes        | NA | Taxonomic name of the organism | M. pyrifera | 
 |	authority_system   | character |  no         | NA | Name of the system assigning the taxon ID | ITIS|  
 |	authority_taxon_id | character |  no         | NA | ID in the authority system |  11274|
 
@@ -93,7 +94,7 @@ Columns
 
 Table: taxon_ancillary
 ---
-Description: additional info about an organism that does not change frequently, eg, trophic level. Teatures that change frequently are probably observations. Ancillary observations are linked through the taxon_id, and one taxon_id may have many ancillary observations about it.
+Description: additional info about an organism that does not change frequently, e.g., trophic level. Features that change frequently are probably observations. Ancillary observations are linked through the taxon_id, and one taxon_id may have many ancillary observations about it.
 
 Columns
 
@@ -141,4 +142,30 @@ Columns
 | std_dev_interval_betw_years | float     |yes|   	|  Standard deviation of the interval between sampling events. 	| 1.1  	|
 | max_num_taxa                |integer    |yes|   	|  Number of unique values in the taxon table. 	| 1  	|
 | geo_extent_bounding_box_m2  |float      |no|   	|   Area of the study location.	|  40 	|
+
+
+
+
+Table: variable_mappings 
+---
+Description: Information linking a variable_name used in a data table to an external definition
+
+This optional table holds mappings (or relations) between variable names in the data tables and measurement definitions external to the data package. This table has multiple uses: 
+
+- provides definitions for variables in the datasets (more extensive than might be found in metadata) 
+- code can use this table to  to create EML code-definition pairs or annotations in metadata
+- a single column in a data table may have mappings to multiple dictionaries, by including multiple rows for it
+
+Columns
+
+|  column name 	|   type	 |   not NULL required?	|  references cols 	| description | example |
+|---------------|----------|-----------------------|-------------------|--------------|---------| 
+| variable_mapping_id  | character |yes| NA	| the id of the variable mapping, a row or record identifier  	| 	1  	|
+| table_name           | character |yes| NA	| the name of the table holding this variable 	| 	my_observation  	|
+| variable_name        | character |yes| ONE OF: observation.variable_name, observation_ancillary.variable_name, taxon_ancillary.variable_name, OR location_ancillary.variable_name | the variable name in another data table  	|  sample_z  	|
+| mapped_system        | character | no| NA	| system defining this variable_name  	|  NERC  	|
+| mapped_id     | character | no| NA	| id of the definition in that system 	| SDN:P07::CFSN0721 	|
+| mapped_label  | character | no| NA	| label for this variable in that mapped system  	|  depth  	|
+
+
 

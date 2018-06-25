@@ -36,7 +36,7 @@ Tables
 ---
 Table: location
 ---
-Description: identifying info about a place (lon, lat, elev). This table is self-referencing, to enable nested sites.
+Description: identifying info about a place (lon, lat, elev). This table is self-referencing, to enable nested sites. The `make_location` utility function simplifies creation of this table. Function is apart of the ecocomDP R package.
 
 Column notes
 
