@@ -1,0 +1,1592 @@
+[
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Reef: Kelp Forest Community Dynamics: Abundance and size of Giant Kelp (Macrocystis Pyrifera), ongoing since 2000",
+        "knbid": "knb-lter-sbc.18.18",
+        "authors": "Daniel Reed"
+    },
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Reef: Kelp Forest Community Dynamics: Fish abundance",
+        "knbid": "knb-lter-sbc.17.28",
+        "authors": "Daniel Reed"
+    },
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Reef: Kelp Forest Community Dynamics: Invertebrate and algal density",
+        "knbid": "knb-lter-sbc.19.21",
+        "authors": "Daniel Reed"
+    },
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Reef: Kelp Forest Community Dynamics: Cover of sessile organisms, Uniform Point Contact",
+        "knbid": "knb-lter-sbc.15.23",
+        "authors": "Daniel Reed"
+    },
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Reef: Long-term experiment: Kelp removal: Abundance and size of Giant Kelp",
+        "knbid": "knb-lter-sbc.29.13",
+        "authors": "Santa Barbara Coastal LTER, Daniel Reed"
+    },
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Reef: Long-term experiment: Kelp removal: Fish abundance",
+        "knbid": "knb-lter-sbc.30.13",
+        "authors": "Santa Barbara Coastal LTER, Daniel Reed"
+    },
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Reef: Long-term experiment: Kelp removal: Invertebrate and algal density",
+        "knbid": "knb-lter-sbc.34.11",
+        "authors": "Santa Barbara Coastal LTER, Daniel Reed"
+    },
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Reef: Long-term experiment: Kelp removal: Cover of sessile organisms, Uniform Point Contact",
+        "knbid": "knb-lter-sbc.28.21",
+        "authors": "Santa Barbara Coastal LTER, Daniel Reed"
+    },
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Reef: Long-term experiment: Algal Biomass",
+        "knbid": "knb-lter-sbc.49.8",
+        "authors": "Santa Barbara Coastal LTER, Daniel Reed, Shannon Harrer"
+    },
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Reef: Abundance, size and fishing effort for California Spiny Lobster (Panulirus interruptus), ongoing since 2012",
+        "knbid": "knb-lter-sbc.77.1",
+        "authors": "Santa Barbara Coastal LTER, Daniel Reed"
+    },
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Time series of settlement of urchins and other invertebrates",
+        "knbid": "knb-lter-sbc.52.3",
+        "authors": "Santa Barbara Coastal LTER, Steven Schroeter, John Dixon, Thomas Ebert, John Richards"
+    },
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Santa Cruz Island: Abundance of Surfperch and Garibaldi",
+        "knbid": "knb-lter-sbc.39.4",
+        "authors": "Santa Barbara Coastal LTER, Russell Schmitt, Sally Holbrook"
+    },
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Santa Cruz Island: Cover of Algae, Invertebrates and Benthic Substrate",
+        "knbid": "knb-lter-sbc.38.4",
+        "authors": "Santa Barbara Coastal LTER, Russell Schmitt, Sally Holbrook"
+    },
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Santa Cruz Island: Abundance and Biomass of Benthic Organisms (food resource collection)",
+        "knbid": "knb-lter-sbc.47.3",
+        "authors": "Santa Barbara Coastal LTER, Russell Schmitt, Sally Holbrook"
+    },
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Santa Cruz Island: Abundance of Pycnopodia helianthoides",
+        "knbid": "knb-lter-sbc.46.3",
+        "authors": "Santa Barbara Coastal LTER, Russel Schmitt, Sally Holbrook"
+    },
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Reef: Historical Kelp Database for giant kelp (Macrocystis pyrifera) biomass in California and Mexico",
+        "knbid": "knb-lter-sbc.14.13",
+        "authors": "Daniel Reed"
+    },
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Reef: Sightings of sea otters (Enhydra lutris) near Santa Barbara and Channel Islands, ongoing since 2007",
+        "knbid": "knb-lter-sbc.61.4",
+        "authors": "Daniel Reed, Shannon Harrer, J Nelson"
+    },
+    {
+        "lterid": "SBC",
+        "title": "SBC LTER: Cross-shelf Study 2008-2009: Profiles of CTD, biogeochemistry, primary production, abundance of phytoplankton groups, and abundance and production of bacteria",
+        "knbid": "knb-lter-sbc.45.8",
+        "authors": "SB Coastal LTER, Elisa Halewood, Craig Carlson, Mark Brzezinski, Jo Goodman"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Rodent Parasite Data for the Sevilleta National Wildlife Refuge, New Mexico (1990-1998)",
+        "knbid": "knb-lter-sev.13.270182",
+        "authors": "Don Duszyinski"
+    },
+    {
+        "lterid": "SEV",
+        "title": "2003 Prescribed Burn Effect on Chihuahuan Desert Grasses and Shrubs at the Sevilleta National Wildlife Refuge, New Mexico: Grass Recovery Study (2003- )",
+        "knbid": "knb-lter-sev.148.131882",
+        "authors": "Esteban Muldavin"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Burn Exclosure Rodent Population Study at the Sevilleta National Wildlife Refuge, New Mexico, (1991-1993)",
+        "knbid": "knb-lter-sev.15.218704",
+        "authors": "Robert Parmenter"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Nitrogen Fertilization Experiment (NFert): Net Primary Production Quadrat Data at the Sevilleta National Wildlife Refuge, New Mexico (2004-present)",
+        "knbid": "knb-lter-sev.155.233346",
+        "authors": "Scott Collins"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Burn Study Sites Quadrat Data for the Net Primary Production Study at the Sevilleta National Wildlife Refuge, New Mexico (2004-present)",
+        "knbid": "knb-lter-sev.156.245412",
+        "authors": "Esteban Muldavin"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Plant Removal Study: Recovery of Vegetation Following Disturbance at the Sevilleta National Wildlife Refuge, New Mexico (1995-2010)",
+        "knbid": "knb-lter-sev.168.192537",
+        "authors": "Debra Peters"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Bird Community Assessment in Grassland, Shrubland, and Woodland Habitats at the Sevilleta National Wildlife Refuge, New Mexico (1991-1997)",
+        "knbid": "knb-lter-sev.17.120278",
+        "authors": "Robert Parmenter"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Pino Gate Prairie Dog Study at the Sevilleta National Wildlife Refuge, New Mexico: Landscape Plot Lizard Data (2001-2002)",
+        "knbid": "knb-lter-sev.173.87391",
+        "authors": "Ana Davidson, David Lightfoot"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Warming-El Nino-Nitrogen Deposition Experiment (WENNDEx): Net Primary Production Quadrat Data at the Sevilleta National Wildlife Refuge, New Mexico (2006 -present)",
+        "knbid": "knb-lter-sev.176.233653",
+        "authors": "Scott Collins, William Pockman, Joe Fargione"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Livestock Exclosure Study: Plant Species Composition in a Chihuahuan Desert Grassland at the Sevilleta National Wildlife Refuge, New Mexico (2004-2007)",
+        "knbid": "knb-lter-sev.178.133945",
+        "authors": "Scott Collins, Lydia Zeglin"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Pinon Juniper Net Primary Production Quadrat Data from the Sevilleta National Wildlife Refuge, New Mexico: 1999-2001",
+        "knbid": "knb-lter-sev.187.167478",
+        "authors": "Esteban Muldavin"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Monsoon Rainfall Manipulation Experiment (MRME): Net Primary Production Quadrat Data at the Sevilleta National Wildlife Refuge, New Mexico (2006-present)",
+        "knbid": "knb-lter-sev.188.243666",
+        "authors": "Scott Collins"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Pino Gate Prairie Dog Study: Landscape-scale Vegetation Plot Data from the Sevilleta National Wildlife Refuge, New Mexico (1999-2002)",
+        "knbid": "knb-lter-sev.193.178639",
+        "authors": "Ana Davidson, David Lightfoot"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Pino Gate Prairie Dog Study: Mound-scale Vegetation Plot Data from the Sevilleta National Wildlife Refuge, New Mexico (2000-2002)",
+        "knbid": "knb-lter-sev.194.188141",
+        "authors": "Ana Davidson, David Lightfoot"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Gunnison's Prairie Dog Relocation Project: Vegetation Cover Data from the Sevilleta National Wildife Refuge, New Mexico (2005-2013 )",
+        "knbid": "knb-lter-sev.212.1",
+        "authors": "Ana Davidson, David Lightfoot"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Effect of Habitat Restoration on Native Bee Communities at the Bosque del Apache National Wildlife Refuge, New Mexico (2008-2010)",
+        "knbid": "knb-lter-sev.215.173899",
+        "authors": "Karen Wright"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Population Ecology of Banner-Tailed Kangaroo Rats (Dipodomys spectabilis) in a Chihuahuan Desert Grassland at the Sevilleta National Wildlife Refuge, New Mexico (2005-2009)",
+        "knbid": "knb-lter-sev.228.102077",
+        "authors": "Andrew Edelman"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Rabbit Population Dynamics in Chihuahuan Desert Grasslands and Shrublands at the Sevilleta National Wildlife Refuge, New Mexico (1992- )",
+        "knbid": "knb-lter-sev.23.121704",
+        "authors": "Robert Parmenter"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Effects of Multiple Resource Additions on Community and Ecosystem Processes: NutNet NPP Quadrat Sampling at the Sevilleta National Wildlife Refuge, New Mexico (2007-present)",
+        "knbid": "knb-lter-sev.231.176381",
+        "authors": "Scott Collins"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Gunnison's Prairie Dog Restoration Experiment (GPDREx): Population Dynamics within Grasslands at the Sevilleta National Widlife Refuge, New Mexico",
+        "knbid": "knb-lter-sev.236.257686",
+        "authors": "Ana Davidson, Stephanie Baker"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Gunnison's Prairie Dog Restoration Experiment (GPDREx): Vegetation Cover Data from the Sevilleta National Wildlife Refuge, New Mexico",
+        "knbid": "knb-lter-sev.238.226091",
+        "authors": "Ana Davidson, Stephanie Baker"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Kruger Species Composition: Konza-Kruger Fire-Grazing Project (2006-2010)",
+        "knbid": "knb-lter-sev.266.180462",
+        "authors": "Alan Knapp, Melinda Smith, John Blair, Scott Collins, Deron Burkepile, Kevin Kirkman"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Konza Species Composition: Konza-Kruger Fire-Grazing Project (2006-2010)",
+        "knbid": "knb-lter-sev.267.196138",
+        "authors": "Alan Knapp, Melinda Smith, John Blair, Scott Collins, Deron Burkepile, Kevin Kirkman"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Pinon-Juniper (Core Site) Quadrat Data for the Net Primary Production Study at the Sevilleta National Wildlife Refuge, New Mexico (2003-present )",
+        "knbid": "knb-lter-sev.278.245672",
+        "authors": "Esteban Muldavin"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Ground Arthropod Community Survey in Grassland, Shrubland, and Woodland at the Sevilleta National Wildlife Refuge, New Mexico (1992-2004)",
+        "knbid": "knb-lter-sev.29.175390",
+        "authors": "David Lightfoot"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Extreme Drought in Grassland Ecosystems (EDGE) Net Primary Production Quadrat Data at the Sevilleta National Wildlife Refuge, New Mexico (2012-present)",
+        "knbid": "knb-lter-sev.297.233742",
+        "authors": "Scott Collins"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Water Balance Modeling Project at the Sevilleta National Wildlife Refuge, New Mexico: Vegetation Plot Data (1995-1998)",
+        "knbid": "knb-lter-sev.81.185474",
+        "authors": "NA"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Small Mammal Exclosure Study (SMES) Ant Data from Chihuahuan Desert Grassland and Shrubland at the Sevilleta National Wildlife Refuge, New Mexico (1995-2005)",
+        "knbid": "knb-lter-sev.88.122261",
+        "authors": "David Lightfoot"
+    },
+    {
+        "lterid": "SEV",
+        "title": "Small Mammal Exclosure Study (SMES) Vegetation Data from the Chihuahuan Desert Grassland and Shrubland at the Sevilleta National Wildlife Refuge, New Mexico (1995-2009)",
+        "knbid": "knb-lter-sev.88.122261",
+        "authors": "David Lightfoot"
+    },
+    {
+        "lterid": "SGS",
+        "title": "SGS-LTER Long-Term Monitoring Project : Vegetation Cover and Structure on Small Mammal Trapping Webs on the Central Plains Experimental Range, Nunn, Colorado, USA 1999 -2006, ARS Study Number 118",
+        "knbid": "knb-lter-sgs.141.17",
+        "authors": "Paul Stapp"
+    },
+    {
+        "lterid": "SGS",
+        "title": "SGS-LTER Standard Production Data : 1983-2008 Annual Aboveground Net Primary Production on the Central Plains Experimental Range, Nunn, Colorado, USA 1983-2008, ARS Study Number 6",
+        "knbid": "knb-lter-sgs.700.1",
+        "authors": "Daniel Milchunas"
+    },
+    {
+        "lterid": "SGS",
+        "title": "Open Top Chamber Experiment Carbon Dioxide (CO2) Elevation Experiment at the Central Plains Experimental Range, Nunn, Colorado, USA",
+        "knbid": "not available",
+        "authors": "Jack Morgan"
+    },
+    {
+        "lterid": "SGS",
+        "title": "SGS-LTER Bouteloua gracilis removal experiment vegetation data (ARS #155) on the Central Plains Experimental Range, Nunn, Colorado, USA",
+        "knbid": "not available",
+        "authors": "William Lauenroth"
+    },
+    {
+        "lterid": "SGS",
+        "title": "SGS-LTER Bouteloua gracilis removal experiment vegetation data (ARS #155) on the Central Plains Experimental Range, Nunn, Colorado, USA",
+        "knbid": "NA",
+        "authors": "William Lauenroth"
+    },
+    {
+        "lterid": "SGS",
+        "title": "SGS-LTER Disturbance intensity and above- and belowground herbivory effects on long-term recovery of shortgrass steppe on the Central Plains Experimental Range, Nunn, Colorado, USA 1977-1990",
+        "knbid": "knb-lter-sgs.130.18",
+        "authors": "William_Lauenroth"
+    },
+    {
+        "lterid": "SGS",
+        "title": "SGS-LTER Ecosystem Stress Area : Long-term dataset following nutrient enrichment stress on the Central Plains Experimental Range in Nunn, Colorado, USA, ARS Study Number 3",
+        "knbid": "not available",
+        "authors": "Daniel G Milchunas, William K Lauenroth"
+    },
+    {
+        "lterid": "SGS",
+        "title": "SGS-LTER Ecosystem Stress Area : Long-term dataset following nutrient enrichment stress on the Central Plains Experimental Range in Nunn, Colorado, USA, ARS Study Number 3",
+        "knbid": "not available",
+        "authors": "Daniel_G._Milchunas;William_K._Lauenroth"
+    },
+    {
+        "lterid": "SGS",
+        "title": "SGS-LTER Effects of grazing on ecosystem structure and function (GZTX): Vegetation measurements on the Central Plains Experimental Range, Nunn, Colorado, USA 1992-2008, ARS Study Number 32",
+        "knbid": "knb-lter-sgs.527.1",
+        "authors": "Daniel G. Milchunas"
+    },
+    {
+        "lterid": "SGS",
+        "title": "SGS-LTER Effects of water and nitrogen additions on plants in shortgrass ecosystems on the Central Plains Experimental Range, Nunn, Colorado, USA 1997-2011, ARS Study Number 143",
+        "knbid": "knb-lter-sgs.542.1",
+        "authors": "William K. Lauenroth"
+    },
+    {
+        "lterid": "SGS",
+        "title": "SGS-LTER Impact of Labile and Recalcitrant Carbon Treatments on Plant Communities in a Semiarid Ecosystem on the Central Plains Experimental Range, Nunn, Colorado, USA 1997-2012, ARS Study Number 3",
+        "knbid": "knb-lter-sgs.539.1",
+        "authors": "Ingrid C. Burke"
+    },
+    {
+        "lterid": "SGS",
+        "title": "SGS-LTER Impact of Labile and Recalcitrant Carbon Treatments on Plant Communities in a Semiarid Ecosystem on the Central Plains Experimental Range, Nunn, Colorado, USA 1997-2012, ARS Study Number 3",
+        "knbid": "knb-lter-sgs.540.1",
+        "authors": "Ingrid C. Burke"
+    },
+    {
+        "lterid": "SGS",
+        "title": "SGS-LTER Long-term Monitoring Project : Carnivore Scat Count on the Central Plains Experimental Range, Nunn, Colorado, USA 1997 -2006, ARS Study Number 98",
+        "knbid": "knb-lter-sgs.135.17",
+        "authors": "Paul Stapp"
+    },
+    {
+        "lterid": "SGS",
+        "title": "SGS-LTER Long-Term Monitoring Project : Small Mammals on Trapping Webs on the Central Plains Experimental Range, Nunn, Colorado, USA 1994 -2006, ARS Study Number 118",
+        "knbid": "knb-lter-sgs.137.17",
+        "authors": "Paul Stapp"
+    },
+    {
+        "lterid": "SGS",
+        "title": "SGS-LTER Long-Term Monitoring Project : Spermophilus tridecemlineatus on Small Mammal Trapping Webs on the Central Plains Experimental Range, Nunn, Colorado, USA 1999 -2006, ARS Study Number 118",
+        "knbid": "knb-lter-sgs.139.17",
+        "authors": "Paul Stapp"
+    },
+    {
+        "lterid": "SGS",
+        "title": "SGS-LTER Long-term Monitoring Project : Spotlight Rabbit Count on the Central Plains Experimental Range, Nunn, Colorado, USA 1994-2006, ARS Study Number 98",
+        "knbid": "knb-lter-sgs.136.17",
+        "authors": "Paul Stapp"
+    },
+    {
+        "lterid": "SGS",
+        "title": "SGS-LTER Long-Term Montitoring Project : Arthropod Pitfall Trapping on Small Mammal Trapping Webs on the Central Plains Experimental Range, Nunn, Colorado, USA 1998-2006, ARS Study Number 118",
+        "knbid": "knb-lter-sgs.134.17",
+        "authors": "Paul Stapp"
+    },
+    {
+        "lterid": "VCR",
+        "title": "Annual heron counts on Chincoteague Island, Virginia 1992-2011",
+        "knbid": "knb-lter-vcr.166.14",
+        "authors": "Dr. R. Erwin"
+    },
+    {
+        "lterid": "VCR",
+        "title": "Biomass of benthic macroalgae in Virginia Coastal Bays 1998-2007",
+        "knbid": "not available",
+        "authors": "Karen McGlathery, Amber Hardison"
+    },
+    {
+        "lterid": "VCR",
+        "title": "Density of Seagrass in Hog Island Bay, VA 2007-2010",
+        "knbid": "knb-lter-vcr.181.11",
+        "authors": "Karen McGlathery"
+    },
+    {
+        "lterid": "VCR",
+        "title": "Vegetation and Ground Cover of Permanent Plots for Upper Phillips Creek Marsh, Nassawadox, VA 1990-2014",
+        "knbid": "knb-lter-vcr.122.21",
+        "authors": "Mark Brinson, Robert Christian"
+    },
+    {
+        "lterid": "VCR",
+        "title": "Long Term Mammal Data from Powdermill Biological Station 1979-1999",
+        "knbid": "knb-lter-vcr.67.17",
+        "authors": "Joseph Merritt"
+    },
+    {
+        "lterid": "VCR",
+        "title": "Dune Biomass on Hog Island, Virginia Coastal Barrier Islands, 1993-2012",
+        "knbid": "knb-lter-vcr.70.20",
+        "authors": "Frank Day`"
+    },
+    {
+        "lterid": "VCR",
+        "title": "Long-term N-fertilized vegetation plots on Hog Island, Virginia Coastal Barrier Islands, 1992-2014",
+        "knbid": "knb-lter-vcr.106.25_",
+        "authors": "Frank Day"
+    },
+    {
+        "lterid": "AND",
+        "title": "Spatial and temporal distribution and abundance of moths in the Andrews Experimental Forest, 1994 to 2008",
+        "knbid": "NA",
+        "authors": "Julia A. Jones"
+    },
+    {
+        "lterid": "AND",
+        "title": "Spatial and temporal distribution and abundance of butterflies in the Andrews Experimental Forest, 1994-1996",
+        "knbid": "NA",
+        "authors": "Jeffery C. Miller"
+    },
+    {
+        "lterid": "AND",
+        "title": "Aquatic insect sampling in Lookout Creek at the H.J. Andrews Experimental Forest, 2001",
+        "knbid": "NA",
+        "authors": "Sherri Johnson"
+    },
+    {
+        "lterid": "AND",
+        "title": "Headwater Stream Macroinvertebrates of the H.J. Andrews Experimental Forest, Oregon, 2003-2004",
+        "knbid": "NA",
+        "authors": "Sherri Johnson"
+    },
+    {
+        "lterid": "AND",
+        "title": "Terrestrial Insect Activity Phenology with trap collections at HJ Andrews",
+        "knbid": "NA",
+        "authors": "Sherri Johnson"
+    },
+    {
+        "lterid": "AND",
+        "title": "Soil Moisture and vegetation cover patterns after logging and burning an old-growth Douglas-fir forest in the Andrews Experimental Forest, 1960-1983",
+        "knbid": "NA",
+        "authors": "Al Levno"
+    },
+    {
+        "lterid": "AND",
+        "title": "Long-term log decay experiments at the Andrews Experimental Forest, 1985 to 2185",
+        "knbid": "NA",
+        "authors": "Mark Harmon"
+    },
+    {
+        "lterid": "AND",
+        "title": "Post-logging community structure and biomass accumulation in Watershed 10, Andrews Experimental Forest , 1974 to present",
+        "knbid": "NA",
+        "authors": "Tom Spies"
+    },
+    {
+        "lterid": "AND",
+        "title": "Species interactions during succession in the western Cascade Range of Oregon, 1990 to present",
+        "knbid": "NA",
+        "authors": "Charles Halpern"
+    },
+    {
+        "lterid": "AND",
+        "title": "Species interactions during succession in the western Cascade Range of Oregon, 1990 to present",
+        "knbid": "NA",
+        "authors": "Charles Halpern"
+    },
+    {
+        "lterid": "AND",
+        "title": "Primary succession on Mount St. Helens: long-term permanent plots",
+        "knbid": "NA",
+        "authors": "Roger del Moral"
+    },
+    {
+        "lterid": "AND",
+        "title": "Mount St. Helens Vegetation Succession",
+        "knbid": "NA",
+        "authors": "Roger del Moral"
+    },
+    {
+        "lterid": "AND",
+        "title": "Ground-dwelling vertebrates, birds, habitat data on the Willamette National Forest, Oregon (Young Stand Thinning and Diversity Study), 1991-2012",
+        "knbid": "NA",
+        "authors": "Joan Hagar, Tom Manning"
+    },
+    {
+        "lterid": "AND",
+        "title": "DEMO Wildlife Study: Arboreal Rodents, Small Mammals, Amphibians, and Birds_",
+        "knbid": "NA",
+        "authors": "Keith B. Aubry"
+    },
+    {
+        "lterid": "AND",
+        "title": "Monitoring small mammal and amphibian abundances on the Willamette National Forest, Oregon (Long-Term Ecosystem Productivity experiment), 1995-1999",
+        "knbid": "NA",
+        "authors": "Steven L. Garman"
+    },
+    {
+        "lterid": "NWT",
+        "title": "Small mammal disturbance data for Niwot Ridge from 1981/6/30 - 1990/8/23, yearly",
+        "knbid": "NA",
+        "authors": "Jim Halfpenny, Hope Humphries"
+    },
+    {
+        "lterid": "BNZ",
+        "title": "Eight Mile Lake Research Watershed, Carbon in Permafrost Experimental Heating Research (CiPEHR): Aboveground plant biomass, 2009-2013.",
+        "knbid": "knb-lter-bnz.501.11",
+        "authors": "Susan Natali, Verity G. Salmon, Edward A.G. Schuur"
+    },
+    {
+        "lterid": "BNZ",
+        "title": "Eight Mile Lake Research Watershed, Carbon in Permafrost Experimental Heating and Drying Research (DryPEHR): Aboveground plant biomass, 2011.",
+        "knbid": "knb-lter-bnz.502.9",
+        "authors": "Marguerite Mauritz, Susan Natali, Verity G. Salmon, Edward A.G. Schuur"
+    },
+    {
+        "lterid": "BNZ",
+        "title": "Bonanza Creek Experimental Forest Beetles Per Trap Beginning in 1975 - Kruse_",
+        "knbid": "knb-lter-bnz.504.7",
+        "authors": "James J Kruse, Richard A Wagner, Diane Wagner"
+    },
+    {
+        "lterid": "BNZ",
+        "title": "Bonanza Creek Experimental Forest Beetle Population Counts_",
+        "knbid": "NA",
+        "authors": "Richard A. Werner"
+    },
+    {
+        "lterid": "BNZ",
+        "title": "Chugach National Forest Beetle Population Counts_",
+        "knbid": "NA",
+        "authors": "Richard A. Werner"
+    },
+    {
+        "lterid": "BNZ",
+        "title": "Tree regeneration after fire: Effects of burn severity, CPCRW vegetative cover analysis_",
+        "knbid": "NA",
+        "authors": "Stuart F. Chapin, Jill Johnstone"
+    },
+    {
+        "lterid": "BNZ",
+        "title": "Tree regeneration after fire: Effects of burn severity, Delta vegetative cover analysis_",
+        "knbid": "NA",
+        "authors": "F. Stuart Chapin, Jill Johnstone"
+    },
+    {
+        "lterid": "BNZ",
+        "title": "Biomass of stream macroinvertebrates and benthic organic material in CPCRW_",
+        "knbid": "NA",
+        "authors": "Jeremy Boyd Jones"
+    },
+    {
+        "lterid": "BNZ",
+        "title": "Abundance of stream macroinvertebrates and benthic organic material in CPCRW_",
+        "knbid": "NA",
+        "authors": "Jeremy Boyd Jones"
+    },
+    {
+        "lterid": "BNZ",
+        "title": "Riparian clearing in CPCRW: Macroinvertebrate and CPOM data; 1982 - 1986_",
+        "knbid": "NA",
+        "authors": "Jeremy Boyd Jones"
+    },
+    {
+        "lterid": "BNZ",
+        "title": "Vegetation and plant community composition for 150 extensive mature black spruce sites in interior Alaska_",
+        "knbid": "NA",
+        "authors": "Teresa Nettleton Hollingsworth"
+    },
+    {
+        "lterid": "BNZ",
+        "title": "Vegetation Plots of the Bonanza Creek LTER Control Plots: Species Percent Cover (1975 - 2009)_",
+        "knbid": "NA",
+        "authors": "F. Stuart Chapin, Teresa Nettleton Hollingsworth, Roger W. Ruess, Keith Van Cleve"
+    },
+    {
+        "lterid": "BNZ",
+        "title": "Vegetation Plots of the Bonanza Creek LTER Control Plots: Species Count (1975 - 2004)_",
+        "knbid": "NA",
+        "authors": "Leslie A. Viereck, Keith Van Cleve, F. Stuart Chapin, Roger W. Ruess, Teresa Nettleton Hollingsworth"
+    },
+    {
+        "lterid": "BNZ",
+        "title": "Vegetation cover: Wickersham fire sites (at the Viereck thaw probe locations), 1977-2004_",
+        "knbid": "NA",
+        "authors": "Phyllis C. Adams, Jamie Hollingsworth, Leslie A. Viereck, Nan Werdin-Pfisterer"
+    },
+    {
+        "lterid": "BNZ",
+        "title": "Vegetation composition for 84 sites in the Regional Site Network, compilation from previous surveys.",
+        "knbid": "NA",
+        "authors": "Roger W. Ruess, Teresa Nettleton Hollingsworth, Jill Johnstone"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e001: Long-Term Nitrogen Deposition: Population, Community, and Ecosystem Consequences",
+        "knbid": "NA",
+        "authors": "David Tilman"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e054: Old-Field Chronosequence:  Plant Productivity",
+        "knbid": "NA",
+        "authors": "David Tilman, Johannes Knops"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e097: Nitrogen Addition and Dynamics of Recovery from Cessation of N Addition",
+        "knbid": "NA",
+        "authors": "David Tilman"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e098: Fire X Nitrogen: Interactive Effects in a Prairie-Like Grassland",
+        "knbid": "NA",
+        "authors": "David Tilman"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e133: Effect of Burning Patterns on Vegetation in the Fish Lake Burn Compartments",
+        "knbid": "NA",
+        "authors": "Peter Reich, David Wedin, Sarah Hobbie, Mark Davis"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e172: Herbivory by Nitrogen Interactive Effects on Community and Ecosystem Processes and Dynamics",
+        "knbid": "NA",
+        "authors": "David Tilman"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e244: Natural Enemies, Plant Diversity and Plant Community Composition",
+        "knbid": "NA",
+        "authors": "Helene Muller-landau, Linda Kinkel"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e244: Natural Enemies, Plant Diversity and Plant Community Composition",
+        "knbid": "NA",
+        "authors": "Helene Muller-Landau, Linda Kinkel"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e245: The influence of natural enemies on plant community composition and productivity",
+        "knbid": "NA",
+        "authors": "Linda Kinkel, Helene Muller-Landau"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e245: The influence of natural enemies on plant community composition and productivity",
+        "knbid": "NA",
+        "authors": "Linda Kinkel, Helene Muller-Landau"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e249: BAC: Biodiversity and Climate",
+        "knbid": "NA",
+        "authors": "David Tilman, Jennifer Powers, Joe McFadden"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e249: BAC: Biodiversity and Climate",
+        "knbid": "NA",
+        "authors": "David Tilman, Jennifer Powers, Joe McFadden"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e008: Effect of N Addition on Vegetation with Mammalian Herbivory",
+        "knbid": "NA",
+        "authors": "Nancy Huntly, Richard Inouye"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e009: Effect of N Addition on Vegetation With Mammalian Herbivory Initially on Disked Ground",
+        "knbid": "NA",
+        "authors": "Nancy Huntly, Richard Inouye"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e010: Herbivore Effects on a Large, Unmanipulated Area",
+        "knbid": "NA",
+        "authors": "Nancy Huntly, Richard Inouye"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e025: The Effects of Adding Different Levels of Nitrogen at Different Times During the Growing Season",
+        "knbid": "NA",
+        "authors": "Richard Inouye"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e026: Traits: Competition and Resource Reduction for Five Grass Species Grown in Monoculture and Competition in Soils with Different Nitrogen Availabilities",
+        "knbid": "NA",
+        "authors": "David Wedin, David Tilman"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e055: Plant Competition Under Different Nitrogen Levels:A Garden Experiment",
+        "knbid": "NA",
+        "authors": "David Tilman"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e061: Effect of Bird Predation on Grasshopper and Plant Communties",
+        "knbid": "NA",
+        "authors": "Mark Ritchie, David Tilman"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e070: Legume Competition Garden",
+        "knbid": "NA",
+        "authors": "David Tilman"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e079: Distribution of Wetland Plant Species in Relation to the Level of the Water Table",
+        "knbid": "NA",
+        "authors": "Martha Phillips, Eville Gorham, Charlotte Bryant"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e093: Soil Heterogeneity and Plant Diversity in an Oak Savanna",
+        "knbid": "NA",
+        "authors": "David Tilman"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e123: The Small Biodiversity Experiment",
+        "knbid": "NA",
+        "authors": "David Tilman, David Wedin, Peter Reich, Johannas Knops"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e123: The Small Biodiversity Experiment",
+        "knbid": "NA",
+        "authors": "David Tilman, David Wedin, Peter Reich, Johannes Knops"
+    },
+    {
+        "lterid": "CDR",
+        "title": "e142: Effects of Long Term Fertilization and Oak Canopy Cover on Plant Communities and Ecosystem Processes",
+        "knbid": "NA",
+        "authors": "Peter Reich"
+    },
+    {
+        "lterid": "GCE",
+        "title": "Visual survey of insect communities on Iva frutescens in summer 2013 and 2014 on Sapelo Island, Georgia",
+        "knbid": "NA",
+        "authors": "Wei-Ting Lin"
+    },
+    {
+        "lterid": "GCE",
+        "title": "Crab population monitoring: mid-marsh and creek bank abundance based on crab hole counts at GCE marsh, monitoring sites 1-10 (All sampling intervals)",
+        "knbid": "NA",
+        "authors": "Steven C. Pennings, Caroline Reddy, Jacob, Shalack, Joel Craig, Sean Sharp, et al."
+    },
+    {
+        "lterid": "GCE",
+        "title": "Mollusc population abundance monitoring: mid-marsh and creekbank infaunal and epifaunal mollusc abundance based on collections from GCE marsh, monitoring sites 1-10 (All sampling intervals)",
+        "knbid": "NA",
+        "authors": "Steven C. Pennings, Merryl Alber, Jacog Shalack, Caroline Reddy, Sasha Greenspan, Joel Craigh, et al."
+    },
+    {
+        "lterid": "GCE",
+        "title": "GCE-LTER Hammock Well Vegetation and Invertebrate Monitoringๆ(All sampling intervals)",
+        "knbid": "NA",
+        "authors": "Merryl Alber, Steve Pennings, Caroline Reddy, Aaron Penn, et al."
+    },
+    {
+        "lterid": "GCE",
+        "title": "Surface water bacterial abundance at ten Georgia Coastal Ecosystems LTER sampling sites (All sampling intervals)",
+        "knbid": "NA",
+        "authors": "Robert E. Hodson, Jen Mou, Ed Sheppard"
+    },
+    {
+        "lterid": "GCE",
+        "title": "Experimental plots studies comparing the impact of fertilization and wrack addition on invertebrate abundance and plant cover in Atlantic and Gulf of Mexico salt marshes from April 2009 to September 2010",
+        "knbid": "NA",
+        "authors": "Brittany DeLoach McCall, Steve Pennings, Huy Vu, Kazik Wieski, Hongyu Guo, Michael Richardson, Brittany DeLong, Claudia Grimm, Annika Stark"
+    },
+    {
+        "lterid": "GCE",
+        "title": "Grasshopper monitoring -- mid-marsh grasshopper abundance and species diversity at eight GCE LTER sampling sites (All sampling intervals)",
+        "knbid": "NA",
+        "authors": "Steve Pennings"
+    },
+    {
+        "lterid": "ARC",
+        "title": "Number of bacteria in the water column of lakes sampled near Toolik Lake LTER Alaska, throughout summer season, 1992-2000.",
+        "knbid": "NA",
+        "authors": "John Hobbie"
+    },
+    {
+        "lterid": "ARC",
+        "title": "Weekly biomass and abundance of sweepnet-captured aboveground arthropods at four sites near Toolik Field Station, Alaska, summers 2010-2014",
+        "knbid": "NA",
+        "authors": "Ashley Asmum, Laura Gough"
+    },
+    {
+        "lterid": "ARC",
+        "title": "Above ground plant biomass in a mesic acidic tussock tundra experimental site from 1982 to 2000 Arctic LTER, Toolik Lake, Alaska.",
+        "knbid": "NA",
+        "authors": "Gus Shaver"
+    },
+    {
+        "lterid": "ARC",
+        "title": "Zooplankton density for all samples collected from Toolik Lake and lakes near the Toolik Field Station, Arctic LTER 2003 - 2011.",
+        "knbid": "NA",
+        "authors": "Christopher Luecke"
+    },
+    {
+        "lterid": "ARC",
+        "title": "Plant % cover by species for the ITEX CO2 flux survey plots at Toolik, Alaska; Abisko, Sweden; Svalbard, Norway; Zackenberg, Northeast Greenland; and Barrow, Alaska 2004-2009",
+        "knbid": "NA",
+        "authors": "Gaius Shaver"
+    },
+    {
+        "lterid": "ARC",
+        "title": "Zooplankton density for lake samples collected near Toolik Lake Arctic LTER in the summer from 1983 to 1992.",
+        "knbid": "NA",
+        "authors": "Phaedra Budy, Christopher Leucke, John O'Brien"
+    },
+    {
+        "lterid": "CAP",
+        "title": "Desert Fertilization Experiment: investigation of Sonoran desert ecosystem response to atmospheric deposition and experimental nutrient addition, 2006-2016 (632_annuals_composition_2008_6b74c53283820aa68b6b9b2a2421f275.csv)",
+        "knbid": "NA",
+        "authors": "Jonathan Allen, Nancy Grimm, Sharon Hall, Jason Kaye"
+    },
+    {
+        "lterid": "CAP",
+        "title": "Desert Fertilization Experiment: investigation of Sonoran desert ecosystem response to atmospheric deposition and experimental nutrient addition, 2006-2016 (632_annuals_biomass_fe1d659d8348fab719484719d6a9f44c.csv)",
+        "knbid": "NA",
+        "authors": "Jonathan Allen, Nancy Grimm, Sharon Hall, Jason Kaye"
+    },
+    {
+        "lterid": "CAP",
+        "title": "Reducing Taste and Odor and Other Algae-Related Problems for Surface Water Supplies in Arid Environments (617_microbial_e387e343c6c18bf06f5443cc4f40dab56623dc55.csv)",
+        "knbid": "NA",
+        "authors": "Paul Westerhoff, Milton Sommerfeld"
+    },
+    {
+        "lterid": "CAP",
+        "title": "Survey 200 long term study of multiple sites in central Arizona-Phoenix: soils (27_cacti_succ_1_2010.csv; 27_cacti_succ_1.csv)",
+        "knbid": "NA",
+        "authors": "Nancy Grimm, Diane Hope, Corinna Gries, Chris Martin, Elizabeth Burns"
+    },
+    {
+        "lterid": "CAP",
+        "title": "Survey 200 long term study of multiple sites in central Arizona-Phoenix: soils (27_hedges_1_2010.csv; 27_hedges_1.csv)",
+        "knbid": "NA",
+        "authors": "Nancy Grimm, Diane Hope, Corinna Gries, Chris Martin, Elizabeth Burns"
+    },
+    {
+        "lterid": "CAP",
+        "title": "Survey 200 long term study of multiple sites in central Arizona-Phoenix: soils (27_insects_1.csv)",
+        "knbid": "NA",
+        "authors": "Nancy Grimm, Diane Hope, Corinna Gries, Chris Martin, Elizabeth Burns"
+    },
+    {
+        "lterid": "CAP",
+        "title": "Survey 200 long term study of multiple sites in central Arizona-Phoenix: soils ( 27_shrub_perennial_1.csv)",
+        "knbid": "NA",
+        "authors": "Nancy Grimm, Diane Hope, Corinna Gries, Chris Martin, Elizabeth Burns"
+    },
+    {
+        "lterid": "CAP",
+        "title": "Survey 200 long term study of multiple sites in central Arizona-Phoenix: soils (27_trees_1.csv)",
+        "knbid": "NA",
+        "authors": "Nancy Grimm, Diane Hope, Corinna Gries, Chris Martin, Elizabeth Burns"
+    },
+    {
+        "lterid": "CAP",
+        "title": "CAP LTER: long-term monitoring of herpetofauna along the Salt River in and near the greater Phoenix metropolitan area, ongoing since 2012",
+        "knbid": "NA",
+        "authors": "Heather Bateman, Nancy Grimm"
+    },
+    {
+        "lterid": "CAP",
+        "title": "Bird surveys along the Salt River in and near the greater Phoenix metropolitan area: 2012-2013",
+        "knbid": "NA",
+        "authors": "Heather Bateman"
+    },
+    {
+        "lterid": "CAP",
+        "title": "Sycamore Creek macroinvertebrate collections after flooding event",
+        "knbid": "NA",
+        "authors": "Nancy Grimm, Stuart Fisher, Joanne Bessler, et al."
+    },
+    {
+        "lterid": "CAP",
+        "title": "Point count bird censusing: long-term monitoring of bird distrubution and diversity in central Arizona-Phoenix: period 2000 to 2011 (34_birds_1.csv)",
+        "knbid": "NA",
+        "authors": "Eyal Shochat, Madhusudan Katti, Paige Warren"
+    },
+    {
+        "lterid": "FCE",
+        "title": "Standard Lengths and Mean Weights for Prey-base Fishes from Taylor River and Joe Bay Sites, Everglades National Park (FCE), South Florida from January 2000 to April 2004",
+        "knbid": "NA",
+        "authors": "Jerry Lorenz"
+    },
+    {
+        "lterid": "FCE",
+        "title": "Consumer Stocks:  Fish, Vegetation, and other Non-physical Data from Everglades National Park (FCE), South Florida from February 2000 to April 2005",
+        "knbid": "NA",
+        "authors": "Joel Trexler"
+    },
+    {
+        "lterid": "FCE",
+        "title": "Consumer Stocks:  Fish Biomass from Everglades National Park (FCE), South Florida from February 2000 to April 2005",
+        "knbid": "NA",
+        "authors": "Joel Trexler"
+    },
+    {
+        "lterid": "FCE",
+        "title": "Consumer Stocks:  Fish Biomass from Everglades National Park (FCE), South Florida from February 1996 to March 2000",
+        "knbid": "NA",
+        "authors": "Joel Trexler"
+    },
+    {
+        "lterid": "FCE",
+        "title": "Florida Bay Braun Blanquet, Everglades National Park (FCE), South Florida from September 2000 to Present",
+        "knbid": "NA",
+        "authors": "James Fourqurean"
+    },
+    {
+        "lterid": "FCE",
+        "title": "Cross Bank Benthic Aboveground biomass, Everglades National Park (FCE), South Florida from 1983 to 2014",
+        "knbid": "NA",
+        "authors": "James Fourqurean"
+    },
+    {
+        "lterid": "FCE",
+        "title": "Capture data for sharks caught in standardized drumline fishing in Shark Bay, Western Australia, with accompanying abiotic data, from February 2008 to July 2014.",
+        "knbid": "NA",
+        "authors": "Michael Heithaus, Jordan Thomson"
+    },
+    {
+        "lterid": "FCE",
+        "title": "Mangrove Forest Growth from the Shark River Slough, Everglades National Park (FCE), South Florida from January 1995 to Present",
+        "knbid": "NA",
+        "authors": "Robert Twilley, Victor Rivera-Monroy, Edward Castaneda"
+    },
+    {
+        "lterid": "FCE",
+        "title": "Bull shark catches, water temperatures, salinities, and dissolved oxygen levels in the Shark River Slough, Everglades National Park (FCE) , from May 2005 to May 2009",
+        "knbid": "NA",
+        "authors": "Michael Heithaus, Philip Matich"
+    },
+    {
+        "lterid": "FCE",
+        "title": "Large consumer isotope values, Shark River Slough, Everglades National Park (FCE LTER), May 2005 to Present",
+        "knbid": "NA",
+        "authors": "Michael Heithaus, Philip Matich, Adam Rosenblatt"
+    },
+    {
+        "lterid": "FCE",
+        "title": "Seasonal Electrofishing Data from Rookery Branch and the North, Watson, and Roberts Rivers Everglades National Park (FCE) from November 2004 to Present",
+        "knbid": "NA",
+        "authors": "Jennifer Rehage"
+    },
+    {
+        "lterid": "FCE",
+        "title": "Minnowtrap Data from Rookery Branch and the North, Watson, and Roberts Rivers National Park (FCE) from November 2004 to April 2008",
+        "knbid": "NA",
+        "authors": "Jennifer Rehage"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Vegetation Response in Simulated Hurricane Experiment at Harvard Forest since 1990 (hf002-02-experiment.csv)",
+        "knbid": "knb-lter-hfr.2.18",
+        "authors": "David Foster, Audry Barker Plotkin, Sara Cooper-Ellis, Ann Lezberg"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Vegetation Response in Simulated Hurricane Experiment at Harvard Forest since 1990 (hf002-10-recruitment.csv)",
+        "knbid": "knb-lter-hfr.2.18",
+        "authors": "David Foster, Audry Barker Plotkin, Sara Cooper-Ellis, Ann Lezberg"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Chronic Nitrogen Amendment Experiment at Harvard Forest since 1988 (hf008-04-tree.csv)",
+        "knbid": "knb-lter-hfr.8.20",
+        "authors": "Serita Frey, Scott ollinger, Michelle Day, Richard MacLean, Mary Martin"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Barre Woods Soil Warming Experiment at Harvard Forest since 2001 (hf018-08-dendrology.csv)",
+        "knbid": "knb-lter-hfr.18.22",
+        "authors": "Jerry Melillo, Paul Steudier, Jacqueline Mohan, Joe Blanchard, Frank Bowles"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Stand and Community Response to Hemlock Woolly Adelgid in Southern New England since 1995 (hf021-02-shrubs.csv)",
+        "knbid": "knb-lter-hfr.21.17",
+        "authors": "David Orwig, David Foster"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Stand and Community Response to Hemlock Woolly Adelgid in Southern New England since 1995 (hf021-04-herbs.csv)",
+        "knbid": "knb-lter-hfr.21.17",
+        "authors": "David Orwig, David Foster"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Permanent Plots at Pisgah State Forest in Winchester NH since 1984 (hf041-01-tree.csv)",
+        "knbid": "knb-lter-hfr.41.19",
+        "authors": "David Foster, Peter Schoonmaker, Audrey Barker Plotkin, Jesse DeNormandie, Russell Stafford"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Biomass Inventories at Harvard Forest EMS Tower since 1993 (hf069-09-trees.csv)",
+        "knbid": "knb-lter-hfr.69.25",
+        "authors": "William Munger, Steven Wofsy, Carol Barford, David Bryant, Victoria Chow, Daniel Curran, Evan Goldman, Elizabeth Hammond-Pyle, Lucy Hutyra, Christine Jones, Kathryn McKain, Leland Werden"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Seed Bank in Hemlock Removal Experiment at Harvard Forest 2004-2010 (hf105-05-seed-rain.csv)",
+        "knbid": "knb-lter-hfr.105.18",
+        "authors": "Aaron Ellison, Elizabeth Farnsworth, Kelley Sullivan, Audrey Barker Plotkin, Samantha Hilerio, Chelsea Carr, Mack Bennett"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Understory Vegetation in Hemlock Removal Experiment at Harvard Forest since 2003 (hf106-03-shrub.csv)",
+        "knbid": "knb-lter-hfr.106.22",
+        "authors": "Aaron Ellison, Audrey Barker Plotkin, David Foster, David Orwig"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Understory Vegetation in Hemlock Removal Experiment at Harvard Forest since 2003 (hf106-04-seedling-density.csv)",
+        "knbid": "knb-lter-hfr.106.22",
+        "authors": "Aaron Ellison, Audrey Barker Plotkin, David Foster, David Orwig"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Understory Vegetation in Hemlock Removal Experiment at Harvard Forest since 2003 (hf106-05-seedling-cover.csv)",
+        "knbid": "knb-lter-hfr.106.22",
+        "authors": "Aaron Ellison, Audrey Barker Plotkin, David Foster, David Orwig"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Ants Under Climate Change at Harvard Forest and Duke Forest since 2009 (hf113-18-hf-cham-ants.csv)",
+        "knbid": "knb-lter-hfr.113.51",
+        "authors": "Aaron Ellison, Robert Dunn, Mark Boudreau, Nicholas Gotelli, Neil McCoy, Shannon Pelini, Renee Marchin, Nathan Sanders"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Ants Under Climate Change at Harvard Forest and Duke Forest since 2009 (hf113-32-hf-cham-spiders.csv)",
+        "knbid": "knb-lter-hfr.113.51",
+        "authors": "Aaron Ellison, Robert Dunn, Mark Boudreau, Nicholas Gotelli, Neil McCoy, Shannon Pelini, Renee Marchin, Nathan Sanders"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Ant Assemblages in Hemlock Removal Experiment at Harvard Forest since 2003 (hf118-01-ants.csv)",
+        "knbid": "knb-lter-hfr.118.24",
+        "authors": "Aaron Ellison"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Moths, Ants and Pitcher Plants in Bogs at Harvard Forest and Belchertown MA since 2007 (hf159-05-MAPPexp1-growth.csv)",
+        "knbid": "knb-lter-hfr.159.13",
+        "authors": "Aaron Ellison, Nicholas Gotelli"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Ants and Ecosystem Function in Hemlock Removal Experiment at Harvard Forest since 2006 (hf160-03-ants.csv)",
+        "knbid": "knb-lter-hfr.160.17",
+        "authors": "Aaron Ellison, Aimee Classen, Israel Del Toro, Nicholas Gotelli, Shannon Pelini, Nathan Sanders"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Tree Growth and Coarse Woody Debris in Regenerating Forests at Harvard Forest since 2008 (hf175-01-dbh.csv)",
+        "knbid": "knb-lter-hfr.175.8",
+        "authors": "Allison Dunn"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Demography of Sarracenia Purpurea in Massachusetts and Vermont since 1997 (hf202-01-sarr-dem.csv)",
+        "knbid": "knb-lter-hfr.202.8",
+        "authors": "Aaron Ellison, Nicholas Gotelli"
+    },
+    {
+        "lterid": "HFR",
+        "title": "Growth Rates of Xanthoparmelia Lichens in North Cemetery, Petersham MA since 2005 (hf217-01-lichen-growth-rates.csv)",
+        "knbid": "knb-lter-hfr.217.2",
+        "authors": "Anne Pringle"
+    },
+    {
+        "lterid": "KBS",
+        "title": "Insect Populations via Sticky Traps (1989 to 2013)",
+        "knbid": "NA",
+        "authors": "Doug Landis, Stuart Gage"
+    },
+    {
+        "lterid": "KBS",
+        "title": "Early Successional Microplot Biomass - by Species (1989 to present)",
+        "knbid": "NA",
+        "authors": "Kay Gross, Mark Hammond"
+    },
+    {
+        "lterid": "KBS",
+        "title": "Forest DBH - Raw Data (1998 to present)",
+        "knbid": "NA",
+        "authors": "Phil Robertson, Dick Harwood, Stacey VanderWulp"
+    },
+    {
+        "lterid": "CWT",
+        "title": "Tree growth (1999-2012) for the Functional Diversity project, Coweeta Hydrologic Laboratory, Otto, North Carolina (1102_1_0.csv)",
+        "knbid": "NA",
+        "authors": "Katherine Elliott, Jason Love"
+    },
+    {
+        "lterid": "CWT",
+        "title": "Tipularia discolor plant demography 1999-2004 (1203_1_0.csv)",
+        "knbid": "NA",
+        "authors": "Robert J. Warren II, Ron Pulliam"
+    },
+    {
+        "lterid": "CWT",
+        "title": "Hexastylis arifolia (Asarum canadensis) plant demography 1999-2006 at the Coweeta Hydrologic Laboratory, Chattahoochee National Forest, and Whitehall Forest (1202_1_0.csv)",
+        "knbid": "NA",
+        "authors": "Robert J. Warren II, Ron Pulliam"
+    },
+    {
+        "lterid": "CWT",
+        "title": "Eastern Hemlock (Tsuga canadensis) Tree Growth Study (1130_1_0.csv)",
+        "knbid": "NA",
+        "authors": "Katherine Elliott, Chelcy Ford Miniat, Jason Love"
+    },
+    {
+        "lterid": "CWT",
+        "title": "Dendrometer Band Measurements from the Coweeta LTER Terrestrial Gradient Sites, Coweeta Hydrologic Laboratory, Otto, North Carolina. (1022_1_0.csv)",
+        "knbid": "NA",
+        "authors": "James M. Vose, Jason Love"
+    },
+    {
+        "lterid": "CWT",
+        "title": "Microhabitat use in a stream fish assemblage (3046_fish_data_1_0.csv)",
+        "knbid": "NA",
+        "authors": "Gary D. Grossman, Mary Freeman"
+    },
+    {
+        "lterid": "CWT",
+        "title": "Stream fish assemblage stability in a southern Appalachian stream at the Coweeta Hydrologic Laboratory from 1984 to 1995 (3047_fish_data_1_0.csv)",
+        "knbid": "NA",
+        "authors": "Gary D. Grossman, Mary Freeman"
+    },
+    {
+        "lterid": "CWT",
+        "title": "Seed production and dispersal for Tsuga canadiensis (1008_1_0.csv)",
+        "knbid": "NA",
+        "authors": "James S. Clark"
+    },
+    {
+        "lterid": "CWT",
+        "title": "Fish collections at Coweeta LTER 100 m stream sites from 1991 to 1998 (CWT_POP_3006_1_0.csv)",
+        "knbid": "NA",
+        "authors": "Gary D. Grossman"
+    },
+    {
+        "lterid": "HBR",
+        "title": "Long-term trends in abundance of Lepidoptera larvae in northern hardwood forests (leps.txt)",
+        "knbid": "knb-lter-hbr.82",
+        "authors": "Richard T. Holmes"
+    },
+    {
+        "lterid": "HBR",
+        "title": "Gastropod abundance on W1 and west of W6, 1997-2006 (gastropods.txt)",
+        "knbid": "knb-lter-hbr.126",
+        "authors": "Steven Hamburg, Matthew Vadeboncoeur, Monica Skeldon"
+    },
+    {
+        "lterid": "MCM",
+        "title": "Summer Phytoplankton Densities 1992-2001",
+        "knbid": "NA",
+        "authors": "Diane McKnight"
+    },
+    {
+        "lterid": "JRN",
+        "title": "Jornada Experimental Range Permanent Quadrat Chart Data beginning 1915",
+        "knbid": "NA",
+        "authors": "Kris Havstad"
+    },
+    {
+        "lterid": "JRN",
+        "title": "Spatial and Temporal Patterns of Net Primary Production in Chihuahuan Desert Ecosystems (NPP Study): NPP Study: Quadrat field measurement data",
+        "knbid": "NA",
+        "authors": "Debra Peters, Laura F. Huenneke, Esteban Muldavin, John Anderson"
+    },
+    {
+        "lterid": "JRN",
+        "title": "Transect Plant Line Intercepts: Transect plant line intercepts - percent cover by species",
+        "knbid": "NA",
+        "authors": "John P Anderson"
+    },
+    {
+        "lterid": "JRN",
+        "title": "Animal Transect Data",
+        "knbid": "NA",
+        "authors": "John P. Anderson"
+    },
+    {
+        "lterid": "JRN",
+        "title": "Arthropod Pitfall Traps-II in 4x4 grid at LTER II NPP sites",
+        "knbid": "NA",
+        "authors": "John P Anderson"
+    },
+    {
+        "lterid": "JRN",
+        "title": "Small Mammal Exclosure Study: SMES rabbit survey data",
+        "knbid": "NA",
+        "authors": "Brandon Bestelmeyer"
+    },
+    {
+        "lterid": "JRN",
+        "title": "Small Mammal Exclosure Study: SMES rodent trapping data",
+        "knbid": "NA",
+        "authors": "Brandon Bestelmeyer"
+    },
+    {
+        "lterid": "JRN",
+        "title": "Small Mammal Exclosure Study: SMES vegetation quadrat data",
+        "knbid": "NA",
+        "authors": "Brandon Bestelmeyer"
+    },
+    {
+        "lterid": "JRN",
+        "title": "Lizard pitfall trap data (LTER-II, LTER-III)",
+        "knbid": "NA",
+        "authors": "John Anderson, David Lightfoot"
+    },
+    {
+        "lterid": "CCE",
+        "title": "Bird Species Abundance - Seasonal 164",
+        "knbid": "NA",
+        "authors": "Bill Sydeman"
+    },
+    {
+        "lterid": "CCE",
+        "title": "Nano and Microplankton Abundance (CalCOFI Cruise) 58",
+        "knbid": "NA",
+        "authors": "Michael Landry, CCE LTER Information Manager"
+    },
+    {
+        "lterid": "CCE",
+        "title": "Nano and Microplankton Biomass (CalCOFI Cruise) 57",
+        "knbid": "NA",
+        "authors": "Michael Landry, CCE LTER Information Manager"
+    },
+    {
+        "lterid": "CCE",
+        "title": "Occurrence and Distribution of Spiny Lobster Phyllosoma, Panulirus interruptus ( Randall) 188",
+        "knbid": "NA",
+        "authors": "Tony Koslow, CCE LTER Information Manager"
+    },
+    {
+        "lterid": "CCE",
+        "title": "Phytoplankton species composition, California Current (CalCOFI Cruises) 254",
+        "knbid": "NA",
+        "authors": "Elizabeth Venrick, CCE LTER Information Manager"
+    },
+    {
+        "lterid": "CCE",
+        "title": "Picoplankton and Bacteria Abundance (CalCOFI Cruise) 159",
+        "knbid": "NA",
+        "authors": "Michael Landry, CCE LTER Information Manager"
+    },
+    {
+        "lterid": "CCE",
+        "title": "Zooplankton Abundance of Euphausiid Sentinel Species - Spring Annual Averages 155",
+        "knbid": "NA",
+        "authors": "Mark Ohman, CCE LTER Information Manager"
+    },
+    {
+        "lterid": "KNZ",
+        "title": "PVC02 Plant Species Composition on Selected Watersheds at Konza Prairie",
+        "knbid": "NA",
+        "authors": "David Hartnett, Scott Collins, Konza LTER"
+    },
+    {
+        "lterid": "SEV",
+        "title": "PVC02 Plant Species Composition on Selected Watersheds at Konza Prairie",
+        "knbid": "NA",
+        "authors": "David Hartnett, Scott Collins, Konza LTER"
+    },
+    {
+        "lterid": "KNZ",
+        "title": "PBG01 Plant species composition in the patch burning-grazing experiment at Konza Prairie",
+        "knbid": "NA",
+        "authors": "Anthony Joern, Konza LTER"
+    },
+    {
+        "lterid": "KNZ",
+        "title": "PPL01 Konza Prairie Long-Term Phosphorus Plots Study",
+        "knbid": "NA",
+        "authors": "Meghan Avolio, Konza LTER"
+    },
+    {
+        "lterid": "KNZ",
+        "title": "CSM01 Seasonal Summary of Numbers of Small Mammals on 14 LTER Traplines in Prairie Habitats at Konza Prairie",
+        "knbid": "NA",
+        "authors": "Donald Kaufman"
+    },
+    {
+        "lterid": "KNZ",
+        "title": "CBH01 Konza Prairie Bison Herd Information",
+        "knbid": "NA",
+        "authors": "John Briggs"
+    },
+    {
+        "lterid": "KNZ",
+        "title": "CBN01 Records of breeding activities for birds on Konza",
+        "knbid": "NA",
+        "authors": "Brett Sandercock, Konza LTER"
+    },
+    {
+        "lterid": "KNZ",
+        "title": "CBP01 Variable distance line-transect sampling of bird population numbers in different habitats on Konza Prairie",
+        "knbid": "NA",
+        "authors": "Alice Boyle"
+    },
+    {
+        "lterid": "KNZ",
+        "title": "CFP01 Fish population on selected watersheds at Konza Prairie",
+        "knbid": "NA",
+        "authors": "Keith Gido, Konza LTER"
+    },
+    {
+        "lterid": "KNZ",
+        "title": "CGP01 Gall-insect Densities on Selected Plant Species in Watersheds with Different Fire Frequencies",
+        "knbid": "NA",
+        "authors": "David Hartnett, Konza LTER"
+    },
+    {
+        "lterid": "KNZ",
+        "title": "CMY01 Mycorrhizal Colonization and Plant Community Responses to Long-term Suppression of Mycorrhizal Fungi",
+        "knbid": "NA",
+        "authors": "Gail Wilson, Konza LTER"
+    },
+    {
+        "lterid": "KNZ",
+        "title": "CPC01 Annual Census of Greater Prairie Chickens on Leks at Konza Prairie",
+        "knbid": "NA",
+        "authors": "Alice Boyle, Konza LTER"
+    },
+    {
+        "lterid": "LUQ",
+        "title": "Revegetation of landslides, vegetation <0.1m (Small landslide plots at the Luquillo Experimental Forest)",
+        "knbid": "NA",
+        "authors": "Lawrence Walker"
+    },
+    {
+        "lterid": "LUQ",
+        "title": "Shrimp populations in Quebrada Prieta (Pools 0, 8, 9, 15) (El Verde)",
+        "knbid": "NA",
+        "authors": "Todd Crowl"
+    },
+    {
+        "lterid": "LUQ",
+        "title": "Frog population plots (El Verde + Bisley)",
+        "knbid": "NA",
+        "authors": "Lawrence Woolbright"
+    },
+    {
+        "lterid": "LUQ",
+        "title": "El Verde Grid long-term invertebrate data",
+        "knbid": "NA",
+        "authors": "Michael Willig, Christopher Bloch"
+    },
+    {
+        "lterid": "LUQ",
+        "title": "Ecuador old fields permanent plot vegetation sampling",
+        "knbid": "NA",
+        "authors": "Randall Myster, Eda Melendez-Colom"
+    },
+    {
+        "lterid": "LUQ",
+        "title": "Sabana pasture permanent plot vegetation sampling",
+        "knbid": "NA",
+        "authors": "Randall Myster, Eda Melendez-Colom"
+    },
+    {
+        "lterid": "LUQ",
+        "title": "Canopy invertebrate responses to Hurricane Hugo",
+        "knbid": "NA",
+        "authors": "Timothy Schowalter, Eda Melendez-Colom"
+    },
+    {
+        "lterid": "LUQ",
+        "title": "Conservation and management of migratory fauna and dams in tropical streams of Puerto Rico",
+        "knbid": "NA",
+        "authors": "Effie Greathouse, Eda Melendez-Colom"
+    },
+    {
+        "lterid": "LUQ",
+        "title": "Bromeliad invertebrate counts at different elevations in the LEF",
+        "knbid": "NA",
+        "authors": "Barbara Richardson, Eda Melendez-Colom"
+    },
+    {
+        "lterid": "LUQ",
+        "title": "Census of species, diameter and location at the Luquillo Forest Dynamics Plot (LFDP), Puerto Rico",
+        "knbid": "NA",
+        "authors": "Jess Zimmerman, Jill Thompson, Eda Melendez-Colom"
+    },
+    {
+        "lterid": "LUQ",
+        "title": "Canopy Trimming Experiment (CTE) Canopy invertebrate responses to disturbance",
+        "knbid": "NA",
+        "authors": "Timothy Schowalter, Eda Melendez-Colom"
+    },
+    {
+        "lterid": "LUQ",
+        "title": "Canopy Trimming Experiment (CTE) Snail data",
+        "knbid": "NA",
+        "authors": "Timothy Schowalter, Eda Melendez-Colom"
+    },
+    {
+        "lterid": "LUQ",
+        "title": "Canopy Trimming Experiment (CTE) Fern surveys",
+        "knbid": "NA",
+        "authors": "Joanne Sharpe, Sarah Stankavich, Eda Melendez-Colom"
+    },
+    {
+        "lterid": "LUQ",
+        "title": "Canopy Trimming Experiment (CTE) plants greater than 1 centimeter diameter at breast height (DBH)",
+        "knbid": "NA",
+        "authors": "Jess Zimmerman, Eda Melendez-Colom"
+    },
+    {
+        "lterid": "LUQ",
+        "title": "Canopy Trimming Experiment (CTE) plant seedling measurements",
+        "knbid": "NA",
+        "authors": "Jess Zimmerman, Eda Melendez-Colom"
+    },
+    {
+        "lterid": "MCR",
+        "title": "MCR LTER: Coral Reef: Long-term Population and Community Dynamics: Benthic Algae and Other Community Components, ongoing since 2005",
+        "knbid": "knb-lter-mcr.8.28",
+        "authors": "Robert Carpenter, Moorea Coral Reef LTER"
+    },
+    {
+        "lterid": "MCR",
+        "title": "MCR LTER: Coral Reef: Long-term Population and Community Dynamics: Fishes, ongoing since 2005",
+        "knbid": "knb-lter-mcr.6.54",
+        "authors": "Andrew Brooks, Giacomo Bernardi, Tom Adam, Moorea Coral Reef LTER"
+    },
+    {
+        "lterid": "MCR",
+        "title": "MCR LTER: Coral Reef: Population Dynamics: Mean Daily Recruitment of Three-spot Dascyllus to Gump Reef, 1992 to 2012",
+        "knbid": "knb-lter-mcr.3.18",
+        "authors": "Russell Schmitt, Sally Holbrook, Moorea Coral Reef LTER"
+    },
+    {
+        "lterid": "MCR",
+        "title": "MCR LTER: Coral Reef: Population Dynamics: Adult threespot dascyllus and their host anemones, ongoing since 1992",
+        "knbid": "knb-lter-mcr.2.16",
+        "authors": "Russell Schmitt, Sally Holbrook, Moorea Coral Reef LTER"
+    },
+    {
+        "lterid": "MCR",
+        "title": "MCR LTER: Coral Reef: Long-term Population Dynamics of Acanthaster planci, ongoing since 2005",
+        "knbid": "knb-lter-mcr.1039.6",
+        "authors": "Andrew Brooks, Moorea Coral Reef LTER"
+    },
+    {
+        "lterid": "MCR",
+        "title": "MCR LTER: Coral Reef: Long-term Population and Community Dynamics: Other Benthic Invertebrates, ongoing since 2005",
+        "knbid": "knb-lter-mcr.7.28",
+        "authors": "Robert Carpenter, Moorea Coral Reef LTER"
+    },
+    {
+        "lterid": "MCR",
+        "title": "MCR LTER: Coral Reef: Community Dynamics: Juvenile Coral Density from 2005, ongoing",
+        "knbid": "knb-lter-mcr.4002.12",
+        "authors": "Peter Edmunds, Moorea Coral Reef LTER"
+    },
+    {
+        "lterid": "MCR",
+        "title": "MCR LTER: Coral Reef: Demersal Zooplankton Composition and Abundance",
+        "knbid": "knb-lter-mcr.21.16",
+        "authors": "Alice Alldredge, Moorea Coral Reef LTER"
+    },
+    {
+        "lterid": "MCR",
+        "title": "MCR LTER: Coral Reef: Water Column: Zooplankton Composition and Abundance",
+        "knbid": "knb-lter-mcr.13.15",
+        "authors": "Alice Alldredge, Moorea Coral Reef LTER"
+    },
+    {
+        "lterid": "MCR",
+        "title": "MCR LTER: Coral Reef: Long-term Population and Community Dynamics: Corals, ongoing since 2005",
+        "knbid": "knb-lter-mcr.4.33",
+        "authors": "Peter Edmunds, Moorea Coral Reef LTER"
+    },
+    {
+        "lterid": "MCR",
+        "title": "MCR LTER: Coral Reef: Macroalgal CHN, ongoing since 2005",
+        "knbid": "knb-lter-mcr.20.16",
+        "authors": "Robert Carpenter, Moorea Coral Reef LTER"
+    },
+    {
+        "lterid": "NTL",
+        "title": "Biocomplexity at North Temperate Lakes LTER; Whole Lake Manipulations: Aquatic Macrophytes 2001 - 2010",
+        "knbid": "NA",
+        "authors": "Stephen Carpenter, Gretchen Hansen, Katie Hein, Timothy Kratz, Jake Vander Zanden"
+    },
+    {
+        "lterid": "NTL",
+        "title": "Cascade Project at North Temperate Lakes LTER: Piscivore Fish 1984 - 2003",
+        "knbid": "NA",
+        "authors": "Stephen Carpenter, Jim Kitchell, Jon Cole, Mike Pace"
+    },
+    {
+        "lterid": "NTL",
+        "title": "Little Rock Lake Experiment at North Temperate Lakes LTER: Zooplankton 1983 - 2000",
+        "knbid": "NA",
+        "authors": "Timothy Kratz"
+    },
+    {
+        "lterid": "NTL",
+        "title": "Madison Wisonsin Lakes Zooplankton 1976 - 1994",
+        "knbid": "NA",
+        "authors": "Richard Lathrop"
+    },
+    {
+        "lterid": "NTL",
+        "title": "North Temperate Lakes LTER: Benthic Macroinvertebrates 1981 - current",
+        "knbid": "NA",
+        "authors": "NTL Lead PI, John Magnuson, Stephen Carpenter, Emily Stanley"
+    },
+    {
+        "lterid": "NTL",
+        "title": "North Temperate Lakes LTER: Crayfish Abundance 1981 - current",
+        "knbid": "NA",
+        "authors": "NTL Lead PI, John Magnuson, Stephen Carpenter, Emily Stanley"
+    },
+    {
+        "lterid": "NTL",
+        "title": "North Temperate Lakes LTER: Fish Length Frequency 1981 - current",
+        "knbid": "NA",
+        "authors": "NTL Lead PI, John Magnuson, Stephen Carpenter, Emily Stanley"
+    },
+    {
+        "lterid": "NTL",
+        "title": "North Temperate Lakes LTER: Fish Lengths and Weights 1981 - current",
+        "knbid": "NA",
+        "authors": "NTL Lead PI, John Magnuson, Stephen Carpenter, Emily Stanley"
+    },
+    {
+        "lterid": "PAL",
+        "title": "Adelie Penguin demography - breeding population size and overwinter survival, collected at Palmer Station Antarctica research area, 1991 - present.",
+        "knbid": "NA",
+        "authors": "William Fraser, PAL LTER Information Manager"
+    },
+    {
+        "lterid": "PAL",
+        "title": "Adelie Penguin demography - all sightings of previously flipper banded penguins, collected at Palmer Station Antarctica research area, 1991 - 2006.",
+        "knbid": "NA",
+        "authors": "William Fraser, PAL LTER Information Manager"
+    },
+    {
+        "lterid": "PIE",
+        "title": "Aboveground biomass of Spartina alterniflora at Law's Point salt marsh on the Rowley River.",
+        "knbid": "knb-lter-pie.32.12",
+        "authors": "Jim Morris, Karen Sundberg, Plum Island Ecosystems LTER"
+    },
+    {
+        "lterid": "PIE",
+        "title": "Aboveground biomass of Spartina patens at Law's Point salt marsh on the Rowley River.",
+        "knbid": "knb-lter-pie.33.13",
+        "authors": "Jim Morris, Karen Sundberg, Plum Island Ecosystems LTER"
+    }
+]
