@@ -1,39 +1,147 @@
 system,identifier_L0 (package ID),identifier_L1 (package ID),creator_L1 (first and last name),"status (underway, complete )","priority (1=high, 2=low)",notes
-edi,knb-lter-ntl.349.2,knb-lter-ntl.344.2,Corinna Gries,complete,,
+knb,knb-csun-usvi.101.4,,,,,metacommunities requested
+edi,knb-lter-arc.10272.4,,,,,metacommunities requested
+edi,knb-lter-bes.543.170,edi.191.2,Colin Smith,complete,1,Meta-communities requested
+edi,knb-lter-bnz.175.20,,,,,metacommunities requested
+edi,knb-lter-bnz.501.11,,,,,from popler
+edi,knb-lter-bnz.502.9,,,,,from popler
+edi,knb-lter-bnz.504.7,,,,,from popler
 edi,knb-lter-cap.41.13,edi.196.1,Will Rosenthal,underway,1,CAP recommended
-edi,knb-lter-cap.643.1,edi.203.1,Will Rosenthal,underway,1,CAP recommended
+edi,knb-lter-cap.46.13,,Colin Smith,underway,1,Meta-communities requested
+edi,knb-lter-cap.627.2,edi.192.2,Colin Smith,complete,1,Meta-communities requested
+edi,knb-lter-cap.632.5,edi.212.1,Will Rosenthal,underway,1,CAP recommended
 edi,knb-lter-cap.641.3,edi.204.1,Will Rosenthal,underway,1,CAP recommended
+edi,knb-lter-cap.643.1,edi.203.1,Will Rosenthal,underway,1,CAP recommended
 edi,knb-lter-cap.652.2,edi.205.1,Will Rosenthal,underway,1,CAP recommended
 edi,knb-lter-cap.653.2,edi.211.1,Will Rosenthal,underway,1,CAP recommended
-edi,knb-lter-cap.632.5,edi.212.1,Will Rosenthal,underway,1,CAP recommended
-edi,knb-lter-ntl.346.2,knb-lter-ntl.346.2,Corinna Gries,complete,,Meta-communities requested
-edi,knb-lter-ntl.345.1,knb-lter-ntl.345.1,Corinna Gries,complete,,Meta-communities requested
-edi,knb-lter-ntl.349.2,knb-lter-ntl.344.2,Corinna Gries,complete,,Meta-communities requested
-edi,knb-lter-mcr.7.28,edi.194.1,Colin Smith,complete,1,Meta-communities requested
-edi,knb-lter-mcr.6.55,edi.125.1,Corinna Gries,complete,,Meta-communities requested (they have the previous revision listed). new revision soon ask Margaret for details
 edi,knb-lter-cdr.386.5,edi.124.3,Colin Smith,complete,,Meta-communities requested
-edi,knb-lter-cap.46.13,,Colin Smith,underway,1,Meta-communities requested
-edi,knb-lter-hfr.118.30,edi.193.3,Colin Smith,complete,1,Meta-communities requested
-edi,knb-lter-cap.627.2,edi.192.2,Colin Smith,complete,1,Meta-communities requested
-edi,knb-lter-jrn.2100007001.13,,,,2,
-edi,knb-lter-bes.543.170,edi.191.2,Colin Smith,complete,1,Meta-communities requested
-edi,knb-lter-vcr.106.25,,,,2,
-edi,knb-lter-vcr.166.15,,,,2,
-edi,knb-lter-vcr.67.17,,,,2,
-edi,knb-lter-ntl.14.18,,Corinna Gries,underway,,
+edi,knb-lter-fce.1164.6,,,,,metacommunities requested
+edi,knb-lter-gce.109.21,,,,,metacommunities requested
+edi,knb-lter-gce.232.20,,,,,metacommunities requested
+edi,knb-lter-gce.236.20,,,,,metacommunities requested
+edi,knb-lter-gce.292.20,,,,,metacommunities requested
+edi,knb-lter-gce.297.20,,,,,metacommunities requested
+edi,knb-lter-gce.299.21,,,,,metacommunities requested
+edi,knb-lter-gce.30.21,,,,,metacommunities requested
+edi,knb-lter-gce.306.30,,,,,metacommunities requested
+edi,knb-lter-gce.314.20,,,,,metacommunities requested
+edi,knb-lter-gce.329.20,,,,,metacommunities requested
+edi,knb-lter-gce.427.6,,,,,metacommunities requested
+edi,knb-lter-gce.429.6,,,,,metacommunities requested
+edi,knb-lter-gce.434.11,,,,,metacommunities requested
+edi,knb-lter-gce.459.4,,,,,metacommunities requested
+edi,knb-lter-hbr.126,,,,,from popler
+edi,knb-lter-hbr.82,,,,,from popler
+edi,knb-lter-hfr.105.18,,,,,from popler
+edi,knb-lter-hfr.106.22,,,,,from popler
+edi,knb-lter-hfr.113.51,,,,,from popler
+edi,knb-lter-hfr.118.30,edi.193.3,Colin Smith,complete,1,Meta-communities requested; popler has rev 24
+edi,knb-lter-hfr.159.13,,,,,from popler
+edi,knb-lter-hfr.160.17,,,,,from popler
+edi,knb-lter-hfr.175.8,,,,,from popler
+edi,knb-lter-hfr.18.22,,,,,from popler
+edi,knb-lter-hfr.202.8,,,,,from popler
+edi,knb-lter-hfr.21.19,,,,,metacommunities requested; popler has rev 17
+edi,knb-lter-hfr.217.2,,,,,from popler
+edi,knb-lter-hfr.2.18,,,,,from popler
+edi,knb-lter-hfr.41.19,,,,,from popler
+edi,knb-lter-hfr.69.25,,,,,from popler
+edi,knb-lter-hfr.8.20,,,,,from popler
+edi,knb-lter-jrn.2100007001.13,,,,2,metacommunities requested
+edi,knb-lter-jrn.210119001.74,,,,,metacommunities requested
+edi,knb-lter-jrn.210351001.47,,,,,metacommunities requested
+edi,knb-lter-knz.87.4,,,,,metacommunities requested
+edi,knb-lter-knz.88.3,,,,,metacommunities requested
+edi,knb-lter-mcr.1039.6,,,,,from popler
+edi,knb-lter-mcr.13.15,,,,,from popler
+edi,knb-lter-mcr.20.16,,,,,from popler
+edi,knb-lter-mcr.21.16,,,,,from popler
+edi,knb-lter-mcr.2.16,,,,,from popler
+edi,knb-lter-mcr.3.18,,,,,from popler
+edi,knb-lter-mcr.4002.12,,,,,from popler
+edi,knb-lter-mcr.4.33,,Colin Smith,underway,2,metacommunities requested; in popler
+edi,knb-lter-mcr.6.54,,,,,metacommunities requested; in popler
+edi,knb-lter-mcr.6.55,edi.125.1,Corinna Gries,complete,,Meta-communities requested (they have the previous revision listed). new revision soon ask Margaret for details
+edi,knb-lter-mcr.7.28,edi.194.1,Colin Smith,complete,1,Meta-communities requested; in popler
+edi,knb-lter-mcr.8.28,,,,2,metacommunities requested; in popler
 edi,knb-lter-ntl.11.24,,,,,
-edi,knb-lter-ntl.355.4,,,,,
+edi,knb-lter-ntl.14.18,,Corinna Gries,underway,,
 edi,knb-lter-ntl.251.2,,,,,
-edi,knb-lter-ntl.37.14,,,,,
-edi,knb-lter-ntl.61.3,,,,,
 edi,knb-lter-ntl.271.3,,,,,
 edi,knb-lter-ntl.3.22,,,,,
-edi,knb-lter-sbc.17.30,,Li Kui,waiting for cleaned update; synchrony WG requested,2,
-edi,knb-lter-sbc.15.25,,Li Kui,waiting for cleaned update; synchrony WG requested,2,
-edi,knb-lter-sbc.19.23,,Li Kui,waiting for cleaned update; synchrony WG requested,2,
-edi,knb-lter-sbc.28.23,,Li Kui,underway,2,
-edi,knb-lter-sbc.30.15,,Li Kui,underway,2,
-edi,knb-lter-sbc.34.13,,Li Kui,underway,2,
-edi,knb-lter-mcr.8.28,,,,2,
-edi,knb-lter-mcr.4.33,,Colin Smith,underway,2,
-edi,knb-lter-sbc.50.4,,Li Kui,after abundance datasts cleaned;synchrony WG requested,2,
+edi,knb-lter-ntl.345.1,knb-lter-ntl.345.1,Corinna Gries,complete,,Meta-communities requested
+edi,knb-lter-ntl.346.2,knb-lter-ntl.346.2,Corinna Gries,complete,,Meta-communities requested
+edi,knb-lter-ntl.349.2,knb-lter-ntl.344.2,Corinna Gries,complete,,Meta-communities requested
+edi,knb-lter-ntl.355.4,,,,,
+edi,knb-lter-ntl.37.14,,,,,
+edi,knb-lter-ntl.61.3,,,,,
+edi,knb-lter-ntl.7.24,,,,,metacommunities requested
+edi,knb-lter-pie.32.12,,,,,from popler
+edi,knb-lter-pie.33.13,,,,,from popler
+edi,knb-lter-sbc.14.13,,,,,from popler
+edi,knb-lter-sbc.15.25,,Li Kui,waiting for cleaned update; synchrony WG requested,2,popler has rev 23
+edi,knb-lter-sbc.17.30,,Li Kui,waiting for cleaned update; synchrony WG requested,2,metacommunities requested; popler has rev 28
+edi,knb-lter-sbc.18.18,,,,,from popler
+edi,knb-lter-sbc.19.23,,Li Kui,waiting for cleaned update; synchrony WG requested,2,metacommunities requested; popler has rev 21
+edi,knb-lter-sbc.28.23,,Li Kui,underway,2,popler has rev 21
+edi,knb-lter-sbc.29.13,,,,,from popler
+edi,knb-lter-sbc.30.15,,Li Kui,underway,2,metacommunities requested; popler has rev 13
+edi,knb-lter-sbc.34.13,,Li Kui,underway,2,metacommunities requested; popler has rev 11
+edi,knb-lter-sbc.38.4,,,,,from popler
+edi,knb-lter-sbc.39.4,,,,,from popler
+edi,knb-lter-sbc.45.8,,,,,from popler
+edi,knb-lter-sbc.46.3,,,,,from popler
+edi,knb-lter-sbc.47.3,,,,,from popler
+edi,knb-lter-sbc.49.9,,,,,metacommunities requested; popler has rev 8
+edi,knb-lter-sbc.50.4,,Li Kui,after abundance datasts cleaned;synchrony WG requested,2,"talk to SBC first. this is a combined biomass, could replace 13, 15, 17, maybe others."
+edi,knb-lter-sbc.52.3,,,,,from popler
+edi,knb-lter-sbc.61.4,,,,,from popler
+edi,knb-lter-sbc.77.1,,,,,from popler
+edi,knb-lter-sev.13.270182,,,,,from popler
+edi,knb-lter-sev.148.131882,,,,,from popler
+edi,knb-lter-sev.15.218704,,,,,from popler
+edi,knb-lter-sev.155.233346,,,,,from popler
+edi,knb-lter-sev.156.245412,,,,,from popler
+edi,knb-lter-sev.168.192537,,,,,from popler
+edi,knb-lter-sev.17.120278,,,,,from popler
+edi,knb-lter-sev.173.87391,,,,,from popler
+edi,knb-lter-sev.176.233653,,,,,from popler
+edi,knb-lter-sev.178.133945,,,,,from popler
+edi,knb-lter-sev.187.167478,,,,,from popler
+edi,knb-lter-sev.188.243666,,,,,from popler
+edi,knb-lter-sev.193.178639,,,,,from popler
+edi,knb-lter-sev.194.188141,,,,,from popler
+edi,knb-lter-sev.212.1,,,,,from popler
+edi,knb-lter-sev.215.173899,,,,,from popler
+edi,knb-lter-sev.228.102077,,,,,from popler
+edi,knb-lter-sev.231.176381,,,,,from popler
+edi,knb-lter-sev.23.121704,,,,,from popler
+edi,knb-lter-sev.236.257686,,,,,from popler
+edi,knb-lter-sev.238.226091,,,,,from popler
+edi,knb-lter-sev.266.180462,,,,,from popler
+edi,knb-lter-sev.267.196138,,,,,from popler
+edi,knb-lter-sev.278.245672,,,,,metacommunities requested; in popler
+edi,knb-lter-sev.29.175390,,,,,metacommunities requested in popler
+edi,knb-lter-sev.297.233742,,,,,from popler
+edi,knb-lter-sev.81.185474,,,,,from popler
+edi,knb-lter-sev.88.122261,,,,,from popler
+edi,knb-lter-sgs.130.18,,,,,from popler
+edi,knb-lter-sgs.134.17,,,,,from popler
+edi,knb-lter-sgs.135.17,,,,,from popler
+edi,knb-lter-sgs.136.17,,,,,from popler
+edi,knb-lter-sgs.137.17,,,,,from popler
+edi,knb-lter-sgs.139.17,,,,,from popler
+edi,knb-lter-sgs.140.17,,,,,metacommunities requested
+edi,knb-lter-sgs.141.17,,,,,metacommunities requested; in popler
+edi,knb-lter-sgs.527.1,,,,,from popler
+edi,knb-lter-sgs.539.1,,,,,from popler
+edi,knb-lter-sgs.540.1,,,,,from popler
+edi,knb-lter-sgs.542.1,,,,,from popler
+edi,knb-lter-sgs.700.1,,,,,metacommunities requested; in popler
+edi,knb-lter-sgs.701.1,,,,,metacommunities requested
+edi,knb-lter-vcr.106.25_,,,,2,from popler
+edi,knb-lter-vcr.122.23,,,,,metacommunities requested; popler has rev 21
+edi,knb-lter-vcr.166.15,,,,2,popler has rev 14
+edi,knb-lter-vcr.181.11,,,,,from popler
+edi,knb-lter-vcr.67.17,,,,2,from popler
+edi,knb-lter-vcr.70.24,,,,,metacommunities requested; popler has rev 17
