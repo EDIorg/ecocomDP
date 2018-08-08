@@ -205,7 +205,7 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
                                                     pattern = paste("\\",
                                                                     code.file.extension,
                                                                     "$",
-                                                                    sep = "")),
+                                                                    sep = ""),ignore.case=TRUE),
                                  stringsAsFactors = F)
   if (length(code_files_found$files) > 1){
     print.data.frame(code_files_found)
