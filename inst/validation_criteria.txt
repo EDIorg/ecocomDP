@@ -51,9 +51,9 @@ dataset_summary	number_of_years_sampled	integer	yes
 dataset_summary	std_dev_interval_betw_years	numeric	yes
 dataset_summary	max_num_taxa	integer	yes
 dataset_summary	geo_extent_bounding_box_m2	numeric	no
-variable_mappings	NA	NA	no
-variable_mappings	table_name	character	yes
-variable_mappings	variable_name	character	yes
-variable_mappings	mapped_system	character	no
-variable_mappings	mapped_id	character	no
-variable_mappings	mapped_label	character	no
+variable_mapping	NA	NA	no
+variable_mapping	table_name	character	yes
+variable_mapping	variable_name	character	yes
+variable_mapping	mapped_system	character	no
+variable_mapping	mapped_id	character	no
+variable_mapping	mapped_label	character	no
