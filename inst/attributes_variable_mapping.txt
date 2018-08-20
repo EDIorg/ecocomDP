@@ -1,4 +1,5 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+variable_mapping_id	"The ID of the variable mapping, a row or record identifier"	character				
 table_name	The name of the table holding this variable.	character				
 variable_name	The variable name in anothre data table.	character				
 mapped_system	System defining this variable_name.	character				
