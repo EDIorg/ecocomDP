@@ -50,7 +50,7 @@ Instructions for using the `ecocomDP` R package are incorporated in the [instruc
 
 ## Running the tests
 
-Coming soon!
+Tests are implemented with the `testthat` R-package, and are organized under the /tests/testthat.
 
 ## Contributing
 

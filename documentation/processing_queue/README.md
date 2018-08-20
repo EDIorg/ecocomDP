@@ -12,12 +12,10 @@ This directory contains lists of datasets to be converted into the ecocomDP. Som
 
 ### Contents
 
-[data_processing_queue](https://github.com/EDIorg/ecocomDP/blob/master/documentation/processing_queue/data_processing_queue.csv) listing EDI prioritized datasets.
+* [data_processing_queue](https://github.com/EDIorg/ecocomDP/blob/master/documentation/processing_queue/data_processing_queue.csv) listing EDI prioritized datasets.
 
-[LTER meta-communities WG](https://docs.google.com/spreadsheets/d/14cWgO-oIdR-F8Rr6lwAo_SXAYAmUumcC332k9sdCN8k/edit#gid=0) list of priority datasets for LTER meta-communities.
+* [LTER meta-communities WG](https://docs.google.com/spreadsheets/d/14cWgO-oIdR-F8Rr6lwAo_SXAYAmUumcC332k9sdCN8k/edit#gid=0) list of priority datasets for LTER meta-communities.
 
-[popler_knbid.csv]
-(https://github.com/EDIorg/ecocomDP/blob/master/documentation/processing_queue/popler_knbid.csv) datasets from popler database which are candidates for conversion. 
+* [popler_knbid.csv](https://github.com/EDIorg/ecocomDP/blob/master/documentation/processing_queue/popler_knbid.csv) datasets from popler database which are candidates for conversion. 
 
-[working]
-(https://github.com/EDIorg/ecocomDP/blob/master/documentation/processing_queue/working) dir for assembling/sorting/etc lists.
+* [working](https://github.com/EDIorg/ecocomDP/blob/master/documentation/processing_queue/working) dir for assembling/sorting/etc lists.
