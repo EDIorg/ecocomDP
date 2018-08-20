@@ -5,7 +5,7 @@ Introduction
 The ecocom design pattern (ecocomDP) is planned to be a flexible intermediate for ecological community survey data. 
 For information on the process see https://environmentaldatainitiative.org/resources/tools/dataset-design/
 
-The ecocomDP is composed of 8 tables, which can be linked via identifiers. This document describes the tables and their contents (columns). Examples of tables can be found in the /examples/ directory. The graphic showing all data objects and their relationships was created from a relational database implementation (PostgreSQL, see the top-level directory of that name for DDL). Three tables are required (“observation”, “location”, “taxon”). The “dataset_summary” is populated from the “observation” table by code.  Two tables hold links to external resources: taxon, and variable_mappings. The taxon table is specifically designed to hold lookup-info from a service such as ITIS. The variable_mappings table hold URIs and lables for external measurement dictionaries.  
+The ecocomDP is composed of 8 tables, which can be linked via identifiers. This document describes the tables and their contents (columns). Examples of tables can be found in the /examples/ directory. The graphic showing all data objects and their relationships was created from a relational database implementation (PostgreSQL, see the top-level directory of that name for DDL). Three tables are required (“observation”, “location”, “taxon”). The “dataset_summary” is populated from the “observation” table by code.  Two tables hold links to external resources: taxon, and variable_mapping. The taxon table is specifically designed to hold lookup-info from a service such as ITIS. The variable_mapping table hold URIs and lables for external measurement dictionaries.  
 
 Each main table has an optional ancillary table for additional information. These are included because primary research typically includes related measurements which may be of interest during anlaysis. 
 
@@ -20,7 +20,7 @@ Below is the table list and suggested population order, ie, parents first.
 |5.| taxon_ancillary|no|  taxon | additonal info about an organism that does not change, in long format | variable, value, unit (phenotypic traits) | taxon_id, date_time, variable_name   |
 |6.| observation_ancillary  | no | observation | additional info about the sampling event (not related to taxa or locations) in long-format  |  variable_name, value, unit | event_id, variable_name  |
 |7.| dataset_summary|yes|  NA | summary info calculated from incoming data. one line table |See examples directory |   |
-|8.| variable_mappings| no |  ONE OF: observation, observation_ancillary, taxon_ancillary, OR location_ancillary | mappings from variable names in tables to external dictionaries | table_name, variable_name, mapped_system, mapped_id, mapped_label | NA   |
+|8.| variable_mapping| no |  ONE OF: observation, observation_ancillary, taxon_ancillary, OR location_ancillary | mappings from variable names in tables to external dictionaries | table_name, variable_name, mapped_system, mapped_id, mapped_label | NA   |
 
 
 _____
@@ -146,7 +146,7 @@ Columns
 
 
 
-Table: variable_mappings 
+Table: variable_mapping 
 ---
 Description: Information linking a variable_name used in a data table to an external definition
 
