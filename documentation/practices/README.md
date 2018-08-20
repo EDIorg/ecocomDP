@@ -8,5 +8,7 @@ This directory contains recommeded practices for creating and maintaining ecocom
 
 * [Misfits](https://github.com/EDIorg/ecocomDP/blob/master/documentation/practices/misfits.md) - What to do with data that doesn't fit into the ecocomDP.
 
+* [Naming tables](https://github.com/EDIorg/ecocomDP/blob/master/documentation/practices/naming_tables.md) - How to name L1 tables.
+
 * [Spatial polygons](https://github.com/EDIorg/ecocomDP/blob/master/documentation/practices/polygons.md) - How to represent spatial polygon data in the ecocomDP.
 
