@@ -6,7 +6,7 @@
 #' @usage 
 #'     make_eml(data.path = "", code.path = "", eml.path = "", 
 #'     parent.package.id = "", child.package.id = "", sep = "", user.id = "", 
-#'     author.system = "", intellectual.rights = "", access.url = "",
+#'     affiliation = "", intellectual.rights = "", access.url = "",
 #'     datetime.format = "", code.file.extension = "")
 #'
 #' @param data.path 
@@ -40,10 +40,13 @@
 #'     A character string specifying the LTER or EDI ID of person publishing 
 #'     the ecocomDP data package (e.g. "EDI"). If you don't have a user ID then 
 #'     query EDI for one (info@environmentaldatainitiative.org).
-#' @param author.system
-#'     A character string specifying the author system the user.id is associated 
-#'     with (e.g. "edi"). If you don't have an author system specification use 
-#'     then query EDI for one (info@environmentaldatainitiative.org).
+#' @param affiliation
+#'     A character string, or list of character strings, specifying the 
+#'     affiliation of your user ID. In a list, the associations must follow the 
+#'     same order of the corresponding values listed under user.id. This is the 
+#'     affiliation used when logging in to the EDI Data Portal and can be: 
+#'     "LTER" or "EDI". If you don't have a user.id then do not use this 
+#'     argument when running `make_eml`.
 #' @param intellectual.rights
 #'     A character string specifying the intellectual rights license to be used 
 #'     with the child ecocomDP data package. Valid arguments are "CCO" 
@@ -151,7 +154,7 @@
 
 
 make_eml <- function(data.path, code.path, eml.path, parent.package.id, 
-                     child.package.id, sep, user.id, author.system, 
+                     child.package.id, sep, user.id, affiliation, 
                      intellectual.rights, access.url, datetime.format, 
                      code.file.extension){
   
@@ -175,8 +178,14 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   if (missing(user.id)){
     stop("Specify a user ID for the data package. Default to 'EDI' if unknown")
   }
-  if (missing(author.system)){
-    stop("Specify an author system for the data package. Default to 'edi' if unknown")
+  # Validate user.id and affiliation
+  if (!missing(user.id) & !missing(affiliation)){
+    if (length(user.id) != length(affiliation)){
+      stop('The number of values listed in arguments "user.id" and "affiliation" do not match. Each user.id must have a corresponding affiliation')
+    }
+    if (sum(sum(affiliation == 'LTER'), sum(affiliation == 'EDI')) != length(affiliation)){
+      stop('Input argument "affiliation" is not "EDI" or "LTER"! Only "EDI" and "LTER" are acceptable values.')
+    }
   }
   # if (missing(intellectual.rights)){
   #   int.rts <- "no change"
@@ -302,23 +311,68 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
 
   allow <- xml_in@access@allow
   
-  list_of_allow <- as(c(new("allow",
-                            principal = paste("uid=",user.id,
-                                              ",o=LTER,dc=ecoinformatics,dc=org",
-                                              sep = ""),
-                            permission = "all")),
-                      "ListOfallow")
+  if (!missing(user.id) & !missing(affiliation)){
+    list_of_allow_principals <- list()
+    list_of_allow_permissions <- list()
+    for (i in 1:length(user.id)){
+      if (affiliation[i] == 'LTER'){
+        list_of_allow_principals[[i]] <- c(
+          paste0(
+            'uid=',
+            user.id[i],
+            ',o=',
+            affiliation[i],
+            ',dc=ecoinformatics,dc=org'
+          ),
+          "public"
+        )
+      } else if (affiliation[i] == 'EDI'){
+        list_of_allow_principals[[i]] <- c(
+          paste0(
+            'uid=',
+            user.id[i],
+            ',o=',
+            affiliation[i],
+            ',dc=edirepository,dc=org'
+          ),
+          "public"
+        )
+      }
+      list_of_allow_permissions[[i]] <- c(
+        "all",
+        "read")
+    }
+  } else {
+    list_of_allow_principals <- list()
+    list_of_allow_permissions <- list()
+  }
   
-  for (i in 1:length(allow)){
-    list_of_allow[[i+1]] <- allow[[i]]
+  access_order <- "allowFirst"
+  
+  access_scope <- "document"
+  
+  access <- new("access",
+                scope = access_scope,
+                order = access_order,
+                authSystem = "https://pasta.edirepository.org/authentication")
+  
+  allow_new <- list()
+  for (i in 1:length(list_of_allow_principals)){
+    allow_new[[i]] <- new("allow",
+                      principal = list_of_allow_principals[[i]][1],
+                      permission = list_of_allow_permissions[[i]][1])
+  }
+  
+  for (i in 1:length(allow_new)){
+    allow[[length(allow)+1]] <- allow_new[[i]]
   }
   
   access <- new("access",
                 scope = "document",
                 order = "allowFirst",
-                authSystem = author.system)
+                authSystem = "https://pasta.edirepository.org/authentication")
   
-  access@allow <- list_of_allow
+  access@allow <- allow
   
   xml_in@access <- access
 
@@ -1016,7 +1070,7 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
     eml <- new("eml",
                schemaLocation = "eml://ecoinformatics.org/eml-2.1.1  http://nis.lternet.edu/schemas/EML/eml-2.1.1/eml.xsd",
                packageId = child.package.id,
-               system = author.system,
+               system = 'edi',
                access = xml_in@access,
                dataset = xml_in@dataset,
                additionalMetadata = xml_in@additionalMetadata)
@@ -1025,7 +1079,7 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
     eml <- new("eml",
                schemaLocation = "eml://ecoinformatics.org/eml-2.1.1  http://nis.lternet.edu/schemas/EML/eml-2.1.1/eml.xsd",
                packageId = child.package.id,
-               system = author.system,
+               system = 'edi',
                access = xml_in@access,
                dataset = xml_in@dataset)
   }

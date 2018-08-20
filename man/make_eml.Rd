@@ -6,7 +6,7 @@
 \usage{
 make_eml(data.path = "", code.path = "", eml.path = "", 
     parent.package.id = "", child.package.id = "", sep = "", user.id = "", 
-    author.system = "", intellectual.rights = "", access.url = "",
+    affiliation = "", intellectual.rights = "", access.url = "",
     datetime.format = "", code.file.extension = "")
 }
 \arguments{
@@ -41,9 +41,12 @@ are separated by this string. Valid options are "," or "\\t".}
 the ecocomDP data package (e.g. "EDI"). If you don't have a user ID then 
 query EDI for one (info@environmentaldatainitiative.org).}
 
-\item{author.system}{A character string specifying the author system the user.id is associated 
-with (e.g. "edi"). If you don't have an author system specification use 
-then query EDI for one (info@environmentaldatainitiative.org).}
+\item{affiliation}{A character string, or list of character strings, specifying the 
+affiliation of your user ID. In a list, the associations must follow the 
+same order of the corresponding values listed under user.id. This is the 
+affiliation used when logging in to the EDI Data Portal and can be: 
+"LTER" or "EDI". If you don't have a user.id then do not use this 
+argument when running `make_eml`.}
 
 \item{intellectual.rights}{A character string specifying the intellectual rights license to be used 
 with the child ecocomDP data package. Valid arguments are "CCO" 
