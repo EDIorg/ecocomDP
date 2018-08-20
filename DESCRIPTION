@@ -17,7 +17,8 @@ Depends:
 Imports: 
 Suggests:
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 License: Creative Commons license CC0 1.0 Universal
 Encoding: UTF-8
 LazyData: true
