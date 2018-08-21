@@ -1,0 +1,15 @@
+location_id,location_name,latitude,longitude,elevation,parent_location_id
+lo_1,Simes_Tract,42.48,-72.21,240,NA
+lo_2,Valley,NA,NA,NA,lo_1
+lo_3,Ridge,NA,NA,NA,lo_1
+lo_4,Valley_1,NA,NA,NA,lo_2
+lo_5,Valley_2,NA,NA,NA,lo_2
+lo_6,Valley_3,NA,NA,NA,lo_2
+lo_7,Valley_8,NA,NA,NA,lo_2
+lo_8,Valley_4,NA,NA,NA,lo_2
+lo_9,Valley_5,NA,NA,NA,lo_2
+lo_10,Ridge_4,NA,NA,NA,lo_3
+lo_11,Ridge_5,NA,NA,NA,lo_3
+lo_12,Ridge_6,NA,NA,NA,lo_3
+lo_13,Ridge_7,NA,NA,NA,lo_3
+lo_14,Ridge_8,NA,NA,NA,lo_3
