@@ -487,6 +487,8 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   
   # Add provenance metadata
   
+  message('Adding provenance to <methodStep>')
+  
   additional_provenance_file <- paste(data.path,
                                       "/",
                                       "additional_provenance.txt",
