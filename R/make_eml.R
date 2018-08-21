@@ -493,9 +493,9 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
                                       sep = "")
   
   if (file.exists(additional_provenance_file)){
-
+    
     # Check for file content
-
+    
     additional_provenance <- read.table(additional_provenance_file,
                                         header=TRUE,
                                         sep = "\t",
@@ -506,11 +506,11 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
     ncol_expected <- ncol(additional_provenance)
     
     ncol_found <- ncol(as.data.frame(additional_provenance[,colSums(is.na(additional_provenance))<nrow(additional_provenance)]))
-
+    
     if (ncol_found == ncol_expected){
-
+      
       message("Adding provenance from additional_provenance.txt")
-
+      
       # provenance <- read_eml(additional_provenance_file)
       # 
       # methods_step <- xml_in@dataset@methods@methodStep
@@ -518,9 +518,9 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
       # methods_step[[length(methods_step)+1]] <- provenance
       # 
       # xml_in@dataset@methods@methodStep <- methods_step
-
+      
     } else {
-
+      
       # Import provenance from PASTA (identical to below)
       
       provenance <- read_eml(paste("https://pasta.lternet.edu/package/provenance/eml",
@@ -543,20 +543,21 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
       provenance@description <- as(
         set_TextType(text = additional_provenance$methodDescription),
         "description")
-
+      
       methods_step <- xml_in@dataset@methods@methodStep
       
       methods_step[[length(methods_step)+1]] <- provenance
       
       xml_in@dataset@methods@methodStep <- methods_step
-
+      
     }
-
+    
   } else {
-
-    # Import provenance from PASTA (identical to above)
-
-    provenance <- read_eml(paste("https://pasta.lternet.edu/package/provenance/eml",
+    
+    # Import provenance from PASTA, and remove creator and contact ID's to prevent
+    # ID clashes.
+    
+    provenance <- read_xml(paste("https://pasta.lternet.edu/package/provenance/eml",
                                  "/",
                                  pkg_prts[1],
                                  "/",
@@ -573,6 +574,30 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
                                       as.is = T,
                                       na.strings = "NA")
     
+    # Remove IDs from creator and contact
+    
+    xml2::xml_set_attr(
+      xml2::xml_find_all(provenance, './/dataSource/creator'),
+      'id', NULL
+    )
+    
+    xml2::xml_set_attr(
+      xml2::xml_find_all(provenance, './/dataSource/contact'),
+      'id', NULL
+    )
+    
+    # Write to data.path
+    
+    xml2::write_xml(
+      provenance,
+      paste0(data.path,
+             '/provenance_metadata.xml')
+    )
+    
+    # Read provenance file and add to L0 EML
+    
+    provenance <- read_eml(paste0(data.path, '/provenance_metadata.xml'))
+    
     provenance@description <- as(
       set_TextType(text = additional_provenance$methodDescription),
       "description")
@@ -582,7 +607,13 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
     methods_step[[length(methods_step)+1]] <- provenance
     
     xml_in@dataset@methods@methodStep <- methods_step
-
+    
+    # Delete provenance_metadata.xml (a temporary file)
+    
+    file.remove(
+      paste0(data.path, '/provenance_metadata.xml')
+      )
+    
   }
 
   # Make EML for ecocomDP tables  ---------------------------------------------
