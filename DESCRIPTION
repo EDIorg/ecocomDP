@@ -13,6 +13,7 @@ Depends:
     stringr (>= 1.2.0),
     stringi (>= 1.1.5),
     reader (>= 1.0.6),
+    xml2 (>= 1.1.1),
     XML (>= 3.98-1.6)
 Imports: 
 Suggests:
