@@ -80,9 +80,11 @@ validate_ecocomDP <- function(data.path) {
   message("Validating:")
   
   # Validate table names ------------------------------------------------------
+  # Inputs should be target(dir.files) and criteria
   
-  validate_table_names(data.path = data.path,
-                       criteria = criteria)
+  table_names <- validate_table_names(data.path = data.path,
+                                      criteria = criteria
+                                      )
   
   # Report required tables that are missing -----------------------------------
 
@@ -103,9 +105,11 @@ validate_ecocomDP <- function(data.path) {
   
   # validate_column_classes()
   
-  # # Validate table IDs --------------------------------------------------------
-  # 
-  # 
+  # Validate primary keys -----------------------------------------------------
+  
+  # Validate composite keys ---------------------------------------------------
+  
+  # Validate referential integrity --------------------------------------------
   
   # Validation complete -------------------------------------------------------
 
