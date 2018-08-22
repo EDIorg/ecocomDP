@@ -8,10 +8,10 @@
 #' @usage validate_table_names(data.path, criteria)
 #' 
 #' @param data.path 
-#'     A character string specifying the path to the directory containing L1
+#'     (character) Path to the directory containing the L1 tables.
 #'     tables.
 #' @param criteria
-#'     A data frame of the validation criteria located in 
+#'     (data frame) Validation criteria located at 
 #'     /inst/validation_criteria.txt.
 #'
 #' @return 
@@ -31,6 +31,9 @@ validate_table_names <- function(data.path, criteria) {
   }
   if (missing(criteria)){
     stop('Input argument "criteria" is missing! Specify the validation criteria for the ecocomDP tables.')
+  }
+  if (!is.data.frame(criteria)){
+    stop('Input argument "criteria" is not a data frame!')
   }
   
   # Validate path
