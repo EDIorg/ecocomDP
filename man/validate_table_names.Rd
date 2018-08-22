@@ -21,7 +21,8 @@ tables.}
 tables.}
 }
 \value{
-A validation report printed in the RStudio console window.
+If table names are valid, then the corresponding table names are 
+    returned. If table names are invalid, then an error message is returned.
 }
 \description{
 Load criteria against which user supplied ecocomDP tables are validated.
@@ -34,9 +35,4 @@ This function ensures that your ecocomDP (L1) tables follow the
 This function loads and parses validation criteria from 
    \emph{validation_criteria.txt} located in the \emph{\inst} directory of
    the \code{ecocomDP} package.
-
-The full suite of L1 validation checks are performed by the 
-   \code{validate_ecocomDP} function. The sequence of checks performed in
-   \code{validate_ecocomDO} are not random, rather some checks are dependent
-   upon others.
 }

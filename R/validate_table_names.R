@@ -1,4 +1,4 @@
-#' Validate table names
+#' validate_table_names
 #'
 #' @description  
 #'     This function ensures that your ecocomDP (L1) tables follow the
@@ -15,14 +15,8 @@
 #'     /inst/validation_criteria.txt.
 #'
 #' @return 
-#'     A validation report printed in the RStudio console window.
-#'          
-#' @details 
-#'    The full suite of L1 validation checks are performed by the 
-#'    \code{validate_ecocomDP} function. The sequence of checks performed in
-#'    \code{validate_ecocomDO} are not random, rather some checks are dependent
-#'    upon others. 
-#' 
+#'     If table names are valid, then the corresponding table names are 
+#'     returned. If table names are invalid, then an error message is returned.
 #'         
 #' @export
 #'
@@ -82,11 +76,9 @@ validate_table_names <- function(data.path, criteria) {
                "Here are the unique study names found:\n",
                paste(study_names, collapse = ", ")),
          call. = F)
+  } else {
+    message('... table names are valid')
+    tables
   }
 
-  
-  # Send validation notice ----------------------------------------------------
-  
-  message('... table names are valid')
-  
 }
