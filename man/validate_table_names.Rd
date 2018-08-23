@@ -14,15 +14,16 @@ validate_table_names(data.path, criteria)
 \item{data.path}{A character string specifying the path to the directory containing L1
 tables.}
 
-\item{criteria}{A data frame of the validation criteria located in 
+\item{criteria}{(data frame) Validation criteria located at 
 /inst/validation_criteria.txt.}
 
-\item{data.path}{A character string specifying the path to the directory containing L1
+\item{data.path}{(character) Path to the directory containing the L1 tables.
 tables.}
 }
 \value{
 If table names are valid, then the corresponding table names are 
-    returned. If table names are invalid, then an error message is returned.
+    returned. If table names are invalid, then an error message is 
+    returned.
 }
 \description{
 Load criteria against which user supplied ecocomDP tables are validated.

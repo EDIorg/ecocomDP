@@ -88,7 +88,7 @@ validate_ecocomDP <- function(data.path) {
   
   # Report required tables that are missing -----------------------------------
 
-  validate_table_presence(data.path = data.path,
+  validate_table_presence(tables = table_names,
                           criteria = criteria)
   
   # Validate column names -----------------------------------------------------

@@ -1,96 +1,74 @@
-#' Validate table presence
+#' validate_table_presence
 #'
 #' @description  
-#'     This function checks for missing ecocomDP (L1) tables. Required tables
-#'     include location, taxon, observation, dataset_summary.
+#'     Check that required L1 tables are present.
 #'
-#' @usage validate_table_presence(data.path, criteria)
+#' @usage validate_table_presence(tables, criteria)
 #' 
-#' @param data.path 
-#'     A character string specifying the path to the directory containing L1
-#'     tables.
+#' @param tables 
+#'     (character) Names of valid L1 tables in your dataset working directory.
+#'     Get valid table names with `validate_table_names`.
 #' @param criteria
-#'     A data frame of the validation criteria located in 
+#'     (data frame) Validation criteria located at 
 #'     /inst/validation_criteria.txt.
 #'
 #' @return 
-#'     A validation report printed in the RStudio console window.
+#'     If required tables are missing, then an error message is produced.
 #'          
 #' @details 
-#' 
-#'    The full suite of L1 validation checks are performed by the 
-#'    \code{validate_ecocomDP} function. The sequence of checks performed in
-#'    \code{validate_ecocomDO} are not random, rather some checks are dependent
-#'    upon others. 
-#' 
 #'         
 #' @export
 #'
 
-validate_table_presence <- function(data.path, criteria){
+validate_table_presence <- function(tables, criteria){
   
   
   # Check arguments and parameterize ------------------------------------------
   
-  if (missing(data.path)){
-    stop('Input argument "data.path" is missing! Specify path to your ecocomDP tables.')
+  if (missing(tables)){
+    stop('Input argument "tables" is missing!')
+  }
+  if (!is.character(tables)){
+    stop('Input argument "tables" is not of class = character!')
   }
   if (missing(criteria)){
     stop('Input argument "criteria" is missing! Specify the validation criteria for the ecocomDP tables.')
   }
+  if (!is.data.frame(criteria)){
+    stop('Input argument "criteria" is not a data frame!')
+  }
   
-  # Validate path
+  # Which table are required? -------------------------------------------------
   
-  validate_path(data.path)
-  
-  # Detect operating system
-  
-  os <- detect_os()
-  
-  # Misc.
-  
-  dir_files <- list.files(data.path, 
-                          recursive = F)
-  
-  
-  # Load validation criteria --------------------------------------------------
-  
-  table_names_required <- criteria$table[(is.na(criteria$class))
-                                         & (criteria$required == "yes")]
-  
-  table_names_required_regexpr <- paste0("_",
-                                         table_names_required,
-                                         "\\b")
+  required_tables <- criteria$table[(
+    is.na(criteria$class)) & (criteria$required == "yes")
+    ]
 
-  
   # Report required tables that are missing -----------------------------------
   
   message("Checking for required tables ...")
   
-  missing_tables <- c()
-  tables <- dir_files[attr(regexpr(paste(table_names_required_regexpr, 
-                                         collapse = "|"), 
-                                   dir_files),
-                           "match.length")
-                      != -1]
-  for (i in 1:length(table_names_required_regexpr)){
-    table_in <- grep(table_names_required_regexpr[i], tables, value = T)
-    if (identical(table_in, character(0))){
-      missing_tables[i] <- str_sub(table_names_required_regexpr[i], 2, nchar(table_names_required_regexpr[i])-2)
+  
+  is_required_table <- function(required_table, tables){
+    required_table_pattern <- paste0(required_table, "\\b")
+    if (sum(str_detect(tables, required_table_pattern)) == 1){
+      required_table
     }
   }
-  if (!identical(missing_tables, NULL)){
-    missing_tables <- missing_tables[!is.na(missing_tables)]
+  
+  required_tables_found <- unlist(lapply(required_tables, is_required_table, tables = tables))
+  use_i <- is.na(match(required_tables, required_tables_found))
+  required_tables_missing <- required_tables[use_i]
+  
+  if (length(required_tables_missing) != 0){
     stop(paste("\n",
                "One or more required tables are missing.\n",
                "These are the missing tables:\n",
-               paste(missing_tables, collapse = ", ")))
+               paste(required_tables_missing, collapse = ", ")))
   }
-  
 
   # Send validation notice ----------------------------------------------------
   
   message('... required tables are present')
-  
   
 }

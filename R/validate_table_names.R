@@ -16,7 +16,8 @@
 #'
 #' @return 
 #'     If table names are valid, then the corresponding table names are 
-#'     returned. If table names are invalid, then an error message is returned.
+#'     returned. If table names are invalid, then an error message is 
+#'     returned.
 #'         
 #' @export
 #'
