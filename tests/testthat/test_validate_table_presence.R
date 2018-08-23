@@ -5,15 +5,14 @@ library(ecocomDP)
 # Load data -------------------------------------------------------------------
 
 criteria <- read.table(
-  paste0(path.package("ecocomDP"),
-         "/validation_criteria.txt"),
+  system.file('validation_criteria.txt', package = 'ecocomDP'),
   header = T,
   sep = "\t",
   as.is = T,
   na.strings = "NA")
 
 all_required_tables <- list.files(
-  paste0(path.package("ecocomDP"), "/test_data/")
+  paste0(path.package('ecocomDP'), '/tests/test_data')
   )
 
 missing_required_tables <- all_required_tables[3:8]

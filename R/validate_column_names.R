@@ -1,103 +1,113 @@
-#' Validate table column names
+#' validate_column_names
 #'
 #' @description  
-#'     This function ensures that the column names of your ecocomDP (L1) tables 
-#'     are valid.
+#'     Check that column names of L1 tables are valid.
 #'
-#' @usage validate_column_names(data.path)
+#' @usage validate_column_names(data.path, criteria)
 #' 
-#' @param data.path 
-#'     A character string specifying the path to the directory containing L1
-#'     tables.
+#' @param tables 
+#'     (character) Names of valid L1 tables in your dataset working directory.
+#'     Get valid table names with `validate_table_names`.
+#' @param data.path
+#'     (character) Path to the directory containing the L1 tables.
 #' @param criteria
-#'     A data frame of the validation criteria located in 
+#'     (data frame) Validation criteria located at 
 #'     /inst/validation_criteria.txt.
 #'
 #' @return 
-#'     A validation report printed in the RStudio console window.
-#'          
-#' @details 
-#' 
-#'    The full suite of L1 validation checks are performed by the 
-#'    \code{validate_ecocomDP} function. The sequence of checks performed in
-#'    \code{validate_ecocomDO} are not random, rather some checks are dependent
-#'    upon others. 
-#' 
+#'     If required column names are missing, then an error is returned.
 #'         
 #' @export
 #'
 
-validate_column_names <- function(data.path, criteria) {
+validate_column_names <- function(tables, data.path, criteria) {
   
   
   # Check arguments and parameterize ------------------------------------------
   
+  if (missing(tables)){
+    stop('Input argument "tables" is missing!')
+  }
+  if (!is.character(tables)){
+    stop('Input argument "tables" is not of class = character!')
+  }
   if (missing(data.path)){
-    stop('Input argument "data.path" is missing! Specify path to your ecocomDP tables.')
+    stop('Input argument "data.path" is missing!')
   }
   if (missing(criteria)){
     stop('Input argument "criteria" is missing! Specify the validation criteria for the ecocomDP tables.')
   }
-
-  # Validate path
+  if (!is.data.frame(criteria)){
+    stop('Input argument "criteria" is not a data frame!')
+  }
   
   validate_path(data.path)
   
-  # Detect operating system
+  # Get validation criteria ---------------------------------------------------
   
-  os <- detect_os()
+  message('Validating column names')
   
-  # Misc.
+  L1_tables <- criteria$table[(
+    is.na(criteria$class))
+    ]
   
-  dir_files <- list.files(data.path, 
-                          recursive = F)
+  # Detect invalid column names -----------------------------------------------
   
-  
-  # Load validation criteria --------------------------------------------------
-  
-  column_names <- unique(criteria$column[!is.na(criteria$column)])
-  
-  table_names <- unique(criteria$table)
-  
-  table_names_regexpr <- paste0("_",
-                                table_names,
-                                "\\b")
-  
-  # Validate column names -----------------------------------------------------
-  
-  message("Checking column names ...")
-  
-  for (i in 1:length(table_names_regexpr)){
-    table_in <- grep(table_names_regexpr[i], dir_files, value = T)
-    if (!identical(table_in, character(0))){
-      sep <- detect_delimeter(path = data.path,
-                              data.files = table_in,
-                              os = os)
-      data <- read.table(paste0(data.path,
-                                "/",
-                                table_in),
-                         header = T,
-                         sep = sep,
-                         as.is = T,
-                         quote = "\"",
-                         comment.char = "")
-      colnames_in <- colnames(data)
-      index <- match(colnames_in, column_names)
-      index_2 <- 1:length(index)
-      invalid_column_names <- colnames_in[index_2[is.na(index)]]
-      if (sum(is.na(index)) > 0){
-        stop(paste("\n",
-                   "This table:\n",
-                   table_in, "\n",
-                   "contains these invalid column names:\n",
-                   paste(invalid_column_names, collapse = ", ")))
-      }
-    }
+  is_column_name <- function(table.name, data.path, L1_tables){
+    
+    # Get L1 table name and columns
+
+    output <- lapply(L1_tables, is_table, table.name)
+    L1_table_found <- unlist(output)
+    L1_table_columns <- criteria$column[(
+      !is.na(criteria$column) & (criteria$table == L1_table_found)
+      )]
+    
+    # Get input file column names
+    
+    os <- detect_os()
+    sep <- detect_delimeter(path = data.path,
+                            data.files = table.name,
+                            os = os)
+    data <- read.table(paste0(data.path, "/", table.name),
+                       header = T,
+                       sep = sep,
+                       as.is = T,
+                       quote = "\"",
+                       comment.char = "")
+    cols <- colnames(data)
+
+    # Which column names are invalid?
+    
+    is_valid_name(cols, L1_table_columns, table.name)
+    
   }
   
+  use_i <- lapply(tables, is_column_name, data.path = data.path, L1_tables = L1_tables)
 
   # Send validation notice ----------------------------------------------------
   
   message('... column names are valid')
 
+}
+
+# Retrieves the name of the L1 table from the input file name
+
+is_table <- function(L1_table, table.name){
+  required_table_pattern <- paste0(L1_table, "\\b")
+  if (sum(str_detect(table.name, required_table_pattern)) == 1){
+    L1_table
+  }
+}
+
+is_valid_name <- function(cols, L1_table_columns, table.name){
+  use_i <- match(cols, L1_table_columns)
+  invalid_columns <- cols[is.na(use_i)]
+  if (length(invalid_columns) > 0){
+    stop(paste0("\n",
+                "This table:\n",
+                table.name, "\n",
+                "contains these invalid column names:\n",
+                paste(invalid_columns, collapse = ", ")))
+  }
 }

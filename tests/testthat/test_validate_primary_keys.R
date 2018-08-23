@@ -5,7 +5,7 @@ library(ecocomDP)
 # Load data -------------------------------------------------------------------
 
 observation <- read.table(
-  paste0(path.package("ecocomDP"), "/test_data/Project_name_observation.csv"),
+  paste0(path.package("ecocomDP"), "/tests/test_data/Project_name_observation.csv"),
   header = T,
   sep = ",",
   as.is = T,
