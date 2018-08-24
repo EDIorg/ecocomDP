@@ -55,7 +55,7 @@ validate_column_names <- function(tables, data.path, criteria) {
   
   is_column_name <- function(table.name, data.path, L1_tables){
     
-    # Get L1 table name and columns
+    # Get L1 table name
 
     output <- lapply(L1_tables, is_table, table.name)
     L1_table_found <- unlist(output)
@@ -93,15 +93,15 @@ validate_column_names <- function(tables, data.path, criteria) {
 
 # Retrieves the name of the L1 table from the input file name
 
-is_table <- function(L1_table, table.name){
-  required_table_pattern <- paste0(L1_table, "\\b")
+is_table <- function(L1.table, table.name){
+  required_table_pattern <- paste0(L1.table, "\\b")
   if (sum(str_detect(table.name, required_table_pattern)) == 1){
-    L1_table
+    L1.table
   }
 }
 
-is_valid_name <- function(cols, L1_table_columns, table.name){
-  use_i <- match(cols, L1_table_columns)
+is_valid_name <- function(cols, L1.table_columns, table.name){
+  use_i <- match(cols, L1.table_columns)
   invalid_columns <- cols[is.na(use_i)]
   if (length(invalid_columns) > 0){
     stop(paste0("\n",

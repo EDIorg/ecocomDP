@@ -2,27 +2,22 @@
 % Please edit documentation in R/validate_column_presence.R
 \name{validate_column_presence}
 \alias{validate_column_presence}
-\title{Validate column presence}
+\title{validate_column_presence}
 \usage{
-validate_column_presence(data.path, criteria)
+validate_column_presence(tables, data.path, criteria)
 }
 \arguments{
-\item{data.path}{A character string specifying the path to the directory containing L1
-tables.}
+\item{tables}{(character) Names of valid L1 tables in your dataset working directory.
+Get valid table names with `validate_table_names`.}
 
-\item{criteria}{A data frame of the validation criteria located in 
+\item{data.path}{(character) Path to the directory containing the L1 tables.}
+
+\item{criteria}{(data frame) Validation criteria located at 
 /inst/validation_criteria.txt.}
 }
 \value{
-A validation report printed in the console window of RStudio.
+If required column names are absent, then an error is returned.
 }
 \description{
-This function ensures that your ecocomDP (L1) tables contain required 
-    columns.
-}
-\details{
-The full suite of L1 validation checks are performed by the 
-   \code{validate_ecocomDP} function. The sequence of checks performed in
-   \code{validate_ecocomDO} are not random, rather some checks are dependent
-   upon others.
+Check that required columns of L1 tables are present.
 }

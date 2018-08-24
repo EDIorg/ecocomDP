@@ -69,13 +69,12 @@ validate_ecocomDP <- function(data.path) {
   
   message("Loading validation criteria")
   
-  criteria <- read.table(paste(path.package("ecocomDP"),
-                               "/validation_criteria.txt",
-                               sep = ""),
-                         header = T,
-                         sep = "\t",
-                         as.is = T,
-                         na.strings = "NA")
+  criteria <- read.table(
+    system.file('validation_criteria.txt', package = 'ecocomDP'),
+    header = T,
+    sep = "\t",
+    as.is = T,
+    na.strings = "NA")
   
   message("Validating:")
   
@@ -93,13 +92,15 @@ validate_ecocomDP <- function(data.path) {
   
   # Validate column names -----------------------------------------------------
   
-  validate_column_names(data.path = data.path,
+  validate_column_names(tables = table_names,
+                        data.path = data.path,
                         criteria = criteria)
 
   # Validate column presence --------------------------------------------------
 
-  validate_column_presence(data.path = data.path,
-                        criteria = criteria)
+  validate_column_presence(tables = table_names,
+                           data.path = data.path,
+                           criteria = criteria)
 
   # Validate column classes ---------------------------------------------------
   
