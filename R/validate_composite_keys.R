@@ -1,8 +1,7 @@
 #' validate_composite_keys
 #'
 #' @description  
-#'     Check that composite keys of a table are unique and issue an error if
-#'     otherwise.
+#'     Check that composite keys of a table are unique.
 #'
 #' @usage validate_composite_keys(tables, data.path, criteria)
 #' 
@@ -16,7 +15,9 @@
 #'     /inst/validation_criteria.txt.
 #'
 #' @return 
-#'     If composite keys are not unique, then an error is returned.
+#'     If composite keys are not unique, a warning is returned, not an error.
+#'     An error is not returned because some usecases (e.g. replicate 
+#'     observations) may result in non-unique composite keys.
 #'         
 #' @export
 #'

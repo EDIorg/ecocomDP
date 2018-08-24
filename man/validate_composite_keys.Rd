@@ -16,9 +16,10 @@ Get valid table names with `validate_table_names`.}
 /inst/validation_criteria.txt.}
 }
 \value{
-If composite keys are not unique, then an error is returned.
+If composite keys are not unique, a warning is returned, not an error.
+    An error is not returned because some usecases (e.g. replicate 
+    observations) may result in non-unique composite keys.
 }
 \description{
-Check that composite keys of a table are unique and issue an error if
-    otherwise.
+Check that composite keys of a table are unique.
 }
