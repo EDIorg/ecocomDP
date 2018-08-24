@@ -4,15 +4,19 @@
 \alias{validate_primary_keys}
 \title{validate_primary_keys}
 \usage{
-validate_primary_keys(x, col)
+validate_primary_keys(tables, data.path, criteria)
 }
 \arguments{
-\item{x}{(data frame) The table to be checked.}
+\item{tables}{(character) Names of valid L1 tables in your dataset working directory.
+Get valid table names with `validate_table_names`.}
 
-\item{col}{(character) Name of the column containing primary keys.}
+\item{data.path}{(character) Path to the directory containing the L1 tables.}
+
+\item{criteria}{(data frame) Validation criteria located at 
+/inst/validation_criteria.txt.}
 }
 \value{
-An error is issued if primary keys are not unique.
+If primary keys are not unique, then an error is returned.
 }
 \description{
 Checks that primary keys of a table are unique and issues an error if

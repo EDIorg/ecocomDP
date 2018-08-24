@@ -108,7 +108,13 @@ validate_ecocomDP <- function(data.path) {
   
   # Validate primary keys -----------------------------------------------------
   
+  validate_primary_keys(tables = table_names, 
+                        data.path = data.path,
+                        criteria = criteria)
+  
   # Validate composite keys ---------------------------------------------------
+  
+  
   
   # Validate referential integrity --------------------------------------------
   
