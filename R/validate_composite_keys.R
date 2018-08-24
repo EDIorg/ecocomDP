@@ -1,10 +1,10 @@
-#' validate_primary_keys
+#' validate_composite_keys
 #'
 #' @description  
-#'     Checks that primary keys of a table are unique and issues an error if
+#'     Check that composite keys of a table are unique and issue an error if
 #'     otherwise.
 #'
-#' @usage validate_primary_keys(tables, data.path, criteria)
+#' @usage validate_composite_keys(tables, data.path, criteria)
 #' 
 #' @param tables 
 #'     (character) Names of valid L1 tables in your dataset working directory.
@@ -16,7 +16,7 @@
 #'     /inst/validation_criteria.txt.
 #'
 #' @return 
-#'     If primary keys are not unique, then an error is returned.
+#'     If composite keys are not unique, then an error is returned.
 #'         
 #' @export
 #'
@@ -54,55 +54,61 @@ validate_composite_keys <- function(tables, data.path, criteria) {
   
   # Are primary keys unique? --------------------------------------------------
   
-  message('Validating primary keys ...')
+  message('Validating composite keys ...')
   
-  prep_primary_key <- function(table.name, data.path, L1.tables) {
+  is_composite_key <- function(table.name, data.path, L1.tables) {
     
-    # Get L1 name and name of primary key
+    # Get L1 name and name of composite key columns
     
     L1_table_found <- unlist(lapply(L1.tables, is_table, table.name))
-    L1_table_pk <- criteria$column[(
-      (!is.na(criteria$class)) & (criteria$primary_key == 'yes') & (criteria$table == L1_table_found)
+    L1_table_ck <- criteria$column[(
+      (!is.na(criteria$class)) & (criteria$composite_key == 'yes') & (criteria$table == L1_table_found)
     )]
     
-    # Read input file
-    
-    os <- detect_os()
-    sep <- detect_delimeter(path = data.path,
-                            data.files = table.name,
-                            os = os)
-    x <- read.table(paste0(data.path, "/", table.name),
-                    header = T,
-                    sep = sep,
-                    as.is = T,
-                    quote = "\"",
-                    comment.char = "")
-    
-    # Are primary keys unique? --------------------------------------------------
-    
-    is_primary_key(x, pk = L1_table_pk, table.name = table.name)
-    
+    if (length(L1_table_ck) > 0){
+      
+      # Read input file
+      
+      os <- detect_os()
+      sep <- detect_delimeter(path = data.path,
+                              data.files = table.name,
+                              os = os)
+      x <- read.table(paste0(data.path, "/", table.name),
+                      header = T,
+                      sep = sep,
+                      as.is = T,
+                      quote = "\"",
+                      comment.char = "")
+      
+      # Are composite keys unique? ----------------------------------------------
+      
+      # Create composite key
+      
+      ck <- apply(x[ , L1_table_ck], 1, paste, collapse = '_')
+      
+      if (!isTRUE(length(unique(ck)) == nrow(x))){
+        
+        use_i <- seq(nrow(x))[duplicated(ck)]
+        
+        warning(paste0("\n",
+                    'This table:\n',
+                    table.name,
+                    "\ncontains non-unique composite keys in rows:\n",
+                    paste(use_i, collapse = " "),
+                    '\nThis may be due to replicate observations. If so, consider',
+                    '\nrevising the variable name to reflect this.'),
+             call. = F
+        )
+      }
+      
+    }
+
   }
   
-  use_i <- lapply(tables, prep_primary_key, data.path = data.path, L1.tables = L1_tables)
+  use_i <- lapply(tables, is_composite_key, data.path = data.path, L1.tables = L1_tables)
   
   # Send validation notice ----------------------------------------------------
   
-  message('... primary keys are unique.')
+  message('... composite keys are unique.')
   
-}
-
-is_primary_key <- function(x, pk, table.name){
-  if (!isTRUE(length(unique(x[ , pk])) == nrow(x))){
-    
-    use_i <- seq(nrow(x))[duplicated(x[ , pk])]
-    
-    stop(paste0("\n",
-                'This table:\n',
-                table.name,
-                "\ncontains non-unique primary keys in rows:\n",
-                paste(use_i, collapse = " ")),
-         call. = F
-    )
-  }
 }

@@ -2,9 +2,9 @@
 % Please edit documentation in R/validate_composite_keys.R
 \name{validate_composite_keys}
 \alias{validate_composite_keys}
-\title{validate_primary_keys}
+\title{validate_composite_keys}
 \usage{
-validate_primary_keys(tables, data.path, criteria)
+validate_composite_keys(tables, data.path, criteria)
 }
 \arguments{
 \item{tables}{(character) Names of valid L1 tables in your dataset working directory.
@@ -16,9 +16,9 @@ Get valid table names with `validate_table_names`.}
 /inst/validation_criteria.txt.}
 }
 \value{
-If primary keys are not unique, then an error is returned.
+If composite keys are not unique, then an error is returned.
 }
 \description{
-Checks that primary keys of a table are unique and issues an error if
+Check that composite keys of a table are unique and issue an error if
     otherwise.
 }
