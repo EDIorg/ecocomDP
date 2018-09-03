@@ -19,7 +19,7 @@ observation	package_id	character	yes	no	yes	no
 observation	location_id	character	yes	no	yes	no
 observation	observation_datetime	Date	yes	no	no	no
 observation	taxon_id	character	yes	no	yes	no
-observation	variable_name	character	yes	no	no	no
+observation	variable_name	character	yes	no	yes	no
 observation	value	numeric	yes	no	no	no
 observation	unit	character	yes	no	no	no
 location_ancillary	NA	NA	no	NA	NA	NA
@@ -39,7 +39,7 @@ taxon_ancillary	unit	character	no	no	no	no
 taxon_ancillary	author	character	no	no	no	no
 observation_ancillary	NA	NA	no	NA	NA	NA
 observation_ancillary	observation_ancillary_id	character	yes	yes	no	no
-observation_ancillary	event_id	character	yes	no	yes	yes
+observation_ancillary	event_id	character	yes	yes	no	yes
 observation_ancillary	variable_name	character	yes	no	yes	yes
 observation_ancillary	value	character	no	no	no	no
 observation_ancillary	unit	character	no	no	no	no
@@ -54,7 +54,7 @@ dataset_summary	geo_extent_bounding_box_m2	numeric	no	no	no	no
 variable_mapping	NA	NA	no	NA	NA	NA
 variable_mapping	variable_mapping_id	character	yes	yes	no	no
 variable_mapping	table_name	character	yes	no	no	yes
-variable_mapping	variable_name	character	yes	yes	yes	yes
+variable_mapping	variable_name	character	yes	yes	no	yes
 variable_mapping	mapped_system	character	no	no	no	yes
 variable_mapping	mapped_id	character	no	no	no	yes
 variable_mapping	mapped_label	character	no	no	no	no
