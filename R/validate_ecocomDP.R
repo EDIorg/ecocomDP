@@ -120,7 +120,9 @@ validate_ecocomDP <- function(data.path) {
   
   # Validate referential integrity --------------------------------------------
   
-  
+  validate_referential_integrity(tables = table_names, 
+                                 data.path = data.path, 
+                                 criteria = criteria)
   
   # Validation complete -------------------------------------------------------
 
