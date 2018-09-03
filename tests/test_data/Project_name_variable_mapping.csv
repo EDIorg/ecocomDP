@@ -1,5 +1,5 @@
 variable_mapping_id,table_name,variable_name,mapped_system,mapped_id,mapped_label
-vama_1,tx_1,NA,hl,1.271,NA
+vama_1,tx_1,abundance,hl,1.271,NA
 vama_2,tx_2,NA,hl,1.1582,NA
 vama_3,tx_3,NA,hl,1.1541,NA
 vama_4,tx_4,NA,hl,1.122,NA
