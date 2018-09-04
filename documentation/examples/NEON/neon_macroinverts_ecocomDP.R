@@ -122,7 +122,7 @@ table_dataset_summary <- data.frame(
   package_id  = NA,
   original_package_id = NA,
   length_of_survey_years = diff(range(year(date_times))),
-  number_of_survey_years = length_of_survey_years,
+  number_of_survey_years = diff(range(year(date_times))),
   std_dev_interval_betw_years = sd(year(date_times)),
   max_num_taxa <- nrow(table_taxon),
   geo_extent_bounding_box = round(
