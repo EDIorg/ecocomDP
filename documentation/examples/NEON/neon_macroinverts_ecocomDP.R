@@ -4,8 +4,8 @@ library(tidyverse)
 # install.packages("devtools")
 library(devtools)
 
-# Install and load dev version of ecocomDP
-# install_github("EDIorg/ecocomDP", ref = 'development')
+# Install and load ecocomDP
+# install_github("EDIorg/ecocomDP")
 library(ecocomDP)
 
 # Install and load neonUtilities
