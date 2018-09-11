@@ -95,23 +95,110 @@ make_eml_neon <- function(
       latitude,
       longitude
       )
-    )[complete.cases(locations), ]
+    )[complete.cases(x$location), ]
   
-  # 
+  geocov_data <- list(
+    bounding_box = list(
+      box_west = min(locations$longitude),
+      box_east = max(locations$longitude),
+      box_north = max(locations$latitude),
+      box_south = min(locations$latitude)
+      ),
+    sites = locations
+    )
+  
+  # Create geographic coverage
   
   list_of_coverage <- list()
-  
-  if (!missing(geographic.coordinates) & !missing(geographic.description)){
-    geographic_description <- new("geographicDescription", geographic.description)
+
+  set_geo_coverage <- function(site, west, east, north, south){
+    geographic_description <- new("geographicDescription", site)
     bounding_coordinates <- new("boundingCoordinates",
-                                westBoundingCoordinate = as.character(geographic.coordinates[4]),
-                                eastBoundingCoordinate = as.character(geographic.coordinates[2]),
-                                northBoundingCoordinate = as.character(geographic.coordinates[1]),
-                                southBoundingCoordinate = as.character(geographic.coordinates[3]))
+                                westBoundingCoordinate = as.character(west),
+                                eastBoundingCoordinate = as.character(east),
+                                northBoundingCoordinate = as.character(north),
+                                southBoundingCoordinate = as.character(south))
     geographic_coverage <- new("geographicCoverage",
                                geographicDescription = geographic_description,
                                boundingCoordinates = bounding_coordinates)
-    list_of_coverage[[(length(list_of_coverage)+1)]] <- geographic_coverage
+    geographic_coverage
+  }
+  
+  list_of_coverage <- mapply(
+    set_geo_coverage,
+    site = geocov_data$sites$location_id,
+    west = geocov_data$sites$longitude,
+    east = geocov_data$sites$longitude,
+    north = geocov_data$sites$latitude,
+    south = geocov_data$sites$latitude
+  )
+  
+  geographic_description <- new("geographicDescription", 'Bounding box of sampling sites.')
+  bounding_coordinates <- new("boundingCoordinates",
+                              westBoundingCoordinate = as.character(geocov_data$bounding_box$box_west),
+                              eastBoundingCoordinate = as.character(geocov_data$bounding_box$box_east),
+                              northBoundingCoordinate = as.character(geocov_data$bounding_box$box_north),
+                              southBoundingCoordinate = as.character(geocov_data$bounding_box$box_south))
+  geographic_coverage <- new("geographicCoverage",
+                             geographicDescription = geographic_description,
+                             boundingCoordinates = bounding_coordinates)
+  list_of_coverage[[(length(list_of_coverage)+1)]] <- geographic_coverage
+  
+  eml@dataset@coverage@geographicCoverage <- as(list_of_coverage, "ListOfgeographicCoverage")
+  
+  # Edit temporal coverage --------------------------------------------------
+  
+  message('<temporalCoverage>')
+  
+  dates <- lubridate::ymd_hm(x$observation$observation_datetime)
+  
+  eml@dataset@coverage@temporalCoverage <- as()
+  
+  temp <- set_coverage(
+    begin = substr(floor_date(min(dates), unit = 'day'), 1, 10),
+    end = substr(ceiling_date(max(dates), unit = 'day'), 1, 10)
+  )
+  eml@dataset@coverage@temporalCoverage <- as(
+    temp@temporalCoverage,
+    'ListOftemporalCoverage'
+    )
+  
+  # Edit taxonomic coverage ---------------------------------------------------
+  
+  taxa_table <- select(spread(
+    data = x$taxon, 
+    key = taxon_rank, 
+    value = taxon_name
+    ),
+    -taxon_id
+  )
+  if (sum(colnames(test) == '<NA>') > 0){
+    taxa_table <- test[ , !colnames(test) == '<NA>']
+  }
+  
+  taxcov <- list()
+  for (i in 1:nrow(taxa_table)){
+    taxa.row <- taxa_table[i, ]
+    use_i <- !is.na(as.character(taxa.row))
+    if (sum(use_i) > 0){
+      taxcov[[i]] <- set_taxonomicCoverage(
+        as.list(
+          # taxa.row[1 , use_i, drop = F]
+          taxa.row[use_i]
+        )
+      )
+    } 
   }
 
+  eml@dataset@coverage@taxonomicCoverage <- as(
+    taxcov,
+    'ListOftaxonomicCoverage'
+  )
+  
+  #
+  # Edit methods --------------------------------------------------------------
+  
+  #
+
 }
+
