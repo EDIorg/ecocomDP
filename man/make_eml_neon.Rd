@@ -13,6 +13,9 @@ make_eml_neon(eml, x)
 Each item of the list must be named after the ecocomDP tables (e.g.
 observation, taxon, dataset_summary, etc.).}
 
+\item{protocols}{(character) Vector of character strings listing the NEON sampling 
+protocols.}
+
 \item{dp.id}{(character) NEON data product ID}
 }
 \value{
