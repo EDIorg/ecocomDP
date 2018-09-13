@@ -64,7 +64,12 @@ make_eml_neon <- function(
   
   message('<abstract>')
   
-  lns <- paste0('This data package is formatted according to the "ecocomDP", a data package design pattern for ecological community surveys, and data from studies of composition and biodiversity. For more information on the ecocomDP project, contact EDI or see https://environmentaldatainitiative.org.',
+  lns <- paste0('This data package is formatted according to the "ecocomDP", a data package design pattern for ecological community surveys, and data from studies of composition and biodiversity. For more information on the ecocomDP project see https://github.com/EDIorg/ecocomDP/tree/master, or contact EDI https://environmentaldatainitiative.org.',
+                '\n',
+                '\n',
+                'This metadata is updated periodically. The last update was ',
+                format(Sys.time(), "%Y-%m-%d"),
+                '.',
                 '\n',
                 '\n',
                 'This data package was derived from the NEON data product found here: ',

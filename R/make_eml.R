@@ -1076,7 +1076,7 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   
   message('Adjusting <abstract>')
   
-  lns <- paste0('This data package is formatted according to the "ecocomDP", a data package design pattern for ecological community surveys, and data from studies of composition and biodiversity. For more information on the ecocomDP project, contact EDI or see https://environmentaldatainitiative.org.',
+  lns <- paste0('This data package is formatted according to the "ecocomDP", a data package design pattern for ecological community surveys, and data from studies of composition and biodiversity. For more information on the ecocomDP project see https://github.com/EDIorg/ecocomDP/tree/master, or contact EDI https://environmentaldatainitiative.org.',
            '\n',
            '\n',
            'This Level 1 data package was derived from the Level 0 data package found here: ',
