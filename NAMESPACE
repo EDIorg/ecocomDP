@@ -2,6 +2,7 @@
 
 export(clean_taxon)
 export(compile_attributes)
+export(compile_attributes_neon)
 export(define_variables)
 export(detect_delimeter)
 export(detect_os)
