@@ -17,7 +17,9 @@
 #'     protocols.
 #' @param dp.id 
 #'     (character) NEON data product ID
-#'
+#' @param eml.path
+#'     (character) Path to which EML will be written to.
+#'     
 #' @return 
 #'     EML metadata for a NEON data product.
 #'         
@@ -28,7 +30,8 @@ make_eml_neon <- function(
   eml,
   x,
   protocols,
-  dp.id
+  dp.id,
+  eml.path
   ){
   
   # Check input arguments -----------------------------------------------------
@@ -67,9 +70,9 @@ make_eml_neon <- function(
   lns <- paste0('This data package is formatted according to the "ecocomDP", a data package design pattern for ecological community surveys, and data from studies of composition and biodiversity. For more information on the ecocomDP project see https://github.com/EDIorg/ecocomDP/tree/master, or contact EDI https://environmentaldatainitiative.org.',
                 '\n',
                 '\n',
-                'This metadata is updated periodically. The last update was ',
+                'This metadata is updated periodically (last update ',
                 format(Sys.time(), "%Y-%m-%d"),
-                '.',
+                ').',
                 '\n',
                 '\n',
                 'This data package was derived from the NEON data product found here: ',
@@ -220,9 +223,11 @@ make_eml_neon <- function(
   lns <- paste0(
     'These NEON sampling protocols were used in creation of this dataset: ',
     paste(protocols, collapse = ', '),
+    '. ',
     'Access these protocols at http://data.neonscience.org/documents'
     )
-  ms <- as(lns, 'methodStep')
+  
+  ms <- new('methodStep', description = as(lns, 'description'))
   eml@dataset@methods@methodStep <- as(list(ms), 'ListOfmethodStep')
   
   # Edit attributes -----------------------------------------------------------
@@ -411,7 +416,14 @@ make_eml_neon <- function(
   #   
   # }
   
-  write_eml(eml, '/Users/csmith/Documents/EDI/datasets/ecocomDP_tests/data.xml')
+  write_eml(
+    eml,
+    paste0(
+      eml.path,
+      '/',
+      dp.id,
+      '_neon.xml'
+    ))
 
 }
 

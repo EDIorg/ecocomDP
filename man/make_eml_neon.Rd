@@ -17,6 +17,8 @@ observation, taxon, dataset_summary, etc.).}
 protocols.}
 
 \item{dp.id}{(character) NEON data product ID}
+
+\item{eml.path}{(character) Path to which EML will be written to.}
 }
 \value{
 EML metadata for a NEON data product.
