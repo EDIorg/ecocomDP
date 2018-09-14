@@ -4,16 +4,18 @@
 \alias{view_landing_page}
 \title{view_landing_page}
 \usage{
-view_landing_page(id)
+view_landing_page(package.id)
 }
 \arguments{
-\item{id}{(integer) A single integer or vector of integers corresponding with 
-data package IDs listed in the data frame created by 
-`list_all_ecocomDP`.}
+\item{package.id}{(character) The data package ID listed in the data frame created by 
+`list_all_ecocomDP`. EDI data package IDs are of the form 
+'edi.package_number.revision_number' (e.g. edi.100.2). NEON data package
+IDs are of the form 'data_product.identifier.revision_number' (e.g.
+'DP1.20120.001').}
 }
 \value{
 The data package landing page.
 }
 \description{
-View human readable version of a data package EML record.
+View the human readable landing page of a data package EML record.
 }
