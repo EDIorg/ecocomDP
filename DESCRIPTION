@@ -24,7 +24,7 @@ Depends:
     xml2 (>= 1.1.1),
     XML (>= 3.98-1.6)
 Imports: 
-Remotes: git::https://github.com/NEONScience/neonUtilities.git
+Remotes: devtools::install_github('NEONScience/NEON-utilities/neonUtilities')
 Suggests:
     knitr,
     rmarkdown,
