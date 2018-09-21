@@ -22,6 +22,23 @@ reformat_neon <- function(dp.id){
     stop('Input argument "dp.id" is missing!')
   }
   
+  criteria <- read.table(
+    system.file('neon_data_products_for_ecocomDP.txt', package = 'ecocomDP'),
+    header = T,
+    sep = "\t",
+    as.is = T,
+    na.strings = "NA")
+  
+  if (!(dp.id %in% unique(criteria$data_product_id))){
+    stop(
+      paste0(
+        'Sorry, the NEON data product "', 
+        dp.id, 
+        '" is not available in the ecocomDP format.'
+        )
+      )
+  }
+  
   # Workflows for NEON data products ------------------------------------------
   # Look for opportunities to generalize this section as more data products
   # come online.
