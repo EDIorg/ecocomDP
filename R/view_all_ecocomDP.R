@@ -22,8 +22,31 @@
 #'
 
 view_all_ecocomDP <- function(){
+
+  # Query the EDI Data Repository ---------------------------------------------
   
-  # - Search EDI Data Repository for ‘ecocomDP’
+  # Get package IDs and titles
+  
+  query <- httr::GET('https://pasta.lternet.edu/package/search/eml?q=keyword:ecocomDP&fl=packageid,title&rows=1000')
+  
+  if (status_code(query) == 200){
+    xml_in <- read_xml(query)
+    pkg_ids <- xml2::xml_text(
+      xml2::xml_find_all(
+        xml_in,
+        './/document/packageid'
+        )
+      )
+    pkg_titles <- xml2::xml_text(
+      xml2::xml_find_all(
+        xml_in,
+        './/document/title'
+      )
+    )
+  }
+  
+    
+  
   # - Get:
   #   - Package identifiers of listed data packages
   # - Data package titles
