@@ -1,3 +1,1 @@
-data_product_id	tables_to_download
-DP1.20120.001	inv_fieldData
-DP1.20120.001	inv_taxonomyProcessed
+data_product_id	tables_to_download	titleDP1.20120.001	NA	NEON Macroinvertebrate collection (Reformatted to ecocomDP Design Pattern)DP1.20120.001	inv_fieldData	NADP1.20120.001	inv_taxonomyProcessed	NA
