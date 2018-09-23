@@ -164,7 +164,7 @@ view_all_ecocomDP <- function(){
     }
     file_data
   }
-  neon_data <- lapply(package.id, get_dataset_observation_neon)
+  neon_data <- lapply(neon_pkg_ids, get_dataset_observation_neon)
   message('summarizing NEON data')
   
   message('... done.')
