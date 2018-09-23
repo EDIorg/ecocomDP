@@ -207,8 +207,9 @@ view_all_ecocomDP <- function(){
     data_out[j, 'max_num_taxa'] <- neon_data[[i]][1, 'max_num_taxa']
     data_out[j, 'geo_extent_bounding_box_m2'] <- neon_data[[i]][1, 'geo_extent_bounding_box_m2']
   }
+  list_of_ecocomDP <- data_out
   
-  View(data_out)
-  data_out
+  View(list_of_ecocomDP)
+  list_of_ecocomDP
  
 }
