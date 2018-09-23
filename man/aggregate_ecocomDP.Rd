@@ -4,21 +4,20 @@
 \alias{aggregate_ecocomDP}
 \title{aggregate_ecocomDP}
 \usage{
-view_all_ecocomDP()
+aggregate_ecocomDP(package.ids)
+}
+\arguments{
+\item{package.ids}{(character) One or more data package IDs listed in the data frame created by 
+`list_all_ecocomDP`. EDI data package IDs are of the form 
+'edi.package_number.revision_number' (e.g. edi.100.2). NEON data package
+IDs are of the form 'data_product.identifier.revision_number' (e.g.
+'DP1.20120.001'). NOTE: Previous data package revisions of ecocomDP 
+packages are valid entries.}
 }
 \value{
-A data frame with fields:
-    \itemize{
-        \item package_id: Data package ID
-        \item title: Data package title
-        \item original_package_id: The parent data package ID
-        \item length_of_survey_years: The number of years surveyed
-        \item number_of_years_sampled: Number of years sampled
-        \item std_dev_interval_betw_years: Standard deviation interval between years
-        \item max_num_taxa: Number of unique taxa observed
-        \item geo_extent_bounding_box_m2: Area (square meters) over which samples were taken.
-    }
+A single ecocomDP containing all the content of the individual ecocomDP
+    listed in the argument "package.ids".
 }
 \description{
-View list of all available ecocomDP with high level metadata.
+Aggregate one or more ecocomDP.
 }
