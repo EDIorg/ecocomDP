@@ -49,18 +49,6 @@ view_all_ecocomDP <- function(){
   
   # Get package EML
   
-  get_eml <- function(package.id){
-    message(paste0('found ', package.id))
-    pkg_prts <- unlist(strsplit(package.id, split = ".", fixed = T))
-    metadata <- XML::xmlParse(paste0("http://pasta.lternet.edu/package/metadata/eml",
-                                    "/",
-                                    pkg_prts[1],
-                                    "/",
-                                    pkg_prts[2],
-                                    "/",
-                                    pkg_prts[3]))
-    metadata
-  }
   eml <- lapply(pkg_ids, FUN = get_eml)
   
   # Get dataset observation tables
@@ -212,4 +200,18 @@ view_all_ecocomDP <- function(){
   View(list_of_ecocomDP)
   list_of_ecocomDP
  
+}
+
+
+get_eml <- function(package.id){
+  message(paste0('found ', package.id))
+  pkg_prts <- unlist(strsplit(package.id, split = ".", fixed = T))
+  metadata <- XML::xmlParse(paste0("http://pasta.lternet.edu/package/metadata/eml",
+                                   "/",
+                                   pkg_prts[1],
+                                   "/",
+                                   pkg_prts[2],
+                                   "/",
+                                   pkg_prts[3]))
+  metadata
 }
