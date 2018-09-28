@@ -30,20 +30,24 @@ aggregate_ecocomDP <- function(package.ids){
 
   # Create list of tables -----------------------------------------------------
   
+  message('Loading requested packages ...')
   tables <- lapply(package.ids, get_ecocomDP)
   names(tables) <- package.ids
   
   # Fill empty fields with NA -------------------------------------------------
   
+  message('Filling empty fields ...')
   tables <- lapply(tables, fill_empty_fields)
 
   # Assign globally unique IDS ------------------------------------------------
   
+  message('Assigning globally unique IDs ...')
   tables <- mapply(assign_ids, tables, names(tables))
   
   # Concatenate ecocomDPs -----------------------------------------------------
   
-  aggregated_ecocomDP <- cat_tables(table.list = tables)
+  message('Binding tables ...')
+  # aggregated_ecocomDP <- cat_tables(table.list = tables)
 
 }
 
