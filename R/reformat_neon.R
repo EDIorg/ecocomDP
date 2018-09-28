@@ -47,6 +47,8 @@ reformat_neon <- function(dp.id){
   
   if (dp.id == 'DP1.20120.001'){
     
+    message('NEON data product DP1.20120.001')
+    
     # Get list of sites
     my_sites <- suppressMessages(lookup_neon_data_availability(
       dpid = dp.id,
@@ -54,6 +56,7 @@ reformat_neon <- function(dp.id){
     )$siteID %>% unique())
     
     # Download field data
+    message('Downloading field data')
     inv_fieldData <- ecocomDP::get_neon_datatable(
       dpid = dp.id,
       data_table_name = 'inv_fieldData',
@@ -61,6 +64,7 @@ reformat_neon <- function(dp.id){
     )
     
     # Download macroinvert counts for sites
+    message('Downloading macroinvert data')
     inv_taxonomyProcessed <- ecocomDP::get_neon_datatable(
       dpid = dp.id,
       data_table_name = 'inv_taxonomyProcessed',
@@ -69,6 +73,7 @@ reformat_neon <- function(dp.id){
     )
     
     # Reformat ecocomDP tables
+    message('Reformatting to ecocomDP')
     
     # location
     table_location <- inv_fieldData %>%
@@ -154,9 +159,24 @@ reformat_neon <- function(dp.id){
         )
       )
     )
+    
+    tables_out <- list(
+      observation = table_observation,
+      location = table_location,
+      taxon = table_taxon,
+      dataset_summary = table_dataset_summary,
+      observation_ancillary = NULL,
+      location_ancillary = NULL,
+      taxon_ancillary = NULL,
+      variable_mapping = NULL
+    )
 
   }
   
   # Workflow for next NEON data product (DP.ID) -------------------------------
 
+  # Return tables
+  
+  tables_out
+  
 }
