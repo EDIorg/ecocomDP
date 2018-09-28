@@ -39,13 +39,11 @@ aggregate_ecocomDP <- function(package.ids){
 
   # Assign globally unique IDS ------------------------------------------------
   
-  test <- mapply(assign_ids, tables, names(tables))
+  tables <- mapply(assign_ids, tables, names(tables))
   
   # Concatenate ecocomDPs -----------------------------------------------------
   
-  cat_tables <- function(table.list){
-    
-  }
+  aggregated_ecocomDP <- cat_tables(table.list = tables)
 
 }
 
@@ -130,66 +128,26 @@ get_ecocomDP <- function(package.id){
     
     # Validate
     
-    response <- httr::GET('https://pasta.lternet.edu/package/search/eml?q=keyword:ecocomDP&fl=packageid&rows=1000')
+    criteria <- read.table(
+      system.file('neon_data_products_for_ecocomDP.txt', package = 'ecocomDP'),
+      header = T,
+      sep = "\t",
+      as.is = T,
+      na.strings = "NA")
     
-    if (!(status_code(response) == 200)){
-      stop('The data repository is inaccessible. Please try again later.')
-    }
-    
-    xml_in <- read_xml(response)
-    pkg_ids <- xml2::xml_text(
-      xml2::xml_find_all(
-        xml_in,
-        './/document/packageid'
-      )
-    )
-    pkg_ids <- stringr::str_replace(pkg_ids, '\\.[:digit:]$', '')
-    
-    pkg_prts <- unlist(strsplit(package.id, split = ".", fixed = T))
-    scope <- pkg_prts[1]
-    identifier <- pkg_prts[2]
-    revision <- pkg_prts[3]
-    
-    if (length(pkg_prts) != 3){
-      stop('The data package ID does not contain all the necessary parts. The package ID must contain the scope, identifier, and revision number (e.g. "edi.124.3")')
-    }
-    
-    response <- httr::GET(paste0('https://pasta.lternet.edu/package/eml/', scope, '/', identifier))
-    revs <- unlist(
-      stringr::str_split(
-        suppressMessages(
-          httr::content(
-            response
-          )
-        ),
-        pattern = '\\n'
-      )
-    )
-    
-    pkg_revs <- paste0(
-      pkg_prts[1],
-      '.',
-      pkg_prts[2],
-      '.',
-      revs)
-    
-    if (!(package.id %in% pkg_revs)){
+    if (!(package.id %in% unique(criteria$data_product_id))){
       stop(
         paste0(
-          'Sorry, the data package.id "',
-          package.id,
+          'Sorry, the NEON data product "', 
+          package.id, 
           '" is not available in the ecocomDP format.'
         )
       )
     }
     
-    # Get EML
+    # Get NEON data and format into ecocomDP
     
-    eml <- get_eml(package.id)
-    
-    # Get ecocomDP tables from NEON
-    
-    dat_out <- get_neon_table(package.id, eml)
+    dat_out <- reformat_neon(dp.id = package.id)
     
   }
   
@@ -720,6 +678,12 @@ assign_ids <- function(table.list, table.list.name){
     '.',
     table.list.name
   )
+  
+  table.list$observation$location_id <- paste0(
+    table.list$observation$location_id,
+    '.',
+    table.list.name
+  )
 
   # dataset_summary
   
@@ -729,10 +693,22 @@ assign_ids <- function(table.list, table.list.name){
     table.list.name
   )
   
+  table.list$observation$package_id <- paste0(
+    table.list$observation$package_id,
+    '.',
+    table.list.name
+  )
+  
   # taxon
   
   table.list$taxon$taxon_id <- paste0(
     table.list$taxon$taxon_id,
+    '.',
+    table.list.name
+  )
+  
+  table.list$observation$taxon_id <- paste0(
+    table.list$observation$taxon_id,
     '.',
     table.list.name
   )
@@ -749,6 +725,12 @@ assign_ids <- function(table.list, table.list.name){
     
     table.list$observation_ancillary$event_id <- paste0(
       table.list$observation_ancillary$event_id,
+      '.',
+      table.list.name
+    )
+    
+    table.list$observation$event_id <- paste0(
+      table.list$observation$event_id,
       '.',
       table.list.name
     )
@@ -811,5 +793,10 @@ assign_ids <- function(table.list, table.list.name){
 
 
 
-
+# Concatenate ecocomDPs -----------------------------------------------------
+cat_tables <- function(table.list){
+  
+  bind_rows()
+  
+}
 
