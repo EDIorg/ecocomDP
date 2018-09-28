@@ -22,12 +22,12 @@ reformat_neon <- function(dp.id){
     stop('Input argument "dp.id" is missing!')
   }
   
-  criteria <- read.table(
+  criteria <- suppressWarnings(read.table(
     system.file('neon_data_products_for_ecocomDP.txt', package = 'ecocomDP'),
     header = T,
     sep = "\t",
     as.is = T,
-    na.strings = "NA")
+    na.strings = "NA"))
   
   if (!(dp.id %in% unique(criteria$data_product_id))){
     stop(
