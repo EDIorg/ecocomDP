@@ -39,6 +39,11 @@ aggregate_ecocomDP <- function(package.ids){
   message('Filling empty fields ...')
   tables <- lapply(tables, fill_empty_fields)
 
+  # Coerce to common field types ----------------------------------------------
+  
+  message('Assigning field types ...')
+  # tables <- lappyl(tables)
+  
   # Assign globally unique IDS ------------------------------------------------
   
   message('Assigning globally unique IDs ...')
@@ -47,7 +52,7 @@ aggregate_ecocomDP <- function(package.ids){
   # Concatenate ecocomDPs -----------------------------------------------------
   
   message('Binding tables ...')
-  # aggregated_ecocomDP <- cat_tables(table.list = tables)
+  aggregated_ecocomDP <- cat_tables(table.list = tables)
 
 }
 
@@ -658,6 +663,12 @@ fill_empty_fields <- function(table.list){
 
 
 
+
+# Assign field types ----------------------------------------------------------
+assign_field_types <- function(table.list){
+  
+}
+
 # Assign globally unique IDs --------------------------------------------------
 assign_ids <- function(table.list, table.list.name){
   
@@ -800,7 +811,69 @@ assign_ids <- function(table.list, table.list.name){
 # Concatenate ecocomDPs -----------------------------------------------------
 cat_tables <- function(table.list){
   
-  bind_rows()
+  # Initialize storage
+  data_out <- list(
+    observation = NULL,
+    location = NULL,
+    taxon = NULL,
+    dataset_summary = NULL,
+    observation_ancillary = NULL,
+    location_ancillary = NULL,
+    taxon_ancillary = NULL,
+    variable_mapping = NULL
+  )
+  
+  # observation
+  for (i in 1:length(tables)){
+    data_out$observation <- bind_rows(
+      data_out$observation,
+      tables[[i]]$observation
+      )
+  }
+  # location
+  for (i in 1:length(tables)){
+    data_out$location <- bind_rows(
+      data_out$location,
+      tables[[i]]$location
+    )
+  }
+  # taxon
+  for (i in 1:length(tables)){
+    data_out$taxon <- bind_rows(
+      data_out$taxon,
+      tables[[i]]$taxon
+    )
+  }
+  # dataset_summary
+  for (i in 1:length(tables)){
+    data_out$dataset_summary <- bind_rows(
+      data_out$dataset_summary,
+      tables[[i]]$dataset_summary
+    )
+  }
+  # observation_ancillary
+  for (i in 1:length(tables)){
+    data_out$observation_ancillary <- bind_rows(
+      data_out$observation_ancillary,
+      tables[[i]]$observation_ancillary
+    )
+  }
+  # location_ancillary
+  for (i in 1:length(tables)){
+    data_out$location_ancillary <- bind_rows(
+      data_out$location_ancillary,
+      tables[[i]]$location_ancillary
+    )
+  }
+  # variable_mapping
+  for (i in 1:length(tables)){
+    data_out$variable_mapping <- bind_rows(
+      data_out$variable_mapping,
+      tables[[i]]$variable_mapping
+    )
+  }
+  
+  data_out
   
 }
 
