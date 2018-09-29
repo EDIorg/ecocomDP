@@ -969,55 +969,80 @@ cat_tables <- function(table.list){
   
   # observation
   for (i in 1:length(table.list)){
-    data_out$observation <- bind_rows(
-      data_out$observation,
-      table.list[[i]]$observation
+    if (!is.null(table.list[[i]]$observation)){
+      data_out$observation <- rbind(
+        data_out$observation,
+        table.list[[i]]$observation
       )
+    }
   }
   # location
   for (i in 1:length(table.list)){
-    data_out$location <- bind_rows(
-      data_out$location,
-      table.list[[i]]$location
-    )
+    if (!is.null(table.list[[i]]$location)){
+      data_out$location <- rbind(
+        data_out$location,
+        table.list[[i]]$location
+      )
+    }
   }
   # taxon
   for (i in 1:length(table.list)){
-    data_out$taxon <- bind_rows(
-      data_out$taxon,
-      table.list[[i]]$taxon
-    )
+    if (!is.null(table.list[[i]]$taxon)){
+      data_out$taxon <- rbind(
+        data_out$taxon,
+        table.list[[i]]$taxon
+      )
+    }
   }
   # dataset_summary
   for (i in 1:length(table.list)){
-    data_out$dataset_summary <- bind_rows(
-      data_out$dataset_summary,
-      table.list[[i]]$dataset_summary
-    )
+    if (!is.null(table.list[[i]]$dataset_summary)){
+      data_out$dataset_summary <- rbind(
+        data_out$dataset_summary,
+        table.list[[i]]$dataset_summary
+      )
+    }
   }
   # observation_ancillary
   for (i in 1:length(table.list)){
-    data_out$observation_ancillary <- bind_rows(
-      data_out$observation_ancillary,
-      table.list[[i]]$observation_ancillary
-    )
+    if (!is.null(table.list[[i]]$observation_ancillary)){
+      data_out$observation_ancillary <- rbind(
+        data_out$observation_ancillary,
+        table.list[[i]]$observation_ancillary
+      )
+    }
   }
   # location_ancillary
   for (i in 1:length(table.list)){
-    data_out$location_ancillary <- bind_rows(
-      data_out$location_ancillary,
-      table.list[[i]]$location_ancillary
-    )
+    if (!is.null(table.list[[i]]$location_ancillary)){
+      data_out$location_ancillary <- rbind(
+        data_out$location_ancillary,
+        table.list[[i]]$location_ancillary
+      )
+    }
+  }
+  # taxon_ancillary
+  for (i in 1:length(table.list)){
+    if (!is.null(table.list[[i]]$taxon_ancillary)){
+      data_out$taxon_ancillary <- rbind(
+        data_out$taxon_ancillary,
+        table.list[[i]]$taxon_ancillary
+      )
+    }
   }
   # variable_mapping
   for (i in 1:length(table.list)){
-    data_out$variable_mapping <- bind_rows(
-      data_out$variable_mapping,
-      table.list[[i]]$variable_mapping
-    )
+    if (!is.null(table.list[[i]]$variable_mapping)){
+      data_out$variable_mapping <- rbind(
+        data_out$variable_mapping,
+        table.list[[i]]$variable_mapping
+      )
+    }
   }
   
   data_out
   
 }
+
+
 
