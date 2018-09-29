@@ -3,7 +3,7 @@
 #' @description  
 #'     Aggregate one or more ecocomDP.
 #'
-#' @usage aggregate_ecocomDP(package.ids)
+#' @usage aggregate_ecocomDP(package.ids, path = NULL)
 #'     
 #' @param package.ids
 #'     (character) One or more data package IDs listed in the data frame created by 
@@ -12,6 +12,9 @@
 #'     IDs are of the form 'data_product.identifier.revision_number' (e.g.
 #'     'DP1.20120.001'). NOTE: Previous data package revisions of ecocomDP 
 #'     packages are valid entries.
+#' @param path
+#'     (character) Path to which the aggregated ecocomDP will be written.
+#'     No path results in no data written to file.
 #'     
 #' @return 
 #'     A single ecocomDP containing all the content of the individual ecocomDP
@@ -20,7 +23,7 @@
 #' @export
 #'
 
-aggregate_ecocomDP <- function(package.ids){
+aggregate_ecocomDP <- function(package.ids, path = NULL){
   
   # Validate arguments --------------------------------------------------------
   
@@ -54,6 +57,112 @@ aggregate_ecocomDP <- function(package.ids){
   message('Binding tables ...')
   tables_aggregated <- cat_tables(table.list = tables)
 
+  # Export the aggregated ecocomDP --------------------------------------------
+  
+  if (!missing(path)){
+    
+    message('Writing aggregated data to file ...')
+    validate_path(path)
+    
+    # observation
+    if (!is.null(tables_aggregated$observation)){
+      write.table(tables_aggregated$observation,
+                  file = paste0(path,
+                                '/',
+                                "ecocomDP_export_observation.csv"),
+                  col.names = T,
+                  row.names = F,
+                  sep = ",",
+                  eol = "\r\n",
+                  quote = F)
+    }
+    # location
+    if (!is.null(tables_aggregated$location)){
+      write.table(tables_aggregated$location,
+                  file = paste0(path,
+                                '/',
+                                "ecocomDP_export_location.csv"),
+                  col.names = T,
+                  row.names = F,
+                  sep = ",",
+                  eol = "\r\n",
+                  quote = F)
+    }
+    # taxon
+    if (!is.null(tables_aggregated$taxon)){
+      write.table(tables_aggregated$taxon,
+                  file = paste0(path,
+                                '/',
+                                "ecocomDP_export_taxon.csv"),
+                  col.names = T,
+                  row.names = F,
+                  sep = ",",
+                  eol = "\r\n",
+                  quote = F)
+    }
+    # dataset_summary
+    if (!is.null(tables_aggregated$dataset_summary)){
+      write.table(tables_aggregated$dataset_summary,
+                  file = paste0(path,
+                                '/',
+                                "ecocomDP_export_dataset_summary.csv"),
+                  col.names = T,
+                  row.names = F,
+                  sep = ",",
+                  eol = "\r\n",
+                  quote = F)
+    }
+    # observation_ancillary
+    if (!is.null(tables_aggregated$observation_ancillary)){
+      write.table(tables_aggregated$observation_ancillary,
+                  file = paste0(path,
+                                '/',
+                                "ecocomDP_export_observation_ancillary.csv"),
+                  col.names = T,
+                  row.names = F,
+                  sep = ",",
+                  eol = "\r\n",
+                  quote = F)
+    }
+    # location_ancillary
+    if (!is.null(tables_aggregated$location_ancillary)){
+      write.table(tables_aggregated$location_ancillary,
+                  file = paste0(path,
+                                '/',
+                                "ecocomDP_export_location_ancillary.csv"),
+                  col.names = T,
+                  row.names = F,
+                  sep = ",",
+                  eol = "\r\n",
+                  quote = F)
+    }
+    # taxon_ancillary
+    if (!is.null(tables_aggregated$taxon_ancillary)){
+      write.table(tables_aggregated$taxon_ancillary,
+                  file = paste0(path,
+                                '/',
+                                "ecocomDP_export_taxon_ancillary.csv"),
+                  col.names = T,
+                  row.names = F,
+                  sep = ",",
+                  eol = "\r\n",
+                  quote = F)
+    }
+    # variable_mapping
+    if (!is.null(tables_aggregated$variable_mapping)){
+      write.table(tables_aggregated$variable_mapping,
+                  file = paste0(path,
+                                '/',
+                                "ecocomDP_export_variable_mapping.csv"),
+                  col.names = T,
+                  row.names = F,
+                  sep = ",",
+                  eol = "\r\n",
+                  quote = F)
+    }
+    
+  }
+  
 }
 
 

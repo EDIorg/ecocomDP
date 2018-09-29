@@ -4,7 +4,7 @@
 \alias{aggregate_ecocomDP}
 \title{aggregate_ecocomDP}
 \usage{
-aggregate_ecocomDP(package.ids)
+aggregate_ecocomDP(package.ids, path = NULL)
 }
 \arguments{
 \item{package.ids}{(character) One or more data package IDs listed in the data frame created by 
@@ -13,6 +13,9 @@ aggregate_ecocomDP(package.ids)
 IDs are of the form 'data_product.identifier.revision_number' (e.g.
 'DP1.20120.001'). NOTE: Previous data package revisions of ecocomDP 
 packages are valid entries.}
+
+\item{path}{(character) Path to which the aggregated ecocomDP will be written.
+No path results in no data written to file.}
 }
 \value{
 A single ecocomDP containing all the content of the individual ecocomDP
