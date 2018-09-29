@@ -38,21 +38,21 @@ aggregate_ecocomDP <- function(package.ids){
   
   message('Filling empty fields ...')
   tables <- lapply(tables, fill_empty_fields)
-
-  # Coerce to common field types ----------------------------------------------
-  
-  message('Assigning field types ...')
-  # tables <- lappyl(tables)
   
   # Assign globally unique IDS ------------------------------------------------
   
   message('Assigning globally unique IDs ...')
   tables <- mapply(assign_ids, tables, names(tables))
   
+  # Coerce to common field types ----------------------------------------------
+  
+  message('Assigning field types ...')
+  tables <- lapply(edi_data, assign_field_types)
+  
   # Concatenate ecocomDPs -----------------------------------------------------
   
   message('Binding tables ...')
-  aggregated_ecocomDP <- cat_tables(table.list = tables)
+  tables_aggregated <- cat_tables(table.list = tables)
 
 }
 
@@ -667,6 +667,41 @@ fill_empty_fields <- function(table.list){
 # Assign field types ----------------------------------------------------------
 assign_field_types <- function(table.list){
   
+  criteria <- read.table(
+    system.file('validation_criteria.txt', package = 'ecocomDP'),
+    header = T,
+    sep = "\t",
+    as.is = T,
+    na.strings = "NA")
+  
+  for (i in 1:length(table.list)){
+    use_tbl <- names(table.list[i])
+    if (!is.null(table.list[[use_tbl]])){
+      for (j in 1:length(colnames(table.list[[use_tbl]]))){
+        use_col <- colnames(table.list[[use_tbl]])[[j]]
+        use_class <- criteria$class[
+          ((criteria$table == use_tbl) & (!is.na(criteria$column)) & (criteria$column == use_col))
+          ]
+        table.list[[use_tbl]][[use_col]] <- col2class(
+          column = table.list[[use_tbl]][[use_col]],
+          class = use_class
+        )
+      }
+      }
+  }
+  
+  # Return
+  table.list
+  }
+col2class <- function(column, class){
+  if (class == 'character'){
+    column <- as.character(column)
+  } else if (class == 'numeric'){
+    column <- as.numeric(column)
+  } else if (class == 'Date'){
+    column <- as.character(column)
+  }
+  column
 }
 
 # Assign globally unique IDs --------------------------------------------------
@@ -824,52 +859,52 @@ cat_tables <- function(table.list){
   )
   
   # observation
-  for (i in 1:length(tables)){
+  for (i in 1:length(table.list)){
     data_out$observation <- bind_rows(
       data_out$observation,
-      tables[[i]]$observation
+      table.list[[i]]$observation
       )
   }
   # location
-  for (i in 1:length(tables)){
+  for (i in 1:length(table.list)){
     data_out$location <- bind_rows(
       data_out$location,
-      tables[[i]]$location
+      table.list[[i]]$location
     )
   }
   # taxon
-  for (i in 1:length(tables)){
+  for (i in 1:length(table.list)){
     data_out$taxon <- bind_rows(
       data_out$taxon,
-      tables[[i]]$taxon
+      table.list[[i]]$taxon
     )
   }
   # dataset_summary
-  for (i in 1:length(tables)){
+  for (i in 1:length(table.list)){
     data_out$dataset_summary <- bind_rows(
       data_out$dataset_summary,
-      tables[[i]]$dataset_summary
+      table.list[[i]]$dataset_summary
     )
   }
   # observation_ancillary
-  for (i in 1:length(tables)){
+  for (i in 1:length(table.list)){
     data_out$observation_ancillary <- bind_rows(
       data_out$observation_ancillary,
-      tables[[i]]$observation_ancillary
+      table.list[[i]]$observation_ancillary
     )
   }
   # location_ancillary
-  for (i in 1:length(tables)){
+  for (i in 1:length(table.list)){
     data_out$location_ancillary <- bind_rows(
       data_out$location_ancillary,
-      tables[[i]]$location_ancillary
+      table.list[[i]]$location_ancillary
     )
   }
   # variable_mapping
-  for (i in 1:length(tables)){
+  for (i in 1:length(table.list)){
     data_out$variable_mapping <- bind_rows(
       data_out$variable_mapping,
-      tables[[i]]$variable_mapping
+      table.list[[i]]$variable_mapping
     )
   }
   
