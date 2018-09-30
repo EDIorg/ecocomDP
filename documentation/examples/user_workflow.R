@@ -9,7 +9,7 @@ view_landing_page('edi.191.2')
 view_landing_page('knb-lter-ntl.345.3')
 view_landing_page('DP1.20120.001')
 
-# Aggregate select ecocomDPs
+# Aggregate select ecocomDPs and export to path
 data <- aggregate_ecocomDP(
   package.ids = c('edi.124.3', 
                   'edi.191.2', 
