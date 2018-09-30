@@ -7,6 +7,9 @@
 #' 
 #' @param dp.id 
 #'     (character) NEON data product ID (e.g. 'DP1.20120.001').
+#' @param neon.sites
+#'     (character) A list of NEON site abbreviations from which to get
+#'     data for.
 #'     
 #' @return 
 #'     Core ecocomDP tables for a user supplied NEON data product.
@@ -14,7 +17,7 @@
 #' @export
 #'
 
-reformat_neon <- function(dp.id){
+reformat_neon <- function(dp.id, neon.sites = NULL){
   
   # Validate arguments --------------------------------------------------------
   
@@ -50,10 +53,15 @@ reformat_neon <- function(dp.id){
     message('NEON data product DP1.20120.001')
     
     # Get list of sites
-    my_sites <- suppressMessages(lookup_neon_data_availability(
-      dpid = dp.id,
-      data_table_name = 'inv_fieldData'
-    )$siteID %>% unique())
+    if (is.null(neon.sites)){
+      my_sites <- suppressMessages(lookup_neon_data_availability(
+        dpid = dp.id,
+        data_table_name = 'inv_fieldData'
+      )$siteID %>% unique())
+    } else {
+      my_sites <- neon.sites
+    }
+    
     
     # Download field data
     message('Downloading field data')

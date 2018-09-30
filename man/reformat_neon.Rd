@@ -8,6 +8,9 @@ reformat_neon(dp.id)
 }
 \arguments{
 \item{dp.id}{(character) NEON data product ID (e.g. 'DP1.20120.001').}
+
+\item{neon.sites}{(character) A list of NEON site abbreviations from which to get
+data for.}
 }
 \value{
 Core ecocomDP tables for a user supplied NEON data product.

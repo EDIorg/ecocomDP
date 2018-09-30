@@ -23,7 +23,7 @@
 #' @export
 #'
 
-aggregate_ecocomDP <- function(package.ids, path = NULL){
+aggregate_ecocomDP <- function(package.ids, path = NULL, neon.sites = NULL){
   
   # Validate arguments --------------------------------------------------------
   
@@ -34,7 +34,7 @@ aggregate_ecocomDP <- function(package.ids, path = NULL){
   # Create list of tables -----------------------------------------------------
   
   message('Loading requested packages ...')
-  tables <- lapply(package.ids, get_ecocomDP)
+  tables <- lapply(package.ids, get_ecocomDP, neon.sites = neon.sites)
   names(tables) <- package.ids
   
   # Fill empty fields with NA -------------------------------------------------
@@ -50,7 +50,7 @@ aggregate_ecocomDP <- function(package.ids, path = NULL){
   # Coerce to common field types ----------------------------------------------
   
   message('Assigning field types ...')
-  tables <- lapply(edi_data, assign_field_types)
+  tables <- lapply(tables, assign_field_types)
   
   # Concatenate ecocomDPs -----------------------------------------------------
   
@@ -169,7 +169,7 @@ aggregate_ecocomDP <- function(package.ids, path = NULL){
 
 
 # Get ecocomDP --------------------------------------------------------------
-get_ecocomDP <- function(package.id){
+get_ecocomDP <- function(package.id, neon.sites = NULL){
   
   # Get data from EDI -------------------------------------------------------
   
@@ -265,7 +265,12 @@ get_ecocomDP <- function(package.id){
     
     # Get NEON data and format into ecocomDP
     
-    dat_out <- reformat_neon(dp.id = package.id)
+    if (!is.null(neon.sites)){
+      dat_out <- reformat_neon(dp.id = package.id,
+                               neon.sites = neon.sites)
+    } else {
+      dat_out <- reformat_neon(dp.id = package.id)
+    }
     
   }
   

@@ -15,7 +15,8 @@ data <- aggregate_ecocomDP(
                   'edi.191.2', 
                   'knb-lter-ntl.345.3', 
                   'DP1.20120.001'),
-  path = '/Users/csmith/Documents/ecocomDP_export'
+  neon.sites = c('MAYF', 'PRIN', 'CRAM'),
+  path = '/Users/csmith/Downloads/ecocomDP_exports'
   )
 
 
