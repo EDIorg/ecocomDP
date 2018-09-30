@@ -163,6 +163,8 @@ aggregate_ecocomDP <- function(package.ids, path = NULL, neon.sites = NULL){
     
   }
   
+  tables_aggregated
+  
 }
 
 
