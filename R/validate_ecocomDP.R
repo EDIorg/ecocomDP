@@ -102,6 +102,16 @@ validate_ecocomDP <- function(data.path) {
                            data.path = data.path,
                            criteria = criteria)
 
+  # Validate datetime format --------------------------------------------------
+  
+  validate_datetime(tables = table_names,
+                    data.path = data.path,
+                    criteria = criteria)
+  
+  validate_datetime(tables = tables,
+                    data.path = data.path,
+                    criteria = criteria)
+  
   # Validate column classes ---------------------------------------------------
   
   # validate_column_classes()
@@ -131,4 +141,7 @@ validate_ecocomDP <- function(data.path) {
 
   
 }
+
+
+
   
