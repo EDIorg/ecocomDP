@@ -139,7 +139,12 @@ validate_ecocomDP <- function(data.path) {
 
 
 
-# Validate table names --------------------------------------------------------
+
+
+
+
+
+
 # validate_table_names
 # 
 # @description
@@ -231,7 +236,12 @@ validate_table_names <- function(data.path, criteria) {
 
 
 
-# Validate table presence -----------------------------------------------------
+
+
+
+
+
+
 # validate_table_presence
 #
 # @description  
@@ -310,7 +320,12 @@ validate_table_presence <- function(tables, criteria){
 
 
 
-# Validate column names -------------------------------------------------------
+
+
+
+
+
+
 # validate_column_names
 #
 # @description  
@@ -428,7 +443,12 @@ is_valid_name <- function(cols, L1.table_columns, table.name){
 
 
 
-# Validate column presence ----------------------------------------------------
+
+
+
+
+
+
 # validate_column_presence
 #
 # @description  
@@ -544,7 +564,11 @@ validate_column_presence <- function(tables, data.path, criteria){
 
 
 
-# Validate datetime -----------------------------------------------------------
+
+
+
+
+
 
 validate_datetime <- function(tables, data.path, criteria){
   
@@ -617,7 +641,12 @@ is_datetime_format <- function(table.name, data.path, criteria) {
 
 
 
-# Validate column classes -----------------------------------------------------
+
+
+
+
+
+
 # Validate column classes
 #
 # @description  
@@ -762,7 +791,12 @@ validate_column_classes <- function(data.path) {
 
 
 
-# Validate primary keys -------------------------------------------------------
+
+
+
+
+
+
 # validate_primary_keys
 #
 # @description  
@@ -875,7 +909,12 @@ is_primary_key <- function(x, pk, table.name){
 
 
 
-# Validate composite keys -----------------------------------------------------
+
+
+
+
+
+
 # validate_composite_keys
 #
 # @description  
@@ -995,7 +1034,12 @@ validate_composite_keys <- function(tables, data.path, criteria) {
 
 
 
-# Validate referential integrity ----------------------------------------------
+
+
+
+
+
+
 # validate_referential_integrity
 #
 # @description  
