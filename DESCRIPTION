@@ -24,7 +24,9 @@ Depends:
     xml2 (>= 1.1.1),
     XML (>= 3.98-1.6)
 Imports: 
-Remotes: github::NeonScience/NEON-utilities/neonUtilities
+Remotes: 
+    github::NeonScience/NEON-utilities/neonUtilities,
+    github::EDIorg/EDI-utilities/EDIutils
 Suggests:
     knitr,
     rmarkdown,
