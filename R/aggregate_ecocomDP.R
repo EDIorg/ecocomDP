@@ -62,7 +62,7 @@ aggregate_ecocomDP <- function(package.ids, path = NULL, neon.sites = NULL){
   if (!missing(path)){
     
     message('Writing aggregated data to file ...')
-    validate_path(path)
+    EDIutils::validate_path(path)
     
     # observation
     if (!is.null(tables_aggregated$observation)){

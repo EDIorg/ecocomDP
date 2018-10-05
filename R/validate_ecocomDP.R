@@ -62,7 +62,7 @@ validate_ecocomDP <- function(data.path) {
   
   # Detect operating system
   
-  os <- detect_os()
+  os <- EDIutils::detect_os()
   
   # Misc.
   
@@ -194,7 +194,7 @@ validate_table_names <- function(data.path, criteria) {
   
   # Detect operating system
   
-  os <- detect_os()
+  os <- EDIutils::detect_os()
   
   # Misc.
   
@@ -398,7 +398,7 @@ validate_column_names <- function(tables, data.path, criteria) {
     
     # Get input file column names
     
-    os <- detect_os()
+    os <- EDIutils::detect_os()
     sep <- detect_delimeter(path = data.path,
                             data.files = table.name,
                             os = os)
@@ -528,7 +528,7 @@ validate_column_presence <- function(tables, data.path, criteria){
     
     # Get input file column names
     
-    os <- detect_os()
+    os <- EDIutils::detect_os()
     sep <- detect_delimeter(path = data.path,
                             data.files = table.name,
                             os = os)
@@ -611,7 +611,7 @@ is_datetime_format <- function(table.name, data.path, criteria) {
     
     # Read input file
     
-    os <- detect_os()
+    os <- EDIutils::detect_os()
     sep <- detect_delimeter(path = data.path,
                             data.files = table.name,
                             os = os)
@@ -694,7 +694,7 @@ validate_column_classes <- function(data.path) {
   
   # Detect operating system
   
-  os <- detect_os()
+  os <- EDIutils::detect_os()
   
   # Misc.
   
@@ -871,7 +871,7 @@ validate_primary_keys <- function(tables, data.path, criteria) {
     
     # Read input file
     
-    os <- detect_os()
+    os <- EDIutils::detect_os()
     sep <- detect_delimeter(path = data.path,
                             data.files = table.name,
                             os = os)
@@ -992,7 +992,7 @@ validate_composite_keys <- function(tables, data.path, criteria) {
       
       # Read input file
       
-      os <- detect_os()
+      os <- EDIutils::detect_os()
       sep <- detect_delimeter(path = data.path,
                               data.files = table.name,
                               os = os)
@@ -1138,7 +1138,7 @@ get_foreign_keys <- function(key, table.name, data.path){
   table_pattern <- paste0(table.name, "\\b")
   use_i <- str_detect(dir_tables, table_pattern)
   if (sum(use_i) > 0){
-    os <- detect_os()
+    os <- EDIutils::detect_os()
     sep <- detect_delimeter(path = data.path,
                             data.files = dir_tables[use_i],
                             os = os)
@@ -1168,7 +1168,7 @@ get_primary_keys <- function(key, table.name, data.path){
   table_pattern <- paste0(table.name, "\\b")
   use_i <- str_detect(dir_tables, table_pattern)
   if (sum(use_i) > 0){
-    os <- detect_os()
+    os <- EDIutils::detect_os()
     sep <- detect_delimeter(path = data.path,
                             data.files = dir_tables[use_i],
                             os = os)

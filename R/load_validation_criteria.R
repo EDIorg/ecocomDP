@@ -28,11 +28,11 @@ validate_table_names <- function(data.path) {
   
   # Validate path
   
-  validate_path(data.path)
+  EDIutils::validate_path(data.path)
   
   # Detect operating system
   
-  os <- detect_os()
+  os <- EDIutils::detect_os()
   
   # Misc.
   

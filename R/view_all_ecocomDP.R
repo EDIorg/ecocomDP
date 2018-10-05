@@ -128,10 +128,10 @@ view_all_ecocomDP <- function(){
       )
     
     if ((length(use_i) != 0)){
-      file_delimiter <- detect_delimeter(
+      file_delimiter <- EDIutils::detect_delimeter(
         path = file.path(system.file(package = 'ecocomDP')),
         data.files = list.files(system.file(package = 'ecocomDP'))[use_i],
-        os = detect_os())
+        os = EDIutils::detect_os())
       if (file_delimiter == ","){
         file_data <-read.table(paste0(file.path(system.file(package = 'ecocomDP')),
                                       '/',

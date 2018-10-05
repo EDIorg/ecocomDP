@@ -106,7 +106,7 @@ view_landing_page <- function(package.id){
       revision
       )
     
-    if (detect_os() == 'mac'){
+    if (EDIutils::detect_os() == 'mac'){
       system(
         paste0(
           'open ',
@@ -115,7 +115,7 @@ view_landing_page <- function(package.id){
           '"'
         )
       )
-    } else if (detect_os() == 'win'){
+    } else if (EDIutils::detect_os() == 'win'){
       system(
         paste0(
           'open ',
@@ -151,7 +151,7 @@ view_landing_page <- function(package.id){
     
     # Open landing page
     
-    if (detect_os() == 'mac'){
+    if (EDIutils::detect_os() == 'mac'){
       system(
         paste0(
           'open ',
@@ -164,7 +164,7 @@ view_landing_page <- function(package.id){
           )
         )
       )
-    } else if (detect_os() == 'win'){
+    } else if (EDIutils::detect_os() == 'win'){
       system(
         paste0(
           system.file(
