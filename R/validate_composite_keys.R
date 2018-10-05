@@ -100,6 +100,8 @@ validate_composite_keys <- function(tables, data.path, criteria) {
                     '\nrevising the variable name to reflect this.'),
              call. = F
         )
+      } else {
+        message('... composite keys are unique.')
       }
       
     }
@@ -109,7 +111,5 @@ validate_composite_keys <- function(tables, data.path, criteria) {
   use_i <- lapply(tables, is_composite_key, data.path = data.path, L1.tables = L1_tables)
   
   # Send validation notice ----------------------------------------------------
-  
-  message('... composite keys are unique.')
   
 }
