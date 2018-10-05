@@ -37,7 +37,7 @@ testthat::test_that('Unique keys result in NULL output.', {
 
 testthat::test_that('Unique keys result in message.', {
   
-  expect_message(
+  expect_error(
     validate_primary_keys(tables = all_required_tables, data.path = data.path, criteria = criteria)
     )
   

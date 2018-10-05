@@ -20,12 +20,10 @@ criteria <- read.table(
 # Composite keys are unique ---------------------------------------------------
 
 testthat::test_that('Unique keys result in NULL output.', {
-  
-  expect_equal(
-    is.null(validate_composite_keys(tables = all_required_tables[c(1,2,4,5,6,7,8)],
+  expect_warning(
+    validate_composite_keys(tables = all_required_tables[c(1,2,4,5,6,7,8)],
                                     data.path = data.path,
-                                    criteria = criteria)),
-    TRUE
+                                    criteria = criteria)
   )
 })
 

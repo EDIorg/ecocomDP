@@ -12,12 +12,12 @@ criteria <- read.table(
   na.strings = "NA")
 
 valid_table_names <- c("Project_name_dataset_summary.csv",
-                       "Project_name_location.csv",
                        "Project_name_location_ancillary.csv",
-                       "Project_name_observation.csv",
+                       "Project_name_location.csv",
                        "Project_name_observation_ancillary.csv",
-                       "Project_name_taxon.csv",
+                       "Project_name_observation.csv",
                        "Project_name_taxon_ancillary.csv",
+                       "Project_name_taxon.csv",
                        "Project_name_variable_mapping.csv")
 
 # Valid tables ----------------------------------------------------------------
