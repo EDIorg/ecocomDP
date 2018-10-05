@@ -31,14 +31,19 @@ Run this function after creating a L1 and before making EML for it.
        \item \strong{Table names} Table names must follow the ecocomDP 
        naming convention (i.e. \emph{studyName_ecocomDPTableName.ext}, e.g. 
        \emph{gleon_chloride_observation.csv}). 
-       \item \strong{Required tables} Some L1 tables are 
+       \item \strong{Table presence} Some L1 tables are 
        required, others are not.
        \item \strong{Column names} Column names must be those specified by
        the data pattern.
-       \item \strong{Required columns} Some columns are 
+       \item \strong{Column presence} Some columns are 
        required, others are not.
+       \item \strong{Datetime format} One datetime format is valid, namely
+       'YYYY-MM-DDThh:mm:ss'.
        \item \strong{Column classes} Column classes must match the 
        ecocomDP specification.
-       \item \strong{Relational IDs} Relational IDs should be unique.
+       \item \strong{Primary keys} Primary keys must be valid.
+       \item \strong{Composite keys} Composite keys must be valid.
+       \item \strong{Referential integrity} Referential integrity must be
+       valid.
    }
 }
