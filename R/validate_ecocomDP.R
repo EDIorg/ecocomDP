@@ -182,29 +182,29 @@ validate_ecocomDP <- function(data.path = NULL, data.list = NULL){
 
 
 
-# validate_table_names
-# 
-# @description
-#     This function ensures that your ecocomDP (L1) tables follow the
-#     table naming convention (i.e. \emph{studyName_ecocomDPTableName.ext},
-#     e.g. \emph{gleon_chloride_observation.csv}).
-# 
-# @usage validate_table_names(data.path, criteria)
-# 
-# @param data.path
-#     (character) Path to the directory containing the L1 tables.
-#     tables.
-# @param criteria
-#     (data frame) Validation criteria located at
-#     /inst/validation_criteria.txt.
-# 
-# @return
-#     If table names are valid, then the corresponding table names are
-#     returned. If table names are invalid, then an error message is
-#     returned.
-# 
-# @export
-
+#' validate_table_names
+#' 
+#' @description
+#'     This function ensures that your ecocomDP (L1) tables follow the
+#'     table naming convention (i.e. \emph{studyName_ecocomDPTableName.ext},
+#'     e.g. \emph{gleon_chloride_observation.csv}).
+#' 
+#' @usage validate_table_names(data.path, criteria)
+#' 
+#' @param data.path
+#'     (character) Path to the directory containing the L1 tables.
+#'     tables.
+#' @param criteria
+#'     (data frame) Validation criteria located at
+#'     /inst/validation_criteria.txt.
+#' 
+#' @return
+#'     If table names are valid, then the corresponding table names are
+#'     returned. If table names are invalid, then an error message is
+#'     returned.
+#' 
+#' @export
+#' 
 validate_table_names <- function(data.path, criteria) {
   
   
@@ -279,27 +279,27 @@ validate_table_names <- function(data.path, criteria) {
 
 
 
-# validate_table_presence
-#
-# @description  
-#     Check that required L1 tables are present.
-#
-# @usage validate_table_presence(tables, criteria)
-# 
-# @param tables 
-#     (character) Names of valid L1 tables in your dataset working directory.
-#     Get valid table names with `validate_table_names`.
-# @param criteria
-#     (data frame) Validation criteria located at 
-#     /inst/validation_criteria.txt.
-#
-# @return 
-#     If required tables are missing, then an error message is produced.
-#          
-# @details 
-#         
-# @export
-#
+#' validate_table_presence
+#'
+#' @description  
+#'     Check that required L1 tables are present.
+#'
+#' @usage validate_table_presence(tables, criteria)
+#' 
+#' @param tables 
+#'     (character) Names of valid L1 tables in your dataset working directory.
+#'     Get valid table names with `validate_table_names`.
+#' @param criteria
+#'     (data frame) Validation criteria located at 
+#'     /inst/validation_criteria.txt.
+#'
+#' @return 
+#'     If required tables are missing, then an error message is produced.
+#'          
+#' @details 
+#'         
+#' @export
+#'
 
 validate_table_presence <- function(tables, criteria){
   
@@ -363,27 +363,27 @@ validate_table_presence <- function(tables, criteria){
 
 
 
-# validate_column_names
-#
-# @description  
-#     Check that column names of L1 tables are valid.
-#
-# @usage validate_column_names(data.path, criteria)
-# 
-# @param tables 
-#     (character) Names of valid L1 tables in your dataset working directory.
-#     Get valid table names with `validate_table_names`.
-# @param data.path
-#     (character) Path to the directory containing the L1 tables.
-# @param criteria
-#     (data frame) Validation criteria located at 
-#     /inst/validation_criteria.txt.
-#
-# @return 
-#     If required column names are missing, then an error is returned.
-#         
-# @export
-#
+#' validate_column_names
+#'
+#' @description  
+#'     Check that column names of L1 tables are valid.
+#'
+#' @usage validate_column_names(data.path, criteria)
+#' 
+#' @param tables 
+#'     (character) Names of valid L1 tables in your dataset working directory.
+#'     Get valid table names with `validate_table_names`.
+#' @param data.path
+#'     (character) Path to the directory containing the L1 tables.
+#' @param criteria
+#'     (data frame) Validation criteria located at 
+#'     /inst/validation_criteria.txt.
+#'
+#' @return 
+#'     If required column names are missing, then an error is returned.
+#'         
+#' @export
+#'
 
 validate_column_names <- function(tables, data.path, criteria) {
   
@@ -486,27 +486,27 @@ is_valid_name <- function(cols, L1.table_columns, table.name){
 
 
 
-# validate_column_presence
-#
-# @description  
-#     Check that required columns of L1 tables are present.
-#
-# @usage validate_column_presence(tables, data.path, criteria)
-# 
-# @param tables 
-#     (character) Names of valid L1 tables in your dataset working directory.
-#     Get valid table names with `validate_table_names`.
-# @param data.path
-#     (character) Path to the directory containing the L1 tables.
-# @param criteria
-#     (data frame) Validation criteria located at 
-#     /inst/validation_criteria.txt.
-#
-# @return 
-#     If required column names are absent, then an error is returned.
-#         
-# @export
-#
+#' validate_column_presence
+#'
+#' @description  
+#'     Check that required columns of L1 tables are present.
+#'
+#' @usage validate_column_presence(tables, data.path, criteria)
+#' 
+#' @param tables 
+#'     (character) Names of valid L1 tables in your dataset working directory.
+#'     Get valid table names with `validate_table_names`.
+#' @param data.path
+#'     (character) Path to the directory containing the L1 tables.
+#' @param criteria
+#'     (data frame) Validation criteria located at 
+#'     /inst/validation_criteria.txt.
+#'
+#' @return 
+#'     If required column names are absent, then an error is returned.
+#'         
+#' @export
+#'
 
 validate_column_presence <- function(tables, data.path, criteria){
   
@@ -686,32 +686,32 @@ is_datetime_format <- function(L1.table, tables, data.path, criteria) {
 
 
 
-# Validate column classes
-#
-# @description  
-#     This function ensures that your ecocomDP (L1) tables contain columns of 
-#     the correct class (i.e. character, numeric, etc.).
-#
-# @usage validate_column_classes(data.path)
-# 
-# @param data.path 
-#     A character string specifying the path to the directory containing L1
-#     tables.
-#
-# @return 
-#     A validation report printed in the console window of RStudio. The 
-#     validation checks run until an error is encountered. You must address 
-#     errors before continuing to the next check. Once all validation checks 
-#     have successfully completed, you will be notified with a congratulatory 
-#     message.
-#          
-# @details 
-#    The full suite of L1 validation checks are performed by the 
-#    \code{validate_ecocomDP} function. The sequence of checks performed in
-#    \code{validate_ecocomDO} are not random, rather some checks are dependent
-#    upon others. 
-# @export
-#
+#' Validate column classes
+#'
+#' @description  
+#'     This function ensures that your ecocomDP (L1) tables contain columns of 
+#'     the correct class (i.e. character, numeric, etc.).
+#'
+#' @usage validate_column_classes(data.path)
+#' 
+#' @param data.path 
+#'     A character string specifying the path to the directory containing L1
+#'     tables.
+#'
+#' @return 
+#'     A validation report printed in the console window of RStudio. The 
+#'     validation checks run until an error is encountered. You must address 
+#'     errors before continuing to the next check. Once all validation checks 
+#'     have successfully completed, you will be notified with a congratulatory 
+#'     message.
+#'          
+#' @details 
+#'    The full suite of L1 validation checks are performed by the 
+#'    \code{validate_ecocomDP} function. The sequence of checks performed in
+#'    \code{validate_ecocomDO} are not random, rather some checks are dependent
+#'    upon others. 
+#' @export
+#'
 
 validate_column_classes <- function(data.path) {
   
@@ -836,28 +836,28 @@ validate_column_classes <- function(data.path) {
 
 
 
-# validate_primary_keys
-#
-# @description  
-#     Checks that primary keys of a table are unique and issues an error if
-#     otherwise.
-#
-# @usage validate_primary_keys(tables, data.path, criteria)
-# 
-# @param tables 
-#     (character) Names of valid L1 tables in your dataset working directory.
-#     Get valid table names with `validate_table_names`.
-# @param data.path
-#     (character) Path to the directory containing the L1 tables.
-# @param criteria
-#     (data frame) Validation criteria located at 
-#     /inst/validation_criteria.txt.
-#
-# @return 
-#     If primary keys are not unique, then an error is returned.
-#         
-# @export
-#
+#' validate_primary_keys
+#'
+#' @description  
+#'     Checks that primary keys of a table are unique and issues an error if
+#'     otherwise.
+#'
+#' @usage validate_primary_keys(tables, data.path, criteria)
+#' 
+#' @param tables 
+#'     (character) Names of valid L1 tables in your dataset working directory.
+#'     Get valid table names with `validate_table_names`.
+#' @param data.path
+#'     (character) Path to the directory containing the L1 tables.
+#' @param criteria
+#'     (data frame) Validation criteria located at 
+#'     /inst/validation_criteria.txt.
+#'
+#' @return 
+#'     If primary keys are not unique, then an error is returned.
+#'         
+#' @export
+#'
 
 
 validate_primary_keys <- function(tables, data.path, criteria) {
@@ -954,29 +954,29 @@ is_primary_key <- function(x, pk, table.name){
 
 
 
-# validate_composite_keys
-#
-# @description  
-#     Check that composite keys of a table are unique.
-#
-# @usage validate_composite_keys(tables, data.path, criteria)
-# 
-# @param tables 
-#     (character) Names of valid L1 tables in your dataset working directory.
-#     Get valid table names with `validate_table_names`.
-# @param data.path
-#     (character) Path to the directory containing the L1 tables.
-# @param criteria
-#     (data frame) Validation criteria located at 
-#     /inst/validation_criteria.txt.
-#
-# @return 
-#     If composite keys are not unique, a warning is returned, not an error.
-#     An error is not returned because some usecases (e.g. replicate 
-#     observations) may result in non-unique composite keys.
-#         
-# @export
-#
+#' validate_composite_keys
+#'
+#' @description  
+#'     Check that composite keys of a table are unique.
+#'
+#' @usage validate_composite_keys(tables, data.path, criteria)
+#' 
+#' @param tables 
+#'     (character) Names of valid L1 tables in your dataset working directory.
+#'     Get valid table names with `validate_table_names`.
+#' @param data.path
+#'     (character) Path to the directory containing the L1 tables.
+#' @param criteria
+#'     (data frame) Validation criteria located at 
+#'     /inst/validation_criteria.txt.
+#'
+#' @return 
+#'     If composite keys are not unique, a warning is returned, not an error.
+#'     An error is not returned because some usecases (e.g. replicate 
+#'     observations) may result in non-unique composite keys.
+#'         
+#' @export
+#'
 
 
 validate_composite_keys <- function(tables, data.path, criteria) {
@@ -1079,27 +1079,27 @@ validate_composite_keys <- function(tables, data.path, criteria) {
 
 
 
-# validate_referential_integrity
-#
-# @description  
-#     Check that foreign keys match primary keys.
-#
-# @usage validate_referential_integrity(tables, data.path, criteria)
-# 
-# @param tables 
-#     (character) Names of valid L1 tables in your dataset working directory.
-#     Get valid table names with `validate_table_names`.
-# @param data.path
-#     (character) Path to the directory containing the L1 tables.
-# @param criteria
-#     (data frame) Validation criteria located at 
-#     /inst/validation_criteria.txt.
-#
-# @return 
-#     If foreign keys do not match primary keys, then an error is returned.
-#         
-# @export
-#
+#' validate_referential_integrity
+#'
+#' @description  
+#'     Check that foreign keys match primary keys.
+#'
+#' @usage validate_referential_integrity(tables, data.path, criteria)
+#' 
+#' @param tables 
+#'     (character) Names of valid L1 tables in your dataset working directory.
+#'     Get valid table names with `validate_table_names`.
+#' @param data.path
+#'     (character) Path to the directory containing the L1 tables.
+#' @param criteria
+#'     (data frame) Validation criteria located at 
+#'     /inst/validation_criteria.txt.
+#'
+#' @return 
+#'     If foreign keys do not match primary keys, then an error is returned.
+#'         
+#' @export
+#'
 
 
 validate_referential_integrity <- function(tables, data.path, criteria) {
