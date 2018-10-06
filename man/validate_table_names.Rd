@@ -16,9 +16,13 @@ tables.}
 
 \item{criteria}{(data frame) Validation criteria located in the R package inst directory.}
 
-\item{data.list}{(list of data frames) A list of of data frames with 
-corresponding file names following this structure:
+\item{data.list}{(list of data frames) A list of of data frames with the following 
+structure:
 \itemize{
+    \item \strong{list name}
+    \itemize{
+        \item \strong{ecocomDP table name} i.e. 
+    }
     \item \strong{L1 table name:} i.e. observation, location, taxon, etc.
         \item \strong{data frame:} Name data frame Data frame representation of the L1 table
         \item \strong{file name} File name the data frame was created from.
