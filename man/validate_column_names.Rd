@@ -2,7 +2,7 @@
 % Please edit documentation in R/validate_ecocomDP.R
 \name{validate_column_names}
 \alias{validate_column_names}
-\title{validate_column_names}
+\title{Check that column names of ecocomDP tables are valid}
 \usage{
 validate_column_names(data.path, criteria)
 }

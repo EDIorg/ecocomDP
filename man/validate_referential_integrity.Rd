@@ -2,7 +2,7 @@
 % Please edit documentation in R/validate_ecocomDP.R
 \name{validate_referential_integrity}
 \alias{validate_referential_integrity}
-\title{validate_referential_integrity}
+\title{Check that referential integrity of ecocomDP tables is valid}
 \usage{
 validate_referential_integrity(tables, data.path, criteria)
 }

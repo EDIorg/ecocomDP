@@ -2,7 +2,7 @@
 % Please edit documentation in R/validate_ecocomDP.R
 \name{validate_composite_keys}
 \alias{validate_composite_keys}
-\title{validate_composite_keys}
+\title{Check that composite keys of ecocomDP tables are valid}
 \usage{
 validate_composite_keys(tables, data.path, criteria)
 }

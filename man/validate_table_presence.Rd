@@ -2,7 +2,7 @@
 % Please edit documentation in R/validate_ecocomDP.R
 \name{validate_table_presence}
 \alias{validate_table_presence}
-\title{validate_table_presence}
+\title{Check that required ecocomDP tables are present}
 \usage{
 validate_table_presence(tables, criteria)
 }

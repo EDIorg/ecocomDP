@@ -2,7 +2,7 @@
 % Please edit documentation in R/validate_ecocomDP.R
 \name{validate_primary_keys}
 \alias{validate_primary_keys}
-\title{validate_primary_keys}
+\title{Check that primary keys of ecocomDP tables are valid}
 \usage{
 validate_primary_keys(tables, data.path, criteria)
 }

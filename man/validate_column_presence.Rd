@@ -2,7 +2,7 @@
 % Please edit documentation in R/validate_ecocomDP.R
 \name{validate_column_presence}
 \alias{validate_column_presence}
-\title{validate_column_presence}
+\title{Check that required columns of ecocomDP tables are present}
 \usage{
 validate_column_presence(tables, data.path, criteria)
 }
