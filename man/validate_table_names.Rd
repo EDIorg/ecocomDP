@@ -8,17 +8,25 @@
 \usage{
 load_validation_criteria(data.path)
 
-validate_table_names(data.path, criteria)
+validate_table_names(data.path, criteria, data.list = NULL)
 }
 \arguments{
 \item{data.path}{A character string specifying the path to the directory containing L1
 tables.}
 
-\item{criteria}{(data frame) Validation criteria located at
-/inst/validation_criteria.txt.}
+\item{criteria}{(data frame) Validation criteria located in the R package inst directory.}
+
+\item{data.list}{(list of data frames) A list of of data frames with 
+corresponding file names following this structure:
+\itemize{
+    \item \strong{L1 table name:} i.e. observation, location, taxon, etc.
+        \item \strong{data frame:} Name data frame Data frame representation of the L1 table
+        \item \strong{file name} File name the data frame was created from.
+}}
 
 \item{data.path}{(character) Path to the directory containing the L1 tables.
-tables.}
+tables. Use this argument if tables are locally stored and need to be
+read in to R.}
 }
 \value{
 If table names are valid, then the corresponding table names are
