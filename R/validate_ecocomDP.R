@@ -1,4 +1,4 @@
-#' validate_ecocomDP
+#' Run all validation checks on a set of ecocomDP tables
 #'
 #' @description  
 #'     Once you've created an ecocomDP (L1) you will need to check that it 

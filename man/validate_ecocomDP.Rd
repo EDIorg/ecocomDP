@@ -2,7 +2,7 @@
 % Please edit documentation in R/validate_ecocomDP.R
 \name{validate_ecocomDP}
 \alias{validate_ecocomDP}
-\title{validate_ecocomDP}
+\title{Run all validation checks on a set of ecocomDP tables}
 \usage{
 validate_ecocomDP(data.path = NULL, data.list = NULL)
 }
