@@ -1,15 +1,19 @@
-#' Validate ecocomDP tables
+#' validate_ecocomDP
 #'
 #' @description  
 #'     Once you've created an ecocomDP (L1) you will need to check that it 
 #'     is accurately formatted. This validation process ensures your L1 is 
 #'     correct and can be combined with other L1.
 #'
-#' @usage validate_ecocomDP(data.path)
+#' @usage validate_ecocomDP(data.path = NULL, data.list = NULL)
 #' 
 #' @param data.path 
-#'     A character string specifying the path to the directory containing L1
+#'     (character) The path to the directory containing L1
 #'     tables.
+#' @param data.list 
+#'     (list of data frames) A named list of data frames containing the L1
+#'     tables. Data frame tables must be named after the file name from 
+#'     which they were read, including the extension.
 #'
 #' @return 
 #'     A validation report to the RStudio console window. When an issue is 
@@ -47,28 +51,16 @@
 #' @export
 #'
 
-validate_ecocomDP <- function(data.path) {
+validate_ecocomDP <- function(data.path = NULL, data.list = NULL){
   
   
-  # Check arguments and parameterize
+  # Check arguments
   
-  if (missing(data.path)){
-    stop('Input argument "data.path" is missing! Specify path to your ecocomDP tables.')
+  if (is.null(data.path) & is.null(data.list)){
+    stop('One of the arguments "data.path" or "data.list" must be used.')
+  } else if (!is.null(data.path) & !is.null(data.list)){
+    stop('Both arguments "data.path" and "data.list" cannot be used.')
   }
-
-  # Validate path
-  
-  validate_path(data.path)
-  
-  # Detect operating system
-  
-  os <- EDIutils::detect_os()
-  
-  # Misc.
-  
-  dir_files <- list.files(data.path, 
-                          recursive = F)
-
   
   # Load validation criteria
   
@@ -81,64 +73,104 @@ validate_ecocomDP <- function(data.path) {
     as.is = T,
     na.strings = "NA")
   
-  message("Validating:")
+  # Validate locally stored files ...
   
-  # Validate table names
-  # Inputs should be target(dir.files) and criteria
-  
-  table_names <- validate_table_names(data.path = data.path,
-                                      criteria = criteria
-                                      )
-  
-  # Report required tables that are missing
+  if (!is.null(data.path)){
+    
+    # Validate path
 
-  validate_table_presence(tables = table_names,
-                          criteria = criteria)
+    EDIutils::validate_path(data.path)
+    
+    # Detect operating system
+    
+    os <- EDIutils::detect_os()
+    
+    # Misc.
+    
+    dir_files <- list.files(
+      data.path, 
+      recursive = F
+      )
+    
+    # Validate table names
+    # Inputs should be target(dir.files) and criteria
+    
+    table_names <- validate_table_names(
+      data.path = data.path,
+      criteria = criteria
+      )
+    
+    # Report required tables that are missing
+    
+    validate_table_presence(
+      tables = table_names,
+      criteria = criteria
+      )
+    
+    # Validate column names
+    
+    validate_column_names(
+      tables = table_names,
+      data.path = data.path,
+      criteria = criteria
+      )
+    
+    # Validate column presence
+    
+    validate_column_presence(
+      tables = table_names,
+      data.path = data.path,
+      criteria = criteria
+      )
+    
+    # # Validate datetime format
+    # 
+    # validate_datetime(
+    #   tables = table_names,
+    #   data.path = data.path,
+    #   criteria = criteria
+    #   )
+    
+    # Validate column classes
+    
+    # validate_column_classes()
+    
+    # Validate primary keys
+    
+    validate_primary_keys(
+      tables = table_names, 
+      data.path = data.path,
+      criteria = criteria
+      )
+    
+    # Validate composite keys
+    
+    validate_composite_keys(
+      tables = table_names, 
+      data.path = data.path,
+      criteria = criteria
+      )
+    
+    # Validate referential integrity
+    
+    validate_referential_integrity(
+      tables = table_names, 
+      data.path = data.path, 
+      criteria = criteria
+      )
+    
+    # Validation complete
+    
+    message(paste('Congratulations! Your ecocomDP tables have passed validation!\n',
+                  'Now make metadata for it with the "make_eml" function.'))
+    
+    
+  }
   
-  # Validate column names
+  if (!is.null(data.list)){
+    
+  }
   
-  validate_column_names(tables = table_names,
-                        data.path = data.path,
-                        criteria = criteria)
-
-  # Validate column presence
-
-  validate_column_presence(tables = table_names,
-                           data.path = data.path,
-                           criteria = criteria)
-
-  # Validate datetime format
-  
-  validate_datetime(tables = table_names,
-                    data.path = data.path,
-                    criteria = criteria)
-
-  # Validate column classes
-  
-  # validate_column_classes()
-  
-  # Validate primary keys
-  
-  validate_primary_keys(tables = table_names, 
-                        data.path = data.path,
-                        criteria = criteria)
-  
-  # Validate composite keys
-  
-  validate_composite_keys(tables = table_names, 
-                          data.path = data.path,
-                          criteria = criteria)
-  
-  # Validate referential integrity
-  
-  validate_referential_integrity(tables = table_names, 
-                                 data.path = data.path, 
-                                 criteria = criteria)
-  
-  # Validation complete
-
-  message(paste('Congratulations! Your ecocomDP tables have passed validation!\n',
-                'Now make metadata for it with the "make_eml" function.'))
 }
 
 
@@ -190,7 +222,7 @@ validate_table_names <- function(data.path, criteria) {
   
   # Validate path
   
-  validate_path(data.path)
+  EDIutils::validate_path(data.path)
   
   # Detect operating system
   
@@ -374,7 +406,7 @@ validate_column_names <- function(tables, data.path, criteria) {
     stop('Input argument "criteria" is not a data frame!')
   }
   
-  validate_path(data.path)
+  EDIutils::validate_path(data.path)
   
   # Get validation criteria ---------------------------------------------------
   
@@ -399,7 +431,7 @@ validate_column_names <- function(tables, data.path, criteria) {
     # Get input file column names
     
     os <- EDIutils::detect_os()
-    sep <- detect_delimeter(path = data.path,
+    sep <- EDIutils::detect_delimeter(path = data.path,
                             data.files = table.name,
                             os = os)
     data <- read.table(paste0(data.path, "/", table.name),
@@ -499,7 +531,7 @@ validate_column_presence <- function(tables, data.path, criteria){
   
   # Validate path
   
-  validate_path(data.path)
+  EDIutils::validate_path(data.path)
   
   # Validation parameters -----------------------------------------------------
   
@@ -529,7 +561,7 @@ validate_column_presence <- function(tables, data.path, criteria){
     # Get input file column names
     
     os <- EDIutils::detect_os()
-    sep <- detect_delimeter(path = data.path,
+    sep <- EDIutils::detect_delimeter(path = data.path,
                             data.files = table.name,
                             os = os)
     data <- read.table(paste0(data.path, "/", table.name),
@@ -591,7 +623,7 @@ validate_datetime <- function(tables, data.path, criteria){
   
   message('Validating datetime format ...')
   
-  lapply(tables, is_datetime_format, data.path = data.path, criteria = criteria)
+  lapply(X = L1_tables, FUN = is_datetime_format, tables = tables, data.path = data.path, criteria = criteria)
   
   # Send validation notice ----------------------------------------------------
   
@@ -600,19 +632,21 @@ validate_datetime <- function(tables, data.path, criteria){
   
 }
 
-is_datetime_format <- function(table.name, data.path, criteria) {
+is_datetime_format <- function(L1.table, tables, data.path, criteria) {
   
   # Get L1 name and name of composite key columns
   
-  L1_table_found <- unlist(lapply(L1.tables, is_table, table.name))
+  L1_table_found <- is_table(L1.table = L1.table, table.name = tables)
   L1_table_ck <- criteria$column[criteria$table == L1_table_found]
   
   if (length(L1_table_ck) > 0){
     
+    table.name <- tables[str_detect(tables, paste0(L1_table_found, '\\b'))]
+    
     # Read input file
     
     os <- EDIutils::detect_os()
-    sep <- detect_delimeter(path = data.path,
+    sep <- EDIutils::detect_delimeter(path = data.path,
                             data.files = table.name,
                             os = os)
     x <- read.table(paste0(data.path, "/", table.name),
@@ -690,7 +724,7 @@ validate_column_classes <- function(data.path) {
   
   # Validate path
   
-  validate_path(data.path)
+  EDIutils::validate_path(data.path)
   
   # Detect operating system
   
@@ -736,7 +770,7 @@ validate_column_classes <- function(data.path) {
   for (i in 1:length(table_names_regexpr)){
     table_in <- grep(table_names_regexpr[i], dir_files, value = T)
     if (!identical(table_in, character(0))){
-      sep <- detect_delimeter(path = data.path,
+      sep <- EDIutils::detect_delimeter(path = data.path,
                               data.files = table_in,
                               os = os)
       data_in <- read.table(paste(data.path,
@@ -848,7 +882,7 @@ validate_primary_keys <- function(tables, data.path, criteria) {
   
   # Validate path
   
-  validate_path(data.path)
+  EDIutils::validate_path(data.path)
   
   # Validation parameters -----------------------------------------------------
   
@@ -872,7 +906,7 @@ validate_primary_keys <- function(tables, data.path, criteria) {
     # Read input file
     
     os <- EDIutils::detect_os()
-    sep <- detect_delimeter(path = data.path,
+    sep <- EDIutils::detect_delimeter(path = data.path,
                             data.files = table.name,
                             os = os)
     x <- read.table(paste0(data.path, "/", table.name),
@@ -967,7 +1001,7 @@ validate_composite_keys <- function(tables, data.path, criteria) {
   
   # Validate path
   
-  validate_path(data.path)
+  EDIutils::validate_path(data.path)
   
   # Validation parameters -----------------------------------------------------
   
@@ -993,7 +1027,7 @@ validate_composite_keys <- function(tables, data.path, criteria) {
       # Read input file
       
       os <- EDIutils::detect_os()
-      sep <- detect_delimeter(path = data.path,
+      sep <- EDIutils::detect_delimeter(path = data.path,
                               data.files = table.name,
                               os = os)
       x <- read.table(paste0(data.path, "/", table.name),
@@ -1022,9 +1056,7 @@ validate_composite_keys <- function(tables, data.path, criteria) {
                        '\nrevising the variable name to reflect this.'),
                 call. = F
         )
-      } else {
-        message('... composite keys are unique.')
-      }
+      } 
       
     }
     
@@ -1033,6 +1065,8 @@ validate_composite_keys <- function(tables, data.path, criteria) {
   use_i <- lapply(tables, is_composite_key, data.path = data.path, L1.tables = L1_tables)
   
   # Send validation notice ----------------------------------------------------
+  
+  message('... composite keys are unique.')
   
 }
 
@@ -1090,7 +1124,7 @@ validate_referential_integrity <- function(tables, data.path, criteria) {
   
   # Validate path
   
-  validate_path(data.path)
+  EDIutils::validate_path(data.path)
   
   # Message
   
@@ -1139,7 +1173,7 @@ get_foreign_keys <- function(key, table.name, data.path){
   use_i <- str_detect(dir_tables, table_pattern)
   if (sum(use_i) > 0){
     os <- EDIutils::detect_os()
-    sep <- detect_delimeter(path = data.path,
+    sep <- EDIutils::detect_delimeter(path = data.path,
                             data.files = dir_tables[use_i],
                             os = os)
     data_in <- read.table(paste0(data.path, "/", dir_tables[use_i]),
@@ -1169,7 +1203,7 @@ get_primary_keys <- function(key, table.name, data.path){
   use_i <- str_detect(dir_tables, table_pattern)
   if (sum(use_i) > 0){
     os <- EDIutils::detect_os()
-    sep <- detect_delimeter(path = data.path,
+    sep <- EDIutils::detect_delimeter(path = data.path,
                             data.files = dir_tables[use_i],
                             os = os)
     data_in <- read.table(paste0(data.path, "/", dir_tables[use_i]),

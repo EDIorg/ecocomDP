@@ -2,13 +2,17 @@
 % Please edit documentation in R/validate_ecocomDP.R
 \name{validate_ecocomDP}
 \alias{validate_ecocomDP}
-\title{Validate ecocomDP tables}
+\title{validate_ecocomDP}
 \usage{
-validate_ecocomDP(data.path)
+validate_ecocomDP(data.path = NULL, data.list = NULL)
 }
 \arguments{
-\item{data.path}{A character string specifying the path to the directory containing L1
+\item{data.path}{(character) The path to the directory containing L1
 tables.}
+
+\item{data.list}{(list of data frames) A named list of data frames containing the L1
+tables. Data frame tables must be named after the file name from 
+which they were read, including the extension.}
 }
 \value{
 A validation report to the RStudio console window. When an issue is 
