@@ -16,15 +16,16 @@ tables.}
 
 \item{criteria}{(data frame) Validation criteria located in the R package inst directory.}
 
-\item{data.list}{(list of data frames) A list of of data frames with the following 
+\item{data.list}{(list of data frames) A list of of data frames. Use this argument if
+tables are read into the R environment. The list should be of the following 
 structure:
 \itemize{
-    \item \strong{list name} Name of the list object. This can be anything.
+    \item \strong{"list name"} Name of the list object. This can be anything.
     \itemize{
-        \item \strong{L1 table name} i.e. observation, location, taxon, etc.
+        \item \strong{"L1 table name"} i.e. observation, location, taxon, etc.
         \itemize{
-            \item \strong{data} Data frame representation of the L1 table
-            \item \strong{fname} File name the data frame was created from
+            \item \strong{"data"} Data frame representation of the L1 table
+            \item \strong{"fname"} File name the data frame was created from
         }
     }
 }}

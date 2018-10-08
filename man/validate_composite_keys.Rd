@@ -10,7 +10,19 @@ validate_composite_keys(tables, data.path, criteria)
 \item{tables}{(character) Names of valid L1 tables in your dataset working directory.
 Get valid table names with `validate_table_names`.}
 
-\item{data.path}{(character) Path to the directory containing the L1 tables.}
+\item{data.list}{(list of data frames) A list of of data frames. Use this argument if
+tables are read into the R environment. The list should be of the following 
+structure:
+\itemize{
+    \item \strong{"list name"} Name of the list object. This can be anything.
+    \itemize{
+        \item \strong{"L1 table name"} i.e. observation, location, taxon, etc.
+        \itemize{
+            \item \strong{"data"} Data frame representation of the L1 table
+            \item \strong{"fname"} File name the data frame was created from
+        }
+    }
+}}
 
 \item{criteria}{(data frame) Validation criteria located at 
 /inst/validation_criteria.txt.}
