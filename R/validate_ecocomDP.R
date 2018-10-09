@@ -893,6 +893,7 @@ validate_primary_keys <- function(tables, data.list, criteria) {
     
     is_primary_key(x, pk = L1_table_pk, table.name = table.name)
     
+    
   }
   
   use_i <- lapply(tables, prep_primary_key, data.list = data.list, L1.tables = L1_tables)
@@ -1014,7 +1015,7 @@ validate_composite_keys <- function(tables, data.list, criteria) {
                        '\nrevising the variable name to reflect this.'),
                 call. = F
         )
-      } 
+      }
       
     }
     
@@ -1158,14 +1159,17 @@ validate_referential_integrity <- function(tables, data.list, criteria) {
     
   }
   
-  primary_key_values <- mapply(get_primary_keys, key = x$column, table.name = x$table)
+  primary_key_tables <- x$table
   
+  primary_key_values <- mapply(get_primary_keys, key = x$column, table.name = x$table)
+
   # Foreign keys should have a matching primary key
   
   is_foreign_key(fk.tables = foreign_key_tables, 
                  fk.values = foreign_key_values, 
+                 pk.tables = primary_key_tables,
                  pk.values = primary_key_values
-  )
+                 )
   
   # Send validation notice
   
@@ -1182,7 +1186,7 @@ validate_referential_integrity <- function(tables, data.list, criteria) {
 # fk.tables = (character) names of tables containing foreign keys
 # fk.values = (list) values of foreign keys
 # pk.values = (list) values of primary keys
-is_foreign_key <- function(fk.tables, fk.values, pk.values){
+is_foreign_key <- function(fk.tables, fk.values, pk.tables, pk.values){
   
   fk.names <- names(fk.values)
   pk.names <- names(pk.values)
@@ -1220,7 +1224,7 @@ is_foreign_key <- function(fk.tables, fk.values, pk.values){
   }
   
   # Validate event_id
-  
+
   if (sum(fk.names == 'event_id') > 0){
     fk_val <- fk.values[['event_id']]
     fk_val <- fk_val[!is.na(fk_val)] # Remove NA (NAs are allowed)
@@ -1240,10 +1244,16 @@ is_foreign_key <- function(fk.tables, fk.values, pk.values){
     fk.names <- fk.names[!use_i]
   }
   
-  # Validate other foreign keys
+  # Validate variable_names
+  # Aggregate all foreign key variable_names from tables
+  # Match against variable_mappings table content
   
-  other_foreign_keys <- function(fk.table, fk.name, fk.value, pk.value){
-    use_i <- match(fk.value, pk.value)
+  
+  # Validate remaining foreign keys
+  
+  other_foreign_keys <- function(fk.table, fk.name, fk.value){
+    use_i <- seq(length(pk.names))[pk.names == fk.name]
+    use_i <- match(fk.value, pk.values[[use_i]])
     if (sum(is.na(use_i)) > 0){
       stop(paste0('\nThe foreign key:\n',
                   fk.name,
@@ -1258,9 +1268,8 @@ is_foreign_key <- function(fk.tables, fk.values, pk.values){
   mapply(other_foreign_keys, 
          fk.table = fk.tables,
          fk.name = fk.names,
-         fk.value = fk.values,
-         pk.value = pk.values[fk.names]
-  )
+         fk.value = fk.values
+         )
   
 }
 
