@@ -613,30 +613,30 @@ validate_column_presence <- function(tables, data.list, criteria){
 
 
 
-validate_datetime <- function(tables, data.path, criteria){
-  
-  # Validation parameters
-  
-  L1_tables <- criteria$table[
-    ((complete.cases(criteria$column)) & 
-       ((criteria$column == 'datetime') | (criteria$column == 'observation_datetime')))]
-  
-  criteria <- criteria[
-    ((complete.cases(criteria$column)) & 
-       ((criteria$column == 'datetime') | (criteria$column == 'observation_datetime'))), ]
-  
-  # Does datetime format match the standard ?
-  
-  message('Validating datetime format ...')
-  
-  lapply(X = L1_tables, FUN = is_datetime_format, tables = tables, data.path = data.path, criteria = criteria)
-  
-  # Send validation notice
-  
-  message('... datetime format is correct.')
-  
-  
-}
+# validate_datetime <- function(tables, data.list, criteria){
+#   
+#   # Validation parameters
+#   
+#   L1_tables <- criteria$table[
+#     ((complete.cases(criteria$column)) & 
+#        ((criteria$column == 'datetime') | (criteria$column == 'observation_datetime')))]
+#   
+#   criteria <- criteria[
+#     ((complete.cases(criteria$column)) & 
+#        ((criteria$column == 'datetime') | (criteria$column == 'observation_datetime'))), ]
+#   
+#   # Does datetime format match the standard ?
+#   
+#   message('Validating datetime format ...')
+#   
+#   lapply(X = L1_tables, FUN = is_datetime_format, tables = tables, data.path = data.path, criteria = criteria)
+#   
+#   # Send validation notice
+#   
+#   message('... datetime format is correct.')
+#   
+#   
+# }
 
 
 

@@ -10,6 +10,8 @@ tables <- list.files(
 
 data.path <- paste0(path.package('ecocomDP'), '/tests/test_data')
 
+data.list <- lapply(tables, read_ecocomDP_table, data.path = data.path)
+
 criteria <- read.table(
   system.file('validation_criteria.txt', package = 'ecocomDP'),
   header = T,
