@@ -1197,7 +1197,7 @@ is_foreign_key <- function(fk.tables, fk.values, pk.tables, pk.values){
   if (sum(is.na(use_i)) > 0){
     stop(paste0("\n",
                 'These foreign keys:\n',
-                paste(fk.names(is.na(use_i)), collapse = ', '),
+                paste(fk.names[is.na(use_i)], collapse = ', '),
                 '\nare missing primary keys'
     )
     )

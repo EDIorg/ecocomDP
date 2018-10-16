@@ -24,11 +24,20 @@ valid_table_names <- c("Project_name_dataset_summary.csv",
 
 testthat::test_that('Valid tables result in a corresponding list of table names.', {
   
+  table_names_found <- validate_table_names(
+    paste0(path.package('ecocomDP'), '/tests/test_data'),
+    criteria)
+  
+  use_i <- match(valid_table_names, table_names_found)
+  
   expect_equal(
-    validate_table_names(
-      paste0(path.package('ecocomDP'), '/tests/test_data'),
-      criteria),
-    valid_table_names
+    length(use_i) == length(table_names_found),
+    TRUE
+  )
+  
+  expect_equal(
+    (sum(is.na(use_i)) == 0),
+    TRUE
   )
   
 })

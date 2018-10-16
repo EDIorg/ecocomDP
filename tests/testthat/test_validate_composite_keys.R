@@ -22,7 +22,7 @@ names(data.list) <- unlist(lapply(file_names, is_table_rev, L1_table_names))
 # Composite keys are unique ---------------------------------------------------
 
 testthat::test_that('Unique keys result in NULL output.', {
-  expect_warning(
+  expect_message(
     validate_composite_keys(tables = file_names[c(1,2,4,5,6,7,8)],
                                     data.list = data.list,
                                     criteria = criteria)
