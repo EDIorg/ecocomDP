@@ -17,14 +17,17 @@ The raw version of your dataset is what we refer to as Level-0, or L0. The ecoco
 * [Aggregate L1 data](#aggregate-l1-data)
 
 ## Archive the L0 dataset
+[back to top](#contents)
 
 It is a good practice to archive the L0 version of your dataset “as is” before converting it to L1. The L0 may contain information that will be lost from the L1. Create EML metadata for your L0 and upload your data and metadata to the Environmental Data Initiative repository using [the `EMLassemblyline`](https://github.com/EDIorg/EMLassemblyline).
 
 ## Update taxonomy data
+[back to top](#contents)
 
 While you are going through the effort of reformatting a dataset to L1, you may as well update the taxonomic data with authority IDs and taxonomic serial numbers (TSNs) to make the taxonomic information of these datasets relatable. [We've developed the `taxonomyCleanr` R package to help you do this](https://github.com/EDIorg/taxonomyCleanr).
 
 ## Create L1 tables
+[back to top](#contents)
 
 The process of formatting a L0 dataset to L1 is variable and depends on several factors making a scripted solution difficult. However, we have identified some general steps that are helpful to follow in this process and have created some resources to help with this process:
 * [General instructions with notes.](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/table-creation.md).
@@ -33,6 +36,7 @@ The process of formatting a L0 dataset to L1 is variable and depends on several 
 * [Templates to assist in planning a converstion from your L0 data to the L1 ecocomDP.](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/template-mapping.md)
 
 ## Validate L1 tables
+[back to top](#contents)
 
 Once you've created a L0 for your dataset, and before making EML, you will need to ensure the relational tables pass normalization tests as well as checks for required tables, fields, field classes, datetime formats, etc. Validation tests are run by the `validate_ecocomDP` function of the ecocomDP R package.
 
@@ -41,21 +45,26 @@ Run the `validate_ecocomDP` function. Consult function documentation for use.
 Resolve each error encountered in the validation process. If no errors exist, and your L1 is valid, you will receive the message: *"Congratulations! Your ecocomDP has passed validation!"*
 
 ## Define categorical variables of L1 tables
+[back to top](#contents)
 
 After the L1 tables have been validated, you will need to define their categorical variables (e.g. the 'variable_name' field of the 'observation' table is composed of categorical variables that others won't know the meaning of without a supplied definition). Run the `define_variables` function (enter `?define_variables` in the RStudio Console window for instructions) and the code will automatically identify the unique categorical variables in your tables and prompt you to provide 'definitions' and 'units'. If you have no units to report then leave the units field blank.
 
 ## Document
+[back to top](#contents)
 
 After the L1 tables have been validated and categorical variables defined, you can make an EML metadata record for them to complete the data package for upload to the EDI data repository. Before running the `make_eml` function run `import_templates` (enter `?import_templates` in the RStudio console to see required arguments.  Because L1 tables are standardized, the `make_eml` function will generate most of the EML automatically, however you will need to supply some additional information.
 
 ## Archive the L1 dataset
+[back to top](#contents)
 
 Your L1 ecocomDP and associated metadata form a package that may be uploaded to the [EDI data repository](https://portal.edirepository.org/nis/home.jsp). [Follow these instructions](https://environmentaldatainitiative.org/resources/assemble-data-and-metadata/step-4-submit-your-data-package/) to upload your data package.
 
 ## Find L1 data
+[back to top](#contents)
 
 Get a list of all available L1 data with the function `view_all_ecocomDP`. View L1 metadata with `view_landing_page`.
 
 ## Aggregate L1 data
+[back to top](#contents)
 
 Aggregate L1 of interest with the function `aggregate_ecocomDP`.
