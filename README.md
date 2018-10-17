@@ -8,36 +8,28 @@ However, in synthesis research the largest time investment is still in discoveri
 
 _Figure: Abstract view of dataset levels. A flexible intermediate (L1, middle) lies between datasets of primary observations (L0, left) and the aggregated views used by synthesis projects. If datasets are in a recognized format, EDI can create tools for some basic functions_
 
-## Getting Started
+## Contents
 
-### Contents
+### Documentation
 
-#### Documentation
+* [Table descriptions, relationships, and requriements.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/model)
+* [Instructions for creating, validating, packaging, and archiving ecocomDP tables](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions)
+* [List of datasets to be converted to ecocomDP](https://github.com/EDIorg/ecocomDP/tree/master/documentation/processing_queue)
 
-[Table descriptions, relationships, and requriements.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/model)
+### Data
 
-[An example set of ecocomDP tables.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/examples)
+* Datasets converted to ecocomDP:
+    * [Environmental Data Initiative (EDI)](https://portal.edirepository.org:443/nis/simpleSearch?defType=edismax&q=ecocomDP&fq=-scope:ecotrends&fq=-scope:lter-landsat*&fl=id,packageid,title,author,organization,pubdate,coordinates&debug=false) To find all ecocomDP datasets, enter "ecocomDP' in the 'simple search' box in the EDI data repository.
+    * [National Ecological Observatory Network (NEON)](https://github.com/EDIorg/ecocomDP/tree/master/documentation/examples/NEON) Run the function `view_all_ecocomDP` to see which NEON data products are available. The function `view_all_ecocomDP` is available in the ecocomDP R package (more info below).
+    * [Popler](https://github.com/AldoCompagnoni/popler) Approximately 50 datasets from the Popler database are available in the ecocomDP format. Use the function `format_popler_to_ecocomDP` to get Popler data into the ecocomDP format. The function `format_popler_to_ecocomDP` is available for [download through the LTER Meta-communities working group](https://github.com/sokole/ltermetacommunities/blob/master/EDI/format_popler_to_ecocomDP.R).
 
-[Instructions for creating an ecocomDP](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions)
-
-[List of datasets to be converted to ecocomDP.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/processing_queue). This list includeds datasets that have been converted, but is not exhaustive. 
-
-[Datasets converted to ecocomDP, available from EDI](https://portal.edirepository.org:443/nis/simpleSearch?defType=edismax&q=ecocomDP&fq=-scope:ecotrends&fq=-scope:lter-landsat*&fl=id,packageid,title,author,organization,pubdate,coordinates&debug=false) To find all ecocomDP datasets, enter "ecocomDP' in the 'simple search' box in the EDI data repository.
-
-
-#### PostgreSQL
+### PostgreSQL
 
 [A PostgreSQL implementation of ecocomDP can be found here](https://github.com/EDIorg/ecocomDP/tree/master/postgreSQL).
 
-#### R package
+### R package
 
-We're developing an R package to do the following:
-1. Help format a level-0 dataset to the ecocomDP (in development).
-2. Validate tables against the ecocomDP schema (in development).
-3. Make metadata for the ecocomDP tables in the Ecological Metadata Language (EML; completed).
-4. Aggregate all data packages in the ecocomDP format and create/export views (in development). 
-
-The ecocomDP R package is available here on GitHub. Installation requires `devtools`.
+The R package helps create, validate, document, archive, find, and use data in the ecocomDP. The ecocomDP R package is available here on GitHub.
 ```
 # Install and load devtools
 install.packages("devtools")
@@ -47,8 +39,6 @@ library(devtools)
 install_github("EDIorg/ecocomDP")
 library(ecocomDP)
 ```
-
-Instructions for using the `ecocomDP` R package are incorporated in the [instructions for creating an ecocomDP](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions)
 
 ## Running the tests
 
@@ -60,7 +50,7 @@ Community contributions are welcome. Please reference our [code conduct](https:/
 
 ## Versioning
 
-We have not yet versioned this project.
+This project follows the [semantic versioning specification](https://semver.org).
 
 ## Authors
 
