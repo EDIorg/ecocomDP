@@ -1,10 +1,10 @@
 system,identifier_L0 (package ID),identifier_L1 (package ID),creator_L1 (first and last name),"status (underway, complete )","priority (1=high, 2=low)",notes
 knb,knb-csun-usvi.101.4,,,,,metacommunities requested
-edi,knb-lter-arc.10272.4,,,,,metacommunities requested
+edi,knb-lter-arc.10272.4,,Song Qian,underway,,metacommunities requested
 edi,knb-lter-bes.543.170,edi.191.2,Colin Smith,complete,1,Meta-communities requested
-edi,knb-lter-bnz.175.20,,,,,metacommunities requested
-edi,knb-lter-bnz.501.11,,,,,from popler
-edi,knb-lter-bnz.502.9,,,,,from popler
+edi,knb-lter-bnz.175.20,,Song Qian,underway,,metacommunities requested
+edi,knb-lter-bnz.501.11,,Song Qian,underway,,from popler
+edi,knb-lter-bnz.502.9,,Song Qian,underway,,from popler
 edi,knb-lter-bnz.504.7,edi.245.1,Will Rosenthal,underway,,from popler
 edi,knb-lter-cap.41.13,edi.196.1,Will Rosenthal,underway -- complete but not on website,1,CAP recommended
 edi,knb-lter-cap.46.13,,Colin Smith,underway,1,Meta-communities requested
@@ -16,7 +16,7 @@ edi,knb-lter-cap.652.2,edi.205.1,Will Rosenthal,underway -- complete but not on 
 edi,knb-lter-cap.653.2,edi.211.1,Will Rosenthal,underway -- compete but not on website,1,CAP recommended
 edi,knb-lter-cdr.386.5,edi.124.3,Colin Smith,complete,,Meta-communities requested
 edi,knb-lter-fce.1164.6,,,,,metacommunities requested
-edi,knb-lter-gce.109.21,,,,,metacommunities requested
+edi,knb-lter-gce.109.21,,Song Qian,underway,,metacommunities requested
 edi,knb-lter-gce.232.20,,,,,metacommunities requested
 edi,knb-lter-gce.236.20,,,,,metacommunities requested
 edi,knb-lter-gce.292.20,,,,,metacommunities requested
@@ -30,8 +30,8 @@ edi,knb-lter-gce.427.6,,,,,metacommunities requested
 edi,knb-lter-gce.429.6,,,,,metacommunities requested
 edi,knb-lter-gce.434.11,,,,,metacommunities requested
 edi,knb-lter-gce.459.4,,,,,metacommunities requested
-edi,knb-lter-hbr.126,,,,,from popler
-edi,knb-lter-hbr.82,,,,,from popler
+edi,knb-lter-hbr.126,,Song Qian,underway,,from popler
+edi,knb-lter-hbr.82,,Song Qian,underway,,from popler
 edi,knb-lter-hfr.105.18,,,,,from popler
 edi,knb-lter-hfr.106.22,,,,,from popler
 edi,knb-lter-hfr.113.51,,,,,from popler
@@ -52,7 +52,7 @@ edi,knb-lter-jrn.210119001.74,,,,,metacommunities requested
 edi,knb-lter-jrn.210351001.47,,,,,metacommunities requested
 edi,knb-lter-knz.87.4,,,,,metacommunities requested
 edi,knb-lter-knz.88.3,,,,,metacommunities requested
-edi,knb-lter-mcr.1039.6,,,,,from popler
+edi,knb-lter-mcr.1039.6,,Song Qian,underway,,from popler
 edi,knb-lter-mcr.13.15,,,,,from popler
 edi,knb-lter-mcr.20.16,,,,,from popler
 edi,knb-lter-mcr.21.16,,,,,from popler
