@@ -64,7 +64,7 @@ validate_ecocomDP <- function(data.path = NULL, data.list = NULL){
   
   # Load validation criteria
   
-  message("Loading validation criteria")
+  message("Loading validation criteria\n")
   
   criteria <- read.table(
     system.file('validation_criteria.txt', package = 'ecocomDP'),
@@ -92,6 +92,8 @@ validate_ecocomDP <- function(data.path = NULL, data.list = NULL){
     
     names(data.list) <- unlist(lapply(file_names, is_table_rev, L1_table_names))
 
+    data.list
+    
   } else if (!is.null(data.list)){
     
     file_names <- validate_table_names(
@@ -162,8 +164,7 @@ validate_ecocomDP <- function(data.path = NULL, data.list = NULL){
   
   # Validation complete
   
-  message(paste('Congratulations! Your ecocomDP tables have passed validation!\n',
-                'Now make metadata for it with the "make_eml" function.'))
+  message('Congratulations! Your ecocomDP tables have passed validation!\n')
 
 }
 
@@ -265,7 +266,7 @@ validate_table_names <- function(data.path = NULL, criteria, data.list = NULL) {
                  paste(study_names, collapse = ", ")),
            call. = F)
     } else {
-      message('... table names are valid')
+      message('... table names are valid\n')
       tables
     }
     
@@ -387,7 +388,7 @@ validate_table_presence <- function(tables, criteria){
   
   # Send validation notice
   
-  message('... required tables are present')
+  message('... required tables are present\n')
   
 }
 
@@ -490,7 +491,7 @@ validate_column_names <- function(tables, data.list, criteria) {
   
   # Send validation notice
   
-  message('... column names are valid')
+  message('... column names are valid\n')
   
 }
 
@@ -602,7 +603,7 @@ validate_column_presence <- function(tables, data.list, criteria){
   
   # Send validation notice
   
-  message('... required columns are present')
+  message('... required columns are present\n')
   
 }
 
@@ -613,30 +614,30 @@ validate_column_presence <- function(tables, data.list, criteria){
 
 
 
-# validate_datetime <- function(tables, data.list, criteria){
-#   
-#   # Validation parameters
-#   
-#   L1_tables <- criteria$table[
-#     ((complete.cases(criteria$column)) & 
-#        ((criteria$column == 'datetime') | (criteria$column == 'observation_datetime')))]
-#   
-#   criteria <- criteria[
-#     ((complete.cases(criteria$column)) & 
-#        ((criteria$column == 'datetime') | (criteria$column == 'observation_datetime'))), ]
-#   
-#   # Does datetime format match the standard ?
-#   
-#   message('Validating datetime format ...')
-#   
-#   lapply(X = L1_tables, FUN = is_datetime_format, tables = tables, data.path = data.path, criteria = criteria)
-#   
-#   # Send validation notice
-#   
-#   message('... datetime format is correct.')
-#   
-#   
-# }
+validate_datetime <- function(tables, data.list, criteria){
+
+  # Validation parameters
+
+  L1_tables <- criteria$table[
+    ((complete.cases(criteria$column)) &
+       ((criteria$column == 'datetime') | (criteria$column == 'observation_datetime')))]
+
+  criteria <- criteria[
+    ((complete.cases(criteria$column)) &
+       ((criteria$column == 'datetime') | (criteria$column == 'observation_datetime'))), ]
+
+  # Does datetime format match the standard ?
+
+  message('Validating datetime format ...')
+
+  lapply(X = L1_tables, FUN = is_datetime_format, tables = tables, data.path = data.path, criteria = criteria)
+
+  # Send validation notice
+
+  message('... datetime format is correct.')
+
+
+}
 
 
 
@@ -900,7 +901,7 @@ validate_primary_keys <- function(tables, data.list, criteria) {
   
   # Send validation notice
   
-  message('... primary keys are unique.')
+  message('... primary keys are unique\n')
   
 }
 
@@ -1009,8 +1010,7 @@ validate_composite_keys <- function(tables, data.list, criteria) {
         warning(paste0("\n",
                        'This table:\n',
                        table.name,
-                       "\ncontains non-unique composite keys in rows:\n",
-                       paste(use_i, collapse = " "),
+                       "\ncontains non-unique composite keys.",
                        '\nThis may be due to replicate observations. If so, consider',
                        '\nrevising the variable name to reflect this.'),
                 call. = F
@@ -1025,7 +1025,7 @@ validate_composite_keys <- function(tables, data.list, criteria) {
   
   # Send validation notice
   
-  message('... composite keys are unique.')
+  message('... composite keys are unique\n')
   
 }
 
@@ -1119,7 +1119,11 @@ validate_referential_integrity <- function(tables, data.list, criteria) {
     use_i <- str_detect(dir_tables, table_pattern)
     if (sum(use_i) > 0){
       data_in <- data.list[[table.name]][['data']]
-      uni_values <- unique(data_in[ , key])
+      if (key %in% colnames(data_in)){
+        uni_values <- unique(data_in[ , key])
+      } else {
+        uni_values <- NULL
+      }
       uni_values
     } else {
       uni_values <- NULL
@@ -1128,6 +1132,8 @@ validate_referential_integrity <- function(tables, data.list, criteria) {
   }
 
   foreign_key_values <- mapply(get_foreign_keys, key = x$column, table.name = x$table)
+  
+  # is.null(foreign_key_values)
   
   # Get primary key values
   
@@ -1173,7 +1179,7 @@ validate_referential_integrity <- function(tables, data.list, criteria) {
   
   # Send validation notice
   
-  message('... tables have referential integrity.')
+  message('... tables have referential integrity\n')
   
 }
 
@@ -1207,16 +1213,18 @@ is_foreign_key <- function(fk.tables, fk.values, pk.tables, pk.values){
   
   if (sum(fk.names == 'parent_location_id') > 0){
     fk_val <- fk.values[['parent_location_id']]
-    fk_val <- fk_val[!is.na(fk_val)] # Remove NA (NAs are allowed)
-    pk_val <- pk.values[['location_id']]
-    use_i <- is.na(match(fk_val, pk_val))
-    if (sum(use_i) > 0){
-      stop(paste0('\nThe foreign key "parent_location_id"',
-                  '\ncontains values that cannot be found in the primary key',
-                  '\n"location_id" of the location table, specifically\n',
-                  paste(fk_val[use_i], collapse = ', ')
-      )
-      )
+    if (!is.null(fk_val)){
+      fk_val <- fk_val[!is.na(fk_val)] # Remove NA (NAs are allowed)
+      pk_val <- pk.values[['location_id']]
+      use_i <- is.na(match(fk_val, pk_val))
+      if (sum(use_i) > 0){
+        stop(paste0('\nThe foreign key "parent_location_id"',
+                    '\ncontains values that cannot be found in the primary key',
+                    '\n"location_id" of the location table, specifically\n',
+                    paste(fk_val[use_i], collapse = ', ')
+        )
+        )
+      }
     }
     fk.tables <- fk.tables[fk.tables != 'location']
     fk.values <- fk.values[names(fk.values) != 'parent_location_id']
@@ -1229,14 +1237,16 @@ is_foreign_key <- function(fk.tables, fk.values, pk.tables, pk.values){
     fk_val <- fk.values[['event_id']]
     fk_val <- fk_val[!is.na(fk_val)] # Remove NA (NAs are allowed)
     pk_val <- pk.values[['event_id']]
-    use_i <- is.na(match(fk_val, pk_val))
-    if (sum(use_i) > 0){
-      stop(paste0('\nThe foreign key "event_id"',
-                  '\ncontains values that cannot be found in the primary key',
-                  '\n"event_id" of the observation_ancillary table, specifically\n',
-                  paste(fk_val[use_i], collapse = ', ')
-      )
-      )
+    if ((!is.null(pk_val)) & (!is.null(fk_val))){
+      use_i <- is.na(match(fk_val, pk_val))
+      if (sum(use_i) > 0){
+        stop(paste0('\nThe foreign key "event_id"',
+                    '\ncontains values that cannot be found in the primary key',
+                    '\n"event_id" of the observation_ancillary table, specifically\n',
+                    paste(fk_val[use_i], collapse = ', ')
+        )
+        )
+      }
     }
     use_i <- fk.names == 'event_id'
     fk.tables <- fk.tables[!use_i]
@@ -1309,6 +1319,7 @@ fnames_from_list <- function(n, i, lis){
 
 
 is_primary_key <- function(x, pk, table.name){
+  
   if (!isTRUE(length(unique(x[ , pk])) == nrow(x))){
     
     use_i <- seq(nrow(x))[duplicated(x[ , pk])]
@@ -1317,7 +1328,9 @@ is_primary_key <- function(x, pk, table.name){
                 'This table:\n',
                 table.name,
                 "\ncontains non-unique primary keys in rows:\n",
-                paste(use_i, collapse = " ")),
+                paste(use_i, collapse = " "),
+                "\nof this column:\n",
+                pk),
          call. = F
     )
   }
