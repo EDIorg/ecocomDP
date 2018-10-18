@@ -10,8 +10,6 @@ tables <- list.files(
 
 data.path <- paste0(path.package('ecocomDP'), '/tests/test_data')
 
-data.list <- lapply(tables, read_ecocomDP_table, data.path = data.path)
-
 criteria <- read.table(
   system.file('validation_criteria.txt', package = 'ecocomDP'),
   header = T,
@@ -19,29 +17,55 @@ criteria <- read.table(
   as.is = T,
   na.strings = "NA")
 
+L1_table_names <- criteria$table[is.na(criteria$column)]
+
+data.list <- lapply(tables, read_ecocomDP_table, data.path = data.path)
+names(data.list) <- unlist(lapply(tables, is_table_rev, L1_table_names))
+
 criteria_2 <- criteria[
   ((complete.cases(criteria$column)) & 
      ((criteria$column == 'datetime') | (criteria$column == 'observation_datetime'))), ]
 
-# Datetime format is not correct ----------------------------------------------
+# Datetime format is invalid --------------------------------------------------
 
-# Test data contains invalid datetime formats
-
-testthat::test_that('Invalid datetime formats result in error (check sub-function).', {
+testthat::test_that('Invalid datetime formats result in error.', {
   expect_error(
     is_datetime_format(
-      table.name = tables[2], 
-      data.path = data.path,
+      L1.table = criteria_2$table[2],
+      tables = 'Project_name_location_ancillary.csv', 
+      data.list = data.list,
       criteria = criteria_2
       )
   )
 })
 
-testthat::test_that('Invalid datetime formats result in error.', {
-  expect_error(
+# Datetime format is valid ----------------------------------------------------
+
+# Fix datetime issues in location_ancillary
+
+x <- data.list$location_ancillary$data$datetime
+x <- EDIutils::datetime_to_iso8601(
+  x = x,
+  orders = c('ymd', 'dmy')
+  )
+data.list$location_ancillary$data$datetime <- x
+
+# Fix datetime issues in observation
+
+x <- data.list$observation$data$observation_datetime
+x <- EDIutils::datetime_to_iso8601(
+  x = x,
+  orders = c('ymd', 'dmy')
+)
+data.list$observation$data$observation_datetime <- x
+
+# Expect message
+
+testthat::test_that('Valid datetime formats result in message.', {
+  expect_message(
     validate_datetime(
-      tables = tables, 
-      data.path = data.path,
+      tables = tables,
+      data.list = data.list,
       criteria = criteria
     )
   )

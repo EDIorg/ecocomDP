@@ -126,13 +126,13 @@ validate_ecocomDP <- function(data.path = NULL, data.list = NULL){
     criteria = criteria
   )
   
-  # # Validate datetime format
-  # 
-  # validate_datetime(
-  #   tables = table_names,
-  #   data.path = data.path,
-  #   criteria = criteria
-  #   )
+  # Validate datetime format
+
+  validate_datetime(
+    tables = file_names,
+    data.list = data.list,
+    criteria = criteria
+    )
   
   # Validate column classes
   
@@ -615,7 +615,7 @@ validate_column_presence <- function(tables, data.list, criteria){
 
 
 validate_datetime <- function(tables, data.list, criteria){
-
+  
   # Validation parameters
 
   L1_tables <- criteria$table[
@@ -630,11 +630,11 @@ validate_datetime <- function(tables, data.list, criteria){
 
   message('Validating datetime format ...')
 
-  lapply(X = L1_tables, FUN = is_datetime_format, tables = tables, data.path = data.path, criteria = criteria)
+  lapply(X = L1_tables, FUN = is_datetime_format, tables = tables, data.list = data.list, criteria = criteria)
 
   # Send validation notice
 
-  message('... datetime format is correct.')
+  message('... datetime format is correct\n')
 
 
 }
@@ -1345,9 +1345,9 @@ is_primary_key <- function(x, pk, table.name){
 
 
 
-is_datetime_format <- function(L1.table, tables, data.path, criteria) {
+is_datetime_format <- function(L1.table, tables, data.list, criteria) {
   
-  # Get L1 name and name of composite key columns
+  # Get names of L1 table and datetime column
   
   L1_table_found <- is_table(L1.table = L1.table, table.name = tables)
   L1_table_ck <- criteria$column[criteria$table == L1_table_found]
@@ -1356,33 +1356,27 @@ is_datetime_format <- function(L1.table, tables, data.path, criteria) {
     
     table.name <- tables[str_detect(tables, paste0(L1_table_found, '\\b'))]
     
-    # Read input file
+    # Read datetime vector
     
-    os <- EDIutils::detect_os()
-    sep <- EDIutils::detect_delimeter(path = data.path,
-                                      data.files = table.name,
-                                      os = os)
-    x <- read.table(paste0(data.path, "/", table.name),
-                    header = T,
-                    sep = sep,
-                    as.is = T,
-                    quote = "\"",
-                    comment.char = "")
+    x <- data.list[[L1_table_found]][['data']][ ,L1_table_ck]
     
-    # Is datetime format correct?
-    # Read in vector & remove NA
-    # Coerce to datetime standard (YYYY-MM-DD hh:mm:ss)
-    # Check for NAs
+    # Count NA of input data
     
-    raw_datetime <- x[ , L1_table_ck]
-    raw_datetime <- raw_datetime[!is.na(raw_datetime)]
-    con_datetime <- suppressWarnings(lubridate::ymd_hms(raw_datetime))
-    if (sum(is.na(con_datetime)) > 0){
+    n_na_raw <- sum(is.na(x))
+    
+    # Count NA of datetimes read as YYYY-MM-DDThh:mm:ss
+    
+    n_na_con <- suppressWarnings(sum(is.na(lubridate::ymd_hms(x))))
+    
+    if (n_na_con > n_na_raw){
+      use_i <- seq(length(x))[suppressWarnings(is.na(lubridate::ymd_hms(x)))]
       stop(paste0("\n",
                   'This table:\n',
                   table.name,
                   "\ncontains an unsupported datetime formats.",
-                  '\nThe format should be "YYYY-MM-DD hh:mm:ss".'),
+                  '\nThe format should be "YYYY-MM-DDThh:mm:ss".',
+                  '\nUnsupported datetime formats occur in rows:\n',
+                  paste(use_i, collapse = ' ')),
            call. = F
       )
     }
