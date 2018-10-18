@@ -1225,11 +1225,11 @@ compile_attributes <- function(path, delimiter){
     
     # Read attributes_draft table
     
-    df_attributes <- read.table(paste(path.package("ecocomDP"),
-                                      "/attributes_",
-                                      table_names[i],
-                                      ".txt",
-                                      sep = ""),
+    df_attributes <- read.table(system.file(paste0('/attributes_',
+                                                   table_names[i],
+                                                   '.txt'
+                                                   ),
+                                            package = 'ecocomDP'),
                                 header = T,
                                 sep = "\t",
                                 as.is = T,

@@ -1356,30 +1356,35 @@ is_datetime_format <- function(L1.table, tables, data.list, criteria) {
     
     table.name <- tables[str_detect(tables, paste0(L1_table_found, '\\b'))]
     
-    # Read datetime vector
-    
-    x <- data.list[[L1_table_found]][['data']][ ,L1_table_ck]
-    
-    # Count NA of input data
-    
-    n_na_raw <- sum(is.na(x))
-    
-    # Count NA of datetimes read as YYYY-MM-DDThh:mm:ss
-    
-    n_na_con <- suppressWarnings(sum(is.na(lubridate::ymd_hms(x))))
-    
-    if (n_na_con > n_na_raw){
-      use_i <- seq(length(x))[suppressWarnings(is.na(lubridate::ymd_hms(x)))]
-      stop(paste0("\n",
-                  'This table:\n',
-                  table.name,
-                  "\ncontains an unsupported datetime formats.",
-                  '\nThe format should be "YYYY-MM-DDThh:mm:ss".',
-                  '\nUnsupported datetime formats occur in rows:\n',
-                  paste(use_i, collapse = ' ')),
-           call. = F
-      )
+    if (L1_table_ck %in% colnames(data.list[[L1_table_found]][['data']])){
+      
+      # Read datetime vector
+      
+      x <- data.list[[L1_table_found]][['data']][ ,L1_table_ck]
+      
+      # Count NA of input data
+      
+      n_na_raw <- sum(is.na(x))
+      
+      # Count NA of datetimes read as YYYY-MM-DDThh:mm:ss
+      
+      n_na_con <- suppressWarnings(sum(is.na(lubridate::ymd_hms(x))))
+      
+      if (n_na_con > n_na_raw){
+        use_i <- seq(length(x))[suppressWarnings(is.na(lubridate::ymd_hms(x)))]
+        stop(paste0("\n",
+                    'This table:\n',
+                    table.name,
+                    "\ncontains an unsupported datetime formats.",
+                    '\nThe format should be "YYYY-MM-DDThh:mm:ss".',
+                    '\nUnsupported datetime formats occur in rows:\n',
+                    paste(use_i, collapse = ' ')),
+             call. = F
+        )
+      }
+      
     }
+    
   }
   
 }
