@@ -14,7 +14,7 @@ taxon	authority_system	character	no	no	no	no
 taxon	authority_taxon_id	character	no	no	no	no
 observation	NA	NA	yes	NA	NA	NA
 observation	observation_id	character	yes	yes	no	no
-observation	event_id	character	yes	no	yes	no
+observation	event_id	character	yes	no	no	no
 observation	package_id	character	yes	no	yes	no
 observation	location_id	character	yes	no	yes	no
 observation	observation_datetime	Date	yes	no	no	no
@@ -39,7 +39,7 @@ taxon_ancillary	unit	character	no	no	no	no
 taxon_ancillary	author	character	no	no	no	no
 observation_ancillary	NA	NA	no	NA	NA	NA
 observation_ancillary	observation_ancillary_id	character	yes	yes	no	no
-observation_ancillary	event_id	character	yes	yes	no	yes
+observation_ancillary	event_id	character	yes	no	no	yes
 observation_ancillary	variable_name	character	yes	no	no	yes
 observation_ancillary	value	character	no	no	no	no
 observation_ancillary	unit	character	no	no	no	no
