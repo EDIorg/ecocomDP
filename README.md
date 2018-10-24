@@ -13,7 +13,7 @@ _Figure: Abstract view of dataset levels. A flexible intermediate (L1, middle) l
 ### Documentation
 
 * [Table descriptions, relationships, and requriements.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/model)
-* [Instructions for creating, validating, packaging, and archiving ecocomDP tables](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions)
+* [Instructions for creating, validating, and archiving ecocomDP tables](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions)
 * [List of datasets to be converted to ecocomDP](https://github.com/EDIorg/ecocomDP/tree/master/documentation/processing_queue)
 
 ### Data
