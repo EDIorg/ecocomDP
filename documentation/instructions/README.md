@@ -6,7 +6,7 @@ The raw version of your dataset is what we refer to as Level-0, or L0. The ecoco
 
 ### Contents:
 
-* [Archive the L0 dataset](#archive-the-l0-dataset)
+* [Archive L0 data](#archive-l0-data)
 * [Create L1 tables](#create-l1-tables)
 * [Validate L1 tables](#validate-l1-tables)
 * [Define categorical variables of L1 tables](#define-categorical-variables-of-l1-tables)
@@ -15,7 +15,7 @@ The raw version of your dataset is what we refer to as Level-0, or L0. The ecoco
 * [Find L1 data](#find-l1-data)
 * [Aggregate L1 data](#aggregate-l1-data)
 
-## Archive the L0 dataset
+## Archive L0 data
 [back to top](#contents)
 
 If the L0 dataset you are converting isn't already archived in the EDI Data Repository, you should consider archiving it “as is” before converting it to L1. Often the L0 format is easier to update with new data and is of a format that best suits a projects needs. Archive the L0 by creating EML metadata with the [`EMLassemblyline`](https://github.com/EDIorg/EMLassemblyline), then upload the data and metadata to EDI. Uploading requires a user account. Contact EDI to get an account (info@environmentaldatainitiative.org).
