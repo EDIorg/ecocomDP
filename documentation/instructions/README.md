@@ -23,11 +23,15 @@ If the L0 dataset you are converting isn't already archived in the EDI Data Repo
 ## Create L1 tables
 [back to top](#contents)
 
-The process of formatting a L0 dataset to L1 is variable and depends on several factors making a scripted solution difficult. However, we have identified some general steps that are helpful to follow in this process and have created some resources to help with this process:
+The process of converting L0 to L1 should be fully scripted to enable future updates to the L1 when the L0 is updated. The preferred scripting language is R, but other languages are acceptable. This conversion script will be archived with the L1 tables and called upon to revise L1 data when L0 updates occur. The automated maintenance of L1 datasets is managed by EDI.
+
+__Resources to help create L1 tables:__
+* [Detailed descriptions of the L1 ecocomDP tables and their relationships.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/model) - Familiarize yourself with the L1 data pattern before attempting conversion. There are several details that you should be aware of, including required and non-required tables and columns, as well as column class restrictions and date-time format expectations.
+* [Example L1 data package](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.247.2) - This is a good example of an L1 data package. The metadata is composed of L0 content, and new L1 content. This example contains a set of L1 tables and the conversion script that created these tables.
+* [Example conversion script](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.247.2) - Within the above listed data package is the conversion script that created the tables (conversion_cap652.r). This script reads in the L0 data and metadata from the EDI Data Repository, applies a series of transformations, and outputs the L1 tables. The function only requires 3 arguments: (1) The path to where the L1 tables will be exported, (2) The L0 package ID, (3) The L1 package ID. Your conversion script should only require these arguments as well.
 * [General instructions with notes.](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/table-creation.md).
-* [Detailed descriptions of the L1 ecocomDP tables and their relationships.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/model)
-* [Measurement vocabularies to assist in creation of the variable_mapping table](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/measurement_vocabularies.md)
 * [Templates to assist in planning a converstion from your L0 data to the L1 ecocomDP.](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/template-mapping.md)
+* [Measurement vocabularies to assist in creation of the variable_mapping table](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/measurement_vocabularies.md)
 
 ## Validate L1 tables
 [back to top](#contents)
