@@ -7,7 +7,6 @@ The raw version of your dataset is what we refer to as Level-0, or L0. The ecoco
 ### Contents:
 
 * [Archive the L0 dataset](#archive-the-l0-dataset)
-* [Update taxonomy data](#update-taxonomy-data)
 * [Create L1 tables](#create-l1-tables)
 * [Validate L1 tables](#validate-l1-tables)
 * [Define categorical variables of L1 tables](#define-categorical-variables-of-l1-tables)
@@ -20,11 +19,6 @@ The raw version of your dataset is what we refer to as Level-0, or L0. The ecoco
 [back to top](#contents)
 
 If the L0 dataset you are converting isn't already archived in the EDI Data Repository, you should consider archiving it “as is” before converting it to L1. Often the L0 format is easier to update with new data and is of a format that best suits a projects needs. Archive the L0 by creating EML metadata with the [`EMLassemblyline`](https://github.com/EDIorg/EMLassemblyline), then upload the data and metadata to EDI. Uploading requires a user account. Contact EDI to get an account (info@environmentaldatainitiative.org).
-
-## Update taxonomy data
-[back to top](#contents)
-
-While you are going through the effort of reformatting a dataset to L1, you may as well update the taxonomic data with authority IDs and taxonomic serial numbers (TSNs) to make the taxonomic information of these datasets relatable. [We've developed the `taxonomyCleanr` R package to help you do this](https://github.com/EDIorg/taxonomyCleanr).
 
 ## Create L1 tables
 [back to top](#contents)
