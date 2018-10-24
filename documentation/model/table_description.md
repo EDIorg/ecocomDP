@@ -1,4 +1,4 @@
-# Design Pattern - ecocomDP 
+# Table descriptions, relationships, and requirements
 
 Introduction
 ---
