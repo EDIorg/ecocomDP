@@ -69,7 +69,7 @@ Columns
 | event_id             | character |yes|(table = observation_ancillary) event_id    | The ID of the sampling event, required if observation_ancillary table is included   | 2009mar03_dive1      |
 | package_id           | character |yes|(table = summary) package_id   	| The ID of this data package  	| edi.100001.1   	|
 | location_id | character |yes| (table = location) location_id |  A reference to a location	|  sbc_ABUR_1 	|
-| observation_datetime | datetime  |yes|   	|Date and time of the observation, following the ISO 8601 standard format YYYY-MM-DDThh:mm+-hh (indcluding offset to UTC) to the precision of datetime data| 2017-08-01 or 2017-08-01T14:01-07  	|
+| observation_datetime | datetime  |yes|   	|Date and time of the observation following the ISO 8601 standard format [see here for details](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/datetime.md)| 2017-08-01, 2017-08-01T14:01-07, etc.  	|
 | taxon_id             | character |yes| (table = taxon) taxon_id  	| reference to a taxon ID  	| sbclter_MAPY   	|
 | variable_name        | character |yes|   	| name of the variable measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  kelp_density  	|
 | value                | float     |yes|   	| value for the variable  	| 7  	|
@@ -85,7 +85,7 @@ Columns
 |---------------|---------|-----------------------|-------------------|-------------|---------| 
 |location_ancillary_id | character |yes|          |   Identifier of the sampling location ancillary.	|   	|
 |location_id           | character |yes|(table = location) location_id   	| Id of the location for reference	| sbclter_ABUR_1  	|
-|datetime              | datetime  |no |          | date and time of the ancillary info, ISO datetime (indcluding offset to UTC)	|  experimental treatment date 	| 
+|datetime              | datetime  |no |          | Date and time of ancillary info following the ISO 8601 standard format [see here for details](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/datetime.md)	|  experimental treatment date 	| 
 |variable_name         | character |yes|   	      |  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList) 	| treatment  	|
 |value                 | character |yes|   	      |  value for the variable 	| kelp removal  	|
 |unit                  | character |no |   	      |  unit for this variable 	|   	|
@@ -102,7 +102,7 @@ Columns
 |---------------|---------|-----------------------|-------------------|--------------|---------|     
 | taxon_ancillary_id | character |yes|            | a unique id for this record  	|   	|
 | taxon_id           | character |yes| (table = taxon) taxon_id   	|  The ID of the taxon table. 	|   	|
-| datetime           | datetime |no|            | date and time of the ancillary info, ISO datetime (indcluding offset to UTC) 	|   	|
+| datetime           | datetime |no|            | Date and time of the ancillary info following the ISO 8601 standard format [see here for details](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/datetime.md) 	|   	|
 | variable_name      | character |yes|            |  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  trophic_level 	|
 | value              | character |yes|            |  value for the variable 	|   primary producer	|
 | unit               | character |no |            | unit for this variable  	|   	|
