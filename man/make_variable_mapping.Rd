@@ -4,40 +4,33 @@
 \alias{make_variable_mapping}
 \title{Make variable_mapping table}
 \usage{
-make_location(x, cols = c('site', 'nested_level_1', 'nested_level_2', 
-    'etc.', kml = NULL, col = NULL))
+make_variable_mapping(observation, location, taxon, dataset_summary,
+    observation_ancillary = NULL, location_ancillary = NULL, taxon_ancillary = NULL)
 }
 \arguments{
-\item{x}{A data frame containing sampling location names (in columns) for each 
-observation (rows).}
+\item{observation}{(data frame) The completed observation table.}
 
-\item{cols}{A list of columns in x containing sampling location data. The list 
-order should reflect the hierarchical arrangement of sampling locations.
-E.g.: If 'site' is the coarsest level of observation, 'habitat' is 
-nested within 'site', 'transect' is nested within 'habitat', and 
-'quadrat' is nested within 'transect' then the 'cols' argument should
-be supplied as:
+\item{location}{(data frame) The completed location table.}
 
-cols = c('site', 'habitat','transect', 'quadrat')}
+\item{taxon}{(data frame) The completed taxon table.}
 
-\item{kml}{A data object (simple feature collection) created with the `st_read``
-function of the `sf`` (simple features) R package. This data object
-contains a field called 'Name'. Values listed in this field must match
-the corresponding values listed in the data frame (x) and specified in
-'cols'.}
+\item{dataset_summary}{(data frame) The completed dataset_summary table.}
 
-\item{col}{A character string indicating the column name specified in the input
-argument 'cols' to which the data in the kml object corresponds to.
-E.g., if the kml corresponds with with the column named 'site' then
-enter 'site' for the col argument.}
+\item{observation_ancillary}{(data frame) The completed observation_ancillary table.}
+
+\item{location_ancillary}{(data frame) The completed location_ancillary table.}
+
+\item{taxon_ancillary}{(data frame) The completed taxon_ancillary table.}
 }
 \value{
-A data frame of the location table.
+A data frame of the variable_mapping with completed columns:
+    \itemize{
+        \item{variable_mapping_id}
+        \item{table_name}
+        \item{variable_name}
+    }
+    Other columns are filled with NA.
 }
 \description{
-Make a data frame of the location table.
-}
-\note{
-The arguments 'kml' and 'col' only accept single inputs. I.e. does 
-    not support kml data for more than one col.
+Make a data frame of the variable mapping table.
 }
