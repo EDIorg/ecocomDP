@@ -26,18 +26,18 @@ criteria_2 <- criteria[
   ((complete.cases(criteria$column)) & 
      ((criteria$column == 'datetime') | (criteria$column == 'observation_datetime'))), ]
 
-# Datetime format is invalid --------------------------------------------------
-
-testthat::test_that('Invalid datetime formats result in error.', {
-  expect_error(
-    is_datetime_format(
-      L1.table = criteria_2$table[2],
-      tables = 'Project_name_location_ancillary.csv', 
-      data.list = data.list,
-      criteria = criteria_2
-      )
-  )
-})
+# # Datetime format is invalid --------------------------------------------------
+# 
+# testthat::test_that('Invalid datetime formats result in error.', {
+#   expect_error(
+#     is_datetime_format(
+#       L1.table = criteria_2$table[2],
+#       tables = 'Project_name_location_ancillary.csv', 
+#       data.list = data.list,
+#       criteria = criteria_2
+#       )
+#   )
+# })
 
 # Datetime format is valid ----------------------------------------------------
 

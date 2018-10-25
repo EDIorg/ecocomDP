@@ -1368,7 +1368,13 @@ is_datetime_format <- function(L1.table, tables, data.list, criteria) {
       
       # Count NA of datetimes read as YYYY-MM-DDThh:mm:ss
       
-      n_na_con <- suppressWarnings(sum(is.na(lubridate::ymd_hms(x))))
+      n_na_con <- suppressWarnings(
+        sum(
+          is.na(
+            EDIutils::iso8601_to_datetime(x)
+            )
+          )
+        )
       
       if (n_na_con > n_na_raw){
         use_i <- seq(length(x))[suppressWarnings(is.na(lubridate::ymd_hms(x)))]
