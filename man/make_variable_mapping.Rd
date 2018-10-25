@@ -4,17 +4,11 @@
 \alias{make_variable_mapping}
 \title{Make variable_mapping table}
 \usage{
-make_variable_mapping(observation, location, taxon, dataset_summary,
-    observation_ancillary = NULL, location_ancillary = NULL, taxon_ancillary = NULL)
+make_variable_mapping(observation, observation_ancillary = NULL, 
+    location_ancillary = NULL, taxon_ancillary = NULL)
 }
 \arguments{
 \item{observation}{(data frame) The completed observation table.}
-
-\item{location}{(data frame) The completed location table.}
-
-\item{taxon}{(data frame) The completed taxon table.}
-
-\item{dataset_summary}{(data frame) The completed dataset_summary table.}
 
 \item{observation_ancillary}{(data frame) The completed observation_ancillary table.}
 

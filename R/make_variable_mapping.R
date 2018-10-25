@@ -4,17 +4,11 @@
 #'     Make a data frame of the variable mapping table.
 #'
 #' @usage 
-#'     make_variable_mapping(observation, location, taxon, dataset_summary,
-#'     observation_ancillary = NULL, location_ancillary = NULL, taxon_ancillary = NULL)
+#'     make_variable_mapping(observation, observation_ancillary = NULL, 
+#'     location_ancillary = NULL, taxon_ancillary = NULL)
 #'
 #' @param observation
 #'     (data frame) The completed observation table.
-#' @param location
-#'     (data frame) The completed location table.
-#' @param taxon
-#'     (data frame) The completed taxon table.
-#' @param dataset_summary
-#'     (data frame) The completed dataset_summary table.
 #' @param observation_ancillary
 #'     (data frame) The completed observation_ancillary table.
 #' @param location_ancillary
@@ -34,22 +28,13 @@
 #' @export
 #'
 
-make_variable_mapping <- function(observation, location, taxon, dataset_summary, 
-                                  observation_ancillary = NULL, location_ancillary = NULL, taxon_ancillary = NULL){
+make_variable_mapping <- function(observation, observation_ancillary = NULL, 
+                                  location_ancillary = NULL, taxon_ancillary = NULL){
   
   # Check arguments -----------------------------------------------------------
   
   if (missing(observation)){
     stop('Input argument "observation" is missing!')
-  }
-  if (missing(location)){
-    stop('Input argument "location" is missing!')
-  }
-  if (missing(taxon)){
-    stop('Input argument "taxon" is missing!')
-  }
-  if (missing(dataset_summary)){
-    stop('Input argument "dataset_summary" is missing!')
   }
   
   # Get unique variables from tables ------------------------------------------
