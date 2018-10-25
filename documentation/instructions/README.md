@@ -9,9 +9,8 @@ The raw version of your dataset is what we refer to as Level-0, or L0. The ecoco
 * [Archive L0 data](#archive-l0-data)
 * [Create L1 tables](#create-l1-tables)
 * [Validate L1 tables](#validate-l1-tables)
-* [Define categorical variables of L1 tables](#define-categorical-variables-of-l1-tables)
-* [Document](#document)
-* [Archive the L1 dataset](#archive-the-l1-dataset)
+* [Create L1 metadata](#create-l1-metadata)
+* [Archive L1 data](#archive-l1-data)
 * [Find L1 data](#find-l1-data)
 * [Aggregate L1 data](#aggregate-l1-data)
 
@@ -29,8 +28,7 @@ __Resources to help create L1 tables:__
 * [Detailed descriptions of the L1 ecocomDP tables and their relationships.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/model) - Familiarize yourself with the L1 data pattern before attempting conversion. There are several details that you should be aware of, including required and non-required tables and columns, as well as column class restrictions and date-time format expectations.
 * [Example L1 data package](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.247.2) - This is a good example of an L1 data package. The metadata is composed of L0 content, and new L1 content. This example contains a set of L1 tables and the conversion script that created these tables.
 * [Example conversion script](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.247.2) - Within the above listed data package is the conversion script that created the tables (conversion_cap652.r). This script reads in the L0 data and metadata from the EDI Data Repository, applies a series of transformations, and outputs the L1 tables. The function only requires 3 arguments: (1) The path to where the L1 tables will be exported, (2) The L0 package ID, (3) The L1 package ID. __Your conversion script should only require these arguments as well.__
-* [General instructions with notes.](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/table-creation.md).
-* [Templates to assist in planning a converstion from your L0 data to the L1 ecocomDP.](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/template-mapping.md)
+* [Guide to creating tables](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/table-creation.md) - Includes general recommendations for the order in which tables should be created, notes on table content, and functions from the `ecocomDP` R package that help create tables.
 * [Measurement vocabularies to assist in creation of the variable_mapping table](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/measurement_vocabularies.md)
 
 ## Validate L1 tables
@@ -42,17 +40,12 @@ Run the `validate_ecocomDP` function. Consult function documentation for use.
 
 Resolve each error encountered in the validation process. If no errors exist, and your L1 is valid, you will receive the message: *"Congratulations! Your ecocomDP has passed validation!"*
 
-## Define categorical variables of L1 tables
-[back to top](#contents)
-
-After the L1 tables have been validated, you will need to define their categorical variables (e.g. the 'variable_name' field of the 'observation' table is composed of categorical variables that others won't know the meaning of without a supplied definition). Run the `define_variables` function (enter `?define_variables` in the RStudio Console window for instructions) and the code will automatically identify the unique categorical variables in your tables and prompt you to provide 'definitions' and 'units'. If you have no units to report then leave the units field blank.
-
-## Document
+## Create L1 metadata
 [back to top](#contents)
 
 After the L1 tables have been validated and categorical variables defined, you can make an EML metadata record for them to complete the data package for upload to the EDI data repository. Before running the `make_eml` function run `import_templates` (enter `?import_templates` in the RStudio console to see required arguments.  Because L1 tables are standardized, the `make_eml` function will generate most of the EML automatically, however you will need to supply some additional information.
 
-## Archive the L1 dataset
+## Archive L1 data
 [back to top](#contents)
 
 Your L1 ecocomDP and associated metadata form a package that may be uploaded to the [EDI data repository](https://portal.edirepository.org/nis/home.jsp). [Follow these instructions](https://environmentaldatainitiative.org/resources/assemble-data-and-metadata/step-4-submit-your-data-package/) to upload your data package.
