@@ -66,94 +66,128 @@
 #'
 
 
-define_variables <- function(data.path, sep) {
+define_variables <- function(data.path, data.list = NULL, parent.pkg.id){
   
-  # Check arguments
+  criteria <- read.table(
+    system.file('validation_criteria.txt', package = 'ecocomDP'),
+    header = T,
+    sep = "\t",
+    as.is = T,
+    na.strings = "NA")
   
-  if (missing(data.path)){
-    stop("Specify path to dataset working directory.")
-  }
-  if (missing(sep)){
-    stop("Specify field separator.")
-  }
+  L1_table_names <- criteria$table[is.na(criteria$column)]
   
+  file_names <- suppressMessages(
+    validate_table_names(
+      data.path = data.path,
+      criteria = criteria
+    )
+  )
   
-  # Parameters ----------------------------------------------------------------
+  data.list <- lapply(file_names, read_ecocomDP_table, data.path = data.path)
   
-  table_patterns <- c("observation\\b", "observation_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b", "location\\b","location_ancillary\\b", "taxon\\b")
-  table_names <- c("observation", "observation_ancillary", "taxon_ancillary", "dataset_summary", "location", "location_ancillary", "taxon")
-  dir_files <- list.files(data.path)
-  table_names_found <- list()
-  tables_found <- list()
-  for (i in 1:length(table_patterns)){
-    tables_found[[i]] <- dir_files[grep(paste("^(?=.*", table_patterns[i], ")(?!.*variables)", sep = ""), dir_files, perl=TRUE)]
-    if (!identical(tables_found[[i]], character(0))){
-      table_names_found[[i]] <- table_names[i]
-    }
-  }
-  tables_found <- unlist(tables_found)
-  table_names <- unlist(table_names_found)
+  names(data.list) <- unlist(lapply(file_names, is_table_rev, L1_table_names))
   
-  # Begin function ------------------------------------------------------------
-
-  # Issue warning
-
-  answer <- readline(
-    "Are you sure you want to build new variable tables? This will overwrite your previous work! (y or n):  ")
+  cat_vars <- ecocomDP::make_variable_mapping(
+    observation = data.list$observation$data,
+    observation_ancillary = data.list$observation_ancillary$data,
+    taxon_ancillary = data.list$taxon_ancillary$data,
+    location_ancillary = data.list$location_ancillary
+  )[ , c('variable_name', 'table_name')]
   
-  if (answer == "y"){
+  cat_vars$attributeName <- rep('variable_name', nrow(cat_vars))
+  cat_vars$definition <- NA_character_
+  cat_vars$unit <- NA_character_
+  
+  cat_vars <- dplyr::select(
+    cat_vars,
+    table_name,
+    attributeName,
+    variable_name,
+    definition,
+    unit)
+  
+  colnames(cat_vars) <- c(
+    'tableName',
+    'attributeName',
+    'code', 
+    'definition', 
+    'unit'
+  )
+  
+  # Parse variable metadata into cat_vars object
+  
+  for (i in 1:nrow(cat_vars)){
     
-    print("Custom units template copied to working directory.")
+    var_metadata <- get_var_metadata(
+      var.name = cat_vars$code[i],
+      pkg.id = parent.pkg.id
+    )
     
-    write_catvars <- function(tables_found, sep, table_names){
-      tables_out <- list()
-      for (i in 1:length(tables_found)){
-        if ((table_names[i] == "observation")|(table_names[i] == "observation_ancillary")|(table_names[i] == "location_ancillary")|(table_names[i] == "taxon_ancillary")){
-          print(paste("Reading", tables_found[i]))
-          data_in <- read.table(paste(data.path,
-                                      "/",
-                                      tables_found[i],
-                                      sep = ""),
-                                header = T,
-                                sep = sep,
-                                as.is = T,
-                                na.strings = "NA")
-          # Build the catvars table
-          print("Identifying categorical variables ...")
-          univars <- unique(data_in[["variable_name"]])
-          catvars <- data.frame(attributeName = character(length(univars)),
-                                code = character(length(univars)),
-                                definition = character(length(univars)),
-                                units = character(length(univars)),
-                                stringsAsFactors = F)
-          catvars[["attributeName"]] <- rep("variable_name", length(univars))
-          catvars[["code"]] <- univars
-          # Write catvars table
-          print(paste("Writing ", table_names[i], "_variables", ".txt", sep = ""))
-          write.table(catvars,
-                      paste(data.path,
-                            "/",
-                            table_names[i],
-                            "_variables",
-                            ".txt",
-                            sep = ""),
-                      sep = "\t",
-                      row.names = F,
-                      quote = F,
-                      fileEncoding = "UTF-8") 
-          tables_out[[i]] <- table_names[i]
-        }
-      }
-      # Prompt the user to manually edit the catvars file and custom unit files.
-      tables_out <- unlist(tables_out)
-      print("Open:")
-      for (i in 1:length(tables_out)){
-        print(paste(tables_out[i], "_variables", ".txt", sep = ""))
-      }
-      print(paste("add definitions and units then save, and close.",sep = ""))
-      view_unit_dictionary()
-    }
-    write_catvars(tables_found, sep, table_names)
+    cat_vars[i, c('definition', 'unit')] <- unlist(var_metadata)[c('definition', 'unit')]
+    
   }
+  
+  # Get definitions from L0 metadata
+  # Inputs:
+  # var.name = (character) variable name
+  # pkg.id = (character) EDI data package ID (e.g. knb-lter-cap.627.7)
+  # Outputs:
+  # Definition, unit
+  get_var_metadata <- function(var.name, pkg.id){
+    scope <- unlist(stringr::str_split(pkg.id, '\\.'))[1]
+    identifier <- unlist(stringr::str_split(pkg.id, '\\.'))[2]
+    revision <- unlist(stringr::str_split(pkg.id, '\\.'))[3]
+    metadata <- xmlParse(paste("http://pasta.lternet.edu/package/metadata/eml",
+                               "/",
+                               scope,
+                               "/",
+                               identifier,
+                               "/",
+                               revision,
+                               sep = ""))
+    entity_names <- unlist(
+      xmlApply(metadata["//dataset/dataTable/entityName"],
+               xmlValue)
+    )
+    
+    for (i in 1:length(entity_names)){
+      definition <- unlist(
+        try(xmlApply(
+          metadata[
+            paste0("//dataTable[./entityName = '",
+                   entity_names[i],
+                   "']//attribute[./attributeName = '",
+                   var.name,
+                   "']//attributeDefinition")],
+          xmlValue
+        ), silent = TRUE)
+      )
+      unit <- unlist(
+        try(xmlApply(
+          metadata[
+            paste0("//dataTable[./entityName = '",
+                   entity_names[i],
+                   "']//attribute[./attributeName = '",
+                   var.name,
+                   "']//standardUnit")],
+          xmlValue
+        ), silent = TRUE)
+      )
+      if (!is.character(definition)){
+        definition <- NA_character_
+      }
+      if (!is.character(unit)){
+        unit <- NA_character_
+      }
+    }
+    
+    list(
+      name = var.name,
+      definition = definition,
+      unit = unit
+    )
+    
+  }
+  
 }
-
