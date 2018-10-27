@@ -3,6 +3,7 @@
 %   R/validate_ecocomDP.R
 \name{validate_table_names}
 \alias{validate_table_names}
+\alias{validate_table_names}
 \title{Load validation criteria}
 \usage{
 load_validation_criteria(data.path)
