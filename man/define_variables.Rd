@@ -4,67 +4,36 @@
 \alias{define_variables}
 \title{Define ecocomDP variables}
 \usage{
-define_variables(data.path = "", sep = "")
+define_variables(data.path, parent.pkg.id)
 }
 \arguments{
-\item{data.path}{A character string specifying a path to the dataset working directory 
-containing ecocomDP tables.}
+\item{data.path}{(character) Path to ecocomDP tables.}
 
-\item{sep}{The field separator string. Values within each row of ecocomDP tables
-are separated by this string. Valid options are "," or "\\t".}
+\item{parent.pkg.id}{(character) ID of parent data package from which the ecocomDP tables
+were created. The data package must be stored in the Environmental Data 
+Initiative repository. Example data package ID: knb-lter-cap.627.3}
 }
 \value{
-A tab delimited UTF-8 file in the dataset working directory titled 
-    \emph{ecocomDPtablename_variables.txt} with fields:
+(data frame) A data frame with columns:
     \itemize{
-        \item \strong{attributeName} Name of the variable field from the
-        an ecocomDP table.
-        \item \strong{code} Unique variable names detected in an ecocomDP 
-        table.
-        \item \strong{definition} A field for users to supply definitions 
-        for variables listed in the code field.
-        \item \strong{units} A field for users to supply the units for each 
-        defined variable.
+        \item{tableName} Name of ecocomDP table containing the variable.
+        \item{attributeName} Name of the column in ecocomDP tables 
+        containing the variable.
+        \item{code} Name of the variable listed in the ecocomDP tables.
+        \item{definition} Definition of the varible, if found in the parent
+        metadata.
+        \item{unit} Unit of the variable, if found in the parent metadata.  
     }
 }
 \description{
-This function identifies unique variables listed in the ecocomDP tables
-    and writes them to tables for you to provide definitions and units for.
+Get variable definitions and units from the parent data package EML 
+    metadata.
 }
 \details{
-Run this function after you have created and validated ecocomDP tables but
-    prior to create EML with \code{make_eml}. 
-
-    Variables of ecocomDP tables are stored in long format. Use 
-    \code{define_variables} to identify unique variables and assign 
-    definitions and associated units.
-    
-    Refer to the standard unit dictionary when selecting units. Open the 
-    standard unit dictionary by calling \code{view_unit_dictionary}. Search 
-    for a unit and enter the value listed in the \emph{name} field of the 
-    dictionary into the \emph{units} field of 
-    \emph{ecocomDPtablename_variables.txt}. NOTE these values are case 
-    sensitive. If you cannot find the unit you are looking for, enter the 
-    unit in the tab delimited UTF-8 formatted file \emph{custom_units.txt} 
-    that is imported into your dataset working directory when calling 
-    \code{import_templates}. Valid custom units must be convertible to SI 
-    Units (i.e. International System of Units). If it cannot be converted to
-    SI then list it in the units field as "dimensionless". To create a 
-    custom unit define the:
-    \itemize{
-        \item \strong{id} This is equivalent to the unit name. Reference 
-        the standard unit dictionary formatting
-        \item \strong{unitType} The type of unit being defined.
-        Reference the dictionary for examples.
-        \item \strong{parentSI} The SI equivalent of the id you have entered.
-        \item \strong{multiplierToSI} This is the multiplier to convert 
-        from your custom unit to the SI unit equivalent.
-        \item \strong{description} A description of the custom unit. 
-        Reference the dictionary for examples.
-        }
-}
-\seealso{
-\code{\link{import_templates}} to import ecocomDP templates.
-
-\code{\link{make_eml}} to make EML for an ecocomDP.
+Extract unique variables listed in the "variable_name" column fromm
+    all ecocomDP tables, then look up the variable names in the parent
+    data package EML record and output in a data frame for user supply to 
+    `make_eml`. When a variable name can't be found in the parent package
+    EML, the definition is assigned a value of NA. NOTE: Some variables 
+    don't have units.
 }
