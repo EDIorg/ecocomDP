@@ -7,7 +7,7 @@
 make_eml(data.path = "", code.path = "", eml.path = "", 
     parent.package.id = "", child.package.id = "", sep = "", user.id = "", 
     affiliation = "", intellectual.rights = "", access.url = "",
-    datetime.format = "", code.file.extension = "")
+    code.file.extension = "")
 }
 \arguments{
 \item{data.path}{A character string specifying the path to the dataset working directory 
@@ -37,6 +37,9 @@ child.package.id then query EDI for one
 \item{sep}{The field separator string. Values within each row of ecocomDP tables
 are separated by this string. Valid options are "," or "\\t".}
 
+\item{cat.vars}{(data frame) Categorical variables, definitions, and units. Create 
+"cat.vars" with the `define_variables` function.}
+
 \item{user.id}{A character string specifying the LTER or EDI ID of person publishing 
 the ecocomDP data package (e.g. "EDI"). If you don't have a user ID then 
 query EDI for one (info@environmentaldatainitiative.org).}
@@ -61,30 +64,6 @@ URL of a table that has a URL of
 https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride/gleon_chloride_concentrations.csv
 has a base URL of 
 https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride.}
-
-\item{datetime.format}{A character string specifying the date time format 
- string used throughout your ecocomDP tables. 
- Valid date time formats are a combination of date, time, and time 
- zone strings.
-     \itemize{
-         \item \strong{Date format strings:} YYYY-MM-DD; where YYYY is year, MM is 
-         month, DD is day of month.
-         \item \strong{Time format strings:} hh:mm:ss.sss, hhmmss.sss,
-         hh:mm:ss, hhmmss, hh:mm, hhmm, hh; where hh is hour (in 24 hr
-         clock), mm is minute, ss is second, and ss.sss is decimal 
-         second.
-         \item\strong{Time zone format strings:} Z, +hh:mm, +hhmm, +hh,
-         -hh:mm, -hhmm, -hh; where Z (capitalized) is Coordinated 
-         Universal Time, and + and - denote times ahead and behind UTC
-         respectively.
-     }
-If reporting a date without time, use the date format 
-string. If reporting a date and time, select the date and one time 
-format string and combine with a single space (e.g. 
-YYYY-MM-DD hh:mm) or with a "T" (e.g. YYYY-MM-DDThh:mm). If 
-reporting a date and time, it is recommended that a time zone 
-specifier be appended without a space (e.g. YYYY-MM-DD hh:mm-hh:mm, 
-or YYYY-MM-DDThh:mm-hh:mm).}
 
 \item{code.file.extension}{A character string specifying the extension of the processing script(s) 
 used to create this ecocomDP. For example, enter ".R" if the processing script(s)

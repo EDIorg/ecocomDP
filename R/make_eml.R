@@ -7,7 +7,7 @@
 #'     make_eml(data.path = "", code.path = "", eml.path = "", 
 #'     parent.package.id = "", child.package.id = "", sep = "", user.id = "", 
 #'     affiliation = "", intellectual.rights = "", access.url = "",
-#'     datetime.format = "", code.file.extension = "")
+#'     code.file.extension = "")
 #'
 #' @param data.path 
 #'     A character string specifying the path to the dataset working directory 
@@ -36,6 +36,9 @@
 #' @param sep
 #'     The field separator string. Values within each row of ecocomDP tables
 #'     are separated by this string. Valid options are "," or "\\t".
+#' @param cat.vars
+#'     (data frame) Categorical variables, definitions, and units. Create 
+#'     "cat.vars" with the `define_variables` function.
 #' @param user.id
 #'     A character string specifying the LTER or EDI ID of person publishing 
 #'     the ecocomDP data package (e.g. "EDI"). If you don't have a user ID then 
@@ -61,30 +64,6 @@
 #'     https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride/gleon_chloride_concentrations.csv
 #'     has a base URL of 
 #'     https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride.
-#' @param datetime.format 
-#'     A character string specifying the date time format 
-#'     string used throughout your ecocomDP tables. 
-#'     Valid date time formats are a combination of date, time, and time 
-#'     zone strings.
-#'         \itemize{
-#'             \item \strong{Date format strings:} YYYY-MM-DD; where YYYY is year, MM is 
-#'             month, DD is day of month.
-#'             \item \strong{Time format strings:} hh:mm:ss.sss, hhmmss.sss,
-#'             hh:mm:ss, hhmmss, hh:mm, hhmm, hh; where hh is hour (in 24 hr
-#'             clock), mm is minute, ss is second, and ss.sss is decimal 
-#'             second.
-#'             \item\strong{Time zone format strings:} Z, +hh:mm, +hhmm, +hh,
-#'             -hh:mm, -hhmm, -hh; where Z (capitalized) is Coordinated 
-#'             Universal Time, and + and - denote times ahead and behind UTC
-#'             respectively.
-#'         }
-#'    If reporting a date without time, use the date format 
-#'    string. If reporting a date and time, select the date and one time 
-#'    format string and combine with a single space (e.g. 
-#'    YYYY-MM-DD hh:mm) or with a "T" (e.g. YYYY-MM-DDThh:mm). If 
-#'    reporting a date and time, it is recommended that a time zone 
-#'    specifier be appended without a space (e.g. YYYY-MM-DD hh:mm-hh:mm, 
-#'    or YYYY-MM-DDThh:mm-hh:mm).
 #' @param code.file.extension
 #'    A character string specifying the extension of the processing script(s) 
 #'    used to create this ecocomDP. For example, enter ".R" if the processing script(s)
@@ -154,8 +133,8 @@
 
 
 make_eml <- function(data.path, code.path, eml.path, parent.package.id, 
-                     child.package.id, sep, user.id, affiliation, 
-                     intellectual.rights, access.url, datetime.format, 
+                     child.package.id, sep, cat.vars, user.id, affiliation, 
+                     intellectual.rights, access.url, 
                      code.file.extension){
   
   # Check arguments and input requirements ------------------------------------
@@ -175,6 +154,9 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   if (missing(sep)){
     stop("Specify the field delimiter of the ecocomDP tables.")
   }
+  if (missing(cat.vars)){
+    stop('Input argument "cat.vars" not found. Create cat.vars with the define_variables function.')
+  }
   if (missing(user.id)){
     stop("Specify a user ID for the data package. Default to 'EDI' if unknown")
   }
@@ -190,9 +172,7 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   # if (missing(intellectual.rights)){
   #   int.rts <- "no change"
   # }
-  if (missing(datetime.format)){
-    stop("Specify a datetime format used throughout tables of this ecocomDP.")
-  }
+  
   if (missing(code.file.extension)){
     stop("Specify the code file extension.")
   }
@@ -288,14 +268,9 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
     os <- "win"
   }
   
-  # Compile attributes and add datetime.format string
+  # Compile attributes
 
   attributes_in <- compile_attributes(path = data.path, delimiter = sep)
-  
-  for (i in 1:length(attributes_in[[1]])){
-    use_i <- attributes_in[[1]][[i]]$columnClasses == "Date"
-    attributes_in[[1]][[i]]$formatString[use_i] <- datetime.format
-  }
   
   # Initialize data entity storage (tables)
 
@@ -653,22 +628,24 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
       as.is=TRUE,
       comment.char = "")
 
+    # Define datetime format string
+    
+    if (sum(use_i <- attributes_in[[1]][[i]]$columnClasses == "Date") > 0){
+      use_i <- attributes_in[[1]][[i]]$columnClasses == "Date"
+      colname <- attributes_in[[1]][[i]]$attributeName[use_i]
+      datetime_format <- EDIutils::get_datetime_format(df_table[ , colname])
+      attributes_in[[1]][[i]]$formatString[use_i] <- datetime_format
+    }
+
     # Read catvars file
 
-    catvar <- grep(paste(table_names[i], "_variables.txt", sep = ""), dir_files, value = T)
+    use_i <- table_names[i] == cat.vars$tableName
+    catvars <- cat.vars[
+      table_names[i] == cat.vars$tableName, 
+      c('attributeName', 'code', 'definition', 'unit')
+      ]
     
-    if (!identical(catvar, character(0))){
-
-      catvars <- read.table(
-        paste(
-          data.path,
-          "/",
-          catvar, sep = ""),
-        header=TRUE,
-        sep="\t",
-        quote="\"",
-        as.is=TRUE,
-        comment.char = "")
+    if (nrow(catvars) > 0){
 
       if (dim(catvars)[1] > 0){
 
