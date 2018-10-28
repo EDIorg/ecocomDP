@@ -423,12 +423,12 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   
   message("Adding to <keywordSet>")
   
-  keywords <- read.table(paste(path.package("ecocomDP"),
-                               "/controlled_vocabulary.csv",
-                               sep = ""),
-                         sep = ",",
-                         header = T,
-                         as.is = T)
+  keywords <- read.table(
+    system.file('/controlled_vocabulary.csv', package = 'ecocomDP'),
+    header = T,
+    sep = ",",
+    as.is = T,
+    na.strings = "NA")
   
   list_keywordSet <- xml_in@dataset@keywordSet
   
@@ -461,16 +461,12 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
     if (intellectual.rights == "CC0"){
       message("Changing <intellectualRights> to CC0")
       xml_in@dataset@intellectualRights <- as(
-        set_TextType(paste(path.package("ecocomDP"),
-                           "/intellectual_rights_cc0_1.txt",
-                           sep = "")),
+        set_TextType(system.file('intellectual_rights_cc0_1.txt', package = 'ecocomDP')),
         "intellectualRights")
     } else if (intellectual.rights == "CCBY"){
       message("Changing <intellectualRights> to CCBY")
       xml_in@dataset@intellectualRights <- as(
-        set_TextType(paste(path.package("ecocomDP"),
-                           "/intellectual_rights_by_4.0.txt",
-                           sep = "")),
+        set_TextType(system.file('intellectual_rights_by_4.0.txt', package = 'ecocomDP')),
         "intellectualRights")
     }
   }
@@ -479,134 +475,63 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   
   message('Adding provenance to <methodStep>')
   
-  additional_provenance_file <- paste(data.path,
-                                      "/",
-                                      "additional_provenance.txt",
-                                      sep = "")
+  # Import provenance from PASTA, and remove creator and contact ID's to prevent
+  # ID clashes.
   
-  if (file.exists(additional_provenance_file)){
-    
-    # Check for file content
-    
-    additional_provenance <- read.table(additional_provenance_file,
-                                        header=TRUE,
-                                        sep = "\t",
-                                        quote="\"",
-                                        as.is=TRUE,
-                                        comment.char = "",
-                                        fill = T)
-    ncol_expected <- ncol(additional_provenance)
-    
-    ncol_found <- ncol(as.data.frame(additional_provenance[,colSums(is.na(additional_provenance))<nrow(additional_provenance)]))
-    
-    if (ncol_found == ncol_expected){
-      
-      message("Adding provenance from additional_provenance.txt")
-      
-      # provenance <- read_eml(additional_provenance_file)
-      # 
-      # methods_step <- xml_in@dataset@methods@methodStep
-      # 
-      # methods_step[[length(methods_step)+1]] <- provenance
-      # 
-      # xml_in@dataset@methods@methodStep <- methods_step
-      
-    } else {
-      
-      # Import provenance from PASTA (identical to below)
-      
-      provenance <- read_eml(paste("https://pasta.lternet.edu/package/provenance/eml",
-                                   "/",
-                                   pkg_prts[1],
-                                   "/",
-                                   identifier,
-                                   "/",
-                                   revision,
-                                   sep = ""))
-      
-      additional_metadata <- read.table(paste(path.package("ecocomDP"),
-                                              "/additional_provenance.txt",
-                                              sep = ""),
-                                        header = T,
-                                        sep = "\t",
-                                        as.is = T,
-                                        na.strings = "NA")
-      
-      provenance@description <- as(
-        set_TextType(text = additional_provenance$methodDescription),
-        "description")
-      
-      methods_step <- xml_in@dataset@methods@methodStep
-      
-      methods_step[[length(methods_step)+1]] <- provenance
-      
-      xml_in@dataset@methods@methodStep <- methods_step
-      
-    }
-    
-  } else {
-    
-    # Import provenance from PASTA, and remove creator and contact ID's to prevent
-    # ID clashes.
-    
-    provenance <- read_xml(paste("https://pasta.lternet.edu/package/provenance/eml",
-                                 "/",
-                                 pkg_prts[1],
-                                 "/",
-                                 identifier,
-                                 "/",
-                                 revision,
-                                 sep = ""))
-    
-    additional_metadata <- read.table(paste(path.package("ecocomDP"),
-                                            "/additional_provenance.txt",
-                                            sep = ""),
-                                      header = T,
-                                      sep = "\t",
-                                      as.is = T,
-                                      na.strings = "NA")
-    
-    # Remove IDs from creator and contact
-    
-    xml2::xml_set_attr(
-      xml2::xml_find_all(provenance, './/dataSource/creator'),
-      'id', NULL
+  provenance <- read_xml(paste("https://pasta.lternet.edu/package/provenance/eml",
+                               "/",
+                               pkg_prts[1],
+                               "/",
+                               identifier,
+                               "/",
+                               revision,
+                               sep = ""))
+  
+  additional_provenance <- read.table(system.file('additional_provenance.txt', package = 'ecocomDP'),
+                                    header = T,
+                                    sep = "\t",
+                                    as.is = T,
+                                    na.strings = "NA")
+  
+  # Remove IDs from creator and contact
+  
+  xml2::xml_set_attr(
+    xml2::xml_find_all(provenance, './/dataSource/creator'),
+    'id', NULL
+  )
+  
+  xml2::xml_set_attr(
+    xml2::xml_find_all(provenance, './/dataSource/contact'),
+    'id', NULL
+  )
+  
+  # Write to data.path
+  
+  xml2::write_xml(
+    provenance,
+    paste0(data.path,
+           '/provenance_metadata.xml')
+  )
+  
+  # Read provenance file and add to L0 EML
+  
+  provenance <- read_eml(paste0(data.path, '/provenance_metadata.xml'))
+  
+  provenance@description <- as(
+    set_TextType(text = additional_provenance$methodDescription),
+    "description")
+  
+  methods_step <- xml_in@dataset@methods@methodStep
+  
+  methods_step[[length(methods_step)+1]] <- provenance
+  
+  xml_in@dataset@methods@methodStep <- methods_step
+  
+  # Delete provenance_metadata.xml (a temporary file)
+  
+  file.remove(
+    paste0(data.path, '/provenance_metadata.xml')
     )
-    
-    xml2::xml_set_attr(
-      xml2::xml_find_all(provenance, './/dataSource/contact'),
-      'id', NULL
-    )
-    
-    # Write to data.path
-    
-    xml2::write_xml(
-      provenance,
-      paste0(data.path,
-             '/provenance_metadata.xml')
-    )
-    
-    # Read provenance file and add to L0 EML
-    
-    provenance <- read_eml(paste0(data.path, '/provenance_metadata.xml'))
-    
-    provenance@description <- as(
-      set_TextType(text = additional_provenance$methodDescription),
-      "description")
-    
-    methods_step <- xml_in@dataset@methods@methodStep
-    
-    methods_step[[length(methods_step)+1]] <- provenance
-    
-    xml_in@dataset@methods@methodStep <- methods_step
-    
-    # Delete provenance_metadata.xml (a temporary file)
-    
-    file.remove(
-      paste0(data.path, '/provenance_metadata.xml')
-      )
-    
-  }
 
   # Make EML for ecocomDP tables  ---------------------------------------------
 
