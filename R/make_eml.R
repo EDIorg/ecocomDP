@@ -648,19 +648,27 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
 
     }
 
+    # Get file end of line character
+    
+    eol <- EDIutils::get_eol(
+      path = data.path,
+      file.name = tables_found[i],
+      os = EDIutils::detect_os()
+      )
+    
     # Set physical
 
     if (sep == "\t"){
       physical <- set_physical(tables_found[i],
                                numHeaderLines = "1",
-                               recordDelimiter = "\\r\\n",
+                               recordDelimiter = eol,
                                attributeOrientation = "column",
                                fieldDelimiter = "\\t",
                                quoteCharacter = "\"")
     } else if (sep == ","){
       physical <- set_physical(tables_found[i],
                                numHeaderLines = "1",
-                               recordDelimiter = "\\r\\n",
+                               recordDelimiter = eol,
                                attributeOrientation = "column",
                                fieldDelimiter = ",",
                                quoteCharacter = "\"")
