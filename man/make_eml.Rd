@@ -38,7 +38,9 @@ child.package.id then query EDI for one
 are separated by this string. Valid options are "," or "\\t".}
 
 \item{cat.vars}{(data frame) Categorical variables, definitions, and units. Create 
-"cat.vars" with the `define_variables` function.}
+"cat.vars" with the `define_variables` function. Variables that can't be 
+defined by the parent package EML should be manually defined by editing 
+this object after it is created.}
 
 \item{user.id}{A character string specifying the LTER or EDI ID of person publishing 
 the ecocomDP data package (e.g. "EDI"). If you don't have a user ID then 

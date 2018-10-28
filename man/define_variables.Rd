@@ -34,6 +34,9 @@ Extract unique variables listed in the "variable_name" column fromm
     all ecocomDP tables, then look up the variable names in the parent
     data package EML record and output in a data frame for user supply to 
     `make_eml`. When a variable name can't be found in the parent package
-    EML, the definition is assigned a value of NA. NOTE: Some variables 
-    don't have units.
+    EML, the definition is assigned a value of NA.
+}
+\note{
+Variables that can't be defined by the parent package EML should be 
+    manually defined by editing this object after it is created.
 }
