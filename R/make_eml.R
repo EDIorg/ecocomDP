@@ -568,15 +568,6 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
       as.is=TRUE,
       comment.char = "")
 
-    # Define datetime format string
-    
-    if (sum(use_i <- attributes_in[[1]][[i]]$columnClasses == "Date") > 0){
-      use_i <- attributes_in[[1]][[i]]$columnClasses == "Date"
-      colname <- attributes_in[[1]][[i]]$attributeName[use_i]
-      datetime_format <- EDIutils::get_datetime_format(df_table[ , colname])
-      attributes_in[[1]][[i]]$formatString[use_i] <- datetime_format
-    }
-
     # Read catvars file
 
     use_i <- table_names[i] == cat.vars$tableName
@@ -1271,6 +1262,21 @@ compile_attributes <- function(path, delimiter){
     if (length(use_i) > 0){
       attributes$definition[use_i] <- attributes$attributeDefinition[use_i]
     }
+    
+    # Define datetime format string. Remove datetime column if empty (i.e. NA).
+    
+    if (sum(use_i <- attributes$columnClasses == "Date") > 0){
+      use_i <- attributes$columnClasses == "Date"
+      colname <- attributes$attributeName[use_i]
+      if (sum(is.na(df_table[ , colname])) == nrow(df_table)){
+        attributes <- attributes[!use_i, ]
+      } else {
+        datetime_format <- EDIutils::get_datetime_format(df_table[ , colname])
+        attributes$formatString[use_i] <- datetime_format
+      }
+    }
+    
+    # Store attributes
     
     attributes_stored[[i]] <- attributes
     
