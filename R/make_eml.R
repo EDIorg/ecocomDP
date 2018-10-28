@@ -71,6 +71,16 @@
 #'    used to create this ecocomDP. For example, enter ".R" if the processing script(s)
 #'    are written in the R, or enter ".py" if the processing script(s) are
 #'    written in Python.
+#' @param additional.contact
+#'    (data frame) Contact information for creator of the script that converts
+#'    the parent data package to the ecocomDP. The data frame must have these
+#'    columns:
+#'    \itemize{
+#'        \item{givenName}
+#'        \item{surName}
+#'        \item{organizationName}
+#'        \item{electronicMailAddress}
+#'    }
 #'
 #' @return 
 #'     An EML metadata file written to the location specified by 
@@ -137,7 +147,7 @@
 make_eml <- function(data.path, code.path, eml.path, parent.package.id, 
                      child.package.id, sep, cat.vars, user.id, affiliation, 
                      intellectual.rights, access.url, 
-                     code.file.extension){
+                     code.file.extension, additional.contact = NULL){
   
   # Check arguments and input requirements ------------------------------------
 
@@ -174,10 +184,17 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   # if (missing(intellectual.rights)){
   #   int.rts <- "no change"
   # }
-  
   if (missing(code.file.extension)){
     stop("Specify the code file extension.")
   }
+  if (!is.null(additional.contact)){
+    use_i <- match(colnames(additional.contact), c('givenName', 'surName', 'organizationName', 'electronicMailAddress'))
+    if (sum(is.na(use_i)) > 0){
+      stop('The data frame "additional.contact" does not have the required columns. Check column presence and spelling.')
+    }
+  }
+  
+  
   
   # Validate arguments --------------------------------------------------------
   
@@ -371,34 +388,30 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   
   # Modify eml-contact
   
-  message("Adding to <contact>")
-  
-  personinfo <- read.table(paste(data.path,
-                                 "/additional_contact.txt",
-                                 sep = ""),
-                           header = T,
-                           sep = "\t",
-                           as.is = T,
-                           na.strings = "NA")
-  
-  if (nrow(personinfo) >= 1){
+  if (!missing(additional.contact)){
     
-    individualName <- new(
-      "individualName",
-      givenName = trimws(personinfo["givenName"]),
-      surName = trimws(personinfo["surName"]))
+    message("Adding to <contact>")
     
-    contact <- new(
-      "contact",
-      individualName = individualName,
-      organizationName = trimws(personinfo[["organizationName"]]),
-      electronicMailAddress = trimws(personinfo[["electronicMailAddress"]]))
+    personinfo <- additional.contact
     
-    xml_in@dataset@contact[[length(xml_in@dataset@contact)+1]] <- contact
+    if (nrow(personinfo) >= 1){
+      
+      individualName <- new(
+        "individualName",
+        givenName = trimws(personinfo["givenName"]),
+        surName = trimws(personinfo["surName"]))
+      
+      contact <- new(
+        "contact",
+        individualName = individualName,
+        organizationName = trimws(personinfo[["organizationName"]]),
+        electronicMailAddress = trimws(personinfo[["electronicMailAddress"]]))
+      
+      xml_in@dataset@contact[[length(xml_in@dataset@contact)+1]] <- contact
+      
+    }
     
   }
-  
-  
 
   # Modify eml-pubDate
 

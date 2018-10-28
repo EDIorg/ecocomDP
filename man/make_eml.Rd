@@ -71,6 +71,16 @@ https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride.}
 used to create this ecocomDP. For example, enter ".R" if the processing script(s)
 are written in the R, or enter ".py" if the processing script(s) are
 written in Python.}
+
+\item{additional.contact}{(data frame) Contact information for creator of the script that converts
+the parent data package to the ecocomDP. The data frame must have these
+columns:
+\itemize{
+    \item{givenName}
+    \item{surName}
+    \item{organizationName}
+    \item{electronicMailAddress}
+}}
 }
 \value{
 An EML metadata file written to the location specified by 
