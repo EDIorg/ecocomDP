@@ -39,7 +39,7 @@ Columns
 | latitude 	  |  float 	|   	no                  |   NA |Latitude in decimal degrees. Latitudes south of the equator are negative.|  34.400275	|
 | longitude 	|  float 	|   	no                  |   NA |Longitude in decimal degrees. Longitudes west of the prime meridian are negative.| -119.7445915 |
 | elevation	  |  float 	|   	np                  |   NA |Sampling location elevation in meters relative to sea level. Above sea level is positive. Below sea level is negative.| -15	|
-| parent_location_id	|  character | no  	|   NA| Sampling location identifier from this table for the parent of this sampling location. Presence indicates nested locations.	|  sbclter_abur	|
+| parent_location_id	|  character | no  	|   NA| Sampling location identifier from this table for the parent of this sampling location. Presence indicates nested locations.	|  sbclter_abur_I	|
 
 
 Table: taxon
