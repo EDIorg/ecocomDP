@@ -27,7 +27,7 @@ Depends:
 Imports: 
 Remotes: 
     github::NeonScience/NEON-utilities/neonUtilities,
-    github::EDIorg/EDI-utilities/EDIutils
+    github::EDIorg/EDIutils
 Suggests:
     knitr,
     rmarkdown,
