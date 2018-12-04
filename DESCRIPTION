@@ -22,12 +22,12 @@ Depends:
     readr (>= 1.1.1),
     RMySQL (>= 0.10.15),
     xml2 (>= 1.1.1),
-    EDIutils (>= 0.0.0.9000),
     XML (>= 3.98-1.6)
 Imports: 
 Remotes: 
     github::NeonScience/NEON-utilities/neonUtilities,
     github::EDIorg/EDIutils
+    github::EDIorg/dataCleanr
 Suggests:
     knitr,
     rmarkdown,

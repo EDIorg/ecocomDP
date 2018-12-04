@@ -1371,7 +1371,7 @@ is_datetime_format <- function(L1.table, tables, data.list, criteria) {
       n_na_con <- suppressWarnings(
         sum(
           is.na(
-            EDIutils::iso8601_to_datetime(x)
+            dataCleanr::iso8601_char(x)
             )
           )
         )
