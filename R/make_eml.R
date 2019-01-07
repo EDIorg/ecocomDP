@@ -145,7 +145,7 @@
 
 
 make_eml <- function(data.path, code.path, eml.path, parent.package.id, 
-                     child.package.id, sep, cat.vars, user.id, affiliation, 
+                     child.package.id, sep, cat.vars = NULL, user.id, affiliation, 
                      intellectual.rights, access.url, 
                      code.file.extension, additional.contact = NULL){
   
@@ -166,9 +166,9 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   if (missing(sep)){
     stop("Specify the field delimiter of the ecocomDP tables.")
   }
-  if (missing(cat.vars)){
-    stop('Input argument "cat.vars" not found. Create cat.vars with the define_variables function.')
-  }
+  # if (missing(cat.vars)){
+  #   stop('Input argument "cat.vars" not found. Create cat.vars with the define_variables function.')
+  # }
   if (missing(user.id)){
     stop("Specify a user ID for the data package. Default to 'EDI' if unknown")
   }
@@ -569,14 +569,24 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
       comment.char = "")
 
     # Read catvars file
-
-    use_i <- table_names[i] == cat.vars$tableName
-    catvars <- cat.vars[
-      table_names[i] == cat.vars$tableName, 
-      c('attributeName', 'code', 'definition', 'unit')
-      ]
     
-    if (nrow(catvars) > 0){
+    if (sum(str_detect(paste0(table_names[i], "_variables.txt"), dir_files)) > 0){
+      catvars <- read.table(
+        paste0(data.path, '/', table_names[i], '_variables.txt'),
+        header = TRUE,
+        sep = '\t',
+        quote = '\"',
+        as.is = TRUE,
+        comment.char = '')
+    } else if (!is.null(cat.vars)) {
+      use_i <- table_names[i] == cat.vars$tableName
+      catvars <- cat.vars[
+        table_names[i] == cat.vars$tableName, 
+        c('attributeName', 'code', 'definition', 'unit')
+        ]
+    }
+    
+    if (exists('catvars') & (nrow(catvars) > 0)){
 
       if (dim(catvars)[1] > 0){
 
@@ -1279,7 +1289,7 @@ compile_attributes <- function(path, delimiter){
       if (sum(is.na(df_table[ , colname])) == nrow(df_table)){
         attributes <- attributes[!use_i, ]
       } else {
-        datetime_format <- EDIutils::get_datetime_format(df_table[ , colname])
+        datetime_format <- dataCleanr::iso8601_format(df_table[ , colname])
         attributes$formatString[use_i] <- datetime_format
       }
     }
