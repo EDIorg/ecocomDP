@@ -106,6 +106,10 @@ define_variables <- function(data.path, parent.pkg.id){
   
   cat_vars[ , c('definition', 'unit')] <- var_metadata[ , c('definition', 'unit')]
   
+  use_i <- stringr::str_detect(cat_vars$definition, 'Error in UseMethod')
+  cat_vars[use_i , c('definition', 'unit')] <- NA_character_
+  
+  
   # Return --------------------------------------------------------------------
   
   cat_vars
