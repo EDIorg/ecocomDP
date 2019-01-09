@@ -1318,7 +1318,7 @@ compile_attributes <- function(path, delimiter){
       use_i <- attributes$columnClasses == "Date"
       colname <- attributes$attributeName[use_i]
       if (sum(is.na(df_table[ , colname])) == nrow(df_table)){
-        attributes <- attributes[!use_i, ]
+        attributes$formatString[use_i] <- 'YYYY'
       } else {
         datetime_format <- dataCleanr::iso8601_format(df_table[ , colname])
         attributes$formatString[use_i] <- datetime_format
