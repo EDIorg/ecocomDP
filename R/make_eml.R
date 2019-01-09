@@ -145,7 +145,7 @@
 
 
 make_eml <- function(data.path, code.path, eml.path, parent.package.id, 
-                     child.package.id, sep, cat.vars, user.id, affiliation, 
+                     child.package.id, sep, cat.vars = NULL, user.id, affiliation, 
                      intellectual.rights, access.url, 
                      code.file.extension, additional.contact = NULL){
   
@@ -166,9 +166,9 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   if (missing(sep)){
     stop("Specify the field delimiter of the ecocomDP tables.")
   }
-  if (missing(cat.vars)){
-    stop('Input argument "cat.vars" not found. Create cat.vars with the define_variables function.')
-  }
+  # if (missing(cat.vars)){
+  #   stop('Input argument "cat.vars" not found. Create cat.vars with the define_variables function.')
+  # }
   if (missing(user.id)){
     stop("Specify a user ID for the data package. Default to 'EDI' if unknown")
   }
@@ -381,9 +381,40 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
   # Add taxonomicCoverage
   
   if (file.exists(paste(data.path, "/", "taxonomicCoverage.xml", sep = ""))){
+    
     message("Adding <taxonomicCoverage>")
     taxonomic_coverage <- read_eml(paste(data.path, "/", "taxonomicCoverage.xml", sep = ""))
     xml_in@dataset@coverage@taxonomicCoverage <- as(list(taxonomic_coverage), "ListOftaxonomicCoverage")
+  
+  } else {
+    
+    message("Adding <taxonomicCoverage>")
+    table_patterns <- c("observation\\b", "observation_ancillary\\b", "location_ancillary\\b", "taxon_ancillary\\b", "dataset_summary\\b", "location\\b", "taxon\\b", "variable_mapping\\b")
+    table_names <- c("observation", "observation_ancillary", "location_ancillary", "taxon_ancillary", "dataset_summary", "location", "taxon", "variable_mapping")
+    dir_files <- list.files(data.path)
+    table_names_found <- list()
+    tables_found <- list()
+    for (i in 1:length(table_patterns)){
+      tables_found[[i]] <- dir_files[grep(paste("^(?=.*", table_patterns[i], ")(?!.*variables)", sep = ""), dir_files, perl=TRUE)]
+      if (!identical(tables_found[[i]], character(0))){
+        table_names_found[[i]] <- table_names[i]
+      }
+    }
+    tables_found <- unlist(tables_found)
+    table_names <- unlist(table_names_found)
+    use_i <- table_names == 'taxon'
+    df_table <- read.table(
+      paste(data.path, "/", tables_found[use_i], sep = ""),
+      header=TRUE,
+      sep=sep,
+      quote="\"",
+      as.is=TRUE,
+      comment.char = "")
+    tc <- taxonomyCleanr::make_taxonomicCoverage(taxa.clean = df_table$taxon_name,
+                                                 authority = df_table$authority_system,
+                                                 authority.id = df_table$authority_taxon_id)
+    xml_in@dataset@coverage@taxonomicCoverage <- as(list(tc), "ListOftaxonomicCoverage")
+    
   }
   
   # Modify eml-contact
@@ -569,14 +600,24 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
       comment.char = "")
 
     # Read catvars file
-
-    use_i <- table_names[i] == cat.vars$tableName
-    catvars <- cat.vars[
-      table_names[i] == cat.vars$tableName, 
-      c('attributeName', 'code', 'definition', 'unit')
-      ]
     
-    if (nrow(catvars) > 0){
+    if (sum(str_detect(paste0(table_names[i], "_variables.txt"), dir_files)) > 0){
+      catvars <- read.table(
+        paste0(data.path, '/', table_names[i], '_variables.txt'),
+        header = TRUE,
+        sep = '\t',
+        quote = '\"',
+        as.is = TRUE,
+        comment.char = '')
+    } else if (!is.null(cat.vars)) {
+      use_i <- table_names[i] == cat.vars$tableName
+      catvars <- cat.vars[
+        table_names[i] == cat.vars$tableName, 
+        c('attributeName', 'code', 'definition', 'unit')
+        ]
+    }
+    
+    if (exists('catvars') & (nrow(catvars) > 0)){
 
       if (dim(catvars)[1] > 0){
 
@@ -1279,7 +1320,7 @@ compile_attributes <- function(path, delimiter){
       if (sum(is.na(df_table[ , colname])) == nrow(df_table)){
         attributes <- attributes[!use_i, ]
       } else {
-        datetime_format <- EDIutils::get_datetime_format(df_table[ , colname])
+        datetime_format <- dataCleanr::iso8601_format(df_table[ , colname])
         attributes$formatString[use_i] <- datetime_format
       }
     }
