@@ -1327,7 +1327,8 @@ compile_attributes <- function(path, delimiter){
     
     # Add missing value codes
     
-    
+    attributes$missingValueCode <- 'NA'
+    attributes$missingValueCodeExplanation <- 'Missing value'
     
     # Store attributes
     
