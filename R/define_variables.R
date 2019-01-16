@@ -92,6 +92,11 @@ define_variables <- function(data.path, parent.pkg.id){
     'unit'
   )
   
+  # Add place holder so get_eml_attribute doesn't break
+  
+  cat_vars[nrow(cat_vars)+1, ] <- NA_character_
+  
+  
   # Get variable definitions and units from metadata --------------------------
   
   var_metadata <- mapply(
@@ -109,6 +114,10 @@ define_variables <- function(data.path, parent.pkg.id){
   use_i <- stringr::str_detect(cat_vars$definition, 'Error in UseMethod')
   use_i[is.na(use_i)] <- FALSE
   cat_vars[use_i , c('definition', 'unit')] <- NA_character_
+  
+  # Remove place holder added above
+  
+  cat_vars <- cat_vars[1:(nrow(cat_vars)-1), ]
   
   
   # Return --------------------------------------------------------------------
