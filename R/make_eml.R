@@ -260,23 +260,35 @@ make_eml <- function(data.path, code.path, eml.path, parent.package.id,
 
   # Read in metadata
   
-  if (!missing(eml.path)){
-    
-    xml_in <- read_eml(paste(eml.path,
-                             "/",
-                             parent_eml_file,
-                             sep = ""))
-  } else {
-
-    xml_in <- read_eml(paste("http://pasta.lternet.edu/package/metadata/eml",
-                             "/",
-                             pkg_prts[1],
-                             "/",
-                             identifier,
-                             "/",
-                             revision,
-                             sep = ""))
+  read_metadata <- function(parent_eml_file, scope, identifier, revision, data.path, eml.path = NULL){
+    if (!is.null(eml.path)){
+      xml_in <- read_eml(paste0(eml.path, "/",parent_eml_file))
+    } else {
+      xml_in <- try(read_eml(paste0(
+        "http://pasta.lternet.edu/package/metadata/eml", "/", pkg_prts[1], "/",
+        identifier, "/", revision)))
+      if (class(xml_in) == 'try-error'){
+        xml_in <- read_xml(paste("http://pasta.lternet.edu/package/metadata/eml",
+                                 "/",
+                                 pkg_prts[1],
+                                 "/",
+                                 identifier,
+                                 "/",
+                                 revision,
+                                 sep = ""))
+        xml2::xml_remove(
+          xml2::xml_find_all(xml_in, './/dataset/dataTable/constraint')
+        )
+        xml2::write_xml(xml_in, paste0(data.path, '/metadata.xml'))
+        xml_in <- read_eml(paste0(data.path, '/metadata.xml'))
+      }
+      xml_in
+    }
   }
+  
+  xml_in <- suppressWarnings(read_metadata(parent_eml_file, scope, identifier, revision, data.path))
+  
+  
 
   # Get system information
   
