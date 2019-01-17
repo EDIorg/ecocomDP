@@ -22,6 +22,7 @@ General guidelines
     2. __parent.pkg.id__ - The L0 package ID (e.g. knb-lter-cap.627.2)
     3. __child.pkg.id__ - The L1 package ID (e.g. edi.101.3)
 A good example of a conversion script is "conversion_cap652.r" of [this data package](https://portal.edirepository.org/nis/mapbrowse?packageid=edi.247.2).
+9. Reference the best practices documentation for challenging edge cases ([Best Practices](https://github.com/EDIorg/ecocomDP/tree/master/documentation/practices)).
 
 
 Table list 
