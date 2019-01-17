@@ -3,7 +3,7 @@
 In some datasets, the locations are described as polygons, eg, with a string of points in a KML file.
 
 ## Example input 
-https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-cap&identifier=627
+https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=192&revision=3
 
 
 ## Best Practices
