@@ -51,21 +51,21 @@ make_variable_mapping <- function(observation, observation_ancillary = NULL,
   
   # Add observation ancillary variables
   
-  if (!missing(observation_ancillary)){
+  if (!is.null(observation_ancillary)){
     vars <- c(vars, unique(as.character(observation_ancillary$variable_name)))
     tbls <- c(tbls, rep('observation_ancillary', length(unique(observation_ancillary$variable_name))))
   }
   
   # Add location ancillary variables
   
-  if (!missing(location_ancillary)){
+  if (!is.null(location_ancillary)){
     vars <- c(vars, unique(as.character(location_ancillary$variable_name)))
     tbls <- c(tbls, rep('location_ancillary', length(unique(location_ancillary$variable_name))))
   }
   
   # Add taxon ancillary variables
   
-  if (!missing(taxon_ancillary)){
+  if (!is.null(taxon_ancillary)){
     vars <- c(vars, unique(as.character(taxon_ancillary$variable_name)))
     tbls <- c(tbls, rep('taxon_ancillary', length(unique(taxon_ancillary$variable_name))))
   }

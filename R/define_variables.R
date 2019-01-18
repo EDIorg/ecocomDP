@@ -69,7 +69,7 @@ define_variables <- function(data.path, parent.pkg.id){
     observation = data.list$observation$data,
     observation_ancillary = data.list$observation_ancillary$data,
     taxon_ancillary = data.list$taxon_ancillary$data,
-    location_ancillary = data.list$location_ancillary
+    location_ancillary = data.list$location_ancillary$data
   )[ , c('variable_name', 'table_name')]
   
   cat_vars$attributeName <- rep('variable_name', nrow(cat_vars))
