@@ -1,56 +1,42 @@
-#' Define ecocomDP variables
+#' Define categorical variables of ecocomDP tables
 #'
 #' @description  
-#'     Get variable definitions and units from the parent data package EML 
-#'     metadata.
+#'     Get variable definitions and units from parent EML.
 #'
 #' @usage define_variables(data.path, parent.pkg.id)
 #'
 #' @param data.path
 #'     (character) Path to ecocomDP tables.
 #' @param parent.pkg.id
-#'     (character) ID of parent data package from which the ecocomDP tables
-#'     were created. The data package must be stored in the Environmental Data 
-#'     Initiative repository. Example data package ID: knb-lter-cap.627.3
+#'     (character) Parent data package ID from the EDI Data Repository (e.g. 
+#'     knb-lter-cap.627.3).
 #'
 #' @return 
 #'     (data frame) A data frame with columns:
 #'     \itemize{
-#'         \item{tableName} Name of ecocomDP table containing the variable.
-#'         \item{attributeName} Name of the column in ecocomDP tables 
-#'         containing the variable.
-#'         \item{code} Name of the variable listed in the ecocomDP tables.
-#'         \item{definition} Definition of the varible, if found in the parent
-#'         metadata.
-#'         \item{unit} Unit of the variable, if found in the parent metadata.  
+#'         \item{tableName} Table in which variable is found.
+#'         \item{attributeName} Field in which variable is found.
+#'         \item{code} Variable name.
+#'         \item{definition} Variable definition, if found, blank if otherwise.
+#'         \item{unit} Variable unit, if found, blank otherwise.
 #'     }
-#'     
-#' @details 
-#'     Extract unique variables listed in the "variable_name" column fromm
-#'     all ecocomDP tables, then look up the variable names in the parent
-#'     data package EML record and output in a data frame for user supply to 
-#'     `make_eml`. When a variable name can't be found in the parent package
-#'     EML, the definition is assigned a value of NA.
-#'     
-#' @note 
-#'     Variables that can't be defined by the parent package EML should be 
-#'     manually defined by editing this object after it is created.
 #'
 #' @export
 #'
 
 define_variables <- function(data.path, parent.pkg.id){
   
-  # Get variables from tables at data.path ------------------------------------
+  message('Retrieving variable definitions and units')
   
-  message('Getting variables from ecocomDP tables')
+  # Define what a variable is
   
   criteria <- read.table(
     system.file('validation_criteria.txt', package = 'ecocomDP'),
     header = T,
     sep = "\t",
     as.is = T,
-    na.strings = "NA")
+    na.strings = "NA"
+  )
   
   L1_table_names <- criteria$table[is.na(criteria$column)]
   
@@ -61,11 +47,25 @@ define_variables <- function(data.path, parent.pkg.id){
     )
   )
   
-  data.list <- lapply(file_names, read_ecocomDP_table, data.path = data.path)
+  # Load tables
   
-  names(data.list) <- unlist(lapply(file_names, is_table_rev, L1_table_names))
+  data.list <- lapply(
+    file_names, 
+    read_ecocomDP_table, 
+    data.path = data.path
+  )
   
-  cat_vars <- ecocomDP::make_variable_mapping(
+  names(data.list) <- unlist(
+    lapply(
+      file_names, 
+      is_table_rev, 
+      L1_table_names
+    )
+  )
+  
+  # Get variable names and create data.frame
+  
+  cat_vars <- make_variable_mapping(
     observation = data.list$observation$data,
     observation_ancillary = data.list$observation_ancillary$data,
     taxon_ancillary = data.list$taxon_ancillary$data,
@@ -82,7 +82,8 @@ define_variables <- function(data.path, parent.pkg.id){
     attributeName,
     variable_name,
     definition,
-    unit)
+    unit
+  )
   
   colnames(cat_vars) <- c(
     'tableName',
@@ -92,18 +93,19 @@ define_variables <- function(data.path, parent.pkg.id){
     'unit'
   )
   
-  # Add place holder so get_eml_attribute doesn't break
+  # This work around turns vectors into data.frames, get_eml_attribute will
+  # otherwise break.
   
   cat_vars[nrow(cat_vars)+1, ] <- NA_character_
   
   
-  # Get variable definitions and units from metadata --------------------------
+  # Get definitions and reshape output
   
   var_metadata <- mapply(
     EDIutils::get_eml_attribute, 
     attr.name = cat_vars$code, 
     MoreArgs = list(package.id = parent.pkg.id)
-    )
+  )
   
   var_metadata <- as.data.frame(t(var_metadata), row.names = F)
   
