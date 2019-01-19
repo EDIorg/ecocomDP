@@ -2,12 +2,12 @@
 % Please edit documentation in R/make_eml_neon.R
 \name{make_eml_neon}
 \alias{make_eml_neon}
-\title{make_eml_neon}
+\title{Make EML for a NEON data product}
 \usage{
-make_eml_neon(eml, x)
+make_eml_neon(eml, x, protocols, dp.id)
 }
 \arguments{
-\item{eml}{(eml) An EML record for a NEON data product.}
+\item{eml}{(eml) EML ofa NEON data product.}
 
 \item{x}{(list of data frames) The ecocomDP tables for the NEON data product.
 Each item of the list must be named after the ecocomDP tables (e.g.
@@ -16,14 +16,13 @@ observation, taxon, dataset_summary, etc.).}
 \item{protocols}{(character) Vector of character strings listing the NEON sampling 
 protocols.}
 
-\item{dp.id}{(character) NEON data product ID}
+\item{dp.id}{(character) NEON data product ID.}
 
-\item{eml.path}{(character) Path to which EML will be written to.}
+\item{eml.path}{(character) Path to where the EML will be written.}
 }
 \value{
 EML metadata for a NEON data product.
 }
 \description{
-Make an EML metadata record for a NEON data product that has been 
-    reformatted into the ecocomDP.
+Make EML metadata for a NEON data product reformatted in the ecocomDP.
 }

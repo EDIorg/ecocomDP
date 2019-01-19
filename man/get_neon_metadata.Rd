@@ -2,12 +2,12 @@
 % Please edit documentation in R/get_neon_metadata.R
 \name{get_neon_metadata}
 \alias{get_neon_metadata}
-\title{get_neon_metadata}
+\title{Read in NEON EML for a specified data product}
 \usage{
 get_neon_metadata(dpid)
 }
 \arguments{
-\item{dpid}{(character) NEON data product ID (e.g. DP1.20120.001)}
+\item{dpid}{(character) NEON data product ID (e.g. DP1.20120.001).}
 }
 \value{
 EML metadata for a NEON data product.

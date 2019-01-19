@@ -2,41 +2,26 @@
 % Please edit documentation in R/define_variables.R
 \name{define_variables}
 \alias{define_variables}
-\title{Define ecocomDP variables}
+\title{Define categorical variables of ecocomDP tables}
 \usage{
 define_variables(data.path, parent.pkg.id)
 }
 \arguments{
 \item{data.path}{(character) Path to ecocomDP tables.}
 
-\item{parent.pkg.id}{(character) ID of parent data package from which the ecocomDP tables
-were created. The data package must be stored in the Environmental Data 
-Initiative repository. Example data package ID: knb-lter-cap.627.3}
+\item{parent.pkg.id}{(character) Parent data package ID from the EDI Data Repository (e.g. 
+knb-lter-cap.627.3).}
 }
 \value{
 (data frame) A data frame with columns:
     \itemize{
-        \item{tableName} Name of ecocomDP table containing the variable.
-        \item{attributeName} Name of the column in ecocomDP tables 
-        containing the variable.
-        \item{code} Name of the variable listed in the ecocomDP tables.
-        \item{definition} Definition of the varible, if found in the parent
-        metadata.
-        \item{unit} Unit of the variable, if found in the parent metadata.  
+        \item{tableName} Table in which variable is found.
+        \item{attributeName} Field in which variable is found.
+        \item{code} Variable name.
+        \item{definition} Variable definition, if found, blank if otherwise.
+        \item{unit} Variable unit, if found, blank otherwise.
     }
 }
 \description{
-Get variable definitions and units from the parent data package EML 
-    metadata.
-}
-\details{
-Extract unique variables listed in the "variable_name" column fromm
-    all ecocomDP tables, then look up the variable names in the parent
-    data package EML record and output in a data frame for user supply to 
-    `make_eml`. When a variable name can't be found in the parent package
-    EML, the definition is assigned a value of NA.
-}
-\note{
-Variables that can't be defined by the parent package EML should be 
-    manually defined by editing this object after it is created.
+Get variable definitions and units from parent EML.
 }

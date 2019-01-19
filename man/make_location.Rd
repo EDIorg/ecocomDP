@@ -2,23 +2,20 @@
 % Please edit documentation in R/make_location.R
 \name{make_location}
 \alias{make_location}
-\title{Make location table}
+\title{Make the ecocomDP location table}
 \usage{
-make_location(x, cols = c('site', 'nested_level_1', 'nested_level_2', 
-    'etc.', kml = NULL, col = NULL))
+make_location(x, cols, kml = NULL, col = NULL)
 }
 \arguments{
-\item{x}{A data frame containing sampling location names (in columns) for each 
-observation (rows).}
+\item{x}{(data frame) A data frame containing sampling location names (in 
+columns) for each observation (rows).}
 
-\item{cols}{A list of columns in x containing sampling location data. The list 
+\item{cols}{(character) Columns in x containing sampling location data. The list 
 order should reflect the hierarchical arrangement of sampling locations.
 E.g.: If 'site' is the coarsest level of observation, 'habitat' is 
 nested within 'site', 'transect' is nested within 'habitat', and 
 'quadrat' is nested within 'transect' then the 'cols' argument should
-be supplied as:
-
-cols = c('site', 'habitat','transect', 'quadrat')}
+be supplied as: cols = c('site', 'habitat','transect', 'quadrat').}
 
 \item{kml}{A data object (simple feature collection) created with the `st_read``
 function of the `sf`` (simple features) R package. This data object
@@ -26,16 +23,16 @@ contains a field called 'Name'. Values listed in this field must match
 the corresponding values listed in the data frame (x) and specified in
 'cols'.}
 
-\item{col}{A character string indicating the column name specified in the input
-argument 'cols' to which the data in the kml object corresponds to.
-E.g., if the kml corresponds with with the column named 'site' then
-enter 'site' for the col argument.}
+\item{col}{(character) The column name specified in the input argument 'cols' to 
+which the data in the kml object corresponds to. E.g., if the kml 
+corresponds with with the column named 'site' then enter 'site' for the 
+col argument.}
 }
 \value{
 A data frame of the location table.
 }
 \description{
-Make a data frame of the location table.
+Make the ecocomDP location table.
 }
 \note{
 The arguments 'kml' and 'col' only accept single inputs. I.e. does 

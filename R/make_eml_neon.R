@@ -1,13 +1,12 @@
-#' make_eml_neon
+#' Make EML for a NEON data product
 #'
 #' @description  
-#'     Make an EML metadata record for a NEON data product that has been 
-#'     reformatted into the ecocomDP.
+#'     Make EML metadata for a NEON data product reformatted in the ecocomDP.
 #'
-#' @usage make_eml_neon(eml, x)
+#' @usage make_eml_neon(eml, x, protocols, dp.id)
 #' 
 #' @param eml
-#'     (eml) An EML record for a NEON data product.
+#'     (eml) EML ofa NEON data product.
 #' @param x
 #'     (list of data frames) The ecocomDP tables for the NEON data product.
 #'     Each item of the list must be named after the ecocomDP tables (e.g.
@@ -16,9 +15,9 @@
 #'     (character) Vector of character strings listing the NEON sampling 
 #'     protocols.
 #' @param dp.id 
-#'     (character) NEON data product ID
+#'     (character) NEON data product ID.
 #' @param eml.path
-#'     (character) Path to which EML will be written to.
+#'     (character) Path to where the EML will be written.
 #'     
 #' @return 
 #'     EML metadata for a NEON data product.
@@ -26,15 +25,9 @@
 #' @export
 #'
 
-make_eml_neon <- function(
-  eml,
-  x,
-  protocols,
-  dp.id,
-  eml.path
-  ){
+make_eml_neon <- function(eml, x, protocols, dp.id, eml.path){
   
-  # Check input arguments -----------------------------------------------------
+  message(paste('Making EML for NEON data product', dp.id, 'formatted to ecocomDP'))
   
   # Edit title ----------------------------------------------------------------
   
@@ -61,28 +54,35 @@ make_eml_neon <- function(
     title
     )
   
-  eml@dataset@title <- as(list(title), "ListOftitle")
+  eml@dataset@title <- as(
+    list(title), 
+    "ListOftitle"
+  )
   
   # Edit abstract -------------------------------------------------------------
   
   message('<abstract>')
   
-  lns <- paste0('This data package is formatted according to the "ecocomDP", a data package design pattern for ecological community surveys, and data from studies of composition and biodiversity. For more information on the ecocomDP project see https://github.com/EDIorg/ecocomDP/tree/master, or contact EDI https://environmentaldatainitiative.org.',
-                '\n',
-                '\n',
-                'This metadata is updated periodically (last update ',
-                format(Sys.time(), "%Y-%m-%d"),
-                ').',
-                '\n',
-                '\n',
-                'This data package was derived from the NEON data product found here: ',
-                paste0(
-                  'http://data.neonscience.org/data-product-view?dpCode=',
-                  dp.id
-                  )
-                )
+  lns <- paste0(
+    'This data package is formatted according to the "ecocomDP", a data package design pattern for ecological community surveys, and data from studies of composition and biodiversity. For more information on the ecocomDP project see https://github.com/EDIorg/ecocomDP/tree/master, or contact EDI https://environmentaldatainitiative.org.',
+    '\n',
+    '\n',
+    'This metadata is updated periodically (last update ',
+    format(Sys.time(), "%Y-%m-%d"),
+    ').',
+    '\n',
+    '\n',
+    'This data package was derived from the NEON data product found here: ',
+    paste0(
+      'http://data.neonscience.org/data-product-view?dpCode=',
+      dp.id
+      )
+    )
   
-  abstract <- as(set_TextType(text = lns), "abstract")
+  abstract <- as(
+    set_TextType(text = lns), 
+    "abstract"
+  )
   
   eml@dataset@abstract <- abstract
   
@@ -96,7 +96,12 @@ make_eml_neon <- function(
   
   message("<pubDate>")
   
-  eml@dataset@pubDate <- as(format(Sys.time(), "%Y-%m-%d"), "pubDate")
+  eml@dataset@pubDate <- as(
+    format(Sys.time(), 
+           "%Y-%m-%d"
+          ), 
+    "pubDate"
+  )
   
   # Edit distribution ---------------------------------------------------------
   
@@ -104,7 +109,10 @@ make_eml_neon <- function(
   
   null_distribution <- list(NULL)
   
-  eml@dataset@distribution <- as(null_distribution, "ListOfdistribution")
+  eml@dataset@distribution <- as(
+    null_distribution, 
+    "ListOfdistribution"
+  )
   
   # Edit geographic coverage --------------------------------------------------
   
@@ -136,15 +144,22 @@ make_eml_neon <- function(
   list_of_coverage <- list()
 
   set_geo_coverage <- function(site, west, east, north, south){
-    geographic_description <- new("geographicDescription", site)
-    bounding_coordinates <- new("boundingCoordinates",
-                                westBoundingCoordinate = as.character(west),
-                                eastBoundingCoordinate = as.character(east),
-                                northBoundingCoordinate = as.character(north),
-                                southBoundingCoordinate = as.character(south))
-    geographic_coverage <- new("geographicCoverage",
-                               geographicDescription = geographic_description,
-                               boundingCoordinates = bounding_coordinates)
+    geographic_description <- new(
+      "geographicDescription", 
+      site
+    )
+    bounding_coordinates <- new(
+      "boundingCoordinates",
+      westBoundingCoordinate = as.character(west),
+      eastBoundingCoordinate = as.character(east),
+      northBoundingCoordinate = as.character(north),
+      southBoundingCoordinate = as.character(south)
+    )
+    geographic_coverage <- new(
+      "geographicCoverage",
+      geographicDescription = geographic_description,
+      boundingCoordinates = bounding_coordinates
+    )
     geographic_coverage
   }
   
@@ -157,33 +172,49 @@ make_eml_neon <- function(
     south = geocov_data$sites$latitude
   )
   
-  geographic_description <- new("geographicDescription", 'Bounding box of sampling sites.')
-  bounding_coordinates <- new("boundingCoordinates",
-                              westBoundingCoordinate = as.character(geocov_data$bounding_box$box_west),
-                              eastBoundingCoordinate = as.character(geocov_data$bounding_box$box_east),
-                              northBoundingCoordinate = as.character(geocov_data$bounding_box$box_north),
-                              southBoundingCoordinate = as.character(geocov_data$bounding_box$box_south))
-  geographic_coverage <- new("geographicCoverage",
-                             geographicDescription = geographic_description,
-                             boundingCoordinates = bounding_coordinates)
+  geographic_description <- new(
+    "geographicDescription",
+    'Bounding box of sampling sites.'
+  )
+  
+  bounding_coordinates <- new(
+    "boundingCoordinates",
+    westBoundingCoordinate = as.character(geocov_data$bounding_box$box_west),
+    eastBoundingCoordinate = as.character(geocov_data$bounding_box$box_east),
+    northBoundingCoordinate = as.character(geocov_data$bounding_box$box_north),
+    southBoundingCoordinate = as.character(geocov_data$bounding_box$box_south)
+  )
+  
+  geographic_coverage <- new(
+    "geographicCoverage",
+    geographicDescription = geographic_description,
+    boundingCoordinates = bounding_coordinates
+  )
+  
   list_of_coverage[[(length(list_of_coverage)+1)]] <- geographic_coverage
   
-  eml@dataset@coverage@geographicCoverage <- as(list_of_coverage, "ListOfgeographicCoverage")
+  eml@dataset@coverage@geographicCoverage <- as(
+    list_of_coverage, 
+    "ListOfgeographicCoverage"
+  )
   
   # Edit temporal coverage --------------------------------------------------
   
   message('<temporalCoverage>')
   
-  dates <- lubridate::ymd_hm(x$observation$observation_datetime)
+  dates <- lubridate::ymd_hm(
+    x$observation$observation_datetime
+  )
   
   temp <- set_coverage(
     begin = substr(floor_date(min(dates), unit = 'day'), 1, 10),
     end = substr(ceiling_date(max(dates), unit = 'day'), 1, 10)
   )
+  
   eml@dataset@coverage@temporalCoverage <- as(
     temp@temporalCoverage,
     'ListOftemporalCoverage'
-    )
+  )
   
   # Edit taxonomic coverage ---------------------------------------------------
   
@@ -194,6 +225,7 @@ make_eml_neon <- function(
     ),
     -taxon_id
   )
+  
   if (sum(colnames(test) == '<NA>') > 0){
     taxa_table <- test[ , !colnames(test) == '<NA>']
   }
@@ -225,10 +257,17 @@ make_eml_neon <- function(
     paste(protocols, collapse = ', '),
     '. ',
     'Access these protocols at http://data.neonscience.org/documents'
-    )
+  )
   
-  ms <- new('methodStep', description = as(lns, 'description'))
-  eml@dataset@methods@methodStep <- as(list(ms), 'ListOfmethodStep')
+  ms <- new(
+    'methodStep', 
+    description = as(lns, 'description')
+  )
+  
+  eml@dataset@methods@methodStep <- as(
+    list(ms),
+    'ListOfmethodStep'
+  )
   
   # Edit attributes -----------------------------------------------------------
 
@@ -246,9 +285,10 @@ make_eml_neon <- function(
   # Read table_descriptions.txt
   
   table_descriptions <- read.table(
-    system.file('table_descriptions.txt',
-                package = 'ecocomDP'
-    ),
+    system.file(
+      'table_descriptions.txt',
+      package = 'ecocomDP'
+      ),
     header = T,
     sep = "\t",
     as.is = T,
@@ -258,10 +298,7 @@ make_eml_neon <- function(
   
   for (i in 1:length(x)){
     
-    message(paste(
-      "Adding",
-      names(x)[i],
-      "<dataTable>"))
+    message(paste("Adding", names(x)[i], "<dataTable>"))
     
     attributes <- attributes_in[[1]][[i]]
     
@@ -290,6 +327,7 @@ make_eml_neon <- function(
       }
       
       non_blank_rows <- nrow(catvars) - sum(catvars$attributeName == "")
+      
       catvars <- catvars[1:non_blank_rows, 1:3]
       
       # Clean extraneous white spaces from catvars tables
@@ -318,9 +356,11 @@ make_eml_neon <- function(
       
       # Create the attributeList element
       
-      attributeList <- set_attributes(attributes,
-                                      factors = catvars,
-                                      col_classes = col_classes)
+      attributeList <- set_attributes(
+        attributes,
+        factors = catvars,
+        col_classes = col_classes
+      )
       
     } else {
       
@@ -341,33 +381,31 @@ make_eml_neon <- function(
       
       # Create the attributeList element
       
-      attributeList <- set_attributes(attributes,
-                                      col_classes = col_classes)
-      
-      
+      attributeList <- set_attributes(
+        attributes,
+        col_classes = col_classes
+      )
+
     }
-    
 
     # Set physical
     
-    physical <- set_physical(names(x)[i],
-                             numHeaderLines = "1",
-                             recordDelimiter = "\\r\\n", # !!!This information is not accurate
-                             attributeOrientation = "column",
-                             fieldDelimiter = "\\t",
-                             quoteCharacter = "\"")
-    
-    
-    
-    
-    
-    
-    physical@size <- new("size",
-                         unit = "byte",
-                         as.character(
-                           object.size(x[[i]])
-                           )
-                         )
+    physical <- set_physical(
+      names(x)[i],
+      numHeaderLines = "1",
+      recordDelimiter = "\\r\\n", # !!!This information is not accurate
+      attributeOrientation = "column",
+      fieldDelimiter = "\\t",
+      quoteCharacter = "\""
+    )
+
+    physical@size <- new(
+      "size",
+      unit = "byte",
+      as.character(
+        object.size(x[[i]])
+      )
+    )
     
     # Get number of records
     
@@ -375,12 +413,14 @@ make_eml_neon <- function(
     
     # Pull together information for the data table
     
-    data_table <- new("dataTable",
-                      entityName = names(x)[i],
-                      entityDescription = table_descriptions$description[match(names(x)[i], table_descriptions$table_name)],
-                      physical = physical,
-                      attributeList = attributeList,
-                      numberOfRecords = number_of_records)
+    data_table <- new(
+      "dataTable",
+      entityName = names(x)[i],
+      entityDescription = table_descriptions$description[match(names(x)[i], table_descriptions$table_name)],
+      physical = physical,
+      attributeList = attributeList,
+      numberOfRecords = number_of_records
+    )
     
     data_tables_stored[[i]] <- data_table
     
@@ -388,33 +428,23 @@ make_eml_neon <- function(
   
   # Compile data tables
   
-  eml@dataset@dataTable <- new("ListOfdataTable",
-                                  data_tables_stored)
+  eml@dataset@dataTable <- new(
+    "ListOfdataTable",
+    data_tables_stored
+  )
   
   # Build EML -----------------------------------------------------------------
   
-  eml <- new("eml",
-             schemaLocation = "eml://ecoinformatics.org/eml-2.1.1  http://nis.lternet.edu/schemas/EML/eml-2.1.1/eml.xsd",
-             packageId = 'This data product is synthesized on demand from the NEON data portal and does not have a package ID.',
-             system = 'These data are not stored in a repository.',
-             access = eml@access,
-             dataset = eml@dataset)
+  eml <- new(
+    "eml",
+    schemaLocation = "eml://ecoinformatics.org/eml-2.1.1  http://nis.lternet.edu/schemas/EML/eml-2.1.1/eml.xsd",
+    packageId = 'This data product is synthesized on demand from the NEON data portal and does not have a package ID.',
+    system = 'These data are not stored in a repository.',
+    access = eml@access,
+    dataset = eml@dataset
+  )
   
   # Validate EML --------------------------------------------------------------
-  
-  # message("Validating EML")
-  # 
-  # validation_result <- eml_validate(eml)
-  # 
-  # if (validation_result == "TRUE"){
-  #   
-  #   message("EML passed validation!")
-  #   
-  # } else {
-  #   
-  #   message("EML validaton failed. See warnings for details.")
-  #   
-  # }
   
   write_eml(
     eml,
@@ -423,7 +453,8 @@ make_eml_neon <- function(
       '/',
       dp.id,
       '_neon.xml'
-    ))
+    )
+  )
 
 }
 
@@ -474,42 +505,48 @@ compile_attributes_neon <- function(x){
     
     # Read attributes_draft table
     
-    df_attributes <- read.table(system.file(
-      paste0(
-        'attributes_',
-        names(x)[i],
-        '.txt'
+    df_attributes <- read.table(
+      system.file(
+        paste0(
+          'attributes_',
+          names(x)[i],
+          '.txt'
+        ),
+        package = 'ecocomDP'
       ),
-      package = 'ecocomDP'
-    ),
-    header = T,
-    sep = "\t",
-    as.is = T,
-    na.strings = "NA",
-    colClasses = rep("character", 7)
+      header = T,
+      sep = "\t",
+      as.is = T,
+      na.strings = "NA",
+      colClasses = rep("character", 7)
     )
     
     # Synchronize data table and attributes table
     
-    use_i <- match(colnames(df_table), df_attributes[["attributeName"]])
+    use_i <- match(
+      colnames(df_table), 
+      df_attributes[["attributeName"]]
+    )
     
     df_attributes <- df_attributes[use_i, ]
     
     # Initialize outgoing attribute table 
     
     rows <- nrow(df_attributes)
-    attributes <- data.frame(attributeName = character(rows),
-                             formatString = character(rows),
-                             unit = character(rows),
-                             numberType = character(rows),
-                             definition = character(rows),
-                             attributeDefinition = character(rows),
-                             columnClasses = character(rows),
-                             minimum = character(rows),
-                             maximum = character(rows),
-                             missingValueCode = character(rows),
-                             missingValueCodeExplanation = character(rows),
-                             stringsAsFactors = FALSE)
+    attributes <- data.frame(
+      attributeName = character(rows),
+      formatString = character(rows),
+      unit = character(rows),
+      numberType = character(rows),
+      definition = character(rows),
+      attributeDefinition = character(rows),
+      columnClasses = character(rows),
+      minimum = character(rows),
+      maximum = character(rows),
+      missingValueCode = character(rows),
+      missingValueCodeExplanation = character(rows),
+      stringsAsFactors = FALSE
+    )
     
     # Set attribute names
     
@@ -576,21 +613,23 @@ compile_attributes_neon <- function(x){
             attributes$numberType[is_numeric[j]] <- "whole"
           }
           
-          attributes$minimum[is_numeric[j]] <- round(min(raw,
-                                                         na.rm = TRUE),
-                                                     digits = 2)
+          attributes$minimum[is_numeric[j]] <- round(
+            min(
+              raw,
+              na.rm = TRUE),
+            digits = 2
+          )
           
-          attributes$maximum[is_numeric[j]] <- round(max(raw,
-                                                         na.rm = TRUE),
-                                                     digits = 2)
-          
+          attributes$maximum[is_numeric[j]] <- round(
+            max(
+              raw,
+              na.rm = TRUE
+            ),
+            digits = 2
+          )
         }
-        
       }
-      
-      
     }
-    
     
     is_character <- which(attributes$columnClasses == "character") 
     is_catvar <- which(attributes$columnClasses == "categorical")
