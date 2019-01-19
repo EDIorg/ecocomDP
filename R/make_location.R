@@ -1,24 +1,21 @@
-#' Make location table
+#' Make the ecocomDP location table
 #'
 #' @description  
-#'     Make a data frame of the location table.
+#'     Make the ecocomDP location table.
 #'
 #' @usage 
-#'     make_location(x, cols = c('site', 'nested_level_1', 'nested_level_2', 
-#'     'etc.', kml = NULL, col = NULL))
+#'     make_location(x, cols, kml = NULL, col = NULL)
 #'
 #' @param x
-#'     A data frame containing sampling location names (in columns) for each 
-#'     observation (rows).
+#'     (data frame) A data frame containing sampling location names (in 
+#'     columns) for each observation (rows).
 #' @param cols
-#'     A list of columns in x containing sampling location data. The list 
+#'     (character) Columns in x containing sampling location data. The list 
 #'     order should reflect the hierarchical arrangement of sampling locations.
 #'     E.g.: If 'site' is the coarsest level of observation, 'habitat' is 
 #'     nested within 'site', 'transect' is nested within 'habitat', and 
 #'     'quadrat' is nested within 'transect' then the 'cols' argument should
-#'     be supplied as:
-#'     
-#'     cols = c('site', 'habitat','transect', 'quadrat')
+#'     be supplied as: cols = c('site', 'habitat','transect', 'quadrat').
 #' @param kml
 #'     A data object (simple feature collection) created with the `st_read``
 #'     function of the `sf`` (simple features) R package. This data object
@@ -26,10 +23,10 @@
 #'     the corresponding values listed in the data frame (x) and specified in
 #'     'cols'.
 #' @param col
-#'     A character string indicating the column name specified in the input
-#'     argument 'cols' to which the data in the kml object corresponds to.
-#'     E.g., if the kml corresponds with with the column named 'site' then
-#'     enter 'site' for the col argument.
+#'     (character) The column name specified in the input argument 'cols' to 
+#'     which the data in the kml object corresponds to. E.g., if the kml 
+#'     corresponds with with the column named 'site' then enter 'site' for the 
+#'     col argument.
 #'     
 #' @note 
 #'     The arguments 'kml' and 'col' only accept single inputs. I.e. does 
@@ -43,15 +40,22 @@
 
 make_location <- function(x, cols, kml = NULL, col = NULL){
 
+  message('Creating the ecocomDP location table')
+  
   # Check arguments -----------------------------------------------------------
   
   if (missing(x)){
-    stop('Input argument "x" is missing! Specify the data frame containing your location information.')
+    stop(paste('Input argument "x" is missing! Specify the data frame',
+               'containing your location information.'
+              )
+        )
   }
   if (missing(cols)){
-    stop('Input argument "cols" is missing! Specify column names (arranged hierarchically containing location data.')
+    stop(paste('Input argument "cols" is missing! Specify column names',
+               '(arranged hierarchically containing location data.'
+              )
+        )
   }
-  
   
   # Create location table ---------------------------------------------------
   

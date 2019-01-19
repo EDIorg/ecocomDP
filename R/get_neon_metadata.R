@@ -1,4 +1,4 @@
-#' get_neon_metadata
+#' Read in NEON EML for a specified data product
 #'
 #' @description  
 #'     Get metadata from the NEON data portal for a data product ID. NOTE: The
@@ -10,7 +10,7 @@
 #' @usage get_neon_metadata(dpid)
 #' 
 #' @param dpid 
-#'     (character) NEON data product ID (e.g. DP1.20120.001)
+#'     (character) NEON data product ID (e.g. DP1.20120.001).
 #'
 #' @return 
 #'     EML metadata for a NEON data product.
@@ -23,33 +23,44 @@ get_neon_metadata <- function(
   url_prefix_data = 'http://data.neonscience.org:80/api/v0/data/',
   url_prefix_products = 'http://data.neonscience.org:80/api/v0/products'){
   
-  # Check input arguments -----------------------------------------------------
-  
-  # Request data --------------------------------------------------------------
+  # Request data
   
   req <- httr::GET(
-    paste0(url_prefix_products, '/', dpid)
+    paste0(
+      url_prefix_products,
+      '/',
+      dpid
+    )
   )
   
   # View requested data
   
   req_content <- httr::content(req, as = 'parsed')
   req_text <- httr::content(req, as = 'text')
-  avail <- jsonlite::fromJSON(req_text, simplifyDataFrame = T, flatten = T)
+  avail <- jsonlite::fromJSON(
+    req_text, 
+    simplifyDataFrame = T, 
+    flatten = T
+  )
   
-  # get data availability list of the product
+  # List data availability
   
   data_list <- unlist(avail$data$siteCodes$availableDataUrls)
-  
-  # get data availablity
-  
   data <- GET(data_list[1])
   data_files <- jsonlite::fromJSON(httr::content(data, as = 'text'))
   
-  # Get EML (.xml is listed twice, which to use?)
+  # Read EML (.xml is listed twice, which to use?)
+  
   data_eml <- EML::read_eml(
-    data_files$data$files$url[grep('.xml', data_files$data$files$name)[1]]
+    data_files$data$files$url[
+      grep(
+        '.xml', 
+        data_files$data$files$name
+      )[1]
+    ]
   )
+  
+  # Return object
   
   data_eml
   

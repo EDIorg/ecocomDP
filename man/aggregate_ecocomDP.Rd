@@ -2,25 +2,23 @@
 % Please edit documentation in R/aggregate_ecocomDP.R
 \name{aggregate_ecocomDP}
 \alias{aggregate_ecocomDP}
-\title{aggregate_ecocomDP}
+\title{Aggregate ecocomDP data packages}
 \usage{
 aggregate_ecocomDP(package.ids, path = NULL)
 }
 \arguments{
-\item{package.ids}{(character) One or more data package IDs listed in the data frame created by 
-`list_all_ecocomDP`. EDI data package IDs are of the form 
-'edi.package_number.revision_number' (e.g. edi.100.2). NEON data package
-IDs are of the form 'data_product.identifier.revision_number' (e.g.
-'DP1.20120.001'). NOTE: Previous data package revisions of ecocomDP 
-packages are valid entries.}
+\item{package.ids}{(character) A vector of ecocomDP data package IDs to aggregate. Use 
+`view_all_ecocomDP` to get the authoritative list of available ecocomDP.
+NOTE: Previous data package revisions of ecocomDP packages are valid 
+entries.}
 
-\item{path}{(character) Path to which the aggregated ecocomDP will be written.
-No path results in no data written to file.}
+\item{path}{(character) Path to the directory in which the aggregated ecocomDP will 
+be written, if specified.}
 }
 \value{
-A single ecocomDP containing all the content of the individual ecocomDP
-    listed in the argument "package.ids".
+A single ecocomDP containing all contents of the individual ecocomDP
+    listed in the "package.ids" argument.
 }
 \description{
-Aggregate one or more ecocomDP.
+Aggregate one or more ecocomDP data packages into one large ecocomDP.
 }

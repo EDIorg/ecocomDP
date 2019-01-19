@@ -1,24 +1,22 @@
-#' aggregate_ecocomDP
+#' Aggregate ecocomDP data packages
 #'
 #' @description  
-#'     Aggregate one or more ecocomDP.
+#'     Aggregate one or more ecocomDP data packages into one large ecocomDP.
 #'
 #' @usage aggregate_ecocomDP(package.ids, path = NULL)
 #'     
 #' @param package.ids
-#'     (character) One or more data package IDs listed in the data frame created by 
-#'     `list_all_ecocomDP`. EDI data package IDs are of the form 
-#'     'edi.package_number.revision_number' (e.g. edi.100.2). NEON data package
-#'     IDs are of the form 'data_product.identifier.revision_number' (e.g.
-#'     'DP1.20120.001'). NOTE: Previous data package revisions of ecocomDP 
-#'     packages are valid entries.
+#'     (character) A vector of ecocomDP data package IDs to aggregate. Use 
+#'     `view_all_ecocomDP` to get the authoritative list of available ecocomDP.
+#'     NOTE: Previous data package revisions of ecocomDP packages are valid 
+#'     entries.
 #' @param path
-#'     (character) Path to which the aggregated ecocomDP will be written.
-#'     No path results in no data written to file.
+#'     (character) Path to the directory in which the aggregated ecocomDP will 
+#'     be written, if specified.
 #'     
 #' @return 
-#'     A single ecocomDP containing all the content of the individual ecocomDP
-#'     listed in the argument "package.ids".
+#'     A single ecocomDP containing all contents of the individual ecocomDP
+#'     listed in the "package.ids" argument.
 #'         
 #' @export
 #'
@@ -34,7 +32,11 @@ aggregate_ecocomDP <- function(package.ids, path = NULL, neon.sites = NULL){
   # Create list of tables -----------------------------------------------------
   
   message('Loading requested packages ...')
-  tables <- lapply(package.ids, get_ecocomDP, neon.sites = neon.sites)
+  tables <- lapply(
+    package.ids, 
+    get_ecocomDP, 
+    neon.sites = neon.sites
+  )
   names(tables) <- package.ids
   
   # Fill empty fields with NA -------------------------------------------------
