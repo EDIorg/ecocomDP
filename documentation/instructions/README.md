@@ -1,17 +1,19 @@
 # Instructions for creating, archiving, and using the ecocomDP
 
-### Overview
-
-The raw version of your dataset is what we refer to as Level-0, or L0. The ecocomDP version of your data is Level-1, or L1. Because the format and content of L0 datasets vary widely, reformatting from L0 to L1 requires a creation of a custom conversion script. Once this script exists, future revisions of the L1 become simple. After the L1 tables have been created a set of validation checks test that the data are indeed compliant with the ecocomDP schema. This step ensures the L1 can be seemlessly aggregated with other L1. The process of creating EML metadata for the L1 is simplified by the fact that the data are in a standardized format, and boiler plate metadata can be combined with L0 metadata to create a richly documented data package. Once documented, the data should be archived in the EDI Data Repository to be discovered and aggregated with other L1 in the archive. The following set of topics will help you create, validate, document, archive, and aggregate the L1 ecocomDP.
-
 ### Contents:
 
+* [Overview](#overview)
 * [Create](#create)
 * [Validate](#validate)
 * [Document](#document)
 * [Archive](#archive)
 * [Discover](#discover)
 * [Reuse](#reuse)
+
+## Overview
+[back to top](#contents)
+
+The raw version of your dataset is what we refer to as Level-0, or L0. The ecocomDP version of your data is Level-1, or L1. Because the format and content of L0 datasets vary widely, reformatting from L0 to L1 requires a creation of a custom conversion script. Once this script exists, future revisions of the L1 become simple. After the L1 tables have been created a set of validation checks test that the data are indeed compliant with the ecocomDP schema. This step ensures the L1 can be seemlessly aggregated with other L1. The process of creating EML metadata for the L1 is simplified by the fact that the data are in a standardized format, and boiler plate metadata can be combined with L0 metadata to create a richly documented data package. Once documented, the data should be archived in the EDI Data Repository to be discovered and aggregated with other L1 in the archive. The following set of topics will help you create, validate, document, archive, and aggregate the L1 ecocomDP.
 
 ## Create
 [back to top](#contents)
