@@ -245,7 +245,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
   
   # Parameterize --------------------------------------------------------------
   
-  os <- EDIutils::detect_os
+  os <- EDIutils::detect_os()
   data_tables_stored <- list()
   
   # Read EML of parent data package -------------------------------------------
@@ -920,7 +920,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
       )
     )
     
-    if (!missing(access.url)){
+    if (!is.null(access.url)){
 
       data_table_urls <- paste0(
         access.url,
