@@ -117,7 +117,7 @@ make_dataset_summary <- function(parent.package.id, child.package.id, sample.dat
     as.numeric(
       unlist(
         XML::xmlApply(
-          metadata[
+          eml[
             "//dataset/coverage/geographicCoverage/boundingCoordinates/westBoundingCoordinate"
             ], 
           xmlValue
@@ -130,7 +130,7 @@ make_dataset_summary <- function(parent.package.id, child.package.id, sample.dat
     as.numeric(
       unlist(
         xmlApply(
-          metadata[
+          eml[
             "//dataset/coverage/geographicCoverage/boundingCoordinates/eastBoundingCoordinate"
             ], 
           xmlValue
@@ -143,7 +143,7 @@ make_dataset_summary <- function(parent.package.id, child.package.id, sample.dat
     as.numeric(
       unlist(
         xmlApply(
-          metadata[
+          eml[
             "//dataset/coverage/geographicCoverage/boundingCoordinates/southBoundingCoordinate"
             ], 
           xmlValue
@@ -156,7 +156,7 @@ make_dataset_summary <- function(parent.package.id, child.package.id, sample.dat
     as.numeric(
       unlist(
         xmlApply(
-          metadata[
+          eml[
             "//dataset/coverage/geographicCoverage/boundingCoordinates/northBoundingCoordinate"
             ], 
           xmlValue

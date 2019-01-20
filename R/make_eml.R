@@ -237,7 +237,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
       stop("No code files were found at the specified code.path. Add files to code.path or revise code.path.")
     }
     
-  } else if (exists(code.files)){
+  } else if (!missing(code.files)){
     
     code_files <- EDIutils::validate_file_names(
       code.path, 
@@ -246,7 +246,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
     
     if (is.null(code.file.extension)){
       
-      code.file.extention <- str_extract(
+      code_file_extention <- str_extract(
         code_files, 
         '\\.[:alpha:]*$'
       )
@@ -1056,7 +1056,11 @@ make_eml <- function(data.path, code.path = data.path, code.files,
         objectName = code_files[i]
       )
       
-      if (!missing(code.file.extension)){
+      if ((!is.null(code.file.extension)) | (exists('code_file_extention'))){
+        
+        if (exists('code_file_extention')){
+          code.file.extension <- code_file_extention
+        }
         
         if (code.file.extension == ".R"){
           format_name <- "application/R"
