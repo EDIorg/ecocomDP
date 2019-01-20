@@ -2,12 +2,12 @@
 
 Resources for linking a variable_name used in a data table to an external definition.
 
-Resources:
+### Resources:
 * [DarwinCore](https://dwc.tdwg.org/terms/)
 * [The Ecosystem Ontology](https://bioportal.bioontology.org/ontologies/ECSO/?p=summary)
 * [Combee](http://www.ontobee.org)
 
-Example usage:
+### Example usage:
 
 Use DarwinCore to define a variable_name "count"
 
