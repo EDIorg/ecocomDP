@@ -6,20 +6,14 @@ The raw version of your dataset is what we refer to as Level-0, or L0. The ecoco
 
 ### Contents:
 
-* [Archive L0 data](#archive-l0-data)
-* [Create L1 tables](#create-l1-tables)
-* [Validate L1 tables](#validate-l1-tables)
-* [Create L1 metadata](#create-l1-metadata)
-* [Archive L1 data](#archive-l1-data)
-* [Find L1 data](#find-l1-data)
-* [Aggregate L1 data](#aggregate-l1-data)
+* [Create](#create)
+* [Validate](#validate)
+* [Document](#document)
+* [Archive](#archive)
+* [Discover](#discover)
+* [Reuse](#reuse)
 
-## Archive L0 data
-[back to top](#contents)
-
-If the L0 dataset you are converting isn't already archived in the EDI Data Repository, you should consider archiving it “as is” before converting it to L1. Often the L0 format is easier to update with new data and is of a format that best suits a projects needs. Archive the L0 by creating EML metadata with the [`EMLassemblyline`](https://github.com/EDIorg/EMLassemblyline), then upload the data and metadata to EDI. Uploading requires a user account. Contact EDI to get an account (info@environmentaldatainitiative.org).
-
-## Create L1 tables
+## Create
 [back to top](#contents)
 
 The process of converting L0 to L1 should be fully scripted to enable future updates to the L1 when the L0 is updated. The preferred scripting language is R, but other languages are acceptable. This conversion script will be archived with the L1 tables and called upon to revise L1 data when L0 updates occur. The automated maintenance of L1 datasets is managed by EDI.
@@ -31,7 +25,7 @@ __Resources to help create L1 tables:__
 * [Guide to creating tables](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/table-creation.md) - Includes general recommendations for the order in which tables should be created, notes on table content, and functions from the `ecocomDP` R package that help create tables.
 * [Measurement vocabularies to assist in creation of the variable_mapping table](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/measurement_vocabularies.md)
 
-## Validate L1 tables
+## Validate
 [back to top](#contents)
 
 Once you've created a L0 for your dataset, and before making EML, you will need to ensure the relational tables pass normalization tests as well as checks for required tables, fields, field classes, datetime formats, etc. Validation tests are run by the `validate_ecocomDP` function of the ecocomDP R package.
@@ -40,22 +34,22 @@ Run the `validate_ecocomDP` function. Consult function documentation for use.
 
 Resolve each error encountered in the validation process. If no errors exist, and your L1 is valid, you will receive the message: *"Congratulations! Your ecocomDP has passed validation!"*
 
-## Create L1 metadata
+## Document
 [back to top](#contents)
 
 After the L1 tables have been validated and categorical variables defined, you can make an EML metadata record for them to complete the data package for upload to the EDI data repository. Before running the `make_eml` function run `import_templates` (enter `?import_templates` in the RStudio console to see required arguments.  Because L1 tables are standardized, the `make_eml` function will generate most of the EML automatically, however you will need to supply some additional information.
 
-## Archive L1 data
+## Archive
 [back to top](#contents)
 
 Your L1 ecocomDP and associated metadata form a package that may be uploaded to the [EDI data repository](https://portal.edirepository.org/nis/home.jsp). [Follow these instructions](https://environmentaldatainitiative.org/resources/assemble-data-and-metadata/step-4-submit-your-data-package/) to upload your data package.
 
-## Find L1 data
+## Discover
 [back to top](#contents)
 
 Get a list of all available L1 data with the function `view_all_ecocomDP`. View L1 metadata with `view_landing_page`.
 
-## Aggregate L1 data
+## Reuse
 [back to top](#contents)
 
 Aggregate L1 of interest with the function `aggregate_ecocomDP`.
