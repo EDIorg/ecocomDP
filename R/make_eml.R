@@ -125,10 +125,6 @@ make_eml <- function(data.path, code.path = data.path, code.files,
     stop("Specify path to dataset working directory.")
   }
   
-  if (missing(code.files)){
-    stop("Specify the code files used to create this ecocomDP.")
-  }
-  
   if (missing(parent.package.id)){
     stop("Specify the parent data package ID.")
   }
