@@ -5,11 +5,11 @@ Introduction
 The ecocom design pattern (ecocomDP) is planned to be a flexible intermediate for ecological community survey data. 
 For information on the process see https://environmentaldatainitiative.org/resources/tools/dataset-design/
 
-The ecocomDP is composed of 8 tables, which can be linked via identifiers. This document describes the tables and their contents (columns). Examples of tables can be found in the /examples/ directory. The graphic showing all data objects and their relationships was created from a relational database implementation (PostgreSQL, see the top-level directory of that name for DDL). Three tables are required (“observation”, “location”, “taxon”). The “dataset_summary” is populated from the “observation” table by code.  Two tables hold links to external resources: taxon, and variable_mapping. The taxon table is specifically designed to hold lookup-info from a service such as ITIS. The variable_mapping table hold URIs and lables for external measurement dictionaries.  
+The ecocomDP is composed of 8 tables, which can be linked via identifiers. This document describes the tables and their contents (columns). Examples of tables can be found in data package [edi.193](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=192). The graphic showing all data objects and their relationships was created from a relational database implementation (PostgreSQL, see the top-level directory of that name for DDL). Four tables are required (“observation”, “location”, “taxon”, and "dataset_summary"). The “dataset_summary” is populated from the “observation” table by code.  Two tables hold links to external resources: taxon, and variable_mapping. The taxon table is specifically designed to hold lookup-info from a service such as ITIS. The variable_mapping table hold URIs and lables for external measurement dictionaries.  
 
 Each main table has an optional ancillary table for additional information. These are included because primary research typically includes related measurements which may be of interest during anlaysis. 
 
-Below is the table list and suggested population order, ie, parents first.
+Below is the table list and suggested population order, ie, primary tables first.
 
 |  order | table name 	|   required?	|   references tables    | description            | sample cols (examples)   | unique constraints |
 |--------|--------------|-------------|------------------------|------------------------|-------------------------|--------------------|
