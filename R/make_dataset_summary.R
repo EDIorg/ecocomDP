@@ -27,6 +27,10 @@
 
 make_dataset_summary <- function(parent.package.id, child.package.id, sample.dates, taxon.table){
   
+  if (!is.character(sample.dates)){
+    stop('Input argument "sample.dates" must be of class = character.')
+  }
+  
   message('Creating dataset_summary table')
 
   # Initialize dataset_summary table
@@ -59,8 +63,43 @@ make_dataset_summary <- function(parent.package.id, child.package.id, sample.dat
     dataset_summary$std_dev_interval_betw_years <- round(sd(diff(unique(dates))/1), 2)
 
   } else if (is.POSIXct(dates)){
+
+    dates <- dates[order(dates)]
+    dates <- dates[!is.na(dates)]
+    dates_int <- interval(
+      dates[1],
+      dates[length(dates)]
+    )
     
+    dataset_summary$length_of_survey_years <-  round(
+      lubridate::time_length(
+        interval(
+          min(dates),
+          max(dates)
+        ), 
+        unit = 'year'
+      ), 
+      2
+    )
     
+    dataset_summary$number_of_years_sampled <- length(
+      unique(
+        lubridate::year(
+          dates
+        )
+      )
+    )
+
+    dataset_summary$std_dev_interval_betw_years <- sd(
+      diff(
+        dates[
+          order(
+            unique(dates)
+          )
+        ]
+      )/365
+    )
+
   }
   
   dataset_summary$max_num_taxa <- nrow(taxon.table)
