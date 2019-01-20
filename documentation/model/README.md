@@ -1,4 +1,4 @@
-# Tables descriptions, relationships, and requirements
+# Model documentation
 
 ## Contents:
 * [A visualization of table contents and relationships](https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md)
