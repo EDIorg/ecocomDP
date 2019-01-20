@@ -239,8 +239,20 @@ make_eml <- function(data.path, code.path = data.path, code.files,
     
   } else if (exists(code.files)){
     
-    code_files <- code.files
+    code_files <- EDIutils::validate_file_names(
+      code.path, 
+      data.files = code.files
+    )
     
+    if (is.null(code.file.extension)){
+      
+      code.file.extention <- str_extract(
+        code_files, 
+        '\\.[:alpha:]*$'
+      )
+      
+    }
+
   }
   
   # Parameterize --------------------------------------------------------------
