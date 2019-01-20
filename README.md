@@ -19,9 +19,9 @@ _Figure: Abstract view of dataset levels. A flexible intermediate (L1, middle) l
 ### Data
 
 * Datasets converted to ecocomDP:
-    * [Environmental Data Initiative (EDI)](https://portal.edirepository.org:443/nis/simpleSearch?defType=edismax&q=ecocomDP&fq=-scope:ecotrends&fq=-scope:lter-landsat*&fl=id,packageid,title,author,organization,pubdate,coordinates&debug=false) To find all ecocomDP datasets, enter "ecocomDP' in the 'simple search' box in the EDI data repository. Alternatively, run the `view_all_ecocomDP` function from the ecocomDP R package.
-    * [National Ecological Observatory Network (NEON)](https://github.com/EDIorg/ecocomDP/tree/master/documentation/examples/NEON) Run the function `view_all_ecocomDP` to see which NEON data products are available. The function `view_all_ecocomDP` is available in the ecocomDP R package.
-    * [Popler](https://github.com/AldoCompagnoni/popler) Approximately 50 datasets from the Popler database are available in the ecocomDP format. Use the function `format_popler_to_ecocomDP` to get Popler data into the ecocomDP format. The function `format_popler_to_ecocomDP` is available for [download through the LTER Meta-communities working group](https://github.com/sokole/ltermetacommunities/blob/master/EDI/format_popler_to_ecocomDP.R).
+    * [Environmental Data Initiative (EDI)](https://portal.edirepository.org:443/nis/simpleSearch?defType=edismax&q=ecocomDP&fq=-scope:ecotrends&fq=-scope:lter-landsat*&fl=id,packageid,title,author,organization,pubdate,coordinates&debug=false) To find all ecocomDP datasets, enter "ecocomDP' in the 'simple search' box in the EDI data repository. Alternatively, run the ecocomDP R package `view_all_ecocomDP` function.
+    * [National Ecological Observatory Network (NEON)](https://github.com/EDIorg/ecocomDP/tree/master/documentation/examples/NEON) Run the ecocomDP R package function `view_all_ecocomDP` to see which NEON data products are available.
+    * [Popler](https://github.com/AldoCompagnoni/popler) Approximately 50 datasets from the Popler database are available in the ecocomDP format. Use the function `format_popler_to_ecocomDP` to get Popler data into the ecocomDP format. The function `format_popler_to_ecocomDP` is available for [download from the LTER Meta-communities working group GitHub](https://github.com/sokole/ltermetacommunities/blob/master/EDI/format_popler_to_ecocomDP.R).
 
 ### PostgreSQL
 
@@ -29,7 +29,7 @@ _Figure: Abstract view of dataset levels. A flexible intermediate (L1, middle) l
 
 ### R package
 
-The R package helps create, validate, document, archive, find, and use data in the ecocomDP. The ecocomDP R package is available here on GitHub.
+The R package helps create, validate, document, archive, discover, and aggregate ecocomDP. The ecocomDP R package is available here on GitHub.
 ```
 # Install and load devtools
 install.packages("devtools")
