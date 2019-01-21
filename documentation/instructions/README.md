@@ -1,4 +1,4 @@
-# Instructions for creating, archiving, and using the ecocomDP
+# Instructions for creating and reusing ecocomDP datasets
 
 ### Contents:
 
