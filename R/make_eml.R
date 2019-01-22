@@ -1114,18 +1114,6 @@ make_eml <- function(data.path, code.path = data.path, code.files,
           "ListOfdistribution",
           c(distribution)
         )
-      } else {
-        distribution <- new(
-          "distribution",
-          offline = new(
-            "offline",
-            mediumName = "Hard drive"
-          )
-        )
-        physical@distribution <- new(
-          "ListOfdistribution",
-          c(distribution)
-        )
       }
       
       if (os == "mac"){
