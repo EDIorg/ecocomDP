@@ -37,11 +37,19 @@ Write a script to convert level-0 data to the ecocomDP tables. The script should
   * parent.package.id - ID of the level-0 data package
   * child.package.id - ID of the ecocomDP data package
     
-Functions are available in the ecocomDP R library to help create the tables:
+Functions available to help create ecocomDP tables:
 
-  * `make_location` - Make the location table
-  * `make_variable_mapping` - Make the variable_mapping table. [Resources for linking variables to external ontologies are available here](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/measurement_vocabularies.md)
-  * `make_dataset_summary` - Make the dataset summary table
+  * ecocomDP R library functions:
+    * `make_location` - Make the location table
+    * `make_variable_mapping` - Make the variable_mapping table. [Resources for linking variables to external ontologies are available here](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/measurement_vocabularies.md)
+    * `make_dataset_summary` - Make the dataset summary table
+  * taxonomyCleanr R library functions to help populate content of the ecocomDP taxon table:
+    * `resolve_sci_taxa` - Resolve a list of scientific names to one or more authority systems.
+    * `resolve_comm_taxa` - Resolve a list of common names to one or more authority systems.
+  * dataCleanr R library:
+    * `iso8601_char` - Convert datetimes to the ISO 8601 format
+    * `iso8601_format` - Get the format string of ISO 8601 datetimes (e.g. 'YYYY-MM-DD')
+    * `iso8601_read` - Read ISO 8601 formatted datetimes into POSIXct and POSIXlt
     
 [An example script for creating ecocomDP tables is available here.](https://github.com/EDIorg/ecocomDP/blob/master/documentation/examples/convert_bnz501_to_edi275.R)
 
