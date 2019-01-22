@@ -51,7 +51,7 @@ Functions available to help create ecocomDP tables:
     * `iso8601_format` - Get the format string of ISO 8601 datetimes (e.g. 'YYYY-MM-DD')
     * `iso8601_read` - Read ISO 8601 formatted datetimes into POSIXct and POSIXlt
     
-[An example script for creating ecocomDP tables is available here.](https://github.com/EDIorg/ecocomDP/blob/master/documentation/examples/convert_bnz501_to_edi275.R)
+[Example script for creating ecocomDP tables](https://github.com/EDIorg/ecocomDP/blob/master/documentation/examples/convert_bnz501_to_ecocomDP.R)
 
 ## Validate
 [back to top](#contents)
@@ -68,7 +68,7 @@ Create EML metadata for a set of ecocomDP tables using the `make_eml` function o
 
 Archive the ecocomDP tables, conversion script, and EML metadata in the EDI Data Repository. [Follow these instructions](https://environmentaldatainitiative.org/resources/assemble-data-and-metadata/step-4-submit-your-data-package/) to upload your data package.
 
-* [An example ecocomDP data package, including the conversion script and tables is available here.](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=275)
+* [Example ecocomDP data package, including conversion script and tables](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=275)
 
 ## Discover
 [back to top](#contents)
