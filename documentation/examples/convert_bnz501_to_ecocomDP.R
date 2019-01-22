@@ -1,18 +1,29 @@
 # Create ecocomDP data package
 #
-# This script converts knb-lter-bnz.501.x to the edi.275.x
+# This script converts knb-lter-bnz.501.x to the ecocomDP.
 
-# Supply arguments for function
+# Arguments:
+# path = Directory in which the ecocomDP tables will be written
+# parent_pkg_id = The parent (level-0) package ID from the EDI Data Repository
+#                 (e.g. knb-lter-bnz.501.17)
+# child_pkg_id = The child (edi.275.5)
 
-path <- '/Users/csmith/datasets/edi_275'
-parent_pkg_id <- 'knb-lter-bnz.501.17'
-child_pkg_id <- 'edi.275.1'
-
-# Function
-
-convert_tables <- function(path, parent_pkg_id, child_pkg_id){
+convert_bnz501_to_ecocomDP <- function(path, parent_pkg_id, child_pkg_id){
+  
+  message(paste0('Converting ', parent_pkg_id, ' to ecocomDP (', child_pkg_id, ')' ))
   
   project_name <- 'CiPEHR_biomass'
+  
+  # Load libraries ------------------------------------------------------------
+  
+  library(XML)
+  library(tidyr)
+  library(dplyr)
+  library(ecocomDP)
+  library(lubridate)
+  library(taxonomyCleanr)
+  library(dataCleanr)
+  library(stringr)
   
   # Validate arguments --------------------------------------------------------
   
@@ -124,7 +135,8 @@ convert_tables <- function(path, parent_pkg_id, child_pkg_id){
     stringsAsFactors = F
   )
   
-  # Get taxa names
+  # Get taxa names. Full scientific names associated with each species code
+  # are listed in methods of the EML. These have to be added manually.
   
   taxa_name_map <- data.frame(taxa_codes = unique(observation$taxon_id),
                               names = c('AMS',
