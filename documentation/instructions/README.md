@@ -20,28 +20,28 @@ Creation of an ecocomDP should be fully scripted to enable automated maintenance
 
 Familiarize yourself with the ecocomDP. There are several details to be aware of including required and non-required tables and columns, as well as column class restrictions and date-time format expectations. 
 
-* [Table descriptions, relationships, and requirements](https://github.com/EDIorg/ecocomDP/tree/master/documentation/model) 
+  * [Table descriptions, relationships, and requirements](https://github.com/EDIorg/ecocomDP/tree/master/documentation/model) 
 
 Understand level-0 dataset content and how it will map to the ecocomDP. Since level-0 content and format varies widely among level-0 datasets, we can't offer a "one size fits all" solution but do have some recommendations on the order in which tables should be created and notes on handling specific types of content.
 
-* [Table creation recommendations](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/table-creation.md)
+  * [Table creation recommendations](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/table-creation.md)
 
 Write a script to convert level-0 data to the ecocomDP tables. The script should cover these processes:
 
-* Read in level-0 data and metadata from the EDI Data Repository
-* Reformat level-0 data into ecocomDP tables and write to files
+  * Read in level-0 data and metadata from the EDI Data Repository
+  * Reformat level-0 data into ecocomDP tables and write to files
 
   and only require three arguments:
     
-* path - Where the ecocomDP tables will be written
-* parent.package.id - ID of the level-0 data package
-* child.package.id - ID of the ecocomDP data package
+  * path - Where the ecocomDP tables will be written
+  * parent.package.id - ID of the level-0 data package
+  * child.package.id - ID of the ecocomDP data package
     
 Functions are available in the ecocomDP R library to help create the tables:
 
-* `make_location` - Make the location table
-* `make_variable_mapping` - Make the variable_mapping table. [Resources for linking variables to external ontologies are available here](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/measurement_vocabularies.md)
-* `make_dataset_summary` - Make the dataset summary table
+  * `make_location` - Make the location table
+  * `make_variable_mapping` - Make the variable_mapping table. [Resources for linking variables to external ontologies are available here](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/measurement_vocabularies.md)
+  * `make_dataset_summary` - Make the dataset summary table
     
 [An example script for creating ecocomDP tables is available here.](https://github.com/EDIorg/ecocomDP/blob/master/documentation/examples/convert_bnz501_to_edi275.R)
 
