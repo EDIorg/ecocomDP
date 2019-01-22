@@ -48,34 +48,26 @@ Functions are available in the ecocomDP R library to help create the tables:
 ## Validate
 [back to top](#contents)
 
-Once you've created a L0 for your dataset, and before making EML, you will need to ensure the relational tables pass normalization tests as well as checks for required tables, fields, field classes, datetime formats, etc. Validation tests are run by the `validate_ecocomDP` function of the ecocomDP R package.
-
-Run the `validate_ecocomDP` function. Consult function documentation for use.
-
-Resolve each error encountered in the validation process. If no errors exist, and your L1 is valid, you will receive the message: *"Congratulations! Your ecocomDP has passed validation!"*
-
-* `validate_ecocomDP` - Validate a set of ecocomDP tables
-* `define_variables` - Get definitions and units for variables listed in ecocomDP tables
-    * `make_eml` - Make EML for a set of ecocomDP tables
+Validate ecocomDP tables with the `validate_ecocomDP` function of the ecocomDP R library. This function ensures tables pass normalization tests, and checks for required tables, fields, field classes, datetime formats, etc.
 
 ## Document
 [back to top](#contents)
 
-After the L1 tables have been validated and categorical variables defined, you can make an EML metadata record for them to complete the data package for upload to the EDI data repository. Before running the `make_eml` function run `import_templates` (enter `?import_templates` in the RStudio console to see required arguments.  Because L1 tables are standardized, the `make_eml` function will generate most of the EML automatically, however you will need to supply some additional information.
+Create EML metadata for a set of ecocomDP tables using the `make_eml` function of the ecocomDP R library. This function collects relevant information from the level-0 EML and combines it with boiler plate metadata to create an ecocomDP EML record.
 
 ## Archive
 [back to top](#contents)
 
-Your L1 ecocomDP and associated metadata form a package that may be uploaded to the [EDI data repository](https://portal.edirepository.org/nis/home.jsp). [Follow these instructions](https://environmentaldatainitiative.org/resources/assemble-data-and-metadata/step-4-submit-your-data-package/) to upload your data package.
+Archive the ecocomDP tables, conversion script, and EML metadata in the EDI Data Repository. [Follow these instructions](https://environmentaldatainitiative.org/resources/assemble-data-and-metadata/step-4-submit-your-data-package/) to upload your data package.
 
-[An example ecocomDP data package including the conversion script and tables is available here.](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=275)
+* [An example ecocomDP data package, including the conversion script and tables is available here.](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=275)
 
 ## Discover
 [back to top](#contents)
 
-Get a list of all available L1 data with the function `view_all_ecocomDP`. View L1 metadata with `view_landing_page`.
+Get a list of all available ecocomDP data with the `view_all_ecocomDP` function, and view ecocomDP metadata with `view_landing_page` function. Alternatively, search on the term "ecocomDP" in the EDI Data Repository.
 
 ## Reuse
 [back to top](#contents)
 
-Aggregate L1 of interest with the function `aggregate_ecocomDP`.
+Aggregate L1 of interest with the `aggregate_ecocomDP` function.
