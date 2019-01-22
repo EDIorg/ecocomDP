@@ -26,7 +26,7 @@ Depends:
 Imports: 
 Remotes: 
     github::NeonScience/NEON-utilities/neonUtilities,
-    github::EDIorg/EDIutils,
+    github::clnsmth/EDIutils,
     github::EDIorg/dataCleanr
 Suggests:
     knitr,
