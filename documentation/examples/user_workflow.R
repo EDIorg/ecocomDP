@@ -1,9 +1,11 @@
 # An example workflow for the data user
 
-# Update the ecocomDP R package
+# Update the ecocomDP R package and utilities
 library(devtools)
 install_github('EDIorg/ecocomDP')
 library(ecocomDP)
+install_github('EDIorg/EDIutils')
+library(EDIutils)
 
 # Get a list of all ecocomDPs available from EDI and NEON
 ecocomDP_list <- view_all_ecocomDP()

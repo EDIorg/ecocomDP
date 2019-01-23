@@ -11,7 +11,7 @@ edi,knb-lter-cap.46.13,,Colin Smith,underway,1,Meta-communities requested
 edi,knb-lter-cap.627.2,edi.192.2,Colin Smith,complete,1,Meta-communities requested
 edi,knb-lter-cap.632.5,edi.253.1,Will Rosenthal,complete,1,CAP recommended
 edi,knb-lter-cap.641.3,edi.252.1,Will Rosenthal,complete,1,CAP recommended
-edi,knb-lter-cap.643.1,edi.243.1,Will Rosenthal,complete,1,CAP recommended
+edi,knb-lter-cap.643.1,edi.248.1,Will Rosenthal,complete,1,CAP recommended
 edi,knb-lter-cap.652.2,edi.247.1,Will Rosenthal,complete,1,CAP recommended
 edi,knb-lter-cap.653.2,edi.115.1,Will Rosenthal,complete,1,CAP recommended
 edi,knb-lter-cdr.386.5,edi.124.3,Colin Smith,complete,,Meta-communities requested
@@ -81,7 +81,7 @@ edi,knb-lter-pie.32.12,,,,,from popler
 edi,knb-lter-pie.33.13,,,,,from popler
 edi,knb-lter-sbc.14.13,,,,,from popler
 edi,knb-lter-sbc.15.25,,Li Kui,waiting for cleaned update; synchrony WG requested,2,popler has rev 23
-edi,knb-lter-sbc.17.30,,Li Kui,waiting for cleaned update; synchrony WG requested,2,metacommunities requested; popler has rev 28
+edi,knb-lter-sbc.17.30,edi.189.1,Li Kui,complete; synchrony WG requested,2,metacommunities requested; popler has rev 28
 edi,knb-lter-sbc.18.18,,,,,from popler
 edi,knb-lter-sbc.19.23,,Li Kui,waiting for cleaned update; synchrony WG requested,2,metacommunities requested; popler has rev 21
 edi,knb-lter-sbc.28.23,,Li Kui,underway,2,popler has rev 21
