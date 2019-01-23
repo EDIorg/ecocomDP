@@ -26,6 +26,8 @@ structure:
         }
     }
 }}
+
+\item{file.names}{(character) Vector of file names.}
 }
 \value{
 If table names are valid, then the corresponding table names are

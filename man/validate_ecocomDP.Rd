@@ -13,6 +13,9 @@ tables.}
 \item{data.list}{(list of data frames) A named list of data frames containing the L1
 tables. Data frame tables must be named after the file name from 
 which they were read, including the extension.}
+
+\item{package.id}{(character) Package identifier (e.g. 'edi.101.1') containing ecocomDP
+tables to be validated.}
 }
 \value{
 A validation report to the RStudio console window. When an issue is 

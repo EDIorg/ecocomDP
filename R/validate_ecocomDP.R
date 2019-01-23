@@ -14,6 +14,9 @@
 #'     (list of data frames) A named list of data frames containing the L1
 #'     tables. Data frame tables must be named after the file name from 
 #'     which they were read, including the extension.
+#' @param package.id
+#'     (character) Package identifier (e.g. 'edi.101.1') containing ecocomDP
+#'      tables to be validated.
 #'
 #' @return 
 #'     A validation report to the RStudio console window. When an issue is 
@@ -51,15 +54,14 @@
 #' @export
 #'
 
-validate_ecocomDP <- function(data.path = NULL, data.list = NULL){
+validate_ecocomDP <- function(data.path = NULL, data.list = NULL, 
+                              package.id = NULL){
   
   
   # Check arguments
   
-  if (is.null(data.path) & is.null(data.list)){
-    stop('One of the arguments "data.path" or "data.list" must be used.')
-  } else if (!is.null(data.path) & !is.null(data.list)){
-    stop('Both arguments "data.path" and "data.list" cannot be used.')
+  if (is.null(data.path) & is.null(data.list) & is.null(package.id)){
+    stop('One of the arguments "data.path", "data.list", or "package.id" must be used.')
   }
   
   # Load validation criteria
@@ -100,6 +102,26 @@ validate_ecocomDP <- function(data.path = NULL, data.list = NULL){
       data.list = data.list,
       criteria = criteria
       )
+
+  } else if (!is.null(package.id)){
+    
+    data_entities <- suppressMessages(
+      EDIutils::pkg_data_entity_names(package.id)
+    )
+    
+    file_names <- validate_table_names(
+      file.names = data_entities$name,
+      criteria = criteria
+    )
+    
+    data.list <- lapply(
+      file_names, 
+      read_ecocomDP_table, 
+      package.id = package.id,
+      data.path = NULL
+    )
+    
+    names(data.list) <- unlist(lapply(file_names, is_table_rev, L1_table_names))
 
   }
 
@@ -206,6 +228,8 @@ validate_ecocomDP <- function(data.path = NULL, data.list = NULL){
 #'             }
 #'         }
 #'     }
+#' @param file.names
+#'     (character) Vector of file names.
 #' 
 #' @return
 #'     If table names are valid, then the corresponding table names are
@@ -215,18 +239,7 @@ validate_ecocomDP <- function(data.path = NULL, data.list = NULL){
 #' @export
 #'
 
-validate_table_names <- function(data.path = NULL, criteria, data.list = NULL) {
-  
-  # Check arguments and parameterize
-  
-  if (is.null(data.path) & is.null(data.list)){
-    stop('One of the arguments "data.path" or "data.list" must be used.')
-  } else if (!is.null(data.path) & !is.null(data.list)){
-    stop('Both arguments "data.path" and "data.list" cannot be used.')
-  }
-  if (missing(criteria)){
-    stop('Input argument "criteria" is missing! Specify the validation criteria for the ecocomDP tables.')
-  }
+validate_table_names <- function(data.path = NULL, criteria, data.list = NULL, file.names = NULL) {
   
   # Validate file names and read
   
@@ -313,6 +326,45 @@ validate_table_names <- function(data.path = NULL, criteria, data.list = NULL) {
       message('... table names are valid')
       tables
     }
+    
+  } else if (!is.null(file.names)){
+    
+    dir_files <- file.names
+    
+    # Load validation criteria
+    
+    table_names <- unique(criteria$table)
+    
+    table_names_regexpr <- paste0("_",
+                                  table_names,
+                                  "\\b")
+    
+    # Validate file naming convention
+    
+    message("Checking table names ...")
+    
+    msg <- list()
+    tables <- dir_files[attr(regexpr(paste(table_names_regexpr, 
+                                           collapse = "|"), 
+                                     dir_files),
+                             "match.length")
+                        != -1]
+    study_names <- unique(gsub(paste(table_names_regexpr, 
+                                     collapse = "|"), 
+                               "", tables))
+    study_names <- str_replace(study_names, "\\.[:alnum:]*$", replacement = "")
+    if (length(study_names) > 1){
+      stop(paste("\n",
+                 "More than one study name found in your ecocomDP tables.\n",
+                 "Only one study name is allowed.\n",
+                 "Here are the unique study names found:\n",
+                 paste(study_names, collapse = ", ")),
+           call. = F)
+    } else {
+      message('... table names are valid\n')
+      tables
+    }
+    
   }
 
 }
@@ -1497,20 +1549,73 @@ is_valid_name <- function(cols, L1.table_columns, table.name){
 
 
 
-read_ecocomDP_table <- function(data.path, file.name){
-  sep <- EDIutils::detect_delimeter(
-    path = data.path,
-    data.files = file.name,
-    os = EDIutils::detect_os()
-  )
-  x <- read.table(
-    paste0(data.path, "/", file.name),
-    header = T,
-    sep = sep,
-    as.is = T,
-    quote = "\"",
-    comment.char = ""
-  )
+read_ecocomDP_table <- function(data.path = NULL, file.name, package.id = NULL, entity.id = NULL){
+  
+  if (!is.null(data.path)){
+    
+    sep <- EDIutils::detect_delimeter(
+      path = data.path,
+      data.files = file.name,
+      os = EDIutils::detect_os()
+    )
+    
+    x <- read.table(
+      paste0(data.path, "/", file.name),
+      header = T,
+      sep = sep,
+      as.is = T,
+      quote = "\"",
+      comment.char = ""
+    )
+    
+  } else if (!is.null(package.id)){
+    
+    eml <- suppressMessages(
+      EDIutils::pkg_eml(package.id)
+    )
+
+    
+    file <- unlist(
+      xmlApply(
+        eml[
+          "//dataset/dataTable/entityName"
+          ],
+        xmlValue
+      )
+    )
+    
+    use_i <- match(file.name, files)
+    
+    sep <- unlist(
+      xmlApply(
+        eml[
+          "//dataset/dataTable/physical/dataFormat/textFormat/simpleDelimited/fieldDelimiter"
+          ],
+        xmlValue
+      )
+    )[use_i]
+    
+    data_url <- c(
+      unlist(
+        xmlApply(
+          eml["//dataset/dataTable/physical/distribution/online/url"], 
+          xmlValue
+        )
+      )
+    )[use_i]
+    
+    x <- read.table(
+      data_url,
+      header = T,
+      sep = sep,
+      as.is = T,
+      quote = "\"",
+      comment.char = ""
+    )
+    
+  }
+  
   list(data = x, fname = file.name)
+  
 }
 
