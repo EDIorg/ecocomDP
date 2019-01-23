@@ -1573,9 +1573,8 @@ read_ecocomDP_table <- function(data.path = NULL, file.name, package.id = NULL, 
     eml <- suppressMessages(
       EDIutils::pkg_eml(package.id)
     )
-
     
-    file <- unlist(
+    files <- unlist(
       xmlApply(
         eml[
           "//dataset/dataTable/entityName"
