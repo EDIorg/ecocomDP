@@ -31,6 +31,41 @@
 
 make_taxon <- function(taxa, taxon.id = NULL, name.type, data.sources){
   
+  # Validate arguments --------------------------------------------------------
+  
+  if (!missing(taxa)){
+    if (class(taxa) != 'character'){
+      stop('Input argument "taxa" is not of character class')
+    }
+  } else {
+    stop('Input argument "taxa" is missing.')
+  }
+  
+  if (!is.null(taxon.id)){
+    if (class(taxon.id) != 'character'){
+      stop('Input argument "taxon.id" is not of character class')
+    }
+    if (length(taxon.id) != length(taxa)){
+      stop('Length of argument "taxon.id" does not match length Of argument "taxa"')
+    }
+  } 
+
+  if (!missing(name.type)){
+    if ((!stringr::str_detect(name.type, 'scientific')) | 
+        (!stringr::str_detect(name.type, 'common')) |
+        (!stringr::str_detect(name.type, 'both'))){
+      stop('Input argument "name.type" must be "scientific", "common", or "both"')
+    }
+  } else {
+    stop('Input argument "name.type" is missing')
+  }
+  
+  if (missing(data.sources)){
+    stop('Input argument "data.sources" is missing')
+  }
+  
+  # ----------------------
+  
   
   
 }
