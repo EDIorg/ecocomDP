@@ -18,15 +18,18 @@ Creation of an ecocomDP should be fully scripted to enable automated maintenance
 ## Create
 [back to top](#contents)
 
-Familiarize yourself with the ecocomDP. There are several details to be aware of including required and non-required tables and columns, as well as column class restrictions and date-time format expectations. 
+#### Familiarize yourself with the ecocomDP
+There are several details to be aware of including required and non-required tables and columns, as well as column class restrictions and date-time format expectations. 
 
   * [Table descriptions, relationships, and requirements](https://github.com/EDIorg/ecocomDP/tree/master/documentation/model) 
 
-Understand level-0 dataset content and how it will map to the ecocomDP. Since level-0 content and format varies widely among level-0 datasets, we can't offer a "one size fits all" solution but do have some recommendations on the order in which tables should be created and notes on handling specific types of content.
+#### Understand level-0 dataset content and how it will map to the ecocomDP
+Since level-0 content and format varies widely among level-0 datasets, we can't offer a "one size fits all" solution but do have some recommendations on the order in which tables should be created and notes on handling specific types of content.
 
   * [Table creation recommendations](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/table-creation.md)
 
-Write a script to convert level-0 data to the ecocomDP tables. The script should cover these processes:
+#### Write a script to convert level-0 data to the ecocomDP tables
+The script should cover these processes:
 
   * Read in level-0 data and metadata from the EDI Data Repository
   * Reformat level-0 data into ecocomDP tables and write to files
@@ -37,7 +40,7 @@ Write a script to convert level-0 data to the ecocomDP tables. The script should
   * parent.package.id - ID of the level-0 data package
   * child.package.id - ID of the ecocomDP data package
     
-Functions available to help create ecocomDP tables:
+#### Functions available to help create ecocomDP tables
 
   * ecocomDP R library functions:
     * `make_location` - Make the location table
