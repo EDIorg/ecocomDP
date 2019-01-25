@@ -56,7 +56,7 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
   if (missing(sep)){
     stop('Input argument "sep" is missing.')
   } else if (!missing(sep)){
-    if ((!stringr::str_detect(sep, ',')) | (!stringr::str_detect(sep, '\\t'))){
+    if ((!stringr::str_detect(sep, ',')) & (!stringr::str_detect(sep, '\\t'))){
       stop('Input argument "sep" must be "," or "\\t".')
     }
   }

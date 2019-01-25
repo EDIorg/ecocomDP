@@ -51,8 +51,8 @@ make_taxon <- function(taxa, taxon.id = NULL, name.type, data.sources){
   } 
 
   if (!missing(name.type)){
-    if ((!stringr::str_detect(name.type, 'scientific')) | 
-        (!stringr::str_detect(name.type, 'common')) |
+    if ((!stringr::str_detect(name.type, 'scientific')) & 
+        (!stringr::str_detect(name.type, 'common')) &
         (!stringr::str_detect(name.type, 'both'))){
       stop('Input argument "name.type" must be "scientific", "common", or "both"')
     }
