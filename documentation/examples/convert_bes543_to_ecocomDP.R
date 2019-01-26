@@ -109,7 +109,7 @@ convert_bes543_to_ecocomDP <- function(path, parent_pkg_id, child_pkg_id){
   
   # location_id
   
-  birds$location_id <- birds$site_id
+  birds$location_id <- trimws(birds$site_id, 'both')
   
   # taxon_id
   
@@ -154,10 +154,48 @@ convert_bes543_to_ecocomDP <- function(path, parent_pkg_id, child_pkg_id){
   
   message('Creating table "location"')
   
+  # Fix referential integrity violation
+  # observation$location_id contains site_id absent in the sites list
+  
+  use_i <- !(observation$location_id %in% sites$site_id)
+  
+  if (sum(use_i) > 0){
+    
+    df <- as.data.frame(
+      matrix(
+        NA_character_,
+        sum(use_i),
+        ncol(sites)
+      )
+    )
+    
+    colnames(df) <- colnames(sites)
+    
+    df$site_id <- observation$location_id[use_i]
+    
+    df$park_code <- 'unknown'
+    
+    sites <- rbind(
+      sites,
+      df
+    )
+    
+  }
+  
+  # Make location table
+  
   location <- ecocomDP::make_location(
     x = sites,
     cols = c('park_code', 'site_id')
   )
+
+  # Update observation table --------------------------------------------------
+  
+  # location_id
+  
+  observation$location_id <- location$location_id[
+    match(observation$location_id, location$location_name)
+  ]
   
   # Create location_ancillary table -------------------------------------------
   
@@ -338,6 +376,7 @@ convert_bes543_to_ecocomDP <- function(path, parent_pkg_id, child_pkg_id){
   
   observation_ancillary <- dplyr::select(
     observation_ancillary,
+    observation_ancillary_id,
     event_id,
     variable_name,
     value,
