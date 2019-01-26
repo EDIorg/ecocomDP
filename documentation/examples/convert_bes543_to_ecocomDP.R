@@ -1,7 +1,6 @@
-# Create ecocomDP data package
+# Create ecocomDP data tables
 #
-# This script converts knb-lter-bes.543.x to the ecocomDP, validates the 
-# resultant tables, and creates the associated EML record.
+# This script converts knb-lter-bes.543.x to the ecocomDP.
 
 convert_bes543_to_ecocomDP <- function(path, parent_pkg_id, child_pkg_id){
   
