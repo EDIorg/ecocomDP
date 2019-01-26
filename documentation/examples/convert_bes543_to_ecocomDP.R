@@ -3,10 +3,6 @@
 # This script converts knb-lter-bes.543.x to the ecocomDP, validates the 
 # resultant tables, and creates the associated EML record.
 
-path <- 'C:/Users/Colin/Documents/EDI/data_sets/ecocomDP/edi_191'
-parent_pkg_id <- 'knb-lter-bes.543.170'
-child_pkg_id <- 'edi.191.3'
-
 convert_bes543_to_ecocomDP <- function(path, parent_pkg_id, child_pkg_id){
   
   message(paste0('Converting ', parent_pkg_id, ' to ecocomDP (', child_pkg_id, ')' ))
