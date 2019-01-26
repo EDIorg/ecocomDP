@@ -69,7 +69,7 @@ Create EML metadata for a set of ecocomDP tables using the `make_eml` function o
 
 Archive the ecocomDP tables, conversion script, and EML metadata in the EDI Data Repository. [Follow these instructions](https://environmentaldatainitiative.org/resources/assemble-data-and-metadata/step-4-submit-your-data-package/) to upload your data package.
 
-* [Example ecocomDP data package, including conversion script and tables](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=275)
+* [Example ecocomDP data package, including conversion script and tables](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=191)
 
 ## Discover
 [back to top](#contents)
