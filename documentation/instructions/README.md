@@ -64,6 +64,8 @@ Validate ecocomDP tables with the `validate_ecocomDP` function of the ecocomDP R
 
 Create EML metadata for a set of ecocomDP tables using the `make_eml` function of the ecocomDP R library. This function collects relevant information from the level-0 EML and combines it with boiler plate metadata to create an ecocomDP EML record.
 
+[Example script for creating ecocomDP EML](https://github.com/EDIorg/ecocomDP/blob/master/documentation/examples/package_bes543.R)
+
 ## Archive
 [back to top](#contents)
 
