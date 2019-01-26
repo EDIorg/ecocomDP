@@ -52,7 +52,7 @@ The script should cover these processes:
     * `iso8601_format` - Get the format string of ISO 8601 datetimes (e.g. 'YYYY-MM-DD')
     * `iso8601_read` - Read ISO 8601 formatted datetimes into POSIXct and POSIXlt
     
-[Example script for creating ecocomDP tables](https://github.com/EDIorg/ecocomDP/blob/master/documentation/examples/convert_bnz501_to_ecocomDP.R)
+[Example script for creating ecocomDP tables](https://github.com/EDIorg/ecocomDP/blob/master/documentation/examples/convert_bes543_to_ecocomDP.R)
 
 ## Validate
 [back to top](#contents)
