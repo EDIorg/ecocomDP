@@ -90,7 +90,7 @@ validate_ecocomDP <- function(data.path = NULL, data.list = NULL,
       criteria = criteria
       )
 
-    data.list <- lapply(file_names, read_ecocomDP_table, data.path = data.path)
+    data.list <- lapply(X = file_names, FUN = read_ecocomDP_table, data.path = data.path)
     
     names(data.list) <- unlist(lapply(file_names, is_table_rev, L1_table_names))
 

@@ -146,8 +146,7 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
         '/',
         study.name,
         '_observation.csv'),
-      row.names = F,
-      quote = F
+      row.names = F
     )
     
   } else if (sep == '\t'){
@@ -164,8 +163,7 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
       ),
       col.names = T,
       row.names = F,
-      sep = "\t",
-      quote = F
+      sep = "\t"
     )
     
   }
@@ -183,8 +181,7 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
         '/',
         study.name,
         '_location.csv'),
-      row.names = F,
-      quote = F
+      row.names = F
     )
     
   } else if (sep == '\t'){
@@ -201,8 +198,7 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
       ),
       col.names = T,
       row.names = F,
-      sep = "\t",
-      quote = F
+      sep = "\t"
     )
     
   }
@@ -220,8 +216,7 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
         '/',
         study.name,
         '_taxon.csv'),
-      row.names = F,
-      quote = F
+      row.names = F
     )
     
   } else if (sep == '\t'){
@@ -238,8 +233,7 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
       ),
       col.names = T,
       row.names = F,
-      sep = "\t",
-      quote = F
+      sep = "\t"
     )
     
   }
@@ -257,8 +251,7 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
         '/',
         study.name,
         '_dataset_summary.csv'),
-      row.names = F,
-      quote = F
+      row.names = F
     )
     
   } else if (sep == '\t'){
@@ -275,8 +268,7 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
       ),
       col.names = T,
       row.names = F,
-      sep = "\t",
-      quote = F
+      sep = "\t"
     )
     
   }
@@ -294,8 +286,7 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
         '/',
         study.name,
         '_observation_ancillary.csv'),
-      row.names = F,
-      quote = F
+      row.names = F
     )
     
   } else if (sep == '\t'){
@@ -312,8 +303,7 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
       ),
       col.names = T,
       row.names = F,
-      sep = "\t",
-      quote = F
+      sep = "\t"
     )
     
   }
@@ -331,8 +321,7 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
         '/',
         study.name,
         '_location_ancillary.csv'),
-      row.names = F,
-      quote = F
+      row.names = F
     )
     
   } else if (sep == '\t'){
@@ -349,8 +338,7 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
       ),
       col.names = T,
       row.names = F,
-      sep = "\t",
-      quote = F
+      sep = "\t"
     )
     
   }
@@ -368,8 +356,7 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
         '/',
         study.name,
         '_taxon_ancillary.csv'),
-      row.names = F,
-      quote = F
+      row.names = F
     )
     
   } else if (sep == '\t'){
@@ -386,8 +373,7 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
       ),
       col.names = T,
       row.names = F,
-      sep = "\t",
-      quote = F
+      sep = "\t"
     )
     
   }
@@ -405,8 +391,7 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
         '/',
         study.name,
         '_variable_mapping.csv'),
-      row.names = F,
-      quote = F
+      row.names = F
     )
     
   } else if (sep == '\t'){
@@ -423,8 +408,7 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
       ),
       col.names = T,
       row.names = F,
-      sep = "\t",
-      quote = F
+      sep = "\t"
     )
     
   }
