@@ -44,7 +44,7 @@ criteria_2 <- criteria[
 # Fix datetime issues in location_ancillary
 
 x <- data.list$location_ancillary$data$datetime
-x <- EDIutils::datetime_to_iso8601(
+x <- dataCleanr::iso8601_char(
   x = x,
   orders = c('ymd', 'dmy')
   )
@@ -53,7 +53,7 @@ data.list$location_ancillary$data$datetime <- x
 # Fix datetime issues in observation
 
 x <- data.list$observation$data$observation_datetime
-x <- EDIutils::datetime_to_iso8601(
+x <- dataCleanr::iso8601_char(
   x = x,
   orders = c('ymd', 'dmy')
 )

@@ -106,7 +106,7 @@ validate_ecocomDP <- function(data.path = NULL, data.list = NULL,
   } else if (!is.null(package.id)){
     
     data_entities <- suppressMessages(
-      EDIutils::pkg_data_entity_names(package.id)
+      EDIutils::read_data_entity_names(package.id)
     )
     
     file_names <- validate_table_names(
@@ -1571,7 +1571,7 @@ read_ecocomDP_table <- function(data.path = NULL, file.name, package.id = NULL, 
   } else if (!is.null(package.id)){
     
     eml <- suppressMessages(
-      EDIutils::pkg_eml(package.id)
+      EDIutils::read_metadata(package.id)
     )
     
     files <- unlist(
