@@ -35,9 +35,9 @@ convert_bes543_to_ecocomDP <- function(path, parent_pkg_id, child_pkg_id){
   
   message('Loading data')
   
-  metadata <- EDIutils::read_metadata(parent_pkg_id)
+  metadata <- EDIutils::api_read_metadata(parent_pkg_id)
   
-  data_name_id <- EDIutils::read_data_entity_names(parent_pkg_id)
+  data_name_id <- EDIutils::api_read_data_entity_names(parent_pkg_id)
   data_name <- data_name_id$name
   data_id <- data_name_id$identifier
   

@@ -105,7 +105,7 @@ make_dataset_summary <- function(parent.package.id, child.package.id, sample.dat
   dataset_summary$max_num_taxa <- nrow(taxon.table)
   
   eml <- suppressMessages(
-    EDIutils::read_metadata(
+    EDIutils::api_read_metadata(
       parent.package.id
     )
   )
