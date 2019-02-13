@@ -1,5 +1,5 @@
 system,identifier_L0 (package ID),identifier_L1 (package ID),creator_L1 (first and last name),"status (underway, complete )","priority (1=high, 2=low)",notes
-knb,knb-csun-usvi.101.4,,,,,metacommunities requested
+knb,edi.291.1,,,,1,metacommunities requested
 edi,knb-lter-arc.10272.4,edi.262,Song Qian,complete,,metacommunities requested
 edi,knb-lter-bes.543.170,edi.191.2,Colin Smith,complete,1,Meta-communities requested
 edi,knb-lter-bnz.175.20,,Song Qian,underway,,metacommunities requested
