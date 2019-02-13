@@ -80,24 +80,25 @@ edi,knb-lter-ntl.7.24,edi.303.1,Corinna Gries,complete,,metacommunities requeste
 edi,knb-lter-pie.32.12,,,,,from popler
 edi,knb-lter-pie.33.13,,,,,from popler
 edi,knb-lter-sbc.14.13,,,,,from popler
-edi,knb-lter-sbc.15.25,,Li Kui,waiting for cleaned update; synchrony WG requested,2,popler has rev 23
+edi,knb-lter-sbc.15.25,2,Li Kui,waiting for cleaned update; synchrony WG requested,2,popler has rev 23
 edi,knb-lter-sbc.17.30,edi.189.1,Li Kui,complete; synchrony WG requested,2,metacommunities requested; popler has rev 28
 edi,knb-lter-sbc.18.18,,,,,from popler
-edi,knb-lter-sbc.19.23,,Li Kui,waiting for cleaned update; synchrony WG requested,2,metacommunities requested; popler has rev 21
-edi,knb-lter-sbc.28.23,,Li Kui,underway,2,popler has rev 21
+edi,knb-lter-sbc.19.23,2,Li Kui,waiting for cleaned update; synchrony WG requested,2,metacommunities requested; popler has rev 21
+edi,knb-lter-sbc.28.23,2,Li Kui,underway,2,popler has rev 21
 edi,knb-lter-sbc.29.13,,,,,from popler
-edi,knb-lter-sbc.30.15,,Li Kui,underway,2,metacommunities requested; popler has rev 13
-edi,knb-lter-sbc.34.13,,Li Kui,underway,2,metacommunities requested; popler has rev 11
+edi,knb-lter-sbc.30.15,2,Li Kui,underway,2,metacommunities requested; popler has rev 13
+edi,knb-lter-sbc.34.13,2,Li Kui,underway,2,metacommunities requested; popler has rev 11
 edi,knb-lter-sbc.38.4,,,,,from popler
 edi,knb-lter-sbc.39.4,,,,,from popler
 edi,knb-lter-sbc.45.8,,,,,from popler
 edi,knb-lter-sbc.46.3,,,,,from popler
 edi,knb-lter-sbc.47.3,,,,,from popler
 edi,knb-lter-sbc.49.9,,,,,metacommunities requested; popler has rev 8
-edi,knb-lter-sbc.50.4,,Li Kui,after abundance datasts cleaned;synchrony WG requested,2,"talk to SBC first. this is a combined biomass, could replace 13, 15, 17, maybe others."
+edi,knb-lter-sbc.50.7,1,Li Kui,after abundance datasts cleaned;synchrony WG requested,2,"talk to SBC first. this is a combined biomass, could replace 13, 15, 17, maybe others. ."
 edi,knb-lter-sbc.52.3,,,,,from popler
 edi,knb-lter-sbc.61.4,,,,,from popler
 edi,knb-lter-sbc.77.1,,,,,from popler
+edi,knb-lter-sbc.119.2,,,,1,very similar to sbc.50
 edi,knb-lter-sev.13.270182,,,,,from popler
 edi,knb-lter-sev.148.131882,,,,,from popler
 edi,knb-lter-sev.15.218704,,,,,from popler
