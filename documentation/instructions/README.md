@@ -49,7 +49,7 @@ The script should cover these processes:
     * `make_variable_mapping` - Make the variable_mapping table. [Resources for linking variables to external ontologies are available here](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/measurement_vocabularies.md)
     * `make_dataset_summary` - Make the dataset summary table
     * `make_taxon` - Make the taxon table
-  * `dataCleanr` R library:
+  * [`dataCleanr`](https://ediorg.github.io/dataCleanr/index.html) R library:
     * [`iso8601_convert`](https://ediorg.github.io/dataCleanr/reference/iso8601_convert.html) - Convert datetimes to the ISO 8601 format
     * [`iso8601_get_format_string`](https://ediorg.github.io/dataCleanr/reference/iso8601_get_format_string.html) - Get the format string of ISO 8601 datetimes (e.g. 'YYYY-MM-DD')
     * [`iso8601_read`](https://ediorg.github.io/dataCleanr/reference/iso8601_read.html) - Read ISO 8601 formatted datetimes into POSIXct and POSIXlt
