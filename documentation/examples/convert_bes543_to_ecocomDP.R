@@ -94,7 +94,7 @@ convert_bes543_to_ecocomDP <- function(path, parent_pkg_id, child_pkg_id){
     match(surveys$survey_id, birds$survey_id)
   ]
   
-  birds$observation_datetime <- dataCleanr::iso8601_char(
+  birds$observation_datetime <- dataCleanr::iso8601_convert(
     x = birds$observation_datetime,
     orders = 'mdy'
   )
@@ -334,7 +334,7 @@ convert_bes543_to_ecocomDP <- function(path, parent_pkg_id, child_pkg_id){
   
   # Reformat datetime
   
-  observation_ancillary$survey_date <- dataCleanr::iso8601_char(
+  observation_ancillary$survey_date <- dataCleanr::iso8601_get_format_string(
     x = observation_ancillary$survey_date,
     orders = 'mdy'
   )
