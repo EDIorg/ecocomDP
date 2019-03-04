@@ -267,141 +267,157 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
   
   # observation_ancillary
   
-  if (sep == ','){
+  if (!is.null(observation_ancillary)){
     
-    message(paste0(study.name, '_observation_ancillary.csv'))
-    
-    write.csv(
-      observation_ancillary,
-      file = paste0(
-        path,
-        '/',
-        study.name,
-        '_observation_ancillary.csv'),
-      row.names = F
-    )
-    
-  } else if (sep == '\t'){
-    
-    message(paste0(study.name, '_observation_ancillary.txt'))
-    
-    write.table(
-      observation_ancillary,
-      file = paste0(
-        path,
-        '/',
-        study.name,
-        '_observation_ancillary.txt'
-      ),
-      col.names = T,
-      row.names = F,
-      sep = "\t"
-    )
+    if (sep == ','){
+      
+      message(paste0(study.name, '_observation_ancillary.csv'))
+      
+      write.csv(
+        observation_ancillary,
+        file = paste0(
+          path,
+          '/',
+          study.name,
+          '_observation_ancillary.csv'),
+        row.names = F
+      )
+      
+    } else if (sep == '\t'){
+      
+      message(paste0(study.name, '_observation_ancillary.txt'))
+      
+      write.table(
+        observation_ancillary,
+        file = paste0(
+          path,
+          '/',
+          study.name,
+          '_observation_ancillary.txt'
+        ),
+        col.names = T,
+        row.names = F,
+        sep = "\t"
+      )
+      
+    }
     
   }
   
   # location_ancillary
   
-  if (sep == ','){
+  if (!is.null(location_ancillary)){
     
-    message(paste0(study.name, '_location_ancillary.csv'))
-    
-    write.csv(
-      location_ancillary,
-      file = paste0(
-        path,
-        '/',
-        study.name,
-        '_location_ancillary.csv'),
-      row.names = F
-    )
-    
-  } else if (sep == '\t'){
-    
-    message(paste0(study.name, '_location_ancillary.txt'))
-    
-    write.table(
-      location_ancillary,
-      file = paste0(
-        path,
-        '/',
-        study.name,
-        '_location_ancillary.txt'
-      ),
-      col.names = T,
-      row.names = F,
-      sep = "\t"
-    )
+    if (sep == ','){
+      
+      message(paste0(study.name, '_location_ancillary.csv'))
+      
+      write.csv(
+        location_ancillary,
+        file = paste0(
+          path,
+          '/',
+          study.name,
+          '_location_ancillary.csv'),
+        row.names = F
+      )
+      
+    } else if (sep == '\t'){
+      
+      message(paste0(study.name, '_location_ancillary.txt'))
+      
+      write.table(
+        location_ancillary,
+        file = paste0(
+          path,
+          '/',
+          study.name,
+          '_location_ancillary.txt'
+        ),
+        col.names = T,
+        row.names = F,
+        sep = "\t"
+      )
+      
+    } 
     
   }
   
   # taxon_ancillary
   
-  if (sep == ','){
+  if (!is.null(taxon_ancillary)){
     
-    message(paste0(study.name, '_taxon_ancillary.csv'))
-    
-    write.csv(
-      taxon_ancillary,
-      file = paste0(
-        path,
-        '/',
-        study.name,
-        '_taxon_ancillary.csv'),
-      row.names = F
-    )
-    
-  } else if (sep == '\t'){
-    
-    message(paste0(study.name, '_taxon_ancillary.txt'))
-    
-    write.table(
-      taxon_ancillary,
-      file = paste0(
-        path,
-        '/',
-        study.name,
-        '_taxon_ancillary.txt'
-      ),
-      col.names = T,
-      row.names = F,
-      sep = "\t"
-    )
+    if (sep == ','){
+      
+      message(paste0(study.name, '_taxon_ancillary.csv'))
+      
+      write.csv(
+        taxon_ancillary,
+        file = paste0(
+          path,
+          '/',
+          study.name,
+          '_taxon_ancillary.csv'),
+        row.names = F
+      )
+      
+    } else if (sep == '\t'){
+      
+      message(paste0(study.name, '_taxon_ancillary.txt'))
+      
+      write.table(
+        taxon_ancillary,
+        file = paste0(
+          path,
+          '/',
+          study.name,
+          '_taxon_ancillary.txt'
+        ),
+        col.names = T,
+        row.names = F,
+        sep = "\t"
+      )
+      
+    }
     
   }
   
   # variable_mapping
   
-  if (sep == ','){
+  if (!is.null(variable_mapping)){
     
-    message(paste0(study.name, '_variable_mapping.csv'))
-    
-    write.csv(
-      variable_mapping,
-      file = paste0(
-        path,
-        '/',
-        study.name,
-        '_variable_mapping.csv'),
-      row.names = F
-    )
-    
-  } else if (sep == '\t'){
-    
-    message(paste0(study.name, '_variable_mapping.txt'))
-    
-    write.table(
-      variable_mapping,
-      file = paste0(
-        path,
-        '/',
-        study.name,
-        '_variable_mapping.txt'
-      ),
-      col.names = T,
-      row.names = F,
-      sep = "\t"
-    )
+    if (sep == ','){
+      
+      message(paste0(study.name, '_variable_mapping.csv'))
+      
+      write.csv(
+        variable_mapping,
+        file = paste0(
+          path,
+          '/',
+          study.name,
+          '_variable_mapping.csv'),
+        row.names = F
+      )
+      
+    } else if (sep == '\t'){
+      
+      message(paste0(study.name, '_variable_mapping.txt'))
+      
+      write.table(
+        variable_mapping,
+        file = paste0(
+          path,
+          '/',
+          study.name,
+          '_variable_mapping.txt'
+        ),
+        col.names = T,
+        row.names = F,
+        sep = "\t"
+      )
+      
+    }
     
   }
 
