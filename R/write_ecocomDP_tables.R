@@ -101,32 +101,24 @@ write_ecocomDP_tables <- function(path, sep, study.name, observation, location,
     if (class(observation_ancillary) != 'data.frame'){
       stop('Input argument "observation_ancillary" must be a data.frame')
     }
-  } else if (missing(observation_ancillary)){
-    stop('Input argument "observation_ancillary" is missing')
   }
   
   if (!is.null(location_ancillary)){
     if (class(location_ancillary) != 'data.frame'){
       stop('Input argument "location_ancillary" must be a data.frame')
     }
-  } else if (missing(location_ancillary)){
-    stop('Input argument "location_ancillary" is missing')
   }
   
   if (!is.null(taxon_ancillary)){
     if (class(taxon_ancillary) != 'data.frame'){
       stop('Input argument "taxon_ancillary" must be a data.frame')
     }
-  } else if (missing(taxon_ancillary)){
-    stop('Input argument "taxon_ancillary" is missing')
   }
   
   if (!is.null(variable_mapping)){
     if (class(variable_mapping) != 'data.frame'){
       stop('Input argument "variable_mapping" must be a data.frame')
     }
-  } else if (missing(variable_mapping)){
-    stop('Input argument "variable_mapping" is missing')
   }
   
   # Write tables to file ------------------------------------------------------
