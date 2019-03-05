@@ -1418,12 +1418,12 @@ is_datetime_format <- function(L1.table, tables, data.list, criteria) {
       
       n_na_raw <- sum(is.na(x))
       
-      # Count NA of datetimes read by dataCleanr::iso8601_format()
+      # Count NA of datetimes read by dataCleanr::iso8601_convert()
       
       n_na_con <- suppressWarnings(
         sum(
           is.na(
-            dataCleanr::iso8601_char(x)
+            dataCleanr::iso8601_convert(x)
           )
         )
       )
