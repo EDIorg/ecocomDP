@@ -897,6 +897,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
     if (sep == "\t"){
       
       physical <- set_physical(
+        
         tables_found[i],
         numHeaderLines = "1",
         recordDelimiter = eol,
@@ -1579,7 +1580,7 @@ compile_attributes <- function(path, delimiter){
       if (sum(is.na(df_table[ , colname])) == nrow(df_table)){
         attributes$formatString[use_i] <- 'YYYY'
       } else {
-        datetime_format <- dataCleanr::iso8601_format(df_table[ , colname])
+        datetime_format <- dataCleanr::iso8601_get_format_string(df_table[ , colname])
         attributes$formatString[use_i] <- datetime_format
       }
     }
