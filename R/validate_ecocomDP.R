@@ -1420,21 +1420,21 @@ is_datetime_format <- function(L1.table, tables, data.list, criteria) {
       
       # Count NA of datetimes read by dataCleanr::iso8601_convert()
       
-      n_na_con <- suppressWarnings(
-        sum(
-          is.na(
-            dataCleanr::iso8601_convert(x)
-          )
+      use_i <- suppressMessages(
+        suppressWarnings(
+          dataCleanr::iso8601_read(x)
         )
       )
       
+      
+      n_na_con <- sum(is.na(use_i))
+      
       if (n_na_con > n_na_raw){
-        use_i <- seq(length(x))[suppressWarnings(is.na(lubridate::ymd_hms(x)))]
+        use_i <- seq(length(x))[is.na(use_i)]
         stop(paste0("\n",
                     'This table:\n',
                     table.name,
-                    "\ncontains an unsupported datetime formats.",
-                    '\nThe format should be "YYYY-MM-DDThh:mm:ss".',
+                    "\ncontains unsupported datetime formats.",
                     '\nUnsupported datetime formats occur in rows:\n',
                     paste(use_i, collapse = ' ')),
              call. = F
