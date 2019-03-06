@@ -225,7 +225,7 @@ make_location <- function(x, cols, kml = NULL, col = NULL){
       )
       
       location_name <- c(
-        as.character(df[[j]][['key']]),
+        as.character(df[[j]][[cols[j]]]),
         location_name
       )
       
