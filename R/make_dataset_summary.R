@@ -89,15 +89,13 @@ make_dataset_summary <- function(parent.package.id, child.package.id, sample.dat
         )
       )
     )
-
+    
     dataset_summary$std_dev_interval_betw_years <- sd(
       diff(
-        dates[
-          order(
-            unique(dates)
-          )
-        ]
-      )/365
+        lubridate::year(
+          dates
+        )
+      )
     )
 
   }
