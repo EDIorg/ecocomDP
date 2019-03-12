@@ -543,16 +543,20 @@ make_eml <- function(data.path, code.path = data.path, code.files,
       comment.char = ""
     )
     
-    tc <- taxonomyCleanr::make_taxonomicCoverage(
-      taxa.clean = df_table$taxon_name,
-      authority = df_table$authority_system,
-      authority.id = df_table$authority_taxon_id
-    )
-    
-    xml_in@dataset@coverage@taxonomicCoverage <- as(
-      list(tc), 
-      "ListOftaxonomicCoverage"
-    )
+    if (sum(is.na(df_table$authority_taxon_id)) != nrow(df_table)){
+      
+      tc <- taxonomyCleanr::make_taxonomicCoverage(
+        taxa.clean = df_table$taxon_name,
+        authority = df_table$authority_system,
+        authority.id = df_table$authority_taxon_id
+      )
+      
+      xml_in@dataset@coverage@taxonomicCoverage <- as(
+        list(tc), 
+        "ListOftaxonomicCoverage"
+      )
+      
+    }
     
   }
   
