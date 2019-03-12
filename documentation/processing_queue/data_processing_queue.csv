@@ -132,17 +132,19 @@ edi,knb-lter-sev.297.233742,,,,,from popler
 edi,knb-lter-sev.81.185474,,,,,from popler
 edi,knb-lter-sev.88.122261,,,,,from popler
 edi,knb-lter-sgs.130.18,,,,,from popler
-edi,knb-lter-sgs.134.17,,,,,from popler
-edi,knb-lter-sgs.135.17,,,,,from popler
-edi,knb-lter-sgs.136.17,,,,,from popler
-edi,knb-lter-sgs.137.17,,,,,from popler
-edi,knb-lter-sgs.139.17,,,,,from popler
-edi,knb-lter-sgs.140.17,,,,,metacommunities requested
-edi,knb-lter-sgs.141.17,,,,,metacommunities requested; in popler
-edi,knb-lter-sgs.527.1,,,,,from popler
-edi,knb-lter-sgs.539.1,,,,,from popler
-edi,knb-lter-sgs.540.1,,,,,from popler
-edi,knb-lter-sgs.542.1,,,,,from popler
+edi,knb-lter-sgs.134,,Colin Smith,underway,,8 yrs. From popler
+edi,knb-lter-sgs.136,,Colin Smith,underway,,12 yrs. From popler
+edi,knb-lter-sgs.137,,,,,12 yrs trapping mark and recapture. From popler
+edi,knb-lter-sgs.138,,,,,12 yrs related to 137 trapping mark and recapture.
+edi,knb-lter-sgs.139,,,,,7 yrs trapping mark and recapture. From popler
+edi,knb-lter-sgs.140,,Colin Smith,underway,,7 yrs. Metacommunities requested
+edi,knb-lter-sgs.141,,,,,Related to sgs.140. 7 yrs measures structures not organisms. Metacommunities requested; in popler
+edi,knb-lter-sgs.520,,,,,36 yrs experimental.
+edi,knb-lter-sgs.521,,,,,29 yrs experimental.
+edi,knb-lter-sgs.527,,,,,16 yrs experimental. From popler
+edi,knb-lter-sgs.539,,,,,6 yrs experimental. From popler
+edi,knb-lter-sgs.540,,,,,Short-term experimental. From popler
+edi,knb-lter-sgs.542,,,,,Short-term experimental. From popler
 edi,knb-lter-sgs.700,edi.325,Colin Smith,complete,,metacommunities requested; in popler
 edi,knb-lter-sgs.701.1,,,,,metacommunities requested
 edi,knb-lter-vcr.106,,Colin Smith,,2,These data have restricted access and shouldn't be converted yet. From popler.
