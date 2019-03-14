@@ -103,34 +103,26 @@ edi,knb-lter-sbc.52.3,,,,,from popler
 edi,knb-lter-sbc.61.4,,,,,from popler
 edi,knb-lter-sbc.77.1,,,,,from popler
 edi,knb-lter-sbc.119.2,edi.278,Colin,complete,1,very similar to sbc.50
-edi,knb-lter-sev.13.270182,,,,,from popler
-edi,knb-lter-sev.148.131882,,,,,from popler
-edi,knb-lter-sev.15.218704,,,,,from popler
-edi,knb-lter-sev.155.233346,,,,,from popler
-edi,knb-lter-sev.156.245412,,,,,from popler
-edi,knb-lter-sev.168.192537,,,,,from popler
-edi,knb-lter-sev.17.120278,,,,,from popler
-edi,knb-lter-sev.173.87391,,,,,from popler
-edi,knb-lter-sev.176.233653,,,,,from popler
-edi,knb-lter-sev.178.133945,,,,,from popler
-edi,knb-lter-sev.187.167478,,,,,from popler
-edi,knb-lter-sev.188.243666,,,,,from popler
-edi,knb-lter-sev.193.178639,,,,,from popler
-edi,knb-lter-sev.194.188141,,,,,from popler
-edi,knb-lter-sev.212.1,,,,,from popler
-edi,knb-lter-sev.215.173899,,,,,from popler
-edi,knb-lter-sev.228.102077,,,,,from popler
-edi,knb-lter-sev.231.176381,,,,,from popler
-edi,knb-lter-sev.23.121704,,,,,from popler
-edi,knb-lter-sev.236.257686,,,,,from popler
-edi,knb-lter-sev.238.226091,,,,,from popler
-edi,knb-lter-sev.266.180462,,,,,from popler
-edi,knb-lter-sev.267.196138,,,,,from popler
-edi,knb-lter-sev.278.245672,,,,,metacommunities requested; in popler
-edi,knb-lter-sev.29.175390,,,,,metacommunities requested in popler
-edi,knb-lter-sev.297.233742,,,,,from popler
-edi,knb-lter-sev.81.185474,,,,,from popler
-edi,knb-lter-sev.88.122261,,,,,from popler
+edi,knb-lter-sev.13,,,,,8 yrs. Rodent parasite data. From popler
+edi,knb-lter-sev.148,,,,,7 yrs. Prescribed burns. From popler
+edi,knb-lter-sev.156,,,,,6 yrs. Burn experiment. From popler
+edi,knb-lter-sev.168,,,,,10 yrs. Plant removal experiment. From popler
+edi,knb-lter-sev.17,,,,,6 yrs. Bird community. From popler
+edi,knb-lter-sev.176,,,,,10 yrs. Deposition experiment. From popler
+edi,knb-lter-sev.188,,,,,9 yrs. Monsoon rainfall experiment. From popler
+edi,knb-lter-sev.212,,,,,8 yrs. Prarie dog relocation experiment. From popler
+edi,knb-lter-sev.228,,,,,6 yrs. Rainfall experiment. From popler
+edi,knb-lter-sev.231,,,,,9 yrs. Nutrient addition experiment. From popler
+edi,knb-lter-sev.23,,Colin Smith,underway,,13 yrs. Rabbit survey. From popler
+edi,knb-lter-sev.236,,,,,4 yrs. Prarie dog restoration experiment. From popler
+edi,knb-lter-sev.238,,,,,5 yrs. Prarie dog restoration experiment. From popler
+edi,knb-lter-sev.266,,,,,7 yrs. Fire experiment. From popler
+edi,knb-lter-sev.267,,,,,7 yrs. Fire experiment. From popler
+edi,knb-lter-sev.278,,,,,7 yrs. Rainfall experiment. Metacommunities requested; in popler
+edi,knb-lter-sev.29,,Colin Smith,underway,,metacommunities requested in popler
+edi,knb-lter-sev.297,,,,,4 yrs. Drought experiment. From popler
+edi,knb-lter-sev.81,,,,,3 yrs. Experiment. From popler
+edi,knb-lter-sev.88,,,,,10 yrs. Exclosure experiment. From popler
 edi,knb-lter-sgs.130.18,,,,,from popler
 edi,knb-lter-sgs.134,edi.328,Colin Smith,complete,,8 yrs. From popler
 edi,knb-lter-sgs.136,edi.327,Colin Smith,complete,,12 yrs. From popler
