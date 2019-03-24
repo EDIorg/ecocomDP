@@ -39,8 +39,8 @@ edi,knb-lter-gce.429.6,,,,,metacommunities requested
 edi,knb-lter-gce.434.11,,,,,metacommunities requested
 edi,knb-lter-gce.459.4,,,,,metacommunities requested
 edi,knb-lter-hbr.126,edi.263,Song Qian,complete,,from popler
-edi,knb-lter-hbr.82,,Song Qian,underway,,from popler
-edi,knb-lter-hbr.178,,,,,14 yrs. Bird survey. From popler
+edi,knb-lter-hbr.82,edi.349,Colin Smith,underway,,from popler
+edi,knb-lter-hbr.178,edi.348,Colin Smith,underway,,14 yrs. Bird survey. From popler
 edi,knb-lter-hfr.105.18,edi.261.1,Will Rosenthal,complete,,from popler
 edi,knb-lter-hfr.106.22,,,,,from popler
 edi,knb-lter-hfr.113.51,,,,,from popler
@@ -80,6 +80,11 @@ edi,knb-lter-mcr.4.37,edi.277,Colin Smith,complete,2,metacommunities requested; 
 edi,knb-lter-mcr.6.55,edi.125.1,Corinna Gries,complete,,Meta-communities requested (they have the previous revision listed). new revision soon ask Margaret for details
 edi,knb-lter-mcr.7.28,edi.194.1,Colin Smith,complete,1,Meta-communities requested; in popler
 edi,knb-lter-mcr.8,edi.279,Colin Smith,complete,2,metacommunities requested; in popler
+edi,knb-lter-nin.2.1,edi.352,Colin Smith,underway,,
+edi,knb-lter-nin.6.1,edi.350,Colin Smith,underway,,
+edi,knb-lter-nin.7.1,edi.354,Colin Smith,underway,,
+edi,knb-lter-nin.9.1,edi.353,Colin Smith,underway,,
+edi,knb-lter-nin.10.1,edi.351,Colin Smith,underway,,
 edi,knb-lter-ntl.11.24,edi.290.1,Corinna Gries,complete,,
 edi,knb-lter-ntl.13.19,edi.285.1,Corinna Gries,complete,,
 edi,knb-lter-ntl.14.18,edi.284.1,Corinna Gries,complete,,
@@ -93,6 +98,9 @@ edi,knb-lter-ntl.355.4,,,,,
 edi,knb-lter-ntl.37.14,,,,,
 edi,knb-lter-ntl.61.3,,,,,
 edi,knb-lter-ntl.7.24,edi.303.1,Corinna Gries,complete,,metacommunities requested
+edi,knb-lter-nwt.93,,,,,
+edi,knb-lter-nwt.161,,,,,
+edi,knb-lter-nwt.501,,,,,
 edi,knb-lter-pie.33,edi.335,Colin Smith,complete,,18 yrs. Spartina survey of experimental plots. From popler
 edi,knb-lter-pie.175,edi.336,Colin Smith,complete,,14 yrs. Breeding bird survey. From popler
 edi,knb-lter-pie.404,edi.338,Colin Smith,complete,,Phytoplankton survey. Site recommended.
