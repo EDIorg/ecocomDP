@@ -1,14 +1,14 @@
 system,identifier_L0 (package ID),identifier_L1 (package ID),creator_L1 (first and last name),"status (underway, complete )","priority (1=high, 2=low)",notes
-edi,edi.291.1,,,,1,metacommunities requested
+edi,edi.291.1,edi.357,Colin Smith,complete,1,metacommunities requested
 edi,knb-lter-and.4781,,Colin Smith,underway,1,suggested by site
 edi,knb-lter-and.3217.11,,,,1,suggested by site; additional data anticipated soon
 edi,knb-lter-arc.10317,edi.280,Colin Smith,complete,1,suggested by site
 edi,knb-lter-arc.10272.4,edi.262,Song Qian,complete,,metacommunities requested;revisit to consolidate 3 more L0 pkgs (talk to mob)
 edi,knb-lter-bes.543.170,edi.191.2,Colin Smith,complete,1,Meta-communities requested
-edi,knb-lter-bnz.175.20,,Song Qian,underway,,metacommunities requested
+edi,knb-lter-bnz.175.20,edi.351,Colin Smith,complete,,metacommunities requested
 edi,knb-lter-bnz.501.11,edi.275,Song Qian,complete,,from popler
 edi,knb-lter-bnz.502.9,edi.264,Song Qian,complete,,from popler
-edi,knb-lter-bnz.530.9,,,,,need access to species binomials; work with Jason
+edi,knb-lter-bnz.530,edi.320,Colin Smith,complete,,need access to species binomials; work with Jason
 edi,knb-lter-bnz.504.7,edi.251.1,Will Rosenthal,complete,,from popler
 edi,knb-lter-cap.41.13,edi.254.1,Will Rosenthal,complete,1,CAP recommended
 edi,knb-lter-cap.46.13,,Colin Smith,underway,1,Meta-communities requested
@@ -19,7 +19,11 @@ edi,knb-lter-cap.643.1,edi.248.1,Will Rosenthal,complete,1,CAP recommended
 edi,knb-lter-cap.652.2,edi.247.1,Will Rosenthal,complete,1,CAP recommended
 edi,knb-lter-cap.653.2,edi.115.1,Will Rosenthal,complete,1,CAP recommended
 edi,knb-lter-cdr.386.5,edi.124.3,Colin Smith,complete,,Meta-communities requested
-edi,knb-lter-fce.1164.6,,,,,metacommunities requested
+edi,knb-lter-fce.1129,edi.345,Colin Smith,complete,,17 yrs. Seagrass frequency-abundance-density.
+edi,knb-lter-fce.1164,,,,,13 yrs. Offline data entity. Metacommunities requested
+edi,knb-lter-fce.1165,,,,,4 yrs. Metacommunities requested
+edi,knb-lter-fce.1191,,,,,6 yrs. Offline data entity.
+edi,knb-lter-fce.1203,edi.346,Colin Smith,complete,,31 yrs. Above ground biomass.
 edi,knb-lter-gce.109.21,,Song Qian,underway,,metacommunities requested
 edi,knb-lter-gce.232.20,,,,,metacommunities requested
 edi,knb-lter-gce.236.20,,,,,metacommunities requested
@@ -35,7 +39,9 @@ edi,knb-lter-gce.429.6,,,,,metacommunities requested
 edi,knb-lter-gce.434.11,,,,,metacommunities requested
 edi,knb-lter-gce.459.4,,,,,metacommunities requested
 edi,knb-lter-hbr.126,edi.263,Song Qian,complete,,from popler
-edi,knb-lter-hbr.82,,Song Qian,underway,,from popler
+edi,knb-lter-hbr.81,edi.355,Colin Smith,complete,,from popler
+edi,knb-lter-hbr.82,edi.349,Colin Smith,complete,,from popler
+edi,knb-lter-hbr.178,edi.348,Colin Smith,complete,,14 yrs. Bird survey. From popler
 edi,knb-lter-hfr.105.18,edi.261.1,Will Rosenthal,complete,,from popler
 edi,knb-lter-hfr.106.22,,,,,from popler
 edi,knb-lter-hfr.113.51,,,,,from popler
@@ -54,9 +60,16 @@ edi,knb-lter-hfr.8.20,,,,,from popler
 edi,knb-lter-jrn.2100007001.13,,,,2,metacommunities requested
 edi,knb-lter-jrn.210119001.74,,,,,metacommunities requested
 edi,knb-lter-jrn.210351001.47,,,,,metacommunities requested
-edi,knb-lter-knz.87.4,,,,,metacommunities requested
-edi,knb-lter-knz.88.3,,,,,metacommunities requested
-edi,knb-lter-mcr.1038,,Colin Smith,underway,,MCR suggested
+edi,knb-lter-kbs.49,edi.347,Colin Smith,complete,,8 yrs. Aphid collection tower.
+edi,knb-lter-kbs.55,,,,,25 yrs. Plant community and ecosystem response to fertilization and disturbance
+edi,knb-lter-kbs.112,,,,,10 yrs. Plant biomass experimental.
+edi,knb-lter-knz.26,edi.339,Colin Smith,complete,,18 yrs. Bird survey.
+edi,knb-lter-knz.29,edi.341,Colin Smith,complete,,34 yrs. Grass hopper survey. Site recommended.
+edi,knb-lter-knz.69,edi.342,Colin Smith,complete,,35 yrs. Plant survey. Site recommended.
+edi,knb-lter-knz.87,edi.340,Colin Smith,complete,,21 yrs. Fish populations on select watersheds. Metacommunities requested
+edi,knb-lter-knz.88,edi.343,Colin Smith,complete,,32 yrs. Small mammal trapping. Metacommunities requested
+edi,knb-lter-knz.130,edi.344,Colin Smith,complete,,23 yrs. Fish and crayfish survey.
+edi,knb-lter-mcr.1038,edi.321,Colin Smith,complete,,MCR suggested
 edi,knb-lter-mcr.1039.6,edi.274,Song Qian,complete,,from popler
 edi,knb-lter-mcr.13.15,,,,,from popler
 edi,knb-lter-mcr.20.16,,,,,from popler
@@ -68,6 +81,11 @@ edi,knb-lter-mcr.4.37,edi.277,Colin Smith,complete,2,metacommunities requested; 
 edi,knb-lter-mcr.6.55,edi.125.1,Corinna Gries,complete,,Meta-communities requested (they have the previous revision listed). new revision soon ask Margaret for details
 edi,knb-lter-mcr.7.28,edi.194.1,Colin Smith,complete,1,Meta-communities requested; in popler
 edi,knb-lter-mcr.8,edi.279,Colin Smith,complete,2,metacommunities requested; in popler
+edi,knb-lter-nin.2.1,edi.352,Colin Smith,complete,,
+edi,knb-lter-nin.6.1,edi.350,Colin Smith,complete,,
+edi,knb-lter-nin.7.1,edi.354,Colin Smith,complete,,
+edi,knb-lter-nin.9.1,edi.353,Colin Smith,complete,,
+edi,knb-lter-nin.10.1,,,,Need species code-definition list otherwise this dataset is meaningless,
 edi,knb-lter-ntl.11.24,edi.290.1,Corinna Gries,complete,,
 edi,knb-lter-ntl.13.19,edi.285.1,Corinna Gries,complete,,
 edi,knb-lter-ntl.14.18,edi.284.1,Corinna Gries,complete,,
@@ -81,8 +99,13 @@ edi,knb-lter-ntl.355.4,,,,,
 edi,knb-lter-ntl.37.14,,,,,
 edi,knb-lter-ntl.61.3,,,,,
 edi,knb-lter-ntl.7.24,edi.303.1,Corinna Gries,complete,,metacommunities requested
-edi,knb-lter-pie.32.12,,,,,from popler
-edi,knb-lter-pie.33.13,,,,,from popler
+edi,knb-lter-nwt.93,,,,,
+edi,knb-lter-nwt.161,,,,,
+edi,knb-lter-nwt.501,,,,,
+edi,knb-lter-pie.33,edi.335,Colin Smith,complete,,18 yrs. Spartina survey of experimental plots. From popler
+edi,knb-lter-pie.175,edi.336,Colin Smith,complete,,14 yrs. Breeding bird survey. From popler
+edi,knb-lter-pie.404,edi.338,Colin Smith,complete,,Phytoplankton survey. Site recommended.
+edi,knb-lter-pie.405,edi.336,Colin Smith,complete,,10 yrs. Zooplankton survey.
 edi,knb-lter-sbc.14.13,,,,,from popler
 edi,knb-lter-sbc.15.25,2,Li Kui,,2,popler has rev 23; synchrony WG requested
 edi,knb-lter-sbc.17.30,edi.189.1,Li Kui,complete,2,metacommunities requested; popler has rev 28;synchrony WG requested
@@ -103,51 +126,41 @@ edi,knb-lter-sbc.52.3,,,,,from popler
 edi,knb-lter-sbc.61.4,,,,,from popler
 edi,knb-lter-sbc.77.1,,,,,from popler
 edi,knb-lter-sbc.119.2,edi.278,Colin,complete,1,very similar to sbc.50
-edi,knb-lter-sev.13.270182,,,,,from popler
-edi,knb-lter-sev.148.131882,,,,,from popler
-edi,knb-lter-sev.15.218704,,,,,from popler
-edi,knb-lter-sev.155.233346,,,,,from popler
-edi,knb-lter-sev.156.245412,,,,,from popler
-edi,knb-lter-sev.168.192537,,,,,from popler
-edi,knb-lter-sev.17.120278,,,,,from popler
-edi,knb-lter-sev.173.87391,,,,,from popler
-edi,knb-lter-sev.176.233653,,,,,from popler
-edi,knb-lter-sev.178.133945,,,,,from popler
-edi,knb-lter-sev.187.167478,,,,,from popler
-edi,knb-lter-sev.188.243666,,,,,from popler
-edi,knb-lter-sev.193.178639,,,,,from popler
-edi,knb-lter-sev.194.188141,,,,,from popler
-edi,knb-lter-sev.212.1,,,,,from popler
-edi,knb-lter-sev.215.173899,,,,,from popler
-edi,knb-lter-sev.228.102077,,,,,from popler
-edi,knb-lter-sev.231.176381,,,,,from popler
-edi,knb-lter-sev.23.121704,,,,,from popler
-edi,knb-lter-sev.236.257686,,,,,from popler
-edi,knb-lter-sev.238.226091,,,,,from popler
-edi,knb-lter-sev.266.180462,,,,,from popler
-edi,knb-lter-sev.267.196138,,,,,from popler
-edi,knb-lter-sev.278.245672,,,,,metacommunities requested; in popler
-edi,knb-lter-sev.29.175390,,,,,metacommunities requested in popler
-edi,knb-lter-sev.297.233742,,,,,from popler
-edi,knb-lter-sev.81.185474,,,,,from popler
-edi,knb-lter-sev.88.122261,,,,,from popler
+edi,knb-lter-sev.13,,,,,8 yrs. Rodent parasite data. From popler
+edi,knb-lter-sev.148,,,,,7 yrs. Prescribed burns. From popler
+edi,knb-lter-sev.156,,,,,6 yrs. Burn experiment. From popler
+edi,knb-lter-sev.168,,,,,10 yrs. Plant removal experiment. From popler
+edi,knb-lter-sev.17,,,,,6 yrs. Bird community. From popler
+edi,knb-lter-sev.176,,,,,10 yrs. Deposition experiment. From popler
+edi,knb-lter-sev.188,,,,,9 yrs. Monsoon rainfall experiment. From popler
+edi,knb-lter-sev.212,,,,,8 yrs. Prarie dog relocation experiment. From popler
+edi,knb-lter-sev.228,,,,,6 yrs. Rainfall experiment. From popler
+edi,knb-lter-sev.231,,,,,9 yrs. Nutrient addition experiment. From popler
+edi,knb-lter-sev.23,edi.334,Colin Smith,complete,,13 yrs. Rabbit survey. From popler
+edi,knb-lter-sev.236,,,,,4 yrs. Prarie dog restoration experiment. From popler
+edi,knb-lter-sev.238,,,,,5 yrs. Prarie dog restoration experiment. From popler
+edi,knb-lter-sev.266,,,,,7 yrs. Fire experiment. From popler
+edi,knb-lter-sev.267,,,,,7 yrs. Fire experiment. From popler
+edi,knb-lter-sev.278,,,,,7 yrs. Rainfall experiment. Metacommunities requested; in popler
+edi,knb-lter-sev.29,edi.333,Colin Smith,complete,,metacommunities requested in popler
+edi,knb-lter-sev.297,,,,,4 yrs. Drought experiment. From popler
+edi,knb-lter-sev.81,,,,,3 yrs. Experiment. From popler
+edi,knb-lter-sev.88,,,,,10 yrs. Exclosure experiment. From popler
 edi,knb-lter-sgs.130.18,,,,,from popler
-edi,knb-lter-sgs.134.17,,,,,from popler
-edi,knb-lter-sgs.135.17,,,,,from popler
-edi,knb-lter-sgs.136.17,,,,,from popler
-edi,knb-lter-sgs.137.17,,,,,from popler
-edi,knb-lter-sgs.139.17,,,,,from popler
-edi,knb-lter-sgs.140.17,,,,,metacommunities requested
-edi,knb-lter-sgs.141.17,,,,,metacommunities requested; in popler
-edi,knb-lter-sgs.527.1,,,,,from popler
-edi,knb-lter-sgs.539.1,,,,,from popler
-edi,knb-lter-sgs.540.1,,,,,from popler
-edi,knb-lter-sgs.542.1,,,,,from popler
-edi,knb-lter-sgs.700.1,,,,,metacommunities requested; in popler
+edi,knb-lter-sgs.134,edi.328,Colin Smith,complete,,8 yrs. From popler
+edi,knb-lter-sgs.136,edi.327,Colin Smith,complete,,12 yrs. From popler
+edi,knb-lter-sgs.137,edi.329,Colin Smith,complete,,12 yrs trapping mark and recapture. From popler
+edi,knb-lter-sgs.140,edi.326,Colin Smith,complete,,7 yrs. Metacommunities requested
+edi,knb-lter-sgs.520,edi.330,Colin Smith,complete,,36 yrs experimental.
+edi,knb-lter-sgs.521,edi.331,Colin Smith,complete,,29 yrs experimental.
+edi,knb-lter-sgs.527,,,,,16 yrs experimental. From popler
+edi,knb-lter-sgs.539,,,,,6 yrs experimental. From popler
+edi,knb-lter-sgs.540,,,,,Short-term experimental. From popler
+edi,knb-lter-sgs.542,,,,,Short-term experimental. From popler
+edi,knb-lter-sgs.700,edi.325,Colin Smith,complete,,metacommunities requested; in popler
 edi,knb-lter-sgs.701.1,,,,,metacommunities requested
-edi,knb-lter-vcr.106.25_,,,,2,from popler
-edi,knb-lter-vcr.122.23,,,,,metacommunities requested; popler has rev 21
-edi,knb-lter-vcr.166.15,,,,2,popler has rev 14
-edi,knb-lter-vcr.181.11,,,,,from popler
-edi,knb-lter-vcr.67.17,,,,2,from popler
-edi,knb-lter-vcr.70.24,,,,,metacommunities requested; popler has rev 17
+edi,knb-lter-vcr.106,,Colin Smith,,2,These data have restricted access and shouldn't be converted yet. From popler.
+edi,knb-lter-vcr.122,,Colin Smith,,,These data have restricted access and shouldn't be converted yet. Metacommunities requested; popler has rev 21
+edi,knb-lter-vcr.166,edi.324,Colin Smith,complete,2,popler has rev 14
+edi,knb-lter-vcr.67,edi.356,Colin Smith,complete,2,from popler
+edi,knb-lter-vcr.70,edi.323,Colin Smith,complete,,metacommunities requested; popler has rev 17

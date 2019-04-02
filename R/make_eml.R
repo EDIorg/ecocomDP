@@ -543,16 +543,20 @@ make_eml <- function(data.path, code.path = data.path, code.files,
       comment.char = ""
     )
     
-    tc <- taxonomyCleanr::make_taxonomicCoverage(
-      taxa.clean = df_table$taxon_name,
-      authority = df_table$authority_system,
-      authority.id = df_table$authority_taxon_id
-    )
-    
-    xml_in@dataset@coverage@taxonomicCoverage <- as(
-      list(tc), 
-      "ListOftaxonomicCoverage"
-    )
+    if (sum(is.na(df_table$authority_taxon_id)) != nrow(df_table)){
+      
+      tc <- taxonomyCleanr::make_taxonomicCoverage(
+        taxa.clean = df_table$taxon_name,
+        authority = df_table$authority_system,
+        authority.id = df_table$authority_taxon_id
+      )
+      
+      xml_in@dataset@coverage@taxonomicCoverage <- as(
+        list(tc), 
+        "ListOftaxonomicCoverage"
+      )
+      
+    }
     
   }
   
@@ -787,9 +791,21 @@ make_eml <- function(data.path, code.path = data.path, code.files,
     "variable_mapping"
   )
   
+  table_descriptions <- c(
+    "Observation table", 
+    "Observation ancillary table", 
+    "Location ancillary table", 
+    "Taxon ancillary table", 
+    "Dataset summary table", 
+    "Location table", 
+    "Taxon table", 
+    "Variable mapping table"
+  )
+  
   dir_files <- list.files(data.path)
   table_names_found <- list()
   tables_found <- list()
+  table_descriptions_found <- list()
   
   for (i in 1:length(table_patterns)){
     
@@ -809,10 +825,15 @@ make_eml <- function(data.path, code.path = data.path, code.files,
       table_names_found[[i]] <- table_names[i]
     }
     
+    if (!identical(tables_found[[i]], character(0))){
+      table_descriptions_found[[i]] <- table_descriptions[i]
+    }
+    
   }
   
   tables_found <- unlist(tables_found)
   table_names <- unlist(table_names_found)
+  table_descriptions <- unlist(table_descriptions_found)
   
   # Loop through each data table
   
@@ -1019,8 +1040,8 @@ make_eml <- function(data.path, code.path = data.path, code.files,
 
     data_table <- new(
       "dataTable",
-      entityName = tables_found[i],
-      entityDescription = substr(tables_found[i], 1, nchar(tables_found[i])-4),
+      entityName = table_descriptions[i],
+      entityDescription = table_descriptions[i],
       physical = physical,
       attributeList = attributeList,
       numberOfRecords = number_of_records

@@ -27,6 +27,9 @@
 #'     which the data in the kml object corresponds to. E.g., if the kml 
 #'     corresponds with with the column named 'site' then enter 'site' for the 
 #'     col argument.
+#' @param parent.package.id
+#'     (character) Parent data package ID (e.g. "knb-lter-nin.9.1") from which 
+#'     geographicCoverage will be extracted.
 #'     
 #' @note 
 #'     The arguments 'kml' and 'col' only accept single inputs. I.e. does 
@@ -38,7 +41,8 @@
 #' @export
 #'
 
-make_location <- function(x, cols, kml = NULL, col = NULL){
+make_location <- function(x, cols, kml = NULL, col = NULL, 
+                          parent.package.id = NULL){
 
   message('Creating the ecocomDP location table')
   
@@ -418,6 +422,116 @@ make_location <- function(x, cols, kml = NULL, col = NULL){
   }
 
     
+  # Add geographicCoverage ----------------------------------------------------
+  
+  if (!is.null(parent.package.id)){
+    
+    # Read EML
+    
+    metadata <- EDIutils::api_read_metadata(parent.package.id)
+    
+    # Get all geographicCoverage nodes
+    
+    nodeset <- xml2::xml_find_all(
+      metadata,
+      "///geographicCoverage"
+    )
+    
+    # If nodeset is not empty ...
+    
+    if (length(nodeset) > 0){
+      
+      # Get geographicDescription, northBoundingCoordinate, eastBoundingCoordinate,
+      # southBoundingCoordinate, and westBoundingCoordinate 
+      
+      geographicDescription <- xml2::xml_text(
+        xml2::xml_find_all(
+          nodeset,
+          "//geographicDescription"
+        )
+      )
+      
+      northBoundingCoordinate <- xml2::xml_text(
+        xml2::xml_find_all(
+          nodeset,
+          "//boundingCoordinates/northBoundingCoordinate"
+        )
+      )
+      
+      eastBoundingCoordinate <- xml2::xml_text(
+        xml2::xml_find_all(
+          nodeset,
+          "//boundingCoordinates/eastBoundingCoordinate"
+        )
+      )
+      
+      southBoundingCoordinate <- xml2::xml_text(
+        xml2::xml_find_all(
+          nodeset,
+          "//boundingCoordinates/southBoundingCoordinate"
+        )
+      )
+      
+      westBoundingCoordinate <- xml2::xml_text(
+        xml2::xml_find_all(
+          nodeset,
+          "//boundingCoordinates/westBoundingCoordinate"
+        )
+      )
+      
+      # Combine in data frame
+      
+      dataset_coverage <- unique.data.frame(
+        data.frame(
+          geographicDescription,
+          northBoundingCoordinate,
+          eastBoundingCoordinate,
+          southBoundingCoordinate,
+          westBoundingCoordinate,
+          is_point = FALSE,
+          stringsAsFactors = F
+        )
+      )
+      
+      # Determine if location is a ponit or area
+      
+      location_type <- data.frame(
+        ns = dataset_coverage$northBoundingCoordinate == dataset_coverage$southBoundingCoordinate,
+        ew = dataset_coverage$eastBoundingCoordinate == dataset_coverage$westBoundingCoordinate,
+        stringsAsFactors = F
+      )
+      
+      dataset_coverage$is_point <- as.logical(location_type$ns * location_type$ew)
+      
+      # For point locations ...
+      
+      if (any(dataset_coverage$is_point)){
+        
+        # Match each location name to the geographicDescription (one-to-one)
+        
+        use_i <- match(
+          location_table$location_name,
+          dataset_coverage$geographicDescription
+        )
+        
+        use_i[dataset_coverage$is_point[use_i] != TRUE] <- NA
+        
+        # Report latitude for matches
+        
+        location_table$latitude <- dataset_coverage$northBoundingCoordinate[use_i]
+        
+        # Report longitude for matches
+        
+        location_table$longitude <- dataset_coverage$eastBoundingCoordinate[use_i]
+        
+      }
+      
+    }
+    
+  }
+  
+  # Return --------------------------------------------------------------------
+  
   location_table
 
   
