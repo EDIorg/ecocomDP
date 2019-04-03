@@ -1,7 +1,7 @@
 system,identifier_L0 (package ID),identifier_L1 (package ID),creator_L1 (first and last name),"status (underway, complete )","priority (1=high, 2=low)",notes
 edi,edi.291.1,edi.357,Colin Smith,complete,1,metacommunities requested
 edi,knb-lter-and.4781,edi.359,Colin Smith,complete,1,suggested by site
-edi,knb-lter-and.3217.11,,,,1,suggested by site; additional data anticipated soon
+edi,knb-lter-and.3217.11,,Colin Smith,underway,1,suggested by site; additional data anticipated soon
 edi,knb-lter-arc.10317,edi.280,Colin Smith,complete,1,suggested by site
 edi,knb-lter-arc.10272.4,edi.262,Song Qian,complete,,metacommunities requested;revisit to consolidate 3 more L0 pkgs (talk to mob)
 edi,knb-lter-bes.543.170,edi.191.2,Colin Smith,complete,1,Meta-communities requested
