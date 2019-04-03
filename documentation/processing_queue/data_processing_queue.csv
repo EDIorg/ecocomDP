@@ -127,25 +127,15 @@ edi,knb-lter-sbc.61.4,,,,,from popler
 edi,knb-lter-sbc.77.1,,,,,from popler
 edi,knb-lter-sbc.119.2,edi.278,Colin,complete,1,very similar to sbc.50
 edi,knb-lter-sev.13,,,,,8 yrs. Rodent parasite data. From popler
-edi,knb-lter-sev.148,,,,,7 yrs. Prescribed burns. From popler
-edi,knb-lter-sev.156,,,,,6 yrs. Burn experiment. From popler
-edi,knb-lter-sev.168,,,,,10 yrs. Plant removal experiment. From popler
-edi,knb-lter-sev.17,,,,,6 yrs. Bird community. From popler
-edi,knb-lter-sev.176,,,,,10 yrs. Deposition experiment. From popler
-edi,knb-lter-sev.188,,,,,9 yrs. Monsoon rainfall experiment. From popler
-edi,knb-lter-sev.212,,,,,8 yrs. Prarie dog relocation experiment. From popler
-edi,knb-lter-sev.228,,,,,6 yrs. Rainfall experiment. From popler
-edi,knb-lter-sev.231,,,,,9 yrs. Nutrient addition experiment. From popler
+edi,knb-lter-sev.17,,,,1,6 yrs. Bird community. Site recommended.
 edi,knb-lter-sev.23,edi.334,Colin Smith,complete,,13 yrs. Rabbit survey. From popler
-edi,knb-lter-sev.236,,,,,4 yrs. Prarie dog restoration experiment. From popler
-edi,knb-lter-sev.238,,,,,5 yrs. Prarie dog restoration experiment. From popler
-edi,knb-lter-sev.266,,,,,7 yrs. Fire experiment. From popler
-edi,knb-lter-sev.267,,,,,7 yrs. Fire experiment. From popler
-edi,knb-lter-sev.278,,,,,7 yrs. Rainfall experiment. Metacommunities requested; in popler
 edi,knb-lter-sev.29,edi.333,Colin Smith,complete,,metacommunities requested in popler
-edi,knb-lter-sev.297,,,,,4 yrs. Drought experiment. From popler
-edi,knb-lter-sev.81,,,,,3 yrs. Experiment. From popler
-edi,knb-lter-sev.88,,,,,10 yrs. Exclosure experiment. From popler
+edi,knb-lter-sev.106,,,,1,21 yrs. Grasshoppers at National Wildlife refuge. Site recommended
+edi,knb-lter-sev.182,,,,1,20 yrs. Plant biomass at National Wildlife refuge. WAIT until reformatting of this dataset is complete. Site recommended
+edi,knb-lter-sev.185,,,,1,10 yrs. Plant biomass burn study at National Wildlife refuge. WAIT until reformatting of this dataset is complete. Site recommended
+edi,knb-lter-sev.186,,,,1,10 yrs. Plant biomass nitrogen fertilization experiment at National Wildlife refuge. WAIT until reformatting of this dataset is complete. Site recommended
+edi,knb-lter-sev.188,,,,1,9 yrs. Monsoon rainfall experiment. Site recommended
+edi,knb-lter-sev.205,,,,1,8 yrs. Plant biomass nitrogen deposition experiment at National Wildlife refuge. WAIT until reformatting of this dataset is complete. Site recommended
 edi,knb-lter-sgs.130.18,,,,,from popler
 edi,knb-lter-sgs.134,edi.328,Colin Smith,complete,,8 yrs. From popler
 edi,knb-lter-sgs.136,edi.327,Colin Smith,complete,,12 yrs. From popler
