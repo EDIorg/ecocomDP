@@ -55,7 +55,7 @@ view_all_ecocomDP <- function(){
   
   get_dataset_observation <- function(package.id, eml){
     entity_names <- unlist(
-      xmlApply(eml["//dataset/dataTable/entityName"], 
+      xmlApply(eml["//dataset/dataTable/physical/objectName"], 
                xmlValue)
     )
     entity_delimiters <- unlist(
