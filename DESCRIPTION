@@ -15,19 +15,20 @@ Depends:
     lubridate (>= 1.7.4),
     tidyr (>= 0.6.1),
     tidyverse (>= 1.1.1),
-    EML (== 1.0.3),
     stringr (>= 1.2.0),
     stringi (>= 1.1.5),
     reader (>= 1.0.6),
     readr (>= 1.1.1),
     RMySQL (>= 0.10.15),
     xml2 (>= 1.1.1),
+    EML103,
     XML (>= 3.98-1.6)
 Imports: 
 Remotes: 
     github::NeonScience/NEON-utilities/neonUtilities,
     github::clnsmth/EDIutils,
     github::EDIorg/taxonomyCleanr,
+    clnsmth/EML103,
     github::EDIorg/dataCleanr
 Suggests:
     knitr,

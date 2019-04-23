@@ -31,13 +31,8 @@ _Figure: Abstract view of dataset levels. A flexible intermediate (L1, middle) l
 
 The R package helps create, validate, document, archive, discover, and aggregate ecocomDP. The ecocomDP R package is available here on GitHub.
 ```
-# Install and load devtools
-install.packages("devtools")
-library(devtools)
-
-# Install and load ecocomDP
-install_github("EDIorg/ecocomDP")
-library(ecocomDP)
+# Install from GitHub
+remotes::install_github("EDIorg/ecocomDP")
 ```
 
 ## Running the tests

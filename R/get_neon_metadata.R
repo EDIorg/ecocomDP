@@ -51,7 +51,7 @@ get_neon_metadata <- function(
   
   # Read EML (.xml is listed twice, which to use?)
   
-  data_eml <- EML::read_eml(
+  data_eml <- read_eml(
     data_files$data$files$url[
       grep(
         '.xml', 
