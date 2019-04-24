@@ -80,7 +80,7 @@ make_eml_neon <- function(eml, x, protocols, dp.id, eml.path){
     )
   
   abstract <- as(
-    set_TextType(text = lns), 
+    EML103::set_TextType(text = lns), 
     "abstract"
   )
   
@@ -206,7 +206,7 @@ make_eml_neon <- function(eml, x, protocols, dp.id, eml.path){
     x$observation$observation_datetime
   )
   
-  temp <- set_coverage(
+  temp <- EML103::set_coverage(
     begin = substr(floor_date(min(dates), unit = 'day'), 1, 10),
     end = substr(ceiling_date(max(dates), unit = 'day'), 1, 10)
   )
@@ -356,7 +356,7 @@ make_eml_neon <- function(eml, x, protocols, dp.id, eml.path){
       
       # Create the attributeList element
       
-      attributeList <- set_attributes(
+      attributeList <- EML103::set_attributes(
         attributes,
         factors = catvars,
         col_classes = col_classes
@@ -381,7 +381,7 @@ make_eml_neon <- function(eml, x, protocols, dp.id, eml.path){
       
       # Create the attributeList element
       
-      attributeList <- set_attributes(
+      attributeList <- EML103::set_attributes(
         attributes,
         col_classes = col_classes
       )
@@ -390,7 +390,7 @@ make_eml_neon <- function(eml, x, protocols, dp.id, eml.path){
 
     # Set physical
     
-    physical <- set_physical(
+    physical <- EML103::set_physical(
       names(x)[i],
       numHeaderLines = "1",
       recordDelimiter = "\\r\\n", # !!!This information is not accurate
@@ -446,7 +446,7 @@ make_eml_neon <- function(eml, x, protocols, dp.id, eml.path){
   
   # Validate EML --------------------------------------------------------------
   
-  write_eml(
+  EML103::write_eml(
     eml,
     paste0(
       eml.path,

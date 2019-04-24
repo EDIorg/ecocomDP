@@ -280,7 +280,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
                             data.path, eml.path = NULL){
     
     if (!is.null(eml.path)){
-      xml_in <- read_eml(
+      xml_in <- EML103::read_eml(
         paste0(
           eml.path,
           "/",
@@ -291,7 +291,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
     } else {
       
       xml_in <- try(
-        read_eml(
+        EML103::read_eml(
           paste0(
             "http://pasta.lternet.edu/package/metadata/eml",
             "/",
@@ -330,7 +330,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
             '/metadata.xml'
           )
         )
-        xml_in <- read_eml(
+        xml_in <- EML103::read_eml(
           paste0(
             data.path, 
             '/metadata.xml'
@@ -467,7 +467,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
   
   if (file.exists(paste(data.path, "/", "taxonomicCoverage.xml", sep = ""))){
     
-    taxonomic_coverage <- read_eml(
+    taxonomic_coverage <- EML103::read_eml(
       paste0(
         data.path,
         "/",
@@ -658,7 +658,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
       message("Updating <intellectualRights> to CC0")
       
       xml_in@dataset@intellectualRights <- as(
-        set_TextType(
+        EML103::set_TextType(
           system.file(
             'intellectual_rights_cc0_1.txt', 
             package = 'ecocomDP'
@@ -672,7 +672,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
       message("Updating <intellectualRights> to CCBY")
       
       xml_in@dataset@intellectualRights <- as(
-        set_TextType(
+        EML103::set_TextType(
           system.file(
             'intellectual_rights_by_4.0.txt',
             package = 'ecocomDP'
@@ -740,7 +740,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
     )
   )
   
-  provenance <- read_eml(
+  provenance <- EML103::read_eml(
     paste0(
       data.path,
       '/provenance_metadata.xml'
@@ -748,7 +748,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
   )
   
   provenance@description <- as(
-    set_TextType(
+    EML103::set_TextType(
       text = additional_provenance$methodDescription
     ),
     "description"
@@ -885,7 +885,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
         }
       }
       col_classes <- attributes[ ,"columnClasses"]
-      attributeList <- set_attributes(
+      attributeList <- EML103::set_attributes(
         attributes,
         factors = catvars,
         col_classes = col_classes
@@ -901,7 +901,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
       }
       col_classes <- attributes[ ,"columnClasses"]
       col_classes[col_classes == "factor"] <- "character"
-      attributeList <- set_attributes(
+      attributeList <- EML103::set_attributes(
         attributes,
         col_classes = col_classes
       )
@@ -917,7 +917,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
 
     if (sep == "\t"){
       
-      physical <- set_physical(
+      physical <- EML103::set_physical(
         
         tables_found[i],
         numHeaderLines = "1",
@@ -929,7 +929,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
       
     } else if (sep == ","){
       
-      physical <- set_physical(
+      physical <- EML103::set_physical(
         tables_found[i],
         numHeaderLines = "1",
         recordDelimiter = eol,
@@ -1300,7 +1300,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
   )
   
   abstract <- as(
-    set_TextType(text = lns), 
+    EML103::set_TextType(text = lns), 
     "abstract"
   )
   
@@ -1324,7 +1324,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
 
   message("Writing EML")
 
-  write_eml(
+  EML103::write_eml(
     eml, 
     paste0(
       data.path,
@@ -1338,7 +1338,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
 
   message("Validating EML")
 
-  validation_result <- eml_validate(eml)
+  validation_result <- EML103::eml_validate(eml)
 
   if (validation_result == "TRUE"){
     message("EML passed validation!")
