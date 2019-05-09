@@ -13,7 +13,7 @@
 ## Overview
 [back to top](#contents)
 
-Creation of an ecocomDP should be fully scripted to enable automated maintenance and upkeep as the underlying level-0 data and metadata change. Validation checks ensure the ecocomDP tables are congruent with with the ecocomDP schema and that down stream processes can occur without issue. Documenting the ecocomDP with EML metadata is a simple process combining level-0 and ecocomDP metadata elements. Archive in the EDI Data Repository is supported by multiple methods. Discovery and reuse of ecocomDP data is facilitated by the ecocomDP R package. See below for details.
+Creation of an ecocomDP should be fully scripted to enable automated maintenance and upkeep as the underlying level-0 data and metadata change. Validation checks ensure the ecocomDP tables are congruent with the ecocomDP schema and that down stream processes can occur without issue. Documenting the ecocomDP with EML metadata is a simple process combining level-0 and ecocomDP metadata elements. Archive in the EDI Data Repository is supported by multiple methods. Discovery and reuse of ecocomDP data is facilitated by the ecocomDP R package. See below for details.
 
 ## Create
 [back to top](#contents)
