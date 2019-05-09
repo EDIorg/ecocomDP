@@ -1,59 +1,60 @@
-table	column	class	required
-location	NA	NA	yes
-location	location_id	character	yes
-location	location_name	character	no
-location	latitude	numeric	no
-location	longitude	numeric	no
-location	elevation	numeric	no
-location	parent_location_id	character	no
-taxon	NA	NA	yes
-taxon	taxon_id	character	yes
-taxon	taxon_rank	character	no
-taxon	taxon_name	character	yes
-taxon	authority_system	character	no
-taxon	authority_taxon_id	character	no
-observation	NA	NA	yes
-observation	observation_id	character	yes
-observation	event_id	character	yes
-observation	package_id	character	yes
-observation	location_id	character	yes
-observation	observation_datetime	Date	yes
-observation	taxon_id	character	yes
-observation	variable_name	character	yes
-observation	value	numeric	yes
-observation	unit	character	yes
-location_ancillary	NA	NA	no
-location_ancillary	location_ancillary_id	character	yes
-location_ancillary	location_id	character	yes
-location_ancillary	datetime	Date	no
-location_ancillary	variable_name	character	yes
-location_ancillary	value	character	yes
-location_ancillary	unit	character	no
-taxon_ancillary	NA	NA	no
-taxon_ancillary	taxon_ancillary_id	character	yes
-taxon_ancillary	taxon_id	character	yes
-taxon_ancillary	datetime	Date	no
-taxon_ancillary	variable_name	character	yes
-taxon_ancillary	value	character	yes
-taxon_ancillary	unit	character	no
-taxon_ancillary	author	character	no
-observation_ancillary	NA	NA	no
-observation_ancillary	observation_ancillary_id	character	yes
-observation_ancillary	event_id	character	yes
-observation_ancillary	variable_name	character	yes
-observation_ancillary	value	character	no
-observation_ancillary	unit	character	no
-dataset_summary	NA	NA	yes
-dataset_summary	package_id	character	yes
-dataset_summary	original_package_id	character	no
-dataset_summary	length_of_survey_years	integer	yes
-dataset_summary	number_of_years_sampled	integer	yes
-dataset_summary	std_dev_interval_betw_years	numeric	yes
-dataset_summary	max_num_taxa	integer	yes
-dataset_summary	geo_extent_bounding_box_m2	numeric	no
-variable_mappings	NA	NA	no
-variable_mappings	table_name	character	yes
-variable_mappings	variable_name	character	yes
-variable_mappings	mapped_system	character	no
-variable_mappings	mapped_id	character	no
-variable_mappings	mapped_label	character	no
+table	column	class	required	primary_key	foreign_key	composite_key
+location	NA	NA	yes	NA	NA	NA
+location	location_id	character	yes	yes	no	no
+location	location_name	character	no	no	no	no
+location	latitude	numeric	no	no	no	no
+location	longitude	numeric	no	no	no	no
+location	elevation	numeric	no	no	no	no
+location	parent_location_id	character	no	no	yes	no
+taxon	NA	NA	yes	NA	NA	NA
+taxon	taxon_id	character	yes	yes	no	no
+taxon	taxon_rank	character	no	no	no	no
+taxon	taxon_name	character	yes	no	no	no
+taxon	authority_system	character	no	no	no	no
+taxon	authority_taxon_id	character	no	no	no	no
+observation	NA	NA	yes	NA	NA	NA
+observation	observation_id	character	yes	yes	no	no
+observation	event_id	character	yes	no	no	no
+observation	package_id	character	yes	no	yes	no
+observation	location_id	character	yes	no	yes	no
+observation	observation_datetime	Date	yes	no	no	no
+observation	taxon_id	character	yes	no	yes	no
+observation	variable_name	character	yes	no	no	no
+observation	value	numeric	yes	no	no	no
+observation	unit	character	yes	no	no	no
+location_ancillary	NA	NA	no	NA	NA	NA
+location_ancillary	location_ancillary_id	character	yes	yes	no	no
+location_ancillary	location_id	character	yes	no	yes	yes
+location_ancillary	datetime	Date	no	no	no	no
+location_ancillary	variable_name	character	yes	no	no	yes
+location_ancillary	value	character	yes	no	no	no
+location_ancillary	unit	character	no	no	no	no
+taxon_ancillary	NA	NA	no	NA	NA	NA
+taxon_ancillary	taxon_ancillary_id	character	yes	yes	no	no
+taxon_ancillary	taxon_id	character	yes	no	yes	yes
+taxon_ancillary	datetime	Date	no	no	no	no
+taxon_ancillary	variable_name	character	yes	no	no	yes
+taxon_ancillary	value	character	yes	no	no	no
+taxon_ancillary	unit	character	no	no	no	no
+taxon_ancillary	author	character	no	no	no	no
+observation_ancillary	NA	NA	no	NA	NA	NA
+observation_ancillary	observation_ancillary_id	character	yes	yes	no	no
+observation_ancillary	event_id	character	yes	no	no	yes
+observation_ancillary	variable_name	character	yes	no	no	yes
+observation_ancillary	value	character	no	no	no	no
+observation_ancillary	unit	character	no	no	no	no
+dataset_summary	NA	NA	yes	NA	NA	NA
+dataset_summary	package_id	character	yes	yes	no	no
+dataset_summary	original_package_id	character	no	no	no	no
+dataset_summary	length_of_survey_years	integer	yes	no	no	no
+dataset_summary	number_of_years_sampled	integer	yes	no	no	no
+dataset_summary	std_dev_interval_betw_years	numeric	yes	no	no	no
+dataset_summary	max_num_taxa	integer	yes	no	no	no
+dataset_summary	geo_extent_bounding_box_m2	numeric	no	no	no	no
+variable_mapping	NA	NA	no	NA	NA	NA
+variable_mapping	variable_mapping_id	character	yes	yes	no	no
+variable_mapping	table_name	character	yes	no	no	yes
+variable_mapping	variable_name	character	yes	no	no	yes
+variable_mapping	mapped_system	character	no	no	no	no
+variable_mapping	mapped_id	character	no	no	no	no
+variable_mapping	mapped_label	character	no	no	no	no

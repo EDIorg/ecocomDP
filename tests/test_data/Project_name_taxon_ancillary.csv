@@ -1,0 +1,1067 @@
+taxon_ancillary_id,taxon_id,datetime,variable_name,value,author
+txan_1,tx_1,NA,hl,1.271,NA
+txan_2,tx_2,NA,hl,1.1582,NA
+txan_3,tx_3,NA,hl,1.1541,NA
+txan_4,tx_4,NA,hl,1.122,NA
+txan_5,tx_5,NA,hl,1.292,NA
+txan_6,tx_6,NA,hl,1.4453,NA
+txan_7,tx_7,NA,hl,0.26,NA
+txan_8,tx_8,NA,hl,0.916833333,NA
+txan_9,tx_9,NA,hl,0.905,NA
+txan_10,tx_10,NA,hl,2.087555556,NA
+txan_11,tx_11,NA,hl,2.055,NA
+txan_12,tx_12,NA,hl,1.955,NA
+txan_13,tx_13,NA,hl,1.963857143,NA
+txan_14,tx_14,NA,hl,2.238875,NA
+txan_15,tx_15,NA,hl,1.097,NA
+txan_16,tx_16,NA,hl,0.71066,NA
+txan_17,tx_17,NA,hl,0.7809,NA
+txan_18,tx_18,NA,hl,0.8715,NA
+txan_19,tx_19,NA,hl,0.727,NA
+txan_20,tx_20,NA,hl,0.875,NA
+txan_21,tx_21,NA,hl,1.4425,NA
+txan_22,tx_22,NA,hl,1.7495,NA
+txan_23,tx_23,NA,hl,1.4165,NA
+txan_24,tx_24,NA,hl,1.728833333,NA
+txan_25,tx_25,NA,hl,1.735555556,NA
+txan_26,tx_26,NA,hl,1.3576,NA
+txan_27,tx_27,NA,hl,1.532733333,NA
+txan_28,tx_28,NA,hl,1.901,NA
+txan_29,tx_29,NA,hl,1.122526316,NA
+txan_30,tx_30,NA,hl,1.198307692,NA
+txan_31,tx_31,NA,hl,NA,NA
+txan_32,tx_32,NA,hl,1.79125,NA
+txan_33,tx_33,NA,hl,1.3704,NA
+txan_34,tx_34,NA,hl,NA,NA
+txan_35,tx_35,NA,hl,2,NA
+txan_36,tx_36,NA,hl,NA,NA
+txan_37,tx_37,NA,hl,1.450833333,NA
+txan_38,tx_38,NA,hl,1.437,NA
+txan_39,tx_39,NA,hl,1.489,NA
+txan_40,tx_40,NA,hl,0.800363636,NA
+txan_41,tx_41,NA,hl,NA,NA
+txan_42,tx_42,NA,hl,0.838,NA
+txan_43,tx_43,NA,hl,NA,NA
+txan_44,tx_44,NA,hl,NA,NA
+txan_45,tx_45,NA,hl,NA,NA
+txan_46,tx_46,NA,hl,0.751714286,NA
+txan_47,tx_47,NA,hl,0.843,NA
+txan_48,tx_48,NA,hl,0.784,NA
+txan_49,tx_49,NA,hl,1.069333333,NA
+txan_50,tx_50,NA,hl,NA,NA
+txan_51,tx_51,NA,hl,0.9466,NA
+txan_52,tx_52,NA,hl,0.4689,NA
+txan_53,tx_53,NA,hl,0.485,NA
+txan_54,tx_54,NA,hl,0.6444,NA
+txan_55,tx_55,NA,hl,0.47987,NA
+txan_56,tx_56,NA,hl,1.0036,NA
+txan_57,tx_57,NA,hl,1.0789,NA
+txan_58,tx_58,NA,hl,1.083,NA
+txan_59,tx_59,NA,hl,1.083,NA
+txan_60,tx_60,NA,hl,NA,NA
+txan_61,tx_61,NA,hl,NA,NA
+txan_62,tx_62,NA,hl,1.051454545,NA
+txan_63,tx_63,NA,hl,1.078125,NA
+txan_64,tx_64,NA,hl,0.82856,NA
+txan_65,tx_65,NA,hl,0.439571429,NA
+txan_66,tx_66,NA,hl,0.67,NA
+txan_67,tx_67,NA,hl,0.81856,NA
+txan_68,tx_68,NA,hl,NA,NA
+txan_69,tx_69,NA,hl,NA,NA
+txan_70,tx_70,NA,hl,0.423,NA
+txan_71,tx_71,NA,hl,0.4015,NA
+txan_72,tx_72,NA,hl,0.8322,NA
+txan_73,tx_73,NA,hl,0.715666667,NA
+txan_74,tx_74,NA,hl,0.7575,NA
+txan_75,tx_75,NA,hl,0.848333333,NA
+txan_76,tx_76,NA,hl,NA,NA
+txan_77,tx_77,NA,hl,0.582,NA
+txan_78,tx_78,NA,hl,0.61,NA
+txan_79,tx_79,NA,hl,0.9546875,NA
+txan_80,tx_80,NA,hl,0.9622,NA
+txan_81,tx_81,NA,hl,0.865,NA
+txan_82,tx_82,NA,hl,0.424285714,NA
+txan_83,tx_1,NA,rel,0.033044847,NA
+txan_84,tx_2,NA,rel,0.172681748,NA
+txan_85,tx_3,NA,rel,0.199116194,NA
+txan_86,tx_4,NA,rel,0.169953209,NA
+txan_87,tx_5,NA,rel,0.160990712,NA
+txan_88,tx_6,NA,rel,0.167162527,NA
+txan_89,tx_7,NA,rel,0.153846154,NA
+txan_90,tx_8,NA,rel,0.248310945,NA
+txan_91,tx_9,NA,rel,0.236411264,NA
+txan_92,tx_10,NA,rel,0.230625931,NA
+txan_93,tx_11,NA,rel,0.216382806,NA
+txan_94,tx_12,NA,rel,0.232154341,NA
+txan_95,tx_13,NA,rel,0.233432749,NA
+txan_96,tx_14,NA,rel,0.232538663,NA
+txan_97,tx_15,NA,rel,0.265876634,NA
+txan_98,tx_16,NA,rel,0.253543077,NA
+txan_99,tx_17,NA,rel,0.257395313,NA
+txan_100,tx_18,NA,rel,0.253012048,NA
+txan_101,tx_19,NA,rel,0.250343879,NA
+txan_102,tx_20,NA,rel,0.237714286,NA
+txan_103,tx_21,NA,rel,0.335788562,NA
+txan_104,tx_22,NA,rel,0.262074879,NA
+txan_105,tx_23,NA,rel,0.279562301,NA
+txan_106,tx_24,NA,rel,0.285163405,NA
+txan_107,tx_25,NA,rel,0.272087068,NA
+txan_108,tx_26,NA,rel,0.337654685,NA
+txan_109,tx_27,NA,rel,0.297246749,NA
+txan_110,tx_28,NA,rel,0.246514992,NA
+txan_111,tx_29,NA,rel,0.288962866,NA
+txan_112,tx_30,NA,rel,0.288740532,NA
+txan_113,tx_31,NA,rel,NA,NA
+txan_114,tx_32,NA,rel,0.273272854,NA
+txan_115,tx_33,NA,rel,0.280429072,NA
+txan_116,tx_34,NA,rel,NA,NA
+txan_117,tx_35,NA,rel,0.2085,NA
+txan_118,tx_36,NA,rel,NA,NA
+txan_119,tx_37,NA,rel,0.292130959,NA
+txan_120,tx_38,NA,rel,0.327418232,NA
+txan_121,tx_39,NA,rel,0.331556414,NA
+txan_122,tx_40,NA,rel,0.241481145,NA
+txan_123,tx_41,NA,rel,NA,NA
+txan_124,tx_42,NA,rel,0.096658711,NA
+txan_125,tx_43,NA,rel,NA,NA
+txan_126,tx_44,NA,rel,NA,NA
+txan_127,tx_45,NA,rel,NA,NA
+txan_128,tx_46,NA,rel,0.102052452,NA
+txan_129,tx_47,NA,rel,0.222894425,NA
+txan_130,tx_48,NA,rel,0.248086735,NA
+txan_131,tx_49,NA,rel,0.182044888,NA
+txan_132,tx_50,NA,rel,NA,NA
+txan_133,tx_51,NA,rel,0.184132685,NA
+txan_134,tx_52,NA,rel,0.188739603,NA
+txan_135,tx_53,NA,rel,0.175257732,NA
+txan_136,tx_54,NA,rel,0.097765363,NA
+txan_137,tx_55,NA,rel,0.079883577,NA
+txan_138,tx_56,NA,rel,0.190115584,NA
+txan_139,tx_57,NA,rel,0.26934841,NA
+txan_140,tx_58,NA,rel,0.173130194,NA
+txan_141,tx_59,NA,rel,0.192059095,NA
+txan_142,tx_60,NA,rel,NA,NA
+txan_143,tx_61,NA,rel,NA,NA
+txan_144,tx_62,NA,rel,0.17032682,NA
+txan_145,tx_63,NA,rel,0.196057971,NA
+txan_146,tx_64,NA,rel,0.230828368,NA
+txan_147,tx_65,NA,rel,0.073801959,NA
+txan_148,tx_66,NA,rel,0.032835821,NA
+txan_149,tx_67,NA,rel,0.274384285,NA
+txan_150,tx_68,NA,rel,NA,NA
+txan_151,tx_69,NA,rel,NA,NA
+txan_152,tx_70,NA,rel,0.078014184,NA
+txan_153,tx_71,NA,rel,0.084059776,NA
+txan_154,tx_72,NA,rel,0.156212449,NA
+txan_155,tx_73,NA,rel,0.141127154,NA
+txan_156,tx_74,NA,rel,0.133333333,NA
+txan_157,tx_75,NA,rel,0.079764244,NA
+txan_158,tx_76,NA,rel,NA,NA
+txan_159,tx_77,NA,rel,0.24742268,NA
+txan_160,tx_78,NA,rel,0.204918033,NA
+txan_161,tx_79,NA,rel,0.231085714,NA
+txan_162,tx_80,NA,rel,0.22829582,NA
+txan_163,tx_81,NA,rel,0.186936416,NA
+txan_164,tx_82,NA,rel,0.085441941,NA
+txan_165,tx_1,NA,rll,0.655782848,NA
+txan_166,tx_2,NA,rll,1.323778277,NA
+txan_167,tx_3,NA,rll,1.198682956,NA
+txan_168,tx_4,NA,rll,1.250445633,NA
+txan_169,tx_5,NA,rll,1.160990712,NA
+txan_170,tx_6,NA,rll,1.270878018,NA
+txan_171,tx_7,NA,rll,0.615384615,NA
+txan_172,tx_8,NA,rll,1.33757253,NA
+txan_173,tx_9,NA,rll,1.436585898,NA
+txan_174,tx_10,NA,rll,1.259474132,NA
+txan_175,tx_11,NA,rll,1.094566099,NA
+txan_176,tx_12,NA,rll,1.198220793,NA
+txan_177,tx_13,NA,rll,1.212046264,NA
+txan_178,tx_14,NA,rll,1.20453911,NA
+txan_179,tx_15,NA,rll,1.08872683,NA
+txan_180,tx_16,NA,rll,0.881386061,NA
+txan_181,tx_17,NA,rll,0.905365604,NA
+txan_182,tx_18,NA,rll,1.096768024,NA
+txan_183,tx_19,NA,rll,0.888583219,NA
+txan_184,tx_20,NA,rll,1,NA
+txan_185,tx_21,NA,rll,1.299740035,NA
+txan_186,tx_22,NA,rll,1.166761932,NA
+txan_187,tx_23,NA,rll,1.352982704,NA
+txan_188,tx_24,NA,rll,1.558469103,NA
+txan_189,tx_25,NA,rll,1.189308578,NA
+txan_190,tx_26,NA,rll,1.227165586,NA
+txan_191,tx_27,NA,rll,1.4709669,NA
+txan_192,tx_28,NA,rll,1.243687533,NA
+txan_193,tx_29,NA,rll,1.132689422,NA
+txan_194,tx_30,NA,rll,1.155090512,NA
+txan_195,tx_31,NA,rll,NA,NA
+txan_196,tx_32,NA,rll,1.401116539,NA
+txan_197,tx_33,NA,rll,1.510872738,NA
+txan_198,tx_34,NA,rll,NA,NA
+txan_199,tx_35,NA,rll,1.2085,NA
+txan_200,tx_36,NA,rll,NA,NA
+txan_201,tx_37,NA,rll,1.119701321,NA
+txan_202,tx_38,NA,rll,1.33368128,NA
+txan_203,tx_39,NA,rll,1.297221289,NA
+txan_204,tx_40,NA,rll,0.990686052,NA
+txan_205,tx_41,NA,rll,NA,NA
+txan_206,tx_42,NA,rll,0.723150358,NA
+txan_207,tx_43,NA,rll,NA,NA
+txan_208,tx_44,NA,rll,NA,NA
+txan_209,tx_45,NA,rll,NA,NA
+txan_210,tx_46,NA,rll,0.838844546,NA
+txan_211,tx_47,NA,rll,0.970225386,NA
+txan_212,tx_48,NA,rll,0.987244898,NA
+txan_213,tx_49,NA,rll,0.935162095,NA
+txan_214,tx_50,NA,rll,NA,NA
+txan_215,tx_51,NA,rll,0.971371223,NA
+txan_216,tx_52,NA,rll,0.732352314,NA
+txan_217,tx_53,NA,rll,0.754226804,NA
+txan_218,tx_54,NA,rll,0.837057728,NA
+txan_219,tx_55,NA,rll,0.624716099,NA
+txan_220,tx_56,NA,rll,0.986648067,NA
+txan_221,tx_57,NA,rll,0.99629252,NA
+txan_222,tx_58,NA,rll,0.923361034,NA
+txan_223,tx_59,NA,rll,0.923361034,NA
+txan_224,tx_60,NA,rll,NA,NA
+txan_225,tx_61,NA,rll,NA,NA
+txan_226,tx_62,NA,rll,0.931955733,NA
+txan_227,tx_63,NA,rll,1.014376812,NA
+txan_228,tx_64,NA,rll,1.365731309,NA
+txan_229,tx_65,NA,rll,0.652554936,NA
+txan_230,tx_66,NA,rll,0.678507463,NA
+txan_231,tx_67,NA,rll,1.346999609,NA
+txan_232,tx_68,NA,rll,NA,NA
+txan_233,tx_69,NA,rll,NA,NA
+txan_234,tx_70,NA,rll,0.664066194,NA
+txan_235,tx_71,NA,rll,0.686176837,NA
+txan_236,tx_72,NA,rll,0.88344148,NA
+txan_237,tx_73,NA,rll,0.809268747,NA
+txan_238,tx_74,NA,rll,0.818745875,NA
+txan_239,tx_75,NA,rll,0.860903733,NA
+txan_240,tx_76,NA,rll,NA,NA
+txan_241,tx_77,NA,rll,1.046391753,NA
+txan_242,tx_78,NA,rll,0.819672131,NA
+txan_243,tx_79,NA,rll,0.950628571,NA
+txan_244,tx_80,NA,rll,0.958842444,NA
+txan_245,tx_81,NA,rll,0.825086705,NA
+txan_246,tx_82,NA,rll,0.678682842,NA
+txan_247,tx_1,NA,colony.size,Small,NA
+txan_248,tx_2,NA,colony.size,Medium,NA
+txan_249,tx_3,NA,colony.size,Medium,NA
+txan_250,tx_4,NA,colony.size,Medium,NA
+txan_251,tx_5,NA,colony.size,Large,NA
+txan_252,tx_6,NA,colony.size,Medium,NA
+txan_253,tx_7,NA,colony.size,Medium,NA
+txan_254,tx_8,NA,colony.size,NA,NA
+txan_255,tx_9,NA,colony.size,NA,NA
+txan_256,tx_10,NA,colony.size,NA,NA
+txan_257,tx_11,NA,colony.size,NA,NA
+txan_258,tx_12,NA,colony.size,Medium,NA
+txan_259,tx_13,NA,colony.size,NA,NA
+txan_260,tx_14,NA,colony.size,Very Large,NA
+txan_261,tx_15,NA,colony.size,NA,NA
+txan_262,tx_16,NA,colony.size,Very Large,NA
+txan_263,tx_17,NA,colony.size,Large,NA
+txan_264,tx_18,NA,colony.size,Very Large,NA
+txan_265,tx_19,NA,colony.size,Small,NA
+txan_266,tx_20,NA,colony.size,Very Large,NA
+txan_267,tx_21,NA,colony.size,Medium,NA
+txan_268,tx_22,NA,colony.size,NA,NA
+txan_269,tx_23,NA,colony.size,Large,NA
+txan_270,tx_24,NA,colony.size,Medium,NA
+txan_271,tx_25,NA,colony.size,Very Large,NA
+txan_272,tx_26,NA,colony.size,Medium,NA
+txan_273,tx_27,NA,colony.size,Medium,NA
+txan_274,tx_28,NA,colony.size,Medium,NA
+txan_275,tx_29,NA,colony.size,Medium,NA
+txan_276,tx_30,NA,colony.size,Medium,NA
+txan_277,tx_31,NA,colony.size,NA,NA
+txan_278,tx_32,NA,colony.size,Very Large,NA
+txan_279,tx_33,NA,colony.size,Medium,NA
+txan_280,tx_34,NA,colony.size,NA,NA
+txan_281,tx_35,NA,colony.size,Large,NA
+txan_282,tx_36,NA,colony.size,NA,NA
+txan_283,tx_37,NA,colony.size,Medium,NA
+txan_284,tx_38,NA,colony.size,Small,NA
+txan_285,tx_39,NA,colony.size,Large,NA
+txan_286,tx_40,NA,colony.size,Medium,NA
+txan_287,tx_41,NA,colony.size,Large,NA
+txan_288,tx_42,NA,colony.size,Medium,NA
+txan_289,tx_43,NA,colony.size,Large,NA
+txan_290,tx_44,NA,colony.size,NA,NA
+txan_291,tx_45,NA,colony.size,NA,NA
+txan_292,tx_46,NA,colony.size,Medium,NA
+txan_293,tx_47,NA,colony.size,Large,NA
+txan_294,tx_48,NA,colony.size,Large,NA
+txan_295,tx_49,NA,colony.size,NA,NA
+txan_296,tx_50,NA,colony.size,NA,NA
+txan_297,tx_51,NA,colony.size,Large,NA
+txan_298,tx_52,NA,colony.size,Small,NA
+txan_299,tx_53,NA,colony.size,Small,NA
+txan_300,tx_54,NA,colony.size,Small,NA
+txan_301,tx_55,NA,colony.size,Small,NA
+txan_302,tx_56,NA,colony.size,NA,NA
+txan_303,tx_57,NA,colony.size,NA,NA
+txan_304,tx_58,NA,colony.size,NA,NA
+txan_305,tx_59,NA,colony.size,NA,NA
+txan_306,tx_60,NA,colony.size,NA,NA
+txan_307,tx_61,NA,colony.size,Small,NA
+txan_308,tx_62,NA,colony.size,Small,NA
+txan_309,tx_63,NA,colony.size,Medium,NA
+txan_310,tx_64,NA,colony.size,Medium,NA
+txan_311,tx_65,NA,colony.size,Small,NA
+txan_312,tx_66,NA,colony.size,Small,NA
+txan_313,tx_67,NA,colony.size,NA,NA
+txan_314,tx_68,NA,colony.size,NA,NA
+txan_315,tx_69,NA,colony.size,NA,NA
+txan_316,tx_70,NA,colony.size,Small,NA
+txan_317,tx_71,NA,colony.size,Small,NA
+txan_318,tx_72,NA,colony.size,Small,NA
+txan_319,tx_73,NA,colony.size,Small,NA
+txan_320,tx_74,NA,colony.size,Medium,NA
+txan_321,tx_75,NA,colony.size,Medium,NA
+txan_322,tx_76,NA,colony.size,NA,NA
+txan_323,tx_77,NA,colony.size,Large,NA
+txan_324,tx_78,NA,colony.size,Small,NA
+txan_325,tx_79,NA,colony.size,Small,NA
+txan_326,tx_80,NA,colony.size,Small,NA
+txan_327,tx_81,NA,colony.size,Small,NA
+txan_328,tx_82,NA,colony.size,Very Large,NA
+txan_329,tx_1,NA,feeding.preference,Predatory,NA
+txan_330,tx_2,NA,feeding.preference,Granivore,NA
+txan_331,tx_3,NA,feeding.preference,Granivore,NA
+txan_332,tx_4,NA,feeding.preference,Granivore,NA
+txan_333,tx_5,NA,feeding.preference,Predatory,NA
+txan_334,tx_6,NA,feeding.preference,Granivore,NA
+txan_335,tx_7,NA,feeding.preference,Honeydew,NA
+txan_336,tx_8,NA,feeding.preference,Omnivore,NA
+txan_337,tx_9,NA,feeding.preference,Omnivore,NA
+txan_338,tx_10,NA,feeding.preference,Omnivore,NA
+txan_339,tx_11,NA,feeding.preference,Omnivore,NA
+txan_340,tx_12,NA,feeding.preference,Omnivore,NA
+txan_341,tx_13,NA,feeding.preference,Omnivore,NA
+txan_342,tx_14,NA,feeding.preference,Omnivore,NA
+txan_343,tx_15,NA,feeding.preference,Omnivore,NA
+txan_344,tx_16,NA,feeding.preference,Granivore,NA
+txan_345,tx_17,NA,feeding.preference,Granivore,NA
+txan_346,tx_18,NA,feeding.preference,Omnivore,NA
+txan_347,tx_19,NA,feeding.preference,Omnivore,NA
+txan_348,tx_20,NA,feeding.preference,Omnivore,NA
+txan_349,tx_21,NA,feeding.preference,Omnivore,NA
+txan_350,tx_22,NA,feeding.preference,Omnivore,NA
+txan_351,tx_23,NA,feeding.preference,Omnivore,NA
+txan_352,tx_24,NA,feeding.preference,Omnivore,NA
+txan_353,tx_25,NA,feeding.preference,Omnivore,NA
+txan_354,tx_26,NA,feeding.preference,Omnivore,NA
+txan_355,tx_27,NA,feeding.preference,Honeydew,NA
+txan_356,tx_28,NA,feeding.preference,Omnivore,NA
+txan_357,tx_29,NA,feeding.preference,Omnivore,NA
+txan_358,tx_30,NA,feeding.preference,Omnivore,NA
+txan_359,tx_31,NA,feeding.preference,NA,NA
+txan_360,tx_32,NA,feeding.preference,Omnivore,NA
+txan_361,tx_33,NA,feeding.preference,Omnivore,NA
+txan_362,tx_34,NA,feeding.preference,NA,NA
+txan_363,tx_35,NA,feeding.preference,Omnivore,NA
+txan_364,tx_36,NA,feeding.preference,NA,NA
+txan_365,tx_37,NA,feeding.preference,Omnivore,NA
+txan_366,tx_38,NA,feeding.preference,Omnivore,NA
+txan_367,tx_39,NA,feeding.preference,Omnivore,NA
+txan_368,tx_40,NA,feeding.preference,Omnivore,NA
+txan_369,tx_41,NA,feeding.preference,Predatory,NA
+txan_370,tx_42,NA,feeding.preference,Predatory,NA
+txan_371,tx_43,NA,feeding.preference,Predatory,NA
+txan_372,tx_44,NA,feeding.preference,Predatory,NA
+txan_373,tx_45,NA,feeding.preference,NA,NA
+txan_374,tx_46,NA,feeding.preference,Omnivore,NA
+txan_375,tx_47,NA,feeding.preference,Omnivore,NA
+txan_376,tx_48,NA,feeding.preference,Omnivore,NA
+txan_377,tx_49,NA,feeding.preference,Omnivore,NA
+txan_378,tx_50,NA,feeding.preference,Honeydew,NA
+txan_379,tx_51,NA,feeding.preference,Omnivore,NA
+txan_380,tx_52,NA,feeding.preference,Omnivore,NA
+txan_381,tx_53,NA,feeding.preference,Omnivore,NA
+txan_382,tx_54,NA,feeding.preference,Predatory,NA
+txan_383,tx_55,NA,feeding.preference,Omnivore,NA
+txan_384,tx_56,NA,feeding.preference,Omnivore,NA
+txan_385,tx_57,NA,feeding.preference,Omnivore,NA
+txan_386,tx_58,NA,feeding.preference,Omnivore,NA
+txan_387,tx_59,NA,feeding.preference,Omnivore,NA
+txan_388,tx_60,NA,feeding.preference,NA,NA
+txan_389,tx_61,NA,feeding.preference,NA,NA
+txan_390,tx_62,NA,feeding.preference,Omnivore,NA
+txan_391,tx_63,NA,feeding.preference,Omnivore,NA
+txan_392,tx_64,NA,feeding.preference,Omnivore,NA
+txan_393,tx_65,NA,feeding.preference,Granivore,NA
+txan_394,tx_66,NA,feeding.preference,Predatory,NA
+txan_395,tx_67,NA,feeding.preference,Omnivore,NA
+txan_396,tx_68,NA,feeding.preference,NA,NA
+txan_397,tx_69,NA,feeding.preference,NA,NA
+txan_398,tx_70,NA,feeding.preference,Omnivore,NA
+txan_399,tx_71,NA,feeding.preference,Omnivore,NA
+txan_400,tx_72,NA,feeding.preference,Predatory,NA
+txan_401,tx_73,NA,feeding.preference,Predatory,NA
+txan_402,tx_74,NA,feeding.preference,Predatory,NA
+txan_403,tx_75,NA,feeding.preference,Predatory,NA
+txan_404,tx_76,NA,feeding.preference,Predatory,NA
+txan_405,tx_77,NA,feeding.preference,Omnivore,NA
+txan_406,tx_78,NA,feeding.preference,Omnivore,NA
+txan_407,tx_79,NA,feeding.preference,Omnivore,NA
+txan_408,tx_80,NA,feeding.preference,Omnivore,NA
+txan_409,tx_81,NA,feeding.preference,Omnivore,NA
+txan_410,tx_82,NA,feeding.preference,Omnivore,NA
+txan_411,tx_1,NA,nest.substrate,Soil ,NA
+txan_412,tx_2,NA,nest.substrate,Wood,NA
+txan_413,tx_3,NA,nest.substrate,Wood,NA
+txan_414,tx_4,NA,nest.substrate,Wood,NA
+txan_415,tx_5,NA,nest.substrate,Wood,NA
+txan_416,tx_6,NA,nest.substrate,Soil ,NA
+txan_417,tx_7,NA,nest.substrate,Soil ,NA
+txan_418,tx_8,NA,nest.substrate,Soil ,NA
+txan_419,tx_9,NA,nest.substrate,Soil ,NA
+txan_420,tx_10,NA,nest.substrate,Wood,NA
+txan_421,tx_11,NA,nest.substrate,Wood,NA
+txan_422,tx_12,NA,nest.substrate,Wood,NA
+txan_423,tx_13,NA,nest.substrate,Wood,NA
+txan_424,tx_14,NA,nest.substrate,Wood,NA
+txan_425,tx_15,NA,nest.substrate,Wood,NA
+txan_426,tx_16,NA,nest.substrate,Wood,NA
+txan_427,tx_17,NA,nest.substrate,Soil ,NA
+txan_428,tx_18,NA,nest.substrate,Grass,NA
+txan_429,tx_19,NA,nest.substrate,Grass,NA
+txan_430,tx_20,NA,nest.substrate,Grass,NA
+txan_431,tx_21,NA,nest.substrate,Soil ,NA
+txan_432,tx_22,NA,nest.substrate,Soil,NA
+txan_433,tx_23,NA,nest.substrate,Soil ,NA
+txan_434,tx_24,NA,nest.substrate,Soil ,NA
+txan_435,tx_25,NA,nest.substrate,Soil ,NA
+txan_436,tx_26,NA,nest.substrate,Soil ,NA
+txan_437,tx_27,NA,nest.substrate,Soil ,NA
+txan_438,tx_28,NA,nest.substrate,Soil ,NA
+txan_439,tx_29,NA,nest.substrate,Soil ,NA
+txan_440,tx_30,NA,nest.substrate,Soil ,NA
+txan_441,tx_31,NA,nest.substrate,Wood,NA
+txan_442,tx_32,NA,nest.substrate,Soil ,NA
+txan_443,tx_33,NA,nest.substrate,Soil,NA
+txan_444,tx_34,NA,nest.substrate,Wood,NA
+txan_445,tx_35,NA,nest.substrate,Soil ,NA
+txan_446,tx_36,NA,nest.substrate,Soil,NA
+txan_447,tx_37,NA,nest.substrate,Wood,NA
+txan_448,tx_38,NA,nest.substrate,Soil,NA
+txan_449,tx_39,NA,nest.substrate,Soil ,NA
+txan_450,tx_40,NA,nest.substrate,Soil ,NA
+txan_451,tx_41,NA,nest.substrate,NA,NA
+txan_452,tx_42,NA,nest.substrate,Soil ,NA
+txan_453,tx_43,NA,nest.substrate,Soil,NA
+txan_454,tx_44,NA,nest.substrate,Soil,NA
+txan_455,tx_45,NA,nest.substrate,Soil,NA
+txan_456,tx_46,NA,nest.substrate,Soil ,NA
+txan_457,tx_47,NA,nest.substrate,Soil ,NA
+txan_458,tx_48,NA,nest.substrate,Soil,NA
+txan_459,tx_49,NA,nest.substrate,Soil,NA
+txan_460,tx_50,NA,nest.substrate,Soil,NA
+txan_461,tx_51,NA,nest.substrate,Soil,NA
+txan_462,tx_52,NA,nest.substrate,Soil,NA
+txan_463,tx_53,NA,nest.substrate,Soil,NA
+txan_464,tx_54,NA,nest.substrate,Soil,NA
+txan_465,tx_55,NA,nest.substrate,Soil,NA
+txan_466,tx_56,NA,nest.substrate,Soil,NA
+txan_467,tx_57,NA,nest.substrate,Soil,NA
+txan_468,tx_58,NA,nest.substrate,Soil,NA
+txan_469,tx_59,NA,nest.substrate,Soil,NA
+txan_470,tx_60,NA,nest.substrate,Wood,NA
+txan_471,tx_61,NA,nest.substrate,Soil,NA
+txan_472,tx_62,NA,nest.substrate,Soil,NA
+txan_473,tx_63,NA,nest.substrate,Soil,NA
+txan_474,tx_64,NA,nest.substrate,Soil,NA
+txan_475,tx_65,NA,nest.substrate,Soil,NA
+txan_476,tx_66,NA,nest.substrate,Soil,NA
+txan_477,tx_67,NA,nest.substrate,Soil,NA
+txan_478,tx_68,NA,nest.substrate,Acorns,NA
+txan_479,tx_69,NA,nest.substrate,Soil,NA
+txan_480,tx_70,NA,nest.substrate,Soil,NA
+txan_481,tx_71,NA,nest.substrate,Soil,NA
+txan_482,tx_72,NA,nest.substrate,Soil,NA
+txan_483,tx_73,NA,nest.substrate,Soil,NA
+txan_484,tx_74,NA,nest.substrate,Soil,NA
+txan_485,tx_75,NA,nest.substrate,Soil,NA
+txan_486,tx_76,NA,nest.substrate,Soil,NA
+txan_487,tx_77,NA,nest.substrate,Soil,NA
+txan_488,tx_78,NA,nest.substrate,Soil,NA
+txan_489,tx_79,NA,nest.substrate,Acorns,NA
+txan_490,tx_80,NA,nest.substrate,Acorns,NA
+txan_491,tx_81,NA,nest.substrate,Wood,NA
+txan_492,tx_82,NA,nest.substrate,Soil,NA
+txan_493,tx_1,NA,primary.habitat,Open,NA
+txan_494,tx_2,NA,primary.habitat,Open,NA
+txan_495,tx_3,NA,primary.habitat,Conifer forests,NA
+txan_496,tx_4,NA,primary.habitat,Forests,NA
+txan_497,tx_5,NA,primary.habitat,Forests,NA
+txan_498,tx_6,NA,primary.habitat,Open,NA
+txan_499,tx_7,NA,primary.habitat,Open,NA
+txan_500,tx_8,NA,primary.habitat,Open,NA
+txan_501,tx_9,NA,primary.habitat,Open,NA
+txan_502,tx_10,NA,primary.habitat,Forests,NA
+txan_503,tx_11,NA,primary.habitat,Forests,NA
+txan_504,tx_12,NA,primary.habitat,Forests,NA
+txan_505,tx_13,NA,primary.habitat,Forests,NA
+txan_506,tx_14,NA,primary.habitat,Forests,NA
+txan_507,tx_15,NA,primary.habitat,Forests,NA
+txan_508,tx_16,NA,primary.habitat,Forests,NA
+txan_509,tx_17,NA,primary.habitat,Forests,NA
+txan_510,tx_18,NA,primary.habitat,Edge,NA
+txan_511,tx_19,NA,primary.habitat,Bogs,NA
+txan_512,tx_20,NA,primary.habitat,Edge,NA
+txan_513,tx_21,NA,primary.habitat,Open,NA
+txan_514,tx_22,NA,primary.habitat,Conifer forests,NA
+txan_515,tx_23,NA,primary.habitat,Edge,NA
+txan_516,tx_24,NA,primary.habitat,Deciduous forests,NA
+txan_517,tx_25,NA,primary.habitat,Deciduous forests,NA
+txan_518,tx_26,NA,primary.habitat,Forests,NA
+txan_519,tx_27,NA,primary.habitat,Open,NA
+txan_520,tx_28,NA,primary.habitat,Forests,NA
+txan_521,tx_29,NA,primary.habitat,Forests,NA
+txan_522,tx_30,NA,primary.habitat,Edge,NA
+txan_523,tx_31,NA,primary.habitat,Open,NA
+txan_524,tx_32,NA,primary.habitat,Forests,NA
+txan_525,tx_33,NA,primary.habitat,Edge,NA
+txan_526,tx_34,NA,primary.habitat,Open,NA
+txan_527,tx_35,NA,primary.habitat,Edge,NA
+txan_528,tx_36,NA,primary.habitat,Open,NA
+txan_529,tx_37,NA,primary.habitat,Forests,NA
+txan_530,tx_38,NA,primary.habitat,Forests,NA
+txan_531,tx_39,NA,primary.habitat,Open,NA
+txan_532,tx_40,NA,primary.habitat,Open,NA
+txan_533,tx_41,NA,primary.habitat,Forests,NA
+txan_534,tx_42,NA,primary.habitat,Open,NA
+txan_535,tx_43,NA,primary.habitat,NA,NA
+txan_536,tx_44,NA,primary.habitat,Forests,NA
+txan_537,tx_45,NA,primary.habitat,Forests ,NA
+txan_538,tx_46,NA,primary.habitat,Open,NA
+txan_539,tx_47,NA,primary.habitat,Open,NA
+txan_540,tx_48,NA,primary.habitat,Open,NA
+txan_541,tx_49,NA,primary.habitat,Open,NA
+txan_542,tx_50,NA,primary.habitat,Forests,NA
+txan_543,tx_51,NA,primary.habitat,Open,NA
+txan_544,tx_52,NA,primary.habitat,Open,NA
+txan_545,tx_53,NA,primary.habitat,Open,NA
+txan_546,tx_54,NA,primary.habitat,Subterranean ,NA
+txan_547,tx_55,NA,primary.habitat,Open,NA
+txan_548,tx_56,NA,primary.habitat,Forests,NA
+txan_549,tx_57,NA,primary.habitat,Forests,NA
+txan_550,tx_58,NA,primary.habitat,Forests,NA
+txan_551,tx_59,NA,primary.habitat,Forests,NA
+txan_552,tx_60,NA,primary.habitat,Forests,NA
+txan_553,tx_61,NA,primary.habitat,Forests,NA
+txan_554,tx_62,NA,primary.habitat,Forests,NA
+txan_555,tx_63,NA,primary.habitat,Forests,NA
+txan_556,tx_64,NA,primary.habitat,Open,NA
+txan_557,tx_65,NA,primary.habitat,Open,NA
+txan_558,tx_66,NA,primary.habitat,Forests,NA
+txan_559,tx_67,NA,primary.habitat,Open,NA
+txan_560,tx_68,NA,primary.habitat,Forests,NA
+txan_561,tx_69,NA,primary.habitat,Forests,NA
+txan_562,tx_70,NA,primary.habitat,Open,NA
+txan_563,tx_71,NA,primary.habitat,Open,NA
+txan_564,tx_72,NA,primary.habitat,Open,NA
+txan_565,tx_73,NA,primary.habitat,Open,NA
+txan_566,tx_74,NA,primary.habitat,Forests,NA
+txan_567,tx_75,NA,primary.habitat,Open,NA
+txan_568,tx_76,NA,primary.habitat,Forests,NA
+txan_569,tx_77,NA,primary.habitat,Forests,NA
+txan_570,tx_78,NA,primary.habitat,Open,NA
+txan_571,tx_79,NA,primary.habitat,Forests,NA
+txan_572,tx_80,NA,primary.habitat,Forests,NA
+txan_573,tx_81,NA,primary.habitat,Deciduous forests,NA
+txan_574,tx_82,NA,primary.habitat,Open,NA
+txan_575,tx_1,NA,secondary.habitat,Wet,NA
+txan_576,tx_2,NA,secondary.habitat,Wet,NA
+txan_577,tx_3,NA,secondary.habitat,Wet,NA
+txan_578,tx_4,NA,secondary.habitat,Wet,NA
+txan_579,tx_5,NA,secondary.habitat,Wet,NA
+txan_580,tx_6,NA,secondary.habitat,Sandy ,NA
+txan_581,tx_7,NA,secondary.habitat,Edge,NA
+txan_582,tx_8,NA,secondary.habitat,Edge,NA
+txan_583,tx_9,NA,secondary.habitat,Edge,NA
+txan_584,tx_10,NA,secondary.habitat,Edge,NA
+txan_585,tx_11,NA,secondary.habitat,Edge,NA
+txan_586,tx_12,NA,secondary.habitat,Edge,NA
+txan_587,tx_13,NA,secondary.habitat,Edge,NA
+txan_588,tx_14,NA,secondary.habitat,Edge,NA
+txan_589,tx_15,NA,secondary.habitat,Edge,NA
+txan_590,tx_16,NA,secondary.habitat,Edge,NA
+txan_591,tx_17,NA,secondary.habitat,Edge,NA
+txan_592,tx_18,NA,secondary.habitat,Litter,NA
+txan_593,tx_19,NA,secondary.habitat,Edge,NA
+txan_594,tx_20,NA,secondary.habitat,Litter,NA
+txan_595,tx_21,NA,secondary.habitat,Litter,NA
+txan_596,tx_22,NA,secondary.habitat,Litter,NA
+txan_597,tx_23,NA,secondary.habitat,Litter,NA
+txan_598,tx_24,NA,secondary.habitat,Edge,NA
+txan_599,tx_25,NA,secondary.habitat,Edge,NA
+txan_600,tx_26,NA,secondary.habitat,NA,NA
+txan_601,tx_27,NA,secondary.habitat,Edge,NA
+txan_602,tx_28,NA,secondary.habitat,Edge,NA
+txan_603,tx_29,NA,secondary.habitat,Grassy,NA
+txan_604,tx_30,NA,secondary.habitat,Grassy,NA
+txan_605,tx_31,NA,secondary.habitat,NA,NA
+txan_606,tx_32,NA,secondary.habitat,Grassy,NA
+txan_607,tx_33,NA,secondary.habitat,Grassy,NA
+txan_608,tx_34,NA,secondary.habitat,Edge,NA
+txan_609,tx_35,NA,secondary.habitat,Grassy,NA
+txan_610,tx_36,NA,secondary.habitat,NA,NA
+txan_611,tx_37,NA,secondary.habitat,Grassy,NA
+txan_612,tx_38,NA,secondary.habitat,Grassy,NA
+txan_613,tx_39,NA,secondary.habitat,Rocky,NA
+txan_614,tx_40,NA,secondary.habitat,Sandy ,NA
+txan_615,tx_41,NA,secondary.habitat,NA,NA
+txan_616,tx_42,NA,secondary.habitat,Sandy ,NA
+txan_617,tx_43,NA,secondary.habitat,NA,NA
+txan_618,tx_44,NA,secondary.habitat,Sandy ,NA
+txan_619,tx_45,NA,secondary.habitat,Sandy ,NA
+txan_620,tx_46,NA,secondary.habitat,Sandy ,NA
+txan_621,tx_47,NA,secondary.habitat,Sandy ,NA
+txan_622,tx_48,NA,secondary.habitat,Sandy ,NA
+txan_623,tx_49,NA,secondary.habitat,Sandy ,NA
+txan_624,tx_50,NA,secondary.habitat,NA,NA
+txan_625,tx_51,NA,secondary.habitat,Sandy ,NA
+txan_626,tx_52,NA,secondary.habitat,Sandy ,NA
+txan_627,tx_53,NA,secondary.habitat,Sandy ,NA
+txan_628,tx_54,NA,secondary.habitat,NA,NA
+txan_629,tx_55,NA,secondary.habitat,Litter,NA
+txan_630,tx_56,NA,secondary.habitat,NA,NA
+txan_631,tx_57,NA,secondary.habitat,NA,NA
+txan_632,tx_58,NA,secondary.habitat,NA,NA
+txan_633,tx_59,NA,secondary.habitat,NA,NA
+txan_634,tx_60,NA,secondary.habitat,NA,NA
+txan_635,tx_61,NA,secondary.habitat,Sandy ,NA
+txan_636,tx_62,NA,secondary.habitat,NA,NA
+txan_637,tx_63,NA,secondary.habitat,NA,NA
+txan_638,tx_64,NA,secondary.habitat,NA,NA
+txan_639,tx_65,NA,secondary.habitat,NA,NA
+txan_640,tx_66,NA,secondary.habitat,NA,NA
+txan_641,tx_67,NA,secondary.habitat,NA,NA
+txan_642,tx_68,NA,secondary.habitat,NA,NA
+txan_643,tx_69,NA,secondary.habitat,NA,NA
+txan_644,tx_70,NA,secondary.habitat,NA,NA
+txan_645,tx_71,NA,secondary.habitat,NA,NA
+txan_646,tx_72,NA,secondary.habitat,NA,NA
+txan_647,tx_73,NA,secondary.habitat,NA,NA
+txan_648,tx_74,NA,secondary.habitat,NA,NA
+txan_649,tx_75,NA,secondary.habitat,NA,NA
+txan_650,tx_76,NA,secondary.habitat,Grassy,NA
+txan_651,tx_77,NA,secondary.habitat,Grassy,NA
+txan_652,tx_78,NA,secondary.habitat,Wet,NA
+txan_653,tx_79,NA,secondary.habitat,Grassy,NA
+txan_654,tx_80,NA,secondary.habitat,NA,NA
+txan_655,tx_81,NA,secondary.habitat,Grassy,NA
+txan_656,tx_82,NA,secondary.habitat,NA,NA
+txan_657,tx_1,NA,seed.disperser,N,NA
+txan_658,tx_2,NA,seed.disperser,Y,NA
+txan_659,tx_3,NA,seed.disperser,Y,NA
+txan_660,tx_4,NA,seed.disperser,Y,NA
+txan_661,tx_5,NA,seed.disperser,N,NA
+txan_662,tx_6,NA,seed.disperser,Y,NA
+txan_663,tx_7,NA,seed.disperser,N,NA
+txan_664,tx_8,NA,seed.disperser,N,NA
+txan_665,tx_9,NA,seed.disperser,N,NA
+txan_666,tx_10,NA,seed.disperser,N,NA
+txan_667,tx_11,NA,seed.disperser,N,NA
+txan_668,tx_12,NA,seed.disperser,N,NA
+txan_669,tx_13,NA,seed.disperser,N,NA
+txan_670,tx_14,NA,seed.disperser,N,NA
+txan_671,tx_15,NA,seed.disperser,N,NA
+txan_672,tx_16,NA,seed.disperser,Y,NA
+txan_673,tx_17,NA,seed.disperser,Y,NA
+txan_674,tx_18,NA,seed.disperser,N,NA
+txan_675,tx_19,NA,seed.disperser,N,NA
+txan_676,tx_20,NA,seed.disperser,N,NA
+txan_677,tx_21,NA,seed.disperser,N,NA
+txan_678,tx_22,NA,seed.disperser,N,NA
+txan_679,tx_23,NA,seed.disperser,Y,NA
+txan_680,tx_24,NA,seed.disperser,N,NA
+txan_681,tx_25,NA,seed.disperser,N,NA
+txan_682,tx_26,NA,seed.disperser,N,NA
+txan_683,tx_27,NA,seed.disperser,N,NA
+txan_684,tx_28,NA,seed.disperser,Y,NA
+txan_685,tx_29,NA,seed.disperser,N,NA
+txan_686,tx_30,NA,seed.disperser,N,NA
+txan_687,tx_31,NA,seed.disperser,NA,NA
+txan_688,tx_32,NA,seed.disperser,N,NA
+txan_689,tx_33,NA,seed.disperser,N,NA
+txan_690,tx_34,NA,seed.disperser,NA,NA
+txan_691,tx_35,NA,seed.disperser,N,NA
+txan_692,tx_36,NA,seed.disperser,NA,NA
+txan_693,tx_37,NA,seed.disperser,N,NA
+txan_694,tx_38,NA,seed.disperser,N,NA
+txan_695,tx_39,NA,seed.disperser,N,NA
+txan_696,tx_40,NA,seed.disperser,Y,NA
+txan_697,tx_41,NA,seed.disperser,N,NA
+txan_698,tx_42,NA,seed.disperser,N,NA
+txan_699,tx_43,NA,seed.disperser,N,NA
+txan_700,tx_44,NA,seed.disperser,N,NA
+txan_701,tx_45,NA,seed.disperser,N,NA
+txan_702,tx_46,NA,seed.disperser,N,NA
+txan_703,tx_47,NA,seed.disperser,N,NA
+txan_704,tx_48,NA,seed.disperser,N,NA
+txan_705,tx_49,NA,seed.disperser,N,NA
+txan_706,tx_50,NA,seed.disperser,NA,NA
+txan_707,tx_51,NA,seed.disperser,N,NA
+txan_708,tx_52,NA,seed.disperser,N,NA
+txan_709,tx_53,NA,seed.disperser,N,NA
+txan_710,tx_54,NA,seed.disperser,N,NA
+txan_711,tx_55,NA,seed.disperser,N,NA
+txan_712,tx_56,NA,seed.disperser,N,NA
+txan_713,tx_57,NA,seed.disperser,N,NA
+txan_714,tx_58,NA,seed.disperser,N,NA
+txan_715,tx_59,NA,seed.disperser,N,NA
+txan_716,tx_60,NA,seed.disperser,NA,NA
+txan_717,tx_61,NA,seed.disperser,NA,NA
+txan_718,tx_62,NA,seed.disperser,Y,NA
+txan_719,tx_63,NA,seed.disperser,N,NA
+txan_720,tx_64,NA,seed.disperser,N,NA
+txan_721,tx_65,NA,seed.disperser,Y,NA
+txan_722,tx_66,NA,seed.disperser,N,NA
+txan_723,tx_67,NA,seed.disperser,N,NA
+txan_724,tx_68,NA,seed.disperser,N,NA
+txan_725,tx_69,NA,seed.disperser,NA,NA
+txan_726,tx_70,NA,seed.disperser,N,NA
+txan_727,tx_71,NA,seed.disperser,N,NA
+txan_728,tx_72,NA,seed.disperser,N,NA
+txan_729,tx_73,NA,seed.disperser,N,NA
+txan_730,tx_74,NA,seed.disperser,N,NA
+txan_731,tx_75,NA,seed.disperser,N,NA
+txan_732,tx_76,NA,seed.disperser,N,NA
+txan_733,tx_77,NA,seed.disperser,N,NA
+txan_734,tx_78,NA,seed.disperser,N,NA
+txan_735,tx_79,NA,seed.disperser,N,NA
+txan_736,tx_80,NA,seed.disperser,N,NA
+txan_737,tx_81,NA,seed.disperser,N,NA
+txan_738,tx_82,NA,seed.disperser,N,NA
+txan_739,tx_1,NA,slavemaker.sp,N,NA
+txan_740,tx_2,NA,slavemaker.sp,N,NA
+txan_741,tx_3,NA,slavemaker.sp,N,NA
+txan_742,tx_4,NA,slavemaker.sp,N,NA
+txan_743,tx_5,NA,slavemaker.sp,Y,NA
+txan_744,tx_6,NA,slavemaker.sp,N,NA
+txan_745,tx_7,NA,slavemaker.sp,N,NA
+txan_746,tx_8,NA,slavemaker.sp,N,NA
+txan_747,tx_9,NA,slavemaker.sp,N,NA
+txan_748,tx_10,NA,slavemaker.sp,N,NA
+txan_749,tx_11,NA,slavemaker.sp,N,NA
+txan_750,tx_12,NA,slavemaker.sp,N,NA
+txan_751,tx_13,NA,slavemaker.sp,N,NA
+txan_752,tx_14,NA,slavemaker.sp,N,NA
+txan_753,tx_15,NA,slavemaker.sp,N,NA
+txan_754,tx_16,NA,slavemaker.sp,N,NA
+txan_755,tx_17,NA,slavemaker.sp,N,NA
+txan_756,tx_18,NA,slavemaker.sp,N,NA
+txan_757,tx_19,NA,slavemaker.sp,N,NA
+txan_758,tx_20,NA,slavemaker.sp,N,NA
+txan_759,tx_21,NA,slavemaker.sp,N,NA
+txan_760,tx_22,NA,slavemaker.sp,Y,NA
+txan_761,tx_23,NA,slavemaker.sp,Y,NA
+txan_762,tx_24,NA,slavemaker.sp,N,NA
+txan_763,tx_25,NA,slavemaker.sp,N,NA
+txan_764,tx_26,NA,slavemaker.sp,Y,NA
+txan_765,tx_27,NA,slavemaker.sp,N,NA
+txan_766,tx_28,NA,slavemaker.sp,N,NA
+txan_767,tx_29,NA,slavemaker.sp,N,NA
+txan_768,tx_30,NA,slavemaker.sp,N,NA
+txan_769,tx_31,NA,slavemaker.sp,NA,NA
+txan_770,tx_32,NA,slavemaker.sp,N,NA
+txan_771,tx_33,NA,slavemaker.sp,N,NA
+txan_772,tx_34,NA,slavemaker.sp,Y,NA
+txan_773,tx_35,NA,slavemaker.sp,Y,NA
+txan_774,tx_36,NA,slavemaker.sp,Y,NA
+txan_775,tx_37,NA,slavemaker.sp,N,NA
+txan_776,tx_38,NA,slavemaker.sp,Y,NA
+txan_777,tx_39,NA,slavemaker.sp,N,NA
+txan_778,tx_40,NA,slavemaker.sp,N,NA
+txan_779,tx_41,NA,slavemaker.sp,N,NA
+txan_780,tx_42,NA,slavemaker.sp,N,NA
+txan_781,tx_43,NA,slavemaker.sp,N,NA
+txan_782,tx_44,NA,slavemaker.sp,N,NA
+txan_783,tx_45,NA,slavemaker.sp,N,NA
+txan_784,tx_46,NA,slavemaker.sp,N,NA
+txan_785,tx_47,NA,slavemaker.sp,N,NA
+txan_786,tx_48,NA,slavemaker.sp,N,NA
+txan_787,tx_49,NA,slavemaker.sp,Y,NA
+txan_788,tx_50,NA,slavemaker.sp,NA,NA
+txan_789,tx_51,NA,slavemaker.sp,N,NA
+txan_790,tx_52,NA,slavemaker.sp,N,NA
+txan_791,tx_53,NA,slavemaker.sp,N,NA
+txan_792,tx_54,NA,slavemaker.sp,N,NA
+txan_793,tx_55,NA,slavemaker.sp,N,NA
+txan_794,tx_56,NA,slavemaker.sp,N,NA
+txan_795,tx_57,NA,slavemaker.sp,N,NA
+txan_796,tx_58,NA,slavemaker.sp,N,NA
+txan_797,tx_59,NA,slavemaker.sp,N,NA
+txan_798,tx_60,NA,slavemaker.sp,NA,NA
+txan_799,tx_61,NA,slavemaker.sp,NA,NA
+txan_800,tx_62,NA,slavemaker.sp,N,NA
+txan_801,tx_63,NA,slavemaker.sp,N,NA
+txan_802,tx_64,NA,slavemaker.sp,N,NA
+txan_803,tx_65,NA,slavemaker.sp,N,NA
+txan_804,tx_66,NA,slavemaker.sp,N,NA
+txan_805,tx_67,NA,slavemaker.sp,N,NA
+txan_806,tx_68,NA,slavemaker.sp,Y,NA
+txan_807,tx_69,NA,slavemaker.sp,NA,NA
+txan_808,tx_70,NA,slavemaker.sp,N,NA
+txan_809,tx_71,NA,slavemaker.sp,N,NA
+txan_810,tx_72,NA,slavemaker.sp,N,NA
+txan_811,tx_73,NA,slavemaker.sp,N,NA
+txan_812,tx_74,NA,slavemaker.sp,N,NA
+txan_813,tx_75,NA,slavemaker.sp,N,NA
+txan_814,tx_76,NA,slavemaker.sp,N,NA
+txan_815,tx_77,NA,slavemaker.sp,N,NA
+txan_816,tx_78,NA,slavemaker.sp,N,NA
+txan_817,tx_79,NA,slavemaker.sp,N,NA
+txan_818,tx_80,NA,slavemaker.sp,N,NA
+txan_819,tx_81,NA,slavemaker.sp,N,NA
+txan_820,tx_82,NA,slavemaker.sp,N,NA
+txan_821,tx_1,NA,behavior,NA,NA
+txan_822,tx_2,NA,behavior,NA,NA
+txan_823,tx_3,NA,behavior,NA,NA
+txan_824,tx_4,NA,behavior,neutral,NA
+txan_825,tx_5,NA,behavior,dominant,NA
+txan_826,tx_6,NA,behavior,NA,NA
+txan_827,tx_7,NA,behavior,NA,NA
+txan_828,tx_8,NA,behavior,NA,NA
+txan_829,tx_9,NA,behavior,NA,NA
+txan_830,tx_10,NA,behavior,NA,NA
+txan_831,tx_11,NA,behavior,NA,NA
+txan_832,tx_12,NA,behavior,neutral,NA
+txan_833,tx_13,NA,behavior,neutral,NA
+txan_834,tx_14,NA,behavior,neutral,NA
+txan_835,tx_15,NA,behavior,NA,NA
+txan_836,tx_16,NA,behavior,dominant,NA
+txan_837,tx_17,NA,behavior,dominant,NA
+txan_838,tx_18,NA,behavior,dominant,NA
+txan_839,tx_19,NA,behavior,submissive,NA
+txan_840,tx_20,NA,behavior,dominant,NA
+txan_841,tx_21,NA,behavior,dominant,NA
+txan_842,tx_22,NA,behavior,dominant,NA
+txan_843,tx_23,NA,behavior,dominant,NA
+txan_844,tx_24,NA,behavior,dominant,NA
+txan_845,tx_25,NA,behavior,dominant,NA
+txan_846,tx_26,NA,behavior,dominant,NA
+txan_847,tx_27,NA,behavior,dominant,NA
+txan_848,tx_28,NA,behavior,NA,NA
+txan_849,tx_29,NA,behavior,submissive,NA
+txan_850,tx_30,NA,behavior,submissive,NA
+txan_851,tx_31,NA,behavior,NA,NA
+txan_852,tx_32,NA,behavior,NA,NA
+txan_853,tx_33,NA,behavior,submissive,NA
+txan_854,tx_34,NA,behavior,NA,NA
+txan_855,tx_35,NA,behavior,dominant,NA
+txan_856,tx_36,NA,behavior,NA,NA
+txan_857,tx_37,NA,behavior,NA,NA
+txan_858,tx_38,NA,behavior,dominant,NA
+txan_859,tx_39,NA,behavior,dominant,NA
+txan_860,tx_40,NA,behavior,neutral,NA
+txan_861,tx_41,NA,behavior,NA,NA
+txan_862,tx_42,NA,behavior,NA,NA
+txan_863,tx_43,NA,behavior,NA,NA
+txan_864,tx_44,NA,behavior,NA,NA
+txan_865,tx_45,NA,behavior,NA,NA
+txan_866,tx_46,NA,behavior,dominant,NA
+txan_867,tx_47,NA,behavior,dominant,NA
+txan_868,tx_48,NA,behavior,NA,NA
+txan_869,tx_49,NA,behavior,dominant,NA
+txan_870,tx_50,NA,behavior,NA,NA
+txan_871,tx_51,NA,behavior,dominant,NA
+txan_872,tx_52,NA,behavior,dominant,NA
+txan_873,tx_53,NA,behavior,NA,NA
+txan_874,tx_54,NA,behavior,NA,NA
+txan_875,tx_55,NA,behavior,neutral,NA
+txan_876,tx_56,NA,behavior,NA,NA
+txan_877,tx_57,NA,behavior,NA,NA
+txan_878,tx_58,NA,behavior,NA,NA
+txan_879,tx_59,NA,behavior,NA,NA
+txan_880,tx_60,NA,behavior,NA,NA
+txan_881,tx_61,NA,behavior,NA,NA
+txan_882,tx_62,NA,behavior,neutral,NA
+txan_883,tx_63,NA,behavior,NA,NA
+txan_884,tx_64,NA,behavior,NA,NA
+txan_885,tx_65,NA,behavior,NA,NA
+txan_886,tx_66,NA,behavior,NA,NA
+txan_887,tx_67,NA,behavior,NA,NA
+txan_888,tx_68,NA,behavior,NA,NA
+txan_889,tx_69,NA,behavior,NA,NA
+txan_890,tx_70,NA,behavior,NA,NA
+txan_891,tx_71,NA,behavior,NA,NA
+txan_892,tx_72,NA,behavior,NA,NA
+txan_893,tx_73,NA,behavior,NA,NA
+txan_894,tx_74,NA,behavior,NA,NA
+txan_895,tx_75,NA,behavior,NA,NA
+txan_896,tx_76,NA,behavior,NA,NA
+txan_897,tx_77,NA,behavior,dominant,NA
+txan_898,tx_78,NA,behavior,NA,NA
+txan_899,tx_79,NA,behavior,neutral,NA
+txan_900,tx_80,NA,behavior,neutral,NA
+txan_901,tx_81,NA,behavior,NA,NA
+txan_902,tx_82,NA,behavior,NA,NA
+txan_903,tx_1,NA,biogeographic.affinity,widespread,NA
+txan_904,tx_2,NA,biogeographic.affinity,widespread,NA
+txan_905,tx_3,NA,biogeographic.affinity,cold climate,NA
+txan_906,tx_4,NA,biogeographic.affinity,widespread,NA
+txan_907,tx_5,NA,biogeographic.affinity,warm climate,NA
+txan_908,tx_6,NA,biogeographic.affinity,warm climate,NA
+txan_909,tx_7,NA,biogeographic.affinity,warm climate,NA
+txan_910,tx_8,NA,biogeographic.affinity,warm climate,NA
+txan_911,tx_9,NA,biogeographic.affinity,warm climate,NA
+txan_912,tx_10,NA,biogeographic.affinity,warm climate,NA
+txan_913,tx_11,NA,biogeographic.affinity,cold climate,NA
+txan_914,tx_12,NA,biogeographic.affinity,widespread,NA
+txan_915,tx_13,NA,biogeographic.affinity,widespread,NA
+txan_916,tx_14,NA,biogeographic.affinity,widespread,NA
+txan_917,tx_15,NA,biogeographic.affinity,warm climate,NA
+txan_918,tx_16,NA,biogeographic.affinity,cold climate,NA
+txan_919,tx_17,NA,biogeographic.affinity,warm climate,NA
+txan_920,tx_18,NA,biogeographic.affinity,warm climate,NA
+txan_921,tx_19,NA,biogeographic.affinity,widespread,NA
+txan_922,tx_20,NA,biogeographic.affinity,widespread,NA
+txan_923,tx_21,NA,biogeographic.affinity,widespread,NA
+txan_924,tx_22,NA,biogeographic.affinity,cold climate,NA
+txan_925,tx_23,NA,biogeographic.affinity,widespread,NA
+txan_926,tx_24,NA,biogeographic.affinity,widespread,NA
+txan_927,tx_25,NA,biogeographic.affinity,warm climate,NA
+txan_928,tx_26,NA,biogeographic.affinity,widespread,NA
+txan_929,tx_27,NA,biogeographic.affinity,widespread,NA
+txan_930,tx_28,NA,biogeographic.affinity,widespread,NA
+txan_931,tx_29,NA,biogeographic.affinity,warm climate,NA
+txan_932,tx_30,NA,biogeographic.affinity,warm climate,NA
+txan_933,tx_31,NA,biogeographic.affinity,cold climate,NA
+txan_934,tx_32,NA,biogeographic.affinity,cold climate,NA
+txan_935,tx_33,NA,biogeographic.affinity,widespread,NA
+txan_936,tx_34,NA,biogeographic.affinity,cold climate,NA
+txan_937,tx_35,NA,biogeographic.affinity,widespread,NA
+txan_938,tx_36,NA,biogeographic.affinity,widespread,NA
+txan_939,tx_37,NA,biogeographic.affinity,widespread,NA
+txan_940,tx_38,NA,biogeographic.affinity,widespread,NA
+txan_941,tx_39,NA,biogeographic.affinity,widespread,NA
+txan_942,tx_40,NA,biogeographic.affinity,warm climate,NA
+txan_943,tx_41,NA,biogeographic.affinity,widespread,NA
+txan_944,tx_42,NA,biogeographic.affinity,cold climate,NA
+txan_945,tx_43,NA,biogeographic.affinity,widespread,NA
+txan_946,tx_44,NA,biogeographic.affinity,widespread,NA
+txan_947,tx_45,NA,biogeographic.affinity,warm climate,NA
+txan_948,tx_46,NA,biogeographic.affinity,warm climate,NA
+txan_949,tx_47,NA,biogeographic.affinity,widespread,NA
+txan_950,tx_48,NA,biogeographic.affinity,warm climate,NA
+txan_951,tx_49,NA,biogeographic.affinity,widespread,NA
+txan_952,tx_50,NA,biogeographic.affinity,widespread,NA
+txan_953,tx_51,NA,biogeographic.affinity,warm climate,NA
+txan_954,tx_52,NA,biogeographic.affinity,widespread,NA
+txan_955,tx_53,NA,biogeographic.affinity,warm climate,NA
+txan_956,tx_54,NA,biogeographic.affinity,widespread,NA
+txan_957,tx_55,NA,biogeographic.affinity,warm climate,NA
+txan_958,tx_56,NA,biogeographic.affinity,widespread,NA
+txan_959,tx_57,NA,biogeographic.affinity,warm climate,NA
+txan_960,tx_58,NA,biogeographic.affinity,warm climate,NA
+txan_961,tx_59,NA,biogeographic.affinity,warm climate,NA
+txan_962,tx_60,NA,biogeographic.affinity,widespread,NA
+txan_963,tx_61,NA,biogeographic.affinity,widespread,NA
+txan_964,tx_62,NA,biogeographic.affinity,widespread,NA
+txan_965,tx_63,NA,biogeographic.affinity,widespread,NA
+txan_966,tx_64,NA,biogeographic.affinity,warm climate,NA
+txan_967,tx_65,NA,biogeographic.affinity,warm climate,NA
+txan_968,tx_66,NA,biogeographic.affinity,warm climate,NA
+txan_969,tx_67,NA,biogeographic.affinity,warm climate,NA
+txan_970,tx_68,NA,biogeographic.affinity,widespread,NA
+txan_971,tx_69,NA,biogeographic.affinity,widespread,NA
+txan_972,tx_70,NA,biogeographic.affinity,widespread,NA
+txan_973,tx_71,NA,biogeographic.affinity,warm climate,NA
+txan_974,tx_72,NA,biogeographic.affinity,warm climate,NA
+txan_975,tx_73,NA,biogeographic.affinity,widespread,NA
+txan_976,tx_74,NA,biogeographic.affinity,widespread,NA
+txan_977,tx_75,NA,biogeographic.affinity,warm climate,NA
+txan_978,tx_76,NA,biogeographic.affinity,widespread,NA
+txan_979,tx_77,NA,biogeographic.affinity,widespread,NA
+txan_980,tx_78,NA,biogeographic.affinity,warm climate,NA
+txan_981,tx_79,NA,biogeographic.affinity,widespread,NA
+txan_982,tx_80,NA,biogeographic.affinity,widespread,NA
+txan_983,tx_81,NA,biogeographic.affinity,warm climate,NA
+txan_984,tx_82,NA,biogeographic.affinity,warm climate,NA
+txan_985,tx_1,NA,source,Del Toro et al. 2015,NA
+txan_986,tx_2,NA,source,Del Toro et al. 2015,NA
+txan_987,tx_3,NA,source,Del Toro et al. 2015,NA
+txan_988,tx_4,NA,source,Del Toro et al. 2015,NA
+txan_989,tx_5,NA,source,Del Toro et al. 2015,NA
+txan_990,tx_6,NA,source,Del Toro et al. 2015,NA
+txan_991,tx_7,NA,source,Del Toro et al. 2015,NA
+txan_992,tx_8,NA,source,Del Toro et al. 2015,NA
+txan_993,tx_9,NA,source,Del Toro et al. 2015,NA
+txan_994,tx_10,NA,source,Del Toro et al. 2015,NA
+txan_995,tx_11,NA,source,Del Toro et al. 2015,NA
+txan_996,tx_12,NA,source,Del Toro et al. 2015,NA
+txan_997,tx_13,NA,source,Del Toro et al. 2015,NA
+txan_998,tx_14,NA,source,Del Toro et al. 2015,NA
+txan_999,tx_15,NA,source,Del Toro et al. 2015,NA
+txan_1000,tx_16,NA,source,Del Toro et al. 2015,NA
+txan_1001,tx_17,NA,source,Del Toro et al. 2015,NA
+txan_1002,tx_18,NA,source,Del Toro et al. 2015,NA
+txan_1003,tx_19,NA,source,Del Toro et al. 2015,NA
+txan_1004,tx_20,NA,source,Del Toro et al. 2015,NA
+txan_1005,tx_21,NA,source,Del Toro et al. 2015,NA
+txan_1006,tx_22,NA,source,Del Toro et al. 2015,NA
+txan_1007,tx_23,NA,source,Del Toro et al. 2015,NA
+txan_1008,tx_24,NA,source,Del Toro et al. 2015,NA
+txan_1009,tx_25,NA,source,Del Toro et al. 2015,NA
+txan_1010,tx_26,NA,source,Del Toro et al. 2015,NA
+txan_1011,tx_27,NA,source,Del Toro et al. 2015,NA
+txan_1012,tx_28,NA,source,Del Toro et al. 2015,NA
+txan_1013,tx_29,NA,source,Del Toro et al. 2015,NA
+txan_1014,tx_30,NA,source,Del Toro et al. 2015,NA
+txan_1015,tx_31,NA,source,Ellison et al. 2015; www.antweb.org; and www.antwiki.org,NA
+txan_1016,tx_32,NA,source,Del Toro et al. 2015,NA
+txan_1017,tx_33,NA,source,Del Toro et al. 2015,NA
+txan_1018,tx_34,NA,source,Ellison et al. 2015; www.antweb.org; and www.antwiki.org,NA
+txan_1019,tx_35,NA,source,Del Toro et al. 2015,NA
+txan_1020,tx_36,NA,source,Ellison et al. 2015; www.antweb.org; and www.antwiki.org,NA
+txan_1021,tx_37,NA,source,Del Toro et al. 2015,NA
+txan_1022,tx_38,NA,source,Del Toro et al. 2015,NA
+txan_1023,tx_39,NA,source,Del Toro et al. 2015,NA
+txan_1024,tx_40,NA,source,Del Toro et al. 2015,NA
+txan_1025,tx_41,NA,source,Ellison et al. 2015; www.antweb.org; and www.antwiki.org,NA
+txan_1026,tx_42,NA,source,Del Toro et al. 2015,NA
+txan_1027,tx_43,NA,source,Ellison et al. 2015; www.antweb.org; and www.antwiki.org,NA
+txan_1028,tx_44,NA,source,Ellison et al. 2015; www.antweb.org; and www.antwiki.org,NA
+txan_1029,tx_45,NA,source,Ellison et al. 2015; www.antweb.org; and www.antwiki.org,NA
+txan_1030,tx_46,NA,source,Del Toro et al. 2015,NA
+txan_1031,tx_47,NA,source,Del Toro et al. 2015,NA
+txan_1032,tx_48,NA,source,Del Toro et al. 2015,NA
+txan_1033,tx_49,NA,source,Del Toro et al. 2015,NA
+txan_1034,tx_50,NA,source,Ellison et al. 2015; www.antweb.org; and www.antwiki.org,NA
+txan_1035,tx_51,NA,source,Del Toro et al. 2015,NA
+txan_1036,tx_52,NA,source,Del Toro et al. 2015,NA
+txan_1037,tx_53,NA,source,Del Toro et al. 2015,NA
+txan_1038,tx_54,NA,source,Del Toro et al. 2015,NA
+txan_1039,tx_55,NA,source,Del Toro et al. 2015,NA
+txan_1040,tx_56,NA,source,Del Toro et al. 2015,NA
+txan_1041,tx_57,NA,source,Del Toro et al. 2015,NA
+txan_1042,tx_58,NA,source,Del Toro et al. 2015,NA
+txan_1043,tx_59,NA,source,Del Toro et al. 2015,NA
+txan_1044,tx_60,NA,source,Ellison et al. 2015; www.antweb.org; and www.antwiki.org,NA
+txan_1045,tx_61,NA,source,Ellison et al. 2015; www.antweb.org; and www.antwiki.org,NA
+txan_1046,tx_62,NA,source,Del Toro et al. 2015,NA
+txan_1047,tx_63,NA,source,Del Toro et al. 2015,NA
+txan_1048,tx_64,NA,source,Del Toro et al. 2015,NA
+txan_1049,tx_65,NA,source,Del Toro et al. 2015,NA
+txan_1050,tx_66,NA,source,Del Toro et al. 2015,NA
+txan_1051,tx_67,NA,source,Del Toro et al. 2015,NA
+txan_1052,tx_68,NA,source,Ellison et al. 2015; www.antweb.org; and www.antwiki.org,NA
+txan_1053,tx_69,NA,source,Ellison et al. 2015; www.antweb.org; and www.antwiki.org,NA
+txan_1054,tx_70,NA,source,Del Toro et al. 2015,NA
+txan_1055,tx_71,NA,source,Del Toro et al. 2015,NA
+txan_1056,tx_72,NA,source,Del Toro et al. 2015,NA
+txan_1057,tx_73,NA,source,Del Toro et al. 2015,NA
+txan_1058,tx_74,NA,source,Del Toro et al. 2015,NA
+txan_1059,tx_75,NA,source,Del Toro et al. 2015,NA
+txan_1060,tx_76,NA,source,Ellison et al. 2015; www.antweb.org; and www.antwiki.org,NA
+txan_1061,tx_77,NA,source,Del Toro et al. 2015,NA
+txan_1062,tx_78,NA,source,Del Toro et al. 2015,NA
+txan_1063,tx_79,NA,source,Del Toro et al. 2015,NA
+txan_1064,tx_80,NA,source,Del Toro et al. 2015,NA
+txan_1065,tx_81,NA,source,Del Toro et al. 2015,NA
+txan_1066,tx_82,NA,source,Del Toro et al. 2015,NA

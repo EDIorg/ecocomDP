@@ -1,24 +1,21 @@
-#' Make location table
+#' Make the ecocomDP location table
 #'
 #' @description  
-#'     Make a data frame of the location table.
+#'     Make the ecocomDP location table.
 #'
 #' @usage 
-#'     make_location(x, cols = c('site', 'nested_level_1', 'nested_level_2', 
-#'     'etc.', kml = NULL, col = NULL))
+#'     make_location(x, cols, kml = NULL, col = NULL)
 #'
 #' @param x
-#'     A data frame containing sampling location names (in columns) for each 
-#'     observation (rows).
+#'     (data frame) A data frame containing sampling location names (in 
+#'     columns) for each observation (rows).
 #' @param cols
-#'     A list of columns in x containing sampling location data. The list 
+#'     (character) Columns in x containing sampling location data. The list 
 #'     order should reflect the hierarchical arrangement of sampling locations.
 #'     E.g.: If 'site' is the coarsest level of observation, 'habitat' is 
 #'     nested within 'site', 'transect' is nested within 'habitat', and 
 #'     'quadrat' is nested within 'transect' then the 'cols' argument should
-#'     be supplied as:
-#'     
-#'     cols = c('site', 'habitat','transect', 'quadrat')
+#'     be supplied as: cols = c('site', 'habitat','transect', 'quadrat').
 #' @param kml
 #'     A data object (simple feature collection) created with the `st_read``
 #'     function of the `sf`` (simple features) R package. This data object
@@ -26,10 +23,13 @@
 #'     the corresponding values listed in the data frame (x) and specified in
 #'     'cols'.
 #' @param col
-#'     A character string indicating the column name specified in the input
-#'     argument 'cols' to which the data in the kml object corresponds to.
-#'     E.g., if the kml corresponds with with the column named 'site' then
-#'     enter 'site' for the col argument.
+#'     (character) The column name specified in the input argument 'cols' to 
+#'     which the data in the kml object corresponds to. E.g., if the kml 
+#'     corresponds with with the column named 'site' then enter 'site' for the 
+#'     col argument.
+#' @param parent.package.id
+#'     (character) Parent data package ID (e.g. "knb-lter-nin.9.1") from which 
+#'     geographicCoverage will be extracted.
 #'     
 #' @note 
 #'     The arguments 'kml' and 'col' only accept single inputs. I.e. does 
@@ -41,17 +41,25 @@
 #' @export
 #'
 
-make_location <- function(x, cols, kml = NULL, col = NULL){
+make_location <- function(x, cols, kml = NULL, col = NULL, 
+                          parent.package.id = NULL){
 
+  message('Creating the ecocomDP location table')
+  
   # Check arguments -----------------------------------------------------------
   
   if (missing(x)){
-    stop('Input argument "x" is missing! Specify the data frame containing your location information.')
+    stop(paste('Input argument "x" is missing! Specify the data frame',
+               'containing your location information.'
+              )
+        )
   }
   if (missing(cols)){
-    stop('Input argument "cols" is missing! Specify column names (arranged hierarchically containing location data.')
+    stop(paste('Input argument "cols" is missing! Specify column names',
+               '(arranged hierarchically containing location data.'
+              )
+        )
   }
-  
   
   # Create location table ---------------------------------------------------
   
@@ -221,7 +229,7 @@ make_location <- function(x, cols, kml = NULL, col = NULL){
       )
       
       location_name <- c(
-        as.character(df[[j]][['key']]),
+        as.character(df[[j]][[cols[j]]]),
         location_name
       )
       
@@ -414,6 +422,116 @@ make_location <- function(x, cols, kml = NULL, col = NULL){
   }
 
     
+  # Add geographicCoverage ----------------------------------------------------
+  
+  if (!is.null(parent.package.id)){
+    
+    # Read EML
+    
+    metadata <- EDIutils::api_read_metadata(parent.package.id)
+    
+    # Get all geographicCoverage nodes
+    
+    nodeset <- xml2::xml_find_all(
+      metadata,
+      "///geographicCoverage"
+    )
+    
+    # If nodeset is not empty ...
+    
+    if (length(nodeset) > 0){
+      
+      # Get geographicDescription, northBoundingCoordinate, eastBoundingCoordinate,
+      # southBoundingCoordinate, and westBoundingCoordinate 
+      
+      geographicDescription <- xml2::xml_text(
+        xml2::xml_find_all(
+          nodeset,
+          "//geographicDescription"
+        )
+      )
+      
+      northBoundingCoordinate <- xml2::xml_text(
+        xml2::xml_find_all(
+          nodeset,
+          "//boundingCoordinates/northBoundingCoordinate"
+        )
+      )
+      
+      eastBoundingCoordinate <- xml2::xml_text(
+        xml2::xml_find_all(
+          nodeset,
+          "//boundingCoordinates/eastBoundingCoordinate"
+        )
+      )
+      
+      southBoundingCoordinate <- xml2::xml_text(
+        xml2::xml_find_all(
+          nodeset,
+          "//boundingCoordinates/southBoundingCoordinate"
+        )
+      )
+      
+      westBoundingCoordinate <- xml2::xml_text(
+        xml2::xml_find_all(
+          nodeset,
+          "//boundingCoordinates/westBoundingCoordinate"
+        )
+      )
+      
+      # Combine in data frame
+      
+      dataset_coverage <- unique.data.frame(
+        data.frame(
+          geographicDescription,
+          northBoundingCoordinate,
+          eastBoundingCoordinate,
+          southBoundingCoordinate,
+          westBoundingCoordinate,
+          is_point = FALSE,
+          stringsAsFactors = F
+        )
+      )
+      
+      # Determine if location is a ponit or area
+      
+      location_type <- data.frame(
+        ns = dataset_coverage$northBoundingCoordinate == dataset_coverage$southBoundingCoordinate,
+        ew = dataset_coverage$eastBoundingCoordinate == dataset_coverage$westBoundingCoordinate,
+        stringsAsFactors = F
+      )
+      
+      dataset_coverage$is_point <- as.logical(location_type$ns * location_type$ew)
+      
+      # For point locations ...
+      
+      if (any(dataset_coverage$is_point)){
+        
+        # Match each location name to the geographicDescription (one-to-one)
+        
+        use_i <- match(
+          location_table$location_name,
+          dataset_coverage$geographicDescription
+        )
+        
+        use_i[dataset_coverage$is_point[use_i] != TRUE] <- NA
+        
+        # Report latitude for matches
+        
+        location_table$latitude <- dataset_coverage$northBoundingCoordinate[use_i]
+        
+        # Report longitude for matches
+        
+        location_table$longitude <- dataset_coverage$eastBoundingCoordinate[use_i]
+        
+      }
+      
+    }
+    
+  }
+  
+  # Return --------------------------------------------------------------------
+  
   location_table
 
   

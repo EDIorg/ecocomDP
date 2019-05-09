@@ -2,117 +2,82 @@
 % Please edit documentation in R/make_eml.R
 \name{make_eml}
 \alias{make_eml}
-\title{Make EML for an ecocomDP}
+\title{Make EML for a set of ecocomDP tables}
 \usage{
-make_eml(data.path = "", code.path = "", eml.path = "", 
-    parent.package.id = "", child.package.id = "", sep = "", user.id = "", 
-    author.system = "", intellectual.rights = "", access.url = "",
-    datetime.format = "", code.file.extension = "")
+make_eml(data.path, code.path = data.path, code.files, 
+    parent.package.id, sep, cat.vars = NULL, intellectual.rights = NULL, 
+    child.package.id, user.id, affiliation, access.url = NULL, 
+    additional.contact)
 }
 \arguments{
-\item{data.path}{A character string specifying the path to the dataset working directory 
-containing the validated ecocomDP tables.}
+\item{data.path}{(character) Path to the directory containing ecocomDP tables.}
 
-\item{code.path}{A character string specifying the path to the directory containing the 
-scripts used in processing the L0 data to the L1 data.}
+\item{code.path}{(character) Path to the directory containing scripts that reformat the 
+parent data package to the child data package.}
 
-\item{eml.path}{A character string specifying the path to the directory containing the
-EML file of the parent data package. This argument is required if the EML is 
-not located in the EDI data repository.}
+\item{code.files}{(character) Path to the directory containing scripts that reformat the 
+parent data package to the child data package.}
 
-\item{parent.package.id}{A character string specifying the identifier of the parent data package 
-stored in the EDI data repository (e.g. "knb-lter-hfr.118.28"), or a 
-character string specifying the file name of the parent data package EML
-stored at eml.path. If the latter, AND if the provenance metadata 
-exists in the EDI data repository, make sure your local copy of the EML 
-file name matches that in the EDI data repository. Do not include a file 
-extension. The identifier will be used to read in the respective EML file 
-from the EDI data repository or from the eml.path.}
+\item{parent.package.id}{(character) Parent data package ID (e.g. "knb-lter-hfr.118.28") in the 
+EDI Data Repository.}
 
-\item{child.package.id}{A character string specifying the identifier of child data package to be
-uploaded to the EDI data repository (e.g. "edi.53.1"). If you don't have a 
-child.package.id then query EDI for one 
-(info@environmentaldatainitiative.org).}
+\item{sep}{(character) Field delimiter used in the ecocomDP tables. Valid options 
+are "," or "\\t".}
 
-\item{sep}{The field separator string. Values within each row of ecocomDP tables
-are separated by this string. Valid options are "," or "\\t".}
+\item{cat.vars}{(data frame) Categorical variables with associated definitions and 
+units. Create a cat.vars data frame with the `define_variables` 
+function. Variables that can't be defined by the parent package EML 
+should be manually supplied to the cat.vars data frame.}
 
-\item{user.id}{A character string specifying the LTER or EDI ID of person publishing 
-the ecocomDP data package (e.g. "EDI"). If you don't have a user ID then 
-query EDI for one (info@environmentaldatainitiative.org).}
+\item{intellectual.rights}{(character) The intellectual rights license to be used with the 
+ecocomDP. If this argument is NULL, then the parent data package 
+intellectual rights will be used. Valid options are "CCO" 
+(https://creativecommons.org/publicdomain/zero/1.0/legalcode) and
+"CCBY" (https://creativecommons.org/licenses/by/4.0/legalcode).}
 
-\item{author.system}{A character string specifying the author system the user.id is associated 
-with (e.g. "edi"). If you don't have an author system specification use 
-then query EDI for one (info@environmentaldatainitiative.org).}
+\item{child.package.id}{(character) Child data package ID (e.g. "edi.53.1") to be uploaded to 
+EDI Data Repository.}
 
-\item{intellectual.rights}{A character string specifying the intellectual rights license to be used 
-with the child ecocomDP data package. Valid arguments are "CCO" 
-(https://creativecommons.org/publicdomain/zero/1.0/legalcode),
-"CCBY" (https://creativecommons.org/licenses/by/4.0/legalcode), and no 
-argument. No input argument indicates the license wil remain the same
-as the parent data package.}
+\item{user.id}{(character) User ID of person uploading the ecocomDP data package to the
+EDI Data Repository.}
 
-\item{access.url}{(Not required) A character string specifying the base URL that PASTA uses to upload the 
-ecocomDP tables and associated processing scripts. For example, the base 
-URL of a table that has a URL of 
-https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride/gleon_chloride_concentrations.csv
-has a base URL of 
-https://lter.limnology.wisc.edu/sites/default/files/data/gleon_chloride.}
+\item{affiliation}{(character) Affiliation of the user.id. Valid options are "EDI" or 
+"LTER".}
 
-\item{datetime.format}{A character string specifying the date time format 
- string used throughout your ecocomDP tables. 
- Valid date time formats are a combination of date, time, and time 
- zone strings.
-     \itemize{
-         \item \strong{Date format strings:} YYYY-MM-DD; where YYYY is year, MM is 
-         month, DD is day of month.
-         \item \strong{Time format strings:} hh:mm:ss.sss, hhmmss.sss,
-         hh:mm:ss, hhmmss, hh:mm, hhmm, hh; where hh is hour (in 24 hr
-         clock), mm is minute, ss is second, and ss.sss is decimal 
-         second.
-         \item\strong{Time zone format strings:} Z, +hh:mm, +hhmm, +hh,
-         -hh:mm, -hhmm, -hh; where Z (capitalized) is Coordinated 
-         Universal Time, and + and - denote times ahead and behind UTC
-         respectively.
-     }
-If reporting a date without time, use the date format 
-string. If reporting a date and time, select the date and one time 
-format string and combine with a single space (e.g. 
-YYYY-MM-DD hh:mm) or with a "T" (e.g. YYYY-MM-DDThh:mm). If 
-reporting a date and time, it is recommended that a time zone 
-specifier be appended without a space (e.g. YYYY-MM-DD hh:mm-hh:mm, 
-or YYYY-MM-DDThh:mm-hh:mm).}
+\item{access.url}{(character) The base URL access point to ecocomDP tables and scripts 
+that can be downloaded by the EDI Data Repository (e.g.
+https://lter.limnology.wisc.edu/sites/default/files/data). Alternatively
+tables and scripts can be uploaded through the EDI Data Repository 
+Portal.}
 
-\item{code.file.extension}{A character string specifying the extension of the processing script(s) 
-used to create this ecocomDP. For example, enter ".R" if the processing script(s)
-are written in the R, or enter ".py" if the processing script(s) are
-written in Python.}
+\item{additional.contact}{(data frame) Contact information for creator of the script that converts
+the parent data package to the ecocomDP. The data frame must have these
+columns:
+\itemize{
+    \item{givenName}
+    \item{surName}
+    \item{organizationName}
+    \item{electronicMailAddress}
+}}
 }
 \value{
-An EML metadata file written to the location specified by 
-    \emph{data.path} titled \emph{packageID.xml}.
+An EML metadata record for the ecocomDP tables.
 }
 \description{
-Makes EML for an Ecological Community Data Pattern (ecocomDP).
+Makes EML for a set of ecocomDP tables.
 }
 \details{
-Make and validate EML for an Ecological Community Data Pattern 
-    (ecocomDP) using elements from the parent data package and additional 
-    user supplied metadata.
+This function creates valid EML for an Ecological Community Data Pattern 
+    (ecocomDP) using a combination of elements from the parent data package, 
+    boiler plate metadata specific to the ecocomDP, and user supplied 
+    defined in the conversion script.
     
     Run \code{make_eml} after you have:
     \itemize{
-        \item Validated your ecocomDP with \code{validate_ecocomDP}.
-        \item Imported and completed template files to provide additional 
-        metadata to the ecocomDP EML. Run \code{import_templates} to import
-        template files, \emph{addtional_contact.txt} (adds you as an 
-        additional contact for this ecocomDP), \emph{custom_units.txt} 
-        (adds any custom units you need to report for your ecocomDP), 
-        \emph{provenance_metadata.txt} (adds provenance metadata to your 
-        ecocomDP if the parent data package does not originate from the EDI
-        data repository).
+        \item Created ecocomDP tables through a fully scripted process.
+        \item Validated your ecocomDP with `validate_ecocomDP`.
         \item Defined variables contained in your ecocomDP using 
-        \code{define_variables}.
+        `define_variables`.`
     }
 
     This function uses elements of the parent data package EML to create EML
@@ -121,34 +86,27 @@ Make and validate EML for an Ecological Community Data Pattern
     imports the metadata of the parent data package. Some new information is
     added to the parent data package EML as specified below.
     \itemize{
-        \item \strong{Access} Modifies access based on user supplied
-        arguments.
-        \item \strong{Publicaton date} Changes the publication date to when 
-        the ecocomDP was created.
-        \item \strong{Keywords} Adds two keyword sets which include the 
-        key term "ecocomDP" and a set of keywords relevant to community data
-        from the LTER controlled vocabulary.
-        \item \strong{Intellectual rights} Updates the intellectual rights
-        according to user specified arguments.
-        \item \strong{Taxon coverage} Adds taxonomicCoverage if user 
-        supplied taxonomicCoverage.xml is in the dataset working directory. 
-        Create taxonomicCoverage.xml with the taxonomyCleanr R package 
-        (https://github.com/EDIorg/taxonomyCleanr).
-        \item \strong{Contact} Adds the ecocomDP creator as a contact.
-        \item \strong{Provenance} Adds the provenance snippet from the 
-        parent data package with general description of how the ecocomDP was
-        created.
-        \item \strong{Data tables} Adds data table elements for ecocomDP tables
-        present.
-        \item \strong{Formatting scripts} Adds formatting scripts used to 
-        create the ecocomDP as otherEntity.
+        \item \strong{<access>} Appends the ecocomDP creator to the list of 
+        principals granted read and write access to the ecocomDP data 
+        package.
+        \item \strong{<pubDate>} Adds a publication date corresponding to 
+        when the ecocomDP EML was created.
+        \item \strong{<keywordSet} Appends two ecocomDP specific keyword 
+        sets to the keyword sets listed in the parent data package EML.
+        \item \strong{<intellectualRights>} Keeps intact the intellectual
+        rights license of the parent data package, or replaces it with one
+        of the user specified options above.
+        \item \strong{<taxonomicCoverage>} Updates the taxonomic coverage 
+        element with data supplied in the taxon table of the ecocomDP.
+        \item \strong{<contact>} Appends contact information of the ecocomDP
+        creator to the contacts listed in the parent data package.
+        \item \strong{<methodStep>} Adds provenance metadata as a method 
+        step, describing the parent data package from which the ecocomDP 
+        was created.
+        \item \strong{<dataTables>} Replaces the parent data package data
+        tables with the newly created ecocomDP tables. NOTE: All other data
+        entities are removed from the ecocomDP EML.
+        \item \strong{<otherEntity>} Describes formatting scripts under the 
+        other entity element.
     }
-}
-\seealso{
-\code{\link{validate_ecocomDP}} to validate your ecocomDP.
-
-\code{\link{import_templates}} to import ecocomDP templates.
-
-\code{\link{define_variables}} to identify and define variables 
-    listed in ecocomDP tables.
 }

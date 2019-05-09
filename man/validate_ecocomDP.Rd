@@ -2,13 +2,20 @@
 % Please edit documentation in R/validate_ecocomDP.R
 \name{validate_ecocomDP}
 \alias{validate_ecocomDP}
-\title{Validate ecocomDP tables}
+\title{Run all validation checks on a set of ecocomDP tables}
 \usage{
-validate_ecocomDP(data.path)
+validate_ecocomDP(data.path = NULL, data.list = NULL)
 }
 \arguments{
-\item{data.path}{A character string specifying the path to the directory containing L1
+\item{data.path}{(character) The path to the directory containing L1
 tables.}
+
+\item{data.list}{(list of data frames) A named list of data frames containing the L1
+tables. Data frame tables must be named after the file name from 
+which they were read, including the extension.}
+
+\item{package.id}{(character) Package identifier (e.g. 'edi.101.1') containing ecocomDP
+tables to be validated.}
 }
 \value{
 A validation report to the RStudio console window. When an issue is 
@@ -31,14 +38,19 @@ Run this function after creating a L1 and before making EML for it.
        \item \strong{Table names} Table names must follow the ecocomDP 
        naming convention (i.e. \emph{studyName_ecocomDPTableName.ext}, e.g. 
        \emph{gleon_chloride_observation.csv}). 
-       \item \strong{Required tables} Some L1 tables are 
+       \item \strong{Table presence} Some L1 tables are 
        required, others are not.
        \item \strong{Column names} Column names must be those specified by
        the data pattern.
-       \item \strong{Required columns} Some columns are 
+       \item \strong{Column presence} Some columns are 
        required, others are not.
+       \item \strong{Datetime format} One datetime format is valid, namely
+       'YYYY-MM-DDThh:mm:ss'.
        \item \strong{Column classes} Column classes must match the 
        ecocomDP specification.
-       \item \strong{Relational IDs} Relational IDs should be unique.
+       \item \strong{Primary keys} Primary keys must be valid.
+       \item \strong{Composite keys} Composite keys must be valid.
+       \item \strong{Referential integrity} Referential integrity must be
+       valid.
    }
 }

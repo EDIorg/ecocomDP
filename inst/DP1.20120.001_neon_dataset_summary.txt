@@ -1,0 +1,2 @@
+"package_id"	"original_package_id"	"length_of_survey_years"	"number_of_years_sampled"	"std_dev_interval_betw_years"	"max_num_taxa"	"geo_extent_bounding_box_m2"
+NA	NA	4	4	0.929768685862152	1066	NA

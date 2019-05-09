@@ -1,15 +1,15 @@
-# Design Pattern - ecocomDP 
+# Table descriptions, relationships, and requirements
 
 Introduction
 ---
 The ecocom design pattern (ecocomDP) is planned to be a flexible intermediate for ecological community survey data. 
 For information on the process see https://environmentaldatainitiative.org/resources/tools/dataset-design/
 
-The ecocomDP is composed of 8 tables, which can be linked via identifiers. This document describes the tables and their contents (columns). Examples of tables can be found in the /examples/ directory. The graphic showing all data objects and their relationships was created from a relational database implementation (PostgreSQL, see the top-level directory of that name for DDL). Three tables are required (“observation”, “location”, “taxon”). The “dataset_summary” is populated from the “observation” table by code.  Two tables hold links to external resources: taxon, and variable_mappings. The taxon table is specifically designed to hold lookup-info from a service such as ITIS. The variable_mappings table hold URIs and lables for external measurement dictionaries.  
+The ecocomDP is composed of 8 tables, which can be linked via identifiers. This document describes the tables and their contents (columns). Examples of tables can be found in data package [edi.193](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=192). The graphic showing all data objects and their relationships was created from a relational database implementation (PostgreSQL, see the top-level directory of that name for DDL). Four tables are required (“observation”, “location”, “taxon”, and "dataset_summary"). The “dataset_summary” is populated from the “observation” table by code.  Two tables hold links to external resources: taxon, and variable_mapping. The taxon table is specifically designed to hold lookup-info from a service such as ITIS. The variable_mapping table hold URIs and lables for external measurement dictionaries.  
 
 Each main table has an optional ancillary table for additional information. These are included because primary research typically includes related measurements which may be of interest during anlaysis. 
 
-Below is the table list and suggested population order, ie, parents first.
+Below is the table list and suggested population order, ie, primary tables first.
 
 |  order | table name 	|   required?	|   references tables    | description            | sample cols (examples)   | unique constraints |
 |--------|--------------|-------------|------------------------|------------------------|-------------------------|--------------------|
@@ -20,7 +20,7 @@ Below is the table list and suggested population order, ie, parents first.
 |5.| taxon_ancillary|no|  taxon | additonal info about an organism that does not change, in long format | variable, value, unit (phenotypic traits) | taxon_id, date_time, variable_name   |
 |6.| observation_ancillary  | no | observation | additional info about the sampling event (not related to taxa or locations) in long-format  |  variable_name, value, unit | event_id, variable_name  |
 |7.| dataset_summary|yes|  NA | summary info calculated from incoming data. one line table |See examples directory |   |
-|8.| variable_mappings| no |  ONE OF: observation, observation_ancillary, taxon_ancillary, OR location_ancillary | mappings from variable names in tables to external dictionaries | table_name, variable_name, mapped_system, mapped_id, mapped_label | NA   |
+|8.| variable_mapping| no |  ONE OF: observation, observation_ancillary, taxon_ancillary, OR location_ancillary | mappings from variable names in tables to external dictionaries | table_name, variable_name, mapped_system, mapped_id, mapped_label | NA   |
 
 
 _____
@@ -39,7 +39,7 @@ Columns
 | latitude 	  |  float 	|   	no                  |   NA |Latitude in decimal degrees. Latitudes south of the equator are negative.|  34.400275	|
 | longitude 	|  float 	|   	no                  |   NA |Longitude in decimal degrees. Longitudes west of the prime meridian are negative.| -119.7445915 |
 | elevation	  |  float 	|   	np                  |   NA |Sampling location elevation in meters relative to sea level. Above sea level is positive. Below sea level is negative.| -15	|
-| parent_location_id	|  character | no  	|   NA| Sampling location identifier from this table for the parent of this sampling location. Presence indicates nested locations.	|  sbclter_abur	|
+| parent_location_id	|  character | no  	|   NA| Sampling location identifier from this table for the parent of this sampling location. Presence indicates nested locations.	|  sbclter_abur_I	|
 
 
 Table: taxon
@@ -52,7 +52,7 @@ Columns
 |---------------|---------|--------------------|-------------------|--------------|---------|
 | taxon_id           | character |  yes        | NA | ID used in the dataset | sbclter_MAPY |  
 |	taxon_rank         | character |  no         | NA | Taxonomic rank of the organism name | species |   
-|	taxon_name         | character |  yes        | NA | Taxonomic name of the organism | M. pyrifera | 
+|	taxon_name         | character |  yes        | NA | Taxonomic name of the organism | Macrocystis pyrifera | 
 |	authority_system   | character |  no         | NA | Name of the system assigning the taxon ID | ITIS|  
 |	authority_taxon_id | character |  no         | NA | ID in the authority system |  11274|
 
@@ -69,7 +69,7 @@ Columns
 | event_id             | character |yes|(table = observation_ancillary) event_id    | The ID of the sampling event, required if observation_ancillary table is included   | 2009mar03_dive1      |
 | package_id           | character |yes|(table = summary) package_id   	| The ID of this data package  	| edi.100001.1   	|
 | location_id | character |yes| (table = location) location_id |  A reference to a location	|  sbc_ABUR_1 	|
-| observation_datetime | datetime  |yes|   	|Date and time of the observation, following the ISO 8601 standard format YYYY-MM-DDThh:mm+-hh to the precision of datetime data| 2017-08-01 or 2017-08-01T14:01-07  	|
+| observation_datetime | datetime  |yes|   	|Date and time of the observation following the ISO 8601 standard format [see here for details](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/datetime.md)| 2017-08-01, 2017-08-01T14:01-07, etc.  	|
 | taxon_id             | character |yes| (table = taxon) taxon_id  	| reference to a taxon ID  	| sbclter_MAPY   	|
 | variable_name        | character |yes|   	| name of the variable measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  kelp_density  	|
 | value                | float     |yes|   	| value for the variable  	| 7  	|
@@ -85,7 +85,7 @@ Columns
 |---------------|---------|-----------------------|-------------------|-------------|---------| 
 |location_ancillary_id | character |yes|          |   Identifier of the sampling location ancillary.	|   	|
 |location_id           | character |yes|(table = location) location_id   	| Id of the location for reference	| sbclter_ABUR_1  	|
-|datetime              | datetime  |no |          | date and time of the ancillary info, ISO datetime	|  experimental treatment date 	| 
+|datetime              | datetime  |no |          | Date and time of ancillary info following the ISO 8601 standard format [see here for details](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/datetime.md)	|  experimental treatment date 	| 
 |variable_name         | character |yes|   	      |  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList) 	| treatment  	|
 |value                 | character |yes|   	      |  value for the variable 	| kelp removal  	|
 |unit                  | character |no |   	      |  unit for this variable 	|   	|
@@ -102,7 +102,7 @@ Columns
 |---------------|---------|-----------------------|-------------------|--------------|---------|     
 | taxon_ancillary_id | character |yes|            | a unique id for this record  	|   	|
 | taxon_id           | character |yes| (table = taxon) taxon_id   	|  The ID of the taxon table. 	|   	|
-| datetime           | datetime |no|            | date and time of the ancillary info, ISO datetime  	|   	|
+| datetime           | datetime |no|            | Date and time of the ancillary info following the ISO 8601 standard format [see here for details](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/datetime.md) 	|   	|
 | variable_name      | character |yes|            |  variable that was measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  trophic_level 	|
 | value              | character |yes|            |  value for the variable 	|   primary producer	|
 | unit               | character |no |            | unit for this variable  	|   	|
@@ -146,7 +146,7 @@ Columns
 
 
 
-Table: variable_mappings 
+Table: variable_mapping 
 ---
 Description: Information linking a variable_name used in a data table to an external definition
 

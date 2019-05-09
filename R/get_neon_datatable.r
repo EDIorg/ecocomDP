@@ -54,10 +54,6 @@ get_neon_datatable <- function(
   
   data_table_name <- gsub('(?i)_pub', '', data_table_name)
   
-  require(dplyr)
-  require(lubridate)
-  require(readr)
-  
   floor_date_min <- as.Date(sample_date_min, format = sample_date_format) %>% 
     floor_date(., unit = 'months') %>% format(., '%Y-%m-%d')
   floor_date_max <- as.Date(sample_date_max, format = sample_date_format) %>% 
@@ -98,11 +94,7 @@ get_neon_datatable <- function(
   
   fn_get_available_data <- function(url_to_get, data_table_name, data_package_type, ...){
     options(stringsAsFactors = FALSE)
-    
-    require(httr)
-    require(jsonlite)
-    require(dplyr)
-    
+
     url_to_get <- as.character(url_to_get)
     
     tmp.df <- data.frame()

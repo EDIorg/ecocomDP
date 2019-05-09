@@ -4,8 +4,9 @@ library(tidyverse)
 # install.packages("devtools")
 library(devtools)
 
-# Install and load dev version of ecocomDP
-# install_github("EDIorg/ecocomDP", ref = 'development')
+# Install and load ecocomDP
+# install_github("EDIorg/ecocomDP")
+
 library(ecocomDP)
 
 # Install and load neonUtilities
@@ -82,13 +83,56 @@ table_observation <- inv_taxonomyProcessed %>%
   mutate(variable_name = 'density',
          value = estimatedTotalCount / benthicArea,
          unit = 'count per square meter') %>% rename(observation_id = uid,
-         event_id = sampleID,
-         # package_id = NA,
-         location_id = namedLocation,
-         observation_datetime = collectDate,
-         taxon_id = acceptedTaxonID) %>%
+                                                     event_id = sampleID,
+                                                     # package_id = NA,
+                                                     location_id = namedLocation,
+                                                     observation_datetime = collectDate,
+                                                     taxon_id = acceptedTaxonID) %>%
   mutate(package_id = NA) %>%
   select(observation_id, event_id, package_id,
-           location_id, observation_datetime,
-           taxon_id, variable_name, value, unit)
+         location_id, observation_datetime,
+         taxon_id, variable_name, value, unit)
+
+# dataset_summary
+
+getDistanceFromLatLonInKm<-function(lat1,lon1,lat2,lon2) {
+  R <- 6371; # Radius of the earth in km
+  dLat <- deg2rad(lat2-lat1);  # deg2rad below
+  dLon = deg2rad(lon2-lon1); 
+  a <- sin(dLat/2) * sin(dLat/2) + cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * sin(dLon/2) * sin(dLon/2) 
+  c <- 2 * atan2(sqrt(a), sqrt(1-a)) 
+  d <- R * c # Distance in km
+  return(d)
+}
+
+deg2rad<-function(deg) {
+  return(deg * (pi/180))
+}
+
+get_area_square_meters<-function(lon_west,lon_east,lat_north,lat_south){
+  xdistN<-1000*getDistanceFromLatLonInKm(lat_north,lon_east,lat_north,lon_west) 
+  xdistS<-1000*getDistanceFromLatLonInKm(lat_south,lon_east,lat_south,lon_west) 
+  ydist<-1000*getDistanceFromLatLonInKm(lat_north,lon_east,lat_south,lon_east)
+  area<-ydist*(xdistN+xdistS/2)
+  return(area)
+}
+
+date_times <- ymd_hm(table_observation$observation_datetime)
+
+table_dataset_summary <- data.frame(
+  package_id  = NA,
+  original_package_id = NA,
+  length_of_survey_years = diff(range(year(date_times))),
+  number_of_survey_years = diff(range(year(date_times))),
+  std_dev_interval_betw_years = sd(year(date_times)),
+  max_num_taxa <- nrow(table_taxon),
+  geo_extent_bounding_box = round(
+    get_area_square_meters(
+      min(table_location$longitude),
+      max(table_location$longitude),
+      max(table_location$latitude),
+      min(table_location$latitude)
+    )
+  )
+)
 
