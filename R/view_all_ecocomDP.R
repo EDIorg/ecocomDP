@@ -280,15 +280,15 @@ read_table_dataset_summary_neon <- function(package.id){
   
   # Locate dataset_summary table in the ecocomDP package
   
-  use_i <- grep(
-    pattern = paste0(
-      package.id,
-      '_neon_dataset_summary'
-    ),
-    x = list.files(
+  use_i <- stringr::str_detect(
+    list.files(
       system.file(
         package = 'ecocomDP'
       )
+    ),
+    pattern = paste0(
+      package.id,
+      '_neon_dataset_summary'
     )
   )
   
@@ -305,7 +305,12 @@ read_table_dataset_summary_neon <- function(package.id){
   if (entity_delimiter == ','){
     
     output <-readr::read_csv(
-      entity_url, 
+      list.files(
+        system.file(
+          package = 'ecocomDP'
+        ),
+        full.names = TRUE
+      )[use_i], 
       col_types = c(
         package_id = col_character(),
         original_package_id = col_character(),
@@ -320,7 +325,12 @@ read_table_dataset_summary_neon <- function(package.id){
   } else if (entity_delimiter == '\t'){
     
     output <-readr::read_tsv(
-      entity_url, 
+      list.files(
+        system.file(
+          package = 'ecocomDP'
+        ),
+        full.names = TRUE
+      )[use_i], 
       col_types = c(
         package_id = col_character(),
         original_package_id = col_character(),
