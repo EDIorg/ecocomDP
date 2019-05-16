@@ -1,12 +1,12 @@
-#' View a summary of all ecocomDP datasets
+#' View a summary of all ecocomDP data packages
 #'
 #' @description  
-#'     View a summary of all ecocomDP datasets.
+#'     View a summary of all ecocomDP data packages.
 #'
 #' @usage view_all_ecocomDP()
 #'     
 #' @return 
-#'     A data frame with fields:
+#'     (tibble) A tibble with fields:
 #'     \itemize{
 #'         \item \strong{package_id}: Data package ID
 #'         \item \strong{title}: Data package title

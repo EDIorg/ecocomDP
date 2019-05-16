@@ -2,12 +2,12 @@
 % Please edit documentation in R/view_all_ecocomDP.R
 \name{view_all_ecocomDP}
 \alias{view_all_ecocomDP}
-\title{View a summary of all ecocomDP datasets}
+\title{View a summary of all ecocomDP data packages}
 \usage{
 view_all_ecocomDP()
 }
 \value{
-A data frame with fields:
+(tibble) A tibble with fields:
     \itemize{
         \item \strong{package_id}: Data package ID
         \item \strong{title}: Data package title
@@ -20,5 +20,5 @@ A data frame with fields:
     }
 }
 \description{
-View a summary of all ecocomDP datasets.
+View a summary of all ecocomDP data packages.
 }
