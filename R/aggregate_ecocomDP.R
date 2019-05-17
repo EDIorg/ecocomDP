@@ -1,43 +1,159 @@
 #' Aggregate ecocomDP data packages
 #'
 #' @description  
-#'     Aggregate one or more ecocomDP data packages into one large ecocomDP.
+#'     Aggregate ecocomDP data packages.
 #'
-#' @usage aggregate_ecocomDP(package.ids, path = NULL)
+#' @usage 
+#'     aggregate_ecocomDP(
+#'       package.id, 
+#'       path = NULL
+#'     )
 #'     
-#' @param package.ids
-#'     (character) A vector of ecocomDP data package IDs to aggregate. Use 
-#'     `view_all_ecocomDP` to get the authoritative list of available ecocomDP.
-#'     NOTE: Previous data package revisions of ecocomDP packages are valid 
-#'     entries.
+#' @param package.id
+#'     (character) IDs of data packages to aggregate. Use 
+#'     \code{view_all_ecocomDP} to get package IDs of available ecocomDP 
+#'     datasets. Previous data package revisions are valid. It's OK to if only
+#'     one data package is entered.
 #' @param path
-#'     (character) Path to the directory in which the aggregated ecocomDP will 
-#'     be written, if specified.
+#'     (character; optional) Path to the directory in which the aggregated 
+#'     ecocomDP will be written.
+#' @param neon.sites
+#'     (character) NEON sites to use the data of. THIS ARGUMENT IS A WIP.
 #'     
 #' @return 
-#'     A single ecocomDP containing all contents of the individual ecocomDP
-#'     listed in the "package.ids" argument.
+#'     \itemize{
+#'         \item{(list) A named list of tibbles (one for each ecocomDP table)
+#'         containing data from aggregated \code{package.id}s}
+#'         \item{(.csv files) .csv files (one for each ecocomDP table) 
+#'         containing data from aggregated \code{package.id}s}
+#'     }
 #'         
 #' @export
 #'
 
-aggregate_ecocomDP <- function(package.ids, path = NULL, neon.sites = NULL){
-  
-  # Validate arguments --------------------------------------------------------
-  
-  if (missing(package.ids)){
-    stop('Input argument "package.ids" is missing!')
-  }
+aggregate_ecocomDP <- function(package.id, path = NULL, neon.sites = NULL){
 
+  message('Aggregating ecocomDP data packages ...')
+  
+  # Get table attributes ------------------------------------------------------
+  # Get table attributes of each package.id in order to initialize the outgoing 
+  # data list.
+    
+  # Get ecocomDP table names
+  
+  tbls <- unique(
+    suppressMessages(
+      readr::read_tsv(
+        system.file('validation_criteria.txt', package = 'ecocomDP')
+      )$table 
+    )
+  )
+  
+  # Initialize table attributes list
+  
+  tbl_attrs <- lapply(
+    seq_along(package.id),
+    function(x){
+      middle <- vector('list', length(tbls))
+      inner <- lapply(
+        seq_along(middle), 
+        function(x){
+          list(
+            name = NULL,
+            url = NULL,
+            delimiter = NULL,
+            nrecord = NULL
+          )
+        }
+      )
+      names(inner) <- tbls
+      inner
+    }
+  )
+  
+  names(tbl_attrs) <- package.id
+  
+  # Fill table attributes list
+  
+  xpath <- c(
+    name = './/dataset/dataTable/physical/objectName',
+    url = './/dataset/dataTable/physical/distribution/online/url',
+    delimiter = './/dataset/dataTable/physical/dataFormat/textFormat/simpleDelimited/fieldDelimiter',
+    nrecord = './/dataset/dataTable/numberOfRecords'
+  )
+  
+  entity_attr <- xml2::xml_text(
+    xml2::xml_find_all(
+      eml,
+      xpath
+    )
+  )
+  
+  eml <- suppressMessages(EDIutils::api_read_metadata(x))
+  
+  i <- stringr::str_detect(
+    entity_attr,
+    paste0(tbls, '\\.[:alnum:]*$')
+  )
+  
+  test <- lapply(
+    seq_along(tbl_attrs),
+    function(x){
+      eml <- suppressMessages(EDIutils::api_read_metadata(names(tbl_attrs)[x]))
+      tblnames <- xml2::xml_text(
+        xml2::xml_find_all(
+          eml,
+          xpath[['name']]
+        )
+      )
+      lapply(
+        seq_along(tbls),
+        function(x){
+          i <- stringr::str_detect(tblnames, paste0(tbls[x], '\\.[:alnum:]*$'))
+          if (any(i)){
+            lapply(
+              seq_along(xpath),
+              function(x){
+                entity_attr <- xml2::xml_text(
+                  xml2::xml_find_all(
+                    eml,
+                    xpath
+                  )
+                )
+              }
+            )
+          }
+        }
+      )
+      middle <- vector('list', length(tbls))
+      inner <- lapply(
+        seq_along(middle), 
+        function(x){
+          list(
+            name = NULL,
+            url = NULL,
+            delimiter = NULL,
+            nrecord = NULL
+          )
+        }
+      )
+      names(inner) <- tbls
+      inner
+    }
+  )
+
+  # Get nrows of each data pacakge to initialize output
+  
+  
   # Create list of tables -----------------------------------------------------
   
   message('Loading requested packages ...')
   tables <- lapply(
-    package.ids, 
+    package.id, 
     get_ecocomDP, 
     neon.sites = neon.sites
   )
-  names(tables) <- package.ids
+  names(tables) <- package.id
   
   # Fill empty fields with NA -------------------------------------------------
   
@@ -173,6 +289,7 @@ aggregate_ecocomDP <- function(package.ids, path = NULL, neon.sites = NULL){
 
 
 # Get ecocomDP --------------------------------------------------------------
+
 get_ecocomDP <- function(package.id, neon.sites = NULL){
   
   # Get data from EDI -------------------------------------------------------

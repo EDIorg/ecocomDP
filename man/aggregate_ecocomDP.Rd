@@ -4,21 +4,30 @@
 \alias{aggregate_ecocomDP}
 \title{Aggregate ecocomDP data packages}
 \usage{
-aggregate_ecocomDP(package.ids, path = NULL)
+aggregate_ecocomDP(
+      package.id, 
+      path = NULL
+    )
 }
 \arguments{
-\item{package.ids}{(character) A vector of ecocomDP data package IDs to aggregate. Use 
-`view_all_ecocomDP` to get the authoritative list of available ecocomDP.
-NOTE: Previous data package revisions of ecocomDP packages are valid 
-entries.}
+\item{package.id}{(character) IDs of data packages to aggregate. Use 
+\code{view_all_ecocomDP} to get package IDs of available ecocomDP 
+datasets. Previous data package revisions are valid. It's OK to if only
+one data package is entered.}
 
-\item{path}{(character) Path to the directory in which the aggregated ecocomDP will 
-be written, if specified.}
+\item{path}{(character; optional) Path to the directory in which the aggregated 
+ecocomDP will be written.}
+
+\item{neon.sites}{(character) NEON sites to use the data of. THIS ARGUMENT IS A WIP.}
 }
 \value{
-A single ecocomDP containing all contents of the individual ecocomDP
-    listed in the "package.ids" argument.
+\itemize{
+        \item{(list) A named list of tibbles (one for each ecocomDP table)
+        containing data from aggregated \code{package.id}s}
+        \item{(.csv files) .csv files (one for each ecocomDP table) 
+        containing data from aggregated \code{package.id}s}
+    }
 }
 \description{
-Aggregate one or more ecocomDP data packages into one large ecocomDP.
+Aggregate ecocomDP data packages.
 }
