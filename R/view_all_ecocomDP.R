@@ -33,7 +33,7 @@ view_all_ecocomDP <- function(){
   
   # If HTTP request is successful ...
   
-  if (status_code(query) == 200){
+  if (httr::status_code(query) == 200){
     
     # Parse query
     
@@ -209,13 +209,13 @@ read_table_dataset_summary <- function(package.id){
       output <-readr::read_csv(
         entity_url, 
         col_types = c(
-          package_id = col_character(),
-          original_package_id = col_character(),
-          length_of_survey_years = col_double(),
-          number_of_years_sampled = col_double(),
-          std_dev_interval_betw_years = col_double(),
-          max_num_taxa = col_integer(),
-          geo_extent_bounding_box_m2 = col_double()
+          package_id = readr::col_character(),
+          original_package_id = readr::col_character(),
+          length_of_survey_years = readr::col_double(),
+          number_of_years_sampled = readr::col_double(),
+          std_dev_interval_betw_years = readr::col_double(),
+          max_num_taxa = readr::col_integer(),
+          geo_extent_bounding_box_m2 = readr::col_double()
         )
       )
       
@@ -224,13 +224,13 @@ read_table_dataset_summary <- function(package.id){
       output <-readr::read_tsv(
         entity_url, 
         col_types = c(
-          package_id = col_character(),
-          original_package_id = col_character(),
-          length_of_survey_years = col_double(),
-          number_of_years_sampled = col_double(),
-          std_dev_interval_betw_years = col_double(),
-          max_num_taxa = col_integer(),
-          geo_extent_bounding_box_m2 = col_double()
+          package_id = readr::col_character(),
+          original_package_id = readr::col_character(),
+          length_of_survey_years = readr::col_double(),
+          number_of_years_sampled = readr::col_double(),
+          std_dev_interval_betw_years = readr::col_double(),
+          max_num_taxa = readr::col_integer(),
+          geo_extent_bounding_box_m2 = readr::col_double()
         )
       )
       
@@ -312,13 +312,13 @@ read_table_dataset_summary_neon <- function(package.id){
         full.names = TRUE
       )[use_i], 
       col_types = c(
-        package_id = col_character(),
-        original_package_id = col_character(),
-        length_of_survey_years = col_double(),
-        number_of_years_sampled = col_double(),
-        std_dev_interval_betw_years = col_double(),
-        max_num_taxa = col_integer(),
-        geo_extent_bounding_box_m2 = col_double()
+        package_id = readr::col_character(),
+        original_package_id = readr::col_character(),
+        length_of_survey_years = readr::col_double(),
+        number_of_years_sampled = readr::col_double(),
+        std_dev_interval_betw_years = readr::col_double(),
+        max_num_taxa = readr::col_integer(),
+        geo_extent_bounding_box_m2 = readr::col_double()
       )
     )
     
@@ -332,13 +332,13 @@ read_table_dataset_summary_neon <- function(package.id){
         full.names = TRUE
       )[use_i], 
       col_types = c(
-        package_id = col_character(),
-        original_package_id = col_character(),
-        length_of_survey_years = col_double(),
-        number_of_years_sampled = col_double(),
-        std_dev_interval_betw_years = col_double(),
-        max_num_taxa = col_integer(),
-        geo_extent_bounding_box_m2 = col_double()
+        package_id = readr::col_character(),
+        original_package_id = readr::col_character(),
+        length_of_survey_years = readr::col_double(),
+        number_of_years_sampled = readr::col_double(),
+        std_dev_interval_betw_years = readr::col_double(),
+        max_num_taxa = readr::col_integer(),
+        geo_extent_bounding_box_m2 = readr::col_double()
       )
     )
     
