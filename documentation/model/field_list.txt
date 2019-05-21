@@ -24,7 +24,6 @@ location_ancillary.datetime
 location_ancillary.variable_name         
 location_ancillary.value                 
 location_ancillary.unit                  
-location_ancillary.column name 	
 taxon_ancillary.taxon_ancillary_id 
 taxon_ancillary.taxon_id           
 taxon_ancillary.datetime           
