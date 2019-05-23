@@ -33,23 +33,25 @@
 
 aggregate_ecocomDP <- function(package.id, path = NULL, neon.sites = NULL){
 
-  message('Aggregating ecocomDP data packages ...')
+  message('Aggregating ecocomDP data packages: ')
+  message(paste0('  ', package.id, collapse = '\n'))
+
   
   # Get table attributes ------------------------------------------------------
-  # Get table attributes of each package.id in order to initialize the outgoing 
-  # data list.
+  # Get the URL, file name, number of records, and field delimiter of each 
+  # package.id for initializing the outgoing data list.
     
-  # Get ecocomDP table names
+  # Get ecocomDP attributes
   
-  tbls <- unique(
-    suppressMessages(
-      readr::read_tsv(
-        system.file('validation_criteria.txt', package = 'ecocomDP')
-      )$table 
+  attrs_ecocomDP <- suppressMessages(
+    readr::read_tsv(
+      system.file('validation_criteria.txt', package = 'ecocomDP')
     )
   )
   
-  # Initialize table attributes list
+  tbls <- unique(attrs_ecocomDP$table)
+  
+  # Initialize attributes list
   
   tbl_attrs <- lapply(
     seq_along(package.id),
@@ -73,7 +75,7 @@ aggregate_ecocomDP <- function(package.id, path = NULL, neon.sites = NULL){
   
   names(tbl_attrs) <- package.id
   
-  # Fill table attributes list
+  # Fill attributes list
   
   xpath <- c(
     name = './/dataset/dataTable/physical/objectName',
@@ -81,110 +83,146 @@ aggregate_ecocomDP <- function(package.id, path = NULL, neon.sites = NULL){
     delimiter = './/dataset/dataTable/physical/dataFormat/textFormat/simpleDelimited/fieldDelimiter',
     nrecord = './/dataset/dataTable/numberOfRecords'
   )
-  
-  entity_attr <- xml2::xml_text(
-    xml2::xml_find_all(
-      eml,
-      xpath
+
+  invisible(
+    lapply(
+      seq_along(tbl_attrs),
+      function(x){
+        eml <- suppressMessages(EDIutils::api_read_metadata(names(tbl_attrs)[x]))
+        tblnames <- xml2::xml_text(
+          xml2::xml_find_all(
+            eml,
+            xpath[['name']]
+          )
+        )
+        pkg_id <- names(tbl_attrs)[x]
+        lapply(
+          seq_along(tbls),
+          function(x){
+            i <- stringr::str_detect(tblnames, paste0(tbls[x], '\\.[:alnum:]*$'))
+            if (any(i)){
+              tbl <- tbls[x]
+              lapply(
+                seq_along(xpath),
+                function(x){
+                  tbl_attrs[[pkg_id]][[tbl]][[x]] <<- xml2::xml_text(
+                    xml2::xml_find_all(
+                      eml,
+                      xpath[x]
+                    )
+                  )[i]
+                }
+              )
+            }
+          }
+        )
+      }
     )
   )
-  
-  eml <- suppressMessages(EDIutils::api_read_metadata(x))
-  
-  i <- stringr::str_detect(
-    entity_attr,
-    paste0(tbls, '\\.[:alnum:]*$')
-  )
-  
-  test <- lapply(
-    seq_along(tbl_attrs),
+
+  # Initialize outgoing data --------------------------------------------------
+  # Each table is an ecocomDP table filled with NA_character_ of nrows equal 
+  # to the number of records in the ecocomDP tables to be aggregated.
+
+  out <- lapply(
+    seq_along(tbls),
     function(x){
-      eml <- suppressMessages(EDIutils::api_read_metadata(names(tbl_attrs)[x]))
-      tblnames <- xml2::xml_text(
-        xml2::xml_find_all(
-          eml,
-          xpath[['name']]
-        )
-      )
-      lapply(
-        seq_along(tbls),
-        function(x){
-          i <- stringr::str_detect(tblnames, paste0(tbls[x], '\\.[:alnum:]*$'))
-          if (any(i)){
-            lapply(
-              seq_along(xpath),
-              function(x){
-                entity_attr <- xml2::xml_text(
-                  xml2::xml_find_all(
-                    eml,
-                    xpath
-                  )
-                )
-              }
-            )
-          }
-        }
-      )
-      middle <- vector('list', length(tbls))
-      inner <- lapply(
-        seq_along(middle), 
-        function(x){
-          list(
-            name = NULL,
-            url = NULL,
-            delimiter = NULL,
-            nrecord = NULL
-          )
-        }
-      )
-      names(inner) <- tbls
-      inner
+      nrecord <- sum(as.numeric(unlist(map(.x = tbl_attrs, list(tbls[x], 'nrecord')))))
+      cnames <- na.omit(attrs_ecocomDP$column[
+        attrs_ecocomDP$table == tbls[x]
+        ])
+      out <- tibble::as.tibble(data.frame(
+        matrix(NA_character_, nrow = nrecord, ncol = length(cnames)), stringsAsFactors = FALSE))
+      colnames(out) <- cnames
+      out
     }
   )
+  names(out) <- tbls
 
-  # Get nrows of each data pacakge to initialize output
+  # Fill aggregation tables ---------------------------------------------------
   
+  # Read file
+  # Align columns
+  # Assign globally unique IDs
   
-  # Create list of tables -----------------------------------------------------
+  message('Creating tables:')
   
-  message('Loading requested packages ...')
-  tables <- lapply(
-    package.id, 
-    get_ecocomDP, 
-    neon.sites = neon.sites
-  )
-  names(tables) <- package.id
+  for (i in seq_along(tbls)){
+    message(paste0('  ', tbls[i]))
+    counter <- 1
+    url <- unlist(map(.x = tbl_attrs, list(tbls[i], 'url')))
+    delim <- unlist(map(.x = tbl_attrs, list(tbls[i], 'delimiter')))
+    nrecord <- cumsum(unlist(map(.x = tbl_attrs, list(tbls[i], 'nrecord'))))
+    for (j in seq_along(url)){
+      # Read file
+      if (delim[j] == ','){
+        d <- suppressWarnings(
+          suppressMessages(
+            readr::read_csv(
+              url[j], 
+              col_types = paste0(rep('c', length(na.omit(attrs_ecocomDP$class[(attrs_ecocomDP$table == tbls[i])]))), collapse = '')
+            )
+          )
+        )
+      } else if (delim[j] == '\\t'){
+        d <- suppressWarnings(
+          suppressMessages(
+            readr::read_tsv(
+              url[j], 
+              col_types = paste0(rep('c', length(na.omit(attrs_ecocomDP$class[(attrs_ecocomDP$table == tbls[i])]))), collapse = '')
+            )
+          )
+        )
+      }
+      # Add uniqe identifier
+      d <- dplyr::mutate_at(
+        d, 
+        .vars = na.omit(attrs_ecocomDP$column[(attrs_ecocomDP$table == tbls[i]) & (attrs_ecocomDP$globally_unique == 'yes')]),
+        .funs = function(x){
+          paste0(x, '_', names(url[j]))
+        }
+      )
+      # Clean up
+      if (tbls[i] == 'location'){
+        d$parent_location_id[stringr::str_detect(d$parent_location_id, 'NA')] <- NA_character_
+      }
+      # Fill
+      suppressWarnings(
+        out[[i]][counter:nrecord[j], 
+                 match(colnames(d), colnames(out[[i]]))] <- d
+      )
+      counter <- sum(counter, nrecord[j])
+    }
+  }
   
-  # Fill empty fields with NA -------------------------------------------------
-  
-  message('Filling empty fields ...')
-  tables <- lapply(tables, fill_empty_fields)
-  
-  # Assign globally unique IDS ------------------------------------------------
-  
-  message('Assigning globally unique IDs ...')
-  tables <- mapply(assign_ids, tables, names(tables))
-  
-  # Coerce to common field types ----------------------------------------------
-  
-  message('Assigning field types ...')
-  tables <- lapply(tables, assign_field_types)
-  
-  # Concatenate ecocomDPs -----------------------------------------------------
-  
-  message('Binding tables ...')
-  tables_aggregated <- cat_tables(table.list = tables)
+  # Coerce column classes -----------------------------------------------------
 
-  # Export the aggregated ecocomDP --------------------------------------------
+  for (i in 1:length(out)){
+    use_tbl <- names(out[i])
+    if (!is.null(out[[use_tbl]])){
+      for (j in 1:length(colnames(out[[use_tbl]]))){
+        use_col <- colnames(out[[use_tbl]])[[j]]
+        use_class <- attrs_ecocomDP$class[
+          ((attrs_ecocomDP$table == use_tbl) & (!is.na(attrs_ecocomDP$column)) & (attrs_ecocomDP$column == use_col))
+          ]
+        out[[use_tbl]][[use_col]] <- col2class(
+          column = out[[use_tbl]][[use_col]],
+          class = use_class
+        )
+      }
+    }
+  }
+
+  # Write tables to file ------------------------------------------------------
   
   if (!missing(path)){
     
-    message('Writing aggregated data to file ...')
+    message('Writing tables to file')
     EDIutils::validate_path(path)
     
     # observation
-    if (!is.null(tables_aggregated$observation)){
-      write.table(tables_aggregated$observation,
+    if (!is.null(out$observation)){
+      write.table(out$observation,
                   file = paste0(path,
                                 '/',
                                 "ecocomDP_export_observation.csv"),
@@ -195,8 +233,8 @@ aggregate_ecocomDP <- function(package.id, path = NULL, neon.sites = NULL){
                   quote = F)
     }
     # location
-    if (!is.null(tables_aggregated$location)){
-      write.table(tables_aggregated$location,
+    if (!is.null(out$location)){
+      write.table(out$location,
                   file = paste0(path,
                                 '/',
                                 "ecocomDP_export_location.csv"),
@@ -207,8 +245,8 @@ aggregate_ecocomDP <- function(package.id, path = NULL, neon.sites = NULL){
                   quote = F)
     }
     # taxon
-    if (!is.null(tables_aggregated$taxon)){
-      write.table(tables_aggregated$taxon,
+    if (!is.null(out$taxon)){
+      write.table(out$taxon,
                   file = paste0(path,
                                 '/',
                                 "ecocomDP_export_taxon.csv"),
@@ -219,8 +257,8 @@ aggregate_ecocomDP <- function(package.id, path = NULL, neon.sites = NULL){
                   quote = F)
     }
     # dataset_summary
-    if (!is.null(tables_aggregated$dataset_summary)){
-      write.table(tables_aggregated$dataset_summary,
+    if (!is.null(out$dataset_summary)){
+      write.table(out$dataset_summary,
                   file = paste0(path,
                                 '/',
                                 "ecocomDP_export_dataset_summary.csv"),
@@ -231,8 +269,8 @@ aggregate_ecocomDP <- function(package.id, path = NULL, neon.sites = NULL){
                   quote = F)
     }
     # observation_ancillary
-    if (!is.null(tables_aggregated$observation_ancillary)){
-      write.table(tables_aggregated$observation_ancillary,
+    if (!is.null(out$observation_ancillary)){
+      write.table(out$observation_ancillary,
                   file = paste0(path,
                                 '/',
                                 "ecocomDP_export_observation_ancillary.csv"),
@@ -243,8 +281,8 @@ aggregate_ecocomDP <- function(package.id, path = NULL, neon.sites = NULL){
                   quote = F)
     }
     # location_ancillary
-    if (!is.null(tables_aggregated$location_ancillary)){
-      write.table(tables_aggregated$location_ancillary,
+    if (!is.null(out$location_ancillary)){
+      write.table(out$location_ancillary,
                   file = paste0(path,
                                 '/',
                                 "ecocomDP_export_location_ancillary.csv"),
@@ -255,8 +293,8 @@ aggregate_ecocomDP <- function(package.id, path = NULL, neon.sites = NULL){
                   quote = F)
     }
     # taxon_ancillary
-    if (!is.null(tables_aggregated$taxon_ancillary)){
-      write.table(tables_aggregated$taxon_ancillary,
+    if (!is.null(out$taxon_ancillary)){
+      write.table(out$taxon_ancillary,
                   file = paste0(path,
                                 '/',
                                 "ecocomDP_export_taxon_ancillary.csv"),
@@ -267,8 +305,8 @@ aggregate_ecocomDP <- function(package.id, path = NULL, neon.sites = NULL){
                   quote = F)
     }
     # variable_mapping
-    if (!is.null(tables_aggregated$variable_mapping)){
-      write.table(tables_aggregated$variable_mapping,
+    if (!is.null(out$variable_mapping)){
+      write.table(out$variable_mapping,
                   file = paste0(path,
                                 '/',
                                 "ecocomDP_export_variable_mapping.csv"),
@@ -281,7 +319,11 @@ aggregate_ecocomDP <- function(package.id, path = NULL, neon.sites = NULL){
     
   }
   
-  tables_aggregated
+  message('Done')
+  
+  # Return
+  
+  out
   
 }
 
@@ -754,150 +796,6 @@ get_neon_table <- function(package.id, eml){
 
 
 
-# Fill empty fields with NA ---------------------------------------------------
-fill_empty_fields <- function(table.list){
-  
-  criteria <- read.table(
-    system.file('validation_criteria.txt', package = 'ecocomDP'),
-    header = T,
-    sep = "\t",
-    as.is = T,
-    na.strings = "NA")
-
-  # observation
-  cols_expected <- criteria$column[(criteria$table == 'observation') & (!is.na(criteria$column))]
-  cols_missing <- cols_expected[!(cols_expected %in% colnames(table.list$observation))]
-  if (length(cols_missing) > 0){
-    table.list$observation[cols_missing] <- NA_character_
-    table.list$observation <- select(
-      table.list$observation,
-      observation_id,
-      event_id,
-      package_id,
-      location_id,
-      observation_datetime,
-      taxon_id,
-      variable_name,
-      value,
-      unit
-      )
-  }
-  
-  # location
-  cols_expected <- criteria$column[(criteria$table == 'location') & (!is.na(criteria$column))]
-  cols_missing <- cols_expected[!(cols_expected %in% colnames(table.list$location))]
-  if (length(cols_missing) > 0){
-    table.list$location[cols_missing] <- NA_character_
-    table.list$location <- select(
-      table.list$location,
-      location_id,
-      location_name,
-      latitude,
-      longitude,
-      elevation,
-      parent_location_id
-      )
-  }
-  
-  # dataset_summary
-  cols_expected <- criteria$column[(criteria$table == 'dataset_summary') & (!is.na(criteria$column))]
-  cols_missing <- cols_expected[!(cols_expected %in% colnames(table.list$dataset_summary))]
-  if (length(cols_missing) > 0){
-    table.list$dataset_summary[cols_missing] <- NA_character_
-    table.list$dataset_summary <- select(
-      table.list$dataset_summary,
-      package_id,
-      original_package_id,
-      length_of_survey_years,
-      number_of_years_sampled,
-      std_dev_interval_betw_years,
-      max_num_taxa,
-      geo_extent_bounding_box_m2
-    )
-  }
-  
-  # taxon
-  cols_expected <- criteria$column[(criteria$table == 'taxon') & (!is.na(criteria$column))]
-  cols_missing <- cols_expected[!(cols_expected %in% colnames(table.list$taxon))]
-  if (length(cols_missing) > 0){
-    table.list$taxon[cols_missing] <- NA_character_
-    table.list$taxon <- select(table.list$taxon, taxon_id, taxon_rank, taxon_name, authority_system, authority_taxon_id)
-  }
-  
-  # observation_ancillary
-  cols_expected <- criteria$column[(criteria$table == 'observation_ancillary') & (!is.na(criteria$column))]
-  cols_missing <- cols_expected[!(cols_expected %in% colnames(table.list$observation_ancillary))]
-  if ((length(cols_missing) > 0) & (!is.null(table.list$observation_ancillary))){
-    table.list$observation_ancillary[cols_missing] <- NA_character_
-    table.list$observation_ancillary <- select(
-      table.list$observation_ancillary,
-      package_id,
-      original_package_id,
-      length_of_survey_years,
-      number_of_years_sampled,
-      std_dev_interval_betw_years,
-      max_num_taxa,
-      geo_extent_bounding_box_m2
-    )
-  }
-  
-  # location_ancillary
-  cols_expected <- criteria$column[(criteria$table == 'location_ancillary') & (!is.na(criteria$column))]
-  cols_missing <- cols_expected[!(cols_expected %in% colnames(table.list$location_ancillary))]
-  if ((length(cols_missing) > 0) & (!is.null(table.list$location_ancillary))){
-    table.list$location_ancillary[cols_missing] <- NA_character_
-    table.list$location_ancillary <- select(
-      table.list$location_ancillary,
-      location_ancillary_id,
-      location_id,
-      datetime,
-      variable_name,
-      value,
-      unit
-    )
-  }
-  
-  # taxon_ancillary
-  cols_expected <- criteria$column[(criteria$table == 'taxon_ancillary') & (!is.na(criteria$column))]
-  cols_missing <- cols_expected[!(cols_expected %in% colnames(table.list$taxon_ancillary))]
-  if ((length(cols_missing) > 0) & (!is.null(table.list$taxon_ancillary))){
-    table.list$taxon_ancillary[cols_missing] <- NA_character_
-    table.list$taxon_ancillary <- select(
-      table.list$taxon_ancillary,
-      taxon_ancillary_id,
-      taxon_id,
-      datetime,
-      variable_name,
-      value,
-      unit,
-      author
-    )
-  }
-  
-  # variable_mapping
-  cols_expected <- criteria$column[(criteria$table == 'variable_mapping') & (!is.na(criteria$column))]
-  cols_missing <- cols_expected[!(cols_expected %in% colnames(table.list$variable_mapping))]
-  if ((length(cols_missing) > 0) & (!is.null(table.list$variable_mapping))){
-    table.list$variable_mapping[cols_missing] <- NA_character_
-    table.list$variable_mapping <- select(
-      table.list$variable_mapping,
-      variable_mapping_id,
-      table_name,
-      variable_name,
-      mapped_system,
-      mapped_id,
-      mapped_label
-    )
-  }
-
-  # Return
-  
-  table.list
-  
-}
-
-
-
 
 # Assign field types ----------------------------------------------------------
 assign_field_types <- function(table.list){
@@ -922,14 +820,16 @@ assign_field_types <- function(table.list){
           class = use_class
         )
       }
-      }
+    }
   }
   
   # Return
   table.list
-  }
+}
+
 col2class <- function(column, class){
   if (class == 'character'){
+    
     column <- as.character(column)
   } else if (class == 'numeric'){
     column <- as.numeric(column)
@@ -938,239 +838,3 @@ col2class <- function(column, class){
   }
   column
 }
-
-
-
-
-# Assign globally unique IDs --------------------------------------------------
-assign_ids <- function(table.list, table.list.name){
-  
-  # observation
-  
-  table.list$observation$observation_id <- paste0(
-    table.list$observation$observation_id,
-    '.',
-    table.list.name
-    )
-  
-  # location
-  
-  table.list$location$location_id <- paste0(
-    table.list$location$location_id,
-    '.',
-    table.list.name
-  )
-  
-  table.list$location$parent_location_id <- paste0(
-    table.list$location$parent_location_id,
-    '.',
-    table.list.name
-  )
-  
-  table.list$observation$location_id <- paste0(
-    table.list$observation$location_id,
-    '.',
-    table.list.name
-  )
-
-  # dataset_summary
-  
-  table.list$dataset_summary$package_id <- paste0(
-    table.list$dataset_summary$package_id,
-    '.',
-    table.list.name
-  )
-  
-  table.list$observation$package_id <- paste0(
-    table.list$observation$package_id,
-    '.',
-    table.list.name
-  )
-  
-  # taxon
-  
-  table.list$taxon$taxon_id <- paste0(
-    table.list$taxon$taxon_id,
-    '.',
-    table.list.name
-  )
-  
-  table.list$observation$taxon_id <- paste0(
-    table.list$observation$taxon_id,
-    '.',
-    table.list.name
-  )
-  
-  # observation_ancillary
-  
-  if (!is.null(table.list$observation_ancillary)){
-    
-    table.list$observation_ancillary$observation_ancillary_id <- paste0(
-      table.list$observation_ancillary$observation_ancillary_id,
-      '.',
-      table.list.name
-    )
-    
-    table.list$observation_ancillary$event_id <- paste0(
-      table.list$observation_ancillary$event_id,
-      '.',
-      table.list.name
-    )
-    
-    table.list$observation$event_id <- paste0(
-      table.list$observation$event_id,
-      '.',
-      table.list.name
-    )
-    
-  }
-  
-  # location_ancillary
-  
-  if (!is.null(table.list$location_ancillary)){
-    
-    table.list$location_ancillary$location_ancillary_id <- paste0(
-      table.list$location_ancillary$location_ancillary_id,
-      '.',
-      table.list.name
-    )
-
-    table.list$location_ancillary$location_id <- paste0(
-      table.list$location_ancillary$location_id,
-      '.',
-      table.list.name
-    )
-    
-  }
-  
-  # taxon_ancillary
-  
-  if (!is.null(table.list$taxon_ancillary)){
-    
-    table.list$taxon_ancillary$taxon_ancillary_id <- paste0(
-      table.list$taxon_ancillary$taxon_ancillary_id,
-      '.',
-      table.list.name
-    )
-    
-    table.list$taxon_ancillary$taxon_id <- paste0(
-      table.list$taxon_ancillary$taxon_id,
-      '.',
-      table.list.name
-    )
-
-  }
-  
-  # variable_mapping
-  
-  if (!is.null(table.list$variable_mapping)){
-    
-    table.list$variable_mapping$variable_mapping_id <- paste0(
-      table.list$variable_mapping$variable_mapping_id,
-      '.',
-      table.list.name
-    )
-
-  }
-  
-  # Return
-  
-  list(table.list)
-  
-}
-
-
-
-# Concatenate ecocomDPs -----------------------------------------------------
-cat_tables <- function(table.list){
-  
-  # Initialize storage
-  data_out <- list(
-    observation = NULL,
-    location = NULL,
-    taxon = NULL,
-    dataset_summary = NULL,
-    observation_ancillary = NULL,
-    location_ancillary = NULL,
-    taxon_ancillary = NULL,
-    variable_mapping = NULL
-  )
-  
-  # observation
-  for (i in 1:length(table.list)){
-    if (!is.null(table.list[[i]]$observation)){
-      data_out$observation <- rbind(
-        data_out$observation,
-        table.list[[i]]$observation
-      )
-    }
-  }
-  # location
-  for (i in 1:length(table.list)){
-    if (!is.null(table.list[[i]]$location)){
-      data_out$location <- rbind(
-        data_out$location,
-        table.list[[i]]$location
-      )
-    }
-  }
-  # taxon
-  for (i in 1:length(table.list)){
-    if (!is.null(table.list[[i]]$taxon)){
-      data_out$taxon <- rbind(
-        data_out$taxon,
-        table.list[[i]]$taxon
-      )
-    }
-  }
-  # dataset_summary
-  for (i in 1:length(table.list)){
-    if (!is.null(table.list[[i]]$dataset_summary)){
-      data_out$dataset_summary <- rbind(
-        data_out$dataset_summary,
-        table.list[[i]]$dataset_summary
-      )
-    }
-  }
-  # observation_ancillary
-  for (i in 1:length(table.list)){
-    if (!is.null(table.list[[i]]$observation_ancillary)){
-      data_out$observation_ancillary <- rbind(
-        data_out$observation_ancillary,
-        table.list[[i]]$observation_ancillary
-      )
-    }
-  }
-  # location_ancillary
-  for (i in 1:length(table.list)){
-    if (!is.null(table.list[[i]]$location_ancillary)){
-      data_out$location_ancillary <- rbind(
-        data_out$location_ancillary,
-        table.list[[i]]$location_ancillary
-      )
-    }
-  }
-  # taxon_ancillary
-  for (i in 1:length(table.list)){
-    if (!is.null(table.list[[i]]$taxon_ancillary)){
-      data_out$taxon_ancillary <- rbind(
-        data_out$taxon_ancillary,
-        table.list[[i]]$taxon_ancillary
-      )
-    }
-  }
-  # variable_mapping
-  for (i in 1:length(table.list)){
-    if (!is.null(table.list[[i]]$variable_mapping)){
-      data_out$variable_mapping <- rbind(
-        data_out$variable_mapping,
-        table.list[[i]]$variable_mapping
-      )
-    }
-  }
-  
-  data_out
-  
-}
-
-
