@@ -10,18 +10,20 @@ _Figure: Abstract view of dataset levels. A flexible intermediate (L1, middle) l
 
 ## Contents
 
-### Documentation
+### Create ecocomDP data
 
 * [Table descriptions, relationships, and requriements.](https://github.com/EDIorg/ecocomDP/tree/master/documentation/model)
 * [Instructions for creating, validating, and archiving ecocomDP tables](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions)
 * [List of datasets to be converted to ecocomDP](https://github.com/EDIorg/ecocomDP/tree/master/documentation/processing_queue)
 
-### Data
+### Use ecocomDP data
 
-* Datasets converted to ecocomDP:
-    * [Environmental Data Initiative (EDI)](https://portal.edirepository.org:443/nis/simpleSearch?defType=edismax&q=ecocomDP&fq=-scope:ecotrends&fq=-scope:lter-landsat*&fl=id,packageid,title,author,organization,pubdate,coordinates&debug=false) To find all ecocomDP datasets, enter "ecocomDP' in the 'simple search' box in the EDI data repository. Alternatively, run the ecocomDP R package `view_all_ecocomDP` function.
-    * [National Ecological Observatory Network (NEON)](https://github.com/EDIorg/ecocomDP/tree/master/documentation/examples/NEON) Run the ecocomDP R package function `view_all_ecocomDP` to see which NEON data products are available.
-    * [Popler](https://github.com/AldoCompagnoni/popler) Approximately 50 datasets from the Popler database are available in the ecocomDP format. Use the function `format_popler_to_ecocomDP` to get Popler data into the ecocomDP format. The function `format_popler_to_ecocomDP` is available for [download from the LTER Meta-communities working group GitHub](https://github.com/sokole/ltermetacommunities/blob/master/EDI/format_popler_to_ecocomDP.R).
+* Find:
+    * Use the [`view_all_ecocomDP()`](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions#discover) function to list all ecocomDP datasets. This function is apart of the `ecocomDP` R package.
+    * [Environmental Data Initiative (EDI)](https://portal.edirepository.org:443/nis/simpleSearch?defType=edismax&q=ecocomDP&fq=-scope:ecotrends&fq=-scope:lter-landsat*&fl=id,packageid,title,author,organization,pubdate,coordinates&debug=false) Enter "ecocomDP' in the 'simple search' box in the EDI data repository.
+    * [National Ecological Observatory Network (NEON)](https://github.com/EDIorg/ecocomDP/tree/master/documentation/examples/NEON) Use the [`view_all_ecocomDP()`](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions#discover) function to list all NEON data available in the ecocomDP format. This function is apart of the `ecocomDP` R package.
+* Import to R:
+    * Use the [`aggregate_ecocomDP()`](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions#reuse) function to combine ecocomDP datasets. This function is apart of the `ecocomDP` R package.
 
 ### PostgreSQL
 
@@ -29,7 +31,7 @@ _Figure: Abstract view of dataset levels. A flexible intermediate (L1, middle) l
 
 ### R package
 
-The R package helps create, validate, document, archive, discover, and aggregate ecocomDP. The ecocomDP R package is available here on GitHub.
+The R package helps create, validate, document, archive, discover, and use ecocomDP data.
 ```
 # Install from GitHub
 remotes::install_github("EDIorg/ecocomDP")

@@ -6,6 +6,7 @@ library(devtools)
 
 # Install and load ecocomDP
 # install_github("EDIorg/ecocomDP")
+
 library(ecocomDP)
 
 # Install and load neonUtilities
