@@ -127,7 +127,7 @@ aggregate_ecocomDP <- function(package.id, path = NULL, neon.sites = NULL){
   out <- lapply(
     seq_along(tbls),
     function(x){
-      nrecord <- sum(as.numeric(unlist(map(.x = tbl_attrs, list(tbls[x], 'nrecord')))))
+      nrecord <- sum(as.numeric(unlist(purrr::map(.x = tbl_attrs, list(tbls[x], 'nrecord')))))
       cnames <- na.omit(attrs_ecocomDP$column[
         attrs_ecocomDP$table == tbls[x]
         ])
@@ -150,9 +150,9 @@ aggregate_ecocomDP <- function(package.id, path = NULL, neon.sites = NULL){
   for (i in seq_along(tbls)){
     message(paste0('  ', tbls[i]))
     counter <- 1
-    url <- unlist(map(.x = tbl_attrs, list(tbls[i], 'url')))
-    delim <- unlist(map(.x = tbl_attrs, list(tbls[i], 'delimiter')))
-    nrecord <- cumsum(unlist(map(.x = tbl_attrs, list(tbls[i], 'nrecord'))))
+    url <- unlist(purrr::map(.x = tbl_attrs, list(tbls[i], 'url')))
+    delim <- unlist(purrr::map(.x = tbl_attrs, list(tbls[i], 'delimiter')))
+    nrecord <- cumsum(unlist(purrr::map(.x = tbl_attrs, list(tbls[i], 'nrecord'))))
     for (j in seq_along(url)){
       # Read file
       if (delim[j] == ','){
