@@ -6,7 +6,6 @@ Description: A collection of functions to translate your data to the Ecological
     Community Data Pattern (ecocomDP), make EML for the ecocomDP, and 
     synthesize data in the ecocomDP format.
 Imports:
-    R (>= 3.2.5),
     downloader (>= 0.4),
     dplyr (>= 0.5.0),
     gdata (>= 2.18.0),
