@@ -293,7 +293,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
       xml_in <- try(
         EML103::read_eml(
           paste0(
-            "http://pasta.lternet.edu/package/metadata/eml",
+            "https://pasta.lternet.edu/package/metadata/eml",
             "/",
             pkg_prts[1],
             "/",
@@ -308,7 +308,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
         
         xml_in <- read_xml(
           paste0(
-            "http://pasta.lternet.edu/package/metadata/eml",
+            "https://pasta.lternet.edu/package/metadata/eml",
             "/",
             pkg_prts[1],
             "/",
@@ -1232,7 +1232,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
   } else {
     metadata <- xmlParse(
       paste0(
-        "http://pasta.lternet.edu/package/metadata/eml",
+        "https://pasta.lternet.edu/package/metadata/eml",
         "/",
         scope,
         "/",
