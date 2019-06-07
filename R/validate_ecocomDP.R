@@ -270,7 +270,7 @@ validate_table_names <- function(data.path = NULL, criteria, data.list = NULL, f
     study_names <- unique(gsub(paste(table_names_regexpr, 
                                      collapse = "|"), 
                                "", tables))
-    study_names <- str_replace(study_names, "\\.[:alnum:]*$", replacement = "")
+    study_names <- stringr::str_replace(study_names, "\\.[:alnum:]*$", replacement = "")
     if (length(study_names) > 1){
       stop(paste("\n",
                  "More than one study name found in your ecocomDP tables.\n",
@@ -1493,8 +1493,8 @@ is_table <- function(L1.table, table.name){
 # Retrieves the name of the L1 table from the input file name.
 is_table_rev <- function(file.name, L1.table.names){
   required_table_pattern <- paste0(L1.table.names, "\\b")
-  if (sum(str_detect(file.name, required_table_pattern)) == 1){
-    L1.table.names[str_detect(file.name, required_table_pattern)]
+  if (sum(stringr::str_detect(file.name, required_table_pattern)) == 1){
+    L1.table.names[stringr::str_detect(file.name, required_table_pattern)]
   }
 }
 
