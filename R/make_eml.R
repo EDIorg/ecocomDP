@@ -246,7 +246,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
     
     if (is.null(code.file.extension)){
       
-      code_file_extention <- str_extract(
+      code_file_extention <- stringr::str_extract(
         code_files, 
         '\\.[:alpha:]*$'
       )
@@ -306,7 +306,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
       
       if (class(xml_in) == 'try-error'){
         
-        xml_in <- read_xml(
+        xml_in <- xml2::read_xml(
           paste0(
             "https://pasta.lternet.edu/package/metadata/eml",
             "/",
@@ -545,12 +545,12 @@ make_eml <- function(data.path, code.path = data.path, code.files,
     
     if (sum(is.na(df_table$authority_taxon_id)) != nrow(df_table)){
       
-      tc <- taxonomyCleanr::make_taxonomicCoverage(
+      tc <- make_taxonomicCoverage(
         taxa.clean = df_table$taxon_name,
         authority = df_table$authority_system,
         authority.id = df_table$authority_taxon_id
       )
-      
+
       xml_in@dataset@coverage@taxonomicCoverage <- as(
         list(tc), 
         "ListOftaxonomicCoverage"
@@ -691,7 +691,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
   
   message('Adding provenance metadata')
   
-  provenance <- read_xml(
+  provenance <- xml2::read_xml(
     paste0(
       "https://pasta.lternet.edu/package/provenance/eml",
       "/",
@@ -1222,42 +1222,30 @@ make_eml <- function(data.path, code.path = data.path, code.files,
   message('Updating title')
   
   if (!missing(eml.path)){
-    metadata <- xmlParse(
+    metadata <- xml2::read_xml(
       paste0(
         eml.path,
         "/",
-        parent_eml_file),
-      encoding = "UTF-8"
+        parent_eml_file)
     )
   } else {
-    metadata <- xmlParse(
-      paste0(
-        "https://pasta.lternet.edu/package/metadata/eml",
-        "/",
-        scope,
-        "/",
-        identifier,
-        "/",
-        revision
-      ),
-      encoding = "UTF-8"
-    )
+    metadata <- EDIutils::api_read_metadata(parent.package.id)
   }
   
-  title <- unlist(
-    xmlApply(
-      metadata["//dataset/title"], 
-      xmlValue
+  title <- xml2::xml_text(
+    xml2::xml_find_all(
+      metadata,
+      "//dataset/title"
     )
   )
   
-  abstract <- unlist(
-    xmlApply(
-      metadata["//dataset/abstract/para"], 
-      xmlValue
+  abstract <- xml2::xml_text(
+    xml2::xml_find_all(
+      metadata,
+      "//dataset/abstract/para"
     )
   )
-  
+
   title <- new(
     "title",
     paste0(
@@ -1308,7 +1296,6 @@ make_eml <- function(data.path, code.path = data.path, code.files,
   
   
   # Recompile EML -------------------------------------------------------------
-  
   
   eml <- new(
     "eml",
@@ -1618,5 +1605,58 @@ compile_attributes <- function(path, delimiter){
   }
   
   list("attributes" = attributes_stored)
+  
+}
+
+
+# A temporary fix until ecocomDP is refactored for EML v2.0.0
+make_taxonomicCoverage <- function(taxa.clean, authority, authority.id,
+                                   path = NULL){
+  
+  # Define data
+  if (!is.null(path) & file.exists(paste0(path, '/taxa_map.csv'))){
+    taxa_map <- utils::read.table(paste0(path, '/taxa_map.csv'), header = T,
+                                  sep = ',', stringsAsFactors = F)
+    data <- unname(taxonomyCleanr::get_classification(taxa.clean = taxa_map$taxa_clean,
+                                      authority = taxa_map$authority,
+                                      authority.id = taxa_map$authority_id,
+                                      path = path))
+  } else {
+    data <- unname(taxonomyCleanr::get_classification(taxa.clean = taxa.clean,
+                                      authority = authority,
+                                      authority.id = authority.id,
+                                      path = path))
+  }
+  
+  # Create helper function to facilitate differential levels of taxonomic
+  # classification
+  dataframe_2_taxclass <- function(x){
+    if (('name' %in% colnames(x)) & ('rank' %in% colnames(x))){
+      df <- x[ , match(c('name', 'rank'), colnames(x))]
+      df <- as.data.frame(t(data.frame(df$name)))
+      colnames(df) <- x$rank
+      taxcov <- EML103::set_taxonomicCoverage(df)
+      taxcov@taxonomicClassification[[1]]
+    }
+  }
+  taxclass <- lapply(data, dataframe_2_taxclass)
+  
+  # Create EML node set
+  taxcov <- methods::new('taxonomicCoverage')
+  taxcov@taxonomicClassification <- methods::as(taxclass,
+                                                'ListOftaxonomicClassification')
+  
+  # Write to file
+  lib_path <- system.file('test_data.txt', package = 'taxonomyCleanr')
+  lib_path <- substr(lib_path, 1, nchar(lib_path) - 14)
+  if (!is.null(path)){
+    if (path != lib_path){
+      EML103::write_eml(eml = taxcov,
+                        file = paste0(path, "/", "taxonomicCoverage.xml"))
+    }
+  }
+  
+  # Return output
+  taxcov
   
 }
