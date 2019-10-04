@@ -109,13 +109,20 @@
 #'
 #' @export
 #'
-
-
-make_eml <- function(data.path, code.path = data.path, code.files, 
-                     parent.package.id, sep, cat.vars = NULL,
-                     intellectual.rights = NULL, child.package.id, user.id, 
-                     affiliation, access.url = NULL, additional.contact,
-                     code.file.extension = NULL, eml.path = NULL){
+make_eml <- function(data.path, 
+                     code.path = data.path, 
+                     code.files, 
+                     parent.package.id, 
+                     sep, 
+                     cat.vars = NULL,
+                     intellectual.rights = NULL, 
+                     child.package.id, 
+                     user.id, 
+                     affiliation, 
+                     access.url = NULL, 
+                     additional.contact,
+                     code.file.extension = NULL, 
+                     eml.path = NULL){
   
   message(paste('Creating EML for ecocomDP data package', child.package.id))
   
@@ -280,7 +287,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
                             data.path, eml.path = NULL){
     
     if (!is.null(eml.path)){
-      xml_in <- EML103::read_eml(
+      eml <- EML::read_eml(
         paste0(
           eml.path,
           "/",
@@ -290,8 +297,8 @@ make_eml <- function(data.path, code.path = data.path, code.files,
       
     } else {
       
-      xml_in <- try(
-        EML103::read_eml(
+      eml <- try(
+        EML::read_eml(
           paste0(
             "https://pasta.lternet.edu/package/metadata/eml",
             "/",
@@ -304,9 +311,9 @@ make_eml <- function(data.path, code.path = data.path, code.files,
         )
       )
       
-      if (class(xml_in) == 'try-error'){
+      if (class(eml) == 'try-error'){
         
-        xml_in <- xml2::read_xml(
+        eml <- xml2::read_xml(
           paste0(
             "https://pasta.lternet.edu/package/metadata/eml",
             "/",
@@ -319,18 +326,18 @@ make_eml <- function(data.path, code.path = data.path, code.files,
         )
         xml2::xml_remove(
           xml2::xml_find_all(
-            xml_in,
+            eml,
             './/dataset/dataTable/constraint'
           )
         )
         xml2::write_xml(
-          xml_in,
+          eml,
           paste0(
             data.path,
             '/metadata.xml'
           )
         )
-        xml_in <- EML103::read_eml(
+        eml <- EML::read_eml(
           paste0(
             data.path, 
             '/metadata.xml'
@@ -338,13 +345,13 @@ make_eml <- function(data.path, code.path = data.path, code.files,
         )
       }
       
-      xml_in
+      eml
       
     }
     
   }
   
-  xml_in <- suppressWarnings(
+  eml <- suppressWarnings(
     read_metadata(
       parent_eml_file,
       scope,
@@ -361,106 +368,71 @@ make_eml <- function(data.path, code.path = data.path, code.files,
     delimiter = sep
   )
   
-  # Update access -------------------------------------------------------------
+  # Updating nodes ------------------------------------------------------------
   
-  message("Updating <access>")
-
-  allow <- xml_in@access@allow
+  message("Updating nodes ...")
+  message("<eml>")
+  
+  # Update <access> -----------------------------------------------------------
+  # Update <access> to enable repository upload by ecocomDP 
+  # creator(s)/maintainer(s).
+  
+  message("  <access>")
   
   if (!missing(user.id) & !missing(affiliation)){
-    
-    list_of_allow_principals <- list()
-    list_of_allow_permissions <- list()
     
     for (i in 1:length(user.id)){
       
       if (affiliation[i] == 'LTER'){
         
-        list_of_allow_principals[[i]] <- c(
-          paste0(
+        eml$access$allow[[length(eml$access$allow) + 1]] <- list(
+          principal = paste0(
             'uid=',
             user.id[i],
             ',o=',
             affiliation[i],
             ',dc=ecoinformatics,dc=org'
           ),
-          "public"
+          permission = "all"
         )
-        
+
       } else if (affiliation[i] == 'EDI'){
         
-        list_of_allow_principals[[i]] <- c(
-          paste0(
+        eml$access$allow[[length(eml$access$allow) + 1]] <- list(
+          principal = paste0(
             'uid=',
             user.id[i],
             ',o=',
             affiliation[i],
             ',dc=edirepository,dc=org'
           ),
-          "public"
+          permission = "all"
         )
+        
       }
-      
-      list_of_allow_permissions[[i]] <- c(
-        "all",
-        "read"
-      )
-      
+
     }
     
-  } else {
-    
-    list_of_allow_principals <- list()
-    list_of_allow_permissions <- list()
-    
   }
-  
-  access_order <- "allowFirst"
-  access_scope <- "document"
-  access <- new(
-    "access",
-    scope = access_scope,
-    order = access_order,
-    authSystem = "https://pasta.edirepository.org/authentication"
-  )
-  
-  allow_new <- list()
-  for (i in 1:length(list_of_allow_principals)){
-    allow_new[[i]] <- new(
-      "allow",
-      principal = list_of_allow_principals[[i]][1],
-      permission = list_of_allow_permissions[[i]][1]
-    )
-  }
-  
-  for (i in 1:length(allow_new)){
-    allow[[length(allow)+1]] <- allow_new[[i]]
-  }
-  
-  access <- new(
-    "access",
-    scope = "document",
-    order = "allowFirst",
-    authSystem = "https://pasta.edirepository.org/authentication"
-  )
-  
-  access@allow <- allow
-  
-  xml_in@access <- access
 
-  # Remove alternate identifier -----------------------------------------------
-  # The presence of an alternate identifier results in down stream failures.
+  # Remove <alternateIdentifier> ----------------------------------------------
+  # Remove <alternateIdentifier> to prevent downstream errors
 
-  
-  message("Removing <alternateIdentifier>")
+  eml$dataset$alternateIdentifier <- NULL
 
-  null_alternate_identifier <- list(NULL)
+  # Update <dataset> ----------------------------------------------------------
   
-  xml_in@dataset@alternateIdentifier <- as(
-    null_alternate_identifier, 
-    "ListOfalternateIdentifier"
+  message("  <dataset>")
+  
+  # Update <title> ------------------------------------------------------------
+  
+  message('    <title>')
+  
+  eml$dataset$title <- paste0(
+    eml$dataset$title,
+    " (Reformatted to the ecocomDP Design Pattern)"
   )
-  
+
   # Update taxonomicCoverage --------------------------------------------------
   
   message('Updating <taxonomicCoverage>')
@@ -1216,49 +1188,7 @@ make_eml <- function(data.path, code.path = data.path, code.files,
     )
     
   }
-  
-  # Update title --------------------------------------------------------------
-  
-  message('Updating title')
-  
-  if (!missing(eml.path)){
-    metadata <- xml2::read_xml(
-      paste0(
-        eml.path,
-        "/",
-        parent_eml_file)
-    )
-  } else {
-    metadata <- EDIutils::api_read_metadata(parent.package.id)
-  }
-  
-  title <- xml2::xml_text(
-    xml2::xml_find_all(
-      metadata,
-      "//dataset/title"
-    )
-  )
-  
-  abstract <- xml2::xml_text(
-    xml2::xml_find_all(
-      metadata,
-      "//dataset/abstract/para"
-    )
-  )
 
-  title <- new(
-    "title",
-    paste0(
-      title,
-      ' (Reformatted to ecocomDP Design Pattern)'
-    )
-  )
-  
-  xml_in@dataset@title <- as(
-    list(title), 
-    "ListOftitle"
-  )
-  
   # Updating abstract ---------------------------------------------------------
   
   message('Updating abstract')
