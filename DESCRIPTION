@@ -21,16 +21,14 @@ Imports:
     RMySQL (>= 0.10.15),
     xml2 (>= 1.1.1),
     purrr,
-    EML103,
-    neonUtilities,
+    EML (>= 2.0.0),
     EDIutils,
     taxonomyCleanr,
     dataCleanr,
     XML (>= 3.98-1.6)
 Remotes: 
-    clnsmth/EDIutils,
+    EDIorg/EDIutils,
     EDIorg/taxonomyCleanr,
-    clnsmth/EML103,
     EDIorg/dataCleanr
 Suggests:
     knitr,
