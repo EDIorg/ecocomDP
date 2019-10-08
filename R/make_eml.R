@@ -120,7 +120,7 @@ make_eml <- function(data.path,
                      user.id, 
                      affiliation, 
                      access.url = NULL, 
-                     additional.contact,
+                     additional.contact = NULL,
                      code.file.extension = NULL, 
                      eml.path = NULL){
   
@@ -426,157 +426,66 @@ make_eml <- function(data.path,
   
   # Update <title> ------------------------------------------------------------
   
-  message('    <title>')
+  message("    <title>")
   
   eml$dataset$title <- paste0(
     eml$dataset$title,
     " (Reformatted to the ecocomDP Design Pattern)"
   )
-
-  # Update taxonomicCoverage --------------------------------------------------
   
-  message('Updating <taxonomicCoverage>')
+  # Update <pubDate> ----------------------------------------------------------
   
-  if (file.exists(paste(data.path, "/", "taxonomicCoverage.xml", sep = ""))){
-    
-    taxonomic_coverage <- EML103::read_eml(
-      paste0(
-        data.path,
-        "/",
-        "taxonomicCoverage.xml"
-      )
-    )
-    
-    xml_in@dataset@coverage@taxonomicCoverage <- as(
-      list(
-        taxonomic_coverage
-      ),
-      "ListOftaxonomicCoverage"
-    )
+  message("    <pubDate>")
   
-  } else {
-    
-    table_patterns <- c(
-      "observation\\b", 
-      "observation_ancillary\\b", 
-      "location_ancillary\\b", 
-      "taxon_ancillary\\b", 
-      "dataset_summary\\b", 
-      "location\\b", 
-      "taxon\\b",
-      "variable_mapping\\b"
-    )
-    
-    table_names <- c(
-      "observation",
-      "observation_ancillary",
-      "location_ancillary",
-      "taxon_ancillary",
-      "dataset_summary",
-      "location",
-      "taxon",
-      "variable_mapping"
-    )
-    
-    dir_files <- list.files(data.path)
-    table_names_found <- list()
-    tables_found <- list()
-    
-    for (i in 1:length(table_patterns)){
-      tables_found[[i]] <- dir_files[
-        grep(
-          paste0(
-            "^(?=.*",
-            table_patterns[i],
-            ")(?!.*variables)"
-          ), 
-          dir_files, 
-          perl=TRUE)
-      ]
-      if (!identical(tables_found[[i]], character(0))){
-        table_names_found[[i]] <- table_names[i]
-      }
-    }
-    
-    tables_found <- unlist(tables_found)
-    table_names <- unlist(table_names_found)
-    use_i <- table_names == 'taxon'
-    
-    df_table <- read.table(
-      paste0(
-        data.path,
-        "/",
-        tables_found[use_i]
-      ),
-      header=TRUE,
-      sep=sep,
-      quote="\"",
-      as.is=TRUE,
-      comment.char = ""
-    )
-    
-    if (sum(is.na(df_table$authority_taxon_id)) != nrow(df_table)){
-      
-      tc <- make_taxonomicCoverage(
-        taxa.clean = df_table$taxon_name,
-        authority = df_table$authority_system,
-        authority.id = df_table$authority_taxon_id
-      )
-
-      xml_in@dataset@coverage@taxonomicCoverage <- as(
-        list(tc), 
-        "ListOftaxonomicCoverage"
-      )
-      
-    }
-    
-  }
-  
-  # Update contact ------------------------------------------------------------
-  
-  if (!missing(additional.contact)){
-    
-    message("Updating <contact>")
-    personinfo <- additional.contact
-    
-    if (nrow(personinfo) >= 1){
-      
-      individualName <- new(
-        "individualName",
-        givenName = trimws(personinfo["givenName"]),
-        surName = trimws(personinfo["surName"])
-      )
-      
-      contact <- new(
-        "contact",
-        individualName = individualName,
-        organizationName = trimws(personinfo[["organizationName"]]),
-        electronicMailAddress = trimws(personinfo[["electronicMailAddress"]])
-      )
-      
-      xml_in@dataset@contact[[length(xml_in@dataset@contact)+1]] <- contact
-      
-    }
-    
-  }
-
-  # Update publication date ---------------------------------------------------
-
-  message("Updating <pubDate>")
-
-  xml_in@dataset@pubDate <- as(
-    format(
-      Sys.time(),
-      "%Y-%m-%d"
-    ),
-    "pubDate"
+  eml$dataset$pubDate <- format(
+    Sys.time(),
+    "%Y-%m-%d"
   )
+  
+  # Updating <abstract> -------------------------------------------------------
+  
+  message("    <abstract>")
+  
+  src_abstract <- eml$dataset$abstract$section
+  eml$dataset$abstract$section <- NULL
+  
+  eml$dataset$abstract$section[length(eml$dataset$abstract$section) + 1] <- 
+    paste0(
+      "<para>",
+      "This data package is formatted according to the 'ecocomDP', a data package design pattern for ecological community surveys, and data from studies of composition and biodiversity. For more information on the ecocomDP project see https://github.com/EDIorg/ecocomDP/tree/master, or contact EDI https://environmentaldatainitiative.org.",
+      "</para>"
+    )
 
-  # Update keywords -----------------------------------------------------------
+  eml$dataset$abstract$section[length(eml$dataset$abstract$section) + 1] <- 
+    paste0(
+      "<para>",
+      'This Level 1 data package was derived from the Level 0 data package found here: ',
+      paste0(
+        'https://portal.edirepository.org/nis/mapbrowse?scope=',
+        scope,
+        '&identifier=',
+        identifier,
+        '&revision=',
+        revision
+      ),
+      "</para>"
+    )
   
-  message("Updating <keywordSet>")
+  eml$dataset$abstract$section[length(eml$dataset$abstract$section) + 1] <- 
+    paste0(
+      "<para>",
+      'The abstract below was extracted from the Level 0 data package and is included for context:',
+      "</para>"
+    )
   
-  keywords <- read.table(
+  eml$dataset$abstract$section[length(eml$dataset$abstract$section) + 1] <- 
+    src_abstract
+  
+  # Update <keywordSet> -------------------------------------------------------
+  
+  message("    <keywordSet>")
+  
+  keywordSet <- read.table(
     system.file('/controlled_vocabulary.csv', package = 'ecocomDP'),
     header = T,
     sep = ",",
@@ -584,84 +493,123 @@ make_eml <- function(data.path,
     na.strings = "NA"
   )
   
-  list_keywordSet <- xml_in@dataset@keywordSet
-  edi_keywordSet <- list()
-  use_i <- keywords[["keywordThesaurus"]] == "EDI Controlled Vocabulary"
-  keywords_list <- keywords[use_i, "keyword"]
-  
-  for (i in 1:length(keywords_list)){
-    edi_keywordSet[[i]] <- as(
-      keywords_list[i],
-      "keyword"
+  eml$dataset$keywordSet[[length(eml$dataset$keywordSet) + 1]] <- 
+    list(
+      keywordThesaurus = keywordSet$keywordThesaurus[1],
+      keyword = as.list(keywordSet$keyword)
     )
-  }
+
+  # Update <intellectualRights> -----------------------------------------------
+  # Don't overwrite existing intellectualRights, as these are the data release
+  # terms specified by the source data package author. If source data package 
+  # intellectualRights are not specified then add CC0 or CC-BY as specified
+  # in the intellectual.rights argument. Default is CC0 if none is supplied.
   
-  list_keywordSet[[length(list_keywordSet)+1]] <- new(
-    "keywordSet",
-    edi_keywordSet,
-    keywordThesaurus = "EDI Controlled Vocabulary"
-  )
-  
-  lter_keywordSet <- list()
-  use_i <- keywords[["keywordThesaurus"]] == "LTER Controlled Vocabulary"
-  keywords_list <- keywords[use_i, "keyword"]
-  
-  for (i in 1:length(keywords_list)){
-    lter_keywordSet[[i]] <- as(
-      keywords_list[i],
-      "keyword"
+  if (!is.null(eml$dataset$intellectualRights) & 
+      (!is.null(intellectual.rights))) {
+    
+    warning(
+      "Source data package intellectual rights license can't be overwritten.", 
+      call. = FALSE
     )
-  }
-  
-  list_keywordSet[[length(list_keywordSet)+1]] <- new(
-    "keywordSet",
-    lter_keywordSet,
-    keywordThesaurus = "LTER Controlled Vocabulary"
-  )
-  
-  xml_in@dataset@keywordSet <- list_keywordSet
-  
-  # Update license ------------------------------------------------------------
-  
-  if (!missing(intellectual.rights)){
+    
+  } else if (is.null(eml$dataset$intellectualRights) & 
+             (!is.null(intellectual.rights))) {
+    
+    message("    <intellectualRights>")
     
     if (intellectual.rights == "CC0"){
       
-      message("Updating <intellectualRights> to CC0")
-      
-      xml_in@dataset@intellectualRights <- as(
-        EML103::set_TextType(
-          system.file(
-            'intellectual_rights_cc0_1.txt', 
-            package = 'ecocomDP'
-          )
-        ),
-        "intellectualRights"
+      eml$dataset$intellectualRights <- EML::set_TextType(
+        system.file(
+          'intellectual_rights_cc0_1.txt', 
+          package = 'ecocomDP'
+        )
       )
       
     } else if (intellectual.rights == "CCBY"){
-      
-      message("Updating <intellectualRights> to CCBY")
-      
-      xml_in@dataset@intellectualRights <- as(
-        EML103::set_TextType(
-          system.file(
-            'intellectual_rights_by_4.0.txt',
-            package = 'ecocomDP'
-          )
-        ),
-        "intellectualRights"
+
+      eml$dataset$intellectualRights <- EML::set_TextType(
+        system.file(
+          'intellectual_rights_by_4.0.txt', 
+          package = 'ecocomDP'
+        )
       )
       
     }
     
+  } else if (is.null(eml$dataset$intellectualRights) & 
+             (is.null(intellectual.rights))) {
+    
+    message("    <intellectualRights>")
+    
+    eml$dataset$intellectualRights <- EML::set_TextType(
+      system.file(
+        'intellectual_rights_cc0_1.txt', 
+        package = 'ecocomDP'
+      )
+    )
+
   }
   
-  # Add provenance metadata ---------------------------------------------------
+  # Update <taxonomicCoverage> ------------------------------------------------
+  
+  message("    <taxonomicCoverage>")
+  
+  eml$dataset$coverage$taxonomicCoverage <- NULL
+  dir_files <- list.files(data.path)
+  
+  df_table <- read.table(
+    paste0(
+      data.path,
+      "/",
+      dir_files[stringr::str_detect(dir_files, "taxon\\b")]
+    ),
+    header=TRUE,
+    sep=sep,
+    quote="\"",
+    as.is=TRUE,
+    comment.char = ""
+  )
+  
+  if (any(!is.na(df_table$authority_taxon_id))) {
+    
+    # FIXME: This assumes taxonomyCleanr adoption of authority systems.
+    # A solution might reference an authority system URI rather than
+    # taxonomyCleanr synonyms. Implement at taxonomyCleanr
+    tc <- make_taxonomicCoverage(
+      taxa.clean = df_table$taxon_name,
+      authority = df_table$authority_system,
+      authority.id = df_table$authority_taxon_id
+    )
+    
+    dataset$coverage$taxonomicCoverage <- tc
+    
+  }
+  
+  # Update <contact> ----------------------------------------------------------
+  
+  if (!is.null(additional.contact)) {
+    
+    message("    <contact>")
+    
+    eml$dataset$contact[[length(eml$dataset$contact) + 1]] <- 
+      list(
+        individualName = list(
+          givenName = additional.contact$givenName,
+          surName = additional.contact$surName
+        ),
+        organizationName = additional.contact$organizationName,
+        electronicMailAddress = additional.contact$electronicMailAddress
+      )
+
+  }
+
+  # Update <methods> ----------------------------------------------------------
   # Import provenance from PASTA, and remove creator and contact ID's to 
   # prevent ID clashes.
   
-  message('Adding provenance metadata')
+  message("    <methods>")
   
   provenance <- xml2::read_xml(
     paste0(
@@ -1188,42 +1136,6 @@ make_eml <- function(data.path,
     )
     
   }
-
-  # Updating abstract ---------------------------------------------------------
-  
-  message('Updating abstract')
-
-  lns <- paste0(
-    'This data package is formatted according to the "ecocomDP", a data package design pattern for ecological community surveys, and data from studies of composition and biodiversity. For more information on the ecocomDP project see https://github.com/EDIorg/ecocomDP/tree/master, or contact EDI https://environmentaldatainitiative.org.',
-    '\n',
-    '\n',
-    'This Level 1 data package was derived from the Level 0 data package found here: ',
-    paste0(
-      'https://portal.edirepository.org/nis/mapbrowse?scope=',
-      scope,
-      '&identifier=',
-      identifier,
-      '&revision=',
-      revision
-    ),
-    '\n',
-    '\n',
-    'The abstract below was extracted from the Level 0 data package and is included for context:',
-    '\n',
-    '\n',
-    paste0(
-      abstract, 
-      collapse = "\n\n"
-    )
-  )
-  
-  abstract <- as(
-    EML103::set_TextType(text = lns), 
-    "abstract"
-  )
-  
-  xml_in@dataset@abstract <- abstract
-  
   
   # Recompile EML -------------------------------------------------------------
   
