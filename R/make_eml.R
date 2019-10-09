@@ -652,43 +652,11 @@ make_eml <- function(data.path,
     NULL
   )
   
-  xml2::write_xml(
-    provenance,
-    paste0(
-      data.path,
-      '/provenance_metadata.xml'
-    )
-  )
-  
-  provenance <- EML103::read_eml(
-    paste0(
-      data.path,
-      '/provenance_metadata.xml'
-    )
-  )
-  
-  provenance@description <- as(
-    EML103::set_TextType(
-      text = additional_provenance$methodDescription
-    ),
-    "description"
-  )
-  
-  methods_step <- xml_in@dataset@methods@methodStep
-  methods_step[[length(methods_step)+1]] <- provenance
-  xml_in@dataset@methods@methodStep <- methods_step
-  
-  file.remove(
-    paste0(
-      data.path,
-      '/provenance_metadata.xml'
-    )
-  )
+  eml$dataset$methods$methodStep[[length(eml$dataset$methods$methodStep) + 1]] <- 
+    xml2::as_list(provenance)$methodStep$description
 
-  # Add ecocomDP table attributes ---------------------------------------------
+  # Update <dataTable> --------------------------------------------------------
 
-  message('Updating data entities')
-  
   table_patterns <- c(
     "observation\\b", 
     "observation_ancillary\\b", 
@@ -728,7 +696,7 @@ make_eml <- function(data.path,
   table_descriptions_found <- list()
   
   for (i in 1:length(table_patterns)){
-    
+
     tables_found[[i]] <- dir_files[
       grep(
         paste0(
@@ -758,11 +726,11 @@ make_eml <- function(data.path,
   # Loop through each data table
   
   for (i in 1:length(tables_found)){
-
-    message(paste("Adding", table_names[i], "<dataTable>"))
-
+    
+    message("    <dataTable>")
+    
     attributes <- attributes_in[[1]][[i]]
-
+    
     df_table <- read.table(
       paste(data.path, "/", tables_found[i], sep = ""),
       header=TRUE,
@@ -774,9 +742,9 @@ make_eml <- function(data.path,
     if (!is.null(cat.vars)){
       use_i <- table_names[i] == cat.vars$tableName
       catvars <- cat.vars[
-        table_names[i] == cat.vars$tableName, 
+        table_names[i] == cat.vars$tableName,
         c('attributeName', 'code', 'definition', 'unit')
-      ]
+        ]
     }
     
     if (exists('catvars') & (nrow(catvars) > 0)){
@@ -805,14 +773,26 @@ make_eml <- function(data.path,
         }
       }
       col_classes <- attributes[ ,"columnClasses"]
-      attributeList <- EML103::set_attributes(
-        attributes,
-        factors = catvars,
-        col_classes = col_classes
+      attributeList <- suppressWarnings(
+        EML::set_attributes(
+          attributes[ , c(
+            'attributeName', 
+            'formatString',
+            'unit',
+            'numberType',
+            'definition',
+            'attributeDefinition',
+            'minimum',
+            'maximum',
+            'missingValueCode',
+            'missingValueCodeExplanation')],
+          factors = catvars,
+          col_classes = attributes[ ,"columnClasses"]
+        )
       )
-
+      
     } else {
-
+      
       for (j in 1:ncol(attributes)){
         if (class(attributes[ ,j]) == "character" ||
             (class(attributes[ ,j]) == "categorical")){
@@ -821,340 +801,165 @@ make_eml <- function(data.path,
       }
       col_classes <- attributes[ ,"columnClasses"]
       col_classes[col_classes == "factor"] <- "character"
-      attributeList <- EML103::set_attributes(
-        attributes,
-        col_classes = col_classes
+      
+      attributeList <- suppressWarnings(
+        EML::set_attributes(
+          attributes[ , c(
+            'attributeName', 
+            'formatString',
+            'unit',
+            'numberType',
+            'definition',
+            'attributeDefinition',
+            'minimum',
+            'maximum',
+            'missingValueCode',
+            'missingValueCodeExplanation')],
+          col_classes = attributes[ ,"columnClasses"]
+        )
       )
+      
     }
-
+    
     # Set physical
     
-    eol <- EDIutils::get_eol(
-      path = data.path,
-      file.name = tables_found[i],
-      os = EDIutils::detect_os()
+    physical <- suppressMessages(
+      EML::set_physical(
+        paste0(data.path, '/', names(x$data.table)[i]),
+        numHeaderLines = "1",
+        recordDelimiter = EDIutils::get_eol(
+          path = data.path,
+          file.name = names(x$data.table)[i],
+          os = EDIutils::detect_os()
+        ),
+        attributeOrientation = "column",
+        url = 'placeholder'
+      )
     )
-
-    if (sep == "\t"){
-      
-      physical <- EML103::set_physical(
-        
-        tables_found[i],
-        numHeaderLines = "1",
-        recordDelimiter = eol,
-        attributeOrientation = "column",
-        fieldDelimiter = "\\t",
-        quoteCharacter = "\""
-      )
-      
-    } else if (sep == ","){
-      
-      physical <- EML103::set_physical(
-        tables_found[i],
-        numHeaderLines = "1",
-        recordDelimiter = eol,
-        attributeOrientation = "column",
-        fieldDelimiter = ",",
-        quoteCharacter = "\""
-      )
-      
+    
+    if (!is.null(data.table.quote.character)){
+      physical$dataFormat$textFormat$simpleDelimited$quoteCharacter <- data.table.quote.character[i]
     }
-
-    physical@size <- new(
-      "size",
-      unit = "byte",
-      as.character(
-        file.size(
-          paste0(
-            data.path,
-            "/",
-            tables_found[i]
-          )
-        )
-      )
-    )
     
     if (!is.null(access.url)){
-
-      data_table_urls <- paste0(
-        access.url,
+      physical$distribution$online$url[[1]] <- paste0(
+        data.url,
         "/",
-        tables_found[i]
+        names(x$data.table)[i]
       )
-
-      distribution <- new(
-        "distribution",
-        online = new(
-          "online",
-          url = data_table_urls
-        )
-      )
-
-      physical@distribution <- new(
-        "ListOfdistribution",
-        c(distribution)
-      )
-
+    } else {
+      physical$distribution <- list()
     }
     
-    if (os == "mac"){
-
-      command_certutil <- paste0(
-        "md5 ",
-        data.path,
-        "/",
-        tables_found[i]
-      )
-
-      certutil_output <- system(
-        command_certutil, 
-        intern = T
-      )
-
-      checksum_md5 <- gsub(".*= ", "", certutil_output)
-
-      authentication <- new(
-        "authentication",
-        method = "MD5",
-        checksum_md5
-      )
-
-      physical@authentication <- as(
-        list(authentication),
-        "ListOfauthentication"
-      )
-
-    } else if (os == "win"){
-
-      command_certutil <- paste0(
-        "CertUtil -hashfile ",
-        data.path,
-        "\\",
-        tables_found[i],
-        " MD5"
-      )
-
-      certutil_output <- system(
-        command_certutil, 
-        intern = T
-      )
-
-      checksum_md5 <- gsub(" ", "", certutil_output[2])
-
-      authentication <- new(
-        "authentication",
-        method = "MD5",
-        checksum_md5
-      )
-
-      physical@authentication <- as(
-        list(authentication),
-        "ListOfauthentication"
-      )
-
-    }
-
-    number_of_records <- as.character(dim(df_table)[1])
-
     # Pull together information for the data table
-
-    data_table <- new(
-      "dataTable",
-      entityName = table_descriptions[i],
-      entityDescription = table_descriptions[i],
+    
+    data_table <- list(
+      entityName = data.table.description[i],
+      entityDescription = data.table.description[i],
       physical = physical,
       attributeList = attributeList,
-      numberOfRecords = number_of_records
+      numberOfRecords = as.character(dim(df_table)[1])
     )
-
+    
     data_tables_stored[[i]] <- data_table
-
+    
   }
 
   # Compile data tables
 
-  xml_in@dataset@dataTable <- new(
-    "ListOfdataTable",
-    data_tables_stored
-  )
+  dataset$dataTable <- data_tables_stored
   
-  # Add processing scripts ----------------------------------------------------
-  
-  message("Adding processing scripts")
-  
-  list_of_other_entity <- list()
-  
-  if (!identical(code_files, character(0))){
+  # Add <otherEntity> ---------------------------------------------------------
     
-    for (i in 1:length(code_files)){
+  if (length(code_files) > 0) {
+    
+    list_of_other_entity <- list()
+    
+    for (i in 1:length(code_files)) {
       
-      other_entity <- new("otherEntity")
-      other_entity@entityName <- code_files[i]
-      code_description <- "A script that converts a parent data package to the ecocomDP (child data package)"
-      other_entity@entityDescription <- code_description
-
-      physical <- new(
-        "physical",
-        objectName = code_files[i]
-      )
+      message("    <otherEntity>")
       
-      if ((!is.null(code.file.extension)) | (exists('code_file_extention'))){
-        
-        if (exists('code_file_extention')){
-          code.file.extension <- code_file_extention
-        }
-        
-        if (code.file.extension == ".R"){
-          format_name <- "application/R"
-          entity_type <- "text/x-rsrc"
-        } else if (code.file.extension == ".m"){
-          format_name <- "application/MATLAB"
-          entity_type <- "text/x-matlab"
-        } else if (code.file.extension == ".py"){
-          format_name <- "application/Python"
-          entity_type <- "text/x-python"
-        }
-        physical@dataFormat@externallyDefinedFormat@formatName <- format_name
-        
-      } else {
-        
-        physical@dataFormat@externallyDefinedFormat@formatName <- "unknown"
-        
-      }
-
-      physical@size <- new(
-        "size", 
-        unit = "bytes", 
-        as(
-          as.character(
-            file.size(
-              paste0(
-                code.path, 
-                "/", 
-                code_files[i]
-              )
-            )
-          ), 
-          "size"
+      # Create new other entity element
+      
+      otherEntity <- list()
+      
+      # Add entityName
+      
+      otherEntity$entityName <- code_files[i]
+      
+      # Add entityDescription
+      
+      otherEntity$entityDescription <- "A script that converts a parent data package to the ecocomDP (child data package)"
+      
+      # Add physical
+      
+      physical <- suppressMessages(
+        EML::set_physical(
+          paste0(data.path, '/', code_files[i])
         )
       )
       
-      if (!missing(access.url)){
-        code_urls <- paste0(
+      physical$dataFormat$textFormat <- NULL
+      
+      file_extension <- stringr::str_extract(code_files[i], "\\.[:alpha:]*$")
+      if (file_extension == ".R"){
+        format_name <- "application/R"
+        entity_type <- "text/x-rsrc"
+      } else if (file_extension == ".m"){
+        format_name <- "application/MATLAB"
+        entity_type <- "text/x-matlab"
+      } else if (file_extension == ".py"){
+        format_name <- "application/Python"
+        entity_type <- "text/x-python"
+      } else {
+        format_name <- "unknown"
+        entity_type <- "unknown"
+      }
+      
+      physical$dataFormat$externallyDefinedFormat$formatName <- format_name
+      
+      if (!is.null(access.url)){
+        physical$distribution$online$url[[1]] <- paste0(
           access.url,
           "/",
           code_files[i]
-        ) 
-        distribution <- new(
-          "distribution",
-          online = new(
-            "online",
-            url = code_urls
-          )
         )
-        physical@distribution <- new(
-          "ListOfdistribution",
-          c(distribution)
-        )
-      }
-      
-      if (os == "mac"){
-        command_certutil <- paste0(
-          "md5 ",
-          code.path,
-          "/",
-          code_files[i]
-        )
-        certutil_output <- system(
-          command_certutil, 
-          intern = T
-        )
-        checksum_md5 <- gsub(
-          ".*= ",
-          "",
-          certutil_output
-        )
-        authentication <- new(
-          "authentication",
-          method = "MD5",
-          checksum_md5
-        )
-        physical@authentication <- as(
-          list(
-            authentication
-          ),
-          "ListOfauthentication"
-        )
-      } else if (os == "win"){
-        command_certutil <- paste0(
-          "CertUtil -hashfile ",
-          code.path,
-          "\\",
-          code_files[i],
-          " MD5"
-        )
-        certutil_output <- system(
-          command_certutil, 
-          intern = T
-        )
-        checksum_md5 <- gsub(
-          " ",
-          "",
-          certutil_output[2]
-        )
-        authentication <- new(
-          "authentication",
-          method = "MD5",
-          checksum_md5
-        )
-        physical@authentication <- as(
-          list(
-            authentication
-          ),
-          "ListOfauthentication"
-        )
-      }
-      
-      other_entity@physical <- as(
-        c(physical), 
-        "ListOfphysical"
-      )
-      
-      if (!missing(code.file.extension)){
-        other_entity@entityType <- entity_type
       } else {
-        other_entity@entityType <- "unknown"
+        physical$distribution <- list()
       }
-
-      list_of_other_entity[[i]] <- other_entity
+      
+      otherEntity$physical <- physical
+      
+      # Add entityType
+      
+      otherEntity$entityType <- entity_type
+      
+      # Add otherEntity to list
+      
+      list_of_other_entity[[i]] <- otherEntity
       
     }
     
-    xml_in@dataset@otherEntity <- new(
-      "ListOfotherEntity",
-      list_of_other_entity
-    )
+    dataset$otherEntity <- list_of_other_entity
     
   }
-  
+
   # Recompile EML -------------------------------------------------------------
   
-  eml <- new(
-    "eml",
+  eml_out <- list(
     schemaLocation = "eml://ecoinformatics.org/eml-2.1.1  http://nis.lternet.edu/schemas/EML/eml-2.1.1/eml.xsd",
     packageId = child.package.id,
-    system = 'edi',
-    access = xml_in@access,
-    dataset = xml_in@dataset
+    system = "edi",
+    access = eml$access,
+    dataset = eml$dataset
   )
-  
   
   # Write EML -----------------------------------------------------------------
 
   message("Writing EML")
 
-  EML103::write_eml(
-    eml, 
+  EML::write_eml(
+    eml_out, 
     paste0(
       data.path,
       "/",
@@ -1167,7 +972,7 @@ make_eml <- function(data.path,
 
   message("Validating EML")
 
-  validation_result <- EML103::eml_validate(eml)
+  validation_result <- EML::eml_validate(eml_out)
 
   if (validation_result == "TRUE"){
     message("EML passed validation!")
