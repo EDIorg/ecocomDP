@@ -446,19 +446,24 @@ make_eml <- function(data.path,
   
   message("    <abstract>")
   
-  src_abstract <- eml$dataset$abstract$section
-  eml$dataset$abstract$section <- NULL
-  
-  eml$dataset$abstract$section[length(eml$dataset$abstract$section) + 1] <- 
-    paste0(
-      "<para>",
-      "This data package is formatted according to the 'ecocomDP', a data package design pattern for ecological community surveys, and data from studies of composition and biodiversity. For more information on the ecocomDP project see https://github.com/EDIorg/ecocomDP/tree/master, or contact EDI https://environmentaldatainitiative.org.",
-      "</para>"
+  src_abstract <- unname(
+    unlist(
+      stringr::str_remove_all(
+        eml$dataset$abstract, 
+        "</?para>"
+      )
     )
+  )
 
-  eml$dataset$abstract$section[length(eml$dataset$abstract$section) + 1] <- 
+  eml$dataset$abstract <- list()
+  eml$dataset$abstract$section <- list()
+  eml$dataset$abstract$para <- list()
+  
+  eml$dataset$abstract$para[[length(eml$dataset$abstract$para) + 1]] <- 
+    "This data package is formatted according to the 'ecocomDP', a data package design pattern for ecological community surveys, and data from studies of composition and biodiversity. For more information on the ecocomDP project see https://github.com/EDIorg/ecocomDP/tree/master, or contact EDI https://environmentaldatainitiative.org."
+    
+  eml$dataset$abstract$para[[length(eml$dataset$abstract$para) + 1]] <- 
     paste0(
-      "<para>",
       'This Level 1 data package was derived from the Level 0 data package found here: ',
       paste0(
         'https://portal.edirepository.org/nis/mapbrowse?scope=',
@@ -467,19 +472,16 @@ make_eml <- function(data.path,
         identifier,
         '&revision=',
         revision
-      ),
-      "</para>"
+      )
     )
   
-  eml$dataset$abstract$section[length(eml$dataset$abstract$section) + 1] <- 
-    paste0(
-      "<para>",
-      'The abstract below was extracted from the Level 0 data package and is included for context:',
-      "</para>"
-    )
-  
-  eml$dataset$abstract$section[length(eml$dataset$abstract$section) + 1] <- 
-    src_abstract
+  eml$dataset$abstract$para[[length(eml$dataset$abstract$para) + 1]] <- 
+    'The abstract below was extracted from the Level 0 data package and is included for context:'
+
+  for (i in 1:length(src_abstract)) {
+    eml$dataset$abstract$para[[length(eml$dataset$abstract$para) + 1]] <- 
+      src_abstract[i]
+  }
   
   # Update <keywordSet> -------------------------------------------------------
   
@@ -554,8 +556,6 @@ make_eml <- function(data.path,
   
   # Update <taxonomicCoverage> ------------------------------------------------
   
-  message("    <taxonomicCoverage>")
-  
   eml$dataset$coverage$taxonomicCoverage <- NULL
   dir_files <- list.files(data.path)
   
@@ -574,10 +574,12 @@ make_eml <- function(data.path,
   
   if (any(!is.na(df_table$authority_taxon_id))) {
     
+    message("    <taxonomicCoverage>")
+    
     # FIXME: This assumes taxonomyCleanr adoption of authority systems.
     # A solution might reference an authority system URI rather than
     # taxonomyCleanr synonyms. Implement at taxonomyCleanr
-    tc <- make_taxonomicCoverage(
+    tc <- taxonomyCleanr::make_taxonomicCoverage(
       taxa.clean = df_table$taxon_name,
       authority = df_table$authority_system,
       authority.id = df_table$authority_taxon_id
@@ -606,32 +608,30 @@ make_eml <- function(data.path,
   }
 
   # Update <methods> ----------------------------------------------------------
-  # Import provenance from PASTA, and remove creator and contact ID's to 
-  # prevent ID clashes.
   
   message("    <methods>")
   
-  provenance <- xml2::read_xml(
-    paste0(
-      "https://pasta.lternet.edu/package/provenance/eml",
-      "/",
-      pkg_prts[1],
-      "/",
-      identifier,
-      "/",
-      revision
-    )
+  # methodStep 1.) Inform user of ecocomDP conversion methods
+  ecocomDP_methods <- paste0(
+    "The source data package is programmatically converted into an ecocomDP ",
+    "data package using the scripts: ", paste(code.files, collapse = ", "),
+    ". ", "For more information on the ecocomDP project see ",
+    "https://github.com/EDIorg/ecocomDP/tree/master, or contact EDI ",
+    "(https://environmentaldatainitiative.org).",
+    " Below are the source data methods: "
   )
   
-  additional_provenance <- read.table(
-    system.file(
-      'additional_provenance.txt',
-      package = 'ecocomDP'
-      ),
-    header = T,
-    sep = "\t",
-    as.is = T,
-    na.strings = "NA"
+  # methodStep 2.) Inform user of source data methods
+  src_methods <- eml$data$methods$methodStep
+  
+  # methodStep 3.) Inform user of source data location. Creator and contact IDs 
+  # are removed to preempt ID clashes. Metadata is written to tempdir() so 
+  # EML::read_eml() can apply its unique parsing algorithm.
+  provenance <- xml2::read_xml(
+    paste0(
+      "https://pasta.lternet.edu/package/provenance/eml", "/", pkg_prts[1],
+      "/", identifier, "/", revision
+    )
   )
   
   xml2::xml_set_attr(
@@ -652,11 +652,37 @@ make_eml <- function(data.path,
     NULL
   )
   
+  xml2::write_xml(
+    provenance,
+    paste0(
+      tempdir(),
+      "/provenance.xml"
+    )
+  )
+  
+  provenance <- EML::read_eml(
+    paste0(
+      tempdir(),
+      "/provenance.xml"
+    )
+  )
+  
+  provenance$`@context` <- NULL
+  provenance$`@type` <- NULL
+  unlink(paste0(tempdir(), "/provenance.xml"))
+  
+  # Initialize the methods node and compile the 3 methodSteps
+  eml$dataset$methods <- list()
+  eml$dataset$methods$methodStep <- list()
   eml$dataset$methods$methodStep[[length(eml$dataset$methods$methodStep) + 1]] <- 
-    xml2::as_list(provenance)$methodStep$description
-
+    list(description = list(para = ecocomDP_methods))
+  eml$dataset$methods$methodStep[[length(eml$dataset$methods$methodStep) + 1]] <- 
+    src_methods
+  eml$dataset$methods$methodStep[[length(eml$dataset$methods$methodStep) + 1]] <- 
+    provenance
+  
   # Update <dataTable> --------------------------------------------------------
-
+  
   table_patterns <- c(
     "observation\\b", 
     "observation_ancillary\\b", 
@@ -696,7 +722,7 @@ make_eml <- function(data.path,
   table_descriptions_found <- list()
   
   for (i in 1:length(table_patterns)){
-
+    
     tables_found[[i]] <- dir_files[
       grep(
         paste0(
@@ -707,7 +733,7 @@ make_eml <- function(data.path,
         dir_files, 
         perl=TRUE
       )
-    ]
+      ]
     
     if (!identical(tables_found[[i]], character(0))){
       table_names_found[[i]] <- table_names[i]
@@ -825,11 +851,11 @@ make_eml <- function(data.path,
     
     physical <- suppressMessages(
       EML::set_physical(
-        paste0(data.path, '/', names(x$data.table)[i]),
+        paste0(data.path, '/', tables_found[i]),
         numHeaderLines = "1",
         recordDelimiter = EDIutils::get_eol(
           path = data.path,
-          file.name = names(x$data.table)[i],
+          file.name = tables_found[i],
           os = EDIutils::detect_os()
         ),
         attributeOrientation = "column",
@@ -837,15 +863,11 @@ make_eml <- function(data.path,
       )
     )
     
-    if (!is.null(data.table.quote.character)){
-      physical$dataFormat$textFormat$simpleDelimited$quoteCharacter <- data.table.quote.character[i]
-    }
-    
     if (!is.null(access.url)){
       physical$distribution$online$url[[1]] <- paste0(
-        data.url,
+        access.url,
         "/",
-        names(x$data.table)[i]
+        tables_found[i][i]
       )
     } else {
       physical$distribution <- list()
@@ -854,8 +876,8 @@ make_eml <- function(data.path,
     # Pull together information for the data table
     
     data_table <- list(
-      entityName = data.table.description[i],
-      entityDescription = data.table.description[i],
+      entityName = table_descriptions[i],
+      entityDescription = table_descriptions[i],
       physical = physical,
       attributeList = attributeList,
       numberOfRecords = as.character(dim(df_table)[1])
@@ -864,10 +886,10 @@ make_eml <- function(data.path,
     data_tables_stored[[i]] <- data_table
     
   }
-
+  
   # Compile data tables
-
-  dataset$dataTable <- data_tables_stored
+  
+  eml$dataset$dataTable <- data_tables_stored
   
   # Add <otherEntity> ---------------------------------------------------------
     
@@ -940,11 +962,11 @@ make_eml <- function(data.path,
       
     }
     
-    dataset$otherEntity <- list_of_other_entity
+    eml$dataset$otherEntity <- list_of_other_entity
     
   }
 
-  # Recompile EML -------------------------------------------------------------
+  # Update <eml> --------------------------------------------------------------
   
   eml_out <- list(
     schemaLocation = "eml://ecoinformatics.org/eml-2.1.1  http://nis.lternet.edu/schemas/EML/eml-2.1.1/eml.xsd",
@@ -953,6 +975,9 @@ make_eml <- function(data.path,
     access = eml$access,
     dataset = eml$dataset
   )
+  
+  message("  </dataset>")
+  message("</eml>")
   
   # Write EML -----------------------------------------------------------------
 
@@ -1252,58 +1277,5 @@ compile_attributes <- function(path, delimiter){
   }
   
   list("attributes" = attributes_stored)
-  
-}
-
-
-# A temporary fix until ecocomDP is refactored for EML v2.0.0
-make_taxonomicCoverage <- function(taxa.clean, authority, authority.id,
-                                   path = NULL){
-  
-  # Define data
-  if (!is.null(path) & file.exists(paste0(path, '/taxa_map.csv'))){
-    taxa_map <- utils::read.table(paste0(path, '/taxa_map.csv'), header = T,
-                                  sep = ',', stringsAsFactors = F)
-    data <- unname(taxonomyCleanr::get_classification(taxa.clean = taxa_map$taxa_clean,
-                                      authority = taxa_map$authority,
-                                      authority.id = taxa_map$authority_id,
-                                      path = path))
-  } else {
-    data <- unname(taxonomyCleanr::get_classification(taxa.clean = taxa.clean,
-                                      authority = authority,
-                                      authority.id = authority.id,
-                                      path = path))
-  }
-  
-  # Create helper function to facilitate differential levels of taxonomic
-  # classification
-  dataframe_2_taxclass <- function(x){
-    if (('name' %in% colnames(x)) & ('rank' %in% colnames(x))){
-      df <- x[ , match(c('name', 'rank'), colnames(x))]
-      df <- as.data.frame(t(data.frame(df$name)))
-      colnames(df) <- x$rank
-      taxcov <- EML103::set_taxonomicCoverage(df)
-      taxcov@taxonomicClassification[[1]]
-    }
-  }
-  taxclass <- lapply(data, dataframe_2_taxclass)
-  
-  # Create EML node set
-  taxcov <- methods::new('taxonomicCoverage')
-  taxcov@taxonomicClassification <- methods::as(taxclass,
-                                                'ListOftaxonomicClassification')
-  
-  # Write to file
-  lib_path <- system.file('test_data.txt', package = 'taxonomyCleanr')
-  lib_path <- substr(lib_path, 1, nchar(lib_path) - 14)
-  if (!is.null(path)){
-    if (path != lib_path){
-      EML103::write_eml(eml = taxcov,
-                        file = paste0(path, "/", "taxonomicCoverage.xml"))
-    }
-  }
-  
-  # Return output
-  taxcov
   
 }
