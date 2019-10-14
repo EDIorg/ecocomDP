@@ -1,374 +1,342 @@
-#' Make EML for a set of ecocomDP tables
-#'
-#' @description  
-#'     Makes EML for a set of ecocomDP tables.
+#' Make EML metadata for ecocomDP tables
+#' 
+#' Run this function AFTER you have validated your ecocomDP tables with 
+#' \code{ecocomDP::validate_ecocomDP()}.
 #'
 #' @usage 
-#'     make_eml(data.path, code.path = data.path, code.files, 
-#'     parent.package.id, sep, cat.vars = NULL, intellectual.rights = NULL, 
-#'     child.package.id, user.id, affiliation, access.url = NULL, 
-#'     additional.contact)
+#'     make_eml(
+#'       path,
+#'       parent.package.id,
+#'       child.package.id,
+#'       script,
+#'       script.description,
+#'       cat.vars,
+#'       contact,
+#'       user.id,
+#'       user.domain,
+#'       data.url = NULL
+#'     )
 #'
-#' @param data.path 
-#'     (character) Path to the directory containing ecocomDP tables.
-#' @param code.path
-#'     (character) Path to the directory containing scripts that reformat the 
-#'     parent data package to the child data package.
-#' @param code.files
-#'     (character) Path to the directory containing scripts that reformat the 
-#'     parent data package to the child data package.
+#' @param path 
+#'     (character) Path to the directory containing ecocomDP data tables, 
+#'     conversion scripts, and where EML metadata will be written.
 #' @param parent.package.id
-#'     (character) Parent data package ID (e.g. "knb-lter-hfr.118.28") in the 
-#'     EDI Data Repository.
-#' @param sep
-#'     (character) Field delimiter used in the ecocomDP tables. Valid options 
-#'     are "," or "\\t".
-#' @param cat.vars
-#'     (data frame) Categorical variables with associated definitions and 
-#'     units. Create a cat.vars data frame with the `define_variables` 
-#'     function. Variables that can't be defined by the parent package EML 
-#'     should be manually supplied to the cat.vars data frame.
-#' @param intellectual.rights
-#'     (character) The intellectual rights license to be used with the 
-#'     ecocomDP. If this argument is NULL, then the parent data package 
-#'     intellectual rights will be used. Valid options are "CCO" 
-#'     (https://creativecommons.org/publicdomain/zero/1.0/legalcode) and
-#'     "CCBY" (https://creativecommons.org/licenses/by/4.0/legalcode).
+#'     (character) Parent data package ID (e.g. "knb-lter-hfr.118.28"). Only 
+#'     EDI Data Repository package IDs are currently supported.
 #' @param child.package.id
 #'     (character) Child data package ID (e.g. "edi.53.1") to be uploaded to 
 #'     EDI Data Repository.
-#' @param user.id
-#'     (character) User ID of person uploading the ecocomDP data package to the
-#'     EDI Data Repository.
-#' @param affiliation
-#'     (character) Affiliation of the user.id. Valid options are "EDI" or 
-#'     "LTER".
-#' @param access.url
-#'     (character) The base URL access point to ecocomDP tables and scripts 
-#'     that can be downloaded by the EDI Data Repository (e.g.
-#'     https://lter.limnology.wisc.edu/sites/default/files/data). Alternatively
-#'     tables and scripts can be uploaded through the EDI Data Repository 
-#'     Portal.
-#' @param additional.contact
-#'    (data frame) Contact information for creator of the script that converts
-#'    the parent data package to the ecocomDP. The data frame must have these
-#'    columns:
+#' @param script
+#'     (character) Names of scripts used to convert and repackage the source 
+#'     data into the ecocomDP.
+#' @param script.description
+#'     (character) A description for each object listed under \code{script}.
+#' @param cat.vars
+#'     (data frame) Categorical variables with associated definitions and 
+#'     units. Create a cat.vars data frame with the 
+#'     \code{ecocomDP::define_variables()} function. Variables that can't be 
+#'     defined by the parent package EML should be manually supplied to the 
+#'     cat.vars data frame in one of the scripts specified in the 
+#'     \code{script} argument.
+#' @param contact
+#'    (data frame) Contact information of this ecocomDP creator.
+#'    The data frame must have these columns:
 #'    \itemize{
 #'        \item{givenName}
 #'        \item{surName}
 #'        \item{organizationName}
 #'        \item{electronicMailAddress}
 #'    }
+#' @param user.id
+#'     (character) ID(s) of user account(s) associated with the data repository
+#'     in which this ecocomDP data package will be archived. Only EDI Data 
+#'     Repository IDs are currently supported.
+#' @param user.domain
+#'     (character) Domain of the \code{user.id}(s). Only "EDI" and "LTER" are 
+#'     currently supported. If more than one, then supply as a vector of 
+#'     character strings in the same order as the corresponding \code{user.id}.
+#' @param data.url
+#'     (character) An optional argument specifying the publicly accessible URL 
+#'     from which the ecocomDP tables and objects listed under the 
+#'     \code{script} argument can be downloaded by the EDI Data Repository. 
+#'     Don't use this argument if manually uploading to the repository.
 #'
 #' @return 
-#'     An EML metadata record for the ecocomDP tables.
+#'     An EML metadata record for the ecocomDP dataset defined by the arguments
+#'     to this function.
 #'
 #' @details 
-#'     This function creates valid EML for an Ecological Community Data Pattern 
-#'     (ecocomDP) using a combination of elements from the parent data package, 
-#'     boiler plate metadata specific to the ecocomDP, and user supplied 
-#'     defined in the conversion script.
-#'     
-#'     Run \code{make_eml} after you have:
+#'     This function creates an EML record for an Ecological Community Data 
+#'     Pattern (ecocomDP) combining metadata from the parent data package and
+#'     boiler-plate metadata describing the ecocomDP tables. Changes to the 
+#'     parent EML include:
 #'     \itemize{
-#'         \item Created ecocomDP tables through a fully scripted process.
-#'         \item Validated your ecocomDP with `validate_ecocomDP`.
-#'         \item Defined variables contained in your ecocomDP using 
-#'         `define_variables`.`
-#'     }
-#' 
-#'     This function uses elements of the parent data package EML to create EML
-#'     for the ecocomDP. Since ecocomDP is a fixed format, this function calls
-#'     on boiler plate table attributes of the R package inst/ directory and 
-#'     imports the metadata of the parent data package. Some new information is
-#'     added to the parent data package EML as specified below.
-#'     \itemize{
-#'         \item \strong{<access>} Appends the ecocomDP creator to the list of 
+#'         \item \strong{<access>} Adds the \code{user.id} to the list of 
 #'         principals granted read and write access to the ecocomDP data 
-#'         package.
-#'         \item \strong{<pubDate>} Adds a publication date corresponding to 
-#'         when the ecocomDP EML was created.
-#'         \item \strong{<keywordSet} Appends two ecocomDP specific keyword 
-#'         sets to the keyword sets listed in the parent data package EML.
+#'         package this EML describes.
+#'         \item \strong{<title>} Adds a note that this is a derived data 
+#'         package in the ecocomDP format.
+#'         \item \strong{<pubDate>} Adds the date this EML was created.
+#'         \item \strong{<abstract>} Adds a note that this is a derived data 
+#'         package in the ecocomDP format.
+#'         \item \strong{<keywordSet} Adds the "ecocomDP" keyword to enable
+#'         search and discovery of all ecocomDP data packages in the EDI Data
+#'         Repository, and 7 terms from the LTER Controlled vocabulary:
+#'         "communities", "community composition", "community dynamics", 
+#'         "community patterns", "species composition", "species diversity",
+#'         and "species richness".
 #'         \item \strong{<intellectualRights>} Keeps intact the intellectual
-#'         rights license of the parent data package, or replaces it with one
-#'         of the user specified options above.
+#'         rights license of the parent data package, or replaces it with
+#'         "CCO" (https://creativecommons.org/publicdomain/zero/1.0/legalcode).
 #'         \item \strong{<taxonomicCoverage>} Updates the taxonomic coverage 
 #'         element with data supplied in the taxon table of the ecocomDP.
-#'         \item \strong{<contact>} Appends contact information of the ecocomDP
-#'         creator to the contacts listed in the parent data package.
-#'         \item \strong{<methodStep>} Adds provenance metadata as a method 
-#'         step, describing the parent data package from which the ecocomDP 
-#'         was created.
+#'         \item \strong{<contact>} Adds contact information of the ecocomDP
+#'         creator to the list of contacts in the parent data package EML.
+#'         \item \strong{<methodStep>} Adds a note that this data package was
+#'         created by the scripts listed under the \code{script} argument,
+#'         and adds provenance metadata noting that this is a derived data 
+#'         and describing where the parent data package can be accessed.
 #'         \item \strong{<dataTables>} Replaces the parent data package data
-#'         tables with the newly created ecocomDP tables. NOTE: All other data
-#'         entities are removed from the ecocomDP EML.
-#'         \item \strong{<otherEntity>} Describes formatting scripts under the 
-#'         other entity element.
+#'         tables metadata with boiler-plate metadata for the ecocomDP tables.
+#'         \item \strong{<otherEntity>} Describes scripts listed in the 
+#'         \code{script} and \code{script.description} arguments. Any other
+#'         entities listed in the parent EML are removed.
 #'     }
 #'
 #' @export
+#' 
+#' @examples 
+#' \dontrun{
+#' 
+#' # Set path to ecocomDP tables and scripts
+#' path <- "/Users/csmith/Desktop/ecocomDP"
+#' 
+#' # Validate ecocomDP tables
+#' ecocomDP::validate_ecocomDP(path)
+#' 
+#' # Use parent EML to define variables of the ecocomDP and manually add variable 
+#' # names and definitions created in the ecocomDP re-formatting process.
+#' catvars <- ecocomDP::define_variables(path, "knb-lter-sev.29.12")
+#' catvars$unit[catvars$code == "Count"] <- "number"
+#' catvars$definition[catvars$code == "Comments"] <- "A special statement related to an observation"
+#' 
+#' # Create contact information for the ecocomDP creator
+#' additional_contact <- data.frame(
+#'   givenName = 'Colin',
+#'   surName = 'Smith',
+#'   organizationName = 'Environmental Data Initiative',
+#'   electronicMailAddress = 'csmith@@wisc.edu',
+#'   stringsAsFactors = FALSE
+#' )
+#' 
+#' # Create EML
+#' ecocomDP::make_eml(
+#'   path = path,
+#'   parent.package.id = "knb-lter-sev.29.12",
+#'   child.package.id = "edi.101.5",
+#'   script = c(
+#'     "convert_sev29_to_ecocomDP.R", 
+#'     "package_edi_333.R"
+#'   ),
+#'   script.description = c(
+#'     "R script for creating the ecocomDP tables.",
+#'     "R script for creating the ecocomDP EML"
+#'   ),
+#'   cat.vars = catvars,
+#'   contact = additional_contact,
+#'   user.id = 'csmith',
+#'   user.domain = 'LTER',
+#' )
+#' }
 #'
-make_eml <- function(data.path, 
-                     code.path = data.path, 
-                     code.files, 
+make_eml <- function(path,
                      parent.package.id, 
-                     sep, 
-                     cat.vars = NULL,
-                     intellectual.rights = NULL, 
                      child.package.id, 
+                     script,
+                     script.description,
+                     cat.vars,
+                     contact,
                      user.id, 
-                     affiliation, 
-                     access.url = NULL, 
-                     additional.contact = NULL,
-                     code.file.extension = NULL, 
-                     eml.path = NULL){
+                     user.domain,
+                     data.url = NULL) {
   
-  message(paste('Creating EML for ecocomDP data package', child.package.id))
-  
-  # Validate and process arguments --------------------------------------------
-
-  if (missing(data.path)){
-    stop("Specify path to dataset working directory.")
-  }
-  
-  if (missing(parent.package.id)){
-    stop("Specify the parent data package ID.")
-  }
-  
-  if (missing(sep)){
-    stop("Specify the field delimiter of the ecocomDP tables.")
-  }
-  
-  if (is.null(cat.vars)){
-    warning(paste('Input argument "cat.vars" not found. Use the',
-                  'define_variables function to create them.'))
-  }
-  
-  if (missing(child.package.id)){
-    stop("Specify the child data package ID.")
-  }
-  
-  if (missing(user.id)){
-    stop("Specify a user ID for the data package.")
-  }
-  if (missing(affiliation)){
-    stop("Specify the affiliation associated wiht the user ID.")
-  }
-  if (!missing(user.id) & !missing(affiliation)){
-    if (length(user.id) != length(affiliation)){
-      stop(paste('The number of values listed in arguments "user.id" and',
-                 '"affiliation" do not match. Each user.id must have a',
-                 'corresponding affiliation'))
-    }
-    if (sum(sum(affiliation == 'LTER'), sum(affiliation == 'EDI')) != length(affiliation)){
-      stop(paste('Input argument "affiliation" is not "EDI" or "LTER"! Only',
-                 '"EDI" and "LTER" are acceptable values.'))
-    }
-  }
-  
-  if (is.null(code.file.extension) & (missing(code.files))){
-    stop(paste("Specify the script(s) used to create the ecocomDP tables or the',
-               'file extension of the script(s)."))
-  }
-  
-  if (!is.null(additional.contact)){
-    use_i <- match(
-      colnames(additional.contact),
-      c('givenName', 'surName', 'organizationName', 'electronicMailAddress')
-    )
-    if (sum(is.na(use_i)) > 0){
-      stop(paste('The data frame "additional.contact" does not have the',
-                 'required columns. Check column presence and spelling.')
-           )
-    }
-  }
-  
-  # Identify script files. Search directories for files matching the 
-  # code.file.extension, or use inputs from the code.files argument.
-  
-  if (!is.null(code.file.extension)){
-    
-    match_info <- regexpr(
-      "\\.[^\\.]*$", 
-      code.file.extension
-    )
-    
-    code.file.extension <- substr(
-      code.file.extension,
-      start = match_info[1],
-      stop = nchar(
-        code.file.extension
-      )
-    ) 
-    
-    code_files_found <- data.frame(
-      files = list.files(
-        code.path, 
-        pattern = paste0(
-          "\\",
-          code.file.extension,
-          "$"
-        ),
-        ignore.case=TRUE
-      ),
-      stringsAsFactors = F
-    )
-    
-    if (length(code_files_found$files) > 1){
-      
-      print.data.frame(code_files_found)
-      message(paste("Which of the above listed code files were used to create",
-                    "this ecocomDP?"))
-      answer <- readline(paste("Enter respective row numbers. Separate each entry",
-                               "with a comma and no space (e.g. 3,12): "))
-      code_files <- code_files_found$files[
-        as.integer(
-          unlist(
-            strsplit(
-              answer,
-              ","
-            )
-          )
-        )
-      ]
-      message(paste("You selected ...", code_files))
-      
-    } else if (length(code_files_found$files) == 1){
-      
-      code_files <- code_files_found$files[1]
-      
-    }
-    
-    if (!exists("code_files")){
-      stop("No code files were found at the specified code.path. Add files to code.path or revise code.path.")
-    }
-    
-  } else if (!missing(code.files)){
-    
-    code_files <- EDIutils::validate_file_names(
-      code.path, 
-      data.files = code.files
-    )
-    
-    if (is.null(code.file.extension)){
-      
-      code_file_extention <- stringr::str_extract(
-        code_files, 
-        '\\.[:alpha:]*$'
-      )
-      
-    }
-
-  }
-  
-  # Parameterize --------------------------------------------------------------
-  
-  os <- EDIutils::detect_os()
-  data_tables_stored <- list()
-  
-  # Read EML of parent data package -------------------------------------------
-  
-  message(paste('Reading EML of parent data package', parent.package.id))
-  
-  pkg_prts <- unlist(
-    strsplit(
-      parent.package.id, 
-      split = ".", 
-      fixed = T
-    )
+  message(
+    paste0("Creating EML for derived data package (", child.package.id, ")")
   )
   
-  scope <- pkg_prts[1]
-  identifier <- pkg_prts[2]
-  revision <- pkg_prts[3]
+  # Validate inputs -----------------------------------------------------------
   
-  read_metadata <- function(parent_eml_file, scope, identifier, revision, 
-                            data.path, eml.path = NULL){
-    
-    if (!is.null(eml.path)){
-      eml <- EML::read_eml(
-        paste0(
-          eml.path,
-          "/",
-          parent_eml_file
-        )
+  if (missing(path)) {
+    stop(
+      call. = FALSE, 
+      paste(
+        "Input argument 'path' is missing.", "Please specify the directory",
+        "to the ecocomDP tables and any associated processing scripts."
       )
-      
-    } else {
-      
-      eml <- try(
-        EML::read_eml(
-          paste0(
-            "https://pasta.lternet.edu/package/metadata/eml",
-            "/",
-            pkg_prts[1],
-            "/",
-            identifier,
-            "/",
-            revision
-          )
-        )
-      )
-      
-      if (class(eml) == 'try-error'){
-        
-        eml <- xml2::read_xml(
-          paste0(
-            "https://pasta.lternet.edu/package/metadata/eml",
-            "/",
-            pkg_prts[1],
-            "/",
-            identifier,
-            "/",
-            revision
-          )
-        )
-        xml2::xml_remove(
-          xml2::xml_find_all(
-            eml,
-            './/dataset/dataTable/constraint'
-          )
-        )
-        xml2::write_xml(
-          eml,
-          paste0(
-            data.path,
-            '/metadata.xml'
-          )
-        )
-        eml <- EML::read_eml(
-          paste0(
-            data.path, 
-            '/metadata.xml'
-          )
-        )
-      }
-      
-      eml
-      
-    }
-    
+    )
   }
   
-  eml <- suppressWarnings(
-    read_metadata(
-      parent_eml_file,
-      scope,
-      identifier,
-      revision,
-      data.path
+  # FIXME: Check that the data package exists in the EDI data repository
+  if (missing(parent.package.id)) {
+    stop(
+      call. = FALSE, 
+      paste(
+        "Input argument 'parent.package.id' is missing. Please specify the",
+        "ID of the parent data package from which this ecocomDP was derived.",
+        "NOTE: Only data packages in the EDI Data Repository are currently",
+        "supported."
+      )
+    )
+  }
+  
+  # FIXME: Check that the data package ID is in one of the expected formats
+  # (i.e. LTER or EDI). Issue warning, not error.
+  if (missing(child.package.id)) {
+    stop(
+      call. = FALSE,
+      paste(
+        "Input argument 'child.package.id' is missing. Please specify the",
+        "ID of the data package this EML will describe."
+      )
+    )
+  }
+  
+  if (missing(script)) {
+    stop(
+      call. = FALSE,
+      paste(
+        "Input argument 'script' is missing. Please specifiy any scripts used",
+        "to convert and repackage the source data into the ecocomDP."
+      )
+    )
+  }
+  
+  if (missing(script.description)) {
+    stop(
+      call. = FALSE,
+      paste(
+        "Input argument 'script.description' is missing. Please describe the",
+        "scripts listed under the 'script' argument."
+      )
+    )
+  }
+  
+  script <- EDIutils::validate_file_names(path, script)
+  
+  if (length(script) != length(script.description)) {
+    stop(
+      call. = FALSE,
+      paste(
+        "The number of items listed under the 'script' and",
+        "'script.description' arguments must match."
+      )
+    )
+  }
+  
+  if (is.null(cat.vars)) {
+    stop(
+      call. = FALSE,
+      paste(
+        "Input argument 'cat.vars' is missing. Create this input using the",
+        "function 'ecocomDP::define_variables()'."
+      )
+    )
+  }
+
+  if (!all(c("tableName", "attributeName", "code", "definition", "unit") %in%
+      names(cat.vars))) {
+    stop(
+      call. = FALSE,
+      paste(
+        "Input argument 'cat.vars' is missing required columns. Required",
+        "columns are: 'tableName', 'attributeName', 'code', 'definition',",
+        "'unit'."
+      )
+    )
+  }
+
+  if (missing(contact)) {
+    stop(
+      call. = FALSE,
+      paste(
+        "Input argument 'contact' is missing. Please specify the contact",
+        "information for the creator of this ecocomDP data package. Supply",
+        "this information as a data frame with the columns 'givenName',",
+        "'surName', 'organizationName', 'electronicMailAddress'."
+      )
+    )
+  }
+  
+  if (!all(
+    c('givenName', 'surName', 'organizationName', 'electronicMailAddress') %in% 
+    names(contact))) {
+    stop(
+      call. = FALSE,
+      paste(
+        "Input argument 'contact' is missing required columns.", 
+        "This data frame should have the columns: 'givenName',",
+        "'surName', 'organizationName', 'electronicMailAddress'."
+      )
+    )
+  }
+  
+  # FIXME: Check the input 'user.id' against the list of EDI/LTER users.
+  if (missing(user.id)) {
+    stop(
+      call. = FALSE,
+      paste(
+        "Input argument 'user.id' is missing. Please specify the user ID under",
+        "which this data package will be uploaded. NOTE: Only EDI Data",
+        "Repository user IDs are currently supported."
+      )
+    )
+  }
+  
+  if (missing(user.domain)) {
+    stop(
+      call. = FALSE,
+      "Input argument 'user.domain' is missing. Please specify the domain",
+      "under which the 'user.id' argument exists. NOTE: Only 'EDI' and 'LTER'",
+      "domains are currently supported."
+    )
+  }
+  
+  if (!all(user.domain %in% c("LTER", "EDI"))) {
+    stop(
+      call. = FALSE,
+      paste(
+        "Input argument 'user.domain' is not one of the currently supported",
+        "'EDI' or 'LTER'."
+      )
+    )
+  }
+  
+  if (length(user.id) != length(user.domain)) {
+    stop(
+      call. = FALSE,
+      paste(
+        "The number of items listed under the 'user.id' and",
+        "'user.domain' arguments must match."
+      )
+    )
+  }
+  
+  # FIXME: Add check for publicly accessible 'data.url' argument
+
+  # Read parent EML -----------------------------------------------------------
+  
+  message(paste0("Reading parent data package EML (", parent.package.id, ")"))
+
+  scope <- unlist(strsplit(parent.package.id, split = ".", fixed = T))[1]
+  identifier <- unlist(strsplit(parent.package.id, split = ".", fixed = T))[2]
+  revision <- unlist(strsplit(parent.package.id, split = ".", fixed = T))[3]
+  
+  eml <- EML::read_eml(
+    paste0(
+      "https://pasta.lternet.edu/package/metadata/eml", "/", scope, "/",
+      identifier, "/", revision
     )
   )
-  
-  # Compile boiler plate attribute metadata for ecocomDP tables ---------------
-
-  attributes_in <- compile_attributes(
-    path = data.path,
-    delimiter = sep
-  )
-  
-  # Updating nodes ------------------------------------------------------------
   
   message("Updating nodes ...")
   message("<eml>")
@@ -379,38 +347,26 @@ make_eml <- function(data.path,
   
   message("  <access>")
   
-  if (!missing(user.id) & !missing(affiliation)){
+  for (i in 1:length(user.id)){
     
-    for (i in 1:length(user.id)){
+    if (user.domain[i] == 'LTER'){
       
-      if (affiliation[i] == 'LTER'){
-        
-        eml$access$allow[[length(eml$access$allow) + 1]] <- list(
-          principal = paste0(
-            'uid=',
-            user.id[i],
-            ',o=',
-            affiliation[i],
-            ',dc=ecoinformatics,dc=org'
-          ),
-          permission = "all"
-        )
-
-      } else if (affiliation[i] == 'EDI'){
-        
-        eml$access$allow[[length(eml$access$allow) + 1]] <- list(
-          principal = paste0(
-            'uid=',
-            user.id[i],
-            ',o=',
-            affiliation[i],
-            ',dc=edirepository,dc=org'
-          ),
-          permission = "all"
-        )
-        
-      }
-
+      eml$access$allow[[length(eml$access$allow) + 1]] <- list(
+        principal = paste0(
+          'uid=', user.id[i], ',o=', user.domain[i], ',dc=ecoinformatics,dc=org'
+        ),
+        permission = "all"
+      )
+      
+    } else if (user.domain[i] == 'EDI'){
+      
+      eml$access$allow[[length(eml$access$allow) + 1]] <- list(
+        principal = paste0(
+          'uid=', user.id[i], ',o=', user.domain[i], ',dc=edirepository,dc=org'
+        ),
+        permission = "all"
+      )
+      
     }
     
   }
@@ -428,24 +384,22 @@ make_eml <- function(data.path,
   
   message("    <title>")
   
-  eml$dataset$title <- paste0(
-    eml$dataset$title,
-    " (Reformatted to the ecocomDP Design Pattern)"
+  # Append note about ecocomDP format
+  eml$dataset$title <- paste(
+    eml$dataset$title, "(Reformatted to the ecocomDP Design Pattern)"
   )
   
   # Update <pubDate> ----------------------------------------------------------
   
   message("    <pubDate>")
   
-  eml$dataset$pubDate <- format(
-    Sys.time(),
-    "%Y-%m-%d"
-  )
+  eml$dataset$pubDate <- format(Sys.time(), "%Y-%m-%d")
   
   # Updating <abstract> -------------------------------------------------------
   
   message("    <abstract>")
   
+  # Get parent abstract
   src_abstract <- unname(
     unlist(
       stringr::str_remove_all(
@@ -455,29 +409,37 @@ make_eml <- function(data.path,
     )
   )
 
+  # Reset abstract node
   eml$dataset$abstract <- list()
   eml$dataset$abstract$section <- list()
   eml$dataset$abstract$para <- list()
   
-  eml$dataset$abstract$para[[length(eml$dataset$abstract$para) + 1]] <- 
-    "This data package is formatted according to the 'ecocomDP', a data package design pattern for ecological community surveys, and data from studies of composition and biodiversity. For more information on the ecocomDP project see https://github.com/EDIorg/ecocomDP/tree/master, or contact EDI https://environmentaldatainitiative.org."
-    
-  eml$dataset$abstract$para[[length(eml$dataset$abstract$para) + 1]] <- 
-    paste0(
-      'This Level 1 data package was derived from the Level 0 data package found here: ',
-      paste0(
-        'https://portal.edirepository.org/nis/mapbrowse?scope=',
-        scope,
-        '&identifier=',
-        identifier,
-        '&revision=',
-        revision
-      )
-    )
+  # Add boiler-plate ecocomDP (paragraph 1)
+  eml$dataset$abstract$para[[length(eml$dataset$abstract$para) + 1]] <- paste(
+    "This data package is formatted according to the 'ecocomDP', a data",
+    "package design pattern for ecological community surveys, and data from",
+    "studies of composition and biodiversity. For more information on the",
+    "ecocomDP project see https://github.com/EDIorg/ecocomDP/tree/master, or",
+    "contact EDI https://environmentaldatainitiative.org."
+  )
   
-  eml$dataset$abstract$para[[length(eml$dataset$abstract$para) + 1]] <- 
-    'The abstract below was extracted from the Level 0 data package and is included for context:'
+  # Add boiler-plate ecocomDP (paragraph 2)  
+  eml$dataset$abstract$para[[length(eml$dataset$abstract$para) + 1]] <- paste(
+    "This Level-1 data package was derived from the Level-0 data package",
+    "found here:",
+    paste0(
+      'https://portal.edirepository.org/nis/mapbrowse?scope=', scope,
+      '&identifier=', identifier, '&revision=', revision
+    )
+  )
 
+  # Add boiler-plate ecocomDP (paragraph 3)
+  eml$dataset$abstract$para[[length(eml$dataset$abstract$para) + 1]] <- paste(
+    "The abstract below was extracted from the Level-0 data package and is",
+    "included for context:"
+  )
+
+  # Add parent abstract (paragraph 4)
   for (i in 1:length(src_abstract)) {
     eml$dataset$abstract$para[[length(eml$dataset$abstract$para) + 1]] <- 
       src_abstract[i]
@@ -487,92 +449,60 @@ make_eml <- function(data.path,
   
   message("    <keywordSet>")
   
+  # Read boiler-plate ecocomDP keywords
   keywordSet <- read.table(
-    system.file('/controlled_vocabulary.csv', package = 'ecocomDP'),
-    header = T,
+    system.file("/controlled_vocabulary.csv", package = "ecocomDP"),
+    header = T, 
     sep = ",",
     as.is = T,
     na.strings = "NA"
   )
   
-  eml$dataset$keywordSet[[length(eml$dataset$keywordSet) + 1]] <- 
-    list(
-      keywordThesaurus = keywordSet$keywordThesaurus[1],
-      keyword = as.list(keywordSet$keyword)
-    )
+  # Add to the parent keyword set
+  eml$dataset$keywordSet[[length(eml$dataset$keywordSet) + 1]] <- list(
+    keywordThesaurus = keywordSet$keywordThesaurus[1],
+    keyword = as.list(keywordSet$keyword)
+  )
 
   # Update <intellectualRights> -----------------------------------------------
-  # Don't overwrite existing intellectualRights, as these are the data release
-  # terms specified by the source data package author. If source data package 
-  # intellectualRights are not specified then add CC0 or CC-BY as specified
-  # in the intellectual.rights argument. Default is CC0 if none is supplied.
+  # Use parent intellectual rights or CC0 if none exists
   
-  if (!is.null(eml$dataset$intellectualRights) & 
-      (!is.null(intellectual.rights))) {
-    
-    warning(
-      "Source data package intellectual rights license can't be overwritten.", 
-      call. = FALSE
-    )
-    
-  } else if (is.null(eml$dataset$intellectualRights) & 
-             (!is.null(intellectual.rights))) {
-    
-    message("    <intellectualRights>")
-    
-    if (intellectual.rights == "CC0"){
-      
-      eml$dataset$intellectualRights <- EML::set_TextType(
-        system.file(
-          'intellectual_rights_cc0_1.txt', 
-          package = 'ecocomDP'
-        )
-      )
-      
-    } else if (intellectual.rights == "CCBY"){
-
-      eml$dataset$intellectualRights <- EML::set_TextType(
-        system.file(
-          'intellectual_rights_by_4.0.txt', 
-          package = 'ecocomDP'
-        )
-      )
-      
-    }
-    
-  } else if (is.null(eml$dataset$intellectualRights) & 
-             (is.null(intellectual.rights))) {
+  if (is.null(eml$dataset$intellectualRights)) {
     
     message("    <intellectualRights>")
     
     eml$dataset$intellectualRights <- EML::set_TextType(
-      system.file(
-        'intellectual_rights_cc0_1.txt', 
-        package = 'ecocomDP'
-      )
+      system.file('intellectual_rights_cc0_1.txt', package = 'ecocomDP')
     )
-
+    
   }
-  
+
   # Update <taxonomicCoverage> ------------------------------------------------
+  # Update the taxonomic coverage element using information from the taxon 
+  # table, specifically data in the authority system and authority ID fields
+  # (if it exists)
   
+  # Reset the taxonomic coverage element
   eml$dataset$coverage$taxonomicCoverage <- NULL
-  dir_files <- list.files(data.path)
   
-  df_table <- read.table(
+  # Read the taxon table
+  dir_files <- list.files(path)
+  df <- read.table(
     paste0(
-      data.path,
-      "/",
-      dir_files[stringr::str_detect(dir_files, "taxon\\b")]
+      path, "/", dir_files[stringr::str_detect(dir_files, "taxon\\b")]
     ),
-    header=TRUE,
-    sep=sep,
-    quote="\"",
-    as.is=TRUE,
-    comment.char = ""
+    header = TRUE,
+    sep = EDIutils::detect_delimeter(
+      path,
+      dir_files[stringr::str_detect(dir_files, "taxon\\b")],
+      EDIutils::detect_os()
+    ),
+    quote = "\"",
+    as.is = TRUE
   )
   
-  if (any(!is.na(df_table$authority_taxon_id))) {
+  # Create new taxonomic coverage (if supporting data exists)
+  if (any(!is.na(df$authority_taxon_id))) {
     
     message("    <taxonomicCoverage>")
     
@@ -580,9 +510,9 @@ make_eml <- function(data.path,
     # A solution might reference an authority system URI rather than
     # taxonomyCleanr synonyms. Implement at taxonomyCleanr
     tc <- taxonomyCleanr::make_taxonomicCoverage(
-      taxa.clean = df_table$taxon_name,
-      authority = df_table$authority_system,
-      authority.id = df_table$authority_taxon_id
+      taxa.clean = df$taxon_name,
+      authority = df$authority_system,
+      authority.id = df$authority_taxon_id
     )
     
     dataset$coverage$taxonomicCoverage <- tc
@@ -591,97 +521,303 @@ make_eml <- function(data.path,
   
   # Update <contact> ----------------------------------------------------------
   
-  if (!is.null(additional.contact)) {
-    
-    message("    <contact>")
-    
-    eml$dataset$contact[[length(eml$dataset$contact) + 1]] <- 
-      list(
-        individualName = list(
-          givenName = additional.contact$givenName,
-          surName = additional.contact$surName
-        ),
-        organizationName = additional.contact$organizationName,
-        electronicMailAddress = additional.contact$electronicMailAddress
-      )
-
-  }
+  message("    <contact>")
+  
+  # Add ecocomDP creator as a contact incase questions arise
+  eml$dataset$contact[[length(eml$dataset$contact) + 1]] <- list(
+    individualName = list(
+      givenName = contact$givenName,
+      surName = contact$surName
+    ),
+    organizationName = contact$organizationName,
+    electronicMailAddress = contact$electronicMailAddress
+  )
 
   # Update <methods> ----------------------------------------------------------
+  # Update parent methods with ecocomDP creation process and provenance 
+  # metadata to provide the user with a full understanding of how these data 
+  # were created
   
   message("    <methods>")
   
-  # methodStep 1.) Inform user of ecocomDP conversion methods
-  ecocomDP_methods <- paste0(
-    "The source data package is programmatically converted into an ecocomDP ",
-    "data package using the scripts: ", paste(code.files, collapse = ", "),
-    ". ", "For more information on the ecocomDP project see ",
-    "https://github.com/EDIorg/ecocomDP/tree/master, or contact EDI ",
-    "(https://environmentaldatainitiative.org).",
-    " Below are the source data methods: "
-  )
-  
-  # methodStep 2.) Inform user of source data methods
+  # Get parent methods
   src_methods <- eml$data$methods$methodStep
   
-  # methodStep 3.) Inform user of source data location. Creator and contact IDs 
-  # are removed to preempt ID clashes. Metadata is written to tempdir() so 
-  # EML::read_eml() can apply its unique parsing algorithm.
+  # Reset methods node
+  eml$dataset$methods <- list()
+  eml$dataset$methods$methodStep <- list()
+  
+  # Add ecocomDP methods (paragraph 1)
+  eml$dataset$methods$methodStep[[length(eml$dataset$methods$methodStep) + 1]] <- 
+    list(
+      description = list(
+        para = paste0(
+          "The source data package is programmatically converted into an ",
+          "ecocomDP data package using the scripts: ", 
+          paste(script, collapse = ", "), ". For more information on the ",
+          "ecocomDP project see: ",
+          "'https://github.com/EDIorg/ecocomDP/tree/master' or contact EDI ",
+          "(https://environmentaldatainitiative.org). Below are the source ",
+          "data methods:"
+        )
+      )
+    )
+  
+  # Add parent methods (paragraph 2)
+  eml$dataset$methods$methodStep[[length(eml$dataset$methods$methodStep) + 1]] <- 
+    src_methods
+  
+  # Add provenance metadata (paragraph 3). Read provenance from the EDI Data 
+  # Repository and remove creator and contact IDs to preempt ID clashes. 
+  # Metadata is written to tempdir() so EML::read_eml() can apply its unique 
+  # parsing algorithm.
   provenance <- xml2::read_xml(
     paste0(
-      "https://pasta.lternet.edu/package/provenance/eml", "/", pkg_prts[1],
+      "https://pasta.lternet.edu/package/provenance/eml", "/", scope,
       "/", identifier, "/", revision
     )
   )
   
   xml2::xml_set_attr(
-    xml2::xml_find_all(
-      provenance,
-      './/dataSource/creator'
-    ),
+    xml2::xml_find_all(provenance, './/dataSource/creator'),
     'id', 
     NULL
   )
   
   xml2::xml_set_attr(
-    xml2::xml_find_all(
-      provenance,
-      './/dataSource/contact'
-      ),
+    xml2::xml_find_all(provenance, './/dataSource/contact'),
     'id',
     NULL
   )
   
   xml2::write_xml(
     provenance,
-    paste0(
-      tempdir(),
-      "/provenance.xml"
-    )
+    paste0(tempdir(), "/provenance.xml")
   )
   
   provenance <- EML::read_eml(
-    paste0(
-      tempdir(),
-      "/provenance.xml"
-    )
+    paste0(tempdir(), "/provenance.xml")
   )
   
   provenance$`@context` <- NULL
   provenance$`@type` <- NULL
   unlink(paste0(tempdir(), "/provenance.xml"))
   
-  # Initialize the methods node and compile the 3 methodSteps
-  eml$dataset$methods <- list()
-  eml$dataset$methods$methodStep <- list()
-  eml$dataset$methods$methodStep[[length(eml$dataset$methods$methodStep) + 1]] <- 
-    list(description = list(para = ecocomDP_methods))
-  eml$dataset$methods$methodStep[[length(eml$dataset$methods$methodStep) + 1]] <- 
-    src_methods
   eml$dataset$methods$methodStep[[length(eml$dataset$methods$methodStep) + 1]] <- 
     provenance
   
   # Update <dataTable> --------------------------------------------------------
+  # Combine boiler-plate ecocomDP table attributes with table specific 
+  # metadata
+  
+  r <- suppressMessages(
+    compile_attributes(path)
+  )
+  data_table <- list()
+  
+  for (i in 1:length(r$tables_found)) {
+    
+    message("    <dataTable>")
+
+    # Remove white space from categorical variables
+    cat.vars <- as.data.frame(
+      apply(cat.vars, 2, trimws, which = "both"), 
+      stringsAsFactors = FALSE
+    )
+    
+    # Remove white space from attributes variables
+    r$attributes[[i]] <- as.data.frame(
+      apply(r$attributes[[i]], 2, trimws, which = "both"), 
+      stringsAsFactors = FALSE
+    )
+    
+    # Create the attribute list
+    attributeList <- suppressWarnings(
+      EML::set_attributes(
+        r$attributes[[i]][ , c(
+          'attributeName', 
+          'formatString',
+          'unit',
+          'numberType',
+          'definition',
+          'attributeDefinition',
+          'minimum',
+          'maximum',
+          'missingValueCode',
+          'missingValueCodeExplanation')],
+        factors = cat.vars,
+        col_classes = r$attributes[[i]][ ,"columnClasses"]
+      )
+    )
+
+    # Set physical
+    physical <- suppressMessages(
+      EML::set_physical(
+        paste0(path, '/', r$tables_found[i]),
+        numHeaderLines = "1",
+        recordDelimiter = EDIutils::get_eol(
+          path = path,
+          file.name = r$tables_found[i],
+          os = EDIutils::detect_os()
+        ),
+        attributeOrientation = "column",
+        url = 'placeholder'
+      )
+    )
+    
+    if (!is.null(data.url)) {
+      physical$distribution$online$url[[1]] <- paste0(
+        data.url, "/", r$tables_found[i]
+      )
+    } else {
+      physical$distribution <- list()
+    }
+    
+    # Read the data table and get number of records
+    df <- read.table(
+      paste0(path, "/", r$tables_found[i]),
+      header = TRUE,
+      sep = r$delimiter[i],
+      quote = "\"",
+      as.is = TRUE,
+      comment.char = ""
+    )
+    
+    # Pull together information for the data table
+    data_table[[i]] <- list(
+      entityName = r$table_descriptions[i],
+      entityDescription = r$table_descriptions[i],
+      physical = physical,
+      attributeList = attributeList,
+      numberOfRecords = as.character(nrow(df))
+    )
+
+  }
+  
+  # Compile data tables
+  
+  eml$dataset$dataTable <- data_table
+  
+  # Add <otherEntity> ---------------------------------------------------------
+  # Add items listed under the "script" argument as other entities
+    
+  other_entity <- list()
+  
+  for (i in 1:length(script)) {
+    
+    message("    <otherEntity>")
+    
+    # Create other entity
+    otherEntity <- list(
+      entityName = script[i],
+      entityDescription = script.description[i],
+      physical = suppressMessages(
+        EML::set_physical(
+          paste0(path, '/', script[i])
+        )
+      )
+    )
+    
+    otherEntity$physical$dataFormat$textFormat <- NULL
+    
+    # Get and add file format name and entity type
+    file_extension <- stringr::str_extract(script[i], "\\.[:alpha:]*$")
+    if (file_extension == ".R") {
+      format_name <- "application/R"
+      entity_type <- "text/x-rsrc"
+    } else if (file_extension == ".m") {
+      format_name <- "application/MATLAB"
+      entity_type <- "text/x-matlab"
+    } else if (file_extension == ".py") {
+      format_name <- "application/Python"
+      entity_type <- "text/x-python"
+    } else {
+      format_name <- "unknown"
+      entity_type <- "unknown"
+    }
+    
+    otherEntity$physical$dataFormat$externallyDefinedFormat$formatName <- format_name
+    otherEntity$entityType <- entity_type
+    
+    # Add download url
+    if (!is.null(data.url)) {
+      otherEntity$physical$distribution$online$url[[1]] <- paste0(
+        data.url, "/", script[i]
+      )
+    } else {
+      otherEntity$physical$distribution <- list()
+    }
+    
+    # Add otherEntity to list
+    other_entity[[i]] <- otherEntity
+    
+  }
+  
+  eml$dataset$otherEntity <- other_entity
+  
+  # Update <eml> --------------------------------------------------------------
+  
+  eml_out <- list(
+    schemaLocation = "eml://ecoinformatics.org/eml-2.1.1  http://nis.lternet.edu/schemas/EML/eml-2.1.1/eml.xsd",
+    packageId = child.package.id,
+    system = "edi",
+    access = eml$access,
+    dataset = eml$dataset
+  )
+  
+  message("  </dataset>")
+  message("</eml>")
+  
+  # Write EML -----------------------------------------------------------------
+
+  message("Writing EML")
+
+  EML::write_eml(
+    eml_out, 
+    paste0(path, "/", child.package.id, ".xml")
+  )
+
+  # Validate EML --------------------------------------------------------------
+
+  message("Validating EML")
+
+  validation_result <- EML::eml_validate(eml_out)
+
+  if (validation_result == "TRUE"){
+    message("EML passed validation!")
+  } else {
+    message("EML validaton failed. See warnings for details.")
+  }
+  
+}
+
+
+
+
+# Compile attributes
+#
+# @description  
+#     This is a helper function for make_eml.R. It compiles attributes, 
+#     retrieves minimum and maximum values for numeric data and reformats the 
+#     attributes table.
+#
+# @usage 
+#     make_eml(path, parent.package.id, child.package.id)
+#
+# @param path 
+#     A path to the dataset working directory containing the validated 
+#     ecocomDP tables.
+#
+# @return 
+#     Attributes formatted for make_eml.R
+#     
+# @export
+#
+compile_attributes <- function(path){
+  
+  message('Compiling table attributes:')
+  
+  # Parameterize --------------------------------------------------------------
   
   table_patterns <- c(
     "observation\\b", 
@@ -716,352 +852,9 @@ make_eml <- function(data.path,
     "Variable mapping table"
   )
   
-  dir_files <- list.files(data.path)
-  table_names_found <- list()
-  tables_found <- list()
-  table_descriptions_found <- list()
-  
-  for (i in 1:length(table_patterns)){
-    
-    tables_found[[i]] <- dir_files[
-      grep(
-        paste0(
-          "^(?=.*",
-          table_patterns[i],
-          ")(?!.*variables)"
-        ), 
-        dir_files, 
-        perl=TRUE
-      )
-      ]
-    
-    if (!identical(tables_found[[i]], character(0))){
-      table_names_found[[i]] <- table_names[i]
-    }
-    
-    if (!identical(tables_found[[i]], character(0))){
-      table_descriptions_found[[i]] <- table_descriptions[i]
-    }
-    
-  }
-  
-  tables_found <- unlist(tables_found)
-  table_names <- unlist(table_names_found)
-  table_descriptions <- unlist(table_descriptions_found)
-  
-  # Loop through each data table
-  
-  for (i in 1:length(tables_found)){
-    
-    message("    <dataTable>")
-    
-    attributes <- attributes_in[[1]][[i]]
-    
-    df_table <- read.table(
-      paste(data.path, "/", tables_found[i], sep = ""),
-      header=TRUE,
-      sep=sep,
-      quote="\"",
-      as.is=TRUE,
-      comment.char = "")
-    
-    if (!is.null(cat.vars)){
-      use_i <- table_names[i] == cat.vars$tableName
-      catvars <- cat.vars[
-        table_names[i] == cat.vars$tableName,
-        c('attributeName', 'code', 'definition', 'unit')
-        ]
-    }
-    
-    if (exists('catvars') & (nrow(catvars) > 0)){
-      
-      if (dim(catvars)[1] > 0){
-        for (j in 1:dim(catvars)[2]){
-          catvars[ ,j] <- as.character(catvars[ ,j])
-        }
-        non_blank_rows <- nrow(catvars) - sum(catvars$attributeName == "")
-        catvars <- catvars[1:non_blank_rows, 1:3]
-        # Clean extraneous white spaces from catvars tables
-        if (dim(catvars)[1] != 0){
-          for (j in 1:ncol(catvars)){
-            if (class(catvars[ ,j]) == "character" ||
-                (class(catvars[ ,j]) == "factor")){
-              catvars[ ,j] <- trimws(catvars[ ,j])
-            }
-          }
-        }
-      }
-      # Clean extraneous white spaces from attributes
-      for (j in 1:ncol(attributes)){
-        if (class(attributes[ ,j]) == "character" ||
-            (class(attributes[ ,j]) == "factor")){
-          attributes[ ,j] <- trimws(attributes[ ,j])
-        }
-      }
-      col_classes <- attributes[ ,"columnClasses"]
-      attributeList <- suppressWarnings(
-        EML::set_attributes(
-          attributes[ , c(
-            'attributeName', 
-            'formatString',
-            'unit',
-            'numberType',
-            'definition',
-            'attributeDefinition',
-            'minimum',
-            'maximum',
-            'missingValueCode',
-            'missingValueCodeExplanation')],
-          factors = catvars,
-          col_classes = attributes[ ,"columnClasses"]
-        )
-      )
-      
-    } else {
-      
-      for (j in 1:ncol(attributes)){
-        if (class(attributes[ ,j]) == "character" ||
-            (class(attributes[ ,j]) == "categorical")){
-          attributes[ ,j] <- trimws(attributes[ ,j])
-        }
-      }
-      col_classes <- attributes[ ,"columnClasses"]
-      col_classes[col_classes == "factor"] <- "character"
-      
-      attributeList <- suppressWarnings(
-        EML::set_attributes(
-          attributes[ , c(
-            'attributeName', 
-            'formatString',
-            'unit',
-            'numberType',
-            'definition',
-            'attributeDefinition',
-            'minimum',
-            'maximum',
-            'missingValueCode',
-            'missingValueCodeExplanation')],
-          col_classes = attributes[ ,"columnClasses"]
-        )
-      )
-      
-    }
-    
-    # Set physical
-    
-    physical <- suppressMessages(
-      EML::set_physical(
-        paste0(data.path, '/', tables_found[i]),
-        numHeaderLines = "1",
-        recordDelimiter = EDIutils::get_eol(
-          path = data.path,
-          file.name = tables_found[i],
-          os = EDIutils::detect_os()
-        ),
-        attributeOrientation = "column",
-        url = 'placeholder'
-      )
-    )
-    
-    if (!is.null(access.url)){
-      physical$distribution$online$url[[1]] <- paste0(
-        access.url,
-        "/",
-        tables_found[i][i]
-      )
-    } else {
-      physical$distribution <- list()
-    }
-    
-    # Pull together information for the data table
-    
-    data_table <- list(
-      entityName = table_descriptions[i],
-      entityDescription = table_descriptions[i],
-      physical = physical,
-      attributeList = attributeList,
-      numberOfRecords = as.character(dim(df_table)[1])
-    )
-    
-    data_tables_stored[[i]] <- data_table
-    
-  }
-  
-  # Compile data tables
-  
-  eml$dataset$dataTable <- data_tables_stored
-  
-  # Add <otherEntity> ---------------------------------------------------------
-    
-  if (length(code_files) > 0) {
-    
-    list_of_other_entity <- list()
-    
-    for (i in 1:length(code_files)) {
-      
-      message("    <otherEntity>")
-      
-      # Create new other entity element
-      
-      otherEntity <- list()
-      
-      # Add entityName
-      
-      otherEntity$entityName <- code_files[i]
-      
-      # Add entityDescription
-      
-      otherEntity$entityDescription <- "A script that converts a parent data package to the ecocomDP (child data package)"
-      
-      # Add physical
-      
-      physical <- suppressMessages(
-        EML::set_physical(
-          paste0(data.path, '/', code_files[i])
-        )
-      )
-      
-      physical$dataFormat$textFormat <- NULL
-      
-      file_extension <- stringr::str_extract(code_files[i], "\\.[:alpha:]*$")
-      if (file_extension == ".R"){
-        format_name <- "application/R"
-        entity_type <- "text/x-rsrc"
-      } else if (file_extension == ".m"){
-        format_name <- "application/MATLAB"
-        entity_type <- "text/x-matlab"
-      } else if (file_extension == ".py"){
-        format_name <- "application/Python"
-        entity_type <- "text/x-python"
-      } else {
-        format_name <- "unknown"
-        entity_type <- "unknown"
-      }
-      
-      physical$dataFormat$externallyDefinedFormat$formatName <- format_name
-      
-      if (!is.null(access.url)){
-        physical$distribution$online$url[[1]] <- paste0(
-          access.url,
-          "/",
-          code_files[i]
-        )
-      } else {
-        physical$distribution <- list()
-      }
-      
-      otherEntity$physical <- physical
-      
-      # Add entityType
-      
-      otherEntity$entityType <- entity_type
-      
-      # Add otherEntity to list
-      
-      list_of_other_entity[[i]] <- otherEntity
-      
-    }
-    
-    eml$dataset$otherEntity <- list_of_other_entity
-    
-  }
-
-  # Update <eml> --------------------------------------------------------------
-  
-  eml_out <- list(
-    schemaLocation = "eml://ecoinformatics.org/eml-2.1.1  http://nis.lternet.edu/schemas/EML/eml-2.1.1/eml.xsd",
-    packageId = child.package.id,
-    system = "edi",
-    access = eml$access,
-    dataset = eml$dataset
-  )
-  
-  message("  </dataset>")
-  message("</eml>")
-  
-  # Write EML -----------------------------------------------------------------
-
-  message("Writing EML")
-
-  EML::write_eml(
-    eml_out, 
-    paste0(
-      data.path,
-      "/",
-      child.package.id,
-      ".xml"
-    )
-  )
-
-  # Validate EML --------------------------------------------------------------
-
-  message("Validating EML")
-
-  validation_result <- EML::eml_validate(eml_out)
-
-  if (validation_result == "TRUE"){
-    message("EML passed validation!")
-  } else {
-    message("EML validaton failed. See warnings for details.")
-  }
-  
-}
-
-
-
-
-# Compile attributes
-#
-# @description  
-#     This is a helper function for make_eml.R. It compiles attributes, 
-#     retrieves minimum and maximum values for numeric data and reformats the 
-#     attributes table.
-#
-# @usage 
-#     make_eml(path, parent.package.id, child.package.id)
-#
-# @param path 
-#     A path to the dataset working directory containing the validated 
-#     ecocomDP tables.
-#     
-# @param delimiter
-#     The delimiter of input files. Can be comma (i.e. ",") or tab (i.e. "\\t")
-#
-# @return 
-#     Attributes formatted for make_eml.R
-#     
-# @export
-#
-compile_attributes <- function(path, delimiter){
-  
-  message('Compiling table attributes:')
-  
-  # Parameterize --------------------------------------------------------------
-  
-  table_patterns <- c(
-    "observation\\b", 
-    "observation_ancillary\\b", 
-    "location_ancillary\\b", 
-    "taxon_ancillary\\b", 
-    "dataset_summary\\b", 
-    "location\\b", 
-    "taxon\\b", 
-    "variable_mapping\\b"
-  )
-  
-  table_names <- c(
-    "observation", 
-    "observation_ancillary", 
-    "location_ancillary", 
-    "taxon_ancillary", 
-    "dataset_summary", 
-    "location", 
-    "taxon", 
-    "variable_mapping"
-  )
-  
   dir_files <- list.files(path)
   table_names_found <- list()
+  table_descriptions_found <- list()
   tables_found <- list()
   
   for (i in 1:length(table_patterns)){
@@ -1079,10 +872,15 @@ compile_attributes <- function(path, delimiter){
     if (!identical(tables_found[[i]], character(0))){
       table_names_found[[i]] <- table_names[i]
     }
+    if (!identical(tables_found[[i]], character(0))){
+      table_descriptions_found[[i]] <- table_descriptions[i]
+    }
   }
   
   tables_found <- unlist(tables_found)
   table_names <- unlist(table_names_found)
+  table_descriptions <- unlist(table_descriptions_found)
+  delimiter <- EDIutils::detect_delimeter(path, tables_found, EDIutils::detect_os())
   
   # Loop through each ecocomDP table that is present --------------------------
   
@@ -1092,7 +890,7 @@ compile_attributes <- function(path, delimiter){
     
     message(table_names[i])
     
-    if (delimiter == ","){
+    if (delimiter[i] == ","){
       
       df_table <- read.csv(
         paste0(
@@ -1111,7 +909,7 @@ compile_attributes <- function(path, delimiter){
           tables_found[i]
           ),
         header = T,
-        sep = delimiter,
+        sep = delimiter[i],
         as.is = T,
         na.strings = "NA"
       ) 
@@ -1276,6 +1074,12 @@ compile_attributes <- function(path, delimiter){
     
   }
   
-  list("attributes" = attributes_stored)
+  list(
+    attributes = attributes_stored,
+    tables_found = tables_found,
+    table_names = unlist(table_names_found),
+    table_descriptions = unlist(table_descriptions_found),
+    delimiter = delimiter
+  )
   
 }

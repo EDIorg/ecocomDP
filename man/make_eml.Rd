@@ -2,111 +2,153 @@
 % Please edit documentation in R/make_eml.R
 \name{make_eml}
 \alias{make_eml}
-\title{Make EML for a set of ecocomDP tables}
+\title{Make EML metadata for ecocomDP tables}
 \usage{
-make_eml(data.path, code.path = data.path, code.files, 
-    parent.package.id, sep, cat.vars = NULL, intellectual.rights = NULL, 
-    child.package.id, user.id, affiliation, access.url = NULL, 
-    additional.contact)
+make_eml(
+      path,
+      parent.package.id,
+      child.package.id,
+      script,
+      script.description,
+      cat.vars,
+      contact,
+      user.id,
+      user.domain,
+      data.url = NULL
+    )
 }
 \arguments{
-\item{data.path}{(character) Path to the directory containing ecocomDP tables.}
+\item{path}{(character) Path to the directory containing ecocomDP data tables, 
+conversion scripts, and where EML metadata will be written.}
 
-\item{code.path}{(character) Path to the directory containing scripts that reformat the 
-parent data package to the child data package.}
-
-\item{code.files}{(character) Path to the directory containing scripts that reformat the 
-parent data package to the child data package.}
-
-\item{parent.package.id}{(character) Parent data package ID (e.g. "knb-lter-hfr.118.28") in the 
-EDI Data Repository.}
-
-\item{sep}{(character) Field delimiter used in the ecocomDP tables. Valid options 
-are "," or "\\t".}
-
-\item{cat.vars}{(data frame) Categorical variables with associated definitions and 
-units. Create a cat.vars data frame with the `define_variables` 
-function. Variables that can't be defined by the parent package EML 
-should be manually supplied to the cat.vars data frame.}
-
-\item{intellectual.rights}{(character) The intellectual rights license to be used with the 
-ecocomDP. If this argument is NULL, then the parent data package 
-intellectual rights will be used. Valid options are "CCO" 
-(https://creativecommons.org/publicdomain/zero/1.0/legalcode) and
-"CCBY" (https://creativecommons.org/licenses/by/4.0/legalcode).}
+\item{parent.package.id}{(character) Parent data package ID (e.g. "knb-lter-hfr.118.28"). Only 
+EDI Data Repository package IDs are currently supported.}
 
 \item{child.package.id}{(character) Child data package ID (e.g. "edi.53.1") to be uploaded to 
 EDI Data Repository.}
 
-\item{user.id}{(character) User ID of person uploading the ecocomDP data package to the
-EDI Data Repository.}
+\item{script}{(character) Names of scripts used to convert and repackage the source 
+data into the ecocomDP.}
 
-\item{affiliation}{(character) Affiliation of the user.id. Valid options are "EDI" or 
-"LTER".}
+\item{script.description}{(character) A description for each object listed under \code{script}.}
 
-\item{access.url}{(character) The base URL access point to ecocomDP tables and scripts 
-that can be downloaded by the EDI Data Repository (e.g.
-https://lter.limnology.wisc.edu/sites/default/files/data). Alternatively
-tables and scripts can be uploaded through the EDI Data Repository 
-Portal.}
+\item{cat.vars}{(data frame) Categorical variables with associated definitions and 
+units. Create a cat.vars data frame with the 
+\code{ecocomDP::define_variables()} function. Variables that can't be 
+defined by the parent package EML should be manually supplied to the 
+cat.vars data frame in one of the scripts specified in the 
+\code{script} argument.}
 
-\item{additional.contact}{(data frame) Contact information for creator of the script that converts
-the parent data package to the ecocomDP. The data frame must have these
-columns:
+\item{contact}{(data frame) Contact information of this ecocomDP creator.
+The data frame must have these columns:
 \itemize{
     \item{givenName}
     \item{surName}
     \item{organizationName}
     \item{electronicMailAddress}
 }}
+
+\item{user.id}{(character) ID(s) of user account(s) associated with the data repository
+in which this ecocomDP data package will be archived. Only EDI Data 
+Repository IDs are currently supported.}
+
+\item{user.domain}{(character) Domain of the \code{user.id}(s). Only "EDI" and "LTER" are 
+currently supported. If more than one, then supply as a vector of 
+character strings in the same order as the corresponding \code{user.id}.}
+
+\item{data.url}{(character) An optional argument specifying the publicly accessible URL 
+from which the ecocomDP tables and objects listed under the 
+\code{script} argument can be downloaded by the EDI Data Repository. 
+Don't use this argument if manually uploading to the repository.}
 }
 \value{
-An EML metadata record for the ecocomDP tables.
+An EML metadata record for the ecocomDP dataset defined by the arguments
+    to this function.
 }
 \description{
-Makes EML for a set of ecocomDP tables.
+Run this function AFTER you have validated your ecocomDP tables with 
+\code{ecocomDP::validate_ecocomDP()}.
 }
 \details{
-This function creates valid EML for an Ecological Community Data Pattern 
-    (ecocomDP) using a combination of elements from the parent data package, 
-    boiler plate metadata specific to the ecocomDP, and user supplied 
-    defined in the conversion script.
-    
-    Run \code{make_eml} after you have:
+This function creates an EML record for an Ecological Community Data 
+    Pattern (ecocomDP) combining metadata from the parent data package and
+    boiler-plate metadata describing the ecocomDP tables. Changes to the 
+    parent EML include:
     \itemize{
-        \item Created ecocomDP tables through a fully scripted process.
-        \item Validated your ecocomDP with `validate_ecocomDP`.
-        \item Defined variables contained in your ecocomDP using 
-        `define_variables`.`
-    }
-
-    This function uses elements of the parent data package EML to create EML
-    for the ecocomDP. Since ecocomDP is a fixed format, this function calls
-    on boiler plate table attributes of the R package inst/ directory and 
-    imports the metadata of the parent data package. Some new information is
-    added to the parent data package EML as specified below.
-    \itemize{
-        \item \strong{<access>} Appends the ecocomDP creator to the list of 
+        \item \strong{<access>} Adds the \code{user.id} to the list of 
         principals granted read and write access to the ecocomDP data 
-        package.
-        \item \strong{<pubDate>} Adds a publication date corresponding to 
-        when the ecocomDP EML was created.
-        \item \strong{<keywordSet} Appends two ecocomDP specific keyword 
-        sets to the keyword sets listed in the parent data package EML.
+        package this EML describes.
+        \item \strong{<title>} Adds a note that this is a derived data 
+        package in the ecocomDP format.
+        \item \strong{<pubDate>} Adds the date this EML was created.
+        \item \strong{<abstract>} Adds a note that this is a derived data 
+        package in the ecocomDP format.
+        \item \strong{<keywordSet} Adds the "ecocomDP" keyword to enable
+        search and discovery of all ecocomDP data packages in the EDI Data
+        Repository, and 7 terms from the LTER Controlled vocabulary:
+        "communities", "community composition", "community dynamics", 
+        "community patterns", "species composition", "species diversity",
+        and "species richness".
         \item \strong{<intellectualRights>} Keeps intact the intellectual
-        rights license of the parent data package, or replaces it with one
-        of the user specified options above.
+        rights license of the parent data package, or replaces it with
+        "CCO" (https://creativecommons.org/publicdomain/zero/1.0/legalcode).
         \item \strong{<taxonomicCoverage>} Updates the taxonomic coverage 
         element with data supplied in the taxon table of the ecocomDP.
-        \item \strong{<contact>} Appends contact information of the ecocomDP
-        creator to the contacts listed in the parent data package.
-        \item \strong{<methodStep>} Adds provenance metadata as a method 
-        step, describing the parent data package from which the ecocomDP 
-        was created.
+        \item \strong{<contact>} Adds contact information of the ecocomDP
+        creator to the list of contacts in the parent data package EML.
+        \item \strong{<methodStep>} Adds a note that this data package was
+        created by the scripts listed under the \code{script} argument,
+        and adds provenance metadata noting that this is a derived data 
+        and describing where the parent data package can be accessed.
         \item \strong{<dataTables>} Replaces the parent data package data
-        tables with the newly created ecocomDP tables. NOTE: All other data
-        entities are removed from the ecocomDP EML.
-        \item \strong{<otherEntity>} Describes formatting scripts under the 
-        other entity element.
+        tables metadata with boiler-plate metadata for the ecocomDP tables.
+        \item \strong{<otherEntity>} Describes scripts listed in the 
+        \code{script} and \code{script.description} arguments. Any other
+        entities listed in the parent EML are removed.
     }
+}
+\examples{
+\dontrun{
+
+# Set path to ecocomDP tables and scripts
+path <- "/Users/csmith/Desktop/ecocomDP"
+
+# Validate ecocomDP tables
+ecocomDP::validate_ecocomDP(path)
+
+# Use parent EML to define variables of the ecocomDP and manually add variable 
+# names and definitions created in the ecocomDP re-formatting process.
+catvars <- ecocomDP::define_variables(path, "knb-lter-sev.29.12")
+catvars$unit[catvars$code == "Count"] <- "number"
+catvars$definition[catvars$code == "Comments"] <- "A special statement related to an observation"
+
+# Create contact information for the ecocomDP creator
+additional_contact <- data.frame(
+  givenName = 'Colin',
+  surName = 'Smith',
+  organizationName = 'Environmental Data Initiative',
+  electronicMailAddress = 'csmith@wisc.edu',
+  stringsAsFactors = FALSE
+)
+
+# Create EML
+ecocomDP::make_eml(
+  path = path,
+  parent.package.id = "knb-lter-sev.29.12",
+  child.package.id = "edi.101.5",
+  script = c(
+    "convert_sev29_to_ecocomDP.R", 
+    "package_edi_333.R"
+  ),
+  script.description = c(
+    "R script for creating the ecocomDP tables.",
+    "R script for creating the ecocomDP EML"
+  ),
+  cat.vars = catvars,
+  contact = additional_contact,
+  user.id = 'csmith',
+  user.domain = 'LTER',
+)
+}
+
 }
