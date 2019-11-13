@@ -1,9 +1,11 @@
 #EcoCom DP - posgreSQL
 ---
 
-Directory contains the postgreSQL implementation of EDI's design pattern for ecological community survey data (ecocomDP)
+The ecocomDP model is specific to any one language.  ecocomDP is composed of 7 tables, which can be linked via their indexes. An RDB implmentation illustrates this well, but of course, there are other equally usable mechanisms (eg, R data frames).
 
-ecocomDP is composed of 7 tables, which can be linked via their indexes. An RDB implmentation illustrates this well, but of course, there are other equally usable mechanisms (eg, R data frames).
+
+This directory contains the postgreSQL implementation of EDI's design pattern for ecological community survey data (ecocomDP)
+
 
 File: create_7tables_ecocomDP_postgres.sql
 
