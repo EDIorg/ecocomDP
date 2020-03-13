@@ -72,10 +72,25 @@ view_all_ecocomDP <- function(){
   }
 
   # Search NEON ---------------------------------------------------------------
-  # NEON data products are read into R and converted to ecocomDP on demand.
-  # Available products are manually listed in 
-  # "neon_data_products_for_ecocomDP.txt" and the EML manually created and 
-  # stored in the ecocomDP R package.
+  #
+  # Static ecocomDP versions of NEON data products don't exist, and therefore
+  # must be created on demand. To bypass the wait time required in converting
+  # the data to ecocomDP, creating the EML, then rendering the EML for human
+  # browsing, the NEON EML is created ahead of time. The process is:
+  #
+  # 1.) Convert the data product to the ecocomDP
+  # 2.) Run ecocomDP::make_eml() to get the EML
+  # 3.) Pass the EML to EDIs metadata rendering service and copy a webarchive to
+  #     /inst (see existing examples for required formatting).
+  # FIXME: Step 3 is saving the rendered EML as a webarchive which can only be
+  #        used with the Safari web browser. Switch to a format common among
+  #        web browsers.
+  # 4.) Copy the ecocomDP dataset_summary table to /inst (see existing examples 
+  #     for required formatting).
+  # 5.) Update the listing /inst/neon_data_products_for_ecocomDP.txt
+  # 
+  # These data and metadata are then rendered into the summary table output 
+  # by view_all_ecocomDP() and is rendered into 
   
   message('Searching NEON ...')
   

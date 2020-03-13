@@ -4,13 +4,18 @@
 \alias{lookup_neon_data_availability}
 \title{Lookup NEON data product availability}
 \usage{
-lookup_neon_data_availability(dpid = "DP1.10086.001",
-  sample_location_list = NA, sample_location_type = "siteID",
-  sample_date_min = "2012-01-01", sample_date_max = Sys.Date(),
-  sample_date_format = "\%Y-\%m-\%d", data_package_type = "basic",
+lookup_neon_data_availability(
+  dpid = "DP1.10086.001",
+  sample_location_list = NA,
+  sample_location_type = "siteID",
+  sample_date_min = "2012-01-01",
+  sample_date_max = Sys.Date(),
+  sample_date_format = "\%Y-\%m-\%d",
+  data_package_type = "basic",
   url_prefix_data = "http://data.neonscience.org:80/api/v0/data/",
   url_prefix_products = "http://data.neonscience.org:80/api/v0/products/",
-  ...)
+  ...
+)
 }
 \arguments{
 \item{dpid}{character sting for NEON data product ID}
