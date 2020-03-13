@@ -128,6 +128,8 @@ view_landing_page <- function(package.id){
 
     
     # NEON --------------------------------------------------------------------
+    # FIXME: The current implementation requires the Safari web browser.
+    
   } else if (stringr::str_detect(package.id, 'DP')){
     
     # Validate
