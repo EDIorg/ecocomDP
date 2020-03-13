@@ -90,7 +90,7 @@ view_all_ecocomDP <- function(){
   # 5.) Update the listing /inst/neon_data_products_for_ecocomDP.txt
   # 
   # These data and metadata are then rendered into the summary table output 
-  # by view_all_ecocomDP() and is rendered into 
+  # by view_all_ecocomDP()
   
   message('Searching NEON ...')
   
