@@ -1168,7 +1168,7 @@ validate_referential_integrity <- function(tables, data.list, criteria) {
         lis = data.list)
     )
     table_pattern <- paste0(table.name, "\\b")
-    use_i <- str_detect(dir_tables, table_pattern)
+    use_i <- stringr::str_detect(dir_tables, table_pattern)
     if (sum(use_i) > 0){
       data_in <- data.list[[table.name]][['data']]
       if (key %in% colnames(data_in)){
@@ -1205,7 +1205,7 @@ validate_referential_integrity <- function(tables, data.list, criteria) {
         lis = data.list)
     )
     table_pattern <- paste0(table.name, "\\b")
-    use_i <- str_detect(dir_tables, table_pattern)
+    use_i <- stringr::str_detect(dir_tables, table_pattern)
     if (sum(use_i) > 0){
       data_in <- data.list[[table.name]][['data']]
       uni_values <- unique(data_in[ , key])
@@ -1406,7 +1406,7 @@ is_datetime_format <- function(L1.table, tables, data.list, criteria) {
   
   if (length(L1_table_ck) > 0){
     
-    table.name <- tables[str_detect(tables, paste0(L1_table_found, '\\b'))]
+    table.name <- tables[stringr::str_detect(tables, paste0(L1_table_found, '\\b'))]
     
     if (L1_table_ck %in% colnames(data.list[[L1_table_found]][['data']])){
       
@@ -1459,7 +1459,7 @@ is_datetime_format <- function(L1.table, tables, data.list, criteria) {
 
 is_required_table <- function(required_table, tables){
   required_table_pattern <- paste0(required_table, "\\b")
-  if (sum(str_detect(tables, required_table_pattern)) == 1){
+  if (sum(stringr::str_detect(tables, required_table_pattern)) == 1){
     required_table
   }
 }
@@ -1476,7 +1476,7 @@ is_required_table <- function(required_table, tables){
 # Retrieves the name of the L1 table from the input file name.
 is_table <- function(L1.table, table.name){
   required_table_pattern <- paste0(L1.table, "\\b")
-  if (sum(str_detect(table.name, required_table_pattern)) == 1){
+  if (sum(stringr::str_detect(table.name, required_table_pattern)) == 1){
     L1.table
   }
 }
