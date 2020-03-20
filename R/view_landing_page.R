@@ -33,17 +33,17 @@ view_landing_page <- function(package.id){
   # Two methods are used. One for EDI and another for NEON.
   
   # EDI -----------------------------------------------------------------------
-  if ((str_detect(package.id, 'edi.')) | (str_detect(package.id, 'knb-lter'))){
+  if ((stringr::str_detect(package.id, 'edi.')) | (stringr::str_detect(package.id, 'knb-lter'))){
 
     # Validate
 
     response <- httr::GET('https://pasta.lternet.edu/package/search/eml?q=keyword:ecocomDP&fl=packageid&rows=1000')
     
-    if (!(status_code(response) == 200)){
+    if (!(httr::status_code(response) == 200)){
       stop('The data repository is inaccessible. Please try again later.')
     }
 
-    xml_in <- read_xml(response)
+    xml_in <- xml2::read_xml(response)
     pkg_ids <- xml2::xml_text(
       xml2::xml_find_all(
         xml_in,
@@ -128,7 +128,9 @@ view_landing_page <- function(package.id){
 
     
     # NEON --------------------------------------------------------------------
-  } else if (str_detect(package.id, 'DP')){
+    # FIXME: The current implementation requires the Safari web browser.
+    
+  } else if (stringr::str_detect(package.id, 'DP')){
     
     # Validate
     

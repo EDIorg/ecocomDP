@@ -4,14 +4,19 @@
 \alias{get_neon_datatable}
 \title{Get NEON data table}
 \usage{
-get_neon_datatable(dpid = "DP1.10086.001",
+get_neon_datatable(
+  dpid = "DP1.10086.001",
   data_table_name = "sls_soilCoreCollection",
-  sample_location_list = NA, sample_location_type = "siteID",
-  sample_date_min = "2012-01-01", sample_date_max = Sys.Date(),
-  sample_date_format = "\%Y-\%m-\%d", data_package_type = "basic",
+  sample_location_list = NA,
+  sample_location_type = "siteID",
+  sample_date_min = "2012-01-01",
+  sample_date_max = Sys.Date(),
+  sample_date_format = "\%Y-\%m-\%d",
+  data_package_type = "basic",
   url_prefix_data = "http://data.neonscience.org:80/api/v0/data/",
   url_prefix_products = "http://data.neonscience.org:80/api/v0/products/",
-  ...)
+  ...
+)
 }
 \arguments{
 \item{dpid}{character sting for NEON data product ID}
