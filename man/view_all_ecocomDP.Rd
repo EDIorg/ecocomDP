@@ -2,7 +2,7 @@
 % Please edit documentation in R/view_all_ecocomDP.R
 \name{view_all_ecocomDP}
 \alias{view_all_ecocomDP}
-\title{View a summary of all ecocomDP data packages}
+\title{Get summaries of all available data packages in the ecocomDP format}
 \usage{
 view_all_ecocomDP()
 }
@@ -20,5 +20,11 @@ view_all_ecocomDP()
     }
 }
 \description{
-View a summary of all ecocomDP data packages.
+Get summaries of all available data packages in the ecocomDP format
+}
+\examples{
+\dontrun{
+view_all_ecocomDP()
+}
+        
 }

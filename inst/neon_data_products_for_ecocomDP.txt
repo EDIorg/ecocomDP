@@ -1,1 +1,8 @@
-data_product_id	tables_to_download	titleDP1.20120.001	NA	NEON Macroinvertebrate collection (Reformatted to ecocomDP Design Pattern)DP1.20120.001	inv_fieldData	NADP1.20120.001	inv_taxonomyProcessed	NA
+id	title	master_taxon_list	data_table
+DP1.20166.001	"Periphyton, seston, and phytoplankton collection"	ALGAE	alg_taxonomyProcessed
+DP1.10072.001	Small mammal box trapping	SMALL_MAMMAL	mam_pertrapnight
+DP1.10058.001	Plant presence and percent cover	PLANT	div_10m2Data100m2Data
+DP1.10022.001	Ground beetles sampled from pitfall traps (Herpetology)	HERPETOLOGY	bet_sorting
+DP1.20107.001	"Fish electrofishing, gill netting, and fyke netting counts"	FISH	fsh_bulkCount
+DP1.10022.001	Ground beetles sampled from pitfall traps (Beetle)	BEETLE	bet_sorting
+DP1.20120.001	Macroinvertebrate collection	MACROINVERTEBRATE	inv_taxonomyProcessed
