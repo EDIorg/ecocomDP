@@ -1,0 +1,205 @@
+##############################################################################################
+#' @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for ALGAE from neon.data.product.id DP1.20166.001 (Periphyton, seston, and phytoplankton collection) from the NEON data portal and map to the ecocomDP 
+#' @export
+
+# changelog and author contributions / copyrights
+#   Eric R Sokol (2020-04-17)
+#     original creation
+##############################################################################################
+map_neon_data_to_ecocomDP.ALGAE <- function(
+  neon.data.product.id = "DP1.20166.001",
+  ...
+){
+  
+  # get all tables
+  all_tabs_in <- neonUtilities::loadByProduct(
+    # hard coded arguments
+    dpID = neon.data.product.id, 
+    package = "basic", 
+    
+    # dots for passing user input
+    ...
+    
+    # # required input from users
+    # site = c("MAYF", "PRIN"), 
+    # startdate = "2016-1", 
+    # enddate = "2018-11",
+    
+    # # optional input from users
+    # avg = "all",
+    # check.size = FALSE,
+    # nCores = 1,
+    # forceParallel = FALSE,
+  )
+  
+  
+  
+  # tables needed for ALGAE to populate the ecocomDP tables
+  
+  field_data_in <- all_tabs_in$alg_fieldData
+  tax_long_in <- all_tabs_in$alg_taxonomyProcessed
+  biomass_in <-all_tabs_in$alg_biomass
+  
+  
+  
+  #Observation table
+  
+  ###change NA"s to 0"s in tax_long_in data for calculations only
+  # tax_long_in$perBottleSampleVolume[is.na(tax_long_in$perBottleSampleVolume)] <- 0
+  #join algae biomass and taxonomy data 
+  
+  
+  
+  # browser()
+  
+  
+  
+  # Note that observational data are in the tax table returned by the lab, 
+  # however, we need "fieldSampleVolume" from the biomass table to standardize
+  # algal counts returned by the lab. Thus we"re joining tables here by sampleID, 
+  # but only keeping sampleID, parentSampleID, and fieldSampleVolume from the biomass table.
+  
+  alg_tax_biomass <- biomass_in %>%
+    dplyr::select(parentSampleID, sampleID, fieldSampleVolume) %>%
+    dplyr::distinct() %>%
+    dplyr::left_join(tax_long_in, by = "sampleID") %>%
+    dplyr::distinct()
+  
+  
+  # browser()
+  
+  
+  
+  # only keep cols in field_data_in that are unique to that table
+  field_data_names_to_keep <- c("parentSampleID",
+                                names(field_data_in) %>% 
+                                  dplyr::setdiff(names(alg_tax_biomass)))
+  
+  field_data_in <- field_data_in[,field_data_names_to_keep] %>%
+    dplyr::distinct()
+  
+  # create the observation table by joining with field_data_in
+  table_observation_raw <- alg_tax_biomass %>% 
+    dplyr::left_join(field_data_in, by = "parentSampleID") %>%
+    dplyr::filter(algalParameterUnit=="cellsPerBottle")%>%
+    dplyr::mutate(
+      density = dplyr::case_when(
+        algalSampleType %in% c("seston") ~ algalParameterValue / perBottleSampleVolume,
+        #add phytoplankton back in when applicable
+        TRUE ~ (algalParameterValue / perBottleSampleVolume) * (fieldSampleVolume / benthicArea)),
+      cell_density_standardized_unit = dplyr::case_when(
+        algalSampleType == "phytoplankton" ~ "cells/mL",
+        TRUE ~ "cells/m2"))
+  
+  # browser()
+  
+  # rename fields for ecocomDP
+  table_observation_ecocomDP <- table_observation_raw %>%
+    dplyr::mutate(
+      package_id = paste0(neon.data.product.id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+    dplyr::rename(
+      observation_id = uid, 
+      event_id = eventID,
+      location_id = namedLocation,
+      observation_datetime = collectDate,
+      taxon_id = acceptedTaxonID,
+      variable_name = algalParameter,
+      value = density,
+      unit = cell_density_standardized_unit) 
+  
+  # browser()
+  
+  # make observation table
+  table_observation <- table_observation_ecocomDP %>%
+    dplyr::select(
+      observation_id,
+      event_id,
+      package_id,
+      location_id,
+      observation_datetime,
+      taxon_id,
+      variable_name,
+      value,
+      unit) %>% 
+    dplyr::distinct()
+  
+  # make observation ancillary table
+  table_observation_ancillary <- table_observation_ecocomDP %>%
+    dplyr::select(
+      -c(
+        event_id,
+        package_id,
+        location_id,
+        observation_datetime,
+        taxon_id,
+        variable_name,
+        value,
+        unit)) %>% 
+    dplyr::distinct()
+  
+  
+  
+  # ecocomDP location table
+  
+  # get relevant location info from the data
+  table_location_raw <- table_observation_raw %>%
+    dplyr::select(domainID, siteID, namedLocation, decimalLatitude, decimalLongitude, elevation) %>%
+    dplyr::distinct() 
+  
+  # make ecocomDP format location table, identifying hierarchical spatial structure
+  table_location <- table_observation_raw %>%
+    ecocomDP::make_location(
+      cols = c("domainID", "siteID", "namedLocation"))
+  
+  # populate latitude
+  table_location$latitude <- table_location_raw$decimalLatitude[match(table_location$location_name, table_location_raw$namedLocation)] 
+  
+  #populate longitude
+  table_location$longitude <- table_location_raw$decimalLongitude[match(table_location$location_name, table_location_raw$namedLocation)] 
+  
+  # populate elevation
+  table_location$elevation <- table_location_raw$elevation[match(table_location$location_name, table_location_raw$namedLocation)] 
+  
+  
+  
+  
+  # # Taxon table using available data
+  # 
+  # # NOTE: we could use the NEON taxon tables API as an alternative to populate
+  # # the taxon table. We could make it more standardized, but it might be 
+  # # more resource intensive
+  table_taxon_raw <- tax_long_in %>%
+    dplyr::select(acceptedTaxonID, taxonRank, scientificName, identificationReferences) %>%
+    dplyr::distinct() 
+  
+  # # make ecocomDP format taxon table using ecocomDP function
+  # table_taxon <- ecocomDP::make_taxon(
+  #     taxa = table_taxon_raw$scientificName,
+  #     taxon.id = table_taxon_raw$acceptedTaxonID,
+  #     name.type = "scientific",
+  #     data.sources = 3)
+  
+  # alternative for making ecocomDP format taxon table 
+  table_taxon <- table_taxon_raw %>%
+    dplyr::rename(
+      taxon_id = acceptedTaxonID,
+      taxon_rank = taxonRank,
+      taxon_name = scientificName,
+      authority_taxon_id = identificationReferences
+    ) %>%
+    dplyr::mutate(
+      authority_system = "NEON_external_lab",
+    )
+  
+  
+  
+  
+  # list of tables to be returned, with standardized names for elements
+  out_list <- list(
+    location = table_location,
+    taxon = table_taxon,
+    observation = table_observation,
+    observation_ancillary = table_observation_ancillary)
+  
+  return(out_list)
+}
