@@ -26,20 +26,20 @@ download.file(inUrl1,infile1,method="auto")
   
 # Fix any interval or ratio columns mistakenly read in as nominal and nominal columns read as numeric or dates read as strings
                 
-if (class(dt1$observation_id)!="factor") dt1$observation_id<- as.factor(dt1$observation_id)
-if (class(dt1$event_id)!="factor") dt1$event_id<- as.factor(dt1$event_id)
-if (class(dt1$package_id)!="factor") dt1$package_id<- as.factor(dt1$package_id)
-if (class(dt1$location_id)!="factor") dt1$location_id<- as.factor(dt1$location_id)                                   
-# attempting to convert dt1$observation_datetime dateTime string to R date structure (date or POSIXct)                                
-tmpDateFormat<-"%Y-%m-%d"
-tmp1observation_datetime<-as.Date(dt1$observation_datetime,format=tmpDateFormat)
-# Keep the new dates only if they all converted correctly
-if(length(tmp1observation_datetime) == length(tmp1observation_datetime[!is.na(tmp1observation_datetime)])){dt1$observation_datetime <- tmp1observation_datetime } else {print("Date conversion failed for dt1$observation_datetime. Please inspect the data and do the date conversion yourself.")}                                                                    
-rm(tmpDateFormat,tmp1observation_datetime) 
-if (class(dt1$taxon_id)!="factor") dt1$taxon_id<- as.factor(dt1$taxon_id)
-if (class(dt1$variable_name)!="factor") dt1$variable_name<- as.factor(dt1$variable_name)
-if (class(dt1$value)=="factor") dt1$value <-as.numeric(levels(dt1$value))[as.integer(dt1$value) ]
-if (class(dt1$unit)!="factor") dt1$unit<- as.factor(dt1$unit)
+# if (class(dt1$observation_id)!="factor") dt1$observation_id<- as.factor(dt1$observation_id)
+# if (class(dt1$event_id)!="factor") dt1$event_id<- as.factor(dt1$event_id)
+# if (class(dt1$package_id)!="factor") dt1$package_id<- as.factor(dt1$package_id)
+# if (class(dt1$location_id)!="factor") dt1$location_id<- as.factor(dt1$location_id)                                   
+# # attempting to convert dt1$observation_datetime dateTime string to R date structure (date or POSIXct)                                
+# tmpDateFormat<-"%Y-%m-%d"
+# tmp1observation_datetime<-as.Date(dt1$observation_datetime,format=tmpDateFormat)
+# # Keep the new dates only if they all converted correctly
+# if(length(tmp1observation_datetime) == length(tmp1observation_datetime[!is.na(tmp1observation_datetime)])){dt1$observation_datetime <- tmp1observation_datetime } else {print("Date conversion failed for dt1$observation_datetime. Please inspect the data and do the date conversion yourself.")}                                                                    
+# rm(tmpDateFormat,tmp1observation_datetime) 
+# if (class(dt1$taxon_id)!="factor") dt1$taxon_id<- as.factor(dt1$taxon_id)
+# if (class(dt1$variable_name)!="factor") dt1$variable_name<- as.factor(dt1$variable_name)
+# if (class(dt1$value)=="factor") dt1$value <-as.numeric(levels(dt1$value))[as.integer(dt1$value) ]
+# if (class(dt1$unit)!="factor") dt1$unit<- as.factor(dt1$unit)
                 
 # Convert Missing Values to NA for non-dates
                 
@@ -79,15 +79,15 @@ download.file(inUrl2,infile2,method="auto")
                     "unit"    ), check.names=TRUE, as.is = TRUE)
                
   
-# Fix any interval or ratio columns mistakenly read in as nominal and nominal columns read as numeric or dates read as strings
-                
-if (class(dt2$observation_ancillary_id)!="factor") dt2$observation_ancillary_id<- as.factor(dt2$observation_ancillary_id)
-if (class(dt2$event_id)!="factor") dt2$event_id<- as.factor(dt2$event_id)
-if (class(dt2$variable_name)!="factor") dt2$variable_name<- as.factor(dt2$variable_name)
-if (class(dt2$value)!="factor") dt2$value<- as.factor(dt2$value)
-if (class(dt2$unit)!="factor") dt2$unit<- as.factor(dt2$unit)
-                
-# Convert Missing Values to NA for non-dates
+# # Fix any interval or ratio columns mistakenly read in as nominal and nominal columns read as numeric or dates read as strings
+#                 
+# if (class(dt2$observation_ancillary_id)!="factor") dt2$observation_ancillary_id<- as.factor(dt2$observation_ancillary_id)
+# if (class(dt2$event_id)!="factor") dt2$event_id<- as.factor(dt2$event_id)
+# if (class(dt2$variable_name)!="factor") dt2$variable_name<- as.factor(dt2$variable_name)
+# if (class(dt2$value)!="factor") dt2$value<- as.factor(dt2$value)
+# if (class(dt2$unit)!="factor") dt2$unit<- as.factor(dt2$unit)
+#                 
+# # Convert Missing Values to NA for non-dates
                 
 
 
@@ -122,21 +122,21 @@ download.file(inUrl3,infile3,method="auto")
                     "unit"    ), check.names=TRUE, as.is = TRUE)
                
   
-# Fix any interval or ratio columns mistakenly read in as nominal and nominal columns read as numeric or dates read as strings
-                
-if (class(dt3$location_ancillary_id)!="factor") dt3$location_ancillary_id<- as.factor(dt3$location_ancillary_id)
-if (class(dt3$location_id)!="factor") dt3$location_id<- as.factor(dt3$location_id)                                   
-# attempting to convert dt3$datetime dateTime string to R date structure (date or POSIXct)                                
-tmpDateFormat<-"%Y-%m-%d"
-tmp3datetime<-as.Date(dt3$datetime,format=tmpDateFormat)
-# Keep the new dates only if they all converted correctly
-if(length(tmp3datetime) == length(tmp3datetime[!is.na(tmp3datetime)])){dt3$datetime <- tmp3datetime } else {print("Date conversion failed for dt3$datetime. Please inspect the data and do the date conversion yourself.")}                                                                    
-rm(tmpDateFormat,tmp3datetime) 
-if (class(dt3$variable_name)!="factor") dt3$variable_name<- as.factor(dt3$variable_name)
-if (class(dt3$value)!="factor") dt3$value<- as.factor(dt3$value)
-if (class(dt3$unit)!="factor") dt3$unit<- as.factor(dt3$unit)
-                
-# Convert Missing Values to NA for non-dates
+# # Fix any interval or ratio columns mistakenly read in as nominal and nominal columns read as numeric or dates read as strings
+#                 
+# if (class(dt3$location_ancillary_id)!="factor") dt3$location_ancillary_id<- as.factor(dt3$location_ancillary_id)
+# if (class(dt3$location_id)!="factor") dt3$location_id<- as.factor(dt3$location_id)                                   
+# # attempting to convert dt3$datetime dateTime string to R date structure (date or POSIXct)                                
+# tmpDateFormat<-"%Y-%m-%d"
+# tmp3datetime<-as.Date(dt3$datetime,format=tmpDateFormat)
+# # Keep the new dates only if they all converted correctly
+# if(length(tmp3datetime) == length(tmp3datetime[!is.na(tmp3datetime)])){dt3$datetime <- tmp3datetime } else {print("Date conversion failed for dt3$datetime. Please inspect the data and do the date conversion yourself.")}                                                                    
+# rm(tmpDateFormat,tmp3datetime) 
+# if (class(dt3$variable_name)!="factor") dt3$variable_name<- as.factor(dt3$variable_name)
+# if (class(dt3$value)!="factor") dt3$value<- as.factor(dt3$value)
+# if (class(dt3$unit)!="factor") dt3$unit<- as.factor(dt3$unit)
+#                 
+# # Convert Missing Values to NA for non-dates
                 
 
 
@@ -172,19 +172,19 @@ download.file(inUrl4,infile4,method="auto")
                     "author"    ), check.names=TRUE, as.is = TRUE)
                
   
-# Fix any interval or ratio columns mistakenly read in as nominal and nominal columns read as numeric or dates read as strings
-                
-if (class(dt4$taxon_ancillary_id)!="factor") dt4$taxon_ancillary_id<- as.factor(dt4$taxon_ancillary_id)
-if (class(dt4$taxon_id)!="factor") dt4$taxon_id<- as.factor(dt4$taxon_id)                                   
-# attempting to convert dt4$datetime dateTime string to R date structure (date or POSIXct)                                
-tmpDateFormat<-"%Y-%m-%d"
-tmp4datetime<-as.Date(dt4$datetime,format=tmpDateFormat)
-# Keep the new dates only if they all converted correctly
-if(length(tmp4datetime) == length(tmp4datetime[!is.na(tmp4datetime)])){dt4$datetime <- tmp4datetime } else {print("Date conversion failed for dt4$datetime. Please inspect the data and do the date conversion yourself.")}                                                                    
-rm(tmpDateFormat,tmp4datetime) 
-if (class(dt4$variable_name)!="factor") dt4$variable_name<- as.factor(dt4$variable_name)
-if (class(dt4$value)!="factor") dt4$value<- as.factor(dt4$value)
-if (class(dt4$author)!="factor") dt4$author<- as.factor(dt4$author)
+# # Fix any interval or ratio columns mistakenly read in as nominal and nominal columns read as numeric or dates read as strings
+#                 
+# if (class(dt4$taxon_ancillary_id)!="factor") dt4$taxon_ancillary_id<- as.factor(dt4$taxon_ancillary_id)
+# if (class(dt4$taxon_id)!="factor") dt4$taxon_id<- as.factor(dt4$taxon_id)                                   
+# # attempting to convert dt4$datetime dateTime string to R date structure (date or POSIXct)                                
+# tmpDateFormat<-"%Y-%m-%d"
+# tmp4datetime<-as.Date(dt4$datetime,format=tmpDateFormat)
+# # Keep the new dates only if they all converted correctly
+# if(length(tmp4datetime) == length(tmp4datetime[!is.na(tmp4datetime)])){dt4$datetime <- tmp4datetime } else {print("Date conversion failed for dt4$datetime. Please inspect the data and do the date conversion yourself.")}                                                                    
+# rm(tmpDateFormat,tmp4datetime) 
+# if (class(dt4$variable_name)!="factor") dt4$variable_name<- as.factor(dt4$variable_name)
+# if (class(dt4$value)!="factor") dt4$value<- as.factor(dt4$value)
+# if (class(dt4$author)!="factor") dt4$author<- as.factor(dt4$author)
                 
 # Convert Missing Values to NA for non-dates
                 
@@ -223,19 +223,19 @@ download.file(inUrl5,infile5,method="auto")
                     "geo_extent_bounding_box_m2"    ), check.names=TRUE, as.is = TRUE)
                
   
-# Fix any interval or ratio columns mistakenly read in as nominal and nominal columns read as numeric or dates read as strings
-                
-if (class(dt5$package_id)!="factor") dt5$package_id<- as.factor(dt5$package_id)
-if (class(dt5$original_package_id)!="factor") dt5$original_package_id<- as.factor(dt5$original_package_id)
-if (class(dt5$length_of_survey_years)=="factor") dt5$length_of_survey_years <-as.numeric(levels(dt5$length_of_survey_years))[as.integer(dt5$length_of_survey_years) ]
-if (class(dt5$number_of_years_sampled)=="factor") dt5$number_of_years_sampled <-as.numeric(levels(dt5$number_of_years_sampled))[as.integer(dt5$number_of_years_sampled) ]
-if (class(dt5$std_dev_interval_betw_years)!="factor") dt5$std_dev_interval_betw_years<- as.factor(dt5$std_dev_interval_betw_years)
-if (class(dt5$max_num_taxa)=="factor") dt5$max_num_taxa <-as.numeric(levels(dt5$max_num_taxa))[as.integer(dt5$max_num_taxa) ]
-if (class(dt5$geo_extent_bounding_box_m2)=="factor") dt5$geo_extent_bounding_box_m2 <-as.numeric(levels(dt5$geo_extent_bounding_box_m2))[as.integer(dt5$geo_extent_bounding_box_m2) ]
-                
+# # Fix any interval or ratio columns mistakenly read in as nominal and nominal columns read as numeric or dates read as strings
+#                 
+# if (class(dt5$package_id)!="factor") dt5$package_id<- as.factor(dt5$package_id)
+# if (class(dt5$original_package_id)!="factor") dt5$original_package_id<- as.factor(dt5$original_package_id)
+# if (class(dt5$length_of_survey_years)=="factor") dt5$length_of_survey_years <-as.numeric(levels(dt5$length_of_survey_years))[as.integer(dt5$length_of_survey_years) ]
+# if (class(dt5$number_of_years_sampled)=="factor") dt5$number_of_years_sampled <-as.numeric(levels(dt5$number_of_years_sampled))[as.integer(dt5$number_of_years_sampled) ]
+# if (class(dt5$std_dev_interval_betw_years)!="factor") dt5$std_dev_interval_betw_years<- as.factor(dt5$std_dev_interval_betw_years)
+# if (class(dt5$max_num_taxa)=="factor") dt5$max_num_taxa <-as.numeric(levels(dt5$max_num_taxa))[as.integer(dt5$max_num_taxa) ]
+# if (class(dt5$geo_extent_bounding_box_m2)=="factor") dt5$geo_extent_bounding_box_m2 <-as.numeric(levels(dt5$geo_extent_bounding_box_m2))[as.integer(dt5$geo_extent_bounding_box_m2) ]
+#                 
 # Convert Missing Values to NA for non-dates
                 
-dt5$geo_extent_bounding_box_m2 <- ifelse((trimws(as.character(dt5$geo_extent_bounding_box_m2))==trimws("NA")),NA,dt5$geo_extent_bounding_box_m2)
+# dt5$geo_extent_bounding_box_m2 <- ifelse((trimws(as.character(dt5$geo_extent_bounding_box_m2))==trimws("NA")),NA,dt5$geo_extent_bounding_box_m2)
 
 
 # Here is the structure of the input data frame:
@@ -271,20 +271,20 @@ download.file(inUrl6,infile6,method="auto")
                     "parent_location_id"    ), check.names=TRUE, as.is = TRUE)
                
   
-# Fix any interval or ratio columns mistakenly read in as nominal and nominal columns read as numeric or dates read as strings
-                
-if (class(dt6$location_id)!="factor") dt6$location_id<- as.factor(dt6$location_id)
-if (class(dt6$location_name)!="factor") dt6$location_name<- as.factor(dt6$location_name)
-if (class(dt6$latitude)=="factor") dt6$latitude <-as.numeric(levels(dt6$latitude))[as.integer(dt6$latitude) ]
-if (class(dt6$longitude)=="factor") dt6$longitude <-as.numeric(levels(dt6$longitude))[as.integer(dt6$longitude) ]
-if (class(dt6$elevation)=="factor") dt6$elevation <-as.numeric(levels(dt6$elevation))[as.integer(dt6$elevation) ]
-if (class(dt6$parent_location_id)!="factor") dt6$parent_location_id<- as.factor(dt6$parent_location_id)
-                
-# Convert Missing Values to NA for non-dates
-                
-dt6$latitude <- ifelse((trimws(as.character(dt6$latitude))==trimws("NA")),NA,dt6$latitude)
-dt6$longitude <- ifelse((trimws(as.character(dt6$longitude))==trimws("NA")),NA,dt6$longitude)
-dt6$elevation <- ifelse((trimws(as.character(dt6$elevation))==trimws("NA")),NA,dt6$elevation)
+# # Fix any interval or ratio columns mistakenly read in as nominal and nominal columns read as numeric or dates read as strings
+#                 
+# if (class(dt6$location_id)!="factor") dt6$location_id<- as.factor(dt6$location_id)
+# if (class(dt6$location_name)!="factor") dt6$location_name<- as.factor(dt6$location_name)
+# if (class(dt6$latitude)=="factor") dt6$latitude <-as.numeric(levels(dt6$latitude))[as.integer(dt6$latitude) ]
+# if (class(dt6$longitude)=="factor") dt6$longitude <-as.numeric(levels(dt6$longitude))[as.integer(dt6$longitude) ]
+# if (class(dt6$elevation)=="factor") dt6$elevation <-as.numeric(levels(dt6$elevation))[as.integer(dt6$elevation) ]
+# if (class(dt6$parent_location_id)!="factor") dt6$parent_location_id<- as.factor(dt6$parent_location_id)
+#                 
+# # Convert Missing Values to NA for non-dates
+#                 
+# dt6$latitude <- ifelse((trimws(as.character(dt6$latitude))==trimws("NA")),NA,dt6$latitude)
+# dt6$longitude <- ifelse((trimws(as.character(dt6$longitude))==trimws("NA")),NA,dt6$longitude)
+# dt6$elevation <- ifelse((trimws(as.character(dt6$elevation))==trimws("NA")),NA,dt6$elevation)
 
 
 # Here is the structure of the input data frame:
@@ -318,14 +318,14 @@ download.file(inUrl7,infile7,method="auto")
                     "authority_taxon_id"    ), check.names=TRUE, as.is = TRUE)
                
   
-# Fix any interval or ratio columns mistakenly read in as nominal and nominal columns read as numeric or dates read as strings
-                
-if (class(dt7$taxon_id)!="factor") dt7$taxon_id<- as.factor(dt7$taxon_id)
-if (class(dt7$taxon_rank)!="factor") dt7$taxon_rank<- as.factor(dt7$taxon_rank)
-if (class(dt7$taxon_name)!="factor") dt7$taxon_name<- as.factor(dt7$taxon_name)
-if (class(dt7$authority_system)!="factor") dt7$authority_system<- as.factor(dt7$authority_system)
-if (class(dt7$authority_taxon_id)!="factor") dt7$authority_taxon_id<- as.factor(dt7$authority_taxon_id)
-                
+# # Fix any interval or ratio columns mistakenly read in as nominal and nominal columns read as numeric or dates read as strings
+#                 
+# if (class(dt7$taxon_id)!="factor") dt7$taxon_id<- as.factor(dt7$taxon_id)
+# if (class(dt7$taxon_rank)!="factor") dt7$taxon_rank<- as.factor(dt7$taxon_rank)
+# if (class(dt7$taxon_name)!="factor") dt7$taxon_name<- as.factor(dt7$taxon_name)
+# if (class(dt7$authority_system)!="factor") dt7$authority_system<- as.factor(dt7$authority_system)
+# if (class(dt7$authority_taxon_id)!="factor") dt7$authority_taxon_id<- as.factor(dt7$authority_taxon_id)
+#                 
 # Convert Missing Values to NA for non-dates
                 
 

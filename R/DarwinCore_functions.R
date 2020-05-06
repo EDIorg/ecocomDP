@@ -35,27 +35,31 @@ create_table_dwca_occurrence_core <- function(
   # TODO: Move this function into a new file, perhaps "manipulate_tables.R"
   long2wide_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
     
-    # TODO: Unnest location
-    
+    loc_name_combined <- rep(NA_character_, nrow(dt_loc))
     for (i in 1:length(dt_loc$location_id)) {
-      
       if (!is.na(dt_loc$parent_location_id[i])) {
-        tid <- dt_loc$parent_location_id[i]
-        # TODO: Resume here!
-        # browser()
-        dt_loc$location_id == tid
-        
+        id_out <- dt_loc$location_id[i]
+        id <- dt_loc$location_id[i]
+        cont <- TRUE
+        while (isTRUE(cont)) {
+          if (!is.na(dt_loc$parent_location_id[id == dt_loc$location_id])) {
+            # browser()
+            id_out[length(id_out) + 1] <- dt_loc$parent_location_id[id == dt_loc$location_id]
+            id <- dt_loc$parent_location_id[id == dt_loc$location_id]
+          } else {
+            # id_out[length(id_out) + 1] <- dt_loc$location_id[id == dt_loc$location_id]
+            cont <- FALSE
+          }
+        }
+        loc_name_combined[i] <- paste(
+          dt_loc$location_name[
+            dt_loc$location_id %in% rev(id_out)], 
+          collapse = ".")
       }
-      
-      # cont <- TRUE
-      # while (isTRUE(cont)) {
-      #   if (i == 2){
-      #     browser()
-      #   }
-      # }
-      
     }
-    
+    loc_name_combined[is.na(dt_loc$parent_location_id)] <- dt_loc$location_name[is.na(dt_loc$parent_location_id)]
+    # TODO: Resume here
+    # browser()
     
     # Left join observation, location, and taxon tables
     output <- dplyr::left_join(

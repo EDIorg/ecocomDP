@@ -37,6 +37,8 @@ L1_to_L2_DwCA <- function(core.name, L1.id) {
   
   source(system.file("/edi_193_3.R", package = "ecocomDP"))
   
+  
+  
   # assign tables to a var for that type (read pkg function will use their 
   # actual names, assign based on known str frag)
   # TODO: Use the entity name to determine which of the ecocomDP tables that 
