@@ -28,7 +28,9 @@ L1_to_L2_DwCA <- function(core.name, L1.id) {
   dwca_mappings_file <- readr::read_csv(system.file("dwca_occurrence_core_mappings.csv", package = "ecocomDP"))
 
   # msg the user
-  message('Using config files at: ', dirname(dwca_config_file))
+  message(
+    'Using config files at: ', 
+    dirname(system.file("dwca_occurrence_core_config.csv", package = "ecocomDP")))
   message('Making ', core.name)
   
   # Load data -----------------------------------------------------------------
