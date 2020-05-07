@@ -28,57 +28,21 @@ create_table_dwca_occurrence_core <- function(
     # If dt_loc_ancil exists, then the occurence table can have sampleValueUnit
   }
   
-  # Assemble vectors ----------------------------------------------------------
-  # fields in the config are the column headers. number of rows will = that in the L1 obs table.
-  # ideally, you would drive this from the mapping tables
-
-  # TODO: Move this function into a new file, perhaps "manipulate_tables.R"
-  long2wide_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
-    
-    loc_name_combined <- rep(NA_character_, nrow(dt_loc))
-    for (i in 1:length(dt_loc$location_id)) {
-      if (!is.na(dt_loc$parent_location_id[i])) {
-        id_out <- dt_loc$location_id[i]
-        id <- dt_loc$location_id[i]
-        cont <- TRUE
-        while (isTRUE(cont)) {
-          if (!is.na(dt_loc$parent_location_id[id == dt_loc$location_id])) {
-            # browser()
-            id_out[length(id_out) + 1] <- dt_loc$parent_location_id[id == dt_loc$location_id]
-            id <- dt_loc$parent_location_id[id == dt_loc$location_id]
-          } else {
-            # id_out[length(id_out) + 1] <- dt_loc$location_id[id == dt_loc$location_id]
-            cont <- FALSE
-          }
-        }
-        loc_name_combined[i] <- paste(
-          dt_loc$location_name[
-            dt_loc$location_id %in% rev(id_out)], 
-          collapse = ".")
-      }
-    }
-    loc_name_combined[is.na(dt_loc$parent_location_id)] <- dt_loc$location_name[is.na(dt_loc$parent_location_id)]
-    # TODO: Resume here
-    # browser()
-    
-    # Left join observation, location, and taxon tables
-    output <- dplyr::left_join(
-      dplyr::left_join(
-        dt_obs, dt_loc, 
-        by = "location_id"), 
-      dt_tax, by = "taxon_id")
-  }
+  # Join the tables -----------------------------------------------------------
+  # TODO: Don't forget locationn ancillary
   
-  test <- long2wide_obs_loc_tax(
+  obs_loc_tax <- long2wide_obs_loc_tax(
     dt_obs = dt_obs, 
     dt_loc = dt_loc, 
     dt_tax = dt_tax)
   
-    
-  # Direct pulls: from obs table. their length will set nrows of final table.  
-  occ_eventDate            <- dt_obs$observation_datetime	
-  occ_OrganismQuantityType <- dt_obs$variable_name	
-  occ_organismQuantity     <- dt_obs$value	
+  browser()
+  # Resume dev here ...
+  
+  # Add column
+  obs_loc_tax$new_colname <- NA_character_
+
+  
   
   # computed vectors:
   
