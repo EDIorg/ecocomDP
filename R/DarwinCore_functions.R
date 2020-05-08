@@ -36,20 +36,74 @@ create_table_dwca_occurrence_core <- function(
     dt_loc = dt_loc, 
     dt_tax = dt_tax)
   
-  browser()
+  # browser()
   # Resume dev here ...
   
   # Add column
-  obs_loc_tax$new_colname <- NA_character_
+  # Create computed vectors:
+  
+  # Define new cols specifically needed for DwC-A
+  obs_loc_tax$lsid <- NA_character_
+  obs_loc_tax$comb_id <- NA_character_
+  obs_loc_tax$dc_basisofrecord <- NA_character_
+  obs_loc_tax$dc_occurrencestatus <-NA_character_
+  obs_loc_tax$dc_samplingprotocol <-NA_character_
+  obs_loc_tax$dc_quantitytype <-NA_character_
+  
+  
+  # comb_id
+  # ID should be globally unique. so create a composite ID from other IDs and date,
+  # presuming that this string won't collide with something else. 
+  # TODO: find out how GBIF uses the ID. if it has a role in replacing records, you will need to rethink this
+  # e.g., not use the internal id at all (which might change) and instead use the static part of package id and sample date.
+  obs_loc_tax$comb_id <- paste(sep='.', obs_loc_tax$package_id,
+                               obs_loc_tax$observation_id,
+                               obs_loc_tax$location_id,
+                               obs_loc_tax$event_id,
+                               obs_loc_tax$taxon_id,
+                               obs_loc_tax$observation_datetime)
+ 
+  # occurrence status: choice of present|absent, based on value.
+  if (obs_loc_tax$value == 0) {
+    obs_loc_tax$dc_occurrencestatus <- 'absent'
+  } else {
+    obs_loc_tax$dc_occurrencestatus <-'present'
+  }
+  
+  # sampling protocol: string description of the method. ouch.
+  obs_loc_tax$dc_samplingprotocol <- 'ad hoc observation'
+  
+  
+  # TODO: not all will be human obs.  need logic to determine if this is an instrument or not
+  obs_loc_tax$dc_basisofrecord <- 'HumanObservation'
+  
+  # TODO: not all will be counts of individuals.
+  obs_loc_tax$dc_quantitytype <-'individuals'
+  
+  # resume here:
+  # browser()
+  
+  
+  # Create DF for export 
+  occurrence_core <- dplyr::select(obs_loc_tax, comb_id,
+                            dc_basisofrecord,
+                            dc_occurrencestatus,
+                            location_id,
+                            latitude,
+                            longitude,
+                            dc_samplingprotocol,
+                            observation_datetime,
+                            dc_samplingprotocol,
+                            taxon_name,
+                            authority_system,
+                            authority_taxon_id,
+                            taxon_id,
+                            lsid,
+                            dc_quantitytype,
+                            value
+                            )
+                                
 
-  
-  
-  # computed vectors:
-  
-  
-  # order the cols in a data frame
-  occurrence_core <- data.frame(occ_eventDate, occ_OrganismQuantityType, occ_organismQuantity)
-  
   # send it back.
   return(occurrence_core)
   
