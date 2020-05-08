@@ -51,12 +51,9 @@ create_table_dwca_occurrence_core <- function(
   obs_loc_tax$dc_quantitytype <-NA_character_
   
   
-  # comb_id
-  # ID should be globally unique. so create a composite ID from other IDs and date,
-  # presuming that this string won't collide with something else. 
-  # TODO: find out how GBIF uses the ID. if it has a role in replacing records, you will need to rethink this
-  # e.g., not use the internal id at all (which might change) and instead use the static part of package id and sample date.
-  obs_loc_tax$comb_id <- paste(sep='.', obs_loc_tax$package_id,
+  # comb_id 
+  # TODO: globally unique, see notes.
+   obs_loc_tax$comb_id <- paste(sep='.', obs_loc_tax$package_id,
                                obs_loc_tax$observation_id,
                                obs_loc_tax$location_id,
                                obs_loc_tax$event_id,
@@ -85,6 +82,7 @@ create_table_dwca_occurrence_core <- function(
   
   
   # Create DF for export 
+  # TODO: proper headers. probably want the mapping table for this.
   occurrence_core <- dplyr::select(obs_loc_tax, comb_id,
                             dc_basisofrecord,
                             dc_occurrencestatus,
