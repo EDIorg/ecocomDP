@@ -87,9 +87,6 @@ long2wide_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
   dt_loc_expanded$location_name <- loc_name_combined
   dt_loc_expanded$parent_location_id <- NULL
   
-  # Continue dev here ...
-  # browser()
-  
   # Left join observation, location (expanded), and taxon tables
   dplyr::left_join(
     dplyr::left_join(
