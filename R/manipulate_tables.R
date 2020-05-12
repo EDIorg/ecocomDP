@@ -28,7 +28,8 @@ long2wide_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
   
   # Expand location table -----------------------------------------------------
   
-  # Rewrite names of locations to indicate their nested arrangements
+  # Rewrite names of locations to indicate their nested arrangements and expand
+  # corresponding latitude, longitude, and elevation
   loc_name_combined <- rep(NA_character_, nrow(dt_loc))
   for (i in 1:length(dt_loc$location_id)) {
     if (!is.na(dt_loc$parent_location_id[i])) {
@@ -47,35 +48,36 @@ long2wide_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
         dt_loc$location_name[
           dt_loc$location_id %in% rev(id_out)], 
         collapse = ".")
-    }
-  }
-  
-  # Expand latitude and longitude (and possibly elevation when it exists) from
-  # parent locations to children if the children don't have these values.
-  # TODO: Incorporate latitude, longitude, and elevation (see notes:
-  # https://docs.google.com/document/d/1-s0EGF1TgQneVOaQFQBlrUOmnfOAs9M1mGk-IMVHYnQ/edit)
-  loc_lat_lon_elv <- data.frame(
-    lat = rep(NA_character_, nrow(dt_loc)),
-    lon = rep(NA_character_, nrow(dt_loc)),
-    elv = rep(NA_character_, nrow(dt_loc)),
-    stringsAsFactors = FALSE)
-  for (i in 1:length(dt_loc$location_id)) {
-    if (!is.na(dt_loc$parent_location_id[i])) {
-      id_out <- dt_loc$location_id[i]
-      id <- dt_loc$location_id[i]
-      cont <- TRUE
-      while (isTRUE(cont)) {
-        if (!is.na(dt_loc$parent_location_id[id == dt_loc$location_id])) {
-          id_out[length(id_out) + 1] <- dt_loc$parent_location_id[id == dt_loc$location_id]
-          id <- dt_loc$parent_location_id[id == dt_loc$location_id]
-        } else {
-          cont <- FALSE
+      lat_i <- max(
+        which(
+          !is.na(
+            dt_loc$latitude[
+              dt_loc$location_id %in% rev(id_out)])))
+      lon_i <- max(
+        which(
+          !is.na(
+            dt_loc$longitude[
+              dt_loc$location_id %in% rev(id_out)])))
+      elv_i <- max(
+        which(
+          !is.na(
+            dt_loc$elevation[
+              dt_loc$location_id %in% rev(id_out)])))
+      if (!is.na(lat_i) & !is.na(lon_i)) {
+        if (lat_i == lon_i) {
+          fill <- dt_loc$latitude[dt_loc$location_id %in% rev(id_out)]
+          fill[is.na(fill)] <- dt_loc$latitude[dt_loc$location_id %in% rev(id_out)][lat_i]
+          dt_loc$latitude[dt_loc$location_id %in% rev(id_out)] <- fill
+          fill <- dt_loc$longitude[dt_loc$location_id %in% rev(id_out)]
+          fill[is.na(fill)] <- dt_loc$longitude[dt_loc$location_id %in% rev(id_out)][lat_i]
+          dt_loc$longitude[dt_loc$location_id %in% rev(id_out)] <- fill
+          if (elv_i == lat_i) {
+            fill <- dt_loc$elevation[dt_loc$location_id %in% rev(id_out)]
+            fill[is.na(fill)] <- dt_loc$elevation[dt_loc$location_id %in% rev(id_out)][lat_i]
+            dt_loc$elevation[dt_loc$location_id %in% rev(id_out)] <- fill
+          }
         }
       }
-      loc_name_combined[i] <- paste(
-        dt_loc$location_name[
-          dt_loc$location_id %in% rev(id_out)], 
-        collapse = ".")
     }
   }
   
@@ -84,6 +86,9 @@ long2wide_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
   dt_loc_expanded <- dt_loc
   dt_loc_expanded$location_name <- loc_name_combined
   dt_loc_expanded$parent_location_id <- NULL
+  
+  # Continue dev here ...
+  # browser()
   
   # Left join observation, location (expanded), and taxon tables
   dplyr::left_join(

@@ -36,9 +36,6 @@ create_table_dwca_occurrence_core <- function(
     dt_loc = dt_loc, 
     dt_tax = dt_tax)
   
-  # browser()
-  # Resume dev here ...
-  
   # Add column
   # Create computed vectors:
   
