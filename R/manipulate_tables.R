@@ -88,10 +88,20 @@ long2wide_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
   dt_loc_expanded$parent_location_id <- NULL
   
   # Left join observation, location (expanded), and taxon tables
-  dplyr::left_join(
+  # TO DO: ask Colin for his naming convention for temporary objects
+    temp <- dplyr::left_join(
     dplyr::left_join(
       dt_obs, dt_loc_expanded, 
       by = "location_id"), 
     dt_tax, by = "taxon_id")
   
+  # Pivot the joined df to spread the non-unique columns
+  join_wide <-tidyr::pivot_wider(temp, names_from = variable_name, values_from=c(observation_id, value, unit))
+  # TO DO: QC - handle errors and warnings. incoming tables with duplicate rows contain a list (see edi.323.1)
+
+
+  
+  
+  return(join_wide)
 }
+
