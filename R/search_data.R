@@ -305,6 +305,7 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
   
   if (nrow(output) == 0) {
     output <- "No results found."
+    output
   } else {
     output
   }
