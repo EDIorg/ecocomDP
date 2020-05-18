@@ -2,7 +2,7 @@
 % Please edit documentation in R/aggregate_ecocomDP.R
 \name{aggregate_ecocomDP}
 \alias{aggregate_ecocomDP}
-\title{Aggregate ecocomDP data packages}
+\title{Aggregate ecocomDP data packages (deprecated in favor of read_data())}
 \usage{
 aggregate_ecocomDP(
       package.id, 

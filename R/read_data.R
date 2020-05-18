@@ -237,3 +237,52 @@ read_data <- function(id, path) {
     tables = out)
   
 }
+
+
+
+
+# Helper functions ------------------------------------------------------------
+
+assign_field_types <- function(table.list){
+  
+  criteria <- read.table(
+    system.file('validation_criteria.txt', package = 'ecocomDP'),
+    header = T,
+    sep = "\t",
+    as.is = T,
+    na.strings = "NA")
+  
+  for (i in 1:length(table.list)){
+    use_tbl <- names(table.list[i])
+    if (!is.null(table.list[[use_tbl]])){
+      for (j in 1:length(colnames(table.list[[use_tbl]]))){
+        use_col <- colnames(table.list[[use_tbl]])[[j]]
+        use_class <- criteria$class[
+          ((criteria$table == use_tbl) & (!is.na(criteria$column)) & (criteria$column == use_col))
+          ]
+        table.list[[use_tbl]][[use_col]] <- col2class(
+          column = table.list[[use_tbl]][[use_col]],
+          class = use_class
+        )
+      }
+    }
+  }
+  
+  # Return
+  table.list
+}
+
+
+
+
+col2class <- function(column, class){
+  if (class == 'character'){
+    
+    column <- as.character(column)
+  } else if (class == 'numeric'){
+    column <- as.numeric(column)
+  } else if (class == 'Date'){
+    column <- as.character(column)
+  }
+  column
+}
