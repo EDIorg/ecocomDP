@@ -1,8 +1,31 @@
-#' Read an ecocomDP dataset
+#' Read ecocomDP data
 #'
 #' @param id
-#'     (character) Identifier of dataset to read. IDs are listed in the id 
-#'     column of search results output from \code{search_data()}.
+#'     (character) Identifier (one or more) of ecocomDP datasets to read. IDs 
+#'     are listed in the "id" column of search results output from 
+#'     \code{search_data()}.
+#' @param site 
+#'     (character) For NEON data. Either the string "all", meaning 
+#'     all available sites, or a character vector of codes listed in the 
+#'     "sites" column of results output from \code{search_data()}. Defaults to 
+#'     "all".
+#' @param startdate
+#'     (character) For NEON data. Either NA, meaning all available dates, or a 
+#'     character vector in the form YYYY-MM, e.g. 2017-01. Defaults to NA.
+#' @param enddate 
+#'     (character) For NEON data. Either NA, meaning all available dates, or a 
+#'     character vector in the form YYYY-MM, e.g. 2017-01. Defaults to NA.
+#' @param check.size 
+#'     (logical) For NEON data. T or F, should the user approve the total file 
+#'     size before downloading? Defaults to T. When working in batch mode, or 
+#'     other non-interactive workflow, use check.size = F.
+#' @param nCores
+#'     (integer) For NEON data. The number of cores to parallelize the 
+#'     stacking procedure. By default it is set to a single core.
+#' @param forceParallel 
+#'     (logical) For NEON data. If the data volume to be processed does not 
+#'     meet minimum requirements to run in parallel, this overrides. Set to 
+#'     FALSE as default.
 #' @param path
 #'     (character; optional) Path to the directory in which the aggregated 
 #'     ecocomDP will be written.
@@ -17,9 +40,12 @@
 #' @examples
 #' d <- read_data("edi.193.3")
 #' d <- read_data("DP1.20166.001")
-read_data <- function(id, path) {
+read_data <- function(id, site = "all", startdate = NA, enddate = NA, 
+                      check.size = TRUE, nCores = 1, forceParallel = FALSE, 
+                      path) {
   # TODO: Validate inputs
   # TODO: Wrap map_neon_data_to_ecocomDP()
+  # TODO: Refactor inputs for multiple NEON datasets (supply as list?)
   
   message("Reading ", id)
   
@@ -211,11 +237,27 @@ read_data <- function(id, path) {
   )
   
   # NEON ----------------------------------------------------------------------
+  # Read from NEON
+  
+  # read_data <- function(id, site = "all", startdate = NA, enddate = NA, 
+  #                       check.size = TRUE, nCores = 1, forceParallel = FALSE, 
+  #                       path) {
   
   if (stringr::str_detect(id, "^DP1")) {
-    # Read from NEON
-    
+    out_neon <- ecocomDP::map_neon_data_to_ecocomDP(
+      neon.data.product.id = id,
+      site = site,
+      startdate = startdate,
+      enddate = enddate,
+      check.size = check.size,
+      nCores = nCores,
+      forceParallel = FALSE)
   }
+  
+  # Combine sources -----------------------------------------------------------
+  # Combine results from different sources
+  
+  
   
   # Return --------------------------------------------------------------------
   

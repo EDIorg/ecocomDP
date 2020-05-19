@@ -2,13 +2,45 @@
 % Please edit documentation in R/read_data.R
 \name{read_data}
 \alias{read_data}
-\title{Read an ecocomDP dataset}
+\title{Read ecocomDP data}
 \usage{
-read_data(id, path)
+read_data(
+  id,
+  site = "all",
+  startdate = NA,
+  enddate = NA,
+  check.size = TRUE,
+  nCores = 1,
+  forceParallel = FALSE,
+  path
+)
 }
 \arguments{
-\item{id}{(character) Identifier of dataset to read. IDs are listed in the id 
-column of search results output from \code{search_data()}.}
+\item{id}{(character) Identifier (one or more) of ecocomDP datasets to read. IDs 
+are listed in the "id" column of search results output from 
+\code{search_data()}.}
+
+\item{site}{(character) For NEON data. Either the string "all", meaning 
+all available sites, or a character vector of codes listed in the 
+"sites" column of results output from \code{search_data()}. Defaults to 
+"all".}
+
+\item{startdate}{(character) For NEON data. Either NA, meaning all available dates, or a 
+character vector in the form YYYY-MM, e.g. 2017-01. Defaults to NA.}
+
+\item{enddate}{(character) For NEON data. Either NA, meaning all available dates, or a 
+character vector in the form YYYY-MM, e.g. 2017-01. Defaults to NA.}
+
+\item{check.size}{(logical) For NEON data. T or F, should the user approve the total file 
+size before downloading? Defaults to T. When working in batch mode, or 
+other non-interactive workflow, use check.size = F.}
+
+\item{nCores}{(integer) For NEON data. The number of cores to parallelize the 
+stacking procedure. By default it is set to a single core.}
+
+\item{forceParallel}{(logical) For NEON data. If the data volume to be processed does not 
+meet minimum requirements to run in parallel, this overrides. Set to 
+FALSE as default.}
 
 \item{path}{(character; optional) Path to the directory in which the aggregated 
 ecocomDP will be written.}
@@ -19,7 +51,7 @@ ecocomDP will be written.}
 \item{tables}{A list of data.frames following the ecocomDP format.}
 }
 \description{
-Read an ecocomDP dataset
+Read ecocomDP data
 }
 \details{
 Each data source has a corresponding reader. Determine the source from 
