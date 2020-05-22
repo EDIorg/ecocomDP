@@ -66,8 +66,8 @@ map_neon_data_to_ecocomDP <- function(
   
   # combine neon metadata and ecocomDP tables
   out_list <- list(
-    neon_metadata = metadata_all,
-    ecocomDP_tables = ecocomDP_tables)
+    metadata = metadata_all,
+    tables = ecocomDP_tables)
   
   # browser()
   
