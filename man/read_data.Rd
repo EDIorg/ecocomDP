@@ -10,7 +10,7 @@ read_data(
   site = "all",
   startdate = NA,
   enddate = NA,
-  check.size = TRUE,
+  check.size = FALSE,
   nCores = 1,
   forceParallel = FALSE
 )
@@ -36,7 +36,7 @@ Defaults to NA, meaning all available dates.}
 Defaults to NA, meaning all available dates.}
 
 \item{check.size}{(logical; NEON data only) Should the user approve the total file size 
-before downloading? Defaults to TRUE.}
+before downloading? Defaults to FALSE.}
 
 \item{nCores}{(integer; NEON data only) The number of cores to parallelize the 
 stacking procedure. Defaults to 1.}
@@ -79,10 +79,10 @@ d <- read_data(
   startdate = "2016-1", 
   enddate = "2018-11")
 
-# Read multiple datasets and concatenate together
+# Read multiple datasets from different sources
 d <- read_data(c("edi.193.3", "DP1.20166.001"))
 
-# Read multiple datasets from EDI and NEON with NEON filters.
+# Read multiple datasets from EDI and NEON with NEON filters
 d <- read_data(
   id = list(
     edi.193.3 = NULL,

@@ -21,7 +21,7 @@
 #'     Defaults to NA, meaning all available dates.
 #' @param check.size 
 #'     (logical; NEON data only) Should the user approve the total file size 
-#'     before downloading? Defaults to TRUE.
+#'     before downloading? Defaults to FALSE.
 #' @param nCores
 #'     (integer; NEON data only) The number of cores to parallelize the 
 #'     stacking procedure. Defaults to 1.
@@ -63,10 +63,10 @@
 #'   startdate = "2016-1", 
 #'   enddate = "2018-11")
 #' 
-#' # Read multiple datasets and concatenate together
+#' # Read multiple datasets from different sources
 #' d <- read_data(c("edi.193.3", "DP1.20166.001"))
 #' 
-#' # Read multiple datasets from EDI and NEON with NEON filters.
+#' # Read multiple datasets from EDI and NEON with NEON filters
 #' d <- read_data(
 #'   id = list(
 #'     edi.193.3 = NULL,
@@ -77,52 +77,61 @@
 #'       check.size = FALSE)))
 #' 
 read_data <- function(
-  id, path, site = "all", startdate = NA, enddate = NA, check.size = TRUE, 
+  id, path, site = "all", startdate = NA, enddate = NA, check.size = FALSE, 
   nCores = 1, forceParallel = FALSE) {
-  
-  message("Reading ", id)
   
   # Parameterize --------------------------------------------------------------
   
+  # id can be a list so, if not already, wrap it in list()
+
+  if (!is.list(id)) {
+    empty_list <- vector(mode = "list", length(id))
+    names(empty_list) <- unlist(id)
+    id <- empty_list
+  }
+  
   # Get ecocomDP attributes for validation and coercion
+  
   attr_tbl <- data.table::fread(
     system.file('validation_criteria.txt', package = 'ecocomDP'))
-  
-  # Identify data sources
-  edi_i <- stringr::str_detect(
-    id, 
-    "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)")
-  neon_i <- stringr::str_detect(id, "^DP1")
 
-  # Read from EDI -------------------------------------------------------------
-  # Read from the Environmental Data Initiative Data Repository
+  # Read data -----------------------------------------------------------------
   
-  if (any(edi_i)) {
-    edi_d <- lapply(id[edi_i], read_data_edi)
-    names(edi_d) <- id[edi_i]
-  }
-
-  # Read from NEON ------------------------------------------------------------
-  # Read from the National Ecological Observatory Network
-  
-  if (any(neon_i)) {
-    neon_d <- ecocomDP::map_neon_data_to_ecocomDP(
-      neon.data.product.id = id,
-      site = site,
-      startdate = startdate,
-      enddate = enddate,
-      check.size = check.size,
-      nCores = nCores,
-      forceParallel = forceParallel)
-    browser()
-  }
+  d <- lapply(
+    names(id),
+    function(x) {
+      if (stringr::str_detect(
+        x, 
+        "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)")) {
+        read_data_edi(x)
+      } else if (stringr::str_detect(x, "^DP1")) {
+        if (is.null(id[[x]])) {
+          map_neon_data_to_ecocomDP(
+            neon.data.product.id = x,
+            site = site,
+            startdate = startdate,
+            enddate = enddate,
+            check.size = check.size,
+            nCores = nCores,
+            forceParallel = FALSE)
+        } else {
+          do.call(map_neon_data_to_ecocomDP, c(neon.data.product.id = x, id[[x]]))
+        }
+      }
+    })
+  names(d) <- names(id)
   
   # Apply validation checks ---------------------------------------------------
   
+  # if (length(id) > 1) {
+  #   # Append package_id to primary keys to ensure referential integrity
+  #   
+  # }
+  
   # Coerce column classes -----------------------------------------------------
-  # # Coerce column classes to ecocomDP specifications.
-  # # FIXME Harmonize date formats of different temporal resolutions
-  # 
+  # Coerce column classes to ecocomDP specifications.
+  # FIXME Harmonize date formats of different temporal resolutions
+  
   # invisible(
   #   lapply(
   #     seq_along(out),
@@ -147,60 +156,22 @@ read_data <- function(
   #   )
   # )
   
-  # Combine sources -----------------------------------------------------------
-  # Combine results from different sources
-  
-  if (length(id) > 1) {
-    # Append package_id to primary keys to ensure referential integrity
-    
-  }
-  
-  # Coerce column classes -----------------------------------------------------
-  # Coerce column classes to ecocomDP specifications.
-  # FIXME Harmonize date formats of different temporal resolutions
-  
-  invisible(
-    lapply(
-      seq_along(out),
-      function(i){
-        use_tbl <- names(out[i])
-        if (!is.null(out[[use_tbl]])){
-          lapply(
-            seq_along(colnames(out[[use_tbl]])),
-            function(j){
-              use_col <- colnames(out[[use_tbl]])[[j]]
-              use_class <- attr_tbl$class[
-                ((attr_tbl$table == use_tbl) & 
-                   (!is.na(attr_tbl$column)) & 
-                   (attr_tbl$column == use_col))]
-              out[[use_tbl]][[use_col]] <<- col2class(
-                column = out[[use_tbl]][[use_col]],
-                class = use_class)
-            }
-          )
-        }
-      }
-    )
-  )
-  
   # Return --------------------------------------------------------------------
   
-  if (!missing(path)){
-    message('Writing tables to file')
-    EDIutils::validate_path(path)
-    lapply(
-      seq_along(out),
-      function(x){
-        readr::write_csv(
-          out[[tbls[x]]], 
-          paste0(path, '/ecocomDP_export_', tbls[x], '.csv'))
-      }
-    )
-  }
+  # if (!missing(path)){
+  #   message('Writing tables to file')
+  #   EDIutils::validate_path(path)
+  #   lapply(
+  #     seq_along(out),
+  #     function(x){
+  #       readr::write_csv(
+  #         out[[tbls[x]]],
+  #         paste0(path, '/ecocomDP_export_', tbls[x], '.csv'))
+  #     }
+  #   )
+  # }
   
-  list(
-    metadata = NULL,
-    tables = out)
+  d
   
 }
 
@@ -266,6 +237,13 @@ col2class <- function(column, class){
 #'     (list) Named list of data tables
 #'     
 read_data_edi <- function(id) {
+  
+  message("Reading ", id)
+  
+  # Get ecocomDP attributes for validation and coercion
+  
+  attr_tbl <- data.table::fread(
+    system.file('validation_criteria.txt', package = 'ecocomDP'))
  
   # Get table metadata for reading
   
@@ -309,10 +287,9 @@ read_data_edi <- function(id) {
   output <- lapply(
     names(tbl_attrs),
     function(x) {
-      d <- suppressMessages(
-        data.table::fread(
-          tbl_attrs[[x]]$url, 
-          sep = tbl_attrs[[x]]$delimiter))
+      d <- data.table::fread(
+        tbl_attrs[[x]]$url, 
+        sep = tbl_attrs[[x]]$delimiter)
       # TODO: Add missing columns
       
       # # TODO: Move to join_data()
