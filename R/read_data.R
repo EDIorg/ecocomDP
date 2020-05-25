@@ -121,12 +121,7 @@ read_data <- function(
     })
   names(d) <- names(id)
   
-  # Apply validation checks ---------------------------------------------------
-  
-  # if (length(id) > 1) {
-  #   # Append package_id to primary keys to ensure referential integrity
-  #   
-  # }
+  # Add missing columns -------------------------------------------------------
   
   # Coerce column classes -----------------------------------------------------
   # Coerce column classes to ecocomDP specifications.
@@ -155,6 +150,13 @@ read_data <- function(
   #     }
   #   )
   # )
+  
+  # Apply validation checks ---------------------------------------------------
+  
+  # if (length(id) > 1) {
+  #   # Append package_id to primary keys to ensure referential integrity
+  #   
+  # }
   
   # Return --------------------------------------------------------------------
   
