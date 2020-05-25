@@ -123,21 +123,57 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
       unit) %>% 
     dplyr::distinct()
   
-  # make observation ancillary table
+  # make observation ancillary table. First convert POSIXct POSIXt classed
+  # variables to character, otherwise gathering will produce a warning.
+  table_observation_ecocomDP$identifiedDate <- as.character(
+    table_observation_ecocomDP$identifiedDate)
   table_observation_ancillary <- table_observation_ecocomDP %>%
     dplyr::select(
       -c(
-        event_id,
+        observation_id,
         package_id,
         location_id,
         observation_datetime,
         taxon_id,
         variable_name,
         value,
-        unit)) %>% 
-    dplyr::distinct()
-  
-  
+        unit,
+        domainID,
+        siteID,
+        algalType,
+        scientificName,
+        division,
+        class,
+        order,
+        family,
+        genus,
+        specificEpithet,
+        infraspecificEpithet,
+        scientificNameAuthorship,
+        identificationQualifier,
+        taxonRank,
+        identificationReferences,
+        decimalLatitude,
+        decimalLongitude,
+        coordinateUncertainty,
+        elevation,
+        elevationUncertainty,
+        geodeticDatum,
+        habitatType,
+        benthicArea
+        )) %>% 
+    dplyr::distinct() %>% 
+    tidyr::gather(key = "variable_name", value = "value", -c(event_id))
+  table_observation_ancillary$observation_ancillary_id <- 
+    paste0("obsan_", seq(nrow(table_observation_ancillary)))
+  table_observation_ancillary$unit <- NA_character_
+  table_observation_ancillary <- dplyr::select(
+    table_observation_ancillary,
+    observation_ancillary_id,
+    event_id,
+    variable_name,
+    value,
+    unit)
   
   # ecocomDP location table
   
@@ -147,9 +183,9 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
     dplyr::distinct() 
   
   # make ecocomDP format location table, identifying hierarchical spatial structure
-  table_location <- table_observation_raw %>%
-    ecocomDP::make_location(
-      cols = c("domainID", "siteID", "namedLocation"))
+  table_location <- suppressMessages(
+    table_observation_raw %>% 
+      ecocomDP::make_location(cols = c("domainID", "siteID", "namedLocation")))
   
   # populate latitude
   table_location$latitude <- table_location_raw$decimalLatitude[match(table_location$location_name, table_location_raw$namedLocation)] 
