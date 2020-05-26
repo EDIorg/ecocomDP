@@ -122,56 +122,63 @@ read_data <- function(
     })
   names(d) <- names(id)
   
-  # Add missing columns -------------------------------------------------------
+  # Modify --------------------------------------------------------------------
   
-  d[[1]]$tables$location$location_name <- NULL
-  d[[1]]$tables$location$elevation <- NULL
+  # Add missing columns
 
   invisible(
     lapply(
-      d,
+      names(d),
       function(x) {
         lapply(
-          names(x$tables),
+          names(d[[x]]$tables),
           function(y) {
             nms <- attr_tbl$column[attr_tbl$table == y]
-            x$tables[[y]][setdiff(nms, names(x$tables[[y]]))] <- NA
-            x$tables[[y]] <- x$tables[[y]][nms]
-            x$tables[[y]]
-            browser()
-            d[[x]][[y]] <<- x$tables[[y]]
+            d[[x]]$tables[[y]][setdiff(nms, names(d[[x]]$tables[[y]]))] <<- NA
+            d[[x]]$tables[[y]] <<- d[[x]]$tables[[y]][nms]
           })
       }))
   
-  # Coerce column classes -----------------------------------------------------
   # Coerce column classes to ecocomDP specifications.
   # FIXME Harmonize date formats of different temporal resolutions
   
-  # invisible(
-  #   lapply(
-  #     seq_along(out),
-  #     function(i){
-  #       use_tbl <- names(out[i])
-  #       if (!is.null(out[[use_tbl]])){
-  #         lapply(
-  #           seq_along(colnames(out[[use_tbl]])),
-  #           function(j){
-  #             use_col <- colnames(out[[use_tbl]])[[j]]
-  #             use_class <- attr_tbl$class[
-  #               ((attr_tbl$table == use_tbl) & 
-  #                  (!is.na(attr_tbl$column)) & 
-  #                  (attr_tbl$column == use_col))]
-  #             out[[use_tbl]][[use_col]] <<- col2class(
-  #               column = out[[use_tbl]][[use_col]],
-  #               class = use_class)
-  #           }
-  #         )
-  #       }
-  #     }
-  #   )
-  # )
+  col2class <- function(column, class){
+    if (class == 'character'){
+      column <- as.character(column)
+    } else if (class == 'numeric'){
+      column <- as.numeric(column)
+    } else if (class == 'Date'){
+      column <- lubridate::ymd(column)
+    }
+    column
+  }
   
-  # Apply validation checks ---------------------------------------------------
+  invisible(
+    lapply(
+      names(d),
+      function(x){
+        lapply(
+          names(d[[x]]$tables),
+          function(y) {
+            lapply(
+              names(d[[x]]$tables[[y]]),
+              function(z) {
+                detected <- class(d[[x]]$tables[[y]][[z]])
+                expected <- attr_tbl$class[(attr_tbl$table == y) & (attr_tbl$column == z)]
+                if (detected != expected) {
+                  if (expected == 'character'){
+                    d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
+                  } else if (expected == 'numeric'){
+                    d[[x]]$tables[[y]][[z]] <<- as.numeric(d[[x]]$tables[[y]][[z]])
+                  } else if (expected == 'Date'){
+                    d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
+                  }
+                }
+              })
+          })
+      }))
+  
+  # Validate ------------------------------------------------------------------
   
   # if (length(id) > 1) {
   #   # Append package_id to primary keys to ensure referential integrity
@@ -229,21 +236,6 @@ assign_field_types <- function(table.list){
   
   # Return
   table.list
-}
-
-
-
-
-col2class <- function(column, class){
-  if (class == 'character'){
-    
-    column <- as.character(column)
-  } else if (class == 'numeric'){
-    column <- as.numeric(column)
-  } else if (class == 'Date'){
-    column <- as.character(column)
-  }
-  column
 }
 
 
