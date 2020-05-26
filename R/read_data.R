@@ -94,8 +94,9 @@ read_data <- function(
   
   attr_tbl <- data.table::fread(
     system.file('validation_criteria.txt', package = 'ecocomDP'))
+  attr_tbl <- attr_tbl[!is.na(attr_tbl$column), ]
 
-  # Read data -----------------------------------------------------------------
+  # Read ----------------------------------------------------------------------
   
   d <- lapply(
     names(id),
@@ -122,6 +123,25 @@ read_data <- function(
   names(d) <- names(id)
   
   # Add missing columns -------------------------------------------------------
+  
+  d[[1]]$tables$location$location_name <- NULL
+  d[[1]]$tables$location$elevation <- NULL
+
+  invisible(
+    lapply(
+      d,
+      function(x) {
+        lapply(
+          names(x$tables),
+          function(y) {
+            nms <- attr_tbl$column[attr_tbl$table == y]
+            x$tables[[y]][setdiff(nms, names(x$tables[[y]]))] <- NA
+            x$tables[[y]] <- x$tables[[y]][nms]
+            x$tables[[y]]
+            browser()
+            d[[x]][[y]] <<- x$tables[[y]]
+          })
+      }))
   
   # Coerce column classes -----------------------------------------------------
   # Coerce column classes to ecocomDP specifications.
