@@ -2,6 +2,7 @@
 
 # clean out workspace
 rm(list = ls())
+
 gc()
 
 # options
