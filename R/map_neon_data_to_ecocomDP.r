@@ -56,6 +56,8 @@ map_neon_data_to_ecocomDP <- function(
   # call custom mapping function if available for given NEON neon.data.product.id
   if(neon.data.product.id == "DP1.20166.001"){
     ecocomDP_tables <- map_neon_data_to_ecocomDP.ALGAE(...)
+  }else if(neon.data.product.id == "DP1.20120.001"){
+    ecocomDP_tables <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(...)
   }else{
     message(paste0("WARNING: ecocomDP mapping not currently available for ",neon.data.product.id))
     ecocomDP_tables <- list(
