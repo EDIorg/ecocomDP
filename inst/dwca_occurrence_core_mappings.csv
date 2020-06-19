@@ -1,0 +1,17 @@
+dwca_table_name.field_name,ecocomDP_table.field,alt_ecocomDPtable_field,mechanism_class,mechanism_guidance,note
+Occurrence.occurrenceID ,,,Code,"compound primary key, TBD. note that occurenceID neq eventID",
+Occurrence.basisOfRecord,,,Code,select from a GBIF vocab,
+Occurrence.occurrenceStatus  ,,,Code,"""absent"" if quantity=0, else ""present""",
+Occurrence.SamplingProtocol,,,"fixed string, ad hoc",,
+Occurrence.sampleSizeValue  ,location_ancillary.value,observation_ancillary.value,variable mapping table,,location table if a spatial sample.
+Occurrence.sampleSizeUnit,,,variable mapping table.,,
+Occurrence.locationID,location.location_id,,Code,collapse nested sites into one,
+Occurrence.decimalLatitude,location.latitude,,variable mapping table.,,
+Occurrence.decimalLongitude,location.longitude,,variable mapping table.,,
+Occurrence.scientificName,taxon.taxon_name,,variable mapping table.,,
+Occurrence.nameAccordingToID,taxon.authority_system,,variable mapping table.,,
+Occurrence.taxonID,taxon.authority_taxon_id,,variable mapping table.,,
+Occurrence.scientificNameID,,,Code,"constructed LSID, mapping table",taxon.authority_taxon_id + taxon.taxon_id
+Occurrence.eventDate,observation.observation_datetime,,variable mapping table.,,
+Occurrence.OrganismQuantityType ,observation.variable_name,,Code,"logic, mapping","required for value = organismQuantiy, optional if value = ""indivualCount"". not the unit (no place for the unit in occurrence?) ALWAYS INCLUDE, FIND A STATIC VALUE TO USE WITH COUNT"
+Occurrence.individualCount|Occurrence.organismQuantity,observation.value,,Code,tbd,
