@@ -165,6 +165,9 @@ read_data <- function(
               function(z) {
                 detected <- class(d[[x]]$tables[[y]][[z]])
                 expected <- attr_tbl$class[(attr_tbl$table == y) & (attr_tbl$column == z)]
+                if (all(detected %in% c("POSIXct", "POSIXt"))) {
+                  detected <- "Date"
+                }
                 if (detected != expected) {
                   if (expected == 'character'){
                     d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
