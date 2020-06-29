@@ -66,6 +66,8 @@ map_neon_data_to_ecocomDP <- function(
     ecocomDP_tables <- map_neon_data_to_ecocomDP.ALGAE(...)
   }else if(neon.data.product.id == "DP1.20120.001"){
     ecocomDP_tables <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(...)
+  }else if(neon.data.product.id == "DP1.10043.001"){
+    ecocomDP_tables <- map_neon_data_to_ecocomDP.MOSQUITO(...)
   }else{
     message(paste0("WARNING: ecocomDP mapping not currently available for ",neon.data.product.id))
     ecocomDP_tables <- list(
