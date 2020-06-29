@@ -8,9 +8,9 @@
 #' @description
 #' Pull files from the NEON API by data product, merge data for each table, and convert to ecocomDP format. Please see neonUtilities::loadByProduct for more information. 
 #'
-#' @param my_site_list a list of the sites (ex. c('COMO','LECO'))
-#' @param my_start_date the start date of the data from the sites (ex."2019-06" )
-#' @param my_end_date the end date of the data from the sites (ex."2020-02" )
+#' @param site a list of the sites (ex. c('COMO','LECO'))
+#' @param startdate the start date of the data from the sites (ex."2019-06" )
+#' @param enddate the end date of the data from the sites (ex."2020-02" )
 #' 
 #' @return Returns a named list, including: 
 #' \item{table_location}{A table, which has the lat long for each NEON site included in the data set}
@@ -20,9 +20,9 @@
 #' 
 #' @example 
 #' \dontrun{
-#' my_result <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(my_site_list= c('COMO','LECO'),
-#'                                                          my_start_date = "2019-06", 
-#'                                                          my_end_date = "2019-09")
+#' my_result <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(site= c('COMO','LECO'),
+#'                                                          startdate = "2019-06", 
+#'                                                          enddate = "2019-09")
 #' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for MACROINVERTEBRATE from neon.data.product.id DP1.20120.001 from the NEON data portal and map to the ecocomDP 
@@ -32,7 +32,7 @@
 #   Eric R Sokol & Ruvi Jaimes (2020-06-08)
 #     original creation
 ##############################################################################################
-
+library(dplyr)
 
 
 ##### my version ----
@@ -113,7 +113,7 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
            acceptedTaxonID) %>%
     
     # Join the columns selected above with two columns from inv_fielddata (the two columns are sampleID and benthicArea)
-    dplyr::left_join(inv_fielddata %>% select(sampleID, benthicArea)) %>%
+    dplyr::left_join(inv_fielddata %>% dplyr::select(sampleID, benthicArea)) %>%
     
     # some new columns called 'variable_name', 'value', and 'unit', and assign values for all rows in the table.
     # variable_name and unit are both assigned the same text strint for all rows. 
