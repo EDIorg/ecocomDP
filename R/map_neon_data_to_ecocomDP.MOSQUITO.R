@@ -227,7 +227,7 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
                   observation_datetime = startCollectDate,
                   taxon_id = taxonID) %>%
     
-    dplyr::mutate(package_id = NA) %>%
+    dplyr::mutate(package_id = paste0(neon.data.product.id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
     
     dplyr::select(observation_id,
                   event_id,
