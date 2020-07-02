@@ -22,8 +22,8 @@ datasets, then \code{id} should be a character vector of identifiers or
 a named list containing additional arguments to filter on (for NEON data 
 only; see below for arguments and examples).}
 
-\item{path}{(character) Path to the directory in which the data will be written file 
-(one file per ecocomDP table).}
+\item{path}{(character) Path to the directory in which the data will be written as 
+an .rda object.}
 
 \item{site}{(character; NEON data only) A character vector of site codes to filter 
 data on. Sites are listed in the "sites" column of the 

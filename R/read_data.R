@@ -7,8 +7,8 @@
 #'     a named list containing additional arguments to filter on (for NEON data 
 #'     only; see below for arguments and examples).
 #' @param path
-#'     (character) Path to the directory in which the data will be written file 
-#'     (one file per ecocomDP table).
+#'     (character) Path to the directory in which the data will be written as 
+#'     an .rda object.
 #' @param site 
 #'     (character; NEON data only) A character vector of site codes to filter 
 #'     data on. Sites are listed in the "sites" column of the 
@@ -95,6 +95,10 @@ read_data <- function(
   attr_tbl <- data.table::fread(
     system.file('validation_criteria.txt', package = 'ecocomDP'))
   attr_tbl <- attr_tbl[!is.na(attr_tbl$column), ]
+  
+  # Validate input arguments --------------------------------------------------
+  
+  # TODO: Validate input arguments
 
   # Read ----------------------------------------------------------------------
   
@@ -165,6 +169,9 @@ read_data <- function(
               function(z) {
                 detected <- class(d[[x]]$tables[[y]][[z]])
                 expected <- attr_tbl$class[(attr_tbl$table == y) & (attr_tbl$column == z)]
+                if (all(detected %in% c("POSIXct", "POSIXt"))) {
+                  detected <- "Date"
+                }
                 if (detected != expected) {
                   if (expected == 'character'){
                     d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
@@ -187,18 +194,15 @@ read_data <- function(
   
   # Return --------------------------------------------------------------------
   
-  # if (!missing(path)){
-  #   message('Writing tables to file')
-  #   EDIutils::validate_path(path)
-  #   lapply(
-  #     seq_along(out),
-  #     function(x){
-  #       readr::write_csv(
-  #         out[[tbls[x]]],
-  #         paste0(path, '/ecocomDP_export_', tbls[x], '.csv'))
-  #     }
-  #   )
-  # }
+  if (!missing(path)){
+    tstamp <- Sys.time()
+    tstamp <- stringr::str_remove_all(tstamp, "-")
+    tstamp <- stringr::str_replace_all(tstamp, " ", "_")
+    tstamp <- stringr::str_remove_all(tstamp, ":")
+    fname <- paste0("ecocomDP_data_", tstamp, ".rda")
+    message("Writing ", fname)
+    saveRDS(d, file = paste0(path, "/", fname))
+  }
   
   d
   
@@ -208,39 +212,6 @@ read_data <- function(
 
 
 # Helper functions ------------------------------------------------------------
-
-assign_field_types <- function(table.list){
-  
-  criteria <- read.table(
-    system.file('validation_criteria.txt', package = 'ecocomDP'),
-    header = T,
-    sep = "\t",
-    as.is = T,
-    na.strings = "NA")
-  
-  for (i in 1:length(table.list)){
-    use_tbl <- names(table.list[i])
-    if (!is.null(table.list[[use_tbl]])){
-      for (j in 1:length(colnames(table.list[[use_tbl]]))){
-        use_col <- colnames(table.list[[use_tbl]])[[j]]
-        use_class <- criteria$class[
-          ((criteria$table == use_tbl) & (!is.na(criteria$column)) & (criteria$column == use_col))
-          ]
-        table.list[[use_tbl]][[use_col]] <- col2class(
-          column = table.list[[use_tbl]][[use_col]],
-          class = use_class
-        )
-      }
-    }
-  }
-  
-  # Return
-  table.list
-}
-
-
-
-
 
 #' Read an ecocomDP dataset from EDI
 #'
