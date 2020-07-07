@@ -2,9 +2,11 @@
 ##############################################################################################
 #' @title Map NEON data products to ecocomDP
 
-#' @author
-#' Eric R Sokol \email{esokol@battelleecology.org}
-
+#' @author Eric R Sokol \email{esokol@battelleecology.org}
+#' @author Ruvi Jaimes \email{jaimesr@battelleecology.org}
+#' @author Kari Norman \email{kari.norman@berkeley.edu}
+#' @author Natalie Robinson \email{nrobinson@battelleecology.org}
+#' 
 #' @description
 #' Pull files from the NEON API by data product, merge data for each table, and convert to ecocomDP format. Please see neonUtilities::loadByProduct for more information. 
 #'
@@ -21,8 +23,11 @@
 #' Dates are specified only to the month because NEON data are provided in monthly packages. Any month included in the search criteria will be included in the download. Start and end date are inclusive.
 
 #' @return Returns a named list, including: 
-#' \item{neon_metadata}{A list of information about the NEON data product returned by neonUtilities::getProductInfo.}
-#' \item{ecocomDP_tables}{A list of data.frames following the ecocomDP format.}
+#' \item{metadata}{A list of information about the NEON data product returned by neonUtilities::getProductInfo.}
+#' \item{tables}{A list of data.frames following the ecocomDP format.}
+#'     \item{location}{A table, which has the lat long for each NEON site included in the data set}
+#'     \item{taxon}{A table, which describes each taxonID that appears in the data set}
+#'     \item{observation}{A table, which describes each taxonID that appears in the data set}
 
 
 #' @examples
