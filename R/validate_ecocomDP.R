@@ -57,7 +57,6 @@
 validate_ecocomDP <- function(data.path = NULL, data.list = NULL, 
                               package.id = NULL){
   
-  
   # Check arguments
   
   if (is.null(data.path) & is.null(data.list) & is.null(package.id)){
@@ -110,7 +109,7 @@ validate_ecocomDP <- function(data.path = NULL, data.list = NULL,
     )
     
     file_names <- validate_table_names(
-      file.names = data_entities$name,
+      file.names = data_entities,
       criteria = criteria
     )
     
@@ -118,8 +117,7 @@ validate_ecocomDP <- function(data.path = NULL, data.list = NULL,
       file_names, 
       read_ecocomDP_table, 
       package.id = package.id,
-      data.path = NULL
-    )
+      data.path = NULL)
     
     names(data.list) <- unlist(lapply(file_names, is_table_rev, L1_table_names))
 
@@ -129,34 +127,31 @@ validate_ecocomDP <- function(data.path = NULL, data.list = NULL,
   
   validate_table_presence(
     tables = file_names,
-    criteria = criteria
-  )
+    criteria = criteria)
   
   # Validate column names
   
   validate_column_names(
     tables = file_names,
     data.list = data.list,
-    criteria = criteria
-  )
+    criteria = criteria)
   
   # Validate column presence
   
   validate_column_presence(
     tables = file_names,
     data.list = data.list,
-    criteria = criteria
-  )
+    criteria = criteria)
   
   # Validate datetime format
-
+  
   validate_datetime(
     tables = file_names,
     data.list = data.list,
-    criteria = criteria
-    )
+    criteria = criteria)
   
   # Validate column classes
+  # browser()
   
   # validate_column_classes()
   
@@ -285,46 +280,12 @@ validate_table_names <- function(data.path = NULL, criteria, data.list = NULL, f
     
   } else if (!is.null(data.list)){ # Use data.list
     
-    dir_files <- unlist(
-      lapply(
-        seq(length(data.list)), 
-        fnames_from_list, 
-        i = 'fname', 
-        lis = data.list)
-      )
-    
-    # Load validation criteria
-    
-    table_names <- unique(criteria$table)
-    
-    table_names_regexpr <- paste0("_",
-                                  table_names,
-                                  "\\b")
-    
-    # Validate file naming convention
-    
     message("Checking table names ...")
-    
-    msg <- list()
-    tables <- dir_files[attr(regexpr(paste(table_names_regexpr, 
-                                           collapse = "|"), 
-                                     dir_files),
-                             "match.length")
-                        != -1]
-    study_names <- unique(gsub(paste(table_names_regexpr, 
-                                     collapse = "|"), 
-                               "", tables))
-    study_names <- str_replace(study_names, "\\.[:alnum:]*$", replacement = "")
-    if (length(study_names) > 1){
-      stop(paste("\n",
-                 "More than one study name found in your ecocomDP tables.\n",
-                 "Only one study name is allowed.\n",
-                 "Here are the unique study names found:\n",
-                 paste(study_names, collapse = ", ")),
-           call. = F)
+    if (!all(names(data.list) %in% unique(criteria$table))){
+      stop("... non-ecocomDP tables found", call. = F)
     } else {
-      message('... table names are valid')
-      tables
+      message("... table names are valid")
+      names(data.list)
     }
     
   } else if (!is.null(file.names)){
@@ -352,7 +313,7 @@ validate_table_names <- function(data.path = NULL, criteria, data.list = NULL, f
     study_names <- unique(gsub(paste(table_names_regexpr, 
                                      collapse = "|"), 
                                "", tables))
-    study_names <- str_replace(study_names, "\\.[:alnum:]*$", replacement = "")
+    study_names <- stringr::str_replace(study_names, "\\.[:alnum:]*$", replacement = "")
     if (length(study_names) > 1){
       stop(paste("\n",
                  "More than one study name found in your ecocomDP tables.\n",
@@ -435,7 +396,8 @@ validate_table_presence <- function(tables, criteria){
     stop(paste("\n",
                "One or more required tables are missing.\n",
                "These are the missing tables:\n",
-               paste(required_tables_missing, collapse = ", ")))
+               paste(required_tables_missing, collapse = ", ")), 
+         call. = FALSE)
   }
   
   # Send validation notice
@@ -641,9 +603,7 @@ validate_column_presence <- function(tables, data.list, criteria){
     
     # Get input file column names
     
-    data <- data.list[[L1_table_found]][['data']]
-    
-    cols <- colnames(data)
+    cols <- colnames(data.list[[L1_table_found]])
     
     # Report missing columns
     
@@ -1408,11 +1368,11 @@ is_datetime_format <- function(L1.table, tables, data.list, criteria) {
     
     table.name <- tables[stringr::str_detect(tables, paste0(L1_table_found, '\\b'))]
     
-    if (L1_table_ck %in% colnames(data.list[[L1_table_found]][['data']])){
+    if (L1_table_ck %in% colnames(data.list[[L1_table_found]])){
       
       # Read datetime vector
       
-      x <- data.list[[L1_table_found]][['data']][ ,L1_table_ck]
+      x <- data.list[[L1_table_found]][ ,L1_table_ck]
       
       # Count NA of input data
       
@@ -1420,17 +1380,22 @@ is_datetime_format <- function(L1.table, tables, data.list, criteria) {
       
       # Count NA of datetimes read by dataCleanr::iso8601_convert()
       
-      use_i <- suppressMessages(
-        suppressWarnings(
-          dataCleanr::iso8601_read(x)
-        )
-      )
+      use_i <- suppressWarnings(list(
+        lubridate::parse_date_time(x, "ymdHMS"),
+        lubridate::parse_date_time(x, "ymdHM"),
+        lubridate::parse_date_time(x, "ymdH"),
+        lubridate::parse_date_time(x, "ymd")))
       
-      
-      n_na_con <- sum(is.na(use_i))
-      
-      if (n_na_con > n_na_raw){
-        use_i <- seq(length(x))[is.na(use_i)]
+      n_na_con <- unlist(
+        lapply(
+          use_i,
+          function(k) {
+            sum(is.na(k))
+          }))
+
+      if (min(n_na_con) > n_na_raw){
+        use_i <- seq(length(x))[
+          is.na(use_i[[which(n_na_con %in% min(n_na_con))]])]
         stop(paste0("\n",
                     'This table:\n',
                     table.name,
@@ -1515,7 +1480,8 @@ is_valid_col_name <- function(cols, L1.table_columns, table.name){
                 "This table:\n",
                 table.name, "\n",
                 "is missing these columns:\n",
-                paste(missing_columns, collapse = ", ")))
+                paste(missing_columns, collapse = ", ")), 
+         call. = FALSE)
   }
 }
 
@@ -1536,7 +1502,8 @@ is_valid_name <- function(cols, L1.table_columns, table.name){
                 "This table:\n",
                 table.name, "\n",
                 "contains these invalid column names:\n",
-                paste(invalid_columns, collapse = ", ")))
+                paste(invalid_columns, collapse = ", ")),
+         call. = FALSE)
   }
 }
 
@@ -1574,43 +1541,22 @@ read_ecocomDP_table <- function(data.path = NULL, file.name, package.id = NULL, 
       EDIutils::api_read_metadata(package.id)
     )
     
-    files <- unlist(
-      xmlApply(
-        eml[
-          "//dataset/dataTable/entityName"
-          ],
-        xmlValue
-      )
-    )
+    files <- xml2::xml_text(
+      xml2::xml_find_all(eml, "//dataset/dataTable/entityName"))
     
     use_i <- match(file.name, files)
     
-    sep <- unlist(
-      xmlApply(
-        eml[
-          "//dataset/dataTable/physical/dataFormat/textFormat/simpleDelimited/fieldDelimiter"
-          ],
-        xmlValue
-      )
-    )[use_i]
+    sep <- xml2::xml_text(
+      xml2::xml_find_all(
+        eml, 
+        "//dataset/dataTable/physical/dataFormat/textFormat/simpleDelimited/fieldDelimiter"))[use_i]
     
-    data_url <- c(
-      unlist(
-        xmlApply(
-          eml["//dataset/dataTable/physical/distribution/online/url"], 
-          xmlValue
-        )
-      )
-    )[use_i]
+    data_url <- xml2::xml_text(
+      xml2::xml_find_all(
+        eml, 
+        "//dataset/dataTable/physical/distribution/online/url"))[use_i]
     
-    x <- read.table(
-      data_url,
-      header = T,
-      sep = sep,
-      as.is = T,
-      quote = "\"",
-      comment.char = ""
-    )
+    x <- data.table::fread(data_url)
     
   }
   

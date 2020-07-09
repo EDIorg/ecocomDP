@@ -185,12 +185,19 @@ read_data <- function(
           })
       }))
   
-  # Validate ------------------------------------------------------------------
+  
+  # Ensure referential integrity
   
   # if (length(id) > 1) {
   #   # Append package_id to primary keys to ensure referential integrity
   #   
   # }
+  
+  # Validate ------------------------------------------------------------------
+  
+  for (i in 1:length(d)) {
+    validate_ecocomDP(data.list = d[[i]]$tables)
+  }
   
   # Return --------------------------------------------------------------------
   
