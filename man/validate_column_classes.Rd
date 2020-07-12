@@ -2,39 +2,18 @@
 % Please edit documentation in R/validate_ecocomDP.R
 \name{validate_column_classes}
 \alias{validate_column_classes}
-\title{Check that ecocomDP table column classes are valid}
+\title{Check for valid column classes}
 \usage{
-validate_column_classes(data.path)
+validate_column_classes(data.list)
 }
 \arguments{
-\item{d}{(list of data frames) A list of of data frames. Use this argument if
-tables are read into the R environment. The list should be of the following 
-structure:
-\itemize{
-    \item \strong{"list name"} Name of the list object. This can be anything.
-    \itemize{
-        \item \strong{"L1 table name"} i.e. observation, location, taxon, etc.
-        \itemize{
-            \item \strong{"data"} Data frame representation of the L1 table
-            \item \strong{"fname"} File name the data frame was created from
-        }
-    }
-}}
+\item{data.list}{(list of data frames) A named list of data frames, each of which is an 
+ecocomDP table.}
 }
 \value{
-A validation report printed in the console window of RStudio. The
-    validation checks run until an error is encountered. You must address
-    errors before continuing to the next check. Once all validation checks
-    have successfully completed, you will be notified with a congratulatory
-    message.
+If column classes are not formmated to specification, then an error 
+    is returned.
 }
 \description{
-This function ensures that your ecocomDP (L1) tables contain columns of
-    the correct class (i.e. character, numeric, etc.).
-}
-\details{
-The full suite of L1 validation checks are performed by the
-   \code{validate_ecocomDP} function. The sequence of checks performed in
-   \code{validate_ecocomDO} are not random, rather some checks are dependent
-   upon others.
+Check for valid column classes
 }
