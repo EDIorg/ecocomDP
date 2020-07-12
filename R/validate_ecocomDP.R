@@ -1,165 +1,107 @@
-#' Run all validation checks on a set of ecocomDP tables
+#' Validate a dataset against the ecocomDP
 #'
 #' @description  
-#'     Once you've created an ecocomDP (L1) you will need to check that it 
-#'     is accurately formatted. This validation process ensures your L1 is 
-#'     correct and can be combined with other L1.
-#'
-#' @usage validate_ecocomDP(data.path = NULL, data.list = NULL)
+#'     Use this function to verify a dataset conforms to the ecocomDP.
 #' 
 #' @param data.path 
-#'     (character) The path to the directory containing L1
-#'     tables.
-#' @param data.list 
-#'     (list of data frames) A named list of data frames containing the L1
-#'     tables. Data frame tables must be named after the file name from 
-#'     which they were read, including the extension.
-#' @param package.id
-#'     (character) Package identifier (e.g. 'edi.101.1') containing ecocomDP
-#'      tables to be validated.
-#'
-#' @return 
-#'     A validation report to the RStudio console window. When an issue is 
-#'     encountered a message will be displayed with recommendations for fixing
-#'     it. Each issue must be resolved before the next check will be implemented.
-#'     Once all validation checks have been passed, you will be notified with 
-#'     a congratulatory message and you can move on to creating EML metadata with
-#'     \code{make_eml}.
+#'     (character) The path to the directory containing ecocomDP tables.
+#' @param data.list
+#'     (list of data frames) A named list of data frames, each of which is an 
+#'     ecocomDP table.
+#'     
+#' @note
+#'     This function is used by ecocomDP creators (to ensure what has been 
+#'     created is valid), maintainers (to improve the quality of archived
+#'     ecocomDP datasets), and users (to ensure the data being used is free of
+#'     model error).
 #'          
 #' @details 
-#' 
-#'     Run this function after creating a L1 and before making EML for it.
-#' 
-#'    Validation checks performed by this function:
+#'    Validation checks:
 #'    \itemize{
-#'        \item \strong{Table names} Table names must follow the ecocomDP 
-#'        naming convention (i.e. \emph{studyName_ecocomDPTableName.ext}, e.g. 
-#'        \emph{gleon_chloride_observation.csv}). 
-#'        \item \strong{Table presence} Some L1 tables are 
-#'        required, others are not.
-#'        \item \strong{Column names} Column names must be those specified by
-#'        the data pattern.
-#'        \item \strong{Column presence} Some columns are 
-#'        required, others are not.
-#'        \item \strong{Datetime format} One datetime format is valid, namely
-#'        'YYYY-MM-DDThh:mm:ss'.
-#'        \item \strong{Column classes} Column classes must match the 
-#'        ecocomDP specification.
-#'        \item \strong{Primary keys} Primary keys must be valid.
-#'        \item \strong{Composite keys} Composite keys must be valid.
-#'        \item \strong{Referential integrity} Referential integrity must be
-#'        valid.
+#'        \item{File names - When using \code{data.path} the data are read from
+#'        files and must follow an expected pattern, namely 
+#'        \emph{studyName_ecocomDPTableName.ext} (e.g. 
+#'        \emph{gleon_chloride_observation.csv}).}
+#'        \item{Table presence - Some tables are required, others are not.}
+#'        \item{Column names - Column names must follow specification.}
+#'        \item{Column presence - Some columns are required, others are not.}
+#'        \item{Column classes - Column classes must follow specification.}
+#'        \item{Datetime format - Date and datetime formats must follow 
+#'        specification.}
+#'        \item{Primary keys - Primary keys of tables must be valid.}
+#'        \item{Composite keys - Composite keys of tables must be valid.}
+#'        \item{Referential integrity - Referential integrity among tables must 
+#'        be valid.}
 #'    }
+#'    
+#' @examples 
+#' # Validate a set files (example data)
+#' validate_ecocomDP(data.path = system.file("/data", package = "ecocomDP"))
 #'         
 #' @export
 #'
 
-validate_ecocomDP <- function(data.path = NULL, data.list = NULL, 
-                              package.id = NULL){
+validate_ecocomDP <- function(
+  data.path = NULL, 
+  data.list = NULL) {
   
-  # Check arguments
+  # Check arguments -----------------------------------------------------------
   
-  if (is.null(data.path) & is.null(data.list) & is.null(package.id)){
-    stop('One of the arguments "data.path", "data.list", or "package.id" must be used.')
+  if (is.null(data.path) & is.null(data.list)) {
+    stop('One of the arguments "data.path", or "d" must be used.')
   }
-  
-  # Load validation criteria
-  
-  message("Loading validation criteria\n")
-  
-  criteria <- read.table(
-    system.file('validation_criteria.txt', package = 'ecocomDP'),
-    header = T,
-    sep = "\t",
-    as.is = T,
-    na.strings = "NA")
-  
-  L1_table_names <- criteria$table[is.na(criteria$column)]
-  
-  # Validate file names and read data into data.list
-  
-  if (!is.null(data.path)){
-    
+  if (!is.null(data.path)) {
     EDIutils::validate_path(data.path)
-    
-    dir_files <- list.files(data.path, recursive = F)
-    
-    file_names <- validate_table_names(
-      data.path = data.path,
-      criteria = criteria
-      )
-
-    data.list <- lapply(X = file_names, FUN = read_ecocomDP_table, data.path = data.path)
-    
-    names(data.list) <- unlist(lapply(file_names, is_table_rev, L1_table_names))
-
-    data.list
-    
-  } else if (!is.null(data.list)){
-    
-    file_names <- validate_table_names(
-      data.list = data.list,
-      criteria = criteria
-      )
-
-  } else if (!is.null(package.id)){
-    
-    data_entities <- suppressMessages(
-      EDIutils::api_read_data_entity_names(package.id)
-    )
-    
-    file_names <- validate_table_names(
-      file.names = data_entities,
-      criteria = criteria
-    )
-    
-    data.list <- lapply(
-      file_names, 
-      read_ecocomDP_table, 
-      package.id = package.id,
-      data.path = NULL)
-    
-    names(data.list) <- unlist(lapply(file_names, is_table_rev, L1_table_names))
-
+  }
+  
+  # Parameterize --------------------------------------------------------------
+  
+  message("Validating data against the ecocomDP specification")
+  message("Loading criteria")
+  criteria <- data.table::fread(
+    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  
+  # Read data -----------------------------------------------------------------
+  
+  if (!is.null(data.path)) {
+    d <- read_from_files(data.path)
+    invisible(validate_table_names(data.path = data.path))
   }
 
-  # Report required tables that are missing
+  # Validate data -------------------------------------------------------------
   
-  validate_table_presence(
-    tables = file_names,
-    criteria = criteria)
+  validate_table_presence(d)
   
   # Validate column names
   
   validate_column_names(
     tables = file_names,
-    data.list = data.list,
+    d = d,
     criteria = criteria)
   
   # Validate column presence
   
   validate_column_presence(
     tables = file_names,
-    data.list = data.list,
+    d = d,
     criteria = criteria)
   
   # Validate datetime format
   
   validate_datetime(
     tables = file_names,
-    data.list = data.list,
+    d = d,
     criteria = criteria)
   
-  # Validate column classes
-  # browser()
-  
-  # validate_column_classes()
+  # FIXME: Implement validate_column_classes()
+  browser()
+  validate_column_classes()
   
   # Validate primary keys
   
   validate_primary_keys(
     tables = file_names, 
-    data.list = data.list,
+    d = d,
     criteria = criteria
   )
   
@@ -167,7 +109,7 @@ validate_ecocomDP <- function(data.path = NULL, data.list = NULL,
   
   validate_composite_keys(
     tables = file_names, 
-    data.list = data.list,
+    d = d,
     criteria = criteria
   )
   
@@ -175,7 +117,7 @@ validate_ecocomDP <- function(data.path = NULL, data.list = NULL,
   
   validate_referential_integrity(
     tables = file_names, 
-    data.list = data.list, 
+    d = d, 
     criteria = criteria
   )
   
@@ -194,138 +136,60 @@ validate_ecocomDP <- function(data.path = NULL, data.list = NULL,
 
 
 
-#' Validate ecocomDP table names against the naming schema
+#' Check for file name errors
 #' 
 #' @description
 #'     This function ensures that your ecocomDP (L1) tables follow the
-#'     table naming convention (i.e. \emph{studyName_ecocomDPTableName.ext},
+#'     file naming convention (i.e. \emph{studyName_ecocomDPTableName.ext},
 #'     e.g. \emph{gleon_chloride_observation.csv}).
 #' 
-#' @usage validate_table_names(data.path, criteria, data.list = NULL)
-#' 
 #' @param data.path
-#'     (character) Path to the directory containing the L1 tables.
-#'     tables. Use this argument if tables are locally stored and need to be
-#'     read in to R.
-#' @param criteria
-#'     (data frame) Validation criteria located in the R package inst directory.
-#' @param data.list
-#'     (list of data frames) A list of of data frames. Use this argument if
-#'     tables are read into the R environment. The list should be of the following 
-#'     structure:
-#'     \itemize{
-#'         \item \strong{"list name"} Name of the list object. This can be anything.
-#'         \itemize{
-#'             \item \strong{"L1 table name"} i.e. observation, location, taxon, etc.
-#'             \itemize{
-#'                 \item \strong{"data"} Data frame representation of the L1 table
-#'                 \item \strong{"fname"} File name the data frame was created from
-#'             }
-#'         }
-#'     }
-#' @param file.names
-#'     (character) Vector of file names.
+#'     (character) The path to the directory containing ecocomDP tables.
 #' 
 #' @return
 #'     If table names are valid, then the corresponding table names are
 #'     returned. If table names are invalid, then an error message is
 #'     returned.
-#' 
+#'     
 #' @export
 #'
-
-validate_table_names <- function(data.path = NULL, criteria, data.list = NULL, file.names = NULL) {
+validate_table_names <- function(data.path = NULL) {
   
-  # Validate file names and read
+  message("Checking file names")
   
-  if (!is.null(data.path)){
-
-    EDIutils::validate_path(data.path)
-
-    dir_files <- list.files(data.path, recursive = F)
-
-    # Load validation criteria
-    
-    table_names <- unique(criteria$table)
-    
-    table_names_regexpr <- paste0("_",
-                                  table_names,
-                                  "\\b")
-    
-    # Validate file naming convention
-    
-    message("Checking table names ...")
-    
-    msg <- list()
-    tables <- dir_files[attr(regexpr(paste(table_names_regexpr, 
-                                           collapse = "|"), 
-                                     dir_files),
-                             "match.length")
-                        != -1]
-    study_names <- unique(gsub(paste(table_names_regexpr, 
-                                     collapse = "|"), 
-                               "", tables))
-    study_names <- stringr::str_replace(study_names, "\\.[:alnum:]*$", replacement = "")
-    if (length(study_names) > 1){
-      stop(paste("\n",
-                 "More than one study name found in your ecocomDP tables.\n",
-                 "Only one study name is allowed.\n",
-                 "Here are the unique study names found:\n",
-                 paste(study_names, collapse = ", ")),
-           call. = F)
-    } else {
-      message('... table names are valid\n')
-      tables
-    }
-    
-  } else if (!is.null(data.list)){ # Use data.list
-    
-    message("Checking table names ...")
-    if (!all(names(data.list) %in% unique(criteria$table))){
-      stop("... non-ecocomDP tables found", call. = F)
-    } else {
-      message("... table names are valid")
-      names(data.list)
-    }
-    
-  } else if (!is.null(file.names)){
-    
-    dir_files <- file.names
-    
-    # Load validation criteria
-    
-    table_names <- unique(criteria$table)
-    
-    table_names_regexpr <- paste0("_",
-                                  table_names,
-                                  "\\b")
-    
-    # Validate file naming convention
-    
-    message("Checking table names ...")
-    
-    msg <- list()
-    tables <- dir_files[attr(regexpr(paste(table_names_regexpr, 
-                                           collapse = "|"), 
-                                     dir_files),
-                             "match.length")
-                        != -1]
-    study_names <- unique(gsub(paste(table_names_regexpr, 
-                                     collapse = "|"), 
-                               "", tables))
-    study_names <- stringr::str_replace(study_names, "\\.[:alnum:]*$", replacement = "")
-    if (length(study_names) > 1){
-      stop(paste("\n",
-                 "More than one study name found in your ecocomDP tables.\n",
-                 "Only one study name is allowed.\n",
-                 "Here are the unique study names found:\n",
-                 paste(study_names, collapse = ", ")),
-           call. = F)
-    } else {
-      message('... table names are valid\n')
-      tables
-    }
-    
+  # Validate inputs
+  
+  EDIutils::validate_path(data.path)
+  
+  # Parameterize
+  
+  criteria <- data.table::fread(
+    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  
+  # Validate
+  
+  table_names <- unique(criteria$table)
+  table_names_regexpr <- paste0("_", table_names, "\\b")
+  
+  msg <- list()
+  tables <- list.files(data.path)[attr(regexpr(paste(table_names_regexpr, 
+                                         collapse = "|"), 
+                                   list.files(data.path)),
+                           "match.length")
+                      != -1]
+  study_names <- unique(gsub(paste(table_names_regexpr, 
+                                   collapse = "|"), 
+                             "", tables))
+  study_names <- stringr::str_replace(study_names, "\\.[:alnum:]*$", replacement = "")
+  if (length(study_names) > 1){
+    stop(paste("\n",
+               "More than one study name found in your ecocomDP tables.\n",
+               "Only one study name is allowed.\n",
+               "Here are the unique study names found:\n",
+               paste(study_names, collapse = ", ")),
+         call. = F)
+  } else {
+    tables
   }
 
 }
@@ -339,70 +203,36 @@ validate_table_names <- function(data.path = NULL, criteria, data.list = NULL, f
 
 
 
-#' Check that required ecocomDP tables are present
-#'
-#' @description  
-#'     Check that required L1 tables are present.
-#'
-#' @usage validate_table_presence(tables, criteria)
+#' Check for required tables
 #' 
-#' @param tables 
-#'     (character) Names of valid L1 tables in your dataset working directory.
-#'     Get valid table names with `validate_table_names`.
-#' @param criteria
-#'     (data frame) Validation criteria located at 
-#'     /inst/validation_criteria.txt.
+#' @param data.list
+#'     (list of data frames) A named list of data frames, each of which is an 
+#'     ecocomDP table.
 #'
 #' @return 
 #'     If required tables are missing, then an error message is produced.
-#'          
-#' @details 
 #'         
-#' @export
-#'
-
-validate_table_presence <- function(tables, criteria){
+validate_table_presence <- function(data.list) {
   
-  # Check arguments and parameterize
+  message("Checking for required tables")
   
-  if (missing(tables)){
-    stop('Input argument "tables" is missing!')
-  }
-  if (!is.character(tables)){
-    stop('Input argument "tables" is not of class = character!')
-  }
-  if (missing(criteria)){
-    stop('Input argument "criteria" is missing! Specify the validation criteria for the ecocomDP tables.')
-  }
-  if (!is.data.frame(criteria)){
-    stop('Input argument "criteria" is not a data frame!')
-  }
+  # Parameterize
   
-  # Which tables are required?
+  criteria <- data.table::fread(
+    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  required <- criteria$table[
+    (is.na(criteria$class)) & (criteria$required == "yes")]
   
-  required_tables <- criteria$table[(
-    is.na(criteria$class)) & (criteria$required == "yes")
-    ]
+  # Run checks
   
-  # Report required tables that are missing 
-  
-  message("Checking for required tables ...")
-
-  required_tables_found <- unlist(lapply(required_tables, is_required_table, tables = tables))
-  use_i <- is.na(match(required_tables, required_tables_found))
-  required_tables_missing <- required_tables[use_i]
-  
-  if (length(required_tables_missing) != 0){
+  required_missing <- required[!(required %in% names(data.list))]
+  if (any(required_missing)) {
     stop(paste("\n",
                "One or more required tables are missing.\n",
                "These are the missing tables:\n",
-               paste(required_tables_missing, collapse = ", ")), 
+               paste(required_missing, collapse = ", ")), 
          call. = FALSE)
   }
-  
-  # Send validation notice
-  
-  message('... required tables are present\n')
   
 }
 
@@ -415,97 +245,45 @@ validate_table_presence <- function(tables, criteria){
 
 
 
-#' Check that column names of ecocomDP tables are valid
-#'
-#' @description  
-#'     Check that column names of L1 tables are valid.
-#'
-#' @usage validate_column_names(data.path, criteria)
+#' Check for invalid column names
 #' 
-#' @param tables 
-#'     (character) Names of valid L1 tables in your dataset working directory.
-#'     Get valid table names with `validate_table_names`.
 #' @param data.list
-#'     (list of data frames) A list of of data frames. Use this argument if
-#'     tables are read into the R environment. The list should be of the following 
-#'     structure:
-#'     \itemize{
-#'         \item \strong{"list name"} Name of the list object. This can be anything.
-#'         \itemize{
-#'             \item \strong{"L1 table name"} i.e. observation, location, taxon, etc.
-#'             \itemize{
-#'                 \item \strong{"data"} Data frame representation of the L1 table
-#'                 \item \strong{"fname"} File name the data frame was created from
-#'             }
-#'         }
-#'     }
-#' @param criteria
-#'     (data frame) Validation criteria located at 
-#'     /inst/validation_criteria.txt.
+#'     (list of data frames) A named list of data frames, each of which is an 
+#'     ecocomDP table.
 #'
 #' @return 
 #'     If required column names are missing, then an error is returned.
-#'         
-#' @export
 #'
+validate_column_names <- function(data.list) {
 
-validate_column_names <- function(tables, data.list, criteria) {
+  message('Checking column names')
   
-  # Check arguments and parameterize
+  # Parameterize
   
-  if (missing(tables)){
-    stop('Input argument "tables" is missing!')
-  }
-  if (!is.character(tables)){
-    stop('Input argument "tables" is not of class = character!')
-  }
-  if (missing(data.list)){
-    stop('Input argument "data.list" is missing!')
-  }
-  if (missing(criteria)){
-    stop('Input argument "criteria" is missing! Specify the validation criteria for the ecocomDP tables.')
-  }
-  if (!is.data.frame(criteria)){
-    stop('Input argument "criteria" is not a data frame!')
-  }
-
-  # Get validation criteria
+  criteria <- data.table::fread(
+    system.file('validation_criteria.txt', package = 'ecocomDP'))
   
-  message('Validating column names')
+  test <- lapply(
+    names(data.list),
+    function(x) {
+      expected <- criteria$column[
+        (criteria$table %in% x) & !is.na(criteria$column)]
+      invalid_columns <- !(colnames(data.list[[x]]) %in% expected)
+      if (any(invalid_columns)) {
+        colnames(data.list[[x]])[invalid_columns]
+      }
+    })
   
-  L1_tables <- criteria$table[(
-    is.na(criteria$class))
-    ]
+  # Resume development here
+  test[sapply(test, is.null)] <- NULL
   
-  # Detect invalid column names
-  
-  is_column_name <- function(table.name, data.list, L1_tables){
-    
-    # Get L1 table name
-    
-    output <- lapply(L1_tables, is_table, table.name)
-    L1_table_found <- unlist(output)
-    L1_table_columns <- criteria$column[(
-      !is.na(criteria$column) & (criteria$table == L1_table_found)
-    )]
-    
-    # Get input file column names
-    
-    data <- data.list[[L1_table_found]][['data']]
-    
-    cols <- colnames(data)
-    
-    # Which column names are invalid?
-    
-    is_valid_name(cols, L1_table_columns, table.name)
-    
-  }
-  
-  use_i <- lapply(tables, is_column_name, data.list = data.list, L1_tables = L1_tables)
-  
-  # Send validation notice
-  
-  message('... column names are valid\n')
+  #
+  stop(paste0("\n",
+              "This table:\n",
+              table.name, "\n",
+              "contains these invalid column names:\n",
+              paste(invalid_columns, collapse = ", ")),
+       call. = FALSE)
   
 }
 
@@ -531,7 +309,7 @@ validate_column_names <- function(tables, data.list, criteria) {
 #' @param tables 
 #'     (character) Names of valid L1 tables in your dataset working directory.
 #'     Get valid table names with `validate_table_names`.
-#' @param data.list
+#' @param d
 #'     (list of data frames) A list of of data frames. Use this argument if
 #'     tables are read into the R environment. The list should be of the following 
 #'     structure:
@@ -555,7 +333,7 @@ validate_column_names <- function(tables, data.list, criteria) {
 #' @export
 #'
 
-validate_column_presence <- function(tables, data.list, criteria){
+validate_column_presence <- function(tables, d, criteria){
   
   
   # Check arguments and parameterize
@@ -566,8 +344,8 @@ validate_column_presence <- function(tables, data.list, criteria){
   if (!is.character(tables)){
     stop('Input argument "tables" is not of class = character!')
   }
-  if (missing(data.list)){
-    stop('Input argument "data.list" is missing!')
+  if (missing(d)){
+    stop('Input argument "d" is missing!')
   }
   if (missing(criteria)){
     stop('Input argument "criteria" is missing! Specify the validation criteria for the ecocomDP tables.')
@@ -586,7 +364,7 @@ validate_column_presence <- function(tables, data.list, criteria){
   
   message('Validating column presence ...')
   
-  is_required_column <- function(table.name, data.list, L1.tables){
+  is_required_column <- function(table.name, d, L1.tables){
     
     # Get L1 name and required columns of input table
     
@@ -603,7 +381,7 @@ validate_column_presence <- function(tables, data.list, criteria){
     
     # Get input file column names
     
-    cols <- colnames(data.list[[L1_table_found]])
+    cols <- colnames(d[[L1_table_found]])
     
     # Report missing columns
     
@@ -611,7 +389,7 @@ validate_column_presence <- function(tables, data.list, criteria){
     
   }
   
-  use_i <- lapply(tables, is_required_column, data.list = data.list, L1.tables = L1_tables)
+  use_i <- lapply(tables, is_required_column, d = d, L1.tables = L1_tables)
   
   # Send validation notice
   
@@ -626,7 +404,7 @@ validate_column_presence <- function(tables, data.list, criteria){
 
 
 
-validate_datetime <- function(tables, data.list, criteria){
+validate_datetime <- function(tables, d, criteria){
   
   # Validation parameters
 
@@ -642,7 +420,7 @@ validate_datetime <- function(tables, data.list, criteria){
 
   message('Validating datetime format ...')
 
-  lapply(X = L1_tables, FUN = is_datetime_format, tables = tables, data.list = data.list, criteria = criteria)
+  lapply(X = L1_tables, FUN = is_datetime_format, tables = tables, d = d, criteria = criteria)
 
   # Send validation notice
 
@@ -670,7 +448,7 @@ validate_datetime <- function(tables, data.list, criteria){
 #'
 #' @usage validate_column_classes(data.path)
 #'
-#' @param data.list
+#' @param d
 #'     (list of data frames) A list of of data frames. Use this argument if
 #'     tables are read into the R environment. The list should be of the following 
 #'     structure:
@@ -834,7 +612,7 @@ validate_column_classes <- function(data.path) {
 #' @param tables 
 #'     (character) Names of valid L1 tables in your dataset working directory.
 #'     Get valid table names with `validate_table_names`.
-#' @param data.list
+#' @param d
 #'     (list of data frames) A list of of data frames. Use this argument if
 #'     tables are read into the R environment. The list should be of the following 
 #'     structure:
@@ -859,7 +637,7 @@ validate_column_classes <- function(data.path) {
 #'
 
 
-validate_primary_keys <- function(tables, data.list, criteria) {
+validate_primary_keys <- function(tables, d, criteria) {
   
   # Check inputs
   
@@ -869,8 +647,8 @@ validate_primary_keys <- function(tables, data.list, criteria) {
   if (!is.character(tables)){
     stop('Input argument "tables" is not of class = character!')
   }
-  if (missing(data.list)){
-    stop('Input argument "data.list" is missing!')
+  if (missing(d)){
+    stop('Input argument "d" is missing!')
   }
   if (missing(criteria)){
     stop('Input argument "criteria" is missing! Specify the validation criteria for the ecocomDP tables.')
@@ -889,7 +667,7 @@ validate_primary_keys <- function(tables, data.list, criteria) {
   
   message('Validating primary keys ...')
   
-  prep_primary_key <- function(table.name, data.list, L1.tables) {
+  prep_primary_key <- function(table.name, d, L1.tables) {
     
     # Get L1 name and name of primary key
     
@@ -900,7 +678,7 @@ validate_primary_keys <- function(tables, data.list, criteria) {
     
     # Read input file
     
-    x <- data.list[[L1_table_found]][['data']]
+    x <- d[[L1_table_found]][['data']]
     
     # Are primary keys unique?
     
@@ -909,7 +687,7 @@ validate_primary_keys <- function(tables, data.list, criteria) {
     
   }
   
-  use_i <- lapply(tables, prep_primary_key, data.list = data.list, L1.tables = L1_tables)
+  use_i <- lapply(tables, prep_primary_key, d = d, L1.tables = L1_tables)
   
   # Send validation notice
   
@@ -937,7 +715,7 @@ validate_primary_keys <- function(tables, data.list, criteria) {
 #' @param tables 
 #'     (character) Names of valid L1 tables in your dataset working directory.
 #'     Get valid table names with `validate_table_names`.
-#' @param data.list
+#' @param d
 #'     (list of data frames) A list of of data frames. Use this argument if
 #'     tables are read into the R environment. The list should be of the following 
 #'     structure:
@@ -964,7 +742,7 @@ validate_primary_keys <- function(tables, data.list, criteria) {
 #'
 
 
-validate_composite_keys <- function(tables, data.list, criteria) {
+validate_composite_keys <- function(tables, d, criteria) {
   
   # Check inputs
   
@@ -974,8 +752,8 @@ validate_composite_keys <- function(tables, data.list, criteria) {
   if (!is.character(tables)){
     stop('Input argument "tables" is not of class = character!')
   }
-  if (missing(data.list)){
-    stop('Input argument "data.list" is missing!')
+  if (missing(d)){
+    stop('Input argument "d" is missing!')
   }
   if (missing(criteria)){
     stop('Input argument "criteria" is missing! Specify the validation criteria for the ecocomDP tables.')
@@ -994,7 +772,7 @@ validate_composite_keys <- function(tables, data.list, criteria) {
   
   message('Validating composite keys ...')
   
-  is_composite_key <- function(table.name, data.list, L1.tables) {
+  is_composite_key <- function(table.name, d, L1.tables) {
     
     # Get L1 name and name of composite key columns
     
@@ -1007,7 +785,7 @@ validate_composite_keys <- function(tables, data.list, criteria) {
       
       # Read input file
       
-      x <- data.list[[L1_table_found]][['data']]
+      x <- d[[L1_table_found]][['data']]
       
       # Are composite keys unique?
       
@@ -1033,7 +811,7 @@ validate_composite_keys <- function(tables, data.list, criteria) {
     
   }
   
-  use_i <- lapply(tables, is_composite_key, data.list = data.list, L1.tables = L1_tables)
+  use_i <- lapply(tables, is_composite_key, d = d, L1.tables = L1_tables)
   
   # Send validation notice
   
@@ -1060,7 +838,7 @@ validate_composite_keys <- function(tables, data.list, criteria) {
 #' @param tables 
 #'     (character) Names of valid L1 tables in your dataset working directory.
 #'     Get valid table names with `validate_table_names`.
-#' @param data.list
+#' @param d
 #'     (list of data frames) A list of of data frames. Use this argument if
 #'     tables are read into the R environment. The list should be of the following 
 #'     structure:
@@ -1085,7 +863,7 @@ validate_composite_keys <- function(tables, data.list, criteria) {
 #'
 
 
-validate_referential_integrity <- function(tables, data.list, criteria) {
+validate_referential_integrity <- function(tables, d, criteria) {
   
   # Check inputs
   
@@ -1095,8 +873,8 @@ validate_referential_integrity <- function(tables, data.list, criteria) {
   if (!is.character(tables)){
     stop('Input argument "tables" is not of class = character!')
   }
-  if (missing(data.list)){
-    stop('Input argument "data.list" is missing!')
+  if (missing(d)){
+    stop('Input argument "d" is missing!')
   }
   if (missing(criteria)){
     stop('Input argument "criteria" is missing! Specify the validation criteria for the ecocomDP tables.')
@@ -1122,15 +900,15 @@ validate_referential_integrity <- function(tables, data.list, criteria) {
   get_foreign_keys <- function(key, table.name){
     dir_tables <- unlist(
       lapply(
-        seq(length(data.list)),
+        seq(length(d)),
         fnames_from_list,
         i = 'fname',
-        lis = data.list)
+        lis = d)
     )
     table_pattern <- paste0(table.name, "\\b")
     use_i <- stringr::str_detect(dir_tables, table_pattern)
     if (sum(use_i) > 0){
-      data_in <- data.list[[table.name]][['data']]
+      data_in <- d[[table.name]][['data']]
       if (key %in% colnames(data_in)){
         uni_values <- unique(data_in[ , key])
       } else {
@@ -1155,19 +933,19 @@ validate_referential_integrity <- function(tables, data.list, criteria) {
   # get_primary_keys - Get a list of primary key values
   # key = (character) key name
   # table.name = (character) full table name with file extension
-  # data.list = (character) path to table.name
+  # d = (character) path to table.name
   get_primary_keys <- function(key, table.name){
     dir_tables <- unlist(
       lapply(
-        seq(length(data.list)), 
+        seq(length(d)), 
         fnames_from_list, 
         i = 'fname', 
-        lis = data.list)
+        lis = d)
     )
     table_pattern <- paste0(table.name, "\\b")
     use_i <- stringr::str_detect(dir_tables, table_pattern)
     if (sum(use_i) > 0){
-      data_in <- data.list[[table.name]][['data']]
+      data_in <- d[[table.name]][['data']]
       uni_values <- unique(data_in[ , key])
       uni_values
     } else {
@@ -1315,7 +1093,7 @@ is_foreign_key <- function(fk.tables, fk.values, pk.tables, pk.values){
 
 
 
-# Get 'fname' from data.list
+# Get 'fname' from d
 fnames_from_list <- function(n, i, lis){
   lis[[n]][[i]]
 } 
@@ -1357,7 +1135,7 @@ is_primary_key <- function(x, pk, table.name){
 
 
 
-is_datetime_format <- function(L1.table, tables, data.list, criteria) {
+is_datetime_format <- function(L1.table, tables, d, criteria) {
   
   # Get names of L1 table and datetime column
   
@@ -1368,11 +1146,11 @@ is_datetime_format <- function(L1.table, tables, data.list, criteria) {
     
     table.name <- tables[stringr::str_detect(tables, paste0(L1_table_found, '\\b'))]
     
-    if (L1_table_ck %in% colnames(data.list[[L1_table_found]])){
+    if (L1_table_ck %in% colnames(d[[L1_table_found]])){
       
       # Read datetime vector
       
-      x <- data.list[[L1_table_found]][ ,L1_table_ck]
+      x <- d[[L1_table_found]][ ,L1_table_ck]
       
       # Count NA of input data
       
@@ -1494,27 +1272,6 @@ is_valid_col_name <- function(cols, L1.table_columns, table.name){
 
 
 
-is_valid_name <- function(cols, L1.table_columns, table.name){
-  use_i <- match(cols, L1.table_columns)
-  invalid_columns <- cols[is.na(use_i)]
-  if (length(invalid_columns) > 0){
-    stop(paste0("\n",
-                "This table:\n",
-                table.name, "\n",
-                "contains these invalid column names:\n",
-                paste(invalid_columns, collapse = ", ")),
-         call. = FALSE)
-  }
-}
-
-
-
-
-
-
-
-
-
 
 read_ecocomDP_table <- function(data.path = NULL, file.name, package.id = NULL, entity.id = NULL){
   
@@ -1564,3 +1321,45 @@ read_ecocomDP_table <- function(data.path = NULL, file.name, package.id = NULL, 
   
 }
 
+
+
+
+
+
+
+
+
+#' Read ecocomDP from files
+#'
+#' @param data.path 
+#'     (character) The path to the directory containing ecocomDP tables. 
+#'     Duplicate file names are not allowed.
+#'
+#' @return
+#'     (list) A named list of data frames, each with the contents of the 
+#'     corresponding file. Names follow ecocomDP specification.
+#'     
+#' @note 
+#'     This function will deprecate \code{read_ecocomDP_table()}
+#'
+#' @examples
+#' d <- read_from_files(system.file("/data", package = "ecocomDP"))
+#' 
+read_from_files <- function(data.path) {
+  criteria <- data.table::fread(
+    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  d <- lapply(
+    unique(criteria$table),
+    function(x) {
+      ecocomDP_table <- stringr::str_detect(
+        list.files(data.path), 
+        paste0("(?<=.{0,10000})", x, "(?=\\.[:alnum:]*$)"))
+      if (any(ecocomDP_table)) {
+        data.table::fread(
+          paste0(data.path, "/", list.files(data.path)[ecocomDP_table]))
+      }
+    })
+  names(d) <- unique(criteria$table)
+  d[sapply(d, is.null)] <- NULL
+  d
+}

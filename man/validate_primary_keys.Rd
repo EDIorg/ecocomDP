@@ -10,7 +10,7 @@ validate_primary_keys(tables, data.path, criteria)
 \item{tables}{(character) Names of valid L1 tables in your dataset working directory.
 Get valid table names with `validate_table_names`.}
 
-\item{data.list}{(list of data frames) A list of of data frames. Use this argument if
+\item{d}{(list of data frames) A list of of data frames. Use this argument if
 tables are read into the R environment. The list should be of the following 
 structure:
 \itemize{

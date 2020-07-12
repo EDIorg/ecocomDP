@@ -7,7 +7,7 @@
 validate_column_classes(data.path)
 }
 \arguments{
-\item{data.list}{(list of data frames) A list of of data frames. Use this argument if
+\item{d}{(list of data frames) A list of of data frames. Use this argument if
 tables are read into the R environment. The list should be of the following 
 structure:
 \itemize{

@@ -196,6 +196,7 @@ read_data <- function(
   # Validate ------------------------------------------------------------------
   
   for (i in 1:length(d)) {
+    message("Validating ", names(d)[i])
     validate_ecocomDP(data.list = d[[i]]$tables)
   }
   
