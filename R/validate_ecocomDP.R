@@ -56,8 +56,6 @@ validate_ecocomDP <- function(
   
   # Parameterize --------------------------------------------------------------
   
-  message("Validating data against the ecocomDP specification")
-  message("Loading criteria")
   criteria <- data.table::fread(
     system.file('validation_criteria.txt', package = 'ecocomDP'))
   
@@ -66,36 +64,22 @@ validate_ecocomDP <- function(
   if (!is.null(data.path)) {
     d <- read_from_files(data.path)
     invisible(validate_table_names(data.path = data.path))
+  } else {
+    d <- data.list
   }
 
   # Validate data -------------------------------------------------------------
   
+  message("Validating:")
+  
   validate_table_presence(d)
-  
-  # Validate column names
-  
-  validate_column_names(
-    tables = file_names,
-    d = d,
-    criteria = criteria)
-  
-  # Validate column presence
-  
-  validate_column_presence(
-    tables = file_names,
-    d = d,
-    criteria = criteria)
-  
-  # Validate datetime format
-  
-  validate_datetime(
-    tables = file_names,
-    d = d,
-    criteria = criteria)
+  validate_column_names(d)
+  validate_column_presence(d)
+  # FIXME: Uncomment the following line
+  # validate_datetime(d)
   
   # FIXME: Implement validate_column_classes()
-  browser()
-  validate_column_classes()
+  validate_column_classes(d)
   
   # Validate primary keys
   
@@ -155,7 +139,7 @@ validate_ecocomDP <- function(
 #'
 validate_table_names <- function(data.path = NULL) {
   
-  message("Checking file names")
+  message("File names")
   
   # Validate inputs
   
@@ -214,23 +198,21 @@ validate_table_names <- function(data.path = NULL) {
 #'         
 validate_table_presence <- function(data.list) {
   
-  message("Checking for required tables")
+  message("Required tables")
   
   # Parameterize
   
   criteria <- data.table::fread(
     system.file('validation_criteria.txt', package = 'ecocomDP'))
-  required <- criteria$table[
+  
+  # Validate
+  
+  expected <- criteria$table[
     (is.na(criteria$class)) & (criteria$required == "yes")]
-  
-  # Run checks
-  
-  required_missing <- required[!(required %in% names(data.list))]
+  required_missing <- expected[!(expected %in% names(data.list))]
   if (any(required_missing)) {
-    stop(paste("\n",
-               "One or more required tables are missing.\n",
-               "These are the missing tables:\n",
-               paste(required_missing, collapse = ", ")), 
+    stop("These tables are missing tables: ", 
+         paste(required_missing, collapse = ", "),
          call. = FALSE)
   }
   
@@ -256,34 +238,28 @@ validate_table_presence <- function(data.list) {
 #'
 validate_column_names <- function(data.list) {
 
-  message('Checking column names')
+  message('Column names')
   
   # Parameterize
   
   criteria <- data.table::fread(
     system.file('validation_criteria.txt', package = 'ecocomDP'))
   
-  test <- lapply(
+  # Validate
+  
+  lapply(
     names(data.list),
     function(x) {
       expected <- criteria$column[
         (criteria$table %in% x) & !is.na(criteria$column)]
       invalid_columns <- !(colnames(data.list[[x]]) %in% expected)
       if (any(invalid_columns)) {
-        colnames(data.list[[x]])[invalid_columns]
+        stop(
+          "The ", x, " table has these invalid column names: ",
+          paste(colnames(data.list[[x]])[invalid_columns], collapse = ", "),
+          call. = FALSE)
       }
     })
-  
-  # Resume development here
-  test[sapply(test, is.null)] <- NULL
-  
-  #
-  stop(paste0("\n",
-              "This table:\n",
-              table.name, "\n",
-              "contains these invalid column names:\n",
-              paste(invalid_columns, collapse = ", ")),
-       call. = FALSE)
   
 }
 
@@ -299,102 +275,44 @@ validate_column_names <- function(data.list) {
 
 
 
-#' Check that required columns of ecocomDP tables are present 
-#'
-#' @description  
-#'     Check that required columns of L1 tables are present.
-#'
-#' @usage validate_column_presence(tables, data.path, criteria)
+#' Check for required columns
 #' 
-#' @param tables 
-#'     (character) Names of valid L1 tables in your dataset working directory.
-#'     Get valid table names with `validate_table_names`.
-#' @param d
-#'     (list of data frames) A list of of data frames. Use this argument if
-#'     tables are read into the R environment. The list should be of the following 
-#'     structure:
-#'     \itemize{
-#'         \item \strong{"list name"} Name of the list object. This can be anything.
-#'         \itemize{
-#'             \item \strong{"L1 table name"} i.e. observation, location, taxon, etc.
-#'             \itemize{
-#'                 \item \strong{"data"} Data frame representation of the L1 table
-#'                 \item \strong{"fname"} File name the data frame was created from
-#'             }
-#'         }
-#'     }
-#' @param criteria
-#'     (data frame) Validation criteria located at 
-#'     /inst/validation_criteria.txt.
+#' @param data.list
+#'     (list of data frames) A named list of data frames, each of which is an 
+#'     ecocomDP table.
 #'
 #' @return 
 #'     If required column names are absent, then an error is returned.
 #'         
 #' @export
 #'
+validate_column_presence <- function(data.list){
+  
+  message('Required columns')
 
-validate_column_presence <- function(tables, d, criteria){
+  # Parameterize
   
+  criteria <- data.table::fread(
+    system.file('validation_criteria.txt', package = 'ecocomDP'))
   
-  # Check arguments and parameterize
+  # Validate
   
-  if (missing(tables)){
-    stop('Input argument "tables" is missing!')
-  }
-  if (!is.character(tables)){
-    stop('Input argument "tables" is not of class = character!')
-  }
-  if (missing(d)){
-    stop('Input argument "d" is missing!')
-  }
-  if (missing(criteria)){
-    stop('Input argument "criteria" is missing! Specify the validation criteria for the ecocomDP tables.')
-  }
-  if (!is.data.frame(criteria)){
-    stop('Input argument "criteria" is not a data frame!')
-  }
-  
-  # Validation parameters
-  
-  L1_tables <- criteria$table[(
-    is.na(criteria$class))
-    ]
-  
-  # Report missing required columns
-  
-  message('Validating column presence ...')
-  
-  is_required_column <- function(table.name, d, L1.tables){
-    
-    # Get L1 name and required columns of input table
-    
-    output <- lapply(L1.tables, is_table, table.name)
-    L1_table_found <- unlist(output)
-    L1_table_columns <- criteria$column[(
-      !is.na(criteria$column) & (criteria$table == L1_table_found)
-    )]
-    L1_file_name <- unlist(output)
-    cols_required <- criteria[(criteria$required == 'yes') & 
-                                (!is.na(criteria$column)) & 
-                                (L1_file_name == criteria$table), 
-                              'column']
-    
-    # Get input file column names
-    
-    cols <- colnames(d[[L1_table_found]])
-    
-    # Report missing columns
-    
-    is_valid_col_name(cols, L1.table_columns = cols_required, table.name)
-    
-  }
-  
-  use_i <- lapply(tables, is_required_column, d = d, L1.tables = L1_tables)
-  
-  # Send validation notice
-  
-  message('... required columns are present\n')
-  
+  lapply(
+    names(data.list),
+    function(x) {
+      expected <- criteria$column[
+        (criteria$table %in% x) & 
+          !is.na(criteria$column) & 
+          (criteria$required == "yes")]
+      missing_columns <- !(expected %in% colnames(data.list[[x]]))
+      if (any(missing_columns)) {
+        stop(
+          "The ", x, " table is missing these required columns: ",
+          paste(colnames(data.list[[x]])[missing_columns], collapse = ", "),
+          call. = FALSE)
+      }
+    })
+
 }
 
 
@@ -404,28 +322,66 @@ validate_column_presence <- function(tables, d, criteria){
 
 
 
-validate_datetime <- function(tables, d, criteria){
+#' Check for valid date and time formats
+#' 
+#' @param data.list
+#'     (list of data frames) A named list of data frames, each of which is an 
+#'     ecocomDP table.
+#'
+#' @return 
+#'     If date and time data are not formmated to specification, then an error 
+#'     is returned.
+#'         
+#' @export
+#'
+validate_datetime <- function(data.list) {
   
-  # Validation parameters
+  message('Datetime formats')
 
-  L1_tables <- criteria$table[
-    ((complete.cases(criteria$column)) &
-       ((criteria$column == 'datetime') | (criteria$column == 'observation_datetime')))]
-
-  criteria <- criteria[
-    ((complete.cases(criteria$column)) &
-       ((criteria$column == 'datetime') | (criteria$column == 'observation_datetime'))), ]
-
-  # Does datetime format match the standard ?
-
-  message('Validating datetime format ...')
-
-  lapply(X = L1_tables, FUN = is_datetime_format, tables = tables, d = d, criteria = criteria)
-
-  # Send validation notice
-
-  message('... datetime format is correct\n')
-
+  # Parameterize
+  
+  criteria <- data.table::fread(
+    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  
+  # Validate
+  
+  lapply(
+    names(data.list),
+    function(x) {
+      datetime_column <- criteria$column[
+        (criteria$table %in% x) &
+          (criteria$class == "Date") &
+          !is.na(criteria$column)]
+      if (length(datetime_column) > 0) {
+        # Difference in NA count induced by coercion indicates a non-valid 
+        # format
+        v <- data.list[[x]][[datetime_column]]
+        na_count_raw <- sum(is.na(v))
+        use_i <- suppressWarnings(
+          list(
+            lubridate::parse_date_time(v, "ymdHMS"),
+            lubridate::parse_date_time(v, "ymdHM"),
+            lubridate::parse_date_time(v, "ymdH"),
+            lubridate::parse_date_time(v, "ymd")))
+        na_count_parsed <- unlist(
+          lapply(
+            use_i,
+            function(k) {
+              sum(is.na(k))
+            }))
+        if (min(na_count_parsed) > na_count_raw) {
+          use_i <- seq(
+            length(v))[
+              is.na(
+                use_i[[
+                  which(na_count_parsed %in% min(na_count_parsed))]])]
+          stop(
+            "The ", x, "table has unsupported datetime formats at rows: ", 
+            paste(use_i, collapse = ' '),
+            call. = F)
+        }
+      }
+    })
 
 }
 
@@ -479,8 +435,8 @@ validate_datetime <- function(tables, d, criteria){
 #'
 
 validate_column_classes <- function(data.path) {
-
-
+  
+  browser()
   # Check arguments and parameterize
 
   if (missing(data.path)){
@@ -1133,73 +1089,6 @@ is_primary_key <- function(x, pk, table.name){
 
 
 
-
-
-is_datetime_format <- function(L1.table, tables, d, criteria) {
-  
-  # Get names of L1 table and datetime column
-  
-  L1_table_found <- is_table(L1.table = L1.table, table.name = tables)
-  L1_table_ck <- criteria$column[criteria$table == L1_table_found]
-  
-  if (length(L1_table_ck) > 0){
-    
-    table.name <- tables[stringr::str_detect(tables, paste0(L1_table_found, '\\b'))]
-    
-    if (L1_table_ck %in% colnames(d[[L1_table_found]])){
-      
-      # Read datetime vector
-      
-      x <- d[[L1_table_found]][ ,L1_table_ck]
-      
-      # Count NA of input data
-      
-      n_na_raw <- sum(is.na(x))
-      
-      # Count NA of datetimes read by dataCleanr::iso8601_convert()
-      
-      use_i <- suppressWarnings(list(
-        lubridate::parse_date_time(x, "ymdHMS"),
-        lubridate::parse_date_time(x, "ymdHM"),
-        lubridate::parse_date_time(x, "ymdH"),
-        lubridate::parse_date_time(x, "ymd")))
-      
-      n_na_con <- unlist(
-        lapply(
-          use_i,
-          function(k) {
-            sum(is.na(k))
-          }))
-
-      if (min(n_na_con) > n_na_raw){
-        use_i <- seq(length(x))[
-          is.na(use_i[[which(n_na_con %in% min(n_na_con))]])]
-        stop(paste0("\n",
-                    'This table:\n',
-                    table.name,
-                    "\ncontains unsupported datetime formats.",
-                    '\nUnsupported datetime formats occur in rows:\n',
-                    paste(use_i, collapse = ' ')),
-             call. = F
-        )
-      }
-      
-    }
-    
-  }
-  
-}
-
-
-
-
-
-
-
-
-
-
-
 is_required_table <- function(required_table, tables){
   required_table_pattern <- paste0(required_table, "\\b")
   if (sum(stringr::str_detect(tables, required_table_pattern)) == 1){
@@ -1240,31 +1129,6 @@ is_table_rev <- function(file.name, L1.table.names){
     L1.table.names[stringr::str_detect(file.name, required_table_pattern)]
   }
 }
-
-
-
-
-
-
-
-
-
-
-is_valid_col_name <- function(cols, L1.table_columns, table.name){
-  use_i <- match(L1.table_columns, cols)
-  missing_columns <- L1.table_columns[is.na(use_i)]
-  if (length(missing_columns) > 0){
-    stop(paste0("\n",
-                "This table:\n",
-                table.name, "\n",
-                "is missing these columns:\n",
-                paste(missing_columns, collapse = ", ")), 
-         call. = FALSE)
-  }
-}
-
-
-
 
 
 
