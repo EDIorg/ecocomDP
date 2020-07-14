@@ -2,36 +2,17 @@
 % Please edit documentation in R/validate_ecocomDP.R
 \name{validate_composite_keys}
 \alias{validate_composite_keys}
-\title{Check that composite keys of ecocomDP tables are valid}
+\title{Check composite column uniqueness}
 \usage{
-validate_composite_keys(tables, data.path, criteria)
+validate_composite_keys(data.list)
 }
 \arguments{
-\item{tables}{(character) Names of valid L1 tables in your dataset working directory.
-Get valid table names with `validate_table_names`.}
-
-\item{d}{(list of data frames) A list of of data frames. Use this argument if
-tables are read into the R environment. The list should be of the following 
-structure:
-\itemize{
-    \item \strong{"list name"} Name of the list object. This can be anything.
-    \itemize{
-        \item \strong{"L1 table name"} i.e. observation, location, taxon, etc.
-        \itemize{
-            \item \strong{"data"} Data frame representation of the L1 table
-            \item \strong{"fname"} File name the data frame was created from
-        }
-    }
-}}
-
-\item{criteria}{(data frame) Validation criteria located at 
-/inst/validation_criteria.txt.}
+\item{data.list}{(list of data frames) A named list of data frames, each of which is an 
+ecocomDP table.}
 }
 \value{
-If composite keys are not unique, a warning is returned, not an error.
-    An error is not returned because some usecases (e.g. replicate 
-    observations) may result in non-unique composite keys.
+If composite keys are not unique an error is returned.
 }
 \description{
-Check that composite keys of a table are unique.
+Check composite column uniqueness
 }

@@ -78,25 +78,10 @@ validate_ecocomDP <- function(
   # FIXME: Uncomment the following line
   # validate_datetime(d)
   validate_column_classes(d)
-  validate_primary_keys(d)
-  
-  # Validate composite keys
-  
-  validate_composite_keys(
-    tables = file_names, 
-    d = d,
-    criteria = criteria
-  )
-  
-  # Validate referential integrity
-  
-  validate_referential_integrity(
-    tables = file_names, 
-    d = d, 
-    criteria = criteria
-  )
-  
-  # Validation complete
+  # FIXME: Uncomment the following lines
+  # validate_primary_keys(d)
+  # validate_composite_keys(d)
+  validate_referential_integrity(d)
   
   message('Congratulations! Your ecocomDP tables have passed validation!\n')
 
@@ -199,7 +184,7 @@ validate_table_presence <- function(data.list) {
   # Validate
   
   expected <- criteria$table[
-    (is.na(criteria$class)) & (criteria$required == "yes")]
+    (is.na(criteria$class)) & (criteria$required == TRUE)]
   required_missing <- expected[!(expected %in% names(data.list))]
   if (any(required_missing)) {
     stop("These tables are missing tables: ", 
@@ -294,7 +279,7 @@ validate_column_presence <- function(data.list){
       expected <- criteria$column[
         (criteria$table %in% x) & 
           !is.na(criteria$column) & 
-          (criteria$required == "yes")]
+          (criteria$required == TRUE)]
       missing_columns <- !(expected %in% colnames(data.list[[x]]))
       if (any(missing_columns)) {
         stop(
@@ -470,152 +455,66 @@ validate_primary_keys <- function(data.list) {
   lapply(
     names(data.list),
     function(x) {
-      browser()
-      
-      is_primary_key <- function(x, pk, table.name){
-        
-        # anyDuplicated()
-        if (!isTRUE(length(unique(x[ , pk])) == nrow(x))){
-          
-          use_i <- seq(nrow(x))[duplicated(x[ , pk])]
-          
-          stop(paste0("\n",
-                      'This table:\n',
-                      table.name,
-                      "\ncontains non-unique primary keys in rows:\n",
-                      paste(use_i, collapse = " "),
-                      "\nof this column:\n",
-                      pk),
-               call. = F
-          )
+      primary_key <- criteria$column[
+        (criteria$table == x) & 
+          !is.na(criteria$primary_key) & 
+          (criteria$primary_key == TRUE)]
+      v <- data.list[[x]][[primary_key]]
+      use_i <- seq(nrow(v))[duplicated(v)]
+      if (length(use_i) > 0) {
+        stop("The column ", primary_key, " in the table ", x, 
+             " contains non-unique primary keys in rows: ", 
+             paste(use_i, collapse = " "), call. = FALSE)
+      }
+    })
+
+}
+
+
+
+
+
+
+
+
+#' Check composite column uniqueness
+#' 
+#' @param data.list
+#'     (list of data frames) A named list of data frames, each of which is an 
+#'     ecocomDP table.
+#'
+#' @return 
+#'     If composite keys are not unique an error is returned.
+#'
+validate_composite_keys <- function(data.list) {
+  
+  message("Composite keys")
+  
+  # Parameterize
+  
+  criteria <- data.table::fread(
+    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  
+  # Validate
+  
+  lapply(
+    names(data.list),
+    function(x) {
+      composite_columns <- criteria$column[
+        (criteria$table == x) & 
+          !is.na(criteria$column) & 
+          (criteria$composite_key == TRUE)]
+      if (length(composite_columns) > 0) {
+        d <- dplyr::select(data.list[[x]], composite_columns)
+        duplicates <- seq(nrow(d))[duplicated.data.frame(d)]
+        if (length(duplicates) > 0) {
+          stop("The composite keys composed of the columns ", 
+               paste(composite_columns, collapse = ", "), ", in the table ", 
+               x, " contain non-unique values in rows: ", 
+               paste(duplicates, collapse = " "), call. = FALSE)
         }
       }
     })
-  ##
-
-}
-
-
-
-
-
-
-
-
-
-
-
-#' Check that composite keys of ecocomDP tables are valid
-#'
-#' @description  
-#'     Check that composite keys of a table are unique.
-#'
-#' @usage validate_composite_keys(tables, data.path, criteria)
-#' 
-#' @param tables 
-#'     (character) Names of valid L1 tables in your dataset working directory.
-#'     Get valid table names with `validate_table_names`.
-#' @param d
-#'     (list of data frames) A list of of data frames. Use this argument if
-#'     tables are read into the R environment. The list should be of the following 
-#'     structure:
-#'     \itemize{
-#'         \item \strong{"list name"} Name of the list object. This can be anything.
-#'         \itemize{
-#'             \item \strong{"L1 table name"} i.e. observation, location, taxon, etc.
-#'             \itemize{
-#'                 \item \strong{"data"} Data frame representation of the L1 table
-#'                 \item \strong{"fname"} File name the data frame was created from
-#'             }
-#'         }
-#'     }
-#' @param criteria
-#'     (data frame) Validation criteria located at 
-#'     /inst/validation_criteria.txt.
-#'
-#' @return 
-#'     If composite keys are not unique, a warning is returned, not an error.
-#'     An error is not returned because some usecases (e.g. replicate 
-#'     observations) may result in non-unique composite keys.
-#'         
-#' @export
-#'
-
-
-validate_composite_keys <- function(tables, d, criteria) {
-  
-  # Check inputs
-  
-  if (missing(tables)){
-    stop('Input argument "tables" is missing!')
-  }
-  if (!is.character(tables)){
-    stop('Input argument "tables" is not of class = character!')
-  }
-  if (missing(d)){
-    stop('Input argument "d" is missing!')
-  }
-  if (missing(criteria)){
-    stop('Input argument "criteria" is missing! Specify the validation criteria for the ecocomDP tables.')
-  }
-  if (!is.data.frame(criteria)){
-    stop('Input argument "criteria" is not a data frame!')
-  }
-  
-  # Validation parameters
-  
-  L1_tables <- criteria$table[(
-    is.na(criteria$class))
-    ]
-  
-  # Are primary keys unique?
-  
-  message('Validating composite keys ...')
-  
-  is_composite_key <- function(table.name, d, L1.tables) {
-    
-    # Get L1 name and name of composite key columns
-    
-    L1_table_found <- unlist(lapply(L1.tables, is_table, table.name))
-    L1_table_ck <- criteria$column[(
-      (!is.na(criteria$class)) & (criteria$composite_key == 'yes') & (criteria$table == L1_table_found)
-    )]
-    
-    if (length(L1_table_ck) > 0){
-      
-      # Read input file
-      
-      x <- d[[L1_table_found]][['data']]
-      
-      # Are composite keys unique?
-      
-      # Create composite key
-      
-      ck <- apply(x[ , L1_table_ck], 1, paste, collapse = '_')
-      
-      if (!isTRUE(length(unique(ck)) == nrow(x))){
-        
-        use_i <- seq(nrow(x))[duplicated(ck)]
-        
-        warning(paste0("\n",
-                       'This table:\n',
-                       table.name,
-                       "\ncontains non-unique composite keys.",
-                       '\nThis may be due to replicate observations. If so, consider',
-                       '\nrevising the variable name to reflect this.'),
-                call. = F
-        )
-      }
-      
-    }
-    
-  }
-  
-  use_i <- lapply(tables, is_composite_key, d = d, L1.tables = L1_tables)
-  
-  # Send validation notice
-  
-  message('... composite keys are unique\n')
   
 }
 
@@ -626,66 +525,19 @@ validate_composite_keys <- function(tables, d, criteria) {
 
 
 
-
-
-#' Check that referential integrity of ecocomDP tables is valid
-#'
-#' @description  
-#'     Check that foreign keys match primary keys.
-#'
-#' @usage validate_referential_integrity(tables, data.path, criteria)
+#' Check referential integrity
 #' 
-#' @param tables 
-#'     (character) Names of valid L1 tables in your dataset working directory.
-#'     Get valid table names with `validate_table_names`.
-#' @param d
-#'     (list of data frames) A list of of data frames. Use this argument if
-#'     tables are read into the R environment. The list should be of the following 
-#'     structure:
-#'     \itemize{
-#'         \item \strong{"list name"} Name of the list object. This can be anything.
-#'         \itemize{
-#'             \item \strong{"L1 table name"} i.e. observation, location, taxon, etc.
-#'             \itemize{
-#'                 \item \strong{"data"} Data frame representation of the L1 table
-#'                 \item \strong{"fname"} File name the data frame was created from
-#'             }
-#'         }
-#'     }
-#' @param criteria
-#'     (data frame) Validation criteria located at 
-#'     /inst/validation_criteria.txt.
+#' @param data.list
+#'     (list of data frames) A named list of data frames, each of which is an 
+#'     ecocomDP table.
 #'
 #' @return 
 #'     If foreign keys do not match primary keys, then an error is returned.
-#'         
-#' @export
 #'
+validate_referential_integrity <- function(data.list) {
 
-
-validate_referential_integrity <- function(tables, d, criteria) {
-  
-  # Check inputs
-  
-  if (missing(tables)){
-    stop('Input argument "tables" is missing!')
-  }
-  if (!is.character(tables)){
-    stop('Input argument "tables" is not of class = character!')
-  }
-  if (missing(d)){
-    stop('Input argument "d" is missing!')
-  }
-  if (missing(criteria)){
-    stop('Input argument "criteria" is missing! Specify the validation criteria for the ecocomDP tables.')
-  }
-  if (!is.data.frame(criteria)){
-    stop('Input argument "criteria" is not a data frame!')
-  }
-  
-  # Message
-  
-  message('Checking referential integrity ...')
+  message("Referential integrity")
+  browser()  
   
   # Get foreign key values
   
