@@ -4,10 +4,12 @@ Datetime fields of ecocomDP tables must follow the ISO 8601 datetime standard, s
 
 __YYYY-MM-DDThh:mm:ss__
 
+However, the common __YYYY-MM-DD hh:mm:ss__ format is accepted (i.e. no __T__ separating the date and time).
+
 The degree to which this format is followed depends on the precision of the input datetime. 
 * Example: If only a date is input, then the format doesn't include the time field, i.e. YYYY-MM-DD
-* Example: If only a date and hour is input, then the format includes time but not minutes and seconds, i.e. YYYY-MM-DDThh
-* Example: If the full date time is input, then the format should be YYYY-MM-DDThh::mm:ss
+* Example: If only a date and hour is input, then the format includes time but not minutes and seconds, i.e. YYYY-MM-DDThh (n.b. YYYY-MM-DD hh is accepted)
+* Example: If the full date time is input, then the format should be YYYY-MM-DDThh::mm:ss (n.b. YYYY-MM-DD hh::mm:ss is accepted)
 
 Use the `iso8601_char` function from the [dataCleanr R package](https://github.com/dataCleanr/tree/master/EDIutils) to help convert your data to the standard format. Conversely, use the `iso8601_format` function of the same package to read your ISO8601 formatted datetime strings into POSIXct and POSIXt data in R.
 
