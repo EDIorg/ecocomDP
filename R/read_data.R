@@ -138,8 +138,11 @@ read_data <- function(
           names(d[[x]]$tables),
           function(y) {
             nms <- attr_tbl$column[attr_tbl$table == y]
-            d[[x]]$tables[[y]][setdiff(nms, names(d[[x]]$tables[[y]]))] <<- NA
-            d[[x]]$tables[[y]] <<- d[[x]]$tables[[y]][nms]
+            use_i <- setdiff(nms, names(d[[x]]$tables[[y]]))
+            if (length(use_i) > 0) {
+              d[[x]]$tables[[y]][[use_i]] <<- NA
+              d[[x]]$tables[[y]] <<- d[[x]]$tables[[y]][, ..nms]
+            }
           })
       }))
   

@@ -78,14 +78,7 @@ validate_ecocomDP <- function(
   # FIXME: Uncomment the following line
   # validate_datetime(d)
   validate_column_classes(d)
-  
-  # Validate primary keys
-  
-  validate_primary_keys(
-    tables = file_names, 
-    d = d,
-    criteria = criteria
-  )
+  validate_primary_keys(d)
   
   # Validate composite keys
   
