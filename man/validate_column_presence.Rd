@@ -2,34 +2,17 @@
 % Please edit documentation in R/validate_ecocomDP.R
 \name{validate_column_presence}
 \alias{validate_column_presence}
-\title{Check that required columns of ecocomDP tables are present}
+\title{Check for required columns}
 \usage{
-validate_column_presence(tables, data.path, criteria)
+validate_column_presence(data.list)
 }
 \arguments{
-\item{tables}{(character) Names of valid L1 tables in your dataset working directory.
-Get valid table names with `validate_table_names`.}
-
-\item{data.list}{(list of data frames) A list of of data frames. Use this argument if
-tables are read into the R environment. The list should be of the following 
-structure:
-\itemize{
-    \item \strong{"list name"} Name of the list object. This can be anything.
-    \itemize{
-        \item \strong{"L1 table name"} i.e. observation, location, taxon, etc.
-        \itemize{
-            \item \strong{"data"} Data frame representation of the L1 table
-            \item \strong{"fname"} File name the data frame was created from
-        }
-    }
-}}
-
-\item{criteria}{(data frame) Validation criteria located at 
-/inst/validation_criteria.txt.}
+\item{data.list}{(list of data frames) A named list of data frames, each of which is an 
+ecocomDP table.}
 }
 \value{
 If required column names are absent, then an error is returned.
 }
 \description{
-Check that required columns of L1 tables are present.
+Check for required columns
 }

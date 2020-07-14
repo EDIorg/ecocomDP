@@ -42,7 +42,7 @@ convert_bes543_to_ecocomDP <- function(path, parent_pkg_id, child_pkg_id){
   data_id <- data_name_id$identifier
   
   data_delimiters <- unlist(
-    xmlApply(
+    XML::xmlApply(
       metadata[
         "//dataset/dataTable/physical/dataFormat/textFormat/simpleDelimited/fieldDelimiter"
         ],
@@ -52,13 +52,13 @@ convert_bes543_to_ecocomDP <- function(path, parent_pkg_id, child_pkg_id){
   
   data_urls <- c(
     unlist(
-      xmlApply(
+      XML::xmlApply(
         metadata["//dataset/dataTable/physical/distribution/online/url"], 
         xmlValue
       )
     ),
     unlist(
-      xmlApply(
+      XML::xmlApply(
         metadata["//dataset/otherEntity/physical/distribution/online/url"],
         xmlValue
       )
