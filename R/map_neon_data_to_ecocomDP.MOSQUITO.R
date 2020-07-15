@@ -206,7 +206,7 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
                   authority_system,
                   authority_taxon_id)
   
-  
+  browser()
   # observation ----
   table_observation <- mos_dat %>% 
     dplyr::select(uid, 

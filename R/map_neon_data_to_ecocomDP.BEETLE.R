@@ -153,7 +153,7 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
     dplyr::group_by(sampleID) %>%
     dplyr::mutate(observation_id = paste(sampleID, row_number(), sep = ".")) %>%
     dplyr::mutate(package_id = paste0(neon.data.product.id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
-    dplyr:: select(observation_id, 
+    dplyr:: select(observation_id = uid, 
                    event_id = sampleID, 
                    package_id,
                    location_id, 
