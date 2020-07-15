@@ -205,6 +205,9 @@ read_data <- function(
   
   # Return --------------------------------------------------------------------
   
+  # TODO: Add option to export collections of .csv files organized in package
+  # directories named with identifiers and possibly time stamps.
+  
   if (!missing(path)){
     tstamp <- Sys.time()
     tstamp <- stringr::str_remove_all(tstamp, "-")

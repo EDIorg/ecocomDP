@@ -75,18 +75,15 @@ validate_ecocomDP <- function(
   validate_table_presence(d)
   validate_column_names(d)
   validate_column_presence(d)
-  # FIXME: Uncomment the following line
-  # validate_datetime(d)
+  validate_datetime(d)
   validate_column_classes(d)
-  # FIXME: Uncomment the following lines
-  # validate_primary_keys(d)
-  # validate_composite_keys(d)
+  validate_primary_keys(d)
+  validate_composite_keys(d)
   validate_referential_integrity(d)
   
-  message('Congratulations! Your ecocomDP tables have passed validation!\n')
+  message('Done\nThis ecocomDP has passed validation!')
 
 }
-
 
 
 
@@ -537,195 +534,49 @@ validate_composite_keys <- function(data.list) {
 validate_referential_integrity <- function(data.list) {
 
   message("Referential integrity")
-  browser()  
-  
-  # Get foreign key values
-  
-  x <- unique.data.frame(criteria[(criteria$foreign_key == 'yes') & (!is.na(criteria$foreign_key)), c('table', 'column')])
-  
-  foreign_key_tables <- x$table
 
-  # get_foreign_keys - Get a list of foreign key values
-  # key = (character) key name
-  # table.name = (character) full table name with file extension
-  # data.path = (character) path to table.name
-  get_foreign_keys <- function(key, table.name){
-    dir_tables <- unlist(
-      lapply(
-        seq(length(d)),
-        fnames_from_list,
-        i = 'fname',
-        lis = d)
-    )
-    table_pattern <- paste0(table.name, "\\b")
-    use_i <- stringr::str_detect(dir_tables, table_pattern)
-    if (sum(use_i) > 0){
-      data_in <- d[[table.name]][['data']]
-      if (key %in% colnames(data_in)){
-        uni_values <- unique(data_in[ , key])
-      } else {
-        uni_values <- NULL
-      }
-      uni_values
-    } else {
-      uni_values <- NULL
-      uni_values
-    }
-  }
-
-  foreign_key_values <- mapply(get_foreign_keys, key = x$column, table.name = x$table)
+  # Parameterize
   
-  # is.null(foreign_key_values)
+  criteria <- data.table::fread(
+    system.file('validation_criteria.txt', package = 'ecocomDP'))
   
-  # Get primary key values
+  # Validate
   
-  x <- unique.data.frame(criteria[(criteria$primary_key == 'yes') & (!is.na(criteria$primary_key)), 
-                                  c('table', 'column')])
-  
-  # get_primary_keys - Get a list of primary key values
-  # key = (character) key name
-  # table.name = (character) full table name with file extension
-  # d = (character) path to table.name
-  get_primary_keys <- function(key, table.name){
-    dir_tables <- unlist(
-      lapply(
-        seq(length(d)), 
-        fnames_from_list, 
-        i = 'fname', 
-        lis = d)
-    )
-    table_pattern <- paste0(table.name, "\\b")
-    use_i <- stringr::str_detect(dir_tables, table_pattern)
-    if (sum(use_i) > 0){
-      data_in <- d[[table.name]][['data']]
-      uni_values <- unique(data_in[ , key])
-      uni_values
-    } else {
-      uni_values <- NULL
-      uni_values
-    }
-    
-  }
-  
-  primary_key_tables <- x$table
-  
-  primary_key_values <- mapply(get_primary_keys, key = x$column, table.name = x$table)
-
-  # Foreign keys should have a matching primary key
-  
-  is_foreign_key(fk.tables = foreign_key_tables, 
-                 fk.values = foreign_key_values, 
-                 pk.tables = primary_key_tables,
-                 pk.values = primary_key_values
-                 )
-  
-  # Send validation notice
-  
-  message('... tables have referential integrity\n')
+  lapply(
+    names(data.list),
+    function(x) {
+      primary_key <- criteria$column[
+        (criteria$table == x) & 
+          !is.na(criteria$column) & 
+          (criteria$primary_key == TRUE)]
+      primary_key_data <- na.omit(data.list[[x]][[primary_key]])
+      foreign_key_table <- criteria$table[
+          !is.na(criteria$column) & 
+          (criteria$column == primary_key)]
+      invisible(
+        lapply(
+          foreign_key_table,
+          function(k) {
+            if (k == "location") {
+              foreign_key_data <- na.omit(data.list[[k]][["parent_location_id"]])
+              use_i <- foreign_key_data %in% primary_key_data
+              if (length(use_i) == 0) {
+                use_i <- TRUE # This is an exception for parent_location_id
+              }
+            } else {
+              foreign_key_data <- na.omit(data.list[[k]][[primary_key]])
+              use_i <- foreign_key_data %in% primary_key_data
+            }
+            if (!all(use_i)) {
+              stop("The ", k, " table has these foreign keys without a ", 
+                   "primary key reference: ", 
+                   paste(foreign_key_data[!use_i], collapse = ", "), 
+                   call. = FALSE)
+            }
+          }))
+    })
   
 }
-
-
-
-
-
-
-# is_foreign_key - Check that foreign key has matching primary key
-# fk.tables = (character) names of tables containing foreign keys
-# fk.values = (list) values of foreign keys
-# pk.values = (list) values of primary keys
-is_foreign_key <- function(fk.tables, fk.values, pk.tables, pk.values){
-  
-  fk.names <- names(fk.values)
-  pk.names <- names(pk.values)
-  
-  # Error if foreign key names don't have a primary match (missing).
-  
-  use_i <- match(fk.names[fk.names != 'parent_location_id'], pk.names)
-  if (sum(is.na(use_i)) > 0){
-    stop(paste0("\n",
-                'These foreign keys:\n',
-                paste(fk.names[is.na(use_i)], collapse = ', '),
-                '\nare missing primary keys'
-    )
-    )
-  }
-  
-  # Validate parent_location_id
-  
-  if (sum(fk.names == 'parent_location_id') > 0){
-    fk_val <- fk.values[['parent_location_id']]
-    if (!is.null(fk_val)){
-      fk_val <- fk_val[!is.na(fk_val)] # Remove NA (NAs are allowed)
-      pk_val <- pk.values[['location_id']]
-      use_i <- is.na(match(fk_val, pk_val))
-      if (sum(use_i) > 0){
-        stop(paste0('\nThe foreign key "parent_location_id"',
-                    '\ncontains values that cannot be found in the primary key',
-                    '\n"location_id" of the location table, specifically\n',
-                    paste(fk_val[use_i], collapse = ', ')
-        )
-        )
-      }
-    }
-    fk.tables <- fk.tables[fk.tables != 'location']
-    fk.values <- fk.values[names(fk.values) != 'parent_location_id']
-    fk.names <- fk.names[fk.names != 'parent_location_id']
-  }
-  
-  # Validate event_id
-
-  if (sum(fk.names == 'event_id') > 0){
-    fk_val <- fk.values[['event_id']]
-    fk_val <- fk_val[!is.na(fk_val)] # Remove NA (NAs are allowed)
-    pk_val <- pk.values[['event_id']]
-    if ((!is.null(pk_val)) & (!is.null(fk_val))){
-      use_i <- is.na(match(fk_val, pk_val))
-      if (sum(use_i) > 0){
-        stop(paste0('\nThe foreign key "event_id"',
-                    '\ncontains values that cannot be found in the primary key',
-                    '\n"event_id" of the observation_ancillary table, specifically\n',
-                    paste(fk_val[use_i], collapse = ', ')
-        )
-        )
-      }
-    }
-    use_i <- fk.names == 'event_id'
-    fk.tables <- fk.tables[!use_i]
-    fk.values <- fk.values[names(fk.values) != 'event_id']
-    fk.names <- fk.names[!use_i]
-  }
-  
-  # Validate variable_names
-  # Aggregate all foreign key variable_names from tables
-  # Match against variable_mappings table content
-  
-  
-  # Validate remaining foreign keys
-  
-  other_foreign_keys <- function(fk.table, fk.name, fk.value){
-    use_i <- seq(length(pk.names))[pk.names == fk.name]
-    use_i <- match(fk.value, pk.values[[use_i]])
-    if (sum(is.na(use_i)) > 0){
-      stop(paste0('\nThe foreign key:\n',
-                  fk.name,
-                  '\nin this table:\n',
-                  fk.table,
-                  '\ncontains values that do not have a primary key match, specifically:\n',
-                  paste(fk.value[is.na(use_i)], collapse = ', ')
-      )
-      )
-    }
-  }
-  mapply(other_foreign_keys, 
-         fk.table = fk.tables,
-         fk.name = fk.names,
-         fk.value = fk.values
-         )
-  
-}
-
-
 
 
 
@@ -735,53 +586,6 @@ is_foreign_key <- function(fk.tables, fk.values, pk.tables, pk.values){
 
 
 # Helper functions ------------------------------------------------------------
-
-
-
-# Get 'fname' from d
-fnames_from_list <- function(n, i, lis){
-  lis[[n]][[i]]
-} 
-
-
-
-
-
-
-
-
-is_required_table <- function(required_table, tables){
-  required_table_pattern <- paste0(required_table, "\\b")
-  if (sum(stringr::str_detect(tables, required_table_pattern)) == 1){
-    required_table
-  }
-}
-
-
-
-
-
-
-
-
-
-
-# Retrieves the name of the L1 table from the input file name.
-is_table <- function(L1.table, table.name){
-  required_table_pattern <- paste0(L1.table, "\\b")
-  if (sum(stringr::str_detect(table.name, required_table_pattern)) == 1){
-    L1.table
-  }
-}
-
-
-
-
-
-
-
-
-
 
 # Retrieves the name of the L1 table from the input file name.
 is_table_rev <- function(file.name, L1.table.names){
@@ -799,6 +603,11 @@ is_table_rev <- function(file.name, L1.table.names){
 
 
 read_ecocomDP_table <- function(data.path = NULL, file.name, package.id = NULL, entity.id = NULL){
+  
+  .Deprecated(
+    new = 'read_from_files',
+    package = 'ecocomDP',
+    old = 'read_ecocomDP_table')
   
   if (!is.null(data.path)){
     
