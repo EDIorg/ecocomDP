@@ -54,6 +54,8 @@ library(devtools)
 
 # install neon_demo branch of ecocomDP
 devtools::install_github("sokole/ecocomDP@neon_demo")
+devtools::install_github("sokole/ecocomDP@working")
+devtools::install_github("sokole/ecocomDP@master")
 
 library(ecocomDP)
 

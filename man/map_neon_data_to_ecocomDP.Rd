@@ -40,6 +40,8 @@ map_neon_data_to_ecocomDP(neon.data.product.id, ...)
 \item{nCores}{The number of cores to parallelize the stacking procedure. By default it is set to a single core.}
 
 \item{forceParallel}{If the data volume to be processed does not meet minimum requirements to run in parallel, this overrides. Set to FALSE as default.}
+
+\item{token}{User specific API token (generated within neon.datascience user accounts)}
 }
 \value{
 Returns a named list, including: 

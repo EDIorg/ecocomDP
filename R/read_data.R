@@ -29,6 +29,9 @@
 #'     (logical; NEON data only) If the data volume to be processed does not 
 #'     meet minimum requirements to run in parallel, this overrides. Defaults 
 #'     to FALSE.
+#' @param token
+#'     (charqacter; NEON data only) User specific API token (generated within 
+#'     neon.datascience user accounts)
 #'     
 #' @return
 #'     (list) A named list, including: 
@@ -78,7 +81,7 @@
 #' 
 read_data <- function(
   id, path, site = "all", startdate = NA, enddate = NA, check.size = FALSE, 
-  nCores = 1, forceParallel = FALSE) {
+  nCores = 1, forceParallel = FALSE, token = NA) {
   
   # Parameterize --------------------------------------------------------------
   
@@ -118,7 +121,8 @@ read_data <- function(
             enddate = enddate,
             check.size = check.size,
             nCores = nCores,
-            forceParallel = FALSE)
+            forceParallel = forceParallel,
+            token = token)
         } else {
           do.call(map_neon_data_to_ecocomDP, c(neon.data.product.id = x, id[[x]]))
         }
@@ -197,12 +201,16 @@ read_data <- function(
   # }
   
   # Validate ------------------------------------------------------------------
-  
+
   for (i in 1:length(d)) {
-    message("Validating ", names(d)[i])
-    validate_ecocomDP(data.list = d[[i]]$tables)
+    # only validate non-NEON data
+    if(!grepl("^DP1\\.", names(d)[i])){
+      message("Validating ", names(d)[i])
+      validate_ecocomDP(data.list = d[[i]]$tables)
+    }
   }
   
+
   # Return --------------------------------------------------------------------
   
   if (!missing(path)){

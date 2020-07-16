@@ -16,6 +16,11 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
   neon.data.product.id = "DP1.10022.001",
   ...){
   
+  
+  
+  browser()
+  
+  
   # getting data ----
   #download data
   beetles_raw <- neonUtilities::loadByProduct(dpID = neon.data.product.id, 
@@ -51,7 +56,9 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
     #and join to sample data
     dplyr::left_join(beetles_raw$bet_sorting %>%
                        dplyr::filter(sampleType %in% c("carabid", "other carabid")) %>% #only want carabid samples, not bycatch
-                       dplyr::select(sampleID, subsampleID, sampleType, taxonID, scientificName, taxonRank, individualCount,identificationQualifier),
+                       dplyr::select(sampleID, subsampleID, sampleType, 
+                                     taxonID, scientificName, taxonRank, 
+                                     individualCount, identificationQualifier, identificationReferences),
                      by = "sampleID") %>%
     dplyr::filter(!is.na(subsampleID)) #even though they were marked a sampled, some collection times don't acutally have any samples
   
@@ -165,6 +172,17 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
   table_location$elevation <- table_location_raw$elevation[match(table_location$location_name, table_location_raw$namedLocation)] 
   
   
+  
+  
+  
+  
+  browser()
+  # # load neon taxon list
+  # neon_taxon_list <- neonUtilities::getTaxonTable(taxonType = "BEETLE",
+  #                              token = my_neon_token)
+  # 
+  # browser()
+  
   # Taxon Tables 
   table_taxon <- bind_rows(beetles_raw$bet_sorting %>%
                              dplyr::select(taxonID, taxonRank, scientificName), 
@@ -180,6 +198,13 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
                   taxon_name_clean = taxadb::clean_names(stringr::str_replace(taxon_name, " \\(.*\\)", ""), lowercase = FALSE),
                   authority_taxon_id = taxadb::get_ids(taxon_name_clean, "itis", "bare")) %>%
     dplyr::select(-taxon_name_clean)
+  
+  browser()
+  
+  
+  
+  
+  
   
   # return tables ----
   
