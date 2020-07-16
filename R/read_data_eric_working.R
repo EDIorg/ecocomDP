@@ -7,8 +7,10 @@
 #'     a named list containing additional arguments to filter on (for NEON data 
 #'     only; see below for arguments and examples).
 #' @param path
-#'     (character) Path to the directory in which the data will be written as 
-#'     an .rda object.
+#'     (character) Path to the directory in which the data will be written.
+#' @param file.type
+#'     (character) Type of file to save the data to. Options are: ".rda", 
+#'     ".csv"
 #' @param site 
 #'     (character; NEON data only) A character vector of site codes to filter 
 #'     data on. Sites are listed in the "sites" column of the 
@@ -80,8 +82,13 @@
 #'       check.size = FALSE)))
 #' 
 read_data <- function(
+<<<<<<< HEAD
   id, path, site = "all", startdate = NA, enddate = NA, check.size = FALSE, 
   nCores = 1, forceParallel = FALSE, token = NA) {
+=======
+  id, path, file.type, site = "all", startdate = NA, enddate = NA, 
+  check.size = FALSE, nCores = 1, forceParallel = FALSE) {
+>>>>>>> 8b3b07164f093b304f9c843e0e55dd63805e9aea
   
   # Parameterize --------------------------------------------------------------
   
@@ -213,14 +220,8 @@ read_data <- function(
 
   # Return --------------------------------------------------------------------
   
-  if (!missing(path)){
-    tstamp <- Sys.time()
-    tstamp <- stringr::str_remove_all(tstamp, "-")
-    tstamp <- stringr::str_replace_all(tstamp, " ", "_")
-    tstamp <- stringr::str_remove_all(tstamp, ":")
-    fname <- paste0("ecocomDP_data_", tstamp, ".rda")
-    message("Writing ", fname)
-    saveRDS(d, file = paste0(path, "/", fname))
+  if (!missing(path) & !missing(file.type)) {
+    save_data(d, path, file.type)
   }
   
   d
@@ -316,5 +317,62 @@ read_data_edi <- function(id) {
   list(
     metadata = NULL,
     tables = output)
+  
+}
+
+
+
+
+
+
+
+
+#' Save ecocomDP data
+#'
+#' @param data 
+#'     (list) Data as a list object created by \code{read_data()}.
+#' @param path
+#'     (character) Path to the directory in which the data will be written.
+#' @param file.type
+#'     (character) Type of file to save the data to. Options are: ".rda", 
+#'     ".csv"
+#'
+#' @return
+#'     \item{.rda}{If \code{file.type} = ".rda", then an .rda representation 
+#'     of \code{data} is returned.}
+#'     \item{.csv}{If \code{file.type} = ".csv", then an set of .csv files are
+#'     written to a sub-directory of \code{path} named after the data 
+#'     package/product ID.}
+#'     
+#' @export
+#'
+#' @examples
+#' d <- read_data("edi.193.3")
+#' #' save_data(d, tempdir(), ".rda")
+#' save_data(d, tempdir(), ".csv")
+#' 
+save_data <- function(data, path, file.type) {
+  message("Saving data")
+  tstamp <- Sys.time()
+  tstamp <- stringr::str_remove_all(tstamp, "-")
+  tstamp <- stringr::str_replace_all(tstamp, " ", "_")
+  tstamp <- stringr::str_remove_all(tstamp, ":")
+  if (file.type == ".rda") {
+    fname <- paste0("ecocomDP_data_", tstamp, ".rda")
+    message("Writing ", fname)
+    saveRDS(d, file = paste0(path, "/", fname))
+  } else if (file.type == ".csv") {
+    for (i in 1:length(data)) {
+      message("Writing ", names(data)[[i]])
+      dirname <- paste0(path, "/", names(data)[[i]])
+      dir.create(dirname)
+      for (j in 1:length(data[[i]]$tables)) {
+        message("  ", fname)
+        fname <- paste0(names(data[[i]]$tables)[j], ".csv")
+        data.table::fwrite(
+          data[[i]]$tables[[j]], file = paste0(dirname, "/", fname))
+      }
+    }
+  }
   
 }

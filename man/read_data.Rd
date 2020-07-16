@@ -7,6 +7,7 @@
 read_data(
   id,
   path,
+  file.type,
   site = "all",
   startdate = NA,
   enddate = NA,
@@ -23,8 +24,10 @@ datasets, then \code{id} should be a character vector of identifiers or
 a named list containing additional arguments to filter on (for NEON data 
 only; see below for arguments and examples).}
 
-\item{path}{(character) Path to the directory in which the data will be written as 
-an .rda object.}
+\item{path}{(character) Path to the directory in which the data will be written.}
+
+\item{file.type}{(character) Type of file to save the data to. Options are: ".rda", 
+".csv"}
 
 \item{site}{(character; NEON data only) A character vector of site codes to filter 
 data on. Sites are listed in the "sites" column of the 
