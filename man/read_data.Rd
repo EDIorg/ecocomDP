@@ -13,8 +13,7 @@ read_data(
   enddate = NA,
   check.size = FALSE,
   nCores = 1,
-  forceParallel = FALSE,
-  token = NA
+  forceParallel = FALSE
 )
 }
 \arguments{
@@ -48,9 +47,6 @@ stacking procedure. Defaults to 1.}
 \item{forceParallel}{(logical; NEON data only) If the data volume to be processed does not 
 meet minimum requirements to run in parallel, this overrides. Defaults 
 to FALSE.}
-
-\item{token}{(charqacter; NEON data only) User specific API token (generated within 
-neon.datascience user accounts)}
 }
 \value{
 (list) A named list, including: 
