@@ -1,25 +1,5 @@
 ##############################################################################################
-##############################################################################################
-#' @title Map BEETLE adundance data to ecocomDP format
-
-#' @author
-#' Ruvi Jaimes \email{jaimesr@battelleecology.org}
-#' Kari Norman \email{kari.norman@berkeley.edu}
-
-#' @description
-#' Pull files from the NEON API by data product, merge data for each table, and convert to ecocomDP format. Please see neonUtilities::loadByProduct for more information. 
-#'
-#' @param site a list of the sites (ex. c('ABBY','BARR'))
-#' @param startdate the start date of the data from the sites (ex."2019-06" )
-#' @param enddate the end date of the data from the sites (ex."2020-02" )
-#' 
-#' @return Returns a named list, including: 
-#' \item{table_location}{A table, which has the lat long for each NEON site included in the data set}
-#' \item{table_taxon}{A table, which describes each taxonID that appears in the data set}
-#' \item{table_observation}{A table, which describes each taxonID that appears in the data set}
-#' 
-#' 
-#' @example 
+#' @examples 
 #' \dontrun{
 #' my_result <- map_neon_data_to_ecocomDP.BEETLE(site = c('ABBY','BARR'),
 #'                                               startdate = "2019-06", 

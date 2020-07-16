@@ -1,25 +1,6 @@
 ##############################################################################################
 ##############################################################################################
-#' @title Map MOSQUITO density data to ecocomDP format
-
-#' @author
-#' Natalie Robinson \email{nrobinson@battelleecology.org}
-#' Ruvi Jaimes \email{jaimesr@battelleecology.org}
-
-#' @description
-#' Pull files from the NEON API by data product, merge data for each table, and convert to ecocomDP format. Please see neonUtilities::loadByProduct for more information. 
-#'
-#' @param site a list of the sites (c("NIWO","DSNY"))
-#' @param startdate the start date of the data from the sites ("2019-06" )
-#' @param enddate the end date of the data from the sites ("2020-02" )
-#' 
-#' @return Returns a named list, including: 
-#' \item{table_location}{A table, which has the lat long for each NEON site included in the data set}
-#' \item{table_taxon}{A table, which describes each taxonID that appears in the data set}
-#' \item{table_observation}{A table, which describes each taxonID that appears in the data set}
-#' 
-#' 
-#' @example 
+#' @examples 
 #' \dontrun{
 #' my_result <- map_neon_data_to_ecocomDP.MOSQUITO(site = c("NIWO","DSNY"), 
 #'                                                   startdate = "2016-01", 
@@ -30,6 +11,7 @@
 #' @export
 
 ##############################################################################################
+<<<<<<< HEAD
 # mosquitoes function
 #library(dplyr)
 #library(tidyr)
@@ -38,6 +20,8 @@
 
 example <- map_neon_data_to_ecocomDP.MOSQUITO(site = c("ABBY", "BARR"), startdate = "2017-01", enddate = "2017=12")
 
+=======
+>>>>>>> 0a18ade45360b5066ad4c113dfc7dcf7a9a1f272
 map_neon_data_to_ecocomDP.MOSQUITO <- function(
   neon.data.product.id = "DP1.10043.001",
   ...){
