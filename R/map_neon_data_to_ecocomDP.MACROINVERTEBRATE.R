@@ -20,7 +20,6 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
   neon.data.product.id ="DP1.20120.001",
   ...){
   
-  
   # get all tables for this data product for the specified sites in my_site_list, store them in a list called all_tabs
   all_tabs <- neonUtilities::loadByProduct(
     dpID = neon.data.product.id,
@@ -69,15 +68,17 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
     dplyr::rename(taxon_id = acceptedTaxonID,
            taxon_rank = taxonRank,
            taxon_name = scientificName,
-           authority_taxon_id = identificationReferences)%>%
-    dplyr::mutate(
-      authority_system = "NEON_external_lab",
-    )
+           authority_system = identificationReferences)
     
+  
+  
+
+  
   
   # observation ----
   # Make the observation table.
   # start with inv_taxonomyProcessed
+  # NOTE: the observation_id = uuid for record in NEON's inv_taxonomyProcessed table 
   table_observation <- inv_taxonomyProcessed %>% 
     # select a subset of columns from inv_taxonomyProcessed
     dplyr::select(uid,
@@ -90,28 +91,24 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
                   acceptedTaxonID, 
                   domainID, 
                   siteID) %>%
-    distinct() %>% 
+    dplyr::distinct() %>% 
     
+    # suppressMessages(ecocomDP::make_location(cols = c("domainID", "siteID", "namedLocation"))) %>% 
     
-    suppressMessages(
-    
-    ecocomDP::make_location(cols = c("domainID", "siteID", "namedLocation"))) %>% 
-    
-
     # Join the columns selected above with two columns from inv_fielddata (the two columns are sampleID and benthicArea)
     dplyr::left_join(inv_fielddata %>% dplyr::select(sampleID, benthicArea)) %>%
     
     # some new columns called 'variable_name', 'value', and 'unit', and assign values for all rows in the table.
     # variable_name and unit are both assigned the same text strint for all rows. 
     dplyr::mutate(variable_name = 'density',
-           value = estimatedTotalCount / benthicArea,
-           unit = 'count per square meter') %>% 
+                  value = estimatedTotalCount / benthicArea,
+                  unit = 'count per square meter') %>% 
     
     # rename some columns
     dplyr::rename(observation_id = uid,
-           event_id = sampleID,
-           observation_datetime = collectDate,
-           taxon_id = acceptedTaxonID) %>%
+                  event_id = sampleID,
+                  observation_datetime = collectDate,
+                  taxon_id = acceptedTaxonID) %>%
     
     # make a new column called package_id, assign it NA for all rows
     dplyr::mutate(package_id = paste0(neon.data.product.id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>% 
@@ -125,19 +122,22 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
                   variable_name, 
                   value,
                   unit)
-    
-    # only keep the columns listed below
-    # dplyr::select(observation_id, event_id, package_id,
-    #        location_id, observation_datetime,
-    #        taxon_id, variable_name, value, unit)
   
-
+  
+  
+  
+  # only keep the columns listed below
+  # dplyr::select(observation_id, event_id, package_id,
+  #        location_id, observation_datetime,
+  #        taxon_id, variable_name, value, unit)
+  
+  
   table_observation_ancillary <- inv_fielddata %>% 
     select(eventID, sampleID) %>% 
     rename(neon_sample_id = sampleID,
            neon_event_id = eventID) %>% 
     mutate(ecocomDP_event_id = neon_sample_id)
-
+  
   # return ----
   # list of tables to be returned, with standardized names for elements
   out_list <- list(
@@ -151,5 +151,5 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
   
 } #END of function
 
-my_result.mos <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(site= c('COMO','LECO'), startdate = "2019-06",enddate = "2019-09")
+# my_result <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(site= c('COMO','LECO'), startdate = "2019-06",enddate = "2019-09")
 

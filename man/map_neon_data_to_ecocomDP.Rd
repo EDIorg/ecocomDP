@@ -81,7 +81,7 @@ my_result <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(site= c('COMO','LECO'),
                                                          enddate = "2019-09")
 }
 \dontrun{
-my_result <- map_neon_data_to_ecocomDP.MOSQUITOES(site = c("NIWO","DSNY"), 
+my_result <- map_neon_data_to_ecocomDP.MOSQUITO(site = c("NIWO","DSNY"), 
                                                   startdate = "2016-01", 
                                                   enddate = "2018-11")
 }

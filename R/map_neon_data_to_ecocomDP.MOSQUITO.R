@@ -11,17 +11,6 @@
 #' @export
 
 ##############################################################################################
-<<<<<<< HEAD
-# mosquitoes function
-#library(dplyr)
-#library(tidyr)
-#library(neonUtilities)
-
-
-example <- map_neon_data_to_ecocomDP.MOSQUITO(site = c("ABBY", "BARR"), startdate = "2017-01", enddate = "2017=12")
-
-=======
->>>>>>> 0a18ade45360b5066ad4c113dfc7dcf7a9a1f272
 map_neon_data_to_ecocomDP.MOSQUITO <- function(
   neon.data.product.id = "DP1.10043.001",
   ...){
