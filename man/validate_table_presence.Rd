@@ -2,23 +2,17 @@
 % Please edit documentation in R/validate_ecocomDP.R
 \name{validate_table_presence}
 \alias{validate_table_presence}
-\title{Check that required ecocomDP tables are present}
+\title{Check for required tables}
 \usage{
-validate_table_presence(tables, criteria)
+validate_table_presence(data.list)
 }
 \arguments{
-\item{tables}{(character) Names of valid L1 tables in your dataset working directory.
-Get valid table names with `validate_table_names`.}
-
-\item{criteria}{(data frame) Validation criteria located at 
-/inst/validation_criteria.txt.}
+\item{data.list}{(list of data frames) A named list of data frames, each of which is an 
+ecocomDP table.}
 }
 \value{
 If required tables are missing, then an error message is produced.
 }
 \description{
-Check that required L1 tables are present.
-}
-\details{
-
+Check for required tables
 }
