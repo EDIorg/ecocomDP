@@ -75,22 +75,29 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
     )
     
   
-  
   # observation ----
   # Make the observation table.
   # start with inv_taxonomyProcessed
   table_observation <- inv_taxonomyProcessed %>% 
-    
     # select a subset of columns from inv_taxonomyProcessed
     dplyr::select(uid,
-           sampleID,
-           namedLocation, 
-           collectDate,
-           subsamplePercent,
-           individualCount,
-           estimatedTotalCount,
-           acceptedTaxonID) %>%
+                  sampleID,
+                  namedLocation, 
+                  collectDate,
+                  subsamplePercent,
+                  individualCount,
+                  estimatedTotalCount,
+                  acceptedTaxonID, 
+                  domainID, 
+                  siteID) %>%
+    distinct() %>% 
     
+    
+    suppressMessages(
+    
+    ecocomDP::make_location(cols = c("domainID", "siteID", "namedLocation"))) %>% 
+    
+
     # Join the columns selected above with two columns from inv_fielddata (the two columns are sampleID and benthicArea)
     dplyr::left_join(inv_fielddata %>% dplyr::select(sampleID, benthicArea)) %>%
     
@@ -103,19 +110,28 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
     # rename some columns
     dplyr::rename(observation_id = uid,
            event_id = sampleID,
-           # package_id = NA,
-           location_id = namedLocation,
            observation_datetime = collectDate,
            taxon_id = acceptedTaxonID) %>%
     
     # make a new column called package_id, assign it NA for all rows
-    dplyr::mutate(package_id = paste0(neon.data.product.id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+    dplyr::mutate(package_id = paste0(neon.data.product.id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>% 
+    dplyr::left_join(table_location, by = c("namedLocation" = "location_name")) %>% 
+    dplyr::select(observation_id, 
+                  event_id, 
+                  package_id, 
+                  location_id, 
+                  observation_datetime, 
+                  taxon_id, 
+                  variable_name, 
+                  value,
+                  unit)
     
     # only keep the columns listed below
-    dplyr::select(observation_id, event_id, package_id,
-           location_id, observation_datetime,
-           taxon_id, variable_name, value, unit)
+    # dplyr::select(observation_id, event_id, package_id,
+    #        location_id, observation_datetime,
+    #        taxon_id, variable_name, value, unit)
   
+
   table_observation_ancillary <- inv_fielddata %>% 
     select(eventID, sampleID) %>% 
     rename(neon_sample_id = sampleID,
