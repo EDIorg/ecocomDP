@@ -2,55 +2,46 @@
 % Please edit documentation in R/validate_ecocomDP.R
 \name{validate_ecocomDP}
 \alias{validate_ecocomDP}
-\title{Run all validation checks on a set of ecocomDP tables}
+\title{Validate a dataset against the ecocomDP}
 \usage{
 validate_ecocomDP(data.path = NULL, data.list = NULL)
 }
 \arguments{
-\item{data.path}{(character) The path to the directory containing L1
-tables.}
+\item{data.path}{(character) The path to the directory containing ecocomDP tables.}
 
-\item{data.list}{(list of data frames) A named list of data frames containing the L1
-tables. Data frame tables must be named after the file name from 
-which they were read, including the extension.}
-
-\item{package.id}{(character) Package identifier (e.g. 'edi.101.1') containing ecocomDP
-tables to be validated.}
-}
-\value{
-A validation report to the RStudio console window. When an issue is 
-    encountered a message will be displayed with recommendations for fixing
-    it. Each issue must be resolved before the next check will be implemented.
-    Once all validation checks have been passed, you will be notified with 
-    a congratulatory message and you can move on to creating EML metadata with
-    \code{make_eml}.
+\item{data.list}{(list of data frames) A named list of data frames, each of which is an 
+ecocomDP table.}
 }
 \description{
-Once you've created an ecocomDP (L1) you will need to check that it 
-    is accurately formatted. This validation process ensures your L1 is 
-    correct and can be combined with other L1.
+Use this function to verify a dataset conforms to the ecocomDP.
 }
 \details{
-Run this function after creating a L1 and before making EML for it.
-
-   Validation checks performed by this function:
+Validation checks:
    \itemize{
-       \item \strong{Table names} Table names must follow the ecocomDP 
-       naming convention (i.e. \emph{studyName_ecocomDPTableName.ext}, e.g. 
-       \emph{gleon_chloride_observation.csv}). 
-       \item \strong{Table presence} Some L1 tables are 
-       required, others are not.
-       \item \strong{Column names} Column names must be those specified by
-       the data pattern.
-       \item \strong{Column presence} Some columns are 
-       required, others are not.
-       \item \strong{Datetime format} One datetime format is valid, namely
-       'YYYY-MM-DDThh:mm:ss'.
-       \item \strong{Column classes} Column classes must match the 
-       ecocomDP specification.
-       \item \strong{Primary keys} Primary keys must be valid.
-       \item \strong{Composite keys} Composite keys must be valid.
-       \item \strong{Referential integrity} Referential integrity must be
-       valid.
+       \item{File names - When using \code{data.path} the data are read from
+       files and must follow an expected pattern, namely 
+       \emph{studyName_ecocomDPTableName.ext} (e.g. 
+       \emph{gleon_chloride_observation.csv}).}
+       \item{Table presence - Some tables are required, others are not.}
+       \item{Column names - Column names must follow specification.}
+       \item{Column presence - Some columns are required, others are not.}
+       \item{Column classes - Column classes must follow specification.}
+       \item{Datetime format - Date and datetime formats must follow 
+       specification.}
+       \item{Primary keys - Primary keys of tables must be valid.}
+       \item{Composite keys - Composite keys of tables must be valid.}
+       \item{Referential integrity - Referential integrity among tables must 
+       be valid.}
    }
+}
+\note{
+This function is used by ecocomDP creators (to ensure what has been 
+    created is valid), maintainers (to improve the quality of archived
+    ecocomDP datasets), and users (to ensure the data being used is free of
+    model error).
+}
+\examples{
+# Validate a set files (example data)
+validate_ecocomDP(data.path = system.file("/data", package = "ecocomDP"))
+        
 }

@@ -2,32 +2,12 @@
 % Please edit documentation in R/validate_ecocomDP.R
 \name{validate_table_names}
 \alias{validate_table_names}
-\title{Validate ecocomDP table names against the naming schema}
+\title{Check for file name errors}
 \usage{
-validate_table_names(data.path, criteria, data.list = NULL)
+validate_table_names(data.path = NULL)
 }
 \arguments{
-\item{data.path}{(character) Path to the directory containing the L1 tables.
-tables. Use this argument if tables are locally stored and need to be
-read in to R.}
-
-\item{criteria}{(data frame) Validation criteria located in the R package inst directory.}
-
-\item{data.list}{(list of data frames) A list of of data frames. Use this argument if
-tables are read into the R environment. The list should be of the following 
-structure:
-\itemize{
-    \item \strong{"list name"} Name of the list object. This can be anything.
-    \itemize{
-        \item \strong{"L1 table name"} i.e. observation, location, taxon, etc.
-        \itemize{
-            \item \strong{"data"} Data frame representation of the L1 table
-            \item \strong{"fname"} File name the data frame was created from
-        }
-    }
-}}
-
-\item{file.names}{(character) Vector of file names.}
+\item{data.path}{(character) The path to the directory containing ecocomDP tables.}
 }
 \value{
 If table names are valid, then the corresponding table names are
@@ -36,6 +16,6 @@ If table names are valid, then the corresponding table names are
 }
 \description{
 This function ensures that your ecocomDP (L1) tables follow the
-    table naming convention (i.e. \emph{studyName_ecocomDPTableName.ext},
+    file naming convention (i.e. \emph{studyName_ecocomDPTableName.ext},
     e.g. \emph{gleon_chloride_observation.csv}).
 }

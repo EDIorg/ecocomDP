@@ -2,35 +2,17 @@
 % Please edit documentation in R/validate_ecocomDP.R
 \name{validate_primary_keys}
 \alias{validate_primary_keys}
-\title{Check that primary keys of ecocomDP tables are valid}
+\title{Check primary keys}
 \usage{
-validate_primary_keys(tables, data.path, criteria)
+validate_primary_keys(data.list)
 }
 \arguments{
-\item{tables}{(character) Names of valid L1 tables in your dataset working directory.
-Get valid table names with `validate_table_names`.}
-
-\item{data.list}{(list of data frames) A list of of data frames. Use this argument if
-tables are read into the R environment. The list should be of the following 
-structure:
-\itemize{
-    \item \strong{"list name"} Name of the list object. This can be anything.
-    \itemize{
-        \item \strong{"L1 table name"} i.e. observation, location, taxon, etc.
-        \itemize{
-            \item \strong{"data"} Data frame representation of the L1 table
-            \item \strong{"fname"} File name the data frame was created from
-        }
-    }
-}}
-
-\item{criteria}{(data frame) Validation criteria located at 
-/inst/validation_criteria.txt.}
+\item{data.list}{(list of data frames) A named list of data frames, each of which is an 
+ecocomDP table.}
 }
 \value{
 If primary keys are not unique, then an error is returned.
 }
 \description{
-Checks that primary keys of a table are unique and issues an error if
-    otherwise.
+Check primary keys
 }
