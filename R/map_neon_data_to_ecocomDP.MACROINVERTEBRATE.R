@@ -33,6 +33,10 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
   # extract the table with the taxonomy data from all_tabls list of tables 
   inv_taxonomyProcessed <- all_tabs$inv_taxonomyProcessed
   
+  
+  
+  
+
   # location ----
   # get relevant location info from the data
   table_location_raw <- inv_fielddata %>%
@@ -44,6 +48,12 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
     inv_fielddata %>% 
       ecocomDP::make_location(cols = c("domainID", "siteID", "namedLocation")))
   
+  
+  
+
+ 
+  
+  
   # populate latitude
   table_location$latitude <- table_location_raw$decimalLatitude[match(table_location$location_name, table_location_raw$namedLocation)] 
   
@@ -52,6 +62,61 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
   
   # populate elevation
   table_location$elevation <- table_location_raw$elevation[match(table_location$location_name, table_location_raw$namedLocation)] 
+  
+  # replace parent_id with parent_name
+  table_location$parent_location_id <- table_location$location_name[
+    match(table_location$parent_location_id, table_location$location_id)]
+  
+  # replace loc_id with meaningful names
+  table_location$location_id <- table_location$location_name
+  
+  # get neon location info lookup tables
+  neon_domain_list <- neon_site_list %>%
+    dplyr::select(`Domain Number`, `Domain Name`) %>%
+    dplyr::distinct()
+  
+  neon_site_info_list <- neon_site_list %>%
+    dplyr::select(-c(`Domain Number`,`Domain Name`)) %>%
+    dplyr::distinct()
+  
+
+  
+  # update location_names and lat longs where possible
+  for(location_id in table_location$location_id){
+    if(location_id %in% neon_domain_list$`Domain Number`){
+      table_location$location_name[table_location$location_id == location_id] <- 
+        neon_domain_list$`Domain Name`[neon_domain_list$`Domain Number`==location_id]
+    }else if(location_id %in% neon_site_info_list$`Site ID`){
+      table_location$location_name[table_location$location_id == location_id] <- 
+        neon_site_info_list$`Site Name`[neon_site_info_list$`Site ID`==location_id]
+      
+      table_location$latitude[table_location$location_id == location_id] <- 
+        neon_site_info_list$Latitude[neon_site_info_list$`Site ID`==location_id]
+      
+      table_location$longitude[table_location$location_id == location_id] <- 
+        neon_site_info_list$Longitude[neon_site_info_list$`Site ID`==location_id]
+    
+    }
+  }
+  
+  
+
+  
+  # make ancillary table that indicates the location type 
+  table_location_ancillary <- table_location_raw %>% 
+    dplyr::select(domainID, siteID, namedLocation) %>%
+    tidyr::pivot_longer(
+      cols = everything(),
+      names_to = "value",
+      values_to = "location_id") %>%
+    dplyr::mutate(
+      variable_name = "NEON location type",
+      location_ancillary_id = paste0("NEON_location_type_",location_id))
+  
+  
+
+  
+  
   
   # taxon ----
   # create a taxon table, which describes each taxonID that appears in the data set
@@ -131,20 +196,52 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
   #        location_id, observation_datetime,
   #        taxon_id, variable_name, value, unit)
   
-  
-  table_observation_ancillary <- inv_fielddata %>% 
-    select(eventID, sampleID) %>% 
-    rename(neon_sample_id = sampleID,
+
+  table_observation_ancillary_wide <- inv_fielddata %>% 
+    dplyr::select(eventID, sampleID) %>% 
+    dplyr::filter(!is.na(sampleID)) %>%
+    dplyr::rename(neon_sample_id = sampleID,
            neon_event_id = eventID) %>% 
-    mutate(ecocomDP_event_id = neon_sample_id)
+    dplyr::mutate(event_id = neon_sample_id) 
   
+  table_observation_ancillary <- table_observation_ancillary_wide %>%
+    tidyr::pivot_longer(
+      cols = -event_id,
+      names_to = "variable_name",
+      values_to = "value") %>% 
+    dplyr::mutate(
+      observation_ancillary_id = paste0(variable_name, "_for_", event_id))
+    
+  
+
+
+
+
+  # make dataset_summary -- required table
+  years_in_data <- table_observation$observation_datetime %>% lubridate::year()
+  years_in_data %>% ordered()
+  
+  table_dataset_summary <- data.frame(
+    package_id = table_observation$package_id[1],
+    original_package_id = neon.data.product.id,
+    length_of_survey_years = max(years_in_data) - min(years_in_data) + 1,
+    number_of_years_sampled	= years_in_data %>% unique() %>% length(),
+    std_dev_interval_betw_years = years_in_data %>% 
+      unique() %>% sort() %>% diff() %>% stats::sd(),
+    max_num_taxa = table_taxon$taxon_id %>% unique() %>% length()
+  )
+  
+  
+
   # return ----
   # list of tables to be returned, with standardized names for elements
   out_list <- list(
     location = table_location,
+    location_ancillary = table_location_ancillary,
     taxon = table_taxon,
     observation = table_observation,
-    observation_ancillary = table_observation_ancillary)
+    observation_ancillary = table_observation_ancillary,
+    dataset_summary = table_dataset_summary)
   
   # return out_list -- this is output from this function
   return(out_list)

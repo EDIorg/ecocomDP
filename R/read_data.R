@@ -31,6 +31,9 @@
 #'     (logical; NEON data only) If the data volume to be processed does not 
 #'     meet minimum requirements to run in parallel, this overrides. Defaults 
 #'     to FALSE.
+#' @param token 
+#'     (character; NEON data only) User specific API token (generated within 
+#'     neon.datascience user accounts)
 #'     
 #' @return
 #'     (list) A named list, including: 
@@ -80,7 +83,8 @@
 #' 
 read_data <- function(
   id, path, file.type, site = "all", startdate = NA, enddate = NA, 
-  check.size = FALSE, nCores = 1, forceParallel = FALSE) {
+  check.size = FALSE, nCores = 1, forceParallel = FALSE,
+  token = NA) {
   
   # Parameterize --------------------------------------------------------------
   
