@@ -155,6 +155,48 @@ make_dataset_summary <- function(parent.package.id, child.package.id, sample.dat
     )
   )
   
+  dataset_summary$geo_extent_bounding_box_m2 <- round(
+    calulate_geo_extent_bounding_box_m2(
+      westBoundingCoordinate,
+      eastBoundingCoordinate,
+      northBoundingCoordinate,
+      southBoundingCoordinate))
+  
+  dataset_summary
+  
+}
+
+
+
+
+
+
+
+
+#' Calculate geo_extent_bounding_box_m2 of the dataset_summary table
+#'
+#' @param lon_west 
+#'     (numeric) West longitude in decimal degrees and negative if west of the 
+#'     prime meridian.
+#' @param lon_east 
+#'     (numeric) East longitude in decimal degrees and negative if west of the 
+#'     prime meridian.
+#' @param lat_north 
+#'     (numeric) North latitude in decimal degrees.
+#' @param lat_south 
+#'     (numeric) North latitude in decimal degrees.
+#'
+#' @return
+#'     (numeric) Area in square meters.
+#'     
+#' @export
+#'
+calulate_geo_extent_bounding_box_m2 <- function(
+  lon_west, 
+  lon_east, 
+  lat_north, 
+  lat_south) {
+  
   getDistanceFromLatLonInKm<-function(lat1,lon1,lat2,lon2) {
     R <- 6371; # Radius of the earth in km
     dLat <- deg2rad(lat2-lat1);	# deg2rad below
@@ -177,8 +219,11 @@ make_dataset_summary <- function(parent.package.id, child.package.id, sample.dat
     return(area)
   }
   
-  dataset_summary$geo_extent_bounding_box_m2 <- round(get_area_square_meters(westBoundingCoordinate,eastBoundingCoordinate,northBoundingCoordinate,southBoundingCoordinate))
-  
-  dataset_summary
+  round(
+    get_area_square_meters(
+      westBoundingCoordinate,
+      eastBoundingCoordinate,
+      northBoundingCoordinate,
+      southBoundingCoordinate))
   
 }
