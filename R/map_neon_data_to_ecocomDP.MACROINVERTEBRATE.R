@@ -249,4 +249,8 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
 } #END of function
 
 # my_result <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(site= c('COMO','LECO'), startdate = "2019-06",enddate = "2019-09")
+# my_result <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(site= c('COMO','LECO'),check.size = FALSE)
+# my_result <- map_neon_data_to_ecocomDP(neon.data.product.id = "DP1.20120.001", site= c('COMO','LECO'), check.size = FALSE, token = Sys.getenv("NEON_TOKEN"))
+# my_result <- read_data(id = "DP1.20120.001", site= c('COMO','LECO'), check.size = FALSE, token = Sys.getenv("NEON_TOKEN"))
+
 

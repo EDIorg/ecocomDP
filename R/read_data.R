@@ -108,6 +108,7 @@ read_data <- function(
   
   # Read ----------------------------------------------------------------------
   
+
   d <- lapply(
     names(id),
     function(x) {
@@ -130,37 +131,49 @@ read_data <- function(
         }
       }
     })
+  
+
+  
   names(d) <- names(id)
   
   # Modify --------------------------------------------------------------------
   
   # Add missing columns
   
-  invisible(
-    lapply(
-      names(d),
-      function(x) {
-        lapply(
-          names(d[[x]]$tables),
-          function(y) {
-            nms <- attr_tbl$column[attr_tbl$table == y]
-            use_i <- setdiff(nms, names(d[[x]]$tables[[y]]))
-            if (length(use_i) > 0) {
-              d[[x]]$tables[[y]][[use_i]] <<- NA
-              # There seems to be an incompatibility in the handling of 
-              # ..nms between Mac and Windows Os
-              msg <- try(
-                d[[x]]$tables[[y]] <<- d[[x]]$tables[[y]][ , ..nms], 
-                silent = TRUE)
-              if (attr(msg, "class") == "try-error") {
-                d[[x]]$tables[[y]] <<- d[[x]]$tables[[y]][ , nms]
-              }
-            }
-          })
-      }))
+  
+  # this doesn't seem to work -- ERS
+  
+  # invisible(
+  #   lapply(
+  #     names(d),
+  #     function(x) {
+  #       lapply(
+  #         names(d[[x]]$tables),
+  #         function(y) {
+  #           nms <- attr_tbl$column[attr_tbl$table == y]
+  #           use_i <- setdiff(nms, names(d[[x]]$tables[[y]]))
+  #           if (length(use_i) > 0) {
+  #             d[[x]]$tables[[y]][[use_i]] <<- NA
+  #             # There seems to be an incompatibility in the handling of 
+  #             # ..nms between Mac and Windows Os
+  #             msg <- try(
+  #               d[[x]]$tables[[y]] <<- d[[x]]$tables[[y]][ , ..nms], 
+  #               silent = TRUE)
+  #             if (attr(msg, "class") == "try-error") {
+  #               d[[x]]$tables[[y]] <<- d[[x]]$tables[[y]][ , nms]
+  #             }
+  #           }
+  #         })
+  #     }))
+  
+  
+
   
   # Coerce column classes to ecocomDP specifications.
   # FIXME Harmonize date formats of different temporal resolutions
+  
+  
+
   
   col2class <- function(column, class){
     if (class == 'character'){
@@ -200,6 +213,9 @@ read_data <- function(
               })
           })
       }))
+  
+  
+
   
   
   # Ensure referential integrity
