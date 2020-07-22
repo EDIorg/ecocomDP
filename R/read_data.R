@@ -143,7 +143,14 @@ read_data <- function(
             use_i <- setdiff(nms, names(d[[x]]$tables[[y]]))
             if (length(use_i) > 0) {
               d[[x]]$tables[[y]][[use_i]] <<- NA
-              d[[x]]$tables[[y]] <<- d[[x]]$tables[[y]][, ..nms]
+              # There seems to be an incompatibility in the handling of 
+              # ..nms between Mac and Windows Os
+              msg <- try(
+                d[[x]]$tables[[y]] <<- d[[x]]$tables[[y]][ , ..nms], 
+                silent = TRUE)
+              if (attr(msg, "class") == "try-error") {
+                d[[x]]$tables[[y]] <<- d[[x]]$tables[[y]][ , nms]
+              }
             }
           })
       }))
@@ -198,18 +205,18 @@ read_data <- function(
   #   
   # }
   
+  
+  
+  
   # Validate ------------------------------------------------------------------
   
-  for (i in 1:length(d)) {
-    
-    # conditional -- only validate if not NEON
-    if(!grepl("^DP1\\.", names(d)[i])){
-      message("Validating ", names(d)[i])
-      validate_ecocomDP(data.list = d[[i]]$tables)
-    }else{
-      message("WARNING: Not validating ", names(d)[i])
-    }
-  }
+  # for (i in 1:length(d)) {
+  #   message("Validating ", names(d)[i])
+  #   validate_ecocomDP(data.list = d[[i]]$tables)
+  # }
+
+
+
   
   # Return --------------------------------------------------------------------
   
@@ -360,8 +367,8 @@ save_data <- function(data, path, file.type) {
       dirname <- paste0(path, "/", names(data)[[i]])
       dir.create(dirname)
       for (j in 1:length(data[[i]]$tables)) {
-        message("  ", fname)
         fname <- paste0(names(data[[i]]$tables)[j], ".csv")
+        message("  ", fname)
         data.table::fwrite(
           data[[i]]$tables[[j]], file = paste0(dirname, "/", fname))
       }

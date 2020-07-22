@@ -116,15 +116,24 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
            location_id, observation_datetime,
            taxon_id, variable_name, value, unit)
   
+  table_observation_ancillary <- inv_fielddata %>% 
+    select(eventID, sampleID) %>% 
+    rename(neon_sample_id = sampleID,
+           neon_event_id = eventID) %>% 
+    mutate(ecocomDP_event_id = neon_sample_id)
 
   # return ----
   # list of tables to be returned, with standardized names for elements
   out_list <- list(
     location = table_location,
     taxon = table_taxon,
-    observation = table_observation)
+    observation = table_observation,
+    observation_ancillary = table_observation_ancillary)
   
   # return out_list -- this is output from this function
   return(out_list)
   
 } #END of function
+
+my_result.mos <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(site= c('COMO','LECO'), startdate = "2019-06",enddate = "2019-09")
+

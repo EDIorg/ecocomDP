@@ -2,7 +2,7 @@
 ##############################################################################################
 #' @examples 
 #' \dontrun{
-#' my_result <- map_neon_data_to_ecocomDP.MOSQUITOES(site = c("NIWO","DSNY"), 
+#' my_result <- map_neon_data_to_ecocomDP.MOSQUITO(site = c("NIWO","DSNY"), 
 #'                                                   startdate = "2016-01", 
 #'                                                   enddate = "2018-11")
 #' }
@@ -11,12 +11,24 @@
 #' @export
 
 ##############################################################################################
+<<<<<<< HEAD
+# mosquitoes function
+#library(dplyr)
+#library(tidyr)
+#library(neonUtilities)
+
+
+example <- map_neon_data_to_ecocomDP.MOSQUITO(site = c("ABBY", "BARR"), startdate = "2017-01", enddate = "2017=12")
+
+=======
+>>>>>>> 0a18ade45360b5066ad4c113dfc7dcf7a9a1f272
 map_neon_data_to_ecocomDP.MOSQUITO <- function(
-  neon.data.product.id ="DP1.10043.001",
+  neon.data.product.id = "DP1.10043.001",
   ...){
   
   mos_allTabs <- neonUtilities::loadByProduct(
-    dpID = neon.data.product.id, package = "expanded",
+    dpID = neon.data.product.id, 
+    package = "expanded",
     ...)
   # getting data ----  
   # Define important data colums
@@ -94,7 +106,7 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
   # Add trapping info to sorting table 
   # Note - 59 trapping records have no associated sorting record and don't come through the left_join (even though targetTaxaPresent was set to Y or U)
   mos_dat <- mos_sorting %>%
-    dplyr::select(-c(collectDate, domainID, namedLocation, plotID, setDate, siteID)) %>%
+    dplyr::select(-c(uid,collectDate, domainID, namedLocation, plotID, setDate, siteID)) %>%
     dplyr::left_join(select(mos_trapping,-uid),by = 'sampleID') %>%
     dplyr::rename(sampCondition_sorting = sampleCondition.x,
                   sampCondition_trapping = sampleCondition.y,
@@ -112,7 +124,7 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
   # Join expert ID data --
   mos_dat <- mos_dat %>%
     dplyr::left_join(select(mos_expertTaxonomistIDProcessed,
-                            -c(uid,collectDate,domainID,namedLocation,plotID,setDate,siteID,targetTaxaPresent)),
+                            -c(collectDate,domainID,namedLocation,plotID,setDate,siteID,targetTaxaPresent)),
                      by='subsampleID') %>%
     dplyr::rename(remarks_expertID = remarks)
   
@@ -179,23 +191,25 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
                   authority_system,
                   authority_taxon_id)
   
-  
+
   # observation ----
   table_observation <- mos_dat %>% 
     dplyr::select(uid, 
-                  eventID, 
+                  sampleID, 
                   namedLocation, 
                   startCollectDate, 
                   taxonID,
-                  estimated_totIndividuals,
+                  totalWeight,
+                  trapHours,
+                  individualCount,
                   subsampleWeight) %>% 
     
     dplyr::mutate(variable_name = "individuals",
-                  value = round(estimated_totIndividuals / subsampleWeight),
-                  unit = "count per gram") %>% 
+                  value = (individualCount/subsampleWeight) * totalWeight / trapHours,
+                  unit = "count per trap hour") %>% 
     
     dplyr::rename(observation_id = uid,
-                  event_id = eventID,
+                  event_id = sampleID,
                   location_id = namedLocation,
                   observation_datetime = startCollectDate,
                   taxon_id = taxonID) %>%
@@ -211,15 +225,23 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
                   variable_name,
                   value,
                   unit)
+
+table_observation_ancillary <- mos_dat %>% 
+  select(eventID, sampleID) %>% 
+  rename(neon_sample_id = sampleID,
+         neon_event_id = eventID) %>% 
+  mutate(ecocomDP_event_id = neon_sample_id)
   
   # return ----
   # list of tables to be returned, with standardized names for elements
   out_list <- list(
     location = table_location,
     taxon = table_taxon,
-    observation = table_observation)
+    observation = table_observation,
+    observation_ancillary = table_observation_ancillary)
   
   # return out_list -- this is output from this function
   return(out_list)
   
 } # end of function
+

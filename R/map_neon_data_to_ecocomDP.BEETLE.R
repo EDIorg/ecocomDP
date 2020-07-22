@@ -91,14 +91,15 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
     dplyr::bind_rows(lost_indv)
   #Join expert data to existing pinning and sorting data
   #There are ~10 individualID's for which experts ID'd more than one species (not all experts agreed), we want to exclude those expert ID's as per Katie Levan's suggestion
-  ex_expert_id <- beetles_raw$bet_expertTaxonomistIDProcessed %>% 
+
+  ex_expert_id <- beetles_raw$bet_parataxonomistID %>% 
     dplyr::group_by(individualID) %>% 
     dplyr::filter(n_distinct(taxonID) > 1) %>% 
     dplyr::pull(individualID)
   
   # Add expert taxonomy info, where available
   data_expert <- dplyr::left_join(data_pin, 
-                                  dplyr::select(beetles_raw$bet_expertTaxonomistIDProcessed,
+                                  dplyr::select(beetles_raw$bet_parataxonomistID,
                                                 individualID,taxonID,scientificName,taxonRank,identificationQualifier) %>%
                                     dplyr::filter(!individualID %in% ex_expert_id), #exclude ID's that have unresolved expert taxonomy
                                   by = 'individualID', na_matches = "never") %>% 
@@ -126,11 +127,11 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
     dplyr::group_by_at(vars(-individualCount)) %>%
     dplyr::summarise(count = sum(individualCount)) %>%
     dplyr::ungroup()
-  
-  
+
   # making tables ----
   # Observation Tables
   # All individuals of the same species collected at the same time/same location are considered the same observation, regardless of how they were ID'd
+
   table_observation <- beetles_counts %>%
     tidyr::unite(location_id, plotID, trapID) %>%
     dplyr::rename(abundance = count) %>%
@@ -140,15 +141,34 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
     dplyr::group_by(sampleID) %>%
     dplyr::mutate(observation_id = paste(sampleID, row_number(), sep = ".")) %>%
     dplyr::mutate(package_id = paste0(neon.data.product.id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
-    dplyr:: select(observation_id, 
+    tidyr::spread(variable_name,value) %>% 
+    dplyr:: select(observation_id = uid, 
                    event_id = sampleID, 
                    package_id,
                    location_id, 
                    observation_datetime = collectDate, 
-                   taxon_id = taxonID, 
-                   variable_name, 
-                   value,
-                   unit)
+                   taxon_id = taxonID,
+                   value = abundance/trappingDays,
+                   unit) %>% 
+    dplyr::mutate(variable_name = "count per day") %>% 
+    dplyr::select(observation_id,
+                  event_id,
+                  package_id,
+                  location_id,
+                  observation_datetime,
+                  taxon_id,
+                  variable_name,
+                  value,
+                  unit)
+  table_observation <- table_observation[stats::complete.cases(table_observation[,8]),]
+  
+  table_observation_ancillary <- beetles_raw$bet_fielddata %>% 
+    select(eventID, sampleID) %>% 
+    rename(neon_sample_id = sampleID,
+           neon_event_id = eventID) %>% 
+    mutate(ecocomDP_event_id = neon_sample_id)
+  
+  
   
   
   # Location Tables
@@ -188,7 +208,7 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
                              dplyr::select(taxonID, taxonRank, scientificName), 
                            beetles_raw$bet_parataxonomistID %>%
                              dplyr::select(taxonID, taxonRank, scientificName), 
-                           beetles_raw$bet_expertTaxonomistIDProcessed %>%
+                           beetles_raw$bet_parataxonomistID %>%
                              dplyr::select(taxonID, taxonRank, scientificName)) %>% 
     dplyr::distinct() %>%
     dplyr::filter(scientificName != "Carabidae spp.", taxonID != "") %>% #remove typo (entry with the apropriate sciName is already in df)
@@ -211,8 +231,13 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
   out_list <- list(
     observation = table_observation,
     location = table_location,
-    taxon = table_taxon
+    taxon = table_taxon,
+    observation_ancillary = table_observation_ancillary
   )
   
   return(out_list)
 } # end of function
+
+ my_result <- map_neon_data_to_ecocomDP.BEETLE(site = c('ABBY','BARR'), startdate = "2019-06", enddate = "2019-09")
+
+  
