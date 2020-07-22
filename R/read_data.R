@@ -354,7 +354,7 @@ save_data <- function(data, path, file.type) {
   if (file.type == ".rda") {
     fname <- paste0("ecocomDP_data_", tstamp, ".rda")
     message("Writing ", fname)
-    saveRDS(d, file = paste0(path, "/", fname))
+    saveRDS(data, file = paste0(path, "/", fname))
   } else if (file.type == ".csv") {
     for (i in 1:length(data)) {
       message("Writing ", names(data)[[i]])
