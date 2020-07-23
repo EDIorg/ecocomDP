@@ -45,14 +45,11 @@ validate_ecocomDP <- function(
   data.path = NULL, 
   data.list = NULL) {
   
-  # Check arguments -----------------------------------------------------------
+  # Validate arguments --------------------------------------------------------
   
-  if (is.null(data.path) & is.null(data.list)) {
-    stop('One of the arguments "data.path", or "d" must be used.')
-  }
-  if (!is.null(data.path)) {
-    EDIutils::validate_path(data.path)
-  }
+  validate_arguments(
+    fun.name = "validate_ecocomDP",
+    fun.args = as.list(environment()))
   
   # Parameterize --------------------------------------------------------------
   
@@ -681,6 +678,8 @@ read_ecocomDP_table <- function(data.path = NULL, file.name, package.id = NULL, 
 #'
 #' @examples
 #' d <- read_from_files(system.file("/data", package = "ecocomDP"))
+#' 
+#' @export
 #' 
 read_from_files <- function(data.path) {
   criteria <- data.table::fread(

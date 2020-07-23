@@ -10,7 +10,7 @@ validate_ecocomDP(data.path = NULL, data.list = NULL)
 \item{data.path}{(character) The path to the directory containing ecocomDP tables.}
 
 \item{data.list}{(list of data frames) A named list of data frames, each of which is an 
-ecocomDP table.}
+ecocomDP table. See output from \code{read_data()}.}
 }
 \description{
 Use this function to verify a dataset conforms to the ecocomDP.

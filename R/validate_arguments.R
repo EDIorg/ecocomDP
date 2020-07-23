@@ -13,13 +13,15 @@
 #' @details
 #'     Validation checks are function specific.    
 #'
-
 validate_arguments <- function(fun.name, fun.args){
   
   # Parameterize --------------------------------------------------------------
   
   use_i <- sapply(fun.args, function(X) identical(X, quote(expr=)))
   fun.args[use_i] <- list(NULL)
+  
+  criteria <- data.table::fread(
+    system.file('validation_criteria.txt', package = 'ecocomDP'))
   
   # search_data() -------------------------------------------------------------
   
@@ -107,5 +109,36 @@ validate_arguments <- function(fun.name, fun.args){
     
   }
   
+  # validate_ecocomDP() -------------------------------------------------------
+  
+  if (fun.name == "validate_ecocomDP") {
+    
+    # data.path
+    
+    if (!is.null(fun.args$data.path)) {
+      if (!dir.exists(fun.args$data.path)) {
+        stop("Input 'data.path' doesn't exits.", call. = F)
+      }
+    }
+
+    # data.list
+    
+    if (!is.null(fun.args$data.list)) {
+      if (!is.list(fun.args$data.list)) {
+        stop("Input 'data.list' is not a list.", call. = F)
+      }
+      use_i <- names(fun.args$data.list) %in% unique(criteria$table)
+      if (any(!use_i)) {
+        stop(
+          "Input 'data.list' has unsupported tables: ", 
+          paste(names(fun.args$data.list)[!use_i], collapse = ", "), call. = F)
+      }
+    }
+    
+    
+  }
   
 }
+
+
+

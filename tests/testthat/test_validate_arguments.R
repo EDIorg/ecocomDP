@@ -1,6 +1,15 @@
+# Tests are organized around function calls (e.g. all tests listed under 
+# search_data() are relevant to the argument inputs to that function).
+
 context("validate_arguments()")
 
 library(ecocomDP)
+
+# Parameterize ----------------------------------------------------------------
+
+# Read example data
+
+test_data <- read_from_files(system.file("/data", package = "ecocomDP"))
 
 # search_data() ---------------------------------------------------------------
 
@@ -81,5 +90,42 @@ testthat::test_that("search_data()", {
       "search_data",
       as.list(
         list(boolean.operator = "ANDrew"))))
+  
+})
+
+
+# validate_ecocomDP() ---------------------------------------------------------
+
+testthat::test_that("validate_ecocomDP()", {
+  
+  # data.path
+  
+  expect_null(
+    validate_arguments(
+      "validate_ecocomDP",
+      as.list(
+        list(data.path = tempdir()))))
+  
+  expect_error(
+    validate_arguments(
+      "validate_ecocomDP",
+      as.list(
+        list(data.path = paste0(tempdir(), "/aoihebqlnvo333")))))
+  
+  # data.list
+  
+  expect_null(
+    validate_arguments(
+      "validate_ecocomDP",
+      as.list(
+        list(data.list = test_data))))
+  
+  test_data2 <- test_data
+  test_data2$unsupported_table <- NA
+  expect_error(
+    validate_arguments(
+      "validate_ecocomDP",
+      as.list(
+        list(data.list = test_data2))))
   
 })
