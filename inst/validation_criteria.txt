@@ -14,7 +14,7 @@ taxon	authority_system	character	FALSE	FALSE	FALSE	FALSE	FALSE
 taxon	authority_taxon_id	character	FALSE	FALSE	FALSE	FALSE	FALSE
 observation	NA	NA	TRUE	NA	NA	NA	NA
 observation	observation_id	character	TRUE	TRUE	FALSE	FALSE	TRUE
-observation	event_id	character	TRUE	FALSE	FALSE	FALSE	TRUE
+observation	event_id	character	FALSE	FALSE	FALSE	FALSE	TRUE
 observation	package_id	character	TRUE	FALSE	TRUE	TRUE	FALSE
 observation	location_id	character	TRUE	FALSE	TRUE	TRUE	TRUE
 observation	observation_datetime	Date	TRUE	FALSE	FALSE	TRUE	FALSE

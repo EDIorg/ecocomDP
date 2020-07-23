@@ -7,7 +7,7 @@
 #'     (character) The path to the directory containing ecocomDP tables.
 #' @param data.list
 #'     (list of data frames) A named list of data frames, each of which is an 
-#'     ecocomDP table.
+#'     ecocomDP table. See output from \code{read_data()}.
 #'     
 #' @note
 #'     This function is used by ecocomDP creators (to ensure what has been 
@@ -277,6 +277,9 @@ validate_column_presence <- function(data.list){
         (criteria$table %in% x) & 
           !is.na(criteria$column) & 
           (criteria$required == TRUE)]
+      if ((x == "observation") & ("observation_ancillary" %in% names(data.list))) {
+        expected <- c(expected, "event_id")
+      }
       missing_columns <- !(expected %in% colnames(data.list[[x]]))
       if (any(missing_columns)) {
         stop(
