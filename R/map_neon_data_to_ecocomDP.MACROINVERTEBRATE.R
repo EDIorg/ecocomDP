@@ -101,7 +101,6 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
   
   
 
-  
   # make ancillary table that indicates the location type 
   table_location_ancillary <- table_location_raw %>% 
     dplyr::select(domainID, siteID, namedLocation) %>%
@@ -112,7 +111,6 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
     dplyr::mutate(
       variable_name = "NEON location type",
       location_ancillary_id = paste0("NEON_location_type_",location_id))
-  
   
 
   

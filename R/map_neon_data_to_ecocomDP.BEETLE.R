@@ -26,6 +26,10 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
   beetles_raw <- neonUtilities::loadByProduct(dpID = neon.data.product.id, 
                                               ...)
   
+  
+  
+  
+  
   Mode <- function(x) {
     ux <- unique(x)
     ux[which.max(tabulate(match(x, ux)))]
@@ -62,15 +66,24 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
                      by = "sampleID") %>%
     dplyr::filter(!is.na(subsampleID)) #even though they were marked a sampled, some collection times don't acutally have any samples
   
+  
+  
+  
+  
   # Join taxonomic data from pinning with the sorting data
   # Replace sorting taxon info with pinning taxon info (people that pin specimens are more experienced with taxonomy), where available
   data_pin <- data %>%
-    dplyr::left_join(beetles_raw$bet_parataxonomistID %>% select(subsampleID, individualID, taxonID, scientificName, taxonRank,identificationQualifier), by = "subsampleID") %>%
+    dplyr::left_join(beetles_raw$bet_parataxonomistID %>% 
+                       select(subsampleID, individualID, taxonID, scientificName, 
+                              taxonRank,identificationQualifier,
+                              identificationReferences), by = "subsampleID") %>%
     dplyr::mutate_if(is.factor, as.character) %>%
     dplyr::mutate(taxonID = ifelse(is.na(taxonID.y), taxonID.x, taxonID.y)) %>%
     dplyr::mutate(taxonRank = ifelse(is.na(taxonRank.y), taxonRank.x, taxonRank.y)) %>%
     dplyr::mutate(scientificName = ifelse(is.na(scientificName.y), scientificName.x, scientificName.y)) %>%
     dplyr::mutate(identificationSource = ifelse(is.na(scientificName.y), "sort", "pin")) %>%
+    dplyr::mutate(identificationReferences = ifelse(is.na(identificationReferences.y), 
+                                                    identificationReferences.x, identificationReferences.y)) %>%
     dplyr::mutate (identificationQualifier = ifelse(is.na(taxonID.y), identificationQualifier.x, identificationQualifier.y)) %>%
     dplyr::select(-ends_with(".x"), -ends_with(".y"))
   
