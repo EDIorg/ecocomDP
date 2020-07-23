@@ -24,7 +24,6 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
   # getting data ----
   #download data
   beetles_raw <- neonUtilities::loadByProduct(dpID = neon.data.product.id, 
-                                              check.size = FALSE,
                                               ...)
   
   Mode <- function(x) {
@@ -56,7 +55,8 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
     #and join to sample data
     dplyr::left_join(beetles_raw$bet_sorting %>%
                        dplyr::filter(sampleType %in% c("carabid", "other carabid")) %>% #only want carabid samples, not bycatch
-                       dplyr::select(sampleID, subsampleID, sampleType, 
+                       dplyr::select(uid, 
+                                     sampleID, subsampleID, sampleType, 
                                      taxonID, scientificName, taxonRank, 
                                      individualCount, identificationQualifier, identificationReferences),
                      by = "sampleID") %>%
@@ -100,7 +100,9 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
   # Add expert taxonomy info, where available
   data_expert <- dplyr::left_join(data_pin, 
                                   dplyr::select(beetles_raw$bet_parataxonomistID,
-                                                individualID,taxonID,scientificName,taxonRank,identificationQualifier) %>%
+                                                individualID,taxonID,scientificName,
+                                                taxonRank,identificationQualifier,
+                                                identificationReferences) %>%
                                     dplyr::filter(!individualID %in% ex_expert_id), #exclude ID's that have unresolved expert taxonomy
                                   by = 'individualID', na_matches = "never") %>% 
     dplyr::distinct()
@@ -115,6 +117,8 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
     dplyr::mutate(taxonRank = ifelse(is.na(taxonRank.y), taxonRank.x, taxonRank.y)) %>%
     dplyr::mutate(scientificName = ifelse(is.na(scientificName.y), scientificName.x, scientificName.y)) %>%
     dplyr::mutate(identificationSource = ifelse(is.na(scientificName.y), identificationSource, "expert")) %>%
+    dplyr::mutate(identificationReferences = ifelse(is.na(identificationReferences.y), 
+                                                    identificationReferences.x, identificationReferences.y)) %>%
     dplyr::mutate (identificationQualifier = ifelse(is.na(taxonID.y), identificationQualifier.x, identificationQualifier.y)) %>%
     dplyr::select(-ends_with(".x"), -ends_with(".y"))
   
@@ -123,7 +127,8 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
   
   #Get raw counts table
   beetles_counts <- data_expert %>%
-    dplyr::select(-c(subsampleID, sampleType, individualID, identificationSource, identificationQualifier)) %>%
+    dplyr::select(-c(subsampleID, sampleType, individualID, 
+                     identificationSource, identificationQualifier)) %>%
     dplyr::group_by_at(vars(-individualCount)) %>%
     dplyr::summarise(count = sum(individualCount)) %>%
     dplyr::ungroup()
@@ -132,25 +137,27 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
   # Observation Tables
   # All individuals of the same species collected at the same time/same location are considered the same observation, regardless of how they were ID'd
 
-  table_observation <- beetles_counts %>%
+  table_observation_raw <- beetles_counts %>%
     tidyr::unite(location_id, plotID, trapID) %>%
-    dplyr::rename(abundance = count) %>%
-    tidyr::pivot_longer(c(abundance, trappingDays), names_to = "variable_name", values_to = "value") %>%
-    dplyr::mutate(unit = "count") %>%
+    dplyr::rename(abundance = count)
+  
+  table_observation <- table_observation_raw %>%
+    # tidyr::pivot_longer(c(abundance, trappingDays), names_to = "variable_name", values_to = "value") %>%
+    # dplyr::mutate(unit = "count") %>%
     #create observation_id column
-    dplyr::group_by(sampleID) %>%
-    dplyr::mutate(observation_id = paste(sampleID, row_number(), sep = ".")) %>%
+    # dplyr::group_by(sampleID) %>%
+    # dplyr::mutate(observation_id = paste(sampleID, row_number(), sep = ".")) %>%
     dplyr::mutate(package_id = paste0(neon.data.product.id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
-    tidyr::spread(variable_name,value) %>% 
+    # tidyr::spread(variable_name,value) %>% 
     dplyr:: select(observation_id = uid, 
                    event_id = sampleID, 
                    package_id,
                    location_id, 
                    observation_datetime = collectDate, 
                    taxon_id = taxonID,
-                   value = abundance/trappingDays,
-                   unit) %>% 
-    dplyr::mutate(variable_name = "count per day") %>% 
+                   value = abundance/trappingDays) %>% 
+    dplyr::mutate(variable_name = "abundance",
+                  unit = "count per trap day") %>% 
     dplyr::select(observation_id,
                   event_id,
                   package_id,
@@ -160,7 +167,7 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
                   variable_name,
                   value,
                   unit)
-  table_observation <- table_observation[stats::complete.cases(table_observation[,8]),]
+  # table_observation <- table_observation[stats::complete.cases(table_observation[,8]),]
   
   table_observation_ancillary <- beetles_raw$bet_fielddata %>% 
     select(eventID, sampleID) %>% 
@@ -238,6 +245,9 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
   return(out_list)
 } # end of function
 
- # my_result <- map_neon_data_to_ecocomDP.BEETLE(site = c('ABBY','BARR'), startdate = "2019-06", enddate = "2019-09")
+# my_result <- map_neon_data_to_ecocomDP.BEETLE(site = c('ABBY','BARR'),
+#                                               startdate = "2016-01", enddate = "2018-09",
+#                                               check.size = FALSE,
+#                                               token = Sys.getenv("NEON_TOKEN"))
 
   
