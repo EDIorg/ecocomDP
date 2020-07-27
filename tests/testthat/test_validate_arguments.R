@@ -7,9 +7,8 @@ library(ecocomDP)
 
 # Parameterize ----------------------------------------------------------------
 
-# Read example data
-
 test_data <- read_from_files(system.file("/data", package = "ecocomDP"))
+search_index <- search_data()
 
 # search_data() ---------------------------------------------------------------
 
@@ -98,7 +97,7 @@ testthat::test_that("search_data()", {
 
 testthat::test_that("validate_ecocomDP()", {
   
-  # data.path
+  # data.path - Is valid
   
   expect_null(
     validate_arguments(
@@ -112,7 +111,7 @@ testthat::test_that("validate_ecocomDP()", {
       as.list(
         list(data.path = paste0(tempdir(), "/aoihebqlnvo333")))))
   
-  # data.list
+  # data.list - Is valid
   
   expect_null(
     validate_arguments(
@@ -127,5 +126,43 @@ testthat::test_that("validate_ecocomDP()", {
       "validate_ecocomDP",
       as.list(
         list(data.list = test_data2))))
+  
+})
+
+# read_data() -----------------------------------------------------------------
+
+testthat::test_that("read_data()", {
+  
+  # id - Exists in the search_data() default output, otherwise drops the 
+  # invalid input and issues a warning. If a newer revision exists, a warning
+  # is returned.
+  
+  r <- suppressWarnings(
+    validate_arguments(
+      "read_data",
+      as.list(list(id = c("invalid_identifier_123", "edi.359.1")))))
+  expect_equal(
+    r$id, "edi.359.1")
+  
+  expect_warning(
+    validate_arguments(
+      "read_data",
+      as.list(list(id = c("edi.247.1", "edi.359.1")))))
+  
+  # path - Is valid
+  
+  # file.type - Is a supported type
+  
+  # site - Exists in the search_data() default output
+  
+  # startdate - Character of YYYY-MM format
+  
+  # enddate - Character of YYYY-MM format
+  
+  # check.size - Is logical
+  
+  # nCores - Is iteger
+  
+  # forceParallel - Is logical
   
 })

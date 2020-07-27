@@ -82,6 +82,11 @@ read_data <- function(
   id, path, file.type, site = "all", startdate = NA, enddate = NA, 
   check.size = FALSE, nCores = 1, forceParallel = FALSE) {
   
+  # Validate input arguments --------------------------------------------------
+  
+  # test <- validate_arguments("read_data", as.list(environment()))
+  # browser()
+  
   # Parameterize --------------------------------------------------------------
   
   # id can be a list so, if not already, wrap it in list()
@@ -97,10 +102,6 @@ read_data <- function(
   attr_tbl <- data.table::fread(
     system.file('validation_criteria.txt', package = 'ecocomDP'))
   attr_tbl <- attr_tbl[!is.na(attr_tbl$column), ]
-  
-  # Validate input arguments --------------------------------------------------
-  
-  # TODO: Validate input arguments
 
   # Read ----------------------------------------------------------------------
   

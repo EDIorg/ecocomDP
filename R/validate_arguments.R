@@ -13,7 +13,7 @@
 #' @details
 #'     Validation checks are function specific.    
 #'
-validate_arguments <- function(fun.name, fun.args){
+validate_arguments <- function(fun.name, fun.args) {
   
   # Parameterize --------------------------------------------------------------
   
@@ -113,7 +113,7 @@ validate_arguments <- function(fun.name, fun.args){
   
   if (fun.name == "validate_ecocomDP") {
     
-    # data.path
+    # data.path - Is a valid path
     
     if (!is.null(fun.args$data.path)) {
       if (!dir.exists(fun.args$data.path)) {
@@ -121,7 +121,7 @@ validate_arguments <- function(fun.name, fun.args){
       }
     }
 
-    # data.list
+    # data.list - Is a named list containing only ecocomDP tables
     
     if (!is.null(fun.args$data.list)) {
       if (!is.list(fun.args$data.list)) {
@@ -135,6 +135,85 @@ validate_arguments <- function(fun.name, fun.args){
       }
     }
     
+  }
+  
+  # read_data() ---------------------------------------------------------------
+  
+  if (fun.name == "read_data") {
+    
+    # search_index <- search_data()
+    
+    
+    # id - Exists in the search_data() default output, otherwise drops the 
+    # invalid input and issues a warning. If a newer revision exists, a warning
+    # is returned.
+    #
+    # if (!is.null(fun.args$id)) {
+    #   validate_id <- function(x) {
+    #     search_index <- suppressMessages(search_data())
+    #     
+    #     # Is it in the search index?
+    #     index_i <- fun.args$id %in% search_index$id
+    #     if (!all(index_i)) {
+    #       # If not indexed, is it an older revision? Currently, only EDI 
+    #       # supports revisions
+    #       not_indexed <- fun.args$id[!index_i]
+    #       possible_revision <- not_indexed[
+    #         stringr::str_detect(
+    #           not_indexed, 
+    #           "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)")]
+    #       if (length(possible_revision) > 0) {
+    #         browser()
+    #         # FIXME: Only search indexed EDI packages
+    #         not_revision <- stringr::str_remove_all(possible_revision, "\\.[:digit:]*$") %in% 
+    #           stringr::str_remove_all(search_index$id, "\\.[:digit:]*$")
+    #       }
+    #       # warning(
+    #       #   "Invalid input 'id' ", paste(fun.args$id[!use_i], collapse = ", "), 
+    #       #   " cannot be read.", call. = FALSE)
+    #       # fun.args$id <- fun.args$id[use_i]
+    #     }
+    #     
+    #     # Check for newer revisions - If newer is found the original input is
+    #     # removed so the next step (id validation) won't fail
+    #     use_i <- (fun.args$id %in% search_index$id) & 
+    #       (stringr::str_detect(
+    #         fun.args$id, 
+    #         "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)"))
+    #     
+    #     if (!all(use_i)) {
+    #       browser()
+    #       warning(
+    #         "Invalid input 'id' ", paste(fun.args$id[!use_i], collapse = ", "), 
+    #         " cannot be read.", call. = FALSE)
+    #       fun.args$id[use_i]
+    #     }
+    #     
+    #     fun.args$id
+    #   }
+    #   fun.args$id <- validate_id()
+    # }
+    
+    
+    # path - Is valid
+    
+    # file.type - Is a supported type
+    
+    # site - Exists in the search_data() default output
+    
+    # startdate - Character of YYYY-MM format
+    
+    # enddate - Character of YYYY-MM format
+    
+    # check.size - Is logical
+    
+    # nCores - Is iteger
+    
+    # forceParallel - Is logical
+    
+    # Return modified inputs
+    
+    return(fun.args)
     
   }
   
