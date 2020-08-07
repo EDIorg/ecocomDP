@@ -198,15 +198,64 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
   
   
   
+  # replace parent_id with parent_name
+  table_location$parent_location_id <- table_location$location_name[
+    match(table_location$parent_location_id, table_location$location_id)]
+  
+  # replace loc_id with meaningful names
+  table_location$location_id <- table_location$location_name
+  
+  # get neon location info lookup tables
+  neon_domain_list <- neon_site_list %>%
+    dplyr::select(`Domain Number`, `Domain Name`) %>%
+    dplyr::distinct()
+  
+  neon_site_info_list <- neon_site_list %>%
+    dplyr::select(-c(`Domain Number`,`Domain Name`)) %>%
+    dplyr::distinct()
+  
+  
+  
+  # update location_names and lat longs where possible
+  for(location_id in table_location$location_id){
+    if(location_id %in% neon_domain_list$`Domain Number`){
+      table_location$location_name[table_location$location_id == location_id] <- 
+        neon_domain_list$`Domain Name`[neon_domain_list$`Domain Number`==location_id]
+    }else if(location_id %in% neon_site_info_list$`Site ID`){
+      table_location$location_name[table_location$location_id == location_id] <- 
+        neon_site_info_list$`Site Name`[neon_site_info_list$`Site ID`==location_id]
+      
+      table_location$latitude[table_location$location_id == location_id] <- 
+        neon_site_info_list$Latitude[neon_site_info_list$`Site ID`==location_id]
+      
+      table_location$longitude[table_location$location_id == location_id] <- 
+        neon_site_info_list$Longitude[neon_site_info_list$`Site ID`==location_id]
+      
+    }
+  }
+  
+  
+  
+  # make ancillary table that indicates the location type 
+  table_location_ancillary <- table_location_raw %>% 
+    dplyr::select(domainID, siteID, namedLocation) %>%
+    tidyr::pivot_longer(
+      cols = everything(),
+      names_to = "value",
+      values_to = "location_id") %>%
+    dplyr::mutate(
+      variable_name = "NEON location type",
+      location_ancillary_id = paste0("NEON_location_type_",location_id))
+  
   
   # # Taxon table using available data
   # 
   # # NOTE: we could use the NEON taxon tables API as an alternative to populate
   # # the taxon table. We could make it more standardized, but it might be 
   # # more resource intensive
-  table_taxon_raw <- tax_long_in %>%
-    dplyr::select(acceptedTaxonID, taxonRank, scientificName, identificationReferences) %>%
-    dplyr::distinct() 
+  # table_taxon_raw <- tax_long_in %>%
+  #   dplyr::select(acceptedTaxonID, taxonRank, scientificName, identificationReferences) %>%
+  #   dplyr::distinct() 
   
   # # make ecocomDP format taxon table using ecocomDP function
   # table_taxon <- ecocomDP::make_taxon(
@@ -215,27 +264,57 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
   #     name.type = "scientific",
   #     data.sources = 3)
   
-  # alternative for making ecocomDP format taxon table 
-  table_taxon <- table_taxon_raw %>%
-    dplyr::rename(
-      taxon_id = acceptedTaxonID,
-      taxon_rank = taxonRank,
-      taxon_name = scientificName,
-      authority_taxon_id = identificationReferences
-    ) %>%
-    dplyr::mutate(
-      authority_system = "NEON_external_lab",
-    )
+  # # alternative for making ecocomDP format taxon table 
+  # table_taxon <- table_taxon_raw %>%
+  #   dplyr::rename(
+  #     taxon_id = acceptedTaxonID,
+  #     taxon_rank = taxonRank,
+  #     taxon_name = scientificName,
+  #     authority_taxon_id = identificationReferences
+  #   ) %>%
+  #   dplyr::mutate(
+  #     authority_system = "NEON_external_lab",
+  #   )
   
+  table_taxon <- tax_long_in %>%
+    
+    # keep only the coluns listed below
+    dplyr::select(acceptedTaxonID, taxonRank, scientificName, identificationReferences) %>%
+    
+    # remove rows with duplicate information
+    dplyr::distinct() %>%
+    
+    # rename some columns
+    dplyr::rename(taxon_id = acceptedTaxonID,
+                  taxon_rank = taxonRank,
+                  taxon_name = scientificName,
+                  authority_system = identificationReferences)
+  
+  
+  # make dataset_summary -- required table
+  years_in_data <- table_observation$observation_datetime %>% lubridate::year()
+  years_in_data %>% ordered()
+  
+  table_dataset_summary <- data.frame(
+    package_id = table_observation$package_id[1],
+    original_package_id = neon.data.product.id,
+    length_of_survey_years = max(years_in_data) - min(years_in_data) + 1,
+    number_of_years_sampled	= years_in_data %>% unique() %>% length(),
+    std_dev_interval_betw_years = years_in_data %>% 
+      unique() %>% sort() %>% diff() %>% stats::sd(),
+    max_num_taxa = table_taxon$taxon_id %>% unique() %>% length()
+  )
   
   
   
   # list of tables to be returned, with standardized names for elements
   out_list <- list(
     location = table_location,
+    location_ancillary = table_location_ancillary,
     taxon = table_taxon,
     observation = table_observation,
-    observation_ancillary = table_observation_ancillary)
+    observation_ancillary = table_observation_ancillary,
+    dataset_summary = table_dataset_summary)
   
   return(out_list)
 }
