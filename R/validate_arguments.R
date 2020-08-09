@@ -144,55 +144,14 @@ validate_arguments <- function(fun.name, fun.args) {
     # search_index <- search_data()
     
     
-    # id - Exists in the search_data() default output, otherwise drops the 
-    # invalid input and issues a warning. If a newer revision exists, a warning
-    # is returned.
-    #
-    # if (!is.null(fun.args$id)) {
-    #   validate_id <- function(x) {
-    #     search_index <- suppressMessages(search_data())
-    #     
-    #     # Is it in the search index?
-    #     index_i <- fun.args$id %in% search_index$id
-    #     if (!all(index_i)) {
-    #       # If not indexed, is it an older revision? Currently, only EDI 
-    #       # supports revisions
-    #       not_indexed <- fun.args$id[!index_i]
-    #       possible_revision <- not_indexed[
-    #         stringr::str_detect(
-    #           not_indexed, 
-    #           "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)")]
-    #       if (length(possible_revision) > 0) {
-    #         browser()
-    #         # FIXME: Only search indexed EDI packages
-    #         not_revision <- stringr::str_remove_all(possible_revision, "\\.[:digit:]*$") %in% 
-    #           stringr::str_remove_all(search_index$id, "\\.[:digit:]*$")
-    #       }
-    #       # warning(
-    #       #   "Invalid input 'id' ", paste(fun.args$id[!use_i], collapse = ", "), 
-    #       #   " cannot be read.", call. = FALSE)
-    #       # fun.args$id <- fun.args$id[use_i]
-    #     }
-    #     
-    #     # Check for newer revisions - If newer is found the original input is
-    #     # removed so the next step (id validation) won't fail
-    #     use_i <- (fun.args$id %in% search_index$id) & 
-    #       (stringr::str_detect(
-    #         fun.args$id, 
-    #         "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)"))
-    #     
-    #     if (!all(use_i)) {
-    #       browser()
-    #       warning(
-    #         "Invalid input 'id' ", paste(fun.args$id[!use_i], collapse = ", "), 
-    #         " cannot be read.", call. = FALSE)
-    #       fun.args$id[use_i]
-    #     }
-    #     
-    #     fun.args$id
-    #   }
-    #   fun.args$id <- validate_id()
-    # }
+    # id - Exists in the search_data() default output, otherwise the invalid
+    # input is dropped and a warning issued. If a newer revision exists, a 
+    # warning is returned.
+
+    if (!is.null(fun.args$id)) {
+      fun.args$id <- unlist(
+        lapply(fun.args$id, validate_id))
+    }
     
     
     # path - Is valid
@@ -221,3 +180,48 @@ validate_arguments <- function(fun.name, fun.args) {
 
 
 
+
+
+
+#' Validate data package/product identifier
+#'
+#' @param id
+#'     (character) A data package/product identifier for an ecocomDP dataset.
+#'     
+#' @return 
+#'     \item{id}{If valid, then \code{id} is returned along with a warning
+#'     if a newer revision exists.}
+#'     \item{NULL}{If invalid (i.e. not listed in the return of 
+#'     \code{search_data()}) along with a warning.}
+#'     
+#' @details 
+#'     If the exact \code{id} is not indexed, but it is an EDI data package, 
+#'     then a set of logic determines if a newer version is indexed and 
+#'     available.
+#' 
+validate_id <- function(id) {
+  search_index <- suppressMessages(search_data())
+  if (!(id %in% search_index$id)) {
+    possible_revision <- stringr::str_detect(
+      id,
+      "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)")
+    if (possible_revision) {
+      indexed_identifiers <- stringr::str_extract(
+        search_index$id, ".+(?=\\.[:digit:]$)")
+      id_identifier <- stringr::str_extract(id, ".+(?=\\.[:digit:]$)")
+      if (id_identifier %in% indexed_identifiers) {
+        id_version <- stringr::str_extract(id, "[:digit:]$")
+        indexed_version <- stringr::str_extract(
+          search_index$id[which(id_identifier == indexed_identifiers)],
+          "[:digit:]$")
+        if (as.numeric(indexed_version) > as.numeric(id_version)) {
+          warning("A newer version of '", id, "' is available.", call. = FALSE)
+        }
+      }
+    } else {
+      id <- NULL
+      warning("Invalid identifier '", id, "' cannot be read.", call. = FALSE)
+    }
+  }
+  id
+}

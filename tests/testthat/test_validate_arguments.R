@@ -125,7 +125,8 @@ testthat::test_that("validate_ecocomDP()", {
     validate_arguments(
       "validate_ecocomDP",
       as.list(
-        list(data.list = test_data2))))
+        list(data.list = test_data2))),
+    regexp = "Input \'data.list\' has unsupported tables:")
   
 })
 
@@ -133,21 +134,51 @@ testthat::test_that("validate_ecocomDP()", {
 
 testthat::test_that("read_data()", {
   
-  # id - Exists in the search_data() default output, otherwise drops the 
-  # invalid input and issues a warning. If a newer revision exists, a warning
-  # is returned.
-  
-  r <- suppressWarnings(
-    validate_arguments(
-      "read_data",
-      as.list(list(id = c("invalid_identifier_123", "edi.359.1")))))
-  expect_equal(
-    r$id, "edi.359.1")
+  # id - If not valid, then a warning and NULL value is returned.
   
   expect_warning(
     validate_arguments(
       "read_data",
-      as.list(list(id = c("edi.247.1", "edi.359.1")))))
+      as.list(
+        list(
+          id = c(
+            "invalid_identifier_1", 
+            "invalid_identifier_2", 
+            "edi.359.1")))),
+    regexp = "Invalid identifier \'.+\' cannot be read.")
+  
+  r <- suppressWarnings(
+    validate_arguments(
+      "read_data",
+      as.list(
+        list(
+          id = c(
+            "invalid_identifier_1", 
+            "invalid_identifier_2", 
+            "edi.359.1")))))
+  expect_false("invalid_identifier_1" %in% r$id)
+  expect_false("invalid_identifier_2" %in% r$id)
+  expect_true("edi.359.1" %in% r$id)
+  
+  # id - If a newer revision exists, then id and a warning is returned.
+  
+  expect_warning(
+    validate_arguments(
+      "read_data",
+      as.list(
+        list(
+          id = c("edi.275.3", "edi.359.1")))),
+    regexp = "A newer version of \'.+\' is available.")
+  
+  r <- suppressWarnings(
+    validate_arguments(
+      "read_data",
+      as.list(
+        list(
+          id = c("edi.275.3", "edi.359.1")))))
+  expect_true(
+    all(r$id %in% c("edi.275.3", "edi.359.1")))
+  
   
   # path - Is valid
   
