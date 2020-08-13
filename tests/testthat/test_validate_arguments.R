@@ -134,19 +134,12 @@ testthat::test_that("validate_ecocomDP()", {
 
 testthat::test_that("read_data()", {
   
-  # TODO: Test input of list of id and nested attributes
-  
   # id - If not valid, then a warning and NULL value is returned.
   
+  input <- formals(ecocomDP::read_data)
+  input$id <- c("invalid_identifier_1", "invalid_identifier_2", "edi.359.1")
   expect_warning(
-    validate_arguments(
-      "read_data",
-      as.list(
-        list(
-          id = c(
-            "invalid_identifier_1", 
-            "invalid_identifier_2", 
-            "edi.359.1")))),
+    validate_arguments("read_data", input),
     regexp = "Invalid identifier \'.+\' cannot be read.")
   
   r <- suppressWarnings(

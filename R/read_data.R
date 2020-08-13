@@ -10,7 +10,7 @@
 #'     (character) Path to the directory in which the data will be written.
 #' @param file.type
 #'     (character) Type of file to save the data to. Options are: ".rda", 
-#'     ".csv"
+#'     ".csv".
 #' @param site 
 #'     (character; NEON data only) A character vector of site codes to filter 
 #'     data on. Sites are listed in the "sites" column of the 
@@ -79,7 +79,7 @@
 #'       check.size = FALSE)))
 #' 
 read_data <- function(
-  id, path = NULL, file.type = NULL, site = "all", startdate = NA, enddate = NA, 
+  id = NULL, path = NULL, file.type = ".rda", site = "all", startdate = NA, enddate = NA, 
   check.size = FALSE, nCores = 1, forceParallel = FALSE) {
   
   # Validate input arguments --------------------------------------------------

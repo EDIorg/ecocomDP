@@ -5,9 +5,9 @@
 \title{Read ecocomDP data}
 \usage{
 read_data(
-  id,
+  id = NULL,
   path = NULL,
-  file.type = NULL,
+  file.type = ".rda",
   site = "all",
   startdate = NA,
   enddate = NA,
@@ -26,7 +26,7 @@ only; see below for arguments and examples).}
 \item{path}{(character) Path to the directory in which the data will be written.}
 
 \item{file.type}{(character) Type of file to save the data to. Options are: ".rda", 
-".csv"}
+".csv".}
 
 \item{site}{(character; NEON data only) A character vector of site codes to filter 
 data on. Sites are listed in the "sites" column of the 
