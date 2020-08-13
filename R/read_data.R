@@ -79,23 +79,15 @@
 #'       check.size = FALSE)))
 #' 
 read_data <- function(
-  id, path, file.type, site = "all", startdate = NA, enddate = NA, 
+  id, path = NULL, file.type = NULL, site = "all", startdate = NA, enddate = NA, 
   check.size = FALSE, nCores = 1, forceParallel = FALSE) {
   
   # Validate input arguments --------------------------------------------------
   
-  test <- validate_arguments("read_data", as.list(environment()))
-  browser()
+  # test <- validate_arguments("read_data", as.list(environment()))
+  # browser()
   
   # Parameterize --------------------------------------------------------------
-  
-  # id can be a list so, if not already, wrap it in list()
-
-  if (!is.list(id)) {
-    empty_list <- vector(mode = "list", length(id))
-    names(empty_list) <- unlist(id)
-    id <- empty_list
-  }
   
   # Get ecocomDP attributes for validation and coercion
   
@@ -215,7 +207,7 @@ read_data <- function(
   
   # Return --------------------------------------------------------------------
   
-  if (!missing(path) & !missing(file.type)) {
+  if (!is.null(path) & !null(file.type)) {
     save_data(d, path, file.type)
   }
   

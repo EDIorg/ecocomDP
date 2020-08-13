@@ -6,8 +6,8 @@
 \usage{
 read_data(
   id,
-  path,
-  file.type,
+  path = NULL,
+  file.type = NULL,
   site = "all",
   startdate = NA,
   enddate = NA,
