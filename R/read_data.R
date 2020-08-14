@@ -84,8 +84,8 @@ read_data <- function(
   
   # Validate input arguments --------------------------------------------------
   
-  # test <- validate_arguments("read_data", as.list(environment()))
-  # browser()
+  test <- validate_arguments("read_data", as.list(environment()))
+  browser()
   
   # Parameterize --------------------------------------------------------------
   

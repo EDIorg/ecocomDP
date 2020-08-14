@@ -134,146 +134,120 @@ testthat::test_that("validate_ecocomDP()", {
 
 testthat::test_that("read_data()", {
   
-  # id - If not valid, then a warning and NULL value is returned.
+  # id - If not valid, then error
   
   input <- formals(ecocomDP::read_data)
-  input$id <- c("invalid_identifier_1", "invalid_identifier_2", "edi.359.1")
-  expect_warning(
+  input$id <- "invalid_identifier_1"
+  expect_error(
     validate_arguments("read_data", input),
     regexp = "Invalid identifier \'.+\' cannot be read.")
   
-  r <- suppressWarnings(
-    validate_arguments(
-      "read_data",
-      as.list(
-        list(
-          id = c(
-            "invalid_identifier_1", 
-            "invalid_identifier_2", 
-            "edi.359.1")))))
-  expect_false("invalid_identifier_1" %in% r$id)
-  expect_false("invalid_identifier_2" %in% r$id)
-  expect_true("edi.359.1" %in% r$id)
+  input <- formals(ecocomDP::read_data)
+  input$id <- "edi.359.1"
+  expect_silent(
+    suppressWarnings(validate_arguments("read_data", input)))
+  
+  input <- formals(ecocomDP::read_data)
+  input$id <- "DP1.20120.001"
+  expect_silent(
+    validate_arguments("read_data", input))
   
   # id - If a newer revision exists, then id and a warning is returned.
   
+  input <- formals(ecocomDP::read_data)
+  input$id <- "edi.275.3"
   expect_warning(
-    validate_arguments(
-      "read_data",
-      as.list(
-        list(
-          id = c("edi.275.3", "edi.359.1")))),
+    validate_arguments("read_data", input),
     regexp = "A newer version of \'.+\' is available.")
-  
-  r <- suppressWarnings(
-    validate_arguments(
-      "read_data",
-      as.list(
-        list(
-          id = c("edi.275.3", "edi.359.1")))))
-  expect_true(
-    all(r$id %in% c("edi.275.3", "edi.359.1")))
   
   # path - Is valid
   
+  input <- formals(ecocomDP::read_data)
+  input$path <- "/some/invalid/path"
+  input$id <- "edi.359.1"
   expect_error(
-    validate_arguments(
-      "read_data",
-      as.list(list(path = "/some/invalid/path"))),
-    regexp = "Input \'path\' doesn\'t exist.")
+    suppressWarnings(validate_arguments("read_data", input)),
+    regexp = "Input \'path\' .+ doesn\'t exist.")
   
   # file.type - Is a supported type
   
+  input <- formals(ecocomDP::read_data)
+  input$file.type <- ".txt"
+  input$id <- "edi.359.1"
   expect_error(
-    validate_arguments(
-      "read_data",
-      as.list(list(file.type = ".txt"))),
+    suppressWarnings(validate_arguments("read_data", input)),
     regexp = "Unsupported 'file.type'. One of '.rda', '.csv' is expected.")
   
   # TODO: site - Exists for the data package/product identifier in the 
   # search_data() default output
-  
-  expect_error(
-    validate_arguments(
-      "read_data",
-      list(id = "DP1.20120.001", site = c("ARIK", "not a site"))),
-    regexp = "Unsupported \'site\'. Expected format is YYYY-MM.")
+  # 
+  # expect_error(
+  #   validate_arguments(
+  #     "read_data",
+  #     list(id = "DP1.20120.001", site = c("ARIK", "not a site"))),
+  #   regexp = "Unsupported \'site\'. Expected format is YYYY-MM.")
   
   # startdate - Character of YYYY-MM format, and MM is 1-12
   
+  input <- formals(ecocomDP::read_data)
+  input$id <- list(
+    DP1.20120.001 = list(
+      startdate = "2020-08-12"))
   expect_error(
-    validate_arguments(
-      "read_data",
-      as.list(list(startdate = "2020-08-12"))),
+    suppressWarnings(validate_arguments("read_data", input)),
     regexp = "Unsupported \'startdate\'. Expected format is YYYY-MM.")
   
+  input <- formals(ecocomDP::read_data)
+  input$id <- list(
+    DP1.20120.001 = list(
+      startdate = "2020-13"))
   expect_error(
-    validate_arguments(
-      "read_data",
-      as.list(list(startdate = "2020-13"))),
+    suppressWarnings(validate_arguments("read_data", input)),
     regexp = "Unsupported \'startdate\'. Expected format is YYYY-MM.")
-  
-  r <- validate_arguments(
-    "read_data",
-    as.list(list(startdate = "2020-12")))
-  expect_equal(r$startdate, "2020-12")
   
   # enddate - Character of YYYY-MM format
   
+  input <- formals(ecocomDP::read_data)
+  input$id <- list(
+    DP1.20120.001 = list(
+      enddate = "2020-08-12"))
   expect_error(
-    validate_arguments(
-      "read_data",
-      as.list(list(enddate = "2020-08-12"))),
+    suppressWarnings(validate_arguments("read_data", input)),
     regexp = "Unsupported \'enddate\'. Expected format is YYYY-MM.")
   
+  input <- formals(ecocomDP::read_data)
+  input$id <- list(
+    DP1.20120.001 = list(
+      enddate = "2020-13"))
   expect_error(
-    validate_arguments(
-      "read_data",
-      as.list(list(enddate = "2020-13"))),
+    suppressWarnings(validate_arguments("read_data", input)),
     regexp = "Unsupported \'enddate\'. Expected format is YYYY-MM.")
-  
-  r <- validate_arguments(
-    "read_data",
-    as.list(list(enddate = "2020-12")))
-  expect_equal(r$enddate, "2020-12")
   
   # check.size - Is logical
   
+  input <- formals(ecocomDP::read_data)
+  input$check.size <- 2
+  input$id <- "edi.359.1"
   expect_error(
-    validate_arguments(
-      "read_data",
-      as.list(list(check.size = 2))),
+    suppressWarnings(validate_arguments("read_data", input)),
     regexp = "Unsupported \'check.size\' input. Expected is TRUE or FALSE.")
-  
-  r <- validate_arguments(
-    "read_data",
-    as.list(list(check.size = TRUE)))
-  expect_equal(r$check.size, TRUE)
   
   # nCores - Is iteger
   
+  input <- formals(ecocomDP::read_data)
+  input$nCores <- 2.5
+  input$id <- "edi.359.1"
   expect_error(
-    validate_arguments(
-      "read_data",
-      as.list(list(nCores = 2.5))),
+    suppressWarnings(validate_arguments("read_data", input)),
     regexp = "Unsupported \'nCores\' input. Expected is an integer value.")
-  
-  r <- validate_arguments(
-    "read_data",
-    as.list(list(nCores = 2)))
-  expect_equal(r$nCores, 2)
   
   # forceParallel - Is logical
   
+  input <- formals(ecocomDP::read_data)
+  input$forceParallel <- "yes"
+  input$id <- "edi.359.1"
   expect_error(
-    validate_arguments(
-      "read_data",
-      as.list(list(forceParallel = "yes"))),
+    suppressWarnings(validate_arguments("read_data", input)),
     regexp = "Unsupported \'forceParallel\' input. Expected is TRUE or FALSE.")
-  
-  r <- validate_arguments(
-    "read_data",
-    as.list(list(forceParallel = TRUE)))
-  expect_equal(r$forceParallel, TRUE)
   
 })

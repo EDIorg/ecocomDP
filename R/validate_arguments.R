@@ -141,154 +141,152 @@ validate_arguments <- function(fun.name, fun.args) {
   
   if (fun.name == "read_data") {
     
-    # TODO: Consider adding id to warnings/errors so user knows which id it is
-    # associated with.
+    # id - Is required
+    
+    if (is.null(fun.args$id)) {
+      stop("Input 'id' is required.", call. = FALSE)
+    }
     
     # Because inputs to read_data() can vary (i.e. can be a vector of id, list 
     # of id with associated arguments), they need to be converted to a 
     # consistent format for processing.
-    
-    # Create an unnamed list of id with associated arguments
-    
+
     if (!is.list(fun.args$id)) {
-      fun.args <- lapply(
-        fun.args$id, 
-        function(x) {
-          fun.args$id <- x
-          fun.args
-        })
-    } else {
-      fun.args <- fun.args$id
-      fun.args <- lapply(
-        names(fun.args), 
-        function(x) {
-          if (is.null(fun.args[[x]])) {
-            output <- formals(read_data)
-            output$id <- x
-          } else {
-            output <- c(
-              formals(read_data)[
-                !(names(formals(read_data)) %in% names(fun.args[[x]]))],
-              fun.args[[x]])
-            output$id <- x
+      empty_list <- vector(mode = "list", length(fun.args$id))
+      names(empty_list) <- unlist(fun.args$id)
+      fun.args$id <- empty_list
+      # List default NEON arguments directly under id if missing
+      for (i in 1:length(fun.args$id)) {
+        if (stringr::str_detect(
+          names(fun.args$id)[i], "^DP.\\.[:digit:]+\\.[:digit:]+")) {
+          if (is.null(fun.args$id[[i]]$site)) {
+            fun.args$id[[i]]$site <- fun.args$site
           }
-          output
-        })
+          if (is.null(fun.args$id[[i]]$startdate)) {
+            fun.args$id[[i]]$startdate <- fun.args$startdate
+          }
+          if (is.null(fun.args$id[[i]]$enddate)) {
+            fun.args$id[[i]]$enddate <- fun.args$enddate
+          }
+        }
+      }
+      # Remove NEON defaults from top level
+      fun.args$site <- NULL
+      fun.args$startdate <- NULL
+      fun.args$enddate <- NULL
     }
     
-    # Validate general argument values (i.e. not associated with a specific id.
-    # Because of the replication of these argument values for each id in the 
-    # list (see previous section), only the first needs to be tested.
+    # Validate general argument values (i.e. not associated with a specific 
+    # id).
     
-    fun.args <- lapply(
-      fun.args[[1]],
-      function(x) {
-        
-        # path - Is valid
-        
-        if (!is.null(x$path)) {
-          if (!dir.exists(x$path)) {
-            stop("Input 'path' doesn't exist.", call. = FALSE)
-          }
-        }
-        
-        # file.type - Is a supported type
-        
-        if (!is.null(x$file.type)) {
-          if (!(x$file.type %in% c(".rda", ".csv"))) {
-            stop("Unsupported 'file.type'. One of '.rda', '.csv' is expected.", 
-                 call. = FALSE)
-          }
-        }
-        
-        # check.size - Is logical
-        
-        if (!is.null(x$check.size)) {
-          if (!is.logical(x$check.size)) {
-            stop("Unsupported 'check.size' input. Expected is TRUE or FALSE.", 
-                 call. = FALSE)
-          }
-        }
-        
-        # nCores - Is iteger
-        
-        if (!is.null(x$nCores)) {
-          if (!(x$nCores %% 1 == 0)) {
-            stop("Unsupported 'nCores' input. Expected is an integer value.", 
-                 call. = FALSE)
-          }
-        }
-        
-        # forceParallel - Is logical
-        
-        if (!is.null(x$forceParallel)) {
-          if (!is.logical(x$forceParallel)) {
-            stop("Unsupported 'forceParallel' input. Expected is TRUE or FALSE.", 
-                 call. = FALSE)
-          }
-        }
-        
-      })
-
+    # path - Is valid
+    
+    if (!is.null(fun.args$path)) {
+      if (!dir.exists(fun.args$path)) {
+        stop("Input 'path' (", fun.args$path, ") doesn't exist.", call. = FALSE)
+      }
+    }
+    
+    # file.type - Is a supported type
+    
+    if (!is.null(fun.args$file.type)) {
+      if (!(fun.args$file.type %in% c(".rda", ".csv"))) {
+        stop("Unsupported 'file.type'. One of '.rda', '.csv' is expected.", 
+             call. = FALSE)
+      }
+    }
+    
+    # check.size - Is logical
+    
+    if (!is.null(fun.args$check.size) & !is.logical(fun.args$check.size)) {
+      stop("Unsupported 'check.size' input. Expected is TRUE or FALSE.", 
+           call. = FALSE)
+    }
+    
+    # nCores - Is iteger
+    
+    if (!is.null(fun.args$check.size)) {
+      if (!(fun.args$nCores %% 1 == 0)) {
+        stop("Unsupported 'nCores' input. Expected is an integer value.", 
+             call. = FALSE)
+      }
+    }
+    
+    # forceParallel - Is logical
+    
+    if (!is.null(fun.args$check.size) & !is.logical(fun.args$forceParallel)) {
+      stop("Unsupported 'forceParallel' input. Expected is TRUE or FALSE.", 
+           call. = FALSE)
+    }
+    
     # Validate each id and corresponding set of argument values.
     
-    fun.args <- lapply(
-      fun.args,
-      function(x) {
-        
-        # id - Is required
-        
-        if (is.null(x$id)) {
-          stop("Input 'id' is required.", call. = FALSE)
-        }
-        
-        # id - Exists in the search_data() default output, otherwise the 
-        # invalid input is dropped and a warning issued. If a newer revision 
-        # exists, a warning is returned.
-        
-        x$id <- validate_id(x$id)
-        
-        # TODO: site - Exists in the search_data() default output
-        # 
-        # if (!is.null(x$id) & (x$site != "all")) {
-        #   fun.args$site <- unlist(
-        #     lapply(fun.args$site, validate_site))
-        # }
-        
-        # startdate - Character of YYYY-MM format, and MM is 1-12
-        
-        if (!is.na(x$startdate)) {
-          if (!stringr::str_detect(
-            x$startdate, "^[:digit:]{4}-[:digit:]{2}$")) {
-            stop("Unsupported 'startdate'. Expected format is YYYY-MM.", 
-                 call. = FALSE)
+    invisible(
+      lapply(
+        seq_along(fun.args$id),
+        function(x) {
+          id <- names(fun.args$id)[x]
+          
+          # id - Exists in the search_data() default output. If a newer revision 
+          # exists, a warning is returned.
+          
+          validate_id(id)
+          
+          # For a NEON id, validate associated argument values
+          
+          if (stringr::str_detect(id, "^DP.\\.[:digit:]+\\.[:digit:]+")) {
+
+            # site - Listed sites exist for a specified id
+            
+            if (!is.null(fun.args$id[[x]]$site)) {
+              if (fun.args$id[[x]]$site != "all") {
+                validate_site(id, site)
+              }
+            }
+            
+            # startdate - Character of YYYY-MM format, and MM is 1-12
+            
+            if (!is.null(fun.args$id[[x]]$startdate)) {
+              if (!is.na(fun.args$id[[x]]$startdate)) {
+                if (!stringr::str_detect(
+                  fun.args$id[[x]]$startdate, "^[:digit:]{4}-[:digit:]{2}$")) {
+                  stop("Unsupported 'startdate'. Expected format is YYYY-MM.", 
+                       call. = FALSE)
+                }
+                month <- as.integer(
+                  stringr::str_extract(
+                    fun.args$id[[x]]$startdate, "(?<=-)[:digit:]{2}$"))
+                if (!((month > 0) & (month <= 12))) {
+                  stop("Unsupported 'startdate'. Expected format is YYYY-MM.", 
+                       call. = FALSE)
+                }
+              }
+            }
+            
+            # enddate - Character of YYYY-MM format, and MM is 1-12
+            
+            if (!is.null(fun.args$id[[x]]$enddate)) {
+              if (!is.na(fun.args$id[[x]]$enddate)) {
+                if (!stringr::str_detect(
+                  fun.args$id[[x]]$enddate, "^[:digit:]{4}-[:digit:]{2}$")) {
+                  stop("Unsupported 'enddate'. Expected format is YYYY-MM.", 
+                       call. = FALSE)
+                }
+                month <- as.integer(
+                  stringr::str_extract(
+                    fun.args$id[[x]]$enddate, "(?<=-)[:digit:]{2}$"))
+                if (!((month > 0) & (month <= 12))) {
+                  stop("Unsupported 'enddate'. Expected format is YYYY-MM.", 
+                       call. = FALSE)
+                }
+              }
+            }
+            
           }
-          month <- as.integer(
-            stringr::str_extract(x$startdate, "(?<=-)[:digit:]{2}$"))
-          if (!((month > 0) & (month <= 12))) {
-            stop("Unsupported 'startdate'. Expected format is YYYY-MM.", 
-                 call. = FALSE)
-          }
-        }
-        
-        # enddate - Character of YYYY-MM format, and MM is 1-12
-        
-        if (!is.null(x$enddate)) {
-          if (!stringr::str_detect(x$enddate, "^[:digit:]{4}-[:digit:]{2}$")) {
-            stop("Unsupported 'enddate'. Expected format is YYYY-MM.", 
-                 call. = FALSE)
-          }
-          month <- as.integer(
-            stringr::str_extract(x$enddate, "(?<=-)[:digit:]{2}$"))
-          if (!((month > 0) & (month <= 12))) {
-            stop("Unsupported 'enddate'. Expected format is YYYY-MM.", 
-                 call. = FALSE)
-          }
-        }
-        
-      })
+          
+        }))
     
-    # Return modified inputs
+    # Return modified arguments
     
     return(fun.args)
     
@@ -306,13 +304,10 @@ validate_arguments <- function(fun.name, fun.args) {
 #' @param id
 #'     (character) A data package/product identifier for an ecocomDP dataset.
 #'     
-#' @return 
-#'     \item{id}{If valid, then \code{id} is returned along with a warning
-#'     if a newer revision exists.}
-#'     \item{NULL}{If invalid (i.e. not listed in the return of 
-#'     \code{search_data()}) along with a warning.}
-#'     
 #' @details 
+#'     If invalid (i.e. not listed in the return of \code{search_data()}), then
+#'     an error is returned.
+#' 
 #'     If the exact \code{id} is not indexed, but it is an EDI data package, 
 #'     then a set of logic determines if a newer version is indexed and 
 #'     available.
@@ -337,11 +332,9 @@ validate_id <- function(id) {
         }
       }
     } else {
-      warning("Invalid identifier '", id, "' cannot be read.", call. = FALSE)
-      id <- NULL
+      stop("Invalid identifier '", id, "' cannot be read.", call. = FALSE)
     }
   }
-  id
 }
 
 
@@ -360,13 +353,11 @@ validate_id <- function(id) {
 #'     data on. Sites are listed in the "sites" column of the 
 #'     \code{search_data()} output.
 #'     
-#' @return 
-#'     \item{site}{If valid, then \code{site} is returned.}
-#'     \item{NULL}{If invalid, then the errant \code{site} is dropped and a
-#'     warning is returned.}
-#'     
+#' @details 
+#'     If invalid (i.e. not listed in the return of \code{search_data()}), then
+#'     an error is returned.
 #' 
-validate_site <- function(site) {
+validate_site <- function(id, site) {
   search_index <- suppressMessages(search_data())
   browser()
   

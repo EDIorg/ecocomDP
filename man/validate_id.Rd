@@ -9,17 +9,14 @@ validate_id(id)
 \arguments{
 \item{id}{(character) A data package/product identifier for an ecocomDP dataset.}
 }
-\value{
-\item{id}{If valid, then \code{id} is returned along with a warning
-    if a newer revision exists.}
-    \item{NULL}{If invalid (i.e. not listed in the return of 
-    \code{search_data()}) along with a warning.}
-}
 \description{
 Validate data package/product identifier
 }
 \details{
-If the exact \code{id} is not indexed, but it is an EDI data package, 
+If invalid (i.e. not listed in the return of \code{search_data()}), then
+    an error is returned.
+
+    If the exact \code{id} is not indexed, but it is an EDI data package, 
     then a set of logic determines if a newer version is indexed and 
     available.
 }
