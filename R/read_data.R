@@ -184,7 +184,10 @@ read_data <- function(
           })
       }))
   
-  # Append package_id to primary keys to ensure referential integrity
+  # Append package_id to primary keys to ensure referential integrity (except
+  # package_id, appending package_id to package_id changes the field definition
+  # and shouldn't be neccessary as the package_id is very unlikely to be 
+  # duplicated).
   
   invisible(
     lapply(
@@ -197,8 +200,17 @@ read_data <- function(
               names(d[[x]]$tables[[y]]),
               function(z) {
                 if (stringr::str_detect(z, "_id")) {
-                  # except package_id, original_package_id, mapped_id, authority_taxon_id
-                  # special case for parent_location_id
+                  if (!(z %in% c("package_id", "original_package_id", 
+                               "mapped_id", "authority_taxon_id", 
+                               "parent_location_id"))) {
+                    d[[x]]$tables[[y]][[z]] <<- paste0(
+                      d[[x]]$tables[[y]][[z]], "_", x)
+                  } else if (z == "parent_location_id") {
+                    use_i <- is.na(d[[x]]$tables[[y]][[z]])
+                    d[[x]]$tables[[y]][[z]] <<- paste0(
+                      d[[x]]$tables[[y]][[z]], "_", x)
+                    d[[x]]$tables[[y]][[z]][use_i] <<- NA_character_
+                  }
                 }
               })
           })
