@@ -79,12 +79,14 @@
 #'       check.size = FALSE)))
 #' 
 read_data <- function(
-  id = NULL, path = NULL, file.type = ".rda", site = "all", startdate = NA, enddate = NA, 
-  check.size = FALSE, nCores = 1, forceParallel = FALSE) {
+  id = NULL, path = NULL, file.type = ".rda", site = "all", startdate = NA, 
+  enddate = NA, check.size = FALSE, nCores = 1, forceParallel = FALSE) {
   
   # Validate input arguments --------------------------------------------------
   
-  test <- validate_arguments("read_data", as.list(environment()))
+  
+  fun.args <- validate_arguments("read_data", as.list(environment()))
+  # TODO: Update function arguments and down stream handling.
   browser()
   
   # Parameterize --------------------------------------------------------------

@@ -4,14 +4,14 @@
 \alias{validate_site}
 \title{Validate site name (for NEON data products only)}
 \usage{
-validate_site(id, site)
+validate_site(site, id)
 }
 \arguments{
-\item{id}{(character) A data package/product identifier.}
-
 \item{site}{(character; NEON data only) A character vector of site codes to filter 
 data on. Sites are listed in the "sites" column of the 
 \code{search_data()} output.}
+
+\item{id}{(character) A data package/product identifier.}
 }
 \description{
 Validate site name (for NEON data products only)

@@ -239,8 +239,8 @@ validate_arguments <- function(fun.name, fun.args) {
             # site - Listed sites exist for a specified id
             
             if (!is.null(fun.args$id[[x]]$site)) {
-              if (fun.args$id[[x]]$site != "all") {
-                validate_site(id, site)
+              if (all(fun.args$id[[x]]$site != "all")) {
+                validate_site(fun.args$id[[x]]$site, id)
               }
             }
             
@@ -346,42 +346,26 @@ validate_id <- function(id) {
 
 #' Validate site name (for NEON data products only)
 #'
-#' @param id
-#'     (character) A data package/product identifier.
 #' @param site 
 #'     (character; NEON data only) A character vector of site codes to filter 
 #'     data on. Sites are listed in the "sites" column of the 
 #'     \code{search_data()} output.
+#' @param id
+#'     (character) A data package/product identifier.
 #'     
 #' @details 
 #'     If invalid (i.e. not listed in the return of \code{search_data()}), then
 #'     an error is returned.
 #' 
-validate_site <- function(id, site) {
+validate_site <- function(site, id) {
   search_index <- suppressMessages(search_data())
-  browser()
-  
-  if (!(id %in% search_index$id)) {
-    possible_revision <- stringr::str_detect(
-      id,
-      "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)")
-    if (possible_revision) {
-      indexed_identifiers <- stringr::str_extract(
-        search_index$id, ".+(?=\\.[:digit:]$)")
-      id_identifier <- stringr::str_extract(id, ".+(?=\\.[:digit:]$)")
-      if (id_identifier %in% indexed_identifiers) {
-        id_version <- stringr::str_extract(id, "[:digit:]$")
-        indexed_version <- stringr::str_extract(
-          search_index$id[which(id_identifier == indexed_identifiers)],
-          "[:digit:]$")
-        if (as.numeric(indexed_version) > as.numeric(id_version)) {
-          warning("A newer version of '", id, "' is available.", call. = FALSE)
-        }
-      }
-    } else {
-      id <- NULL
-      warning("Invalid identifier '", id, "' cannot be read.", call. = FALSE)
-    }
+  available_sites <- unlist(
+    stringr::str_split(
+      search_index$sites[search_index$id == id], 
+      ","))
+  site_exists <- site %in% available_sites
+  if (!all(site_exists)) {
+    stop("Sites not available in ", id, ": ", paste(site[!site_exists], collapse = ", "), 
+         call. = FALSE)
   }
-  id
 }
