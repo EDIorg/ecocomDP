@@ -49,7 +49,7 @@ meet minimum requirements to run in parallel, this overrides. Defaults
 to FALSE.}
 }
 \value{
-(list) A named list, including: 
+(list) A named list of \code{id}, each including: 
     \item{metadata}{A list of information about the data.}
     \item{tables}{A list of data.frames following the ecocomDP format 
     (\url{https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md})}
@@ -92,7 +92,8 @@ d <- read_data(
     DP1.20166.001 = list(
       site = c("MAYF", "PRIN"),
       startdate = "2016-1",
-      enddate = "2018-11",
-      check.size = FALSE)))
-
+      enddate = "2018-11")),
+  check.size = TRUE,
+  nCores = 2,
+  forceParallel = FALSE)
 }

@@ -33,7 +33,7 @@
 #'     to FALSE.
 #'     
 #' @return
-#'     (list) A named list, including: 
+#'     (list) A named list of \code{id}, each including: 
 #'     \item{metadata}{A list of information about the data.}
 #'     \item{tables}{A list of data.frames following the ecocomDP format 
 #'     (\url{https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md})}
@@ -75,9 +75,10 @@
 #'     DP1.20166.001 = list(
 #'       site = c("MAYF", "PRIN"),
 #'       startdate = "2016-1",
-#'       enddate = "2018-11",
-#'       check.size = FALSE)))
-#' 
+#'       enddate = "2018-11")),
+#'   check.size = TRUE,
+#'   nCores = 2,
+#'   forceParallel = FALSE)
 read_data <- function(
   id = NULL, path = NULL, file.type = ".rda", site = "all", startdate = NA, 
   enddate = NA, check.size = FALSE, nCores = 1, forceParallel = FALSE) {
@@ -86,8 +87,15 @@ read_data <- function(
   
   
   fun.args <- validate_arguments("read_data", as.list(environment()))
-  # TODO: Update function arguments and down stream handling.
-  browser()
+  id <- fun.args$id
+  path <- fun.args$path
+  file.type <- fun.args$file.type
+  site <- fun.args$site
+  startdate <- fun.args$startdate
+  enddate <- fun.args$enddate
+  check.size <- fun.args$check.size
+  nCores <- fun.args$nCores
+  forceParallel <- fun.args$forceParallel
   
   # Parameterize --------------------------------------------------------------
   
@@ -106,19 +114,15 @@ read_data <- function(
         x, 
         "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)")) {
         read_data_edi(x)
-      } else if (stringr::str_detect(x, "^DP1")) {
-        if (is.null(id[[x]])) {
-          map_neon_data_to_ecocomDP(
-            neon.data.product.id = x,
-            site = site,
-            startdate = startdate,
-            enddate = enddate,
-            check.size = check.size,
-            nCores = nCores,
-            forceParallel = FALSE)
-        } else {
-          do.call(map_neon_data_to_ecocomDP, c(neon.data.product.id = x, id[[x]]))
-        }
+      } else if (stringr::str_detect(x, "^DP.\\.[:digit:]+\\.[:digit:]+")) {
+        map_neon_data_to_ecocomDP(
+          neon.data.product.id = x,
+          site = id[[x]]$site,
+          startdate = id[[x]]$startdate,
+          enddate = id[[x]]$enddate,
+          check.size = check.size,
+          nCores = nCores,
+          forceParallel = forceParallel)
       }
     })
   names(d) <- names(id)
@@ -209,7 +213,7 @@ read_data <- function(
   
   # Return --------------------------------------------------------------------
   
-  if (!is.null(path) & !null(file.type)) {
+  if (!is.null(path)) {
     save_data(d, path, file.type)
   }
   
