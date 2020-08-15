@@ -79,12 +79,12 @@
 #'   check.size = TRUE,
 #'   nCores = 2,
 #'   forceParallel = FALSE)
+#'   
 read_data <- function(
   id = NULL, path = NULL, file.type = ".rda", site = "all", startdate = NA, 
   enddate = NA, check.size = FALSE, nCores = 1, forceParallel = FALSE) {
   
   # Validate input arguments --------------------------------------------------
-  
   
   fun.args <- validate_arguments("read_data", as.list(environment()))
   id <- fun.args$id
@@ -155,18 +155,6 @@ read_data <- function(
       }))
   
   # Coerce column classes to ecocomDP specifications.
-  # FIXME Harmonize date formats of different temporal resolutions
-  
-  col2class <- function(column, class){
-    if (class == 'character'){
-      column <- as.character(column)
-    } else if (class == 'numeric'){
-      column <- as.numeric(column)
-    } else if (class == 'Date'){
-      column <- lubridate::ymd(column)
-    }
-    column
-  }
   
   invisible(
     lapply(
@@ -196,13 +184,25 @@ read_data <- function(
           })
       }))
   
+  # Append package_id to primary keys to ensure referential integrity
   
-  # Ensure referential integrity
-  
-  # if (length(id) > 1) {
-  #   # Append package_id to primary keys to ensure referential integrity
-  #   
-  # }
+  invisible(
+    lapply(
+      names(d),
+      function(x){
+        lapply(
+          names(d[[x]]$tables),
+          function(y) {
+            lapply(
+              names(d[[x]]$tables[[y]]),
+              function(z) {
+                if (stringr::str_detect(z, "_id")) {
+                  # except package_id, original_package_id, mapped_id, authority_taxon_id
+                  # special case for parent_location_id
+                }
+              })
+          })
+      }))
   
   # Validate ------------------------------------------------------------------
   
