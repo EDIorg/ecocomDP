@@ -42,22 +42,28 @@ criteria_2 <- criteria[
 # Datetime format is valid ----------------------------------------------------
 
 # Fix datetime issues in location_ancillary
-
-x <- data.list$location_ancillary$data$datetime
-x <- dataCleanr::iso8601_char(
+data.list <- d
+x <- data.list$location_ancillary$datetime
+x <- dataCleanr::iso8601_convert(
   x = x,
   orders = c('ymd', 'dmy')
   )
-data.list$location_ancillary$data$datetime <- x
+data.list$location_ancillary$datetime <- x
 
 # Fix datetime issues in observation
 
-x <- data.list$observation$data$observation_datetime
-x <- dataCleanr::iso8601_char(
+x <- data.list$observation$observation_datetime
+x <- dataCleanr::iso8601_convert(
   x = x,
   orders = c('ymd', 'dmy')
 )
-data.list$observation$data$observation_datetime <- x
+data.list$observation$observation_datetime <- x
+
+d <- data.list
+
+data.table::fwrite(data.list$observation, paste0(readClipboard(), "/observation.csv"))
+
+data.table::fwrite(data.list$location_ancillary, paste0(readClipboard(), "/location_ancillary.csv"))
 
 # Expect message
 

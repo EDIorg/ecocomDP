@@ -17,9 +17,6 @@ Duplicate file names are not allowed.}
 \description{
 Read ecocomDP from files
 }
-\note{
-This function will deprecate \code{read_ecocomDP_table()}
-}
 \examples{
 d <- read_from_files(system.file("/data", package = "ecocomDP"))
 

@@ -93,20 +93,18 @@ validate_ecocomDP <- function(
 #' Check for file name errors
 #' 
 #' @description
-#'     This function ensures that your ecocomDP (L1) tables follow the
-#'     file naming convention (i.e. \emph{studyName_ecocomDPTableName.ext},
-#'     e.g. \emph{gleon_chloride_observation.csv}).
+#'     This function ensures that ecocomDP file names follow the naming 
+#'     convention (i.e. \emph{studyName_ecocomDPTableName.ext}, e.g. 
+#'     \emph{gleon_chloride_observation.csv}).
 #' 
 #' @param data.path
-#'     (character) The path to the directory containing ecocomDP tables.
+#'     (character) Path to the directory containing ecocomDP tables.
 #' 
 #' @return
-#'     If table names are valid, then the corresponding table names are
-#'     returned. If table names are invalid, then an error message is
+#'     (character) If table names are valid, then the corresponding table names 
+#'     are returned. If table names are invalid, then an error message is
 #'     returned.
 #'     
-#' @export
-#'
 validate_table_names <- function(data.path = NULL) {
   
   message("File names")
@@ -180,8 +178,8 @@ validate_table_presence <- function(data.list) {
   expected <- criteria$table[
     (is.na(criteria$class)) & (criteria$required == TRUE)]
   required_missing <- expected[!(expected %in% names(data.list))]
-  if (any(required_missing)) {
-    stop("These tables are missing tables: ", 
+  if (length(required_missing) != 0) {
+    stop("These required tables are missing: ", 
          paste(required_missing, collapse = ", "),
          call. = FALSE)
   }
@@ -217,19 +215,20 @@ validate_column_names <- function(data.list) {
   
   # Validate
   
-  lapply(
-    names(data.list),
-    function(x) {
-      expected <- criteria$column[
-        (criteria$table %in% x) & !is.na(criteria$column)]
-      invalid_columns <- !(colnames(data.list[[x]]) %in% expected)
-      if (any(invalid_columns)) {
-        stop(
-          "The ", x, " table has these invalid column names: ",
-          paste(colnames(data.list[[x]])[invalid_columns], collapse = ", "),
-          call. = FALSE)
-      }
-    })
+  invisible(
+    lapply(
+      names(data.list),
+      function(x) {
+        expected <- criteria$column[
+          (criteria$table %in% x) & !is.na(criteria$column)]
+        invalid_columns <- !(colnames(data.list[[x]]) %in% expected)
+        if (any(invalid_columns)) {
+          stop(
+            "The ", x, " table has these invalid column names: ",
+            paste(colnames(data.list[[x]])[invalid_columns], collapse = ", "),
+            call. = FALSE)
+        }
+      }))
   
 }
 
@@ -267,24 +266,25 @@ validate_column_presence <- function(data.list){
   
   # Validate
   
-  lapply(
-    names(data.list),
-    function(x) {
-      expected <- criteria$column[
-        (criteria$table %in% x) & 
-          !is.na(criteria$column) & 
-          (criteria$required == TRUE)]
-      if ((x == "observation") & ("observation_ancillary" %in% names(data.list))) {
-        expected <- c(expected, "event_id")
-      }
-      missing_columns <- !(expected %in% colnames(data.list[[x]]))
-      if (any(missing_columns)) {
-        stop(
-          "The ", x, " table is missing these required columns: ",
-          paste(colnames(data.list[[x]])[missing_columns], collapse = ", "),
-          call. = FALSE)
-      }
-    })
+  invisible(
+    lapply(
+      names(data.list),
+      function(x) {
+        expected <- criteria$column[
+          (criteria$table %in% x) & 
+            !is.na(criteria$column) & 
+            (criteria$required == TRUE)]
+        if ((x == "observation") & ("observation_ancillary" %in% names(data.list))) {
+          expected <- c(expected, "event_id")
+        }
+        missing_columns <- !(expected %in% colnames(data.list[[x]]))
+        if (any(missing_columns)) {
+          stop(
+            "The ", x, " table is missing these required columns: ",
+            paste(expected[missing_columns], collapse = ", "),
+            call. = FALSE)
+        }
+      }))
 
 }
 
@@ -318,43 +318,44 @@ validate_datetime <- function(data.list) {
   
   # Validate
   
-  lapply(
-    names(data.list),
-    function(x) {
-      datetime_column <- criteria$column[
-        (criteria$table %in% x) &
-          (criteria$class == "Date") &
-          !is.na(criteria$column)]
-      if (length(datetime_column) > 0) {
-        # Difference in NA count induced by coercion indicates a non-valid 
-        # format
-        v <- data.list[[x]][[datetime_column]]
-        na_count_raw <- sum(is.na(v))
-        use_i <- suppressWarnings(
-          list(
-            lubridate::parse_date_time(v, "ymdHMS"),
-            lubridate::parse_date_time(v, "ymdHM"),
-            lubridate::parse_date_time(v, "ymdH"),
-            lubridate::parse_date_time(v, "ymd")))
-        na_count_parsed <- unlist(
-          lapply(
-            use_i,
-            function(k) {
-              sum(is.na(k))
-            }))
-        if (min(na_count_parsed) > na_count_raw) {
-          use_i <- seq(
-            length(v))[
-              is.na(
-                use_i[[
-                  which(na_count_parsed %in% min(na_count_parsed))]])]
-          stop(
-            "The ", x, "table has unsupported datetime formats at rows: ", 
-            paste(use_i, collapse = ' '),
-            call. = F)
+  invisible(
+    lapply(
+      names(data.list),
+      function(x) {
+        datetime_column <- criteria$column[
+          (criteria$table %in% x) &
+            (criteria$class == "Date") &
+            !is.na(criteria$column)]
+        if (length(datetime_column) > 0) {
+          # Difference in NA count induced by coercion indicates a non-valid 
+          # format
+          v <- data.list[[x]][[datetime_column]]
+          na_count_raw <- sum(is.na(v))
+          use_i <- suppressWarnings(
+            list(
+              lubridate::parse_date_time(v, "ymdHMS"),
+              lubridate::parse_date_time(v, "ymdHM"),
+              lubridate::parse_date_time(v, "ymdH"),
+              lubridate::parse_date_time(v, "ymd")))
+          na_count_parsed <- unlist(
+            lapply(
+              use_i,
+              function(k) {
+                sum(is.na(k))
+              }))
+          if (min(na_count_parsed) > na_count_raw) {
+            use_i <- seq(
+              length(v))[
+                is.na(
+                  use_i[[
+                    which(na_count_parsed %in% min(na_count_parsed))]])]
+            stop(
+              "The ", x, " table has unsupported datetime formats at rows: ", 
+              paste(use_i, collapse = ' '),
+              call. = F)
+          }
         }
-      }
-    })
+      }))
 
 }
 
@@ -585,84 +586,6 @@ validate_referential_integrity <- function(data.list) {
 
 
 
-# Helper functions ------------------------------------------------------------
-
-# Retrieves the name of the L1 table from the input file name.
-is_table_rev <- function(file.name, L1.table.names){
-  required_table_pattern <- paste0(L1.table.names, "\\b")
-  if (sum(stringr::str_detect(file.name, required_table_pattern)) == 1){
-    L1.table.names[stringr::str_detect(file.name, required_table_pattern)]
-  }
-}
-
-
-
-
-
-
-
-
-read_ecocomDP_table <- function(data.path = NULL, file.name, package.id = NULL, entity.id = NULL){
-  
-  .Deprecated(
-    new = 'read_from_files',
-    package = 'ecocomDP',
-    old = 'read_ecocomDP_table')
-  
-  if (!is.null(data.path)){
-    
-    sep <- EDIutils::detect_delimeter(
-      path = data.path,
-      data.files = file.name,
-      os = EDIutils::detect_os()
-    )
-    
-    x <- read.table(
-      paste0(data.path, "/", file.name),
-      header = T,
-      sep = sep,
-      as.is = T,
-      quote = "\"",
-      comment.char = ""
-    )
-    
-  } else if (!is.null(package.id)){
-    
-    eml <- suppressMessages(
-      EDIutils::api_read_metadata(package.id)
-    )
-    
-    files <- xml2::xml_text(
-      xml2::xml_find_all(eml, "//dataset/dataTable/entityName"))
-    
-    use_i <- match(file.name, files)
-    
-    sep <- xml2::xml_text(
-      xml2::xml_find_all(
-        eml, 
-        "//dataset/dataTable/physical/dataFormat/textFormat/simpleDelimited/fieldDelimiter"))[use_i]
-    
-    data_url <- xml2::xml_text(
-      xml2::xml_find_all(
-        eml, 
-        "//dataset/dataTable/physical/distribution/online/url"))[use_i]
-    
-    x <- data.table::fread(data_url)
-    
-  }
-  
-  list(data = x, fname = file.name)
-  
-}
-
-
-
-
-
-
-
-
-
 #' Read ecocomDP from files
 #'
 #' @param data.path 
@@ -672,9 +595,6 @@ read_ecocomDP_table <- function(data.path = NULL, file.name, package.id = NULL, 
 #' @return
 #'     (list) A named list of data frames, each with the contents of the 
 #'     corresponding file. Names follow ecocomDP specification.
-#'     
-#' @note 
-#'     This function will deprecate \code{read_ecocomDP_table()}
 #'
 #' @examples
 #' d <- read_from_files(system.file("/data", package = "ecocomDP"))
