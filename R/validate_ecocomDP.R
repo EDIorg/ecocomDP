@@ -72,8 +72,8 @@ validate_ecocomDP <- function(
   validate_table_presence(d)
   validate_column_names(d)
   validate_column_presence(d)
-  validate_datetime(d)
   validate_column_classes(d)
+  validate_datetime(d)
   validate_primary_keys(d)
   validate_composite_keys(d)
   validate_referential_integrity(d)
@@ -327,9 +327,9 @@ validate_datetime <- function(data.list) {
             (criteria$class == "Date") &
             !is.na(criteria$column)]
         if (length(datetime_column) > 0) {
+          v <- data.list[[x]][[datetime_column]]
           # Difference in NA count induced by coercion indicates a non-valid 
           # format
-          v <- data.list[[x]][[datetime_column]]
           na_count_raw <- sum(is.na(v))
           use_i <- suppressWarnings(
             list(
@@ -577,45 +577,4 @@ validate_referential_integrity <- function(data.list) {
           }))
     })
   
-}
-
-
-
-
-
-
-
-
-#' Read ecocomDP from files
-#'
-#' @param data.path 
-#'     (character) The path to the directory containing ecocomDP tables. 
-#'     Duplicate file names are not allowed.
-#'
-#' @return
-#'     (list) A named list of data frames, each with the contents of the 
-#'     corresponding file. Names follow ecocomDP specification.
-#'
-#' @examples
-#' d <- read_from_files(system.file("/data", package = "ecocomDP"))
-#' 
-#' @export
-#' 
-read_from_files <- function(data.path) {
-  criteria <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
-  d <- lapply(
-    unique(criteria$table),
-    function(x) {
-      ecocomDP_table <- stringr::str_detect(
-        list.files(data.path), 
-        paste0("(?<=.{0,10000})", x, "(?=\\.[:alnum:]*$)"))
-      if (any(ecocomDP_table)) {
-        data.table::fread(
-          paste0(data.path, "/", list.files(data.path)[ecocomDP_table]))
-      }
-    })
-  names(d) <- unique(criteria$table)
-  d[sapply(d, is.null)] <- NULL
-  d
 }

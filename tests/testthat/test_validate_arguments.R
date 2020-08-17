@@ -7,7 +7,8 @@ library(ecocomDP)
 
 # Parameterize ----------------------------------------------------------------
 
-test_data <- read_from_files(system.file("/data", package = "ecocomDP"))
+test_data <- read_from_files(
+  system.file("/data", package = "ecocomDP"))[[1]]$tables
 search_index <- search_data()
 
 # search_data() ---------------------------------------------------------------

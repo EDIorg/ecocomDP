@@ -9,7 +9,7 @@ library(ecocomDP)
 
 # Use the example dataset for testing
 
-test_data <- read_from_files(system.file("/data", package = "ecocomDP"))
+test_data <- read_from_files(system.file("/data", package = "ecocomDP"))[[1]]$tables
 test_data_file_names <- dir(
   system.file("/data", package = "ecocomDP"), pattern = "Ant_Assemblages_")
 
@@ -138,9 +138,17 @@ testthat::test_that("validate_datetime()", {
   
   # Return message when datetime formats are valid.
   
-  validate_datetime(d)
+  expect_message(
+    validate_datetime(d),
+    regexp = "Datetime formats")
   
   # Return error when datetime formats are invalid.
+  
+  d$observation$observation_datetime[1:2] <- c("01/02/2003", "01/02/2003")
+  
+  expect_error(
+    validate_datetime(d),
+    "The .+ table has unsupported datetime formats at rows:")
   
 })
 
@@ -148,7 +156,7 @@ testthat::test_that("validate_datetime()", {
 
 testthat::test_that("validate_column_classes()", {
   
-  
+  # TODO: Ensure datetime is character class 
   
 })
 

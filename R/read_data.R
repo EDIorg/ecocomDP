@@ -154,7 +154,10 @@ read_data <- function(
           })
       }))
   
-  # Coerce column classes to ecocomDP specifications.
+  # Coerce column classes to ecocomDP specifications. NOTE: This same 
+  # process is applied to read_from_files(). Any update here should be
+  # duplicated there. A function is not used in order to minimize data object
+  # copies.
   
   invisible(
     lapply(
@@ -168,16 +171,15 @@ read_data <- function(
               function(z) {
                 detected <- class(d[[x]]$tables[[y]][[z]])
                 expected <- attr_tbl$class[(attr_tbl$table == y) & (attr_tbl$column == z)]
-                if (all(detected %in% c("POSIXct", "POSIXt"))) {
+                if (any(detected %in% c("POSIXct", "POSIXt", "Date", "IDate"))) {
                   detected <- "Date"
+                  d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
                 }
                 if (detected != expected) {
                   if (expected == 'character'){
                     d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
                   } else if (expected == 'numeric'){
                     d[[x]]$tables[[y]][[z]] <<- as.numeric(d[[x]]$tables[[y]][[z]])
-                  } else if (expected == 'Date'){
-                    d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
                   }
                 }
               })
@@ -291,32 +293,13 @@ read_data_edi <- function(id) {
       }))
   
   # Read tables
-  # Create globally uniqe identifiers by appending package ID to primary and 
-  # foreign keys.
   
   output <- lapply(
     names(tbl_attrs),
     function(x) {
-      d <- data.table::fread(
+      data.table::fread(
         tbl_attrs[[x]]$url, 
         sep = tbl_attrs[[x]]$delimiter)
-      # TODO: Add missing columns
-      
-      # # TODO: Move to join_data()
-      # d <- dplyr::mutate_at(
-      #   d, 
-      #   .vars = na.omit(attr_tbl$column[
-      #     (attr_tbl$table == x) & (attr_tbl$globally_unique == 'yes')]),
-      #   .funs = function(k){
-      #     paste0(k, '_', id)
-      #   })
-      
-      # Clean up byproducts created with globally unique identifiers
-      if (x == 'location') {
-        d$parent_location_id[
-          stringr::str_detect(d$parent_location_id, 'NA')] <- NA_character_
-      }
-      d
     })
   names(output) <- names(tbl_attrs)
   list(
@@ -325,6 +308,91 @@ read_data_edi <- function(id) {
   
 }
 
+
+
+
+
+
+
+
+#' Read ecocomDP from files
+#'
+#' @param data.path 
+#'     (character) The path to the directory containing ecocomDP tables. 
+#'     Duplicate file names are not allowed.
+#'
+#' @return
+#'     (list) A named list of \code{id}, each including: 
+#'     \item{metadata}{A list of information about the data.}
+#'     \item{tables}{A list of data.frames following the ecocomDP format 
+#'     (\url{https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md})}
+#'
+#' @examples
+#' d <- read_from_files(system.file("/data", package = "ecocomDP"))
+#' 
+#' @export
+#' 
+read_from_files <- function(data.path) {
+  
+  attr_tbl <- data.table::fread(
+    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  attr_tbl <- attr_tbl[!is.na(attr_tbl$column), ]
+  
+  d <- lapply(
+    unique(attr_tbl$table),
+    function(x) {
+      ecocomDP_table <- stringr::str_detect(
+        list.files(data.path), 
+        paste0("(?<=.{0,10000})", x, "(?=\\.[:alnum:]*$)"))
+      if (any(ecocomDP_table)) {
+        data.table::fread(
+          paste0(data.path, "/", list.files(data.path)[ecocomDP_table]))
+      }
+    })
+  names(d) <- unique(attr_tbl$table)
+  d[sapply(d, is.null)] <- NULL
+  
+  # TODO: Read metadata from EML if exists in data.path
+  d <- list(
+    list(metadata = NULL, tables = d))
+  names(d) <- d[[1]]$tables$dataset_summary$package_id
+  
+  # Coerce column classes to ecocomDP specifications. NOTE: This same 
+  # process is applied to read_data(). Any update here should be
+  # duplicated there. A function is not used in order to minimize data object
+  # copies.
+  
+  invisible(
+    lapply(
+      names(d),
+      function(x){
+        lapply(
+          names(d[[x]]$tables),
+          function(y) {
+            lapply(
+              names(d[[x]]$tables[[y]]),
+              function(z) {
+                detected <- class(d[[x]]$tables[[y]][[z]])
+                expected <- attr_tbl$class[(attr_tbl$table == y) & (attr_tbl$column == z)]
+                if (any(detected %in% c("POSIXct", "POSIXt", "Date", "IDate"))) {
+                  detected <- "Date"
+                  d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
+                }
+                if (detected != expected) {
+                  if (expected == 'character'){
+                    d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
+                  } else if (expected == 'numeric'){
+                    d[[x]]$tables[[y]][[z]] <<- as.numeric(d[[x]]$tables[[y]][[z]])
+                  }
+                }
+              })
+          })
+      }))
+  
+  # Return
+  
+  d
+}
 
 
 
