@@ -180,6 +180,8 @@ read_data <- function(
                     d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
                   } else if (expected == 'numeric'){
                     d[[x]]$tables[[y]][[z]] <<- as.numeric(d[[x]]$tables[[y]][[z]])
+                  } else if (expected == 'Date'){
+                    d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
                   }
                 }
               })
@@ -383,6 +385,8 @@ read_from_files <- function(data.path) {
                     d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
                   } else if (expected == 'numeric'){
                     d[[x]]$tables[[y]][[z]] <<- as.numeric(d[[x]]$tables[[y]][[z]])
+                  } else if (expected == 'Date'){
+                    d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
                   }
                 }
               })

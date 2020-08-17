@@ -387,39 +387,40 @@ validate_column_classes <- function(data.list) {
 
   # Validate
   
-  lapply(
-    names(data.list),
-    function(x) {
-      lapply(
-        colnames(data.list[[x]]),
-        function(k) {
-          expected <- criteria$class[
-            (criteria$table %in% x) &
-              !is.na(criteria$column) &
-              (criteria$column %in% k)]
-          detected <- class(data.list[[x]][[k]])
-          if (expected == "numeric") {
-            if ((detected != "integer") &
-                (detected != "integer64") &
-                (detected != "double") &
-                (detected != "numeric")) {
+  invisible(
+    lapply(
+      names(data.list),
+      function(x) {
+        lapply(
+          colnames(data.list[[x]]),
+          function(k) {
+            expected <- criteria$class[
+              (criteria$table %in% x) &
+                !is.na(criteria$column) &
+                (criteria$column %in% k)]
+            detected <- class(data.list[[x]][[k]])
+            if (expected == "numeric") {
+              if ((detected != "integer") &
+                  (detected != "integer64") &
+                  (detected != "double") &
+                  (detected != "numeric")) {
                 issues <- list(
                   column = k, expected = expected, detected = detected)
+              }
+            } else if (expected == "Date") {
+              if (detected != "character") {
+                issues <- list(
+                  column = k, expected = expected, detected = detected)
+              }
             }
-          } else if (expected == "Date") {
-            if (detected != "character") {
-              issues <- list(
-                column = k, expected = expected, detected = detected)
+            if (exists("issues")) {
+              stop(
+                "The ", k, " column in the ", x, " table has a ", detected, 
+                " class but a ", expected, " class is expected.", 
+                call. = FALSE)
             }
-          }
-          if (exists("issues")) {
-            stop(
-              "The ", k, " column in the ", x, " table has a ", detected, 
-              " class but a ", expected, " class is expected.", 
-              call. = FALSE)
-          }
-        })
-    })
+          })
+      }))
 
 }
 
@@ -450,21 +451,22 @@ validate_primary_keys <- function(data.list) {
   
   # Validate
   
-  lapply(
-    names(data.list),
-    function(x) {
-      primary_key <- criteria$column[
-        (criteria$table == x) & 
-          !is.na(criteria$primary_key) & 
-          (criteria$primary_key == TRUE)]
-      v <- data.list[[x]][[primary_key]]
-      use_i <- seq(nrow(v))[duplicated(v)]
-      if (length(use_i) > 0) {
-        stop("The column ", primary_key, " in the table ", x, 
-             " contains non-unique primary keys in rows: ", 
-             paste(use_i, collapse = " "), call. = FALSE)
-      }
-    })
+  invisible(
+    lapply(
+      names(data.list),
+      function(x) {
+        primary_key <- criteria$column[
+          (criteria$table == x) & 
+            !is.na(criteria$primary_key) & 
+            (criteria$primary_key == TRUE)]
+        v <- data.list[[x]][[primary_key]]
+        use_i <- seq(length(v))[duplicated(v)]
+        if (length(use_i) > 0) {
+          stop("The column ", primary_key, " in the table ", x, 
+               " contains non-unique primary keys in rows: ", 
+               paste(use_i, collapse = " "), call. = FALSE)
+        }
+      }))
 
 }
 
@@ -495,24 +497,28 @@ validate_composite_keys <- function(data.list) {
   
   # Validate
   
-  lapply(
-    names(data.list),
-    function(x) {
-      composite_columns <- criteria$column[
-        (criteria$table == x) & 
-          !is.na(criteria$column) & 
-          (criteria$composite_key == TRUE)]
-      if (length(composite_columns) > 0) {
-        d <- dplyr::select(data.list[[x]], composite_columns)
-        duplicates <- seq(nrow(d))[duplicated.data.frame(d)]
-        if (length(duplicates) > 0) {
-          stop("The composite keys composed of the columns ", 
-               paste(composite_columns, collapse = ", "), ", in the table ", 
-               x, " contain non-unique values in rows: ", 
-               paste(duplicates, collapse = " "), call. = FALSE)
+  invisible(
+    lapply(
+      names(data.list),
+      function(x) {
+        composite_columns <- criteria$column[
+          (criteria$table == x) & 
+            !is.na(criteria$column) & 
+            (criteria$composite_key == TRUE)]
+        if (length(composite_columns) > 0) {
+          # if (x == "observation") {
+          #   browser()
+          # }
+          d <- dplyr::select(data.list[[x]], composite_columns)
+          duplicates <- seq(nrow(d))[duplicated.data.frame(d)]
+          if (length(duplicates) > 0) {
+            stop("The composite keys composed of the columns ", 
+                 paste(composite_columns, collapse = ", "), ", in the table ", 
+                 x, " contain non-unique values in rows: ", 
+                 paste(duplicates, collapse = " "), call. = FALSE)
+          }
         }
-      }
-    })
+      }))
   
 }
 

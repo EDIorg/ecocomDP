@@ -156,7 +156,22 @@ testthat::test_that("validate_datetime()", {
 
 testthat::test_that("validate_column_classes()", {
   
-  # TODO: Ensure datetime is character class 
+  d <- test_data
+  
+  # Return message when column classes are valid.
+  
+  expect_message(
+    validate_column_classes(d),
+    regexp = "Column classes")
+  
+  # Return error when column classes are invalid.
+  
+  d$observation$observation_datetime <- as.numeric(
+    d$observation$observation_datetime)
+  
+  expect_error(
+    validate_column_classes(d),
+    "The .+ column in the .+ table has a .+ class but a .+ class is expected.")
   
 })
 
@@ -164,7 +179,21 @@ testthat::test_that("validate_column_classes()", {
 
 testthat::test_that("validate_primary_keys()", {
   
+  d <- test_data
   
+  # Unique primary keys result in message.
+  
+  expect_message(
+    validate_primary_keys(d),
+    regexp = "Primary keys")
+  
+  # Non-unique primary keys result in NULL output.
+  
+  d$taxon_ancillary$taxon_ancillary_id[4:6] <- c("txan_1", "txan_2", "txan_3")
+  
+  expect_error(
+    validate_primary_keys(d),
+    regexp = "The column .+ in the table .+ contains non-unique primary keys")
   
 })
 
@@ -172,7 +201,24 @@ testthat::test_that("validate_primary_keys()", {
 
 testthat::test_that("validate_composite_keys()", {
   
+  d <- test_data
   
+  # Unique composite keys result in message.
+  
+  expect_message(
+    validate_composite_keys(d),
+    regexp = "Composite keys")
+  
+  # Non-unique keys result in error.
+  
+  d$observation$location_id[1:2] <- c("loc_1", "loc_1")
+  d$observation$observation_datetime[1:2] <- c("date_1", "date_1")
+  d$observation$taxon_id[1:2] <- c("tx_1", "tx_1")
+  d$observation$variable_name[1:2] <- c("v1", "v1")
+  
+  expect_error(
+    validate_composite_keys(d),
+    regexp = "The composite keys composed of the columns .+")
   
 })
 
