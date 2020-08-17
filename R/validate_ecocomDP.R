@@ -67,16 +67,22 @@ validate_ecocomDP <- function(
 
   # Validate data -------------------------------------------------------------
   
+  # Gather all validation issues and compile into a single report as this 
+  # provides the user more information for trouble shooting and assessment than
+  # only seeing the first issue encountered.
+  
   message("Validating:")
   
-  validate_table_presence(d)
-  validate_column_names(d)
-  validate_column_presence(d)
-  validate_column_classes(d)
-  validate_datetime(d)
-  validate_primary_keys(d)
-  validate_composite_keys(d)
-  validate_referential_integrity(d)
+  issues_table_presence <- validate_table_presence(d)
+  issues_column_names <- validate_column_names(d)
+  issues_column_presence <- validate_column_presence(d)
+  issues_column_classes <- validate_column_classes(d)
+  issues_datetime <- validate_datetime(d)
+  issues_primary_keys <- validate_primary_keys(d)
+  issues_composite_keys <- validate_composite_keys(d)
+  issues_referential_integrity <- validate_referential_integrity(d)
+  
+  # TODO: Compile messages into warnings or errors
   
   message('Done\nThis ecocomDP has passed validation!')
 
@@ -134,12 +140,9 @@ validate_table_names <- function(data.path = NULL) {
                              "", tables))
   study_names <- stringr::str_replace(study_names, "\\.[:alnum:]*$", replacement = "")
   if (length(study_names) > 1){
-    stop(paste("\n",
-               "More than one study name found in your ecocomDP tables.\n",
-               "Only one study name is allowed.\n",
-               "Here are the unique study names found:\n",
-               paste(study_names, collapse = ", ")),
-         call. = F)
+    stop(
+      "More than one study name found. There can be only one. Unique study ",
+      "names: ", paste(study_names, collapse = ", "), call. = F)
   } else {
     tables
   }
@@ -179,9 +182,8 @@ validate_table_presence <- function(data.list) {
     (is.na(criteria$class)) & (criteria$required == TRUE)]
   required_missing <- expected[!(expected %in% names(data.list))]
   if (length(required_missing) != 0) {
-    stop("These required tables are missing: ", 
-         paste(required_missing, collapse = ", "),
-         call. = FALSE)
+    paste0("Missing required table: ", 
+           paste(required_missing, collapse = ", "))
   }
   
 }
@@ -215,20 +217,20 @@ validate_column_names <- function(data.list) {
   
   # Validate
   
-  invisible(
-    lapply(
-      names(data.list),
-      function(x) {
-        expected <- criteria$column[
-          (criteria$table %in% x) & !is.na(criteria$column)]
-        invalid_columns <- !(colnames(data.list[[x]]) %in% expected)
-        if (any(invalid_columns)) {
-          stop(
-            "The ", x, " table has these invalid column names: ",
-            paste(colnames(data.list[[x]])[invalid_columns], collapse = ", "),
-            call. = FALSE)
-        }
-      }))
+  r <- lapply(
+    names(data.list),
+    function(x) {
+      expected <- criteria$column[
+        (criteria$table %in% x) & !is.na(criteria$column)]
+      invalid_columns <- !(colnames(data.list[[x]]) %in% expected)
+      if (any(invalid_columns)) {
+        paste0(
+          "The ", x, " table has these invalid column names: ",
+          paste(colnames(data.list[[x]])[invalid_columns], collapse = ", "))
+      }
+    })
+  
+  unlist(r)
   
 }
 
@@ -266,25 +268,25 @@ validate_column_presence <- function(data.list){
   
   # Validate
   
-  invisible(
-    lapply(
-      names(data.list),
-      function(x) {
-        expected <- criteria$column[
-          (criteria$table %in% x) & 
-            !is.na(criteria$column) & 
-            (criteria$required == TRUE)]
-        if ((x == "observation") & ("observation_ancillary" %in% names(data.list))) {
-          expected <- c(expected, "event_id")
-        }
-        missing_columns <- !(expected %in% colnames(data.list[[x]]))
-        if (any(missing_columns)) {
-          stop(
-            "The ", x, " table is missing these required columns: ",
-            paste(expected[missing_columns], collapse = ", "),
-            call. = FALSE)
-        }
-      }))
+  r <- lapply(
+    names(data.list),
+    function(x) {
+      expected <- criteria$column[
+        (criteria$table %in% x) & 
+          !is.na(criteria$column) & 
+          (criteria$required == TRUE)]
+      if ((x == "observation") & ("observation_ancillary" %in% names(data.list))) {
+        expected <- c(expected, "event_id")
+      }
+      missing_columns <- !(expected %in% colnames(data.list[[x]]))
+      if (any(missing_columns)) {
+        paste0(
+          "The ", x, " table is missing these required columns: ",
+          paste(expected[missing_columns], collapse = ", "))
+      }
+    })
+  
+  unlist(r)
 
 }
 
@@ -318,44 +320,44 @@ validate_datetime <- function(data.list) {
   
   # Validate
   
-  invisible(
-    lapply(
-      names(data.list),
-      function(x) {
-        datetime_column <- criteria$column[
-          (criteria$table %in% x) &
-            (criteria$class == "Date") &
-            !is.na(criteria$column)]
-        if (length(datetime_column) > 0) {
-          v <- data.list[[x]][[datetime_column]]
-          # Difference in NA count induced by coercion indicates a non-valid 
-          # format
-          na_count_raw <- sum(is.na(v))
-          use_i <- suppressWarnings(
-            list(
-              lubridate::parse_date_time(v, "ymdHMS"),
-              lubridate::parse_date_time(v, "ymdHM"),
-              lubridate::parse_date_time(v, "ymdH"),
-              lubridate::parse_date_time(v, "ymd")))
-          na_count_parsed <- unlist(
-            lapply(
-              use_i,
-              function(k) {
-                sum(is.na(k))
-              }))
-          if (min(na_count_parsed) > na_count_raw) {
-            use_i <- seq(
-              length(v))[
-                is.na(
-                  use_i[[
-                    which(na_count_parsed %in% min(na_count_parsed))]])]
-            stop(
-              "The ", x, " table has unsupported datetime formats at rows: ", 
-              paste(use_i, collapse = ' '),
-              call. = F)
-          }
+  r <- lapply(
+    names(data.list),
+    function(x) {
+      datetime_column <- criteria$column[
+        (criteria$table %in% x) &
+          (criteria$class == "Date") &
+          !is.na(criteria$column)]
+      if (length(datetime_column) > 0) {
+        v <- data.list[[x]][[datetime_column]]
+        # Difference in NA count induced by coercion indicates a non-valid 
+        # format
+        na_count_raw <- sum(is.na(v))
+        use_i <- suppressWarnings(
+          list(
+            lubridate::parse_date_time(v, "ymdHMS"),
+            lubridate::parse_date_time(v, "ymdHM"),
+            lubridate::parse_date_time(v, "ymdH"),
+            lubridate::parse_date_time(v, "ymd")))
+        na_count_parsed <- unlist(
+          lapply(
+            use_i,
+            function(k) {
+              sum(is.na(k))
+            }))
+        if (min(na_count_parsed) > na_count_raw) {
+          use_i <- seq(
+            length(v))[
+              is.na(
+                use_i[[
+                  which(na_count_parsed %in% min(na_count_parsed))]])]
+          paste0(
+            "The ", x, " table has unsupported datetime formats at rows: ", 
+            paste(use_i, collapse = ' '))
         }
-      }))
+      }
+    })
+  
+  unlist(r)
 
 }
 
@@ -506,9 +508,6 @@ validate_composite_keys <- function(data.list) {
             !is.na(criteria$column) & 
             (criteria$composite_key == TRUE)]
         if (length(composite_columns) > 0) {
-          # if (x == "observation") {
-          #   browser()
-          # }
           d <- dplyr::select(data.list[[x]], composite_columns)
           duplicates <- seq(nrow(d))[duplicated.data.frame(d)]
           if (length(duplicates) > 0) {
@@ -549,38 +548,39 @@ validate_referential_integrity <- function(data.list) {
   
   # Validate
   
-  lapply(
-    names(data.list),
-    function(x) {
-      primary_key <- criteria$column[
-        (criteria$table == x) & 
+  invisible(
+    lapply(
+      names(data.list),
+      function(x) {
+        primary_key <- criteria$column[
+          (criteria$table == x) & 
+            !is.na(criteria$column) & 
+            (criteria$primary_key == TRUE)]
+        primary_key_data <- na.omit(data.list[[x]][[primary_key]])
+        foreign_key_table <- criteria$table[
           !is.na(criteria$column) & 
-          (criteria$primary_key == TRUE)]
-      primary_key_data <- na.omit(data.list[[x]][[primary_key]])
-      foreign_key_table <- criteria$table[
-          !is.na(criteria$column) & 
-          (criteria$column == primary_key)]
-      invisible(
-        lapply(
-          foreign_key_table,
-          function(k) {
-            if (k == "location") {
-              foreign_key_data <- na.omit(data.list[[k]][["parent_location_id"]])
-              use_i <- foreign_key_data %in% primary_key_data
-              if (length(use_i) == 0) {
-                use_i <- TRUE # This is an exception for parent_location_id
+            (criteria$column == primary_key)]
+        invisible(
+          lapply(
+            foreign_key_table,
+            function(k) {
+              if (k == "location") {
+                foreign_key_data <- na.omit(data.list[[k]][["parent_location_id"]])
+                use_i <- foreign_key_data %in% primary_key_data
+                if (length(use_i) == 0) {
+                  use_i <- TRUE # This is an exception for parent_location_id
+                }
+              } else {
+                foreign_key_data <- na.omit(data.list[[k]][[primary_key]])
+                use_i <- foreign_key_data %in% primary_key_data
               }
-            } else {
-              foreign_key_data <- na.omit(data.list[[k]][[primary_key]])
-              use_i <- foreign_key_data %in% primary_key_data
-            }
-            if (!all(use_i)) {
-              stop("The ", k, " table has these foreign keys without a ", 
-                   "primary key reference: ", 
-                   paste(foreign_key_data[!use_i], collapse = ", "), 
-                   call. = FALSE)
-            }
-          }))
-    })
+              if (!all(use_i)) {
+                stop("The ", k, " table has these foreign keys without a ", 
+                     "primary key reference in the ", x, " table: ", 
+                     paste(foreign_key_data[!use_i], collapse = ", "), 
+                     call. = FALSE)
+              }
+            }))
+      }))
   
 }

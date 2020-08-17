@@ -37,7 +37,7 @@ testthat::test_that("validate_table_names()", {
       system.file("/data", package = "ecocomDP"), 
       pattern = "Ant_Assemblages_"))
   
-  # More than one study name results in an error
+  # More than one study name results in an error message
   
   file.rename(
     from = dir(
@@ -46,9 +46,16 @@ testthat::test_that("validate_table_names()", {
       full.names = TRUE),
     to = paste0(tempdir(), "/data/Ant_Assemblages_dataset_summary.csv"))
   
+  file.rename(
+    from = dir(
+      paste0(tempdir(), "/data"), 
+      pattern = "observation_ancillary", 
+      full.names = TRUE),
+    to = paste0(tempdir(), "/data/Ant_observation_ancillary.csv"))
+  
   expect_error(
     validate_table_names(paste0(tempdir(), "/data")),
-    regexp = "More than one study name found")
+    regexp = "More than one study name found. There can be only one. Unique ")
   
   # Clean up
   
@@ -67,16 +74,18 @@ testthat::test_that("validate_table_presence()", {
   
   # Return message when all required tables are present.
   
-  expect_message(validate_table_presence(d), regexp = "Required tables")
+  expect_null(validate_table_presence(d))
   
-  # Error when required tables are missing.
+  # Return error message when required tables are missing.
   
   required_tables <- criteria$table[is.na(criteria$column) & criteria$required]
-  d[required_tables] <- NULL
-  
-  expect_error(
-    validate_table_presence(d),
-    regexp = "These required tables are missing: .+")
+  for (i in required_tables) {
+    d <- test_data
+    d[i] <- NULL
+    r <- validate_table_presence(d)
+    expect_true(
+      stringr::str_detect(r, "Missing required table: .+"))
+  }
   
 })
 
@@ -88,19 +97,21 @@ testthat::test_that("validate_column_names()", {
   
   # Return message when column spelling is correct.
   
-  expect_message(
-    validate_column_names(d),
-    regexp = "Column names")
+  expect_null(validate_column_names(d))
   
-  # Return error when column spelling is incorrect.
+  # Return error message when column spelling is incorrect.
   
-  invalid_names <- names(d$location)
-  invalid_names[1:2] <- c("col1", "col2")
-  names(d$location) <- invalid_names
-  
-  expect_error(
-    validate_column_names(d),
-    regexp = "The .+ table has these invalid column names: .+")
+  for (table in names(d)) {
+    d <- test_data
+    invalid_names <- names(d[[table]])
+    invalid_names[1:2] <- c("invalid_colname_1", "invalid_colname_2")
+    names(d[[table]]) <- invalid_names
+    r <- validate_column_names(d)
+    expect_true(
+      stringr::str_detect(
+        r, 
+        "The .+ table has these invalid column names: .+"))
+  }
   
 })
 
@@ -112,21 +123,23 @@ testthat::test_that("validate_column_presence()", {
   
   # Return message when required columns are present.
   
-  expect_message(
-    validate_column_presence(d),
-    regexp = "Required columns")
+  expect_null(validate_column_presence(d))
   
   # Return error when required columns are missing.
   
-  required_columns <- criteria$column[
-    !is.na(criteria$column) & criteria$table == "observation" & criteria$required]
-  for (i in 1:length(required_columns)) {
-    d[["observation"]][[required_columns[i]]] <- NULL
+  for (table in names(d)) {
+    required_columns <- criteria$column[
+      !is.na(criteria$column) & criteria$table == table & criteria$required]
+    for (column in required_columns) {
+      d <- test_data
+      d[[table]][[column]] <- NULL
+      r <- validate_column_presence(d)
+      expect_true(
+        stringr::str_detect(
+          r, 
+          "The .+ table is missing these required columns: .+"))
+    }
   }
-  
-  expect_error(
-    validate_column_presence(d),
-    regexp = "The .+ table is missing these required columns")
   
 })
 
@@ -138,17 +151,29 @@ testthat::test_that("validate_datetime()", {
   
   # Return message when datetime formats are valid.
   
-  expect_message(
-    validate_datetime(d),
-    regexp = "Datetime formats")
+  expect_null(validate_datetime(d))
   
-  # Return error when datetime formats are invalid.
+  # Return error message when datetime formats are invalid.
   
-  d$observation$observation_datetime[1:2] <- c("01/02/2003", "01/02/2003")
-  
-  expect_error(
-    validate_datetime(d),
-    "The .+ table has unsupported datetime formats at rows:")
+  for (table in names(d)) {
+    d <- test_data
+    datetime_columns <- criteria$column[
+      !is.na(criteria$column) & 
+        criteria$table == table & 
+        criteria$class == "Date"]
+    if (length(datetime_columns) != 0) {
+      for (column in datetime_columns) {
+        if (!all(is.na(d[[table]][[column]]))) {
+          d[[table]][[column]][1:2] <- c("01/02/2003", "01/02/2003")
+          r <- validate_datetime(d)
+          expect_true(
+            stringr::str_detect(
+              r, 
+              "The .+ table has unsupported datetime formats at rows:"))
+        }
+      }
+    }
+  }
   
 })
 
@@ -226,7 +251,28 @@ testthat::test_that("validate_composite_keys()", {
 
 testthat::test_that("validate_referential_integrity()", {
   
+  d <- test_data
   
+  # Valid referential integrity results in message.
+  
+  expect_message(
+    validate_referential_integrity(d),
+    regexp = "Referential integrity")
+  
+  # Invalid referential integrity results in error.
+  
+  d$observation$taxon_id[1:2] <- c("invalid_taxon_id1", "invalid_taxon_id2")
+  expect_error(
+    validate_referential_integrity(d),
+    regexp = "The .+ table has these foreign keys without a primary key")
   
 })
 
+# validate_ecocomDP() ---------------------------------------------------------
+
+testthat::test_that("validate_ecocomDP", {
+  
+  # TODO: A validation report, listing all issues, should be returned for 
+  # each data package/product.
+  
+})
