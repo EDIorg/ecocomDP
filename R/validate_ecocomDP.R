@@ -3,11 +3,11 @@
 #' @description  
 #'     Use this function to verify a dataset conforms to the ecocomDP.
 #' 
-#' @param data.path 
-#'     (character) The path to the directory containing ecocomDP tables.
 #' @param data.list
 #'     (list of data frames) A named list of data frames, each of which is an 
 #'     ecocomDP table. See output from \code{read_data()}.
+#' @param data.path 
+#'     (character) The path to the directory containing ecocomDP tables.
 #'     
 #' @note
 #'     This function is used by ecocomDP creators (to ensure what has been 
@@ -42,8 +42,8 @@
 #'
 
 validate_ecocomDP <- function(
-  data.path = NULL, 
-  data.list = NULL) {
+  data.list = NULL,
+  data.path = NULL) {
   
   # Validate arguments --------------------------------------------------------
   
@@ -82,7 +82,59 @@ validate_ecocomDP <- function(
   issues_composite_keys <- validate_composite_keys(d)
   issues_referential_integrity <- validate_referential_integrity(d)
   
-  # TODO: Compile messages into warnings or errors
+  # Create quality report -----------------------------------------------------
+  
+  # Format results into a human readable format
+  # TODO: Enumerate each issue
+  # TODO: Output NULL when no issues were found.
+  
+  browser()
+  
+  id <- d$dataset_summary$package_id
+  if (is.null(id)) {
+    id <- "unknown data ID"
+  }
+  if (!is.null(issues_table_presence)) {
+    issues_table_presence <- paste0("\n", "  Table presence:\n", "    ", issues_table_presence)
+  }
+  if (!is.null(issues_column_names)) {
+    issues_column_names <- paste0("\n", "  Column names:\n", "    ", issues_column_names)
+  }
+  if (!is.null(issues_column_presence)) {
+    issues_column_presence <- paste0("\n", "  Column presence:\n", "    ", issues_column_presence)
+  }
+  if (!is.null(issues_column_classes)) {
+    issues_column_classes <- paste0("\n", "  Column classes:\n", "    ", issues_column_classes)
+  }
+  if (!is.null(issues_datetime)) {
+    issues_datetime <- paste0("\n", "  Date and time format:\n", "    ", issues_datetime)
+  }
+  if (!is.null(issues_primary_keys)) {
+    issues_primary_keys <- paste0("\n", "  Primary keys:\n", "    ", issues_primary_keys)
+  }
+  if (!is.null(issues_composite_keys)) {
+    issues_composite_keys <- paste0("\n", "  Composite keys:\n", "    ", issues_composite_keys)
+  }
+  browser()
+  if (!is.null(issues_referential_integrity)) {
+    issues_referential_integrity <- paste0(
+      "\n", "  Referential integrity:\n", "    ", 
+      paste(issues_referential_integrity, collapse = "\n    "))
+  }
+
+  # TODO: Wrap in warning/error conditional and add controlling argument to validate_ecocomDP()
+  
+  message(
+    paste0(
+      "Quality report for ", id, ":",
+      issues_table_presence,
+      issues_column_names,
+      issues_column_presence,
+      issues_column_classes,
+      issues_datetime,
+      issues_primary_keys,
+      issues_composite_keys,
+      issues_referential_integrity))
   
   message('Done\nThis ecocomDP has passed validation!')
 
@@ -396,34 +448,36 @@ validate_column_classes <- function(data.list) {
         lapply(
           colnames(data.list[[x]]),
           function(k) {
-            expected <- criteria$class[
-              (criteria$table %in% x) &
-                !is.na(criteria$column) &
-                (criteria$column %in% k)]
-            detected <- class(data.list[[x]][[k]])
-            if (expected == "numeric") {
-              if ((detected != "integer") &
-                  (detected != "integer64") &
-                  (detected != "double") &
-                  (detected != "numeric")) {
-                issues <- list(
-                  column = k, expected = expected, detected = detected)
+            if (k %in% criteria$column) {
+              expected <- criteria$class[
+                (criteria$table %in% x) &
+                  !is.na(criteria$column) &
+                  (criteria$column %in% k)]
+              detected <- class(data.list[[x]][[k]])
+              if (expected == "numeric") {
+                if ((detected != "integer") &
+                    (detected != "integer64") &
+                    (detected != "double") &
+                    (detected != "numeric")) {
+                  issues <- list(
+                    column = k, expected = expected, detected = detected)
+                }
+              } else if (expected == "Date") {
+                if (detected != "character") {
+                  issues <- list(
+                    column = k, expected = expected, detected = detected)
+                }
+              } else if (expected == "character") {
+                if (detected != "character") {
+                  issues <- list(
+                    column = k, expected = expected, detected = detected)
+                }
               }
-            } else if (expected == "Date") {
-              if (detected != "character") {
-                issues <- list(
-                  column = k, expected = expected, detected = detected)
+              if (exists("issues")) {
+                paste0(
+                  "The column ", k, " in the table ", x, " has a class of ", 
+                  detected, " but a class of ", expected, " is expected.")
               }
-            } else if (expected == "character") {
-              if (detected != "character") {
-                issues <- list(
-                  column = k, expected = expected, detected = detected)
-              }
-            }
-            if (exists("issues")) {
-              paste0(
-                "The column ", k, " in the table ", x, " has a class of ", 
-                detected, " but a class of ", expected, " is expected.")
             }
           })
       }))
@@ -586,7 +640,7 @@ validate_referential_integrity <- function(data.list) {
             if (!all(use_i)) {
               paste0("The ", k, " table has these foreign keys without a ", 
                      "primary key reference in the ", x, " table: ", 
-                     paste(foreign_key_data[!use_i], collapse = ", "))
+                     paste(unique(foreign_key_data[!use_i]), collapse = ", "))
             }
           })
         unlist(output)

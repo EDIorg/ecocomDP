@@ -37,7 +37,7 @@ testthat::test_that("validate_table_names()", {
       system.file("/data", package = "ecocomDP"), 
       pattern = "Ant_Assemblages_"))
   
-  # More than one study name results in an error message
+  # More than one study name results in a character string
   
   file.rename(
     from = dir(
@@ -76,7 +76,7 @@ testthat::test_that("validate_table_presence()", {
   
   expect_null(validate_table_presence(d))
   
-  # Return error message when required tables are missing.
+  # Return character string when required tables are missing.
   
   required_tables <- criteria$table[is.na(criteria$column) & criteria$required]
   for (i in required_tables) {
@@ -99,7 +99,7 @@ testthat::test_that("validate_column_names()", {
   
   expect_null(validate_column_names(d))
   
-  # Return error message when column spelling is incorrect.
+  # Return character string when column spelling is incorrect.
   
   for (table in names(d)) {
     d <- test_data
@@ -125,7 +125,7 @@ testthat::test_that("validate_column_presence()", {
   
   expect_null(validate_column_presence(d))
   
-  # Return error when required columns are missing.
+  # Return character string when required columns are missing.
   
   for (table in names(d)) {
     required_columns <- criteria$column[
@@ -153,7 +153,7 @@ testthat::test_that("validate_datetime()", {
   
   expect_null(validate_datetime(d))
   
-  # Return error message when datetime formats are invalid.
+  # Return character string when datetime formats are invalid.
   
   for (table in names(d)) {
     d <- test_data
@@ -187,7 +187,7 @@ testthat::test_that("validate_column_classes()", {
   
   expect_null(validate_column_classes(d))
   
-  # Return error message when column classes are invalid.
+  # Return character string when column classes are invalid.
   
   for (table in names(d)) {
     d <- test_data
@@ -215,7 +215,7 @@ testthat::test_that("validate_primary_keys()", {
   
   expect_null(validate_primary_keys(d))
   
-  # Non-unique primary keys result in an error.
+  # Non-unique primary keys result in character string.
   
   d$dataset_summary <- NULL
   for (table in names(d)) {
@@ -248,7 +248,7 @@ testthat::test_that("validate_composite_keys()", {
   
   expect_null(validate_composite_keys(d))
   
-  # Non-unique composite keys result in error.
+  # Non-unique composite keys result in character string.
   
   for (table in names(d)) {
     d <- test_data
@@ -280,7 +280,7 @@ testthat::test_that("validate_referential_integrity()", {
   
   expect_null(validate_referential_integrity(d))
   
-  # Invalid referential integrity results in error.
+  # Invalid referential integrity results in character string.
   
   for (table in names(d)) {
     d <- test_data
@@ -319,7 +319,35 @@ testthat::test_that("validate_referential_integrity()", {
 
 testthat::test_that("validate_ecocomDP", {
   
-  # TODO: A validation report, listing all issues, should be returned for 
-  # each data package/product.
+  d <- test_data
+  
+  # If multiple validation issues, then report all issues with a warning or 
+  # error.
+  
+  # Create issue for validate_table_presence()
+  d$dataset_summary <- NULL
+  # Create issue for validate_column_names()
+  names(d$taxon_ancillary) <- c(
+    "taxon_ancillary_id", "taxon_id", "datetime", "variable_name", "value", 
+    "invalid_col_name")
+  # Create issue for validate_column_presence()
+  d$taxon$taxon_name <- NULL
+  # Create issue for validate_datetime()
+  d$location_ancillary$datetime[1] <- "08/22/2020"
+  # Create issue for validate_column_classes()
+  d$location$latitude <- as.character(d$location$latitude)
+  # Create issue for validate_primary_keys()
+  d$taxon$taxon_id[2] <- d$taxon$taxon_id[1]
+  # Create issue for validate_composite_keys()
+  d$location_ancillary$location_id[3] <- d$location_ancillary$location_id[2]
+  d$location_ancillary$datetime[3] <- d$location_ancillary$datetime[2]
+  d$location_ancillary$variable_name[3] <- d$location_ancillary$variable_name[2]
+  # Create issue for validate_referential_integrity()
+  d$observation$event_id[1] <- "invalid_foreign_key"
+  d$observation$package_id[1] <- "invalid_foreign_key"
+  d$observation$location_id[1] <- "invalid_foreign_key"
+  d$observation$taxon_id[1] <- "invalid_foreign_key"
+  
+  validate_ecocomDP(data.list = d)
   
 })
