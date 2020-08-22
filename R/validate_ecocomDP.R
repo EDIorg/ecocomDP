@@ -389,7 +389,7 @@ validate_column_classes <- function(data.list) {
 
   # Validate
   
-  invisible(
+  r <- invisible(
     lapply(
       names(data.list),
       function(x) {
@@ -414,15 +414,21 @@ validate_column_classes <- function(data.list) {
                 issues <- list(
                   column = k, expected = expected, detected = detected)
               }
+            } else if (expected == "character") {
+              if (detected != "character") {
+                issues <- list(
+                  column = k, expected = expected, detected = detected)
+              }
             }
             if (exists("issues")) {
-              stop(
-                "The ", k, " column in the ", x, " table has a ", detected, 
-                " class but a ", expected, " class is expected.", 
-                call. = FALSE)
+              paste0(
+                "The column ", k, " in the table ", x, " has a class of ", 
+                detected, " but a class of ", expected, " is expected.")
             }
           })
       }))
+  
+  unlist(r)
 
 }
 
@@ -453,7 +459,7 @@ validate_primary_keys <- function(data.list) {
   
   # Validate
   
-  invisible(
+  r <- invisible(
     lapply(
       names(data.list),
       function(x) {
@@ -464,11 +470,13 @@ validate_primary_keys <- function(data.list) {
         v <- data.list[[x]][[primary_key]]
         use_i <- seq(length(v))[duplicated(v)]
         if (length(use_i) > 0) {
-          stop("The column ", primary_key, " in the table ", x, 
-               " contains non-unique primary keys in rows: ", 
-               paste(use_i, collapse = " "), call. = FALSE)
+          paste0("The ", x, " table contains non-unique primary keys in the ",
+                 "column ", primary_key, " at rows: ", 
+                 paste(use_i, collapse = " "))
         }
       }))
+  
+  unlist(r)
 
 }
 
@@ -499,7 +507,7 @@ validate_composite_keys <- function(data.list) {
   
   # Validate
   
-  invisible(
+  r <- invisible(
     lapply(
       names(data.list),
       function(x) {
@@ -511,13 +519,15 @@ validate_composite_keys <- function(data.list) {
           d <- dplyr::select(data.list[[x]], composite_columns)
           duplicates <- seq(nrow(d))[duplicated.data.frame(d)]
           if (length(duplicates) > 0) {
-            stop("The composite keys composed of the columns ", 
+            paste0("The composite keys composed of the columns ", 
                  paste(composite_columns, collapse = ", "), ", in the table ", 
                  x, " contain non-unique values in rows: ", 
-                 paste(duplicates, collapse = " "), call. = FALSE)
+                 paste(duplicates, collapse = " "))
           }
         }
       }))
+  
+  unlist(r)
   
 }
 
@@ -548,7 +558,7 @@ validate_referential_integrity <- function(data.list) {
   
   # Validate
   
-  invisible(
+  r <- invisible(
     lapply(
       names(data.list),
       function(x) {
@@ -560,27 +570,28 @@ validate_referential_integrity <- function(data.list) {
         foreign_key_table <- criteria$table[
           !is.na(criteria$column) & 
             (criteria$column == primary_key)]
-        invisible(
-          lapply(
-            foreign_key_table,
-            function(k) {
-              if (k == "location") {
-                foreign_key_data <- na.omit(data.list[[k]][["parent_location_id"]])
-                use_i <- foreign_key_data %in% primary_key_data
-                if (length(use_i) == 0) {
-                  use_i <- TRUE # This is an exception for parent_location_id
-                }
-              } else {
-                foreign_key_data <- na.omit(data.list[[k]][[primary_key]])
-                use_i <- foreign_key_data %in% primary_key_data
+        output <- lapply(
+          foreign_key_table,
+          function(k) {
+            if (k == "location") {
+              foreign_key_data <- na.omit(data.list[[k]][["parent_location_id"]])
+              use_i <- foreign_key_data %in% primary_key_data
+              if (length(use_i) == 0) {
+                use_i <- TRUE # This is an exception for parent_location_id
               }
-              if (!all(use_i)) {
-                stop("The ", k, " table has these foreign keys without a ", 
+            } else {
+              foreign_key_data <- na.omit(data.list[[k]][[primary_key]])
+              use_i <- foreign_key_data %in% primary_key_data
+            }
+            if (!all(use_i)) {
+              paste0("The ", k, " table has these foreign keys without a ", 
                      "primary key reference in the ", x, " table: ", 
-                     paste(foreign_key_data[!use_i], collapse = ", "), 
-                     call. = FALSE)
-              }
-            }))
+                     paste(foreign_key_data[!use_i], collapse = ", "))
+            }
+          })
+        unlist(output)
       }))
+  
+  unlist(r)
   
 }

@@ -185,18 +185,23 @@ testthat::test_that("validate_column_classes()", {
   
   # Return message when column classes are valid.
   
-  expect_message(
-    validate_column_classes(d),
-    regexp = "Column classes")
+  expect_null(validate_column_classes(d))
   
-  # Return error when column classes are invalid.
+  # Return error message when column classes are invalid.
   
-  d$observation$observation_datetime <- as.numeric(
-    d$observation$observation_datetime)
-  
-  expect_error(
-    validate_column_classes(d),
-    "The .+ column in the .+ table has a .+ class but a .+ class is expected.")
+  for (table in names(d)) {
+    d <- test_data
+    table_columns <- colnames(d[[table]])
+    for (column in table_columns) {
+      d <- test_data
+      d[[table]][[column]] <- as.logical(d[[table]][[column]])
+      r <- validate_column_classes(d)
+      expect_true(
+        stringr::str_detect(
+          r, 
+          "The column .+ in the table .+ has a class of .+ but a class of .+"))
+    }
+  }
   
 })
 
@@ -208,18 +213,29 @@ testthat::test_that("validate_primary_keys()", {
   
   # Unique primary keys result in message.
   
-  expect_message(
-    validate_primary_keys(d),
-    regexp = "Primary keys")
+  expect_null(validate_primary_keys(d))
   
-  # Non-unique primary keys result in NULL output.
+  # Non-unique primary keys result in an error.
   
-  d$taxon_ancillary$taxon_ancillary_id[4:6] <- c("txan_1", "txan_2", "txan_3")
-  
-  expect_error(
-    validate_primary_keys(d),
-    regexp = "The column .+ in the table .+ contains non-unique primary keys")
-  
+  d$dataset_summary <- NULL
+  for (table in names(d)) {
+    d <- test_data
+    primary_key_columns <- criteria$column[
+      !is.na(criteria$column) & 
+        criteria$table == table & 
+        criteria$primary_key]
+    if (length(primary_key_columns) != 0) {
+      for (column in primary_key_columns) {
+        d[[table]][[column]][2] <- d[[table]][[column]][1]
+        r <- validate_primary_keys(d)
+        expect_true(
+          stringr::str_detect(
+            r, 
+            "The .+ table contains non-unique primary keys in the column "))
+      }
+    }
+  }
+
 })
 
 # validate_composite_keys() ---------------------------------------------------
@@ -230,20 +246,27 @@ testthat::test_that("validate_composite_keys()", {
   
   # Unique composite keys result in message.
   
-  expect_message(
-    validate_composite_keys(d),
-    regexp = "Composite keys")
+  expect_null(validate_composite_keys(d))
   
-  # Non-unique keys result in error.
+  # Non-unique composite keys result in error.
   
-  d$observation$location_id[1:2] <- c("loc_1", "loc_1")
-  d$observation$observation_datetime[1:2] <- c("date_1", "date_1")
-  d$observation$taxon_id[1:2] <- c("tx_1", "tx_1")
-  d$observation$variable_name[1:2] <- c("v1", "v1")
-  
-  expect_error(
-    validate_composite_keys(d),
-    regexp = "The composite keys composed of the columns .+")
+  for (table in names(d)) {
+    d <- test_data
+    composite_key_columns <- criteria$column[
+      !is.na(criteria$column) & 
+        criteria$table == table & 
+        criteria$composite_key]
+    if (length(composite_key_columns) != 0) {
+      for (column in composite_key_columns) {
+        d[[table]][[column]][2] <- d[[table]][[column]][1]
+      }
+      r <- validate_composite_keys(d)
+      expect_true(
+        stringr::str_detect(
+          r, 
+          "The composite keys composed of the columns .+"))
+    }
+  }
   
 })
 
@@ -255,16 +278,40 @@ testthat::test_that("validate_referential_integrity()", {
   
   # Valid referential integrity results in message.
   
-  expect_message(
-    validate_referential_integrity(d),
-    regexp = "Referential integrity")
+  expect_null(validate_referential_integrity(d))
   
   # Invalid referential integrity results in error.
   
-  d$observation$taxon_id[1:2] <- c("invalid_taxon_id1", "invalid_taxon_id2")
-  expect_error(
-    validate_referential_integrity(d),
-    regexp = "The .+ table has these foreign keys without a primary key")
+  for (table in names(d)) {
+    d <- test_data
+    primary_key <- criteria$column[
+      (criteria$table == table) & 
+        !is.na(criteria$column) & 
+        (criteria$primary_key == TRUE)]
+    primary_key_data <- na.omit(d[[table]][[primary_key]])
+    foreign_key_table <- criteria$table[
+      !is.na(criteria$column) & 
+        (criteria$column == primary_key)]
+    for (fk_table in foreign_key_table) {
+      if (fk_table != table) {
+        d <- test_data
+        d[[fk_table]][[primary_key]][1] <- "invalid_foreign_key"
+        r <- validate_referential_integrity(d)
+        expect_true(
+          stringr::str_detect(
+            r, 
+            "The .+ table has these foreign keys without a primary key"))
+      } else if (table != "location") {
+        if (fk_table == "location") {
+          d[[fk_table]][["parent_location_id"]][2] <- "invalid_foreign_key"
+          expect_true(
+            stringr::str_detect(
+              r, 
+              "The .+ table has these foreign keys without a primary key"))
+        }
+      }
+    }
+  }
   
 })
 
