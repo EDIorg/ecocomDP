@@ -55,7 +55,7 @@ testthat::test_that("validate_table_names()", {
   
   expect_error(
     validate_table_names(paste0(tempdir(), "/data")),
-    regexp = "More than one study name found. There can be only one. Unique ")
+    regexp = "File names. More than one study name found. Unique study")
   
   # Clean up
   
@@ -84,7 +84,7 @@ testthat::test_that("validate_table_presence()", {
     d[i] <- NULL
     r <- validate_table_presence(d)
     expect_true(
-      stringr::str_detect(r, "Missing required table: .+"))
+      stringr::str_detect(r, "Required table. Missing required table: .+"))
   }
   
 })
@@ -110,7 +110,7 @@ testthat::test_that("validate_column_names()", {
     expect_true(
       stringr::str_detect(
         r, 
-        "The .+ table has these invalid column names: .+"))
+        "Column names. The .+ table has these invalid column names:"))
   }
   
 })
@@ -137,7 +137,7 @@ testthat::test_that("validate_column_presence()", {
       expect_true(
         stringr::str_detect(
           r, 
-          "The .+ table is missing these required columns: .+"))
+          "Required columns. The .+ table is missing these required"))
     }
   }
   
@@ -169,7 +169,7 @@ testthat::test_that("validate_datetime()", {
           expect_true(
             stringr::str_detect(
               r, 
-              "The .+ table has unsupported datetime formats at rows:"))
+              "Datetime format. The .+ table has unsupported"))
         }
       }
     }
@@ -199,7 +199,7 @@ testthat::test_that("validate_column_classes()", {
       expect_true(
         stringr::str_detect(
           r, 
-          "The column .+ in the table .+ has a class of .+ but a class of .+"))
+          "Column classes. The column .+ in the table .+ has a class"))
     }
   }
   
@@ -231,7 +231,7 @@ testthat::test_that("validate_primary_keys()", {
         expect_true(
           stringr::str_detect(
             r, 
-            "The .+ table contains non-unique primary keys in the column "))
+            "Primary keys. The .+ table contains non-unique primary keys in"))
       }
     }
   }
@@ -264,7 +264,7 @@ testthat::test_that("validate_composite_keys()", {
       expect_true(
         stringr::str_detect(
           r, 
-          "The composite keys composed of the columns .+"))
+          "Composite keys. The composite keys composed of the columns .+"))
     }
   }
   
@@ -300,14 +300,14 @@ testthat::test_that("validate_referential_integrity()", {
         expect_true(
           stringr::str_detect(
             r, 
-            "The .+ table has these foreign keys without a primary key"))
+            "Referential integrity. The .+ table has these foreign keys"))
       } else if (table != "location") {
         if (fk_table == "location") {
           d[[fk_table]][["parent_location_id"]][2] <- "invalid_foreign_key"
           expect_true(
             stringr::str_detect(
               r, 
-              "The .+ table has these foreign keys without a primary key"))
+              "Referential integrity. The .+ table has these foreign keys"))
         }
       }
     }

@@ -93,8 +93,6 @@ validate_ecocomDP <- function(
   # Create quality report -----------------------------------------------------
   
   # Format results into a human readable format
-  # TODO: Move subject of check to the beginning of each warning/error. This 
-  # would eliminate the need for section headers.
   
   validation_issues <- c(
     issues_table_presence,
@@ -114,7 +112,9 @@ validate_ecocomDP <- function(
     validation_issues <- c(
       paste0("Validation issues for ", id, ":\n"),
       validation_issues)
-    warning("  Validation issues found for ", id, ". See output for details.", call. = FALSE)
+    warning(
+      "  Validation issues found for ", id, ". See output for details.", 
+      call. = FALSE)
   }
   
   validation_issues
@@ -174,7 +174,7 @@ validate_table_names <- function(data.path = NULL) {
   study_names <- stringr::str_replace(study_names, "\\.[:alnum:]*$", replacement = "")
   if (length(study_names) > 1){
     stop(
-      "More than one study name found. There can be only one. Unique study ",
+      "File names. More than one study name found. Unique study ",
       "names: ", paste(study_names, collapse = ", "), call. = F)
   } else {
     tables
@@ -215,7 +215,7 @@ validate_table_presence <- function(data.list) {
     (is.na(criteria$class)) & (criteria$required == TRUE)]
   required_missing <- expected[!(expected %in% names(data.list))]
   if (length(required_missing) != 0) {
-    paste0("Missing required table: ", 
+    paste0("Required table. Missing required table: ", 
            paste(required_missing, collapse = ", "))
   }
   
@@ -258,7 +258,8 @@ validate_column_names <- function(data.list) {
       invalid_columns <- !(colnames(data.list[[x]]) %in% expected)
       if (any(invalid_columns)) {
         paste0(
-          "The ", x, " table has these invalid column names: ",
+          "Column names. The ", x, " table has these invalid column ",
+          "names: ", 
           paste(colnames(data.list[[x]])[invalid_columns], collapse = ", "))
       }
     })
@@ -314,7 +315,8 @@ validate_column_presence <- function(data.list){
       missing_columns <- !(expected %in% colnames(data.list[[x]]))
       if (any(missing_columns)) {
         paste0(
-          "The ", x, " table is missing these required columns: ",
+          "Required columns. The ", x, " table is missing these ",
+          "required columns: ",
           paste(expected[missing_columns], collapse = ", "))
       }
     })
@@ -384,7 +386,8 @@ validate_datetime <- function(data.list) {
                 use_i[[
                   which(na_count_parsed %in% min(na_count_parsed))]])]
           paste0(
-            "The ", x, " table has unsupported datetime formats at rows: ", 
+            "Datetime format. The ", x, " table has unsupported ",
+            "datetime formats in rows: ", 
             paste(use_i, collapse = ' '))
         }
       }
@@ -456,8 +459,9 @@ validate_column_classes <- function(data.list) {
               }
               if (exists("issues", inherits = FALSE)) {
                 paste0(
-                  "The column ", k, " in the table ", x, " has a class of ", 
-                  detected, " but a class of ", expected, " is expected.")
+                  "Column classes. The column ", k, " in the table ", 
+                  x, " has a class of ", detected, " but a class of ", 
+                  expected, " is expected.")
               }
             }
           })
@@ -505,8 +509,8 @@ validate_primary_keys <- function(data.list) {
         v <- data.list[[x]][[primary_key]]
         use_i <- seq(length(v))[duplicated(v)]
         if (length(use_i) > 0) {
-          paste0("The ", x, " table contains non-unique primary keys in the ",
-                 "column ", primary_key, " at rows: ", 
+          paste0("Primary keys. The ", x, " table contains non-unique ",
+                 "primary keys in the column ", primary_key, " at rows: ", 
                  paste(use_i, collapse = " "))
         }
       }))
@@ -554,10 +558,11 @@ validate_composite_keys <- function(data.list) {
           d <- dplyr::select(data.list[[x]], composite_columns)
           duplicates <- seq(nrow(d))[duplicated.data.frame(d)]
           if (length(duplicates) > 0) {
-            paste0("The composite keys composed of the columns ", 
-                 paste(composite_columns, collapse = ", "), ", in the table ", 
-                 x, " contain non-unique values in rows: ", 
-                 paste(duplicates, collapse = " "))
+            paste0(
+              "Composite keys. The composite keys composed of the columns ", 
+              paste(composite_columns, collapse = ", "), 
+              ", in the table ", x, " contain non-unique values in rows: ", 
+              paste(duplicates, collapse = " "))
           }
         }
       }))
@@ -619,9 +624,10 @@ validate_referential_integrity <- function(data.list) {
               use_i <- foreign_key_data %in% primary_key_data
             }
             if (!all(use_i)) {
-              paste0("The ", k, " table has these foreign keys without a ", 
-                     "primary key reference in the ", x, " table: ", 
-                     paste(unique(foreign_key_data[!use_i]), collapse = ", "))
+              paste0(
+                "Referential integrity. The ", k, " table has these foreign ",
+                "keys without a primary key reference in the ", x, " table: ", 
+                paste(unique(foreign_key_data[!use_i]), collapse = ", "))
             }
           })
         unlist(output)
