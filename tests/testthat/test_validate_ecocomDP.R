@@ -348,6 +348,8 @@ testthat::test_that("validate_ecocomDP", {
   d$observation$location_id[1] <- "invalid_foreign_key"
   d$observation$taxon_id[1] <- "invalid_foreign_key"
   
-  validate_ecocomDP(data.list = d)
+  issues <- validate_ecocomDP(data.list = d)
+  expect_equal(length(issues), 11)
+  expect_true(is.character(issues))
   
 })

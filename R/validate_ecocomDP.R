@@ -67,11 +67,19 @@ validate_ecocomDP <- function(
 
   # Validate data -------------------------------------------------------------
   
+  # Get package/product ID from the dataset_summary table since this function
+  # doesn't require an ID input.
+  
+  id <- d$dataset_summary$package_id
+  if (is.null(id)) {
+    id <- "unknown data ID"
+  }
+  
   # Gather all validation issues and compile into a single report as this 
   # provides the user more information for trouble shooting and assessment than
   # only seeing the first issue encountered.
   
-  message("Validating:")
+  message("Validating ", id, ":")
   
   issues_table_presence <- validate_table_presence(d)
   issues_column_names <- validate_column_names(d)
@@ -85,58 +93,31 @@ validate_ecocomDP <- function(
   # Create quality report -----------------------------------------------------
   
   # Format results into a human readable format
-  # TODO: Enumerate each issue
-  # TODO: Output NULL when no issues were found.
+  # TODO: Move subject of check to the beginning of each warning/error. This 
+  # would eliminate the need for section headers.
   
-  browser()
+  validation_issues <- c(
+    issues_table_presence,
+    issues_column_names,
+    issues_column_presence,
+    issues_column_classes,
+    issues_datetime,
+    issues_primary_keys,
+    issues_composite_keys,
+    issues_referential_integrity)
   
-  id <- d$dataset_summary$package_id
-  if (is.null(id)) {
-    id <- "unknown data ID"
+  if (!is.null(validation_issues)) {
+    validation_issues <- paste0(
+      seq(length(validation_issues)), 
+      ".) ", 
+      validation_issues)
+    validation_issues <- c(
+      paste0("Validation issues for ", id, ":\n"),
+      validation_issues)
+    warning("  Validation issues found for ", id, ". See output for details.", call. = FALSE)
   }
-  if (!is.null(issues_table_presence)) {
-    issues_table_presence <- paste0("\n", "  Table presence:\n", "    ", issues_table_presence)
-  }
-  if (!is.null(issues_column_names)) {
-    issues_column_names <- paste0("\n", "  Column names:\n", "    ", issues_column_names)
-  }
-  if (!is.null(issues_column_presence)) {
-    issues_column_presence <- paste0("\n", "  Column presence:\n", "    ", issues_column_presence)
-  }
-  if (!is.null(issues_column_classes)) {
-    issues_column_classes <- paste0("\n", "  Column classes:\n", "    ", issues_column_classes)
-  }
-  if (!is.null(issues_datetime)) {
-    issues_datetime <- paste0("\n", "  Date and time format:\n", "    ", issues_datetime)
-  }
-  if (!is.null(issues_primary_keys)) {
-    issues_primary_keys <- paste0("\n", "  Primary keys:\n", "    ", issues_primary_keys)
-  }
-  if (!is.null(issues_composite_keys)) {
-    issues_composite_keys <- paste0("\n", "  Composite keys:\n", "    ", issues_composite_keys)
-  }
-  browser()
-  if (!is.null(issues_referential_integrity)) {
-    issues_referential_integrity <- paste0(
-      "\n", "  Referential integrity:\n", "    ", 
-      paste(issues_referential_integrity, collapse = "\n    "))
-  }
-
-  # TODO: Wrap in warning/error conditional and add controlling argument to validate_ecocomDP()
   
-  message(
-    paste0(
-      "Quality report for ", id, ":",
-      issues_table_presence,
-      issues_column_names,
-      issues_column_presence,
-      issues_column_classes,
-      issues_datetime,
-      issues_primary_keys,
-      issues_composite_keys,
-      issues_referential_integrity))
-  
-  message('Done\nThis ecocomDP has passed validation!')
+  validation_issues
 
 }
 
@@ -165,7 +146,7 @@ validate_ecocomDP <- function(
 #'     
 validate_table_names <- function(data.path = NULL) {
   
-  message("File names")
+  message(  "File names")
   
   # Validate inputs
   
@@ -221,7 +202,7 @@ validate_table_names <- function(data.path = NULL) {
 #'         
 validate_table_presence <- function(data.list) {
   
-  message("Required tables")
+  message("  Required tables")
   
   # Parameterize
   
@@ -260,7 +241,7 @@ validate_table_presence <- function(data.list) {
 #'
 validate_column_names <- function(data.list) {
 
-  message('Column names')
+  message('  Column names')
   
   # Parameterize
   
@@ -311,7 +292,7 @@ validate_column_names <- function(data.list) {
 #'
 validate_column_presence <- function(data.list){
   
-  message('Required columns')
+  message('  Required columns')
 
   # Parameterize
   
@@ -363,7 +344,7 @@ validate_column_presence <- function(data.list){
 #'
 validate_datetime <- function(data.list) {
   
-  message('Datetime formats')
+  message('  Datetime formats')
 
   # Parameterize
   
@@ -432,7 +413,7 @@ validate_datetime <- function(data.list) {
 #'
 validate_column_classes <- function(data.list) {
   
-  message("Column classes")
+  message("  Column classes")
   
   # Parameterize
 
@@ -473,7 +454,7 @@ validate_column_classes <- function(data.list) {
                     column = k, expected = expected, detected = detected)
                 }
               }
-              if (exists("issues")) {
+              if (exists("issues", inherits = FALSE)) {
                 paste0(
                   "The column ", k, " in the table ", x, " has a class of ", 
                   detected, " but a class of ", expected, " is expected.")
@@ -504,7 +485,7 @@ validate_column_classes <- function(data.list) {
 #'
 validate_primary_keys <- function(data.list) {
 
-  message("Primary keys")
+  message("  Primary keys")
   
   # Parameterize
   
@@ -552,7 +533,7 @@ validate_primary_keys <- function(data.list) {
 #'
 validate_composite_keys <- function(data.list) {
   
-  message("Composite keys")
+  message("  Composite keys")
   
   # Parameterize
   
@@ -603,7 +584,7 @@ validate_composite_keys <- function(data.list) {
 #'
 validate_referential_integrity <- function(data.list) {
 
-  message("Referential integrity")
+  message("  Referential integrity")
 
   # Parameterize
   
