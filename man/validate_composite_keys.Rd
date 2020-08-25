@@ -11,7 +11,8 @@ validate_composite_keys(data.list)
 ecocomDP table.}
 }
 \value{
-If composite keys are not unique an error is returned.
+(character) If composite keys are not unique, then rows numbers of 
+    duplicate keys are returned, otherwise NULL is returned.
 }
 \description{
 Check composite column uniqueness

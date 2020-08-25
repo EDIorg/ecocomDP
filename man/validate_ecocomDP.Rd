@@ -12,6 +12,11 @@ ecocomDP table. See output from \code{read_data()}.}
 
 \item{data.path}{(character) The path to the directory containing ecocomDP tables.}
 }
+\value{
+(character) If issues are found, then a vector of character strings 
+    describing validation issues is returned along with a warning. If no 
+    issues are found then a NULL is returned.
+}
 \description{
 Use this function to verify a dataset conforms to the ecocomDP.
 }
@@ -41,7 +46,11 @@ This function is used by ecocomDP creators (to ensure what has been
     model error).
 }
 \examples{
-# Validate a set files (example data)
-validate_ecocomDP(data.path = system.file("/data", package = "ecocomDP"))
+# Validate a set of files
+r <- validate_ecocomDP(data.path = system.file("/data", package = "ecocomDP"))
+
+# Validate a list object
+d <- read_from_files(system.file("/data", package = "ecocomDP"))
+r <- validate_ecocomDP(data.list = d)
         
 }

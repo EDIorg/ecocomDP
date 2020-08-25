@@ -11,7 +11,8 @@ validate_table_presence(data.list)
 ecocomDP table.}
 }
 \value{
-If required tables are missing, then an error message is produced.
+(character) If required tables are missing, then the missing table names
+    are returned, otherwise NULL is returned.
 }
 \description{
 Check for required tables

@@ -14,6 +14,11 @@
 #'     created is valid), maintainers (to improve the quality of archived
 #'     ecocomDP datasets), and users (to ensure the data being used is free of
 #'     model error).
+#'     
+#' @return 
+#'     (character) If issues are found, then a vector of character strings 
+#'     describing validation issues is returned along with a warning. If no 
+#'     issues are found then a NULL is returned.
 #'          
 #' @details 
 #'    Validation checks:
@@ -35,12 +40,15 @@
 #'    }
 #'    
 #' @examples 
-#' # Validate a set files (example data)
-#' validate_ecocomDP(data.path = system.file("/data", package = "ecocomDP"))
+#' # Validate a set of files
+#' r <- validate_ecocomDP(data.path = system.file("/data", package = "ecocomDP"))
+#' 
+#' # Validate a list object
+#' d <- read_from_files(system.file("/data", package = "ecocomDP"))
+#' r <- validate_ecocomDP(data.list = d)
 #'         
 #' @export
 #'
-
 validate_ecocomDP <- function(
   data.list = NULL,
   data.path = NULL) {
@@ -90,7 +98,7 @@ validate_ecocomDP <- function(
   issues_composite_keys <- validate_composite_keys(d)
   issues_referential_integrity <- validate_referential_integrity(d)
   
-  # Create quality report -----------------------------------------------------
+  # Report validation issues --------------------------------------------------
   
   # Format results into a human readable format
   
@@ -198,7 +206,8 @@ validate_table_names <- function(data.path = NULL) {
 #'     ecocomDP table.
 #'
 #' @return 
-#'     If required tables are missing, then an error message is produced.
+#'     (character) If required tables are missing, then the missing table names
+#'     are returned, otherwise NULL is returned.
 #'         
 validate_table_presence <- function(data.list) {
   
@@ -237,7 +246,8 @@ validate_table_presence <- function(data.list) {
 #'     ecocomDP table.
 #'
 #' @return 
-#'     If required column names are missing, then an error is returned.
+#'     (character) If column names outside of the allowed set are found, then 
+#'     invalid column names are returned, otherwise NULL is returned.
 #'
 validate_column_names <- function(data.list) {
 
@@ -287,9 +297,8 @@ validate_column_names <- function(data.list) {
 #'     ecocomDP table.
 #'
 #' @return 
-#'     If required column names are absent, then an error is returned.
-#'         
-#' @export
+#'     (character) If required column names are absent, then missing columns
+#'     are returned, otherwise NULL is returned.
 #'
 validate_column_presence <- function(data.list){
   
@@ -339,10 +348,8 @@ validate_column_presence <- function(data.list){
 #'     ecocomDP table.
 #'
 #' @return 
-#'     If date and time data are not formmated to specification, then an error 
-#'     is returned.
-#'         
-#' @export
+#'     (character) If date and time data are not formmated to specification, 
+#'     then rows of invalid formats are returned, otherwise NULL is returned.
 #'
 validate_datetime <- function(data.list) {
   
@@ -411,8 +418,9 @@ validate_datetime <- function(data.list) {
 #'     ecocomDP table.
 #'
 #' @return 
-#'     If column classes are not formmated to specification, then an error 
-#'     is returned.
+#'     (character) If column classes do not follow specification, then the 
+#'     offending column and detected class are returned, otherwise NULL is 
+#'     returned.
 #'
 validate_column_classes <- function(data.list) {
   
@@ -485,7 +493,8 @@ validate_column_classes <- function(data.list) {
 #'     ecocomDP table.
 #'
 #' @return 
-#'     If primary keys are not unique, then an error is returned.
+#'     (character) If primary keys are not unique, then row numbers of 
+#'     duplicate keys are returned, otherwise NULL is returned.
 #'
 validate_primary_keys <- function(data.list) {
 
@@ -533,7 +542,8 @@ validate_primary_keys <- function(data.list) {
 #'     ecocomDP table.
 #'
 #' @return 
-#'     If composite keys are not unique an error is returned.
+#'     (character) If composite keys are not unique, then rows numbers of 
+#'     duplicate keys are returned, otherwise NULL is returned.
 #'
 validate_composite_keys <- function(data.list) {
   
@@ -586,6 +596,9 @@ validate_composite_keys <- function(data.list) {
 #'
 #' @return 
 #'     If foreign keys do not match primary keys, then an error is returned.
+#' @return 
+#'     (character) If foreign keys do not match primary keys, then unmatched 
+#'     foreign keys are returned, otherwise NULL is returned.
 #'
 validate_referential_integrity <- function(data.list) {
 
