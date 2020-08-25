@@ -198,7 +198,7 @@ read_data <- function(
   # and shouldn't be neccessary as the package_id is very unlikely to be 
   # duplicated).
   
-  if (!isTRUE(globally.unique.primary.keys)) {
+  if (isTRUE(globally.unique.primary.keys)) {
     
     invisible(
       lapply(
@@ -232,7 +232,7 @@ read_data <- function(
   # Validate ------------------------------------------------------------------
   
   for (i in 1:length(d)) {
-    d$validation_issues <- validate_ecocomDP(data.list = d[[i]]$tables)
+    d[[i]]$validation_issues <- validate_ecocomDP(data.list = d[[i]]$tables)
   }
   
   # Return --------------------------------------------------------------------

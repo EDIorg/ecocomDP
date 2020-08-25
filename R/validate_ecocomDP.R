@@ -102,31 +102,21 @@ validate_ecocomDP <- function(
   
   # Format results into a human readable format
   
-  validation_issues <- c(
-    issues_table_presence,
-    issues_column_names,
-    issues_column_presence,
-    issues_column_classes,
-    issues_datetime,
-    issues_primary_keys,
-    issues_composite_keys,
-    issues_referential_integrity)
+  validation_issues <- as.list(
+    c(
+      issues_table_presence,
+      issues_column_names,
+      issues_column_presence,
+      issues_column_classes,
+      issues_datetime,
+      issues_primary_keys,
+      issues_composite_keys,
+      issues_referential_integrity))
   
   if (!is.null(validation_issues)) {
-    validation_issues <- paste0(
-      seq(length(validation_issues)), 
-      ".) ", 
-      validation_issues)
-    validation_issues <- c(
-      paste0("Validation issues for ", id, ":\n"),
-      validation_issues)
-    warning(
-      "  Validation issues found for ", id, ". See output for details.", 
-      call. = FALSE)
+    warning("  Validation issues found for ", id, call. = FALSE)
   }
-  
   validation_issues
-
 }
 
 
