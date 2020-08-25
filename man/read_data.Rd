@@ -49,10 +49,10 @@ stacking procedure. Defaults to 1.}
 meet minimum requirements to run in parallel, this overrides. Defaults 
 to FALSE.}
 
-\item{globally.unique.primary.keys}{(logical) Whether to create globally unique primary keys. Reading 
-multiple datasets raises the issue of referential integrity across 
-datasets. If TRUE, \code{id} is appended to each table's primary 
-key. Defaults to FALSE.}
+\item{globally.unique.keys}{(logical) Whether to create globally unique primary keys (and associated
+foreign keys). Reading multiple datasets raises the issue of referential 
+integrity across datasets. If TRUE, \code{id} is appended to each 
+table's primary key and associated foreign key. Defaults to FALSE.}
 }
 \value{
 (list) A named list of \code{id}, each including: 

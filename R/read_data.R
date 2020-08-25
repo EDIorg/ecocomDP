@@ -31,11 +31,11 @@
 #'     (logical; NEON data only) If the data volume to be processed does not 
 #'     meet minimum requirements to run in parallel, this overrides. Defaults 
 #'     to FALSE.
-#' @param globally.unique.primary.keys
-#'     (logical) Whether to create globally unique primary keys. Reading 
-#'     multiple datasets raises the issue of referential integrity across 
-#'     datasets. If TRUE, \code{id} is appended to each table's primary 
-#'     key. Defaults to FALSE.
+#' @param globally.unique.keys
+#'     (logical) Whether to create globally unique primary keys (and associated
+#'     foreign keys). Reading multiple datasets raises the issue of referential 
+#'     integrity across datasets. If TRUE, \code{id} is appended to each 
+#'     table's primary key and associated foreign key. Defaults to FALSE.
 #'     
 #' @return
 #'     (list) A named list of \code{id}, each including: 
