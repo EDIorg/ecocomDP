@@ -31,25 +31,29 @@
 #'     (logical; NEON data only) If the data volume to be processed does not 
 #'     meet minimum requirements to run in parallel, this overrides. Defaults 
 #'     to FALSE.
+#' @param globally.unique.primary.keys
+#'     (logical) Whether to create globally unique primary keys. Reading 
+#'     multiple datasets raises the issue of referential integrity across 
+#'     datasets. If TRUE, \code{id} is appended to each table's primary 
+#'     key. Defaults to FALSE.
 #'     
 #' @return
 #'     (list) A named list of \code{id}, each including: 
 #'     \item{metadata}{A list of information about the data.}
 #'     \item{tables}{A list of data.frames following the ecocomDP format 
 #'     (\url{https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md})}
+#'     \item{validation_issues}{If the dataset fails any validation checks, 
+#'     then they are listed here as a vector of character strings describing 
+#'     each issue.}
 #'     
 #' @details 
 #'     Validation checks are applied to each dataset ensuring they comply with 
-#'     the ecocomDP. A warning is issued when validation fails (please report 
-#'     these to \url{https://github.com/EDIorg/ecocomDP/issues}). Datasets that
-#'     pass validation are returned.
+#'     the ecocomDP. A warning is issued when any validation check fails 
+#'     (please report these to \url{https://github.com/EDIorg/ecocomDP/issues}). 
+#'     All datasets are returned, even if they fail validation.
 #'     
 #'     Column classes are coerced to those defined in the ecocomDP 
 #'     specification.
-#'     
-#'     Reading multiple datasets raises the issue of referential integrity. 
-#'     This is addressed by adding the \code{id} to each table's primary key
-#'     (e.g. observation_id, event_id, etc.).
 #'     
 #' @export
 #' 
@@ -82,7 +86,8 @@
 #'   
 read_data <- function(
   id = NULL, path = NULL, file.type = ".rda", site = "all", startdate = NA, 
-  enddate = NA, check.size = FALSE, nCores = 1, forceParallel = FALSE) {
+  enddate = NA, check.size = FALSE, nCores = 1, forceParallel = FALSE,
+  globally.unique.primary.keys = FALSE) {
   
   # Validate input arguments --------------------------------------------------
   
@@ -193,39 +198,42 @@ read_data <- function(
   # and shouldn't be neccessary as the package_id is very unlikely to be 
   # duplicated).
   
-  invisible(
-    lapply(
-      names(d),
-      function(x){
-        lapply(
-          names(d[[x]]$tables),
-          function(y) {
-            lapply(
-              names(d[[x]]$tables[[y]]),
-              function(z) {
-                if (stringr::str_detect(z, "_id")) {
-                  if (!(z %in% c("package_id", "original_package_id", 
-                               "mapped_id", "authority_taxon_id", 
-                               "parent_location_id"))) {
-                    d[[x]]$tables[[y]][[z]] <<- paste0(
-                      d[[x]]$tables[[y]][[z]], "_", x)
-                  } else if (z == "parent_location_id") {
-                    use_i <- is.na(d[[x]]$tables[[y]][[z]])
-                    d[[x]]$tables[[y]][[z]] <<- paste0(
-                      d[[x]]$tables[[y]][[z]], "_", x)
-                    d[[x]]$tables[[y]][[z]][use_i] <<- NA_character_
+  if (!isTRUE(globally.unique.primary.keys)) {
+    
+    invisible(
+      lapply(
+        names(d),
+        function(x){
+          lapply(
+            names(d[[x]]$tables),
+            function(y) {
+              lapply(
+                names(d[[x]]$tables[[y]]),
+                function(z) {
+                  if (stringr::str_detect(z, "_id")) {
+                    if (!(z %in% c("package_id", "original_package_id", 
+                                   "mapped_id", "authority_taxon_id", 
+                                   "parent_location_id"))) {
+                      d[[x]]$tables[[y]][[z]] <<- paste0(
+                        d[[x]]$tables[[y]][[z]], "_", x)
+                    } else if (z == "parent_location_id") {
+                      use_i <- is.na(d[[x]]$tables[[y]][[z]])
+                      d[[x]]$tables[[y]][[z]] <<- paste0(
+                        d[[x]]$tables[[y]][[z]], "_", x)
+                      d[[x]]$tables[[y]][[z]][use_i] <<- NA_character_
+                    }
                   }
-                }
-              })
-          })
-      }))
+                })
+            })
+        }))
+    
+  }
   
   # Validate ------------------------------------------------------------------
   
-  # for (i in 1:length(d)) {
-  #   message("Validating ", names(d)[i])
-  #   validate_ecocomDP(data.list = d[[i]]$tables)
-  # }
+  for (i in 1:length(d)) {
+    d$validation_issues <- validate_ecocomDP(data.list = d[[i]]$tables)
+  }
   
   # Return --------------------------------------------------------------------
   

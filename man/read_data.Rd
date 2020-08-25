@@ -13,7 +13,8 @@ read_data(
   enddate = NA,
   check.size = FALSE,
   nCores = 1,
-  forceParallel = FALSE
+  forceParallel = FALSE,
+  globally.unique.primary.keys = FALSE
 )
 }
 \arguments{
@@ -47,28 +48,32 @@ stacking procedure. Defaults to 1.}
 \item{forceParallel}{(logical; NEON data only) If the data volume to be processed does not 
 meet minimum requirements to run in parallel, this overrides. Defaults 
 to FALSE.}
+
+\item{globally.unique.primary.keys}{(logical) Whether to create globally unique primary keys. Reading 
+multiple datasets raises the issue of referential integrity across 
+datasets. If TRUE, \code{id} is appended to each table's primary 
+key. Defaults to FALSE.}
 }
 \value{
 (list) A named list of \code{id}, each including: 
     \item{metadata}{A list of information about the data.}
     \item{tables}{A list of data.frames following the ecocomDP format 
     (\url{https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md})}
+    \item{validation_issues}{If the dataset fails any validation checks, 
+    then they are listed here as a vector of character strings describing 
+    each issue.}
 }
 \description{
 Read ecocomDP data
 }
 \details{
 Validation checks are applied to each dataset ensuring they comply with 
-    the ecocomDP. A warning is issued when validation fails (please report 
-    these to \url{https://github.com/EDIorg/ecocomDP/issues}). Datasets that
-    pass validation are returned.
+    the ecocomDP. A warning is issued when any validation check fails 
+    (please report these to \url{https://github.com/EDIorg/ecocomDP/issues}). 
+    All datasets are returned, even if they fail validation.
     
     Column classes are coerced to those defined in the ecocomDP 
     specification.
-    
-    Reading multiple datasets raises the issue of referential integrity. 
-    This is addressed by adding the \code{id} to each table's primary key
-    (e.g. observation_id, event_id, etc.).
 }
 \examples{
 # Read a dataset
