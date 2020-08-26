@@ -53,6 +53,10 @@
 search_data <- function(text, taxa, num.taxa, years, sd.between.surveys, 
                         geographic.area, boolean.operator = "AND") {
   
+  # TODO: Add argument to search within a NEON site. Currently searches return
+  # data products if any of the search parameters are true for any of the 
+  # sites.
+  
   message("Searching data ...")
   
   # Validate arguments --------------------------------------------------------
@@ -138,7 +142,7 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
     }
     
     # Search taxa
-    
+
     if (!missing(taxa)) {
       taxa_i <- rep(F, length(d[[i]]$taxa))
       for (k in 1:length(d[[i]]$taxa)) {
@@ -153,9 +157,6 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
             tolower(paste(taxa, collapse = "|")))
         }
       }
-      if (i == "DP1.10022.001") {
-        browser()
-      }
       if (any(taxa_i, na.rm = T)) {
         use_i[[i]]$taxa <- T
         sites_i[[i]]$taxa <- names(d[[i]]$taxa)[taxa_i]
@@ -164,7 +165,7 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
       use_i[[i]]$taxa <- NULL
       sites_i[[i]]$taxa <- NULL
     }
-    
+
     if (!missing(num.taxa)) {
       num_taxa_i <- rep(F, length(d[[i]]$taxa))
       for (k in 1:length(d[[i]]$taxa)) {
@@ -259,7 +260,7 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
         function(x) {
           all(unname(unlist(x)))
         }))
-    
+
   }
   
   # Return results ------------------------------------------------------------

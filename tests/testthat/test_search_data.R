@@ -136,48 +136,91 @@ testthat::test_that("search_data() with non-NULL input", {
     names(summary_data),
     function(id) {
       x <- summary_data[[id]]
-      if (stringr::str_detect(
-        id, "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)")) {
-        # EDI
-        stringr::str_detect(
-          x$taxa$geographic_bounds$taxa, 
-          taxa_search)
-      } else if (stringr::str_detect(
-        id, "(^DP.\\.[:digit:]+\\.[:digit:]+)")) {
-        # NEON
-        taxa <- unname(
-          unlist(
-            lapply(
-              x$taxa,
-              function(k) {
-                k$taxa
-              })))
-        taxa <- paste(taxa, collapse = ",")
-        stringr::str_detect(taxa, taxa_search)
-      }
+      taxa <- unname(
+        unlist(
+          lapply(
+            x$taxa,
+            function(k) {
+              k$taxa
+            })))
+      taxa <- paste(taxa, collapse = ",")
+      stringr::str_detect(taxa, taxa_search)
     })
-  na.omit(names(summary_data)[unlist(r_method_2)])
   
   expect_true(
-    r_method_1$id,
-    na.omit(names(summary_data)[unlist(r_method_2)])
-  )
-  
-  # ?
-  test <- summary_data[["DP1.10022.001"]]
-  test$taxa$ABBY$taxa
-  
-  
-  stringr::str_view(
-    x$taxa$geographic_bounds$taxa, 
-    taxa_search
-  )
-  
+    all(
+      r_method_1$id %in%
+        unique(na.omit(names(summary_data)[unlist(r_method_2)]))))
+
   # num.taxa
+  
+  search_num_taxa <- c(0, 10)
+  r_method_1 <- search_data(num.taxa = search_num_taxa)
+  r_method_2 <- lapply(
+    names(summary_data),
+    function(id) {
+      x <- summary_data[[id]]
+      num_taxa <- unname(
+        unlist(
+          lapply(
+            x$taxa,
+            function(k) {
+              k$unique_taxa
+            })))
+      any((num_taxa >= search_num_taxa[1]) & (num_taxa <= search_num_taxa[2]))
+    })
+  
+  expect_true(
+    all(
+      unique(r_method_1$id) %in%
+        unique(na.omit(names(summary_data)[unlist(r_method_2)]))))
   
   # years
   
+  search_years <- c(10, 20)
+  r_method_1 <- search_data(num.taxa = search_years)
+  r_method_2 <- lapply(
+    names(summary_data),
+    function(id) {
+      x <- summary_data[[id]]
+      years <- unname(
+        unlist(
+          lapply(
+            x$taxa,
+            function(k) {
+              k$unique_taxa
+            })))
+      any((years >= search_years[1]) & (years <= search_years[2]))
+    })
+  
+  expect_true(
+    all(
+      unique(r_method_1$id) %in%
+        unique(na.omit(names(summary_data)[unlist(r_method_2)]))))
+  
   # sd.between.surveys
+  
+  search_sd_between_surveys <- c(.25, 1)
+  r_method_1 <- search_data(sd.between.surveys = search_sd_between_surveys)
+  r_method_2 <- lapply(
+    names(summary_data),
+    function(id) {
+      x <- summary_data[[id]]
+      sd_between_surveys <- unname(
+        unlist(
+          lapply(
+            x$std_dev_interval_betw_years,
+            function(k) {
+              k
+            })))
+      any((sd_between_surveys >= search_sd_between_surveys[1]) & 
+            (sd_between_surveys <= search_sd_between_surveys[2]))
+    })
+  
+  expect_true(
+    all(
+      unique(r_method_1$id) %in%
+        unique(na.omit(names(summary_data)[unlist(r_method_2)]))))
   
   # geographic.area
   
