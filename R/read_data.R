@@ -344,6 +344,8 @@ read_data_edi <- function(id) {
 #' 
 read_from_files <- function(data.path) {
   
+  validate_arguments("read_from_files", as.list(environment()))
+  
   attr_tbl <- data.table::fread(
     system.file('validation_criteria.txt', package = 'ecocomDP'))
   attr_tbl <- attr_tbl[!is.na(attr_tbl$column), ]
@@ -404,6 +406,7 @@ read_from_files <- function(data.path) {
   # Return
   
   d
+  
 }
 
 

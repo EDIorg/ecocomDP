@@ -292,6 +292,20 @@ validate_arguments <- function(fun.name, fun.args) {
     
   }
   
+  # read_from_files() ---------------------------------------------------------
+  
+  if (fun.name == "read_from_files") {
+    
+    # data.path - Is a valid path
+    
+    if (!is.null(fun.args$data.path)) {
+      if (!dir.exists(fun.args$data.path)) {
+        stop("Input 'data.path' doesn't exits.", call. = F)
+      }
+    }
+    
+  }
+  
 }
 
 

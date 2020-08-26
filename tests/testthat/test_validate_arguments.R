@@ -315,3 +315,23 @@ testthat::test_that("read_data()", {
     regexp = "Unsupported \'forceParallel\' input. Expected is TRUE or FALSE.")
   
 })
+
+# read_from_files() -----------------------------------------------------------
+
+testthat::test_that("read_from_files()", {
+  
+  # data.path - Is valid
+  
+  expect_null(
+    validate_arguments(
+      "read_from_files",
+      as.list(
+        list(data.path = tempdir()))))
+  
+  expect_error(
+    validate_arguments(
+      "read_from_files",
+      as.list(
+        list(data.path = paste0(tempdir(), "/aoihebqlnvo333")))))
+  
+})
