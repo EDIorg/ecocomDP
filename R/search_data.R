@@ -153,6 +153,9 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
             tolower(paste(taxa, collapse = "|")))
         }
       }
+      if (i == "DP1.10022.001") {
+        browser()
+      }
       if (any(taxa_i, na.rm = T)) {
         use_i[[i]]$taxa <- T
         sites_i[[i]]$taxa <- names(d[[i]]$taxa)[taxa_i]

@@ -2,21 +2,21 @@ context("Search data")
 
 library(ecocomDP)
 
-# Parameterize ----------------------------------------------------------------
-
-r <- search_data()
-r_edi<- r[
-  stringr::str_detect(
-    r$id,
-    "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)"), ]
-r_neon<- r[
-  stringr::str_detect(
-    r$id,
-    "^DP.\\.[:digit:]+\\.[:digit:]+"), ]
-
-# search_data() NULL input ----------------------------------------------------
+# NULL input ------------------------------------------------------------------
 
 testthat::test_that("search_data() with NULL input", {
+  
+  # Parameterize
+  
+  r <- search_data()
+  r_edi<- r[
+    stringr::str_detect(
+      r$id,
+      "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)"), ]
+  r_neon<- r[
+    stringr::str_detect(
+      r$id,
+      "^DP.\\.[:digit:]+\\.[:digit:]+"), ]
   
   # class - Is data frame
   
@@ -90,8 +90,97 @@ testthat::test_that("search_data() with NULL input", {
         "min = .+, max = .+"
       )))
   
-  # sites - 
+  # sites - Site search available for NEON only
   
-  # url - 
+  expect_true(
+    all(
+      is.na(r_edi$sites)))
+  
+  expect_true(
+    all(
+      stringr::str_detect(r_neon$sites, "(.+,)+")))
+  
+  # url - Present for all datasets
+  
+  expect_true(
+    all(
+      stringr::str_detect(r$url, "https:.+")))
 
+})
+
+# non-NULL input --------------------------------------------------------------
+
+testthat::test_that("search_data() with non-NULL input", {
+  
+  # Parameterize
+  
+  summary_data <- c(summary_data_edi, summary_data_neon)
+  
+  # text - Search titles
+  
+  r <- search_data(
+    text = "Small mammal box trapping")
+  expect_equal(nrow(r), 1)
+  
+  # text - Search abstract
+  
+  r <- search_data(
+    text = "South Carolina")
+  expect_true(nrow(r) < nrow(search_data()))
+  
+  # taxa
+  
+  taxa_search <- "Chordata"
+  r_method_1 <- search_data(taxa = taxa_search)
+  r_method_2 <- lapply(
+    names(summary_data),
+    function(id) {
+      x <- summary_data[[id]]
+      if (stringr::str_detect(
+        id, "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)")) {
+        # EDI
+        stringr::str_detect(
+          x$taxa$geographic_bounds$taxa, 
+          taxa_search)
+      } else if (stringr::str_detect(
+        id, "(^DP.\\.[:digit:]+\\.[:digit:]+)")) {
+        # NEON
+        taxa <- unname(
+          unlist(
+            lapply(
+              x$taxa,
+              function(k) {
+                k$taxa
+              })))
+        taxa <- paste(taxa, collapse = ",")
+        stringr::str_detect(taxa, taxa_search)
+      }
+    })
+  na.omit(names(summary_data)[unlist(r_method_2)])
+  
+  expect_true(
+    r_method_1$id,
+    na.omit(names(summary_data)[unlist(r_method_2)])
+  )
+  
+  # ?
+  test <- summary_data[["DP1.10022.001"]]
+  test$taxa$ABBY$taxa
+  
+  
+  stringr::str_view(
+    x$taxa$geographic_bounds$taxa, 
+    taxa_search
+  )
+  
+  # num.taxa
+  
+  # years
+  
+  # sd.between.surveys
+  
+  # geographic.area
+  
+  # boolean.operator
+  
 })
