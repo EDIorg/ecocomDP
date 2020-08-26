@@ -87,7 +87,7 @@
 read_data <- function(
   id = NULL, path = NULL, file.type = ".rda", site = "all", startdate = NA, 
   enddate = NA, check.size = FALSE, nCores = 1, forceParallel = FALSE,
-  globally.unique.primary.keys = FALSE) {
+  globally.unique.keys = FALSE) {
   
   # Validate input arguments --------------------------------------------------
   
@@ -198,7 +198,7 @@ read_data <- function(
   # and shouldn't be neccessary as the package_id is very unlikely to be 
   # duplicated).
   
-  if (isTRUE(globally.unique.primary.keys)) {
+  if (isTRUE(globally.unique.keys)) {
     
     invisible(
       lapply(

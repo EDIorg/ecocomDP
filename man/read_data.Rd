@@ -14,7 +14,7 @@ read_data(
   check.size = FALSE,
   nCores = 1,
   forceParallel = FALSE,
-  globally.unique.primary.keys = FALSE
+  globally.unique.keys = FALSE
 )
 }
 \arguments{

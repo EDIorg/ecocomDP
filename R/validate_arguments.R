@@ -219,6 +219,14 @@ validate_arguments <- function(fun.name, fun.args) {
            call. = FALSE)
     }
     
+    # forceParallel - Is logical
+    
+    if (!is.null(fun.args$globally.unique.keys) & 
+        !is.logical(fun.args$globally.unique.keys)) {
+      stop("Unsupported 'globally.unique.keys' input. Expected is TRUE or ",
+           "FALSE.", call. = FALSE)
+    }
+    
     # Validate each id and corresponding set of argument values.
     
     invisible(

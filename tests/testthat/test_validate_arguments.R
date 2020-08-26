@@ -314,6 +314,15 @@ testthat::test_that("read_data()", {
     suppressWarnings(validate_arguments("read_data", input)),
     regexp = "Unsupported \'forceParallel\' input. Expected is TRUE or FALSE.")
   
+  # globally.unique.keys - Is logical
+  
+  input <- formals(ecocomDP::read_data)
+  input$id <- "edi.359.1"
+  input$globally.unique.keys <- "not_a_logical_value"
+  expect_error(
+    suppressWarnings(validate_arguments("read_data", input)),
+    regexp = "Unsupported \'globally.unique.keys\' input. Expected is TRUE or FALSE.")
+  
 })
 
 # read_from_files() -----------------------------------------------------------
