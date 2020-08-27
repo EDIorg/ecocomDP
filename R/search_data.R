@@ -51,7 +51,7 @@
 #' r <- search_data()
 #' 
 #' # Text searches titles, descriptions, and abstracts
-#' r <- search_data(text = "small mammal box trapping")
+#' r <- search_data(text = "Lake")
 #' 
 #' # Taxa searches any taxonomic rank of an organism
 #' r <- search_data(taxa = "Plantae")
@@ -79,9 +79,9 @@
 #'   text = c("Lake", "River"),
 #'   taxa = c("Plantae", "Animalia"),
 #'   num.taxa = c(0, 10),
-#'   years = c(5, 30),
-#'   sd.between.surveys = c(.25, 2),
-#'   geographic.area = c(48, -67.7, 25, -123),
+#'   years = c(10, 100),
+#'   sd.between.surveys = c(.01, 100),
+#'   geographic.area = c(47.1, -86.7, 42.5, -92),
 #'   boolean.operator = "OR")
 #'         
 #' @export
