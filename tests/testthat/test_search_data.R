@@ -178,7 +178,7 @@ testthat::test_that("search_data() with non-NULL input", {
   # years
   
   search_years <- c(10, 20)
-  r_method_1 <- search_data(num.taxa = search_years)
+  r_method_1 <- search_data(years = search_years)
   r_method_2 <- lapply(
     names(summary_data),
     function(id) {
@@ -223,7 +223,44 @@ testthat::test_that("search_data() with non-NULL input", {
         unique(na.omit(names(summary_data)[unlist(r_method_2)]))))
   
   # geographic.area
+  # TODO: Implement test
   
-  # boolean.operator
+  # boolean.operator "OR" - All unique id of separate term searches should be 
+  # combined when using the OR operator
+  
+  r1 <- search_data(text = "Lake")
+  r2 <- search_data(text = "River")
+  r_or <- search_data(text = c("Lake", "River"), boolean.operator = "OR")
+  
+  expect_true(
+    all(
+      unique(c(r1$id, r2$id)) %in% unique(r_or$id)))
+  
+  r1 <- search_data(taxa = "Plantae")
+  r2 <- search_data(taxa = "Animalia")
+  r_or <- search_data(taxa = c("Plantae", "Animalia"), boolean.operator = "OR")
+  
+  expect_true(
+    all(
+      unique(c(r1$id, r2$id)) %in% unique(r_or$id)))
+  
+  # boolean.operator "AND" - All unique id of separate term searches should not 
+  # be expected when using the AND operator
+  
+  r1 <- search_data(text = "Lake")
+  r2 <- search_data(text = "River")
+  r_and <- search_data(text = c("Lake", "River"), boolean.operator = "AND")
+  
+  expect_true(
+    all(
+      intersect(r1$id, r2$id) %in% r_and$id))
+  
+  r1 <- search_data(taxa = "Plantae")
+  r2 <- search_data(taxa = "Animalia")
+  r_and <- search_data(taxa = c("Plantae", "Animalia"), boolean.operator = "AND")
+  
+  expect_true(
+    all(
+      intersect(r1$id, r2$id) %in% r_and$id))
   
 })

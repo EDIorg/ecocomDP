@@ -20,7 +20,7 @@
 #'     years).
 #' @param geographic.area
 #'     (numeric) Decimal degree North, East, South, and West coordinates within
-#'     which the data shoud originate.
+#'     which the data should originate.
 #' @param boolean.operator
 #'     (character) Boolean operator to use when searching \code{text} and 
 #'     \code{taxa}. Supported operators are "AND", "OR".
@@ -47,6 +47,42 @@
 #'     }
 #'     
 #' @examples
+#' # Empty search returns all available data
+#' r <- search_data()
+#' 
+#' # Text searches titles, descriptions, and abstracts
+#' r <- search_data(text = "small mammal box trapping")
+#' 
+#' # Taxa searches any taxonomic rank of an organism
+#' r <- search_data(taxa = "Plantae")
+#' 
+#' # Number of taxa searches the count of unique taxa in a dataset
+#' r <- search_data(num.taxa = c(0, 10))
+#' 
+#' # Years searches the number of years the dataset covers
+#' r <- search_data(years = c(10, 20))
+#' 
+#' # Standard deviation between surveys searches for a sampling frequency
+#' r <- search_data(sd.between.surveys = c(.25, 1))
+#' 
+#' # Geographic area searches where data were collected
+#' r <- search_data(geographic.area = c(47.1, -86.7, 42.5, -92))
+#' 
+#' # Boolean operators AND (default) & OR combine text and taxa search terms
+#' r <- search_data(text = c("Lake", "River"))
+#' r <- search_data(text = c("Lake", "River"), boolean.operator = "OR")
+#' r <- search_data(taxa = c("Plantae", "Animalia"))
+#' r <- search_data(taxa = c("Plantae", "Animalia"), boolean.operator = "OR")
+#' 
+#' # Use any combination of search fields to find the data you're looking for
+#' r <- search_data(
+#'   text = c("Lake", "River"),
+#'   taxa = c("Plantae", "Animalia"),
+#'   num.taxa = c(0, 10),
+#'   years = c(5, 30),
+#'   sd.between.surveys = c(.25, 2),
+#'   geographic.area = c(48, -67.7, 25, -123),
+#'   boolean.operator = "OR")
 #'         
 #' @export
 #'
