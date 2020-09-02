@@ -2,7 +2,6 @@ language: r
 cache: packages
 r_packages:
   - data.table
-  - dataCleanr
   - downloader
   - dplyr
   - EML
