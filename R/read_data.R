@@ -95,16 +95,6 @@ read_data <- function(
 
   # Validate input arguments --------------------------------------------------
   
-# <<<<<<< HEAD
-#   # id can be a list so, if not already, wrap it in list()
-#   
-#   if (!is.list(id)) {
-#     empty_list <- vector(mode = "list", length(id))
-#     names(empty_list) <- unlist(id)
-#     id <- empty_list
-#   }
-# =======
-  
   fun.args <- validate_arguments("read_data", as.list(environment()))
   id <- fun.args$id
   path <- fun.args$path
@@ -116,7 +106,7 @@ read_data <- function(
   nCores <- fun.args$nCores
   token <- fun.args$token
   forceParallel <- fun.args$forceParallel
-  
+
   # Parameterize --------------------------------------------------------------
 
   # Get ecocomDP attributes for validation and coercion
@@ -125,10 +115,8 @@ read_data <- function(
     system.file('validation_criteria.txt', package = 'ecocomDP'))
   attr_tbl <- attr_tbl[!is.na(attr_tbl$column), ]
 
- 
   # Read ----------------------------------------------------------------------
   
-
   d <- lapply(
     names(id),
     function(x) {
@@ -149,8 +137,6 @@ read_data <- function(
       }
     })
   
-
-  
   names(d) <- names(id)
   
   # Modify --------------------------------------------------------------------
@@ -158,34 +144,31 @@ read_data <- function(
   # Add missing columns
   
   
-  # this doesn't seem to work -- ERS
   
-  # invisible(
-  #   lapply(
-  #     names(d),
-  #     function(x) {
-  #       lapply(
-  #         names(d[[x]]$tables),
-  #         function(y) {
-  #           nms <- attr_tbl$column[attr_tbl$table == y]
-  #           use_i <- setdiff(nms, names(d[[x]]$tables[[y]]))
-  #           if (length(use_i) > 0) {
-  #             d[[x]]$tables[[y]][[use_i]] <<- NA
-  #             # There seems to be an incompatibility in the handling of 
-  #             # ..nms between Mac and Windows Os
-  #             msg <- try(
-  #               d[[x]]$tables[[y]] <<- d[[x]]$tables[[y]][ , ..nms], 
-  #               silent = TRUE)
-  #             if (attr(msg, "class") == "try-error") {
-  #               d[[x]]$tables[[y]] <<- d[[x]]$tables[[y]][ , nms]
-  #             }
-  #           }
-  #         })
-  #     }))
-  
-  
+  invisible(
+    lapply(
+      names(d),
+      function(x) {
+        lapply(
+          names(d[[x]]$tables),
+          function(y) {
+            nms <- attr_tbl$column[attr_tbl$table == y]
+            use_i <- setdiff(nms, names(d[[x]]$tables[[y]]))
+            if (length(use_i) > 0) {
+              d[[x]]$tables[[y]][use_i] <<- NA
+              # There seems to be an incompatibility in the handling of 
+              # ..nms between Mac and Windows Os
+              msg <- try(
+                d[[x]]$tables[[y]] <<- d[[x]]$tables[[y]][ , ..nms], 
+                silent = TRUE)
+              if (attr(msg, "class") == "try-error") {
+                d[[x]]$tables[[y]] <<- d[[x]]$tables[[y]][ , nms]
+              }
+            }
+          })
+      }))
 
-  
+
   # Coerce column classes to ecocomDP specifications. NOTE: This same 
   # process is applied to read_from_files(). Any update here should be
   # duplicated there. A function is not used in order to minimize data object
@@ -219,8 +202,6 @@ read_data <- function(
               })
           })
       }))
-  
-
   
 
   # Append package_id to primary keys to ensure referential integrity (except
@@ -261,15 +242,12 @@ read_data <- function(
 
   
   
-  
-  
   # Validate ------------------------------------------------------------------
   
 
   for (i in 1:length(d)) {
     d[[i]]$validation_issues <- validate_ecocomDP(data.list = d[[i]]$tables)
   }
-
   
   
   
@@ -281,7 +259,9 @@ read_data <- function(
   
   d
   
-}
+} #END read_data()
+
+
 
 
 

@@ -1,4 +1,7 @@
 
+# devtools::install_github("sokole/ecocomDP@master")
+library(ecocomDP)
+
 # read EDI data
 d <- read_data("edi.193.3")
 
@@ -25,3 +28,21 @@ d <- read_data(
 d <- read_data(
   id = c("edi.193.3", "DP1.20166.001"),
   token = Sys.getenv("NEON_TOKEN"))
+
+
+# testing with NEON macroinvert
+my_result <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(
+  site= c('COMO','LECO'), 
+  startdate = "2019-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"))
+
+
+# testing with NEON macroinvert
+my_result <- read_data(
+  id = "DP1.20120.001",
+  site= c('COMO','LECO'), 
+  startdate = "2019-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"))
+
