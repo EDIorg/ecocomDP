@@ -15,8 +15,7 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
   all_tabs_in <- neonUtilities::loadByProduct(
     # hard coded arguments
     dpID = neon.data.product.id, 
-    package = "basic", 
-    
+
     # dots for passing user input
     ...
     

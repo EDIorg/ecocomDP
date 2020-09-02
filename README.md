@@ -1,3 +1,8 @@
+<!-- This comment enables badge extraction to pkgdown site -->
+
+[![Travis-CI Build Status](https://travis-ci.com/EDIorg/ecocomDP.svg?branch=master)](https://travis-ci.org/EDIorg/ecocomDP)
+[![codecov.io](https://codecov.io/github/EDIorg/ecocomDP/coverage.svg?branch=master)](https://codecov.io/github/EDIorg/ecocomDP?branch=master)
+
 # ecocomDP: A dataset design pattern for ecological community data to facilitate synthesis and reuse
 
 With the almost forty year existence of the Long-term Ecological Research (LTER) Network and other networks worldwide, a diverse array of long-term observational and experimental data is becoming increasingly available. A number of data repositories are making the data accessible, with the intent that accompanying detailed metadata allow meaningful reuse, repurpose and integration with other data. 

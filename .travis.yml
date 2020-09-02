@@ -1,0 +1,32 @@
+language: r
+cache: packages
+r_packages:
+  - data.table
+  - dataCleanr
+  - downloader
+  - dplyr
+  - EML
+  - gdata
+  - httr
+  - jsonlite
+  - lubridate
+  - magrittr
+  - neonUtilities
+  - purrr
+  - reader
+  - readr
+  - RMySQL
+  - stringi
+  - stringr
+  - tidyr
+  - tidyverse
+  - usethis
+  - xml2
+  - XML
+r_github_packages:
+  - EDIorg/EDIutils
+  - EDIorg/taxonomyCleanr
+  - EDIorg/dataCleanr
+warnings_are_errors: false
+after_success:
+  - Rscript -e 'library(covr); codecov()'

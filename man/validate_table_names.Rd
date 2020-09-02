@@ -7,15 +7,15 @@
 validate_table_names(data.path = NULL)
 }
 \arguments{
-\item{data.path}{(character) The path to the directory containing ecocomDP tables.}
+\item{data.path}{(character) Path to the directory containing ecocomDP tables.}
 }
 \value{
-If table names are valid, then the corresponding table names are
-    returned. If table names are invalid, then an error message is
+(character) If table names are valid, then the corresponding table names 
+    are returned. If table names are invalid, then an error message is
     returned.
 }
 \description{
-This function ensures that your ecocomDP (L1) tables follow the
-    file naming convention (i.e. \emph{studyName_ecocomDPTableName.ext},
-    e.g. \emph{gleon_chloride_observation.csv}).
+This function ensures that ecocomDP file names follow the naming 
+    convention (i.e. \emph{studyName_ecocomDPTableName.ext}, e.g. 
+    \emph{gleon_chloride_observation.csv}).
 }

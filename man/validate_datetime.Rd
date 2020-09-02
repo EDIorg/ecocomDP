@@ -11,8 +11,8 @@ validate_datetime(data.list)
 ecocomDP table.}
 }
 \value{
-If date and time data are not formmated to specification, then an error 
-    is returned.
+(character) If date and time data are not formmated to specification, 
+    then rows of invalid formats are returned, otherwise NULL is returned.
 }
 \description{
 Check for valid date and time formats
