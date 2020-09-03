@@ -4,8 +4,12 @@
 \alias{make_variable_mapping}
 \title{Make variable_mapping table}
 \usage{
-make_variable_mapping(observation, observation_ancillary = NULL, 
-    location_ancillary = NULL, taxon_ancillary = NULL)
+make_variable_mapping(
+  observation,
+  observation_ancillary = NULL,
+  location_ancillary = NULL,
+  taxon_ancillary = NULL
+)
 }
 \arguments{
 \item{observation}{(data frame) The completed observation table.}

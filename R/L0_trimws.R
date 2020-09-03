@@ -4,9 +4,6 @@
 #'     A function to remove white space from L0 character class columns. The 
 #'     presence of white space affects alignment with L0 EML and downstream usage.
 #'
-#' @usage 
-#'     L0_trimws(x)
-#'
 #' @param x
 #'     (data frame) L0 table to trim white space from.
 #'

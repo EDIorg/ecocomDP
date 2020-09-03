@@ -41,15 +41,15 @@ testthat::test_that("validate_table_names()", {
   
   file.rename(
     from = dir(
-      paste0(tempdir(), "/data"), 
-      pattern = "dataset_summary", 
+      paste0(tempdir(), "/data"),
+      pattern = "dataset_summary",
       full.names = TRUE),
     to = paste0(tempdir(), "/data/Ant_Assemblages_dataset_summary.csv"))
   
   file.rename(
     from = dir(
-      paste0(tempdir(), "/data"), 
-      pattern = "observation_ancillary", 
+      paste0(tempdir(), "/data"),
+      pattern = "observation_ancillary",
       full.names = TRUE),
     to = paste0(tempdir(), "/data/Ant_observation_ancillary.csv"))
   
@@ -74,7 +74,9 @@ testthat::test_that("validate_table_presence()", {
   
   # Return message when all required tables are present.
   
-  expect_null(validate_table_presence(d))
+  expect_message(
+    validate_table_presence(d),
+    regexp = "Required tables")
   
   # Return character string when required tables are missing.
   
@@ -327,7 +329,7 @@ testthat::test_that("validate_ecocomDP", {
   # Create issue for validate_table_presence()
   d$dataset_summary <- NULL
   # Create issue for validate_column_names()
-  names(d$taxon_ancillary) <- c(
+  colnames(d$taxon_ancillary) <- c(
     "taxon_ancillary_id", "taxon_id", "datetime", "variable_name", "value", 
     "invalid_col_name")
   # Create issue for validate_column_presence()
@@ -349,7 +351,8 @@ testthat::test_that("validate_ecocomDP", {
   d$observation$taxon_id[1] <- "invalid_foreign_key"
   
   issues <- validate_ecocomDP(data.list = d)
-  expect_equal(length(issues), 11)
-  expect_true(is.character(issues))
+  expect_equal(length(issues), 10)
+  expect_true(is.list(issues))
+  expect_true(is.character(issues[[1]]))
   
 })

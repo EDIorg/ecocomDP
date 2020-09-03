@@ -5,17 +5,17 @@
 \title{Make EML metadata for ecocomDP tables}
 \usage{
 make_eml(
-      path,
-      parent.package.id,
-      child.package.id,
-      script,
-      script.description,
-      cat.vars,
-      contact,
-      user.id,
-      user.domain,
-      data.url = NULL
-    )
+  path,
+  parent.package.id,
+  child.package.id,
+  script,
+  script.description,
+  cat.vars,
+  contact,
+  user.id,
+  user.domain,
+  data.url = NULL
+)
 }
 \arguments{
 \item{path}{(character) Path to the directory containing ecocomDP data tables, 

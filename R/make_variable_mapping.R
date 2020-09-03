@@ -3,10 +3,6 @@
 #' @description  
 #'     Make a data frame of the variable mapping table.
 #'
-#' @usage 
-#'     make_variable_mapping(observation, observation_ancillary = NULL, 
-#'     location_ancillary = NULL, taxon_ancillary = NULL)
-#'
 #' @param observation
 #'     (data frame) The completed observation table.
 #' @param observation_ancillary
