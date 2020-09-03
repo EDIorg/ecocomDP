@@ -317,6 +317,64 @@ testthat::test_that("validate_referential_integrity()", {
   
 })
 
+# validate_latitude_longitude_format() ----------------------------------------
+
+testthat::test_that("validate_latitude_longitude_format()", {
+  
+  d <- test_data
+  
+  # Valid latitude and longitude results in message.
+  
+  expect_null(validate_latitude_longitude_format(d))
+  
+  # Invalid latitude and longitude results in character string.
+  
+  for (i in c("latitude", "longitude")) {
+    d <- test_data
+    d$location[[i]][1:2] <- "invalid_coordinate"
+    expect_true(
+      stringr::str_detect(
+        validate_latitude_longitude_format(d),
+        "The .+ column of the location table contains values that"))
+  }
+  
+})
+
+# validate_latitude_longitude_range() -----------------------------------------
+
+testthat::test_that("validate_latitude_longitude_range()", {
+  
+  d <- test_data
+  
+  # Valid latitude and longitude results in message.
+  
+  expect_null(validate_latitude_longitude_range(d))
+  
+  # Invalid latitude and longitude results in character string.
+  
+  for (i in c("latitude", "longitude")) {
+    d <- test_data
+    if (i == "latitude") {
+      d$location[[i]][1:2] <- c(100, -100)
+      expect_true(
+        stringr::str_detect(
+          validate_latitude_longitude_range(d),
+          paste0(
+            "The latitude column of the location table contains values ",
+            "outside the bounds -90 to 90 in rows: .+")))
+    } else if (i == "longitude") {
+      d$location[[i]][1:2] <- c(190, -190)
+      expect_true(
+        stringr::str_detect(
+          validate_latitude_longitude_range(d),
+          paste0(
+            "The longitude column of the location table contains values ",
+            "outside the bounds -180 to 180 in rows: .+")))
+    }
+  }
+  
+})
+
 # validate_ecocomDP() ---------------------------------------------------------
 
 testthat::test_that("validate_ecocomDP", {
@@ -349,9 +407,15 @@ testthat::test_that("validate_ecocomDP", {
   d$observation$package_id[1] <- "invalid_foreign_key"
   d$observation$location_id[1] <- "invalid_foreign_key"
   d$observation$taxon_id[1] <- "invalid_foreign_key"
+  # Create issue for validate_latitude_longitude_format()
+  d$location$latitude[3] <- "invalid_coordinate_format"
+  d$location$longitude[3] <- "invalid_coordinate_format"
+  # Create issue for validate_latitude_longitude_format()
+  d$location$latitude[4] <- -100
+  d$location$longitude[4] <- -190
   
   issues <- validate_ecocomDP(data.list = d)
-  expect_equal(length(issues), 10)
+  expect_equal(length(issues), 15)
   expect_true(is.list(issues))
   expect_true(is.character(issues[[1]]))
   
