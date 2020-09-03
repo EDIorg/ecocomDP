@@ -355,23 +355,46 @@ testthat::test_that("validate_latitude_longitude_range()", {
   for (i in c("latitude", "longitude")) {
     d <- test_data
     if (i == "latitude") {
-      d$location[[i]][1:2] <- c(100, -100)
+      d$location[[i]][3:4] <- c(100, -100)
       expect_true(
         stringr::str_detect(
           validate_latitude_longitude_range(d),
           paste0(
             "The latitude column of the location table contains values ",
-            "outside the bounds -90 to 90 in rows: .+")))
+            "outside the bounds -90 to 90 in rows: 3, 4")))
     } else if (i == "longitude") {
-      d$location[[i]][1:2] <- c(190, -190)
+      d$location[[i]][3:4] <- c(190, -190)
       expect_true(
         stringr::str_detect(
           validate_latitude_longitude_range(d),
           paste0(
             "The longitude column of the location table contains values ",
-            "outside the bounds -180 to 180 in rows: .+")))
+            "outside the bounds -180 to 180 in rows: 3, 4")))
     }
   }
+  
+})
+
+# validate_elevation() -----------------------------------------
+
+testthat::test_that("validate_elevation()", {
+  
+  d <- test_data
+  
+  # Valid elevation results in message.
+  
+  expect_null(validate_elevation(d))
+  
+  # Invalid elevation results in character string.
+  
+  d$location$elevation[3:4] <- c(8849, -10985)
+  expect_true(
+    stringr::str_detect(
+      validate_elevation(d),
+      paste0(
+        "The elevation column of the location table contains ",
+        "values that may not be in the unit of meters. ",
+        "Questionable values exist in rows: 3, 4")))
   
 })
 
@@ -413,9 +436,12 @@ testthat::test_that("validate_ecocomDP", {
   # Create issue for validate_latitude_longitude_format()
   d$location$latitude[4] <- -100
   d$location$longitude[4] <- -190
+  # Create issue for validate_elevation()
+  d$location$elevation[4] <- 8849
+  d$location$elevation[5] <- -10985
   
   issues <- validate_ecocomDP(data.list = d)
-  expect_equal(length(issues), 15)
+  expect_equal(length(issues), 16)
   expect_true(is.list(issues))
   expect_true(is.character(issues[[1]]))
   

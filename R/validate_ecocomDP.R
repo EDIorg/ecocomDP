@@ -101,6 +101,7 @@ validate_ecocomDP <- function(
     validate_latitude_longitude_format(d)
   issues_validate_latitude_longitude_range <- 
     validate_latitude_longitude_range(d)
+  issues_validate_elevation <- validate_elevation(d)
   
   # Report validation issues --------------------------------------------------
   
@@ -117,7 +118,8 @@ validate_ecocomDP <- function(
       issues_composite_keys,
       issues_referential_integrity,
       issues_validate_latitude_longitude_format,
-      issues_validate_latitude_longitude_range))
+      issues_validate_latitude_longitude_range,
+      issues_validate_elevation))
   
   if (!is.null(validation_issues)) {
     warning("  Validation issues found for ", id, call. = FALSE)
@@ -709,29 +711,27 @@ validate_latitude_longitude_range <- function(data.list) {
     lapply(
       c("latitude", "longitude"),
       function(colname) {
-        values <- na.omit(
-          suppressWarnings(
-            as.numeric(data.list$location[[colname]])))
-        if (length(values) > 0) {
-          if (colname == "latitude") {
-            use_i <- (values >= -90) & (values <= 90)
-            if (!all(use_i)) {
-              return(
-                paste0(
-                  "The ", colname, " column of the location table contains ",
-                  "values outside the bounds -90 to 90 in rows: ", 
-                  paste(seq(length(use_i))[!use_i], collapse = ", ")))
-            }
+        values <- suppressWarnings(
+          as.numeric(data.list$location[[colname]]))
+        if (colname == "latitude") {
+          use_i <- (values >= -90) & (values <= 90)
+          use_i <- na.omit(seq(length(use_i))[!use_i])
+          if (length(use_i) > 0) {
+            return(
+              paste0(
+                "The ", colname, " column of the location table contains ",
+                "values outside the bounds -90 to 90 in rows: ", 
+                paste(use_i, collapse = ", ")))
           }
-          if (colname == "longitude") {
-            use_i <- (values >= -180) & (values <= 180)
-            if (!all(use_i)) {
-              return(
-                paste0(
-                  "The ", colname, " column of the location table contains ",
-                  "values outside the bounds -180 to 180 in rows: ", 
-                  paste(seq(length(use_i))[!use_i], collapse = ", ")))
-            }
+        } else if (colname == "longitude") {
+          use_i <- (values >= -180) & (values <= 180)
+          use_i <- na.omit(seq(length(use_i))[!use_i])
+          if (length(use_i) > 0) {
+            return(
+              paste0(
+                "The ", colname, " column of the location table contains ",
+                "values outside the bounds -180 to 180 in rows: ", 
+                paste(use_i, collapse = ", ")))
           }
         }
       }))
@@ -740,6 +740,48 @@ validate_latitude_longitude_range <- function(data.list) {
   
 }
 
+
+
+
+
+
+
+
+#' Check elevation
+#' 
+#' @param data.list
+#'     (list of data frames) A named list of data frames, each of which is an 
+#'     ecocomDP table.
+#'
+#' @return 
+#'     (character) If elevation values are greater than Mount Everest (8848 m) 
+#'     or are less than the Mariana Trench (-10984 m), then a message is returned.
+#'
+validate_elevation <- function(data.list) {
+  
+  message("  Elevation")
+  
+  r <- invisible(
+    lapply(
+      c("elevation"),
+      function(colname) {
+        values <- suppressWarnings(
+          as.numeric(data.list$location[[colname]]))
+        use_i <- (values <= 8848) & (values >= -10984)
+        use_i <- na.omit(seq(length(use_i))[!use_i])
+        if (length(use_i) > 0) {
+          return(
+            paste0(
+              "The ", colname, " column of the location table contains ",
+              "values that may not be in the unit of meters. Questionable ",
+              "values exist in rows: ", 
+              paste(use_i, collapse = ", ")))
+        }
+      }))
+  
+  unlist(r)
+  
+}
 
 
 
