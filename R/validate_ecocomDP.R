@@ -384,12 +384,24 @@ validate_datetime <- function(data.list) {
             function(k) {
               sum(is.na(k))
             }))
-        if (min(na_count_parsed) > na_count_raw) {
+        
+        if (min(na_count_parsed) < na_count_raw) {
+          
+          
+          
+          # browser()
+          
+          
+          
           use_i <- seq(
             length(v))[
               is.na(
                 use_i[[
                   which(na_count_parsed %in% min(na_count_parsed))]])]
+          
+          
+          
+          
           paste0(
             "Datetime format. The ", x, " table has unsupported ",
             "datetime formats in rows: ", 
