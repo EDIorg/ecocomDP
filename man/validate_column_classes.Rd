@@ -11,8 +11,9 @@ validate_column_classes(data.list)
 ecocomDP table.}
 }
 \value{
-If column classes are not formmated to specification, then an error 
-    is returned.
+(character) If column classes do not follow specification, then the 
+    offending column and detected class are returned, otherwise NULL is 
+    returned.
 }
 \description{
 Check for valid column classes

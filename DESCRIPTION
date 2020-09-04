@@ -43,6 +43,6 @@ Encoding: UTF-8
 LazyData: true
 URL: http://github.com/EDIorg/ecocomDP
 BugReports: http://github.com/EDIorg/ecocomDP/issues
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 SystemRequirements: 
 VignetteBuilder: knitr

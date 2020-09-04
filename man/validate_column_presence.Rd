@@ -11,7 +11,8 @@ validate_column_presence(data.list)
 ecocomDP table.}
 }
 \value{
-If required column names are absent, then an error is returned.
+(character) If required column names are absent, then missing columns
+    are returned, otherwise NULL is returned.
 }
 \description{
 Check for required columns

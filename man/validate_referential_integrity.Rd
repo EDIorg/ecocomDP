@@ -12,6 +12,9 @@ ecocomDP table.}
 }
 \value{
 If foreign keys do not match primary keys, then an error is returned.
+
+(character) If foreign keys do not match primary keys, then unmatched 
+    foreign keys are returned, otherwise NULL is returned.
 }
 \description{
 Check referential integrity

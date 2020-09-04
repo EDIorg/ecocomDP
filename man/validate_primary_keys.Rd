@@ -11,7 +11,8 @@ validate_primary_keys(data.list)
 ecocomDP table.}
 }
 \value{
-If primary keys are not unique, then an error is returned.
+(character) If primary keys are not unique, then row numbers of 
+    duplicate keys are returned, otherwise NULL is returned.
 }
 \description{
 Check primary keys

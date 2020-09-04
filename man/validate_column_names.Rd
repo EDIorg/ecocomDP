@@ -11,7 +11,8 @@ validate_column_names(data.list)
 ecocomDP table.}
 }
 \value{
-If required column names are missing, then an error is returned.
+(character) If column names outside of the allowed set are found, then 
+    invalid column names are returned, otherwise NULL is returned.
 }
 \description{
 Check for invalid column names

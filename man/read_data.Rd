@@ -5,16 +5,17 @@
 \title{Read ecocomDP data}
 \usage{
 read_data(
-  id,
-  path,
-  file.type,
+  id = NULL,
+  path = NULL,
+  file.type = ".rda",
   site = "all",
   startdate = NA,
   enddate = NA,
   check.size = FALSE,
   nCores = 1,
   forceParallel = FALSE,
-  token = NA
+  token = NA,
+  globally.unique.keys = FALSE
 )
 }
 \arguments{
@@ -27,7 +28,7 @@ only; see below for arguments and examples).}
 \item{path}{(character) Path to the directory in which the data will be written.}
 
 \item{file.type}{(character) Type of file to save the data to. Options are: ".rda", 
-".csv"}
+".csv".}
 
 \item{site}{(character; NEON data only) A character vector of site codes to filter 
 data on. Sites are listed in the "sites" column of the 
@@ -51,28 +52,32 @@ to FALSE.}
 
 \item{token}{(character; NEON data only) User specific API token (generated within 
 neon.datascience user accounts)}
+
+\item{globally.unique.keys}{(logical) Whether to create globally unique primary keys (and associated
+foreign keys). Reading multiple datasets raises the issue of referential 
+integrity across datasets. If TRUE, \code{id} is appended to each 
+table's primary key and associated foreign key. Defaults to FALSE.}
 }
 \value{
-(list) A named list, including: 
+(list) A named list of \code{id}, each including: 
     \item{metadata}{A list of information about the data.}
     \item{tables}{A list of data.frames following the ecocomDP format 
     (\url{https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md})}
+    \item{validation_issues}{If the dataset fails any validation checks, 
+    then they are listed here as a vector of character strings describing 
+    each issue.}
 }
 \description{
 Read ecocomDP data
 }
 \details{
 Validation checks are applied to each dataset ensuring they comply with 
-    the ecocomDP. A warning is issued when validation fails (please report 
-    these to \url{https://github.com/EDIorg/ecocomDP/issues}). Datasets that
-    pass validation are returned.
+    the ecocomDP. A warning is issued when any validation check fails 
+    (please report these to \url{https://github.com/EDIorg/ecocomDP/issues}). 
+    All datasets are returned, even if they fail validation.
     
     Column classes are coerced to those defined in the ecocomDP 
     specification.
-    
-    Reading multiple datasets raises the issue of referential integrity. 
-    This is addressed by adding the \code{id} to each table's primary key
-    (e.g. observation_id, event_id, etc.).
 }
 \examples{
 # Read a dataset
@@ -96,7 +101,9 @@ d <- read_data(
     DP1.20166.001 = list(
       site = c("MAYF", "PRIN"),
       startdate = "2016-1",
-      enddate = "2018-11",
-      check.size = FALSE)))
-
+      enddate = "2018-11")),
+  check.size = TRUE,
+  nCores = 2,
+  forceParallel = FALSE)
+  
 }
