@@ -123,8 +123,7 @@ create_table_dwca_occurrence_core <- function(
 #' @export
 #'
 #' @examples
-#' (dwca_event_table, dwca_occurrence_table, dwca_measurementOrFact_table) <- create_table_dwca_event_core(
-#'  a bunch of inputs here.)    
+#' 
 create_tables_dwca_event_core <- function(
   dwca_occurrence_core_config,
   dwca_occurrence_core_mapping,

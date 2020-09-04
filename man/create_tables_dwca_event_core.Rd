@@ -36,6 +36,5 @@ three tables, event, occurrence, measurementOrFact
 Creates DwC-A tables in event core
 }
 \examples{
-(dwca_event_table, dwca_occurrence_table, dwca_measurementOrFact_table) <- create_table_dwca_event_core(
- a bunch of inputs here.)    
+
 }
