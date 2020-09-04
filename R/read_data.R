@@ -242,22 +242,7 @@ read_data <- function(
     
   }
 
-  
-  
-  
-  
-  
-  
-  
-  browser()
-  
-  
-  
-  
-  
-  
-  
-  
+ 
   # Validate ------------------------------------------------------------------
   
 
@@ -265,37 +250,13 @@ read_data <- function(
     d[[i]]$validation_issues <- validate_ecocomDP(data.list = d[[i]]$tables)
   }
   
-  
-  
-  
-  
-  
-  
-  
-  browser()
-  
-  
-  
-  
-  
-  
+ 
   
   # Return --------------------------------------------------------------------
   
   if (!is.null(path)) {
     save_data(d, path, file.type)
   }
-  
-  
-  
-  
-  
-  
-  browser()
-  
-  
-  
-  
   
   
   d
