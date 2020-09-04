@@ -139,6 +139,7 @@ read_data <- function(
   
   names(d) <- names(id)
   
+  
   # Modify --------------------------------------------------------------------
   
   # Add missing columns
@@ -168,6 +169,7 @@ read_data <- function(
           })
       }))
 
+  
 
   # Coerce column classes to ecocomDP specifications. NOTE: This same 
   # process is applied to read_from_files(). Any update here should be
@@ -202,8 +204,8 @@ read_data <- function(
               })
           })
       }))
-  
 
+  
   # Append package_id to primary keys to ensure referential integrity (except
   # package_id, appending package_id to package_id changes the field definition
   # and shouldn't be neccessary as the package_id is very unlikely to be 
@@ -242,6 +244,20 @@ read_data <- function(
 
   
   
+  
+  
+  
+  
+  
+  browser()
+  
+  
+  
+  
+  
+  
+  
+  
   # Validate ------------------------------------------------------------------
   
 
@@ -251,15 +267,42 @@ read_data <- function(
   
   
   
+  
+  
+  
+  
+  
+  browser()
+  
+  
+  
+  
+  
+  
+  
   # Return --------------------------------------------------------------------
   
   if (!is.null(path)) {
     save_data(d, path, file.type)
   }
   
+  
+  
+  
+  
+  
+  browser()
+  
+  
+  
+  
+  
+  
   d
   
 } #END read_data()
+
+
 
 
 
