@@ -5,9 +5,6 @@
 #'     L1 content is locked up in L0 code definitions (e.g. species names). 
 #'     This function converts these codes to the associated definitions.
 #'
-#' @usage 
-#'     L0_codes_to_definitions(x, col.name, x.object.name, eml)
-#'
 #' @param x
 #'     (data frame) L0 table containing the column to convert.
 #' @param col.name

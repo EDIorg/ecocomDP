@@ -3,9 +3,6 @@
 #' @description  
 #'     Make a data frame of the taxon table.
 #'
-#' @usage 
-#'     make_taxon(taxa, taxon.id = NULL, name.type, data.sources)
-#'
 #' @param taxa
 #'     (character) Taxa names to be resolved
 #' @param taxon.id

@@ -3,12 +3,6 @@
 #' @description  
 #'     Write ecocomDP tables to file
 #'
-#' @usage 
-#'     write_ecocomDP_tables(path, sep,  observation, location, taxon, 
-#'     dataset_summary, observation_ancillary = NULL, 
-#'     location_ancillary = NULL, taxon_ancillary = NULL, 
-#'     variable_mapping = NULL)
-#'
 #' @param path
 #'     (character) Directory to which the files will be written.
 #' @param sep

@@ -3,20 +3,6 @@
 #' Run this function AFTER you have validated your ecocomDP tables with 
 #' \code{ecocomDP::validate_ecocomDP()}.
 #'
-#' @usage 
-#'     make_eml(
-#'       path,
-#'       parent.package.id,
-#'       child.package.id,
-#'       script,
-#'       script.description,
-#'       cat.vars,
-#'       contact,
-#'       user.id,
-#'       user.domain,
-#'       data.url = NULL
-#'     )
-#'
 #' @param path 
 #'     (character) Path to the directory containing ecocomDP data tables, 
 #'     conversion scripts, and where EML metadata will be written.

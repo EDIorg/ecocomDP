@@ -3,8 +3,6 @@
 #' @description  
 #'     Get variable definitions and units from parent EML.
 #'
-#' @usage define_variables(data.path, parent.pkg.id)
-#'
 #' @param data.path
 #'     (character) Path to ecocomDP tables.
 #' @param parent.pkg.id

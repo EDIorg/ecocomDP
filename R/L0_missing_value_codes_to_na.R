@@ -4,9 +4,6 @@
 #'     A function to convert missing value codes to NA. Converting missing 
 #'     value codes to a single type simplifies downstream usage.
 #'
-#' @usage 
-#'     L0_missing_value_codes_to_na(x, x.object.name, eml)
-#'
 #' @param x
 #'     (data frame) L0 table with missing value codes to convert.
 #' @param x.object.name

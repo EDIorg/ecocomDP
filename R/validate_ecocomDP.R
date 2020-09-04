@@ -97,6 +97,11 @@ validate_ecocomDP <- function(
   issues_primary_keys <- validate_primary_keys(d)
   issues_composite_keys <- validate_composite_keys(d)
   issues_referential_integrity <- validate_referential_integrity(d)
+  issues_validate_latitude_longitude_format <- 
+    validate_latitude_longitude_format(d)
+  issues_validate_latitude_longitude_range <- 
+    validate_latitude_longitude_range(d)
+  issues_validate_elevation <- validate_elevation(d)
   
   # Report validation issues --------------------------------------------------
   
@@ -111,7 +116,10 @@ validate_ecocomDP <- function(
       issues_datetime,
       issues_primary_keys,
       issues_composite_keys,
-      issues_referential_integrity))
+      issues_referential_integrity,
+      issues_validate_latitude_longitude_format,
+      issues_validate_latitude_longitude_range,
+      issues_validate_elevation))
   
   if (!is.null(validation_issues)) {
     warning("  Validation issues found for ", id, call. = FALSE)
@@ -585,8 +593,6 @@ validate_composite_keys <- function(data.list) {
 #'     ecocomDP table.
 #'
 #' @return 
-#'     If foreign keys do not match primary keys, then an error is returned.
-#' @return 
 #'     (character) If foreign keys do not match primary keys, then unmatched 
 #'     foreign keys are returned, otherwise NULL is returned.
 #'
@@ -639,3 +645,146 @@ validate_referential_integrity <- function(data.list) {
   unlist(r)
   
 }
+
+
+
+
+
+
+
+
+#' Check latitude and longitude format
+#' 
+#' @param data.list
+#'     (list of data frames) A named list of data frames, each of which is an 
+#'     ecocomDP table.
+#'
+#' @return 
+#'     (character) If latitude and longitude values in the location table are 
+#'     not in decimal degree format, then a message is returned.
+#'
+validate_latitude_longitude_format <- function(data.list) {
+  
+  message("  Latitude and longitude format")
+  
+  r <- invisible(
+    lapply(
+      c("latitude", "longitude"),
+      function(colname) {
+        na_before <- sum(is.na(data.list$location[[colname]]))
+        na_after <- suppressWarnings(
+          sum(is.na(as.numeric(data.list$location[[colname]]))))
+        if (na_before < na_after) {
+          paste0(
+            "The ", colname, " column of the location table contains values ",
+            "that are not in decimal degree format.")
+        }
+      }))
+  
+  unlist(r)
+  
+}
+
+
+
+
+
+
+
+
+#' Check latitude and longitude range
+#' 
+#' @param data.list
+#'     (list of data frames) A named list of data frames, each of which is an 
+#'     ecocomDP table.
+#'
+#' @return 
+#'     (character) If latitude and longitude values in the location table are 
+#'     outside of the expected ranges -90 to 90 and -180 to 180 respectively,
+#'     then a message is returned.
+#'
+validate_latitude_longitude_range <- function(data.list) {
+  
+  message("  Latitude and longitude range")
+  
+  r <- invisible(
+    lapply(
+      c("latitude", "longitude"),
+      function(colname) {
+        values <- suppressWarnings(
+          as.numeric(data.list$location[[colname]]))
+        if (colname == "latitude") {
+          use_i <- (values >= -90) & (values <= 90)
+          use_i <- na.omit(seq(length(use_i))[!use_i])
+          if (length(use_i) > 0) {
+            return(
+              paste0(
+                "The ", colname, " column of the location table contains ",
+                "values outside the bounds -90 to 90 in rows: ", 
+                paste(use_i, collapse = ", ")))
+          }
+        } else if (colname == "longitude") {
+          use_i <- (values >= -180) & (values <= 180)
+          use_i <- na.omit(seq(length(use_i))[!use_i])
+          if (length(use_i) > 0) {
+            return(
+              paste0(
+                "The ", colname, " column of the location table contains ",
+                "values outside the bounds -180 to 180 in rows: ", 
+                paste(use_i, collapse = ", ")))
+          }
+        }
+      }))
+  
+  unlist(r)
+  
+}
+
+
+
+
+
+
+
+
+#' Check elevation
+#' 
+#' @param data.list
+#'     (list of data frames) A named list of data frames, each of which is an 
+#'     ecocomDP table.
+#'
+#' @return 
+#'     (character) If elevation values are greater than Mount Everest (8848 m) 
+#'     or are less than the Mariana Trench (-10984 m), then a message is returned.
+#'
+validate_elevation <- function(data.list) {
+  
+  message("  Elevation")
+  
+  r <- invisible(
+    lapply(
+      c("elevation"),
+      function(colname) {
+        values <- suppressWarnings(
+          as.numeric(data.list$location[[colname]]))
+        use_i <- (values <= 8848) & (values >= -10984)
+        use_i <- na.omit(seq(length(use_i))[!use_i])
+        if (length(use_i) > 0) {
+          return(
+            paste0(
+              "The ", colname, " column of the location table contains ",
+              "values that may not be in the unit of meters. Questionable ",
+              "values exist in rows: ", 
+              paste(use_i, collapse = ", ")))
+        }
+      }))
+  
+  unlist(r)
+  
+}
+
+
+
+
+
+

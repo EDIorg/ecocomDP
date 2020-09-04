@@ -4,7 +4,7 @@
 \alias{make_location}
 \title{Make the ecocomDP location table}
 \usage{
-make_location(x, cols, kml = NULL, col = NULL)
+make_location(x, cols, kml = NULL, col = NULL, parent.package.id = NULL)
 }
 \arguments{
 \item{x}{(data frame) A data frame containing sampling location names (in 
