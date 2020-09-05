@@ -14,7 +14,6 @@
 #' @export
 #'
 #' @examples
-#' L1_to_L2_DwCA(core.name = "occurrence", L1.id = "edi.193.3")
 #' 
 L1_to_L2_DwCA <- function(core.name, L1.id) {
   

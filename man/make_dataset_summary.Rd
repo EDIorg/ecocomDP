@@ -4,8 +4,12 @@
 \alias{make_dataset_summary}
 \title{Make dataset_summary table}
 \usage{
-make_dataset_summary(parent.package.id, child.package.id, sample.dates,
-    taxon.table)
+make_dataset_summary(
+  parent.package.id,
+  child.package.id,
+  sample.dates,
+  taxon.table
+)
 }
 \arguments{
 \item{parent.package.id}{(character) Parent data package identifier composed of scope, 

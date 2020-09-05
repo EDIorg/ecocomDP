@@ -3,9 +3,6 @@
 #' @description  
 #'     Make the ecocomDP location table.
 #'
-#' @usage 
-#'     make_location(x, cols, kml = NULL, col = NULL)
-#'
 #' @param x
 #'     (data frame) A data frame containing sampling location names (in 
 #'     columns) for each observation (rows).

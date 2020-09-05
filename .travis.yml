@@ -2,7 +2,6 @@ language: r
 cache: packages
 r_packages:
   - data.table
-  - dataCleanr
   - downloader
   - dplyr
   - EML
@@ -30,3 +29,8 @@ r_github_packages:
 warnings_are_errors: false
 after_success:
   - Rscript -e 'library(covr); codecov()'
+addons:
+  apt:
+    packages:
+      - libv8-dev
+      - libjq-dev

@@ -3,10 +3,6 @@
 #' @description  
 #'     Make the ecocomDP dataset_summary table.
 #'
-#' @usage 
-#'     make_dataset_summary(parent.package.id, child.package.id, sample.dates,
-#'     taxon.table)
-#'
 #' @param parent.package.id
 #'     (character) Parent data package identifier composed of scope, 
 #'     identifier, and revision (e.g. 'edi.101.1').

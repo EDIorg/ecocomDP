@@ -24,6 +24,5 @@ Creates Darwin Core Archive package from an ecocomDP formatted level-1
 TODO: Add details
 }
 \examples{
-L1_to_L2_DwCA(core.name = "occurrence", L1.id = "edi.193.3")
 
 }

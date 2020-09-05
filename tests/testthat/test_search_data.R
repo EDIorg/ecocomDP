@@ -186,9 +186,9 @@ testthat::test_that("search_data() with non-NULL input", {
       years <- unname(
         unlist(
           lapply(
-            x$taxa,
+            x$number_of_years_sampled,
             function(k) {
-              k$unique_taxa
+              k
             })))
       any((years >= search_years[1]) & (years <= search_years[2]))
     })

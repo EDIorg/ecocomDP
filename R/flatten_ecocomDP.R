@@ -13,6 +13,25 @@
 #' @return 
 #'     (data.frame) a single data.frame of merged tables for an ecocomDP data package
 #'
+#' @examples 
+#' \dontrun{
+#' # Flatten NEON data
+#' all_data <- ecocomDP::read_data(
+#' id = "DP1.20120.001",
+#' site= c('COMO','LECO'),
+#' startdate = "2019-06",
+#' enddate = "2019-09",
+#' token = Sys.getenv("NEON_TOKEN"))
+#' 
+#' my_list_of_tables <- all_data[[1]]$tables
+#' flat_data <- ecocomDP::flatten_ecocomDP(my_list_of_tables)
+#' 
+#' # Flatten EDI data
+#' all_data <- ecocomDP::read_data("edi.290.1")
+#' my_list_of_tables <- all_data[[1]]$tables
+#' flat_data <- ecocomDP::flatten_ecocomDP(my_list_of_tables)
+#' }
+#' 
 #' @export
 
 flatten_ecocomDP <- function(data.list){

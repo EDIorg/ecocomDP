@@ -4,10 +4,19 @@
 \alias{write_ecocomDP_tables}
 \title{Write ecocomDP tables to file}
 \usage{
-write_ecocomDP_tables(path, sep,  observation, location, taxon, 
-    dataset_summary, observation_ancillary = NULL, 
-    location_ancillary = NULL, taxon_ancillary = NULL, 
-    variable_mapping = NULL)
+write_ecocomDP_tables(
+  path,
+  sep,
+  study.name,
+  observation,
+  location,
+  taxon,
+  dataset_summary,
+  observation_ancillary = NULL,
+  location_ancillary = NULL,
+  taxon_ancillary = NULL,
+  variable_mapping = NULL
+)
 }
 \arguments{
 \item{path}{(character) Directory to which the files will be written.}
