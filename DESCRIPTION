@@ -29,7 +29,11 @@ Imports:
     tidyverse (>= 1.1.1),
     usethis (>= 1.5.1),
     xml2 (>= 1.3.0),
-    XML (>= 3.98-1.6)
+    XML (>= 3.98-1.6),
+    shiny,
+    plotly,
+    shinyWidgets,
+    shinythemes
 Remotes: 
     EDIorg/EDIutils,
     EDIorg/taxonomyCleanr,
