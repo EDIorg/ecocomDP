@@ -44,22 +44,22 @@ explore_data_app <- function(
   
   #options(shiny.reactlog = TRUE)
   # Define UI ----
-  ui <- fluidPage(
+  ui <- shiny::fluidPage(
     #background color
     shinyWidgets::setBackgroundColor(color = "#e6f5ff",
                                      gradient = "linear",
                                      direction = "bottom"),
     
-    titlePanel("Interact with ecocomDP Data"),
+    shiny::titlePanel("Interact with ecocomDP Data"),
     
-    sidebarLayout(
-      sidebarPanel(
+    shiny::sidebarLayout(
+      shiny::sidebarPanel(
         
-        br(),
+        shiny::br(),
         
-        textInput("search_value", h5("Search data"), 
-                  value = "macroinvertebrate"),
-        helpText("See 'Help' tab for more information."),
+        shiny::textInput("search_value", h5("Search data"), 
+                         value = "macroinvertebrate"),
+        shiny::helpText("See 'Help' tab for more information."),
         
         shinyWidgets::actionBttn(
           inputId = "search_button",
@@ -68,102 +68,103 @@ explore_data_app <- function(
           color = "default"),
         
         
-        uiOutput("id"),
+        shiny::uiOutput("id"),
         
-        conditionalPanel(
+        shiny::conditionalPanel(
           condition = "input.search_button >= '1'",
-          uiOutput("start")
+          shiny::uiOutput("start")
         ),
         
-        conditionalPanel(
+        shiny::conditionalPanel(
           condition = "input.search_button >= '1'",
-          uiOutput("end")
+          shiny::uiOutput("end")
         ),
         
-        conditionalPanel(
+        shiny::conditionalPanel(
           condition = "input.search_button >= '1'",
-          uiOutput("sites") 
+          shiny::uiOutput("sites") 
         ),
         
-        conditionalPanel(
+        shiny::conditionalPanel(
           condition = "input.search_button >= '1'",
-          uiOutput("go_button")
+          shiny::uiOutput("go_button")
         ),
         
         tags$p(),
       ), #end of sidebarPanel
       
-      mainPanel(
+      shiny::mainPanel(
         
-        tabsetPanel(type = "tabs",
-                    tabPanel("ID",
-                             tags$p(),textOutput("id_message"),
-                    ), #end summary tabPanel
-                    tabPanel("Explore Data",
-                             br(),
-                             textOutput("description"),
-                             uiOutput("x"),
-                             uiOutput("color"),
-                             uiOutput("type_graph"),
-                             radioButtons("y_transform", label = "Transform y-axis",
-                                          choices = list("none" = 1, "log (x+1)" = 2), 
-                                          selected = 1),
-                             uiOutput("graph_button"),
-                             br(),
-                             br(),
-                             br(),
-                             conditionalPanel(
-                               condition = "input.graph_button >= '1'",
-                               plotly::plotlyOutput("summary_plot", width = 800, height = 500, inline = TRUE)
-                             ) # end if conditionalPanel
-                    ), # end of tabPanel
-                    tabPanel("Explore Richness", 
-                             br(),
-                             uiOutput("x_richness"),
-                             uiOutput("color_richness"),
-                             uiOutput("graph_button_richness"),
-                             br(),
-                             br(),
-                             br(),
-                             conditionalPanel(
-                               condition = "input.graph_button_richness >= '1'",
-                               plotly::plotlyOutput("richness_plot", width = 800, height = 500, inline = TRUE)
-                             ) #end of conditionalPanel
-                    ), # end of tabPanel
-                    tabPanel("Help",
-                             br(),
-                             p("This Shiny App was built to allow you, the user, to easily look at the biodiversity data",
-                               "from EDI and NEON. The data coming from EDI, or Environmental Data Initiative, is LTER data, ",
-                               "which has up to 40 years of observations. NEON's data is the observational, biodiversity data, ",
-                               "and can also be found at NEON's Data Portal online."),
-                             br(),
-                             h4("Inputs"),
-                             h5("Search Bar"),
-                             p("Type any word from the title, description, or abstract of the EDI or NEON data. ",
-                               "Regular expression syntax is accepted. Press the 'Search' button when you're done."),
-                             h5("Select Bar: ID"),
-                             p("This spits out EDI and NEON data. ",
-                               "Select the data set that you wish to interact with. ",
-                               "For EDI, the whole data set is downloaded, so press 'Download Data' after selecting data."),
-                             h5("Options: start date, end date, and sites"),
-                             p("When there is a NEON selection, you will have the ability to input a start and end date (yyyy-mm)",
-                               "and ability choose up to all sites. When at least one site is selected, press 'Download Data.'"),
-                             br(),
-                             br(),
-                             h4("Tools for you"),
-                             h5("Explore Data"),
-                             p("Here you are given an interactive graph where the y value is a fixed value. ",
-                               "Choose your x axis , a value to group the data by, and the type of graph ",
-                               "you wish to use. A bar plot shows the accumulative value, and the box plot ",
-                               "displays a summary of the values. Press 'Generate Graph' when you are ready. "),
-                             h5("Explore Richness"),
-                             p("Richness is the number of unique species in an area. This interactive graph, has a fixed y value (richness). ",
-                               "Choose your x axis and choice to ",
-                               "group the data by. Press 'Generate Graph' when you are ready. ")
-                             
-                    )# end of tabPanel
-                    
-                    
+        shiny::tabsetPanel(type = "tabs",
+                           shiny::tabPanel("ID",
+                                           tags$p(),
+                                           shiny::textOutput("id_message"),
+                           ), #end summary tabPanel
+                           shiny::tabPanel("Explore Data",
+                                    br(),
+                                    textOutput("description"),
+                                    shiny::uiOutput("x"),
+                                    shiny::uiOutput("color"),
+                                    shiny::uiOutput("type_graph"),
+                                    radioButtons("y_transform", label = "Transform y-axis",
+                                                 choices = list("none" = 1, "log (x+1)" = 2), 
+                                                 selected = 1),
+                                    shiny::uiOutput("graph_button"),
+                                    br(),
+                                    br(),
+                                    br(),
+                                    conditionalPanel(
+                                      condition = "input.graph_button >= '1'",
+                                      plotly::plotlyOutput("summary_plot", width = 800, height = 500, inline = TRUE)
+                                    ) # end if conditionalPanel
+                           ), # end of tabPanel
+                           shiny::tabPanel("Explore Richness", 
+                                    br(),
+                                    shiny::uiOutput("x_richness"),
+                                    shiny::uiOutput("color_richness"),
+                                    shiny::uiOutput("graph_button_richness"),
+                                    br(),
+                                    br(),
+                                    br(),
+                                    conditionalPanel(
+                                      condition = "input.graph_button_richness >= '1'",
+                                      plotly::plotlyOutput("richness_plot", width = 800, height = 500, inline = TRUE)
+                                    ) #end of conditionalPanel
+                           ), # end of tabPanel
+                           shiny::tabPanel("Help",
+                                    br(),
+                                    p("This Shiny App was built to allow you, the user, to easily look at the biodiversity data",
+                                      "from EDI and NEON. The data coming from EDI, or Environmental Data Initiative, is LTER data, ",
+                                      "which has up to 40 years of observations. NEON's data is the observational, biodiversity data, ",
+                                      "and can also be found at NEON's Data Portal online."),
+                                    br(),
+                                    h4("Inputs"),
+                                    h5("Search Bar"),
+                                    p("Type any word from the title, description, or abstract of the EDI or NEON data. ",
+                                      "Regular expression syntax is accepted. Press the 'Search' button when you're done."),
+                                    h5("Select Bar: ID"),
+                                    p("This spits out EDI and NEON data. ",
+                                      "Select the data set that you wish to interact with. ",
+                                      "For EDI, the whole data set is downloaded, so press 'Download Data' after selecting data."),
+                                    h5("Options: start date, end date, and sites"),
+                                    p("When there is a NEON selection, you will have the ability to input a start and end date (yyyy-mm)",
+                                      "and ability choose up to all sites. When at least one site is selected, press 'Download Data.'"),
+                                    br(),
+                                    br(),
+                                    h4("Tools for you"),
+                                    h5("Explore Data"),
+                                    p("Here you are given an interactive graph where the y value is a fixed value. ",
+                                      "Choose your x axis , a value to group the data by, and the type of graph ",
+                                      "you wish to use. A bar plot shows the accumulative value, and the box plot ",
+                                      "displays a summary of the values. Press 'Generate Graph' when you are ready. "),
+                                    h5("Explore Richness"),
+                                    p("Richness is the number of unique species in an area. This interactive graph, has a fixed y value (richness). ",
+                                      "Choose your x axis and choice to ",
+                                      "group the data by. Press 'Generate Graph' when you are ready. ")
+                                    
+                           )# end of tabPanel
+                           
+                           
         ) # end of tabsetPanel
         
       ) # end mainPanel
@@ -175,7 +176,7 @@ explore_data_app <- function(
   # Define server logic ----
   server <- function(input, output, session){
     
-    output$id_message <- renderText({
+    output$id_message <- shiny::renderText({
       
       all_tables <- pulled_data()
       
@@ -187,7 +188,7 @@ explore_data_app <- function(
     
     # Tab buttons ----
     
-    output$graph_button <- renderUI({
+    output$graph_button <- shiny::renderUI({
       all_tables <- pulled_data()
       shinyWidgets::actionBttn(
         inputId = "graph_button",
@@ -196,7 +197,7 @@ explore_data_app <- function(
         color = "default")
     })
     
-    output$type_graph <- renderUI({
+    output$type_graph <- shiny::renderUI({
       all_tables <- pulled_data()
       selectInput("type_graph", h5("Type of graph"), 
                   choices = c(
@@ -205,7 +206,7 @@ explore_data_app <- function(
                     "scatter")) #selectInput
     })
     
-    output$graph_button_richness <- renderUI({
+    output$graph_button_richness <- shiny::renderUI({
       all_tables <- pulled_data() 
       shinyWidgets::actionBttn(
         inputId = "graph_button_richness",
@@ -215,16 +216,16 @@ explore_data_app <- function(
     })
     
     # NEON options ----
-    pulled_data <- eventReactive( 
+    pulled_data <- shiny::eventReactive( 
       input$go,{
-        withProgress(message = 'Loading data',
+        shiny::withProgress(message = 'Loading data',
                      detail= "This may take a while...",{
                        if(if_dp1()){
                          # get user inputs
-                         req(only_id())
-                         req(input$sites)
-                         req(input$start)
-                         req(input$end)
+                         shiny::req(only_id())
+                         shiny::req(input$sites)
+                         shiny::req(input$start)
+                         shiny::req(input$end)
                          
                          # get neon data
                          list_of_tables <- ecocomDP::read_data(
@@ -233,7 +234,7 @@ explore_data_app <- function(
                            startdate = input$start,
                            enddate = input$end,
                            token = my_NEON_TOKEN)
-
+                         
                          
                        }else{
                          
@@ -257,13 +258,13 @@ explore_data_app <- function(
       }
     )
     
-    output$id <- renderUI({
+    output$id <- shiny::renderUI({
       
-      selectInput("id_choices", h5("Select id"), 
+      shiny::selectInput("id_choices", h5("Select id"), 
                   choices = full_name())
     })
     
-    if_dp1 <- reactive({
+    if_dp1 <- shiny::reactive({
       req(input$id_choices)
       if(grepl("DP1",input$id_choices)){
         return(TRUE)
@@ -272,22 +273,22 @@ explore_data_app <- function(
         return(FALSE)
     }) # if_dp1
     
-    output$start <- renderUI({
+    output$start <- shiny::renderUI({
       if(if_dp1()){
-        textInput("start", h5("Start date"), 
+        shiny::textInput("start", h5("Start date"), 
                   value = "2017-01")
       }
       
     })
     
-    output$end <- renderUI({
+    output$end <- shiny::renderUI({
       if(if_dp1()){
-        textInput("end", h5("End date"), 
+        shiny::textInput("end", h5("End date"), 
                   value = "2020-01")
       }
     })
     
-    get_list_of_sites <- reactive({
+    get_list_of_sites <- shiny::reactive({
       info <- neonUtilities::getProductInfo(
         dpID = only_id(),
         token = my_NEON_TOKEN)
@@ -295,9 +296,9 @@ explore_data_app <- function(
       return(sites)
     })
     
-    output$sites <- renderUI({
+    output$sites <- shiny::renderUI({
       if(if_dp1()){
-        pickerInput(
+        shinyWidgets::pickerInput(
           inputId = "sites", 
           label = h5("Selected sites (select items)"), 
           choices = c(get_list_of_sites()),
@@ -306,7 +307,7 @@ explore_data_app <- function(
       }
     })
     
-    only_id <- eventReactive(
+    only_id <- shiny::eventReactive(
       input$id_choices,{
         id <- gsub(":.*","",input$id_choices)
         return(id)
@@ -314,7 +315,7 @@ explore_data_app <- function(
     
     # Go button ----
     
-    output$go_button <- renderUI({
+    output$go_button <- shiny::renderUI({
       if(!if_dp1())
         shinyWidgets::actionBttn(
           inputId = "go",
@@ -331,7 +332,7 @@ explore_data_app <- function(
     
     # Flatten Tables ----
     
-    flatten_tables <- reactive({
+    flatten_tables <- shiny::reactive({
       
       # get data
       all_data <- pulled_data()
@@ -356,7 +357,7 @@ explore_data_app <- function(
     # make table ----  make data table for plotting
     # rename "value" column
     
-    make_table <- reactive({
+    make_table <- shiny::reactive({
       
       grouped_summary <- flatten_tables()
       
@@ -383,7 +384,7 @@ explore_data_app <- function(
     
     # Interactive Normal Graph ----
     
-    output$description <- renderText({
+    output$description <- shiny::renderText({
       
       data <- make_table()
       
@@ -392,20 +393,20 @@ explore_data_app <- function(
     })
     
     # get x variable
-    output$x <- renderUI({
+    output$x <- shiny::renderUI({
       x_values <- make_table() %>% 
-        select(-c(package_id, observation_id, unit, variable_name, day_time))
+        dplyr::select(-c(package_id, observation_id, unit, variable_name, day_time))
       
-      selectInput("x", h5("X value"), choices = names(x_values),
+      shiny::selectInput("x", h5("X value"), choices = names(x_values),
                   selected = "year")
     })
     
     # get grouping variable
-    output$color <- renderUI({
+    output$color <- shiny::renderUI({
       grouped_summary <- make_table() %>% 
-        select(-c(observation_id, unit, day_time, variable_name))
+        dplyr::select(-c(observation_id, unit, day_time, variable_name))
       
-      selectInput("color", h5("Group by"), 
+      shiny::selectInput("color", h5("Group by"), 
                   choices = names(grouped_summary),
                   selected = "package_id") 
     })
@@ -415,10 +416,10 @@ explore_data_app <- function(
     
     
     # make summary plot
-    make_plot <- eventReactive(
+    make_plot <- shiny::eventReactive(
       input$graph_button,{
         
-
+        
         grouped_summary <- make_table() %>% as.data.frame()
         
         if(input$y_transform==1){
@@ -453,7 +454,7 @@ explore_data_app <- function(
               yaxis = list(title = y_lab))
         }
         
-
+        
         return(fig)
         
         
@@ -470,47 +471,47 @@ explore_data_app <- function(
     
     # Make Richness Graph ----
     
- 
+    
     
     # get x variable for plotting
-    output$x_richness <- renderUI({
+    output$x_richness <- shiny::renderUI({
       x_values <- flatten_tables() %>% 
-        select(-c(package_id, observation_id, unit, variable_name, day_time))
+        dplyr::select(-c(package_id, observation_id, unit, variable_name, day_time))
       
-      selectInput("x_richness", h5("X value"), choices = names(x_values),
+      shiny::selectInput("x_richness", h5("X value"), choices = names(x_values),
                   selected = "year")
       
     })
     
     # get grouping variable for plotting
-    output$color_richness <- renderUI({
+    output$color_richness <- shiny::renderUI({
       color_values <- flatten_tables() %>% 
-        select(-c(observation_id, unit, variable_name, day_time))
+        dplyr::select(-c(observation_id, unit, variable_name, day_time))
       
-      selectInput("color_richness", h5("Group by"), choices = names(color_values),
+      shiny::selectInput("color_richness", h5("Group by"), choices = names(color_values),
                   selected = "package_id")
     })
     
     # make plot
-    make_richness_plot <- eventReactive(
+    make_richness_plot <- shiny::eventReactive(
       input$graph_button_richness,{
         
-        req(input$x_richness)
-        req(input$color_richness)
+        shiny::req(input$x_richness)
+        shiny::req(input$color_richness)
         
         # summarize to get richness data by user defined groups
         richness_data <- flatten_tables() %>% 
-          group_by(.data[[input$color_richness]],.data[[input$x_richness]]) %>% 
-          summarise(taxon_id %>% unique() %>% length()) %>% 
-          rename(richness = "taxon_id %>% unique() %>% length()")
+          dplyr::group_by(.data[[input$color_richness]],.data[[input$x_richness]]) %>% 
+          dplyr::summarise(taxon_id %>% unique() %>% length()) %>% 
+          dplyr::rename(richness = "taxon_id %>% unique() %>% length()")
         
         
-        fig3 <- plot_ly(
+        fig3 <- plotly::plot_ly(
           x = richness_data[[input$x_richness]],
           y = richness_data$richness,
           color = richness_data[[input$color_richness]],
           type = "bar") %>% 
-          layout( title = paste("Species Richness by ",input$x_richness, "and ", input$color_richness) ,
+          plotly::layout( title = paste("Species Richness by ",input$x_richness, "and ", input$color_richness) ,
                   xaxis = list(title = input$x_richness),
                   yaxis = list(title = "richness"))
         
@@ -527,6 +528,6 @@ explore_data_app <- function(
   } # end of server
   
   # Run the app ----
-  shinyApp(ui = ui, server = server)
+  shiny::shinyApp(ui = ui, server = server)
   
 }
