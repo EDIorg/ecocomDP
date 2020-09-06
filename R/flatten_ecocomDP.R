@@ -73,34 +73,39 @@ flatten_ecocomDP <- function(data.list){
         data.list$location_ancillary %>%
           dplyr::filter(variable_name == "NEON location type") %>%
           dplyr::select(location_id, value) %>%
-          rename(location_type = value))
+          dplyr::rename(location_type = value))
     
     # extract a list of the location types
     location_type_list <- location$location_type %>% unique()
     
     # identify ultimate parents... i.e., records with no parents
-    location_parent <- location %>% filter(is.na(parent_location_id)) %>%
-      select(location_id, location_type)
+    location_parent <- location %>% 
+      dplyr::filter(is.na(parent_location_id)) %>%
+      dplyr::select(location_id, location_type)
     
     # identify all records that have parents
-    location_child <- location %>% filter(!is.na(parent_location_id))
+    location_child <- location %>% 
+      dplyr::filter(!is.na(parent_location_id))
     
     # loop through from ultimate parents down, joining with child records, until there are no more children
     while(nrow(location_child) > 0){
       
       # inner join parents to children
-      location_new <- location_child %>% inner_join(
-        location_parent %>% rename(location_type_parent = location_type),
+      location_new <- location_child %>% 
+        dplyr::inner_join(
+        location_parent %>% 
+          dplyr::rename(location_type_parent = location_type),
         by = c("parent_location_id" = "location_id"))
       
       # rename parent location id column by location type
       new_parent_location_id_name <- location_new$location_type_parent[1]
       names(location_new)[names(location_new)=="parent_location_id"] <- new_parent_location_id_name
-      location_new <- location_new %>% select(-location_type_parent)
+      location_new <- location_new %>% 
+        dplyr::select(-location_type_parent)
       
       # see if there are any children left that have not been joined to parents
       location_child <- location_child %>%
-        filter(!location_id %in% location_new$location_id)
+        dplyr::filter(!location_id %in% location_new$location_id)
       
       # if there are still children, re-assign parent table
       if (nrow(location_child) > 0){
@@ -109,12 +114,13 @@ flatten_ecocomDP <- function(data.list){
       }else{
         
         # otherwise, clean up new location table and return as output
-        location_new <- location_new %>% select(-location_type)
+        location_new <- location_new %>% 
+          dplyr::select(-location_type)
       }
     }
     
     all_merged <- all_merged %>%
-      left_join(
+      dplyr::left_join(
         location_new, 
         by = "location_id",
         suffix = c("", "_location"))
@@ -135,7 +141,7 @@ flatten_ecocomDP <- function(data.list){
     taxon_ancillary <- data.list$taxon_ancillary %>% 
       tidyr::pivot_wider(names_from = variable_name, values_from = value)
     all_merged <- all_merged %>%
-      left_join(
+      dplyr::left_join(
         taxon_ancillary %>% 
           dplyr::select(-taxon_ancillary_id) %>% 
           dplyr::select_if(not_all_NAs),

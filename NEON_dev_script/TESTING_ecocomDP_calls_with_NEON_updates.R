@@ -44,5 +44,6 @@ my_result <- read_data(
   site= c('COMO','LECO'), 
   startdate = "2019-06",
   enddate = "2019-09",
-  token = Sys.getenv("NEON_TOKEN"))
+  token = Sys.getenv("NEON_TOKEN"),
+  path = NULL)
 
