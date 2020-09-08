@@ -1,6 +1,88 @@
 
 # devtools::install_github("sokole/ecocomDP@master")
+# devtools::install_github("sokole/ecocomDP@working")
+
 library(ecocomDP)
+
+# testing with NEON macroinvert "DP1.20120.001"
+my_result_inv <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(
+  site= c('COMO','LECO'), 
+  startdate = "2019-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+
+
+# DATA
+# testing with NEON algae "DP1.20166.001" -- returns data
+my_result_alg <- map_neon_data_to_ecocomDP.ALGAE(
+  site= c('COMO','LECO'), 
+  startdate = "2017-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+my_result_alg_read_data <- ecocomDP::read_data(
+  id = "DP1.20166.001",
+  site = c('COMO','LECO'), 
+  startdate = "2017-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+
+
+# WARNING NO DATA
+# testing with NEON algae "DP1.20166.001" -- returns no taxon data
+# this case works as intended and returns an empty list that 
+# read data seems to be able to handle
+my_result_alg <- map_neon_data_to_ecocomDP.ALGAE(
+  site = c('COMO','LECO'), 
+  startdate = "2019-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+my_result_alg_read_data <- ecocomDP::read_data(
+  id = "DP1.20166.001",
+  site = c('COMO','LECO'), 
+  startdate = "2019-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # read EDI data
 d <- read_data("edi.193.3")

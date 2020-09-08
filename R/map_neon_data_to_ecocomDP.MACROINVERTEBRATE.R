@@ -27,11 +27,27 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
   
   
   # extract the table with the field data from the all_tabs list of tables
-  inv_fielddata <- all_tabs$inv_fieldData
+  if("inv_fielddata" %in% names(all_tabs)){
+    inv_fielddata <- all_tabs$inv_fielddata
+  }else{
+    # if no data, return an empty list
+    warning(paste0(
+      "WARNING: No field data available for NEON data product ",
+      neon.data.product.id, " for the dates and sites selected."))
+    return(list())
+  }
   
   
-  # extract the table with the taxonomy data from all_tabls list of tables 
-  inv_taxonomyProcessed <- all_tabs$inv_taxonomyProcessed
+  # extract the table with the taxonomy data from all_tabls list of tables
+  if("inv_taxonomyProcessed" %in% names(all_tabs)){
+    inv_taxonomyProcessed <- all_tabs$inv_taxonomyProcessed
+  }else{
+    # if no data, return an empty list
+    warning(paste0(
+      "WARNING: No taxon count data available for NEON data product ",
+      neon.data.product.id, " for the dates and sites selected."))
+    return(list())
+  }
   
   
   

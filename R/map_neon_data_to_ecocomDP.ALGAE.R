@@ -34,11 +34,39 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
   
   
   # tables needed for ALGAE to populate the ecocomDP tables
+  if("alg_fieldData" %in% names(all_tabs_in)){
+    field_data_in <- all_tabs_in$alg_fieldData
+  }else{
+    # field_data_in <- data.frame()
+    # if no data, return an empty list
+    warning(paste0(
+      "WARNING: No field data available for NEON data product ",
+      neon.data.product.id, " for the dates and sites selected."))
+    return(list())
+  }
   
-  field_data_in <- all_tabs_in$alg_fieldData
-  tax_long_in <- all_tabs_in$alg_taxonomyProcessed
-  biomass_in <-all_tabs_in$alg_biomass
   
+  if("alg_taxonomyProcessed" %in% names(all_tabs_in)){
+    tax_long_in <- all_tabs_in$alg_taxonomyProcessed
+  }else{
+    # tax_long_in <- data.frame()
+    # if no data, return an empty list
+    warning(paste0(
+      "WARNING: No taxon count data available for NEON data product ",
+      neon.data.product.id, " for the dates and sites selected."))
+    return(list())
+  }
+  
+  
+  if("alg_biomass" %in% names(all_tabs_in)){
+    biomass_in <- all_tabs_in$alg_biomass
+  }else{
+    # if no data, return an empty list
+    warning(paste0(
+      "WARNING: Missing required data for calculating taxon densities for NEON data product ",
+      neon.data.product.id, " for the dates and sites selected."))
+    return(list())  
+  }
   
   
   #Observation table
@@ -46,12 +74,9 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
   ###change NA"s to 0"s in tax_long_in data for calculations only
   # tax_long_in$perBottleSampleVolume[is.na(tax_long_in$perBottleSampleVolume)] <- 0
   #join algae biomass and taxonomy data 
+
   
-  
-  
-  # browser()
-  
-  
+
   
   # Note that observational data are in the tax table returned by the lab, 
   # however, we need "fieldSampleVolume" from the biomass table to standardize
@@ -63,9 +88,7 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
     dplyr::distinct() %>%
     dplyr::left_join(tax_long_in, by = "sampleID") %>%
     dplyr::distinct()
-  
-  
-  # browser()
+
   
   
   
@@ -90,7 +113,9 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
         algalSampleType == "phytoplankton" ~ "cells/mL",
         TRUE ~ "cells/m2"))
   
-  # browser()
+
+  
+  
   
   # rename fields for ecocomDP
   table_observation_ecocomDP <- table_observation_raw %>%
@@ -106,7 +131,9 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
       value = density,
       unit = cell_density_standardized_unit) 
   
-  # browser()
+
+  
+  
   
   # make observation table
   table_observation <- table_observation_ecocomDP %>%
@@ -122,6 +149,8 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
       unit) %>% 
     dplyr::distinct()
   
+  
+
   # make observation ancillary table. First convert POSIXct POSIXt classed
   # variables to character, otherwise gathering will produce a warning.
   table_observation_ecocomDP$identifiedDate <- as.character(
@@ -173,6 +202,9 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
     variable_name,
     value,
     unit)
+  
+  
+
   
   # ecocomDP location table
   
@@ -234,6 +266,8 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
   }
   
   
+
+  
   
   # make ancillary table that indicates the location type 
   table_location_ancillary <- table_location_raw %>% 
@@ -275,10 +309,20 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
   #     authority_system = "NEON_external_lab",
   #   )
   
+  
+  
+  
   table_taxon <- tax_long_in %>%
     
     # keep only the coluns listed below
-    dplyr::select(acceptedTaxonID, taxonRank, scientificName, identificationReferences) %>%
+    dplyr::select(acceptedTaxonID, taxonRank, scientificName, 
+                  identificationReferences, laboratoryName) %>%
+    
+    # if no idenficationReference provided, fill in authority_system with laboratoryName
+    dplyr::mutate(
+      identificationReferences = dplyr::case_when(
+        is.na(identificationReferences) ~ laboratoryName,
+        TRUE ~ identificationReferences)) %>%
     
     # remove rows with duplicate information
     dplyr::distinct() %>%
@@ -287,12 +331,16 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
     dplyr::rename(taxon_id = acceptedTaxonID,
                   taxon_rank = taxonRank,
                   taxon_name = scientificName,
-                  authority_system = identificationReferences)
+                  authority_system = identificationReferences) %>%
+    dplyr::select(taxon_id, taxon_rank, taxon_name, authority_system)
   
   
   # make dataset_summary -- required table
   years_in_data <- table_observation$observation_datetime %>% lubridate::year()
-  years_in_data %>% ordered()
+  # years_in_data %>% ordered()
+  
+  
+ 
   
   table_dataset_summary <- data.frame(
     package_id = table_observation$package_id[1],
@@ -305,6 +353,8 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
   )
   
   
+ 
+  
   
   # list of tables to be returned, with standardized names for elements
   out_list <- list(
@@ -314,6 +364,8 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
     observation = table_observation,
     observation_ancillary = table_observation_ancillary,
     dataset_summary = table_dataset_summary)
+  
+  
   
   return(out_list)
 }
