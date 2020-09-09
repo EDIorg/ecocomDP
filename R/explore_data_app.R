@@ -57,9 +57,9 @@ explore_data_app <- function(
         
         shiny::br(),
         
-        shiny::textInput("search_value", shiny::h5("Search data"), 
+        shiny::textInput("search_value", shiny::h5("Search ecocomDP data packages"), 
                          value = "macroinvertebrate"),
-        shiny::helpText("See 'Help' tab for more information."),
+        shiny::helpText("Find data packages by searching dataset titles, descriptions, and abstracts. See 'Help' tab for more information."),
         
         shinyWidgets::actionBttn(
           inputId = "search_button",
@@ -98,9 +98,49 @@ explore_data_app <- function(
         shiny::tabsetPanel(type = "tabs",
                            shiny::tabPanel("Loaded Data Package",
                                            shiny::p(),
+                                           shiny::h4("Loaded data package ID:"),
                                            shiny::textOutput("id_message"),
+                                           shiny::p(),
+                                           
+                                           # Save file type
+                                           shiny::br(),
+                                           shiny::h4("Save data package:"),
+                                           shiny::p("Choose a save format:"),
+                                           shiny::p("  (1) a .rda file"),
+                                           shiny::p("  (2) or .csv files in a .zip archive"),
+                                           shiny::selectInput(
+                                             "save_type","",
+                                             choices = c(".rda", ".zip")),
+                                           
+                                           # Save button
+                                           shiny::br(),
+                                           shiny::downloadButton("save_data", "Save"),
+                                           shiny::p(),
+                                           
+                                           
+                                           # tabbed tables for data package
+                                           shiny::br(),
+                                           shiny::p(),
+                                           shiny::h4("View data package tables:"),
+                                           shiny::tabsetPanel(type = "tabs",
+                                                              shiny::tabPanel("dataset_summary",
+                                                                              shiny::tableOutput("dataset_summary")),
+                                                              shiny::tabPanel("observation",
+                                                                              shiny::tableOutput("observation")),
+                                                              shiny::tabPanel("location",
+                                                                              shiny::tableOutput("location")),
+                                                              shiny::tabPanel("taxon",
+                                                                              shiny::tableOutput("taxon")),
+                                                              shiny::tabPanel("observation_ancillary",
+                                                                              shiny::tableOutput("observation_ancillary")),
+                                                              shiny::tabPanel("location_ancillary",
+                                                                              shiny::tableOutput("location_ancillary")),
+                                                              shiny::tabPanel("taxon_ancillary",
+                                                                              shiny::tableOutput("taxon_ancillary"))
+                                           )
+                                           
                            ), #end summary tabPanel
-                           shiny::tabPanel("Explore Data",
+                           shiny::tabPanel("Plot Data",
                                            shiny::br(),
                                            shiny::textOutput("description"),
                                            shiny::uiOutput("x"),
@@ -118,7 +158,7 @@ explore_data_app <- function(
                                              plotly::plotlyOutput("summary_plot", width = 800, height = 500, inline = TRUE)
                                            ) # end if conditionalPanel
                            ), # end of tabPanel
-                           shiny::tabPanel("Explore Richness", 
+                           shiny::tabPanel("Plot Richness", 
                                            shiny::br(),
                                            shiny::uiOutput("x_richness"),
                                            shiny::uiOutput("color_richness"),
@@ -176,6 +216,9 @@ explore_data_app <- function(
   # Define server logic ----
   server <- function(input, output, session){
     
+    
+    
+    # id message
     output$id_message <- shiny::renderText({
       
       all_tables <- pulled_data()
@@ -184,6 +227,139 @@ explore_data_app <- function(
       
       return(retrieved_id)  
     })# end of output$id_message
+    
+    
+    # get file extension for saving ----
+    get_save_file_extension <- reactive({
+      return(input$save_type)
+    })
+    
+    # save loaded data ----
+    output$save_data <- downloadHandler(
+      
+      filename = function(){
+        
+        save_file_type <- get_save_file_extension()
+        all_tables <- pulled_data()
+        if("dataset_summary" %in% names(all_tables[[1]]$tables)){
+          return(paste0(all_tables[[1]]$tables$dataset_summary$package_id,save_file_type))
+        }else{
+          return(paste0(names(all_tables)[1],save_file_type))
+        }
+      },
+      
+      content = function(save_name){
+        all_tables <- pulled_data()
+        save_file_type <- get_save_file_extension()
+  
+        # if saving as a .rda
+        if (save_file_type == ".rda") {
+          saveRDS(all_tables, file = save_name)
+
+        } else if (save_file_type == ".zip") {
+          
+          # if saving as a zipped csvs
+          
+          # -- save files
+          # temp dir for zipping
+          old_dir <- getwd()
+          tmpdir <- tempdir()
+          setwd(tempdir())
+          print(tempdir())
+          
+          # get table names and write to temp dir
+          table_name_list <- names(all_tables[[1]]$tables)
+          for(i in table_name_list){
+            readr::write_csv(all_tables[[1]]$tables[[i]],paste0(i,".csv"))
+          }
+          
+          # add csvs to zip archive
+          zip::zip(zipfile = save_name, files = paste0(table_name_list,".csv"))
+
+          # reset wd to original wd
+          setwd(old_dir)
+          
+        }
+      }
+    )
+    
+    # Display data tables ----
+    output$dataset_summary <- renderTable({
+      table_name <- "dataset_summary"
+      all_tables <- pulled_data()
+      if(table_name %in% names(all_tables[[1]]$tables)){
+        table_to_render <- all_tables[[1]]$tables[[table_name]]
+      }else{
+        table_to_render <- data.frame(message = "This table is not available for the loaded data package")
+      }
+      return(table_to_render)
+    })
+    
+    output$observation <- renderTable({
+      table_name <- "observation"
+      all_tables <- pulled_data()
+      if(table_name %in% names(all_tables[[1]]$tables)){
+        table_to_render <- all_tables[[1]]$tables[[table_name]]
+      }else{
+        table_to_render <- data.frame(message = "This table is not available for the loaded data package")
+      }
+      return(table_to_render)
+    })
+    
+    output$location <- renderTable({
+      table_name <- "location"
+      all_tables <- pulled_data()
+      if(table_name %in% names(all_tables[[1]]$tables)){
+        table_to_render <- all_tables[[1]]$tables[[table_name]]
+      }else{
+        table_to_render <- data.frame(message = "This table is not available for the loaded data package")
+      }
+      return(table_to_render)
+    })
+    
+    output$taxon <- renderTable({
+      table_name <- "taxon"
+      all_tables <- pulled_data()
+      if(table_name %in% names(all_tables[[1]]$tables)){
+        table_to_render <- all_tables[[1]]$tables[[table_name]]
+      }else{
+        table_to_render <- data.frame(message = "This table is not available for the loaded data package")
+      }
+      return(table_to_render)
+    })
+    
+    output$observation_ancillary <- renderTable({
+      table_name <- "observation_ancillary"
+      all_tables <- pulled_data()
+      if(table_name %in% names(all_tables[[1]]$tables)){
+        table_to_render <- all_tables[[1]]$tables[[table_name]]
+      }else{
+        table_to_render <- data.frame(message = "This table is not available for the loaded data package")
+      }
+      return(table_to_render)
+    })
+    
+    output$location_ancillary <- renderTable({
+      table_name <- "location_ancillary"
+      all_tables <- pulled_data()
+      if(table_name %in% names(all_tables[[1]]$tables)){
+        table_to_render <- all_tables[[1]]$tables[[table_name]]
+      }else{
+        table_to_render <- data.frame(message = "This table is not available for the loaded data package")
+      }
+      return(table_to_render)
+    })
+    
+    output$taxon_ancillary <- renderTable({
+      table_name <- "taxon_ancillary"
+      all_tables <- pulled_data()
+      if(table_name %in% names(all_tables[[1]]$tables)){
+        table_to_render <- all_tables[[1]]$tables[[table_name]]
+      }else{
+        table_to_render <- data.frame(message = "This table is not available for the loaded data package")
+      }
+      return(table_to_render)
+    })
     
     
     # Tab buttons ----
@@ -412,9 +588,6 @@ explore_data_app <- function(
                          choices = names(grouped_summary),
                          selected = "package_id") 
     })
-    
-    
-    
     
     
     # make summary plot

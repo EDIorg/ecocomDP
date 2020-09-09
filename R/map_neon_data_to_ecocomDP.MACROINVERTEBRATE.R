@@ -20,15 +20,27 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
   neon.data.product.id ="DP1.20120.001",
   ...){
   
+  
+  
+  # browser()
+  
+  
+  
   # get all tables for this data product for the specified sites in my_site_list, store them in a list called all_tabs
   all_tabs <- neonUtilities::loadByProduct(
     dpID = neon.data.product.id,
     ...)
   
   
+  
+  
+  # browser()
+  
+  
+  
   # extract the table with the field data from the all_tabs list of tables
-  if("inv_fielddata" %in% names(all_tabs)){
-    inv_fielddata <- all_tabs$inv_fielddata
+  if("inv_fieldData" %in% names(all_tabs)){
+    inv_fielddata <- all_tabs$inv_fieldData
   }else{
     # if no data, return an empty list
     warning(paste0(
@@ -36,6 +48,12 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
       neon.data.product.id, " for the dates and sites selected."))
     return(list())
   }
+  
+  
+  
+  
+  # browser()
+  
   
   
   # extract the table with the taxonomy data from all_tabls list of tables
@@ -48,6 +66,12 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
       neon.data.product.id, " for the dates and sites selected."))
     return(list())
   }
+  
+  
+  
+  
+  # browser()
+  
   
   
   

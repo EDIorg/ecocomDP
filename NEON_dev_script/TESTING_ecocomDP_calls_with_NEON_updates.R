@@ -5,12 +5,30 @@
 library(ecocomDP)
 
 # testing with NEON macroinvert "DP1.20120.001"
-my_result_inv <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(
+my_result_inv_mapping <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(
   site= c('COMO','LECO'), 
   startdate = "2019-06",
   enddate = "2019-09",
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
+
+
+my_result_inv_neonUtilities <- neonUtilities::loadByProduct(
+  dpID = "DP1.20120.001",
+  site= c('COMO','LECO'), 
+  startdate = "2019-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+all_tables <- ecocomDP::read_data(
+  id = "DP1.20120.001",
+  site= c('COMO','LECO'), 
+  startdate = "2019-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
 
 
 
@@ -30,6 +48,10 @@ my_result_alg_read_data <- ecocomDP::read_data(
   enddate = "2019-09",
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
+
+
+
+
 
 
 
