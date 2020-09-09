@@ -122,6 +122,9 @@ explore_data_app <- function(
                                            shiny::br(),
                                            shiny::p(),
                                            shiny::h4("View data package tables:"),
+                                           shiny::radioButtons("data_view", label = "Preview or show all data?",
+                                                               choices = list("data preview" = 1, "show all data" = 2), 
+                                                               selected = 1),
                                            shiny::tabsetPanel(type = "tabs",
                                                               shiny::tabPanel("dataset_summary",
                                                                               shiny::tableOutput("dataset_summary")),
@@ -288,7 +291,11 @@ explore_data_app <- function(
       table_name <- "dataset_summary"
       all_tables <- pulled_data()
       if(table_name %in% names(all_tables[[1]]$tables)){
-        table_to_render <- all_tables[[1]]$tables[[table_name]]
+        if(input$data_view == 1){
+          table_to_render <- head(all_tables[[1]]$tables[[table_name]])
+        }else if(input$data_view == 2){
+          table_to_render <- all_tables[[1]]$tables[[table_name]]
+        }
       }else{
         table_to_render <- data.frame(message = "This table is not available for the loaded data package")
       }
@@ -299,7 +306,11 @@ explore_data_app <- function(
       table_name <- "observation"
       all_tables <- pulled_data()
       if(table_name %in% names(all_tables[[1]]$tables)){
-        table_to_render <- all_tables[[1]]$tables[[table_name]]
+        if(input$data_view == 1){
+          table_to_render <- head(all_tables[[1]]$tables[[table_name]])
+        }else if(input$data_view == 2){
+          table_to_render <- all_tables[[1]]$tables[[table_name]]
+        }
       }else{
         table_to_render <- data.frame(message = "This table is not available for the loaded data package")
       }
@@ -310,7 +321,11 @@ explore_data_app <- function(
       table_name <- "location"
       all_tables <- pulled_data()
       if(table_name %in% names(all_tables[[1]]$tables)){
-        table_to_render <- all_tables[[1]]$tables[[table_name]]
+        if(input$data_view == 1){
+          table_to_render <- head(all_tables[[1]]$tables[[table_name]])
+        }else if(input$data_view == 2){
+          table_to_render <- all_tables[[1]]$tables[[table_name]]
+        }
       }else{
         table_to_render <- data.frame(message = "This table is not available for the loaded data package")
       }
@@ -321,7 +336,11 @@ explore_data_app <- function(
       table_name <- "taxon"
       all_tables <- pulled_data()
       if(table_name %in% names(all_tables[[1]]$tables)){
-        table_to_render <- all_tables[[1]]$tables[[table_name]]
+        if(input$data_view == 1){
+          table_to_render <- head(all_tables[[1]]$tables[[table_name]])
+        }else if(input$data_view == 2){
+          table_to_render <- all_tables[[1]]$tables[[table_name]]
+        }
       }else{
         table_to_render <- data.frame(message = "This table is not available for the loaded data package")
       }
@@ -332,7 +351,11 @@ explore_data_app <- function(
       table_name <- "observation_ancillary"
       all_tables <- pulled_data()
       if(table_name %in% names(all_tables[[1]]$tables)){
-        table_to_render <- all_tables[[1]]$tables[[table_name]]
+        if(input$data_view == 1){
+          table_to_render <- head(all_tables[[1]]$tables[[table_name]])
+        }else if(input$data_view == 2){
+          table_to_render <- all_tables[[1]]$tables[[table_name]]
+        }
       }else{
         table_to_render <- data.frame(message = "This table is not available for the loaded data package")
       }
@@ -343,7 +366,11 @@ explore_data_app <- function(
       table_name <- "location_ancillary"
       all_tables <- pulled_data()
       if(table_name %in% names(all_tables[[1]]$tables)){
-        table_to_render <- all_tables[[1]]$tables[[table_name]]
+        if(input$data_view == 1){
+          table_to_render <- head(all_tables[[1]]$tables[[table_name]])
+        }else if(input$data_view == 2){
+          table_to_render <- all_tables[[1]]$tables[[table_name]]
+        }
       }else{
         table_to_render <- data.frame(message = "This table is not available for the loaded data package")
       }
@@ -354,7 +381,11 @@ explore_data_app <- function(
       table_name <- "taxon_ancillary"
       all_tables <- pulled_data()
       if(table_name %in% names(all_tables[[1]]$tables)){
-        table_to_render <- all_tables[[1]]$tables[[table_name]]
+        if(input$data_view == 1){
+          table_to_render <- head(all_tables[[1]]$tables[[table_name]])
+        }else if(input$data_view == 2){
+          table_to_render <- all_tables[[1]]$tables[[table_name]]
+        }
       }else{
         table_to_render <- data.frame(message = "This table is not available for the loaded data package")
       }
