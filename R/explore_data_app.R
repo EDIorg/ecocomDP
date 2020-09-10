@@ -425,7 +425,7 @@ explore_data_app <- function(
     
     output$type_graph <- shiny::renderUI({
       all_tables <- pulled_data()
-      shiny::selectInput("type_graph", h5("Type of graph"), 
+      shiny::selectInput("type_graph", shiny::h5("Type of graph"), 
                   choices = c(
                     # "bar", 
                     "box",
@@ -488,7 +488,7 @@ explore_data_app <- function(
     
     output$id <- shiny::renderUI({
       
-      shiny::selectInput("id_choices", h5("Select Data Package ID"), 
+      shiny::selectInput("id_choices", shiny::h5("Select Data Package ID"), 
                          choices = full_name())
     })
     
@@ -503,7 +503,7 @@ explore_data_app <- function(
     
     output$start <- shiny::renderUI({
       if(if_dp1()){
-        shiny::textInput("start", h5("Start Date (YYYY-MM)"), 
+        shiny::textInput("start", shiny::h5("Start Date (YYYY-MM)"), 
                          value = "2017-01")
       }
       
@@ -511,7 +511,7 @@ explore_data_app <- function(
     
     output$end <- shiny::renderUI({
       if(if_dp1()){
-        shiny::textInput("end", h5("End Date (YYYY-MM)"), 
+        shiny::textInput("end", shiny::h5("End Date (YYYY-MM)"), 
                          value = "2020-01")
       }
     })
@@ -625,7 +625,7 @@ explore_data_app <- function(
       x_values <- make_table() %>% 
         dplyr::select(-c(package_id, observation_id, unit, variable_name, day_time))
       
-      shiny::selectInput("x", h5("X value"), choices = names(x_values),
+      shiny::selectInput("x", shiny::h5("X value"), choices = names(x_values),
                          selected = "year")
     })
     
@@ -634,7 +634,7 @@ explore_data_app <- function(
       grouped_summary <- make_table() %>% 
         dplyr::select(-c(observation_id, unit, day_time, variable_name))
       
-      shiny::selectInput("color", h5("Group by"), 
+      shiny::selectInput("color", shiny::h5("Group by"), 
                          choices = names(grouped_summary),
                          selected = "package_id") 
     })
@@ -703,7 +703,7 @@ explore_data_app <- function(
       x_values <- flatten_tables() %>% 
         dplyr::select(-c(package_id, observation_id, unit, variable_name, day_time))
       
-      shiny::selectInput("x_richness", h5("X value"), choices = names(x_values),
+      shiny::selectInput("x_richness", shiny::h5("X value"), choices = names(x_values),
                          selected = "year")
       
     })
@@ -713,7 +713,7 @@ explore_data_app <- function(
       color_values <- flatten_tables() %>% 
         dplyr::select(-c(observation_id, unit, variable_name, day_time))
       
-      shiny::selectInput("color_richness", h5("Group by"), choices = names(color_values),
+      shiny::selectInput("color_richness", shiny::h5("Group by"), choices = names(color_values),
                          selected = "package_id")
     })
     
