@@ -150,7 +150,8 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
       values_to = "location_id") %>%
     dplyr::mutate(
       variable_name = "NEON location type",
-      location_ancillary_id = paste0("NEON_location_type_",location_id))
+      location_ancillary_id = paste0("NEON_location_type_",location_id)) %>%
+    dplyr::distinct()
   
 
   
@@ -240,7 +241,8 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
     dplyr::filter(!is.na(sampleID)) %>%
     dplyr::rename(neon_sample_id = sampleID,
            neon_event_id = eventID) %>% 
-    dplyr::mutate(event_id = neon_sample_id) 
+    dplyr::mutate(event_id = neon_sample_id) %>%
+    dplyr::distinct()
   
   table_observation_ancillary <- table_observation_ancillary_wide %>%
     tidyr::pivot_longer(

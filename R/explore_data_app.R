@@ -67,6 +67,7 @@ explore_data_app <- function(
           style = "jelly",
           color = "default"),
         
+        shiny::br(),
         
         shiny::uiOutput("id"),
         
@@ -139,7 +140,10 @@ explore_data_app <- function(
                                                               shiny::tabPanel("location_ancillary",
                                                                               shiny::tableOutput("location_ancillary")),
                                                               shiny::tabPanel("taxon_ancillary",
-                                                                              shiny::tableOutput("taxon_ancillary"))
+                                                                              shiny::tableOutput("taxon_ancillary")),
+                                                              shiny::tabPanel("variable_mapping",
+                                                                              shiny::tableOutput("variable_mapping"))
+                                                              
                                            )
                                            
                            ), #end summary tabPanel
@@ -357,7 +361,7 @@ explore_data_app <- function(
           table_to_render <- all_tables[[1]]$tables[[table_name]]
         }
       }else{
-        table_to_render <- data.frame(message = "This table is not available for the loaded data package")
+        table_to_render <- data.frame(message = "This optional table is not included for the loaded data package")
       }
       return(table_to_render)
     })
@@ -372,7 +376,7 @@ explore_data_app <- function(
           table_to_render <- all_tables[[1]]$tables[[table_name]]
         }
       }else{
-        table_to_render <- data.frame(message = "This table is not available for the loaded data package")
+        table_to_render <- data.frame(message = "This optional table is not included for the loaded data package")
       }
       return(table_to_render)
     })
@@ -387,7 +391,22 @@ explore_data_app <- function(
           table_to_render <- all_tables[[1]]$tables[[table_name]]
         }
       }else{
-        table_to_render <- data.frame(message = "This table is not available for the loaded data package")
+        table_to_render <- data.frame(message = "This optional table is not included for the loaded data package")
+      }
+      return(table_to_render)
+    })
+    
+    output$variable_mapping <- renderTable({
+      table_name <- "variable_mapping"
+      all_tables <- pulled_data()
+      if(table_name %in% names(all_tables[[1]]$tables)){
+        if(input$data_view == 1){
+          table_to_render <- head(all_tables[[1]]$tables[[table_name]])
+        }else if(input$data_view == 2){
+          table_to_render <- all_tables[[1]]$tables[[table_name]]
+        }
+      }else{
+        table_to_render <- data.frame(message = "This optional table is not included for the loaded data package")
       }
       return(table_to_render)
     })
@@ -469,7 +488,7 @@ explore_data_app <- function(
     
     output$id <- shiny::renderUI({
       
-      shiny::selectInput("id_choices", h5("Select id"), 
+      shiny::selectInput("id_choices", h5("Select Data Package ID"), 
                          choices = full_name())
     })
     
@@ -484,7 +503,7 @@ explore_data_app <- function(
     
     output$start <- shiny::renderUI({
       if(if_dp1()){
-        shiny::textInput("start", h5("Start date"), 
+        shiny::textInput("start", h5("Start Date (YYYY-MM)"), 
                          value = "2017-01")
       }
       
@@ -492,7 +511,7 @@ explore_data_app <- function(
     
     output$end <- shiny::renderUI({
       if(if_dp1()){
-        shiny::textInput("end", h5("End date"), 
+        shiny::textInput("end", h5("End Date (YYYY-MM)"), 
                          value = "2020-01")
       }
     })
@@ -509,7 +528,7 @@ explore_data_app <- function(
       if(if_dp1()){
         shinyWidgets::pickerInput(
           inputId = "sites", 
-          label = shiny::h5("Selected sites (select items)"), 
+          label = shiny::h5("Selected Sites (you can select multiple)"), 
           choices = c(get_list_of_sites()),
           options = list(`selected-text-format` = "count > 1"),
           multiple = TRUE)

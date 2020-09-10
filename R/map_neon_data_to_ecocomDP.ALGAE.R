@@ -278,7 +278,8 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
       values_to = "location_id") %>%
     dplyr::mutate(
       variable_name = "NEON location type",
-      location_ancillary_id = paste0("NEON_location_type_",location_id))
+      location_ancillary_id = paste0("NEON_location_type_",location_id)) %>%
+    dplyr::distinct()
   
   
   # # Taxon table using available data

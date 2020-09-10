@@ -4,6 +4,55 @@
 
 library(ecocomDP)
 
+
+
+
+# testing NEON bet "DP1.10022.001"
+my_result_bet_mapping <- map_neon_data_to_ecocomDP.BEETLE(
+  site = "CPER", 
+  startdate = "2019-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+all_tables <- ecocomDP::read_data(
+  id = "DP1.10022.001",
+  site = "CPER", 
+  startdate = "2019-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+
+flat_data <- ecocomDP::flatten_ecocomDP(all_tables$DP1.10022.001$tables)
+
+
+
+
+
+
+
+
+# testing NEON mos "DP1.10043.001"
+
+my_result_mos_mapping <- map_neon_data_to_ecocomDP.MOSQUITO(
+  site = "CPER", 
+  startdate = "2019-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+all_tables <- ecocomDP::read_data(
+  id = "DP1.10043.001",
+  site = "CPER", 
+  startdate = "2019-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+
+
+
 # testing with NEON macroinvert "DP1.20120.001"
 my_result_inv_mapping <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(
   site= c('COMO','LECO'), 

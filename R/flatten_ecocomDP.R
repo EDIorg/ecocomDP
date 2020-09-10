@@ -50,17 +50,21 @@ flatten_ecocomDP <- function(data.list){
   
   # merge all_merged with observation_ancillary
   if("observation_ancillary" %in% names(data.list)){
-    observation_ancillary <- data.list$observation_ancillary %>%
-      dplyr::select(-observation_ancillary_id) %>%
+    observation_ancillary_long <- data.list$observation_ancillary 
+    
+    observation_ancillary_long_wide <- observation_ancillary_long[
+      ,!names(observation_ancillary_long) %in% c("observation_ancillary_id","unit")] %>%
       tidyr::pivot_wider(names_from = variable_name, values_from = value) %>%
       dplyr::select_if(not_all_NAs)
     
     all_merged <- all_merged %>%
-      dplyr::left_join(observation_ancillary, 
+      dplyr::left_join(observation_ancillary_long_wide, 
                        by = "event_id",
                        suffix = c("", "_observation_ancillary"))
   }
   
+  
+ 
   
   # merge location data and using "NEON location type" from location ancillary data
   if("location_ancillary" %in% names(data.list) && 
@@ -86,6 +90,9 @@ flatten_ecocomDP <- function(data.list){
     # identify all records that have parents
     location_child <- location %>% 
       dplyr::filter(!is.na(parent_location_id))
+    
+    
+
     
     # loop through from ultimate parents down, joining with child records, until there are no more children
     while(nrow(location_child) > 0){
@@ -119,6 +126,7 @@ flatten_ecocomDP <- function(data.list){
       }
     }
     
+
     all_merged <- all_merged %>%
       dplyr::left_join(
         location_new, 
@@ -135,6 +143,8 @@ flatten_ecocomDP <- function(data.list){
         suffix = c("", "_location"))
   }
   
+
+  
   
   # merge taxon_ancillary
   if("taxon_ancillary" %in% names(data.list)){
@@ -149,6 +159,7 @@ flatten_ecocomDP <- function(data.list){
         suffix = c("", "_taxon_ancillary"))
   }
   
+
   
   # merge other location ancillary data
   if("location_ancillary" %in% names(data.list) &&
@@ -168,6 +179,9 @@ flatten_ecocomDP <- function(data.list){
         suffix = c("", "_location_ancillary"))
   }
   
+  
+  
+
   return(all_merged)
   
 } # end of flatten_ecocomDP
