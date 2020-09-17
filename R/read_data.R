@@ -66,7 +66,7 @@
 #' d <- read_data(
 #'   id = "DP1.20166.001", 
 #'   site = c("MAYF", "PRIN"), 
-#'   startdate = "2016-1", 
+#'   startdate = "2016-01", 
 #'   enddate = "2018-11")
 #' 
 #' # Read multiple datasets from different sources
@@ -78,7 +78,7 @@
 #'     edi.193.3 = NULL,
 #'     DP1.20166.001 = list(
 #'       site = c("MAYF", "PRIN"),
-#'       startdate = "2016-1",
+#'       startdate = "2016-01",
 #'       enddate = "2018-11")),
 #'   check.size = TRUE,
 #'   nCores = 2,
