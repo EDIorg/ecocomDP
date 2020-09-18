@@ -1,169 +1,144 @@
-#' Make taxon table
+#' Make the taxon table
 #'
-#' @description  
-#'     Make a data frame of the taxon table.
-#'
+#' @param x
+#'     (data frame) A data frame containing taxa names (in one or more 
+#'     columns).
+#' @param cols
+#'     (character) One or more columns in \code{x} that when combined form a 
+#'     unique taxa that may be resolvable to a taxonomic authority system. 
+#'     (e.g. \code{cols = c("genus", "species")}).
 #' @param taxa
-#'     (character) Taxa names to be resolved
-#' @param taxon.id
-#'     (character) Primary key for the taxon table (i.e. taxon_id) 
-#'     corresponding to the order of taxa names provided to the taxa argument.
-#'     If left blank, then taxon_id values are auto generated.
+#'     (character) If not using \code{x} and \code{cols}, then a list of 
+#'     unique taxa can be input using this argument.
 #' @param name.type
 #'     (character) Taxonomic name type. Can be: 'scientific', 'common', or 
 #'     'both'.
 #' @param data.sources
-#'     (integer) An ordered numeric vector of ID's corresponding to data 
-#'     sources (i.e. taxonomic authorities) you'd like to query, in the order 
-#'     of decreasing preference. Run `taxonomyCleanr::view_taxa_authorities` 
-#'     to see supported data sources. Columns `resolve_sci_taxa`, and 
-#'     `resolve_comm_taxa` correspond to scientific and common searches.
+#'     (integer) An ordered numeric vector of ID's corresponding to taxonomic 
+#'     authorities to resolve taxa to (in the order of decreasing preference). 
+#'     Run \code{taxonomyCleanr::view_taxa_authorities()} to see supported 
+#'     authorities.
 #'
 #' @return 
-#'     (data frame) A fully populated taxon table. NA's are listed when an 
-#'     authority match could not be made.
+#' A list containing:
+#' \item{taxon}{A data frame of the taxon table}
+#' \item{x}{The input \code{x} with an added taxon_id column linking unique
+#' \code{cols} to the list of taxa in the taxon table.}
 #'     
 #' @export
 #'
-
-make_taxon <- function(taxa, taxon.id = NULL, name.type, data.sources){
+make_taxon <- function(
+  x = NULL, cols = NULL, taxa = NULL, name.type = "scientific", 
+  data.sources = NULL) {
   
-  message('Creating the ecocomDP taxon table')
+  message('Creating taxon')
   
   # Validate arguments --------------------------------------------------------
   
-  if (!missing(taxa)){
-    if (class(taxa) != 'character'){
-      stop('Input argument "taxa" is not of character class')
-    }
-  } else {
-    stop('Input argument "taxa" is missing.')
+  if (!is.null(x) & is.null(cols)) {
+    stop('Input argument "cols" is missing! Specify column names that create ',
+         'unique taxa.', call. = FALSE)
   }
   
-  if (!is.null(taxon.id)){
-    if (class(taxon.id) != 'character'){
-      stop('Input argument "taxon.id" is not of character class')
+  if (!is.null(taxa)){
+    if (class(taxa) != 'character'){
+      stop('Input argument "taxa" is not of character class', call. = FALSE)
     }
-    if (length(taxon.id) != length(taxa)){
-      stop('Length of argument "taxon.id" does not match length Of argument "taxa"')
-    }
-  } 
+  }
 
-  if (!missing(name.type)){
+  if (!is.null(name.type)){
     name.type <- tolower(name.type)
     if ((!stringr::str_detect(name.type, 'scientific')) & 
         (!stringr::str_detect(name.type, 'common')) &
         (!stringr::str_detect(name.type, 'both'))){
-      stop('Input argument "name.type" must be "scientific", "common", or "both"')
+      stop('Input argument "name.type" must be "scientific", "common", or ',
+           '"both"', call. = FALSE)
     }
   } else {
-    stop('Input argument "name.type" is missing')
+    stop('Input argument "name.type" is missing', call. = FALSE)
   }
   
-  if (missing(data.sources)){
-    stop('Input argument "data.sources" is missing')
+  if (is.null(data.sources)){
+    stop('Input argument "data.sources" is missing', call. = FALSE)
+  }
+  
+  # Create "taxa" if using "x" and "cols"
+  if (!is.null(x) & !is.null(cols)) {
+    x$keys <- apply(x[, cols] ,1 ,paste ,collapse = " ")
+    taxa <- unique(x$keys)
   }
   
   # Resolve to authorities ----------------------------------------------------
   
-  if (name.type == 'scientific'){
+  if (name.type == 'scientific') {
     
     taxa_resolved <- taxonomyCleanr::resolve_sci_taxa(
       data.sources = data.sources,
-      x = taxa
-    )
-    
-    # Add to taxon table
+      x = taxa)
     
     taxon <- data.frame(
-      taxon_id = rep(NA_character_, nrow(taxa_resolved)),
+      taxon_id = paste0("tx_", seq(nrow(taxa_resolved))),
       taxon_rank = taxa_resolved$rank,
       taxon_name = taxa_resolved$taxa,
       authority_system = taxa_resolved$authority,
       authority_taxon_id = taxa_resolved$authority_id,
-      stringsAsFactors = F
-    )
+      stringsAsFactors = F)
 
   } else if (name.type == 'common'){
     
     taxa_resolved <- taxonomyCleanr::resolve_comm_taxa(
       data.sources = data.sources,
-      x = taxa
-    )
-    
-    # Add to taxon table
+      x = taxa)
     
     taxon <- data.frame(
-      taxon_id = rep(NA_character_, nrow(taxa_resolved)),
+      taxon_id = paste0("tx_", seq(nrow(taxa_resolved))),
       taxon_rank = taxa_resolved$rank,
       taxon_name = taxa_resolved$taxa,
       authority_system = taxa_resolved$authority,
       authority_taxon_id = taxa_resolved$authority_id,
-      stringsAsFactors = F
-    )
+      stringsAsFactors = F)
     
   } else if (name.type == 'both'){
     
     authorities <- taxonomyCleanr::view_taxa_authorities()
     
     # Scientific
-    
     use_i <- data.sources %in% authorities$id[
-      authorities$resolve_sci_taxa == 'supported'
-    ]
-    
+      authorities$resolve_sci_taxa == 'supported']
     taxa_resolved <- taxonomyCleanr::resolve_sci_taxa(
       data.sources = data.sources[use_i],
-      x = taxa
-    )
+      x = taxa)
     
     # Common
-    
     index <- is.na(taxa_resolved$taxa_clean)
-    
     use_i <- data.sources %in% authorities$id[
-      authorities$resolve_comm_taxa == 'supported'
-      ]
-    
+      authorities$resolve_comm_taxa == 'supported']
     taxa_comm_resolved <- taxonomyCleanr::resolve_comm_taxa(
       data.sources = data.sources[use_i],
-      x = taxa_resolved$taxa[index]
-    )
+      x = taxa_resolved$taxa[index])
     
     # Combine
-    
     taxa_resolved[index, ] <- taxa_comm_resolved
     
     # Add to taxon table
-    
     taxon <- data.frame(
-      taxon_id = rep(NA_character_, nrow(taxa_resolved)),
+      taxon_id = paste0("tx_", seq(nrow(taxa_resolved))),
       taxon_rank = taxa_resolved$rank,
       taxon_name = taxa_resolved$taxa,
       authority_system = taxa_resolved$authority,
       authority_taxon_id = taxa_resolved$authority_id,
-      stringsAsFactors = F
-    )
+      stringsAsFactors = F)
     
   }
-  
-  # Add taxon_id --------------------------------------------------------------
-  
-  if (is.null(taxon.id)){
-    
-    taxon$taxon_id <- paste0(
-      'tx_',
-      seq(nrow(taxon))
-    )
-    
-  } else {
-    
-    taxon$taxon_id <- taxon.id
-    
-  }
-  
+
   # Return --------------------------------------------------------------------
   
-  taxon
+  if (!is.null(x) & !is.null(cols)) {
+    x$keys <- taxon$taxon_id[match(x$keys, taxon$taxon_name)]
+    x <- dplyr::rename(x, taxon_id = keys)
+    return(list(taxon = taxon, x = x))
+  } else {
+    return(list(taxon = taxon, x = NULL))
+  }
 
 }
