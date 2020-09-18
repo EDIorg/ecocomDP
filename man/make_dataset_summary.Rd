@@ -22,9 +22,21 @@ identifier, and revision (e.g. 'edi.101.1').}
 dataset_summary table.}
 
 \item{taxon.table}{(data frame) The ecocomDP taxon table.}
+
+\item{north}{(numeric) North bounding coordinate of the study area in decimal 
+degrees with values north of the equator being positive.}
+
+\item{south}{(numeric) South bounding coordinate of the study area in decimal 
+degrees with values south of the equator being negative.}
+
+\item{east}{(numeric) East bounding coordinate of the study area in decimal 
+degrees with values west of the prime meridian being negative.}
+
+\item{west}{(numeric) West bounding coordinate of the study area in decimal 
+degrees with values west of the equator being negative.}
 }
 \value{
-A data frame of the dataset_summary table.
+(data frame) A data frame of the dataset_summary table
 }
 \description{
 Make the ecocomDP dataset_summary table.
