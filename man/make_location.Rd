@@ -33,7 +33,9 @@ geographicCoverage will be extracted. Currently only works for EDI
 data.}
 }
 \value{
-A data frame of the location table.
+\item{location}{A data frame of the location table}
+\item{x}{The input data frame \code{x} but with an added location_id column.
+This simplifies alignment of values between \code{x} and location.}
 }
 \description{
 Make the ecocomDP location table.
