@@ -10,8 +10,9 @@
 #'     (character) Names of all columns from \code{x} needed to create 
 #'     location_ancillary. This function assumes that all columns with names
 #'     corresponding to the ecocomDP location_ancillary table will be treated
-#'     as such. If any \code{cols} have a different meaning, i.e. within the 
-#'     context of the parent data package, then this function will not work.
+#'     as such. If any \code{cols} are shared between the parent tables (now
+#'     joined in the master data frame) and location_antillary, then there is
+#'     ambiguous meaning and this function will not work.
 #' @param eml
 #'     (xml_document xml_node) EML metadata listing units for variables listed 
 #'     in \code{cols}. Use \code{EDIutils::api_read_metadata()} or 
@@ -64,40 +65,49 @@ make_location_ancillary <- function(x = NULL, cols = NULL, eml = NULL) {
     error = function(cond) {d})
   
   # Now assume variables not belonging to ecocomDP are variables that need to 
-  # be gathered into long format, the units of which will be looked up in the EML 
-  # and listed under the "unit" column of the table.
+  # be gathered into long format.
   variables_to_gather <- colnames(d)[
     !(colnames(d) %in% criteria$column[
       criteria$table %in% "location_ancillary"])]
   d <- tidyr::gather(
     d, "variable_name", "value", variables_to_gather)
   
+  # Add missing location_ancillary columns and fill with NA
+  location_ancillary_columns <- criteria$column[
+    criteria$table %in% "location_ancillary"]
+  missing_columns <- na.omit(
+    location_ancillary_columns[!(location_ancillary_columns %in% colnames(d))])
+  d[, missing_columns] <- NA_character_
+
   # Match variables to units and list in the table. If more than one match 
   # occurs (due to duplicate variable names in the EML) then a warning and 
   # suggested course of action is returned.
   attributes <- xml2::xml_find_all(eml, ".//attributeList/attribute")
   attributeNames <- xml2::xml_text(
     xml2::xml_find_all(eml, ".//attributeList/attribute/attributeName"))
-  d$unit <- NA_character_
   for (col in variables_to_gather) {
-    unit <- xml2::xml_text(
-      xml2::xml_find_all(
-        attributes[attributeNames %in% col], ".//unit"))
-    if (length(unit) == 1) {
-      d$unit[d$variable_name %in% col] <- unit
-    } else if (length(unit) > 1) {
-      warning(
-        "Variable ", col, " occurs more than once in the EML making a ",
-        "one-to-one match with the variables unit ambiguous. Remove ",
-        "duplicate variables from the EML when running this function.",
-        call. = FALSE)
+    if (all(is.na(d$unit[d$variable_name %in% col]))) {
+      # No units imported from the master table so look up in eml
+      unit <- xml2::xml_text(
+        xml2::xml_find_all(
+          attributes[attributeNames %in% col], ".//unit"))
+      if (length(unit) == 1) {
+        d$unit[d$variable_name %in% col] <- unit
+      } else if (length(unit) > 1) {
+        # unit may be ambiguous if col is listed more than once
+        warning(
+          "Variable ", col, " occurs more than once in the EML making a ",
+          "one-to-one match with the variables unit ambiguous. Remove ",
+          "duplicate variables from the EML when running this function.",
+          call. = FALSE)
+      }
     }
   }
   
   # Keep only unique rows, create the location_ancillary_id, and reorder 
   # columns to finalize this table
   d <- dplyr::distinct(d)
-  d$location_ancillary_id <- paste0('ob_', seq(nrow(d)))
+  d$location_ancillary_id <- paste0('loan_', seq(nrow(d)))
   d <- dplyr::select(
     d, na.omit(criteria$column[criteria$table %in% "location_ancillary"]))
 

@@ -16,8 +16,9 @@ will not work otherwise.}
 \item{cols}{(character) Names of all columns from \code{x} needed to create 
 location_ancillary. This function assumes that all columns with names
 corresponding to the ecocomDP location_ancillary table will be treated
-as such. If any \code{cols} have a different meaning, i.e. within the 
-context of the parent data package, then this function will not work.}
+as such. If any \code{cols} are shared between the parent tables (now
+joined in the master data frame) and location_antillary, then there is
+ambiguous meaning and this function will not work.}
 
 \item{eml}{(xml_document xml_node) EML metadata listing units for variables listed 
 in \code{cols}. Use \code{EDIutils::api_read_metadata()} or 
