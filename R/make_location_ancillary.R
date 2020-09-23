@@ -35,13 +35,16 @@ make_location_ancillary <- function(x = NULL, cols = NULL, eml = NULL) {
   
   # Validate arguments --------------------------------------------------------
   
-  if (is.null(x) | is.null(cols)) {
-    stop('Both "x" and "cols" are required', call. = FALSE)
+  if (is.null(x) | is.null(cols) | is.null(eml)) {
+    stop('"x", "cols", and "eml" are required', call. = FALSE)
   }
   if (!is.data.frame(x)) {
     stop('"x" must be a data frame', call. = FALSE)
   }
   if (!is.character(cols)) {
+    stop('"cols" must be character', call. = FALSE)
+  }
+  if (!any(class(eml) %in% c("xml_document", "xml_node"))) {
     stop('"cols" must be character', call. = FALSE)
   }
   
@@ -61,8 +64,42 @@ make_location_ancillary <- function(x = NULL, cols = NULL, eml = NULL) {
     error = function(cond) {d})
   
   # Now assume variables not belonging to ecocomDP are variables that need to 
-  # be gathered into long format.
-  colnames(d)
+  # be gathered into long format, the units of which will be looked up in the EML 
+  # and listed under the "unit" column of the table.
+  variables_to_gather <- colnames(d)[
+    !(colnames(d) %in% criteria$column[
+      criteria$table %in% "location_ancillary"])]
+  d <- tidyr::gather(
+    d, "variable_name", "value", variables_to_gather)
+  
+  # Match variables to units and list in the table. If more than one match 
+  # occurs (due to duplicate variable names in the EML) then a warning and 
+  # suggested course of action is returned.
+  attributes <- xml2::xml_find_all(eml, ".//attributeList/attribute")
+  attributeNames <- xml2::xml_text(
+    xml2::xml_find_all(eml, ".//attributeList/attribute/attributeName"))
+  d$unit <- NA_character_
+  for (col in variables_to_gather) {
+    unit <- xml2::xml_text(
+      xml2::xml_find_all(
+        attributes[attributeNames %in% col], ".//unit"))
+    if (length(unit) == 1) {
+      d$unit[d$variable_name %in% col] <- unit
+    } else if (length(unit) > 1) {
+      warning(
+        "Variable ", col, " occurs more than once in the EML making a ",
+        "one-to-one match with the variables unit ambiguous. Remove ",
+        "duplicate variables from the EML when running this function.",
+        call. = FALSE)
+    }
+  }
+  
+  # Keep only unique rows, create the location_ancillary_id, and reorder 
+  # columns to finalize this table
+  d <- dplyr::distinct(d)
+  d$location_ancillary_id <- paste0('ob_', seq(nrow(d)))
+  d <- dplyr::select(
+    d, na.omit(criteria$column[criteria$table %in% "location_ancillary"]))
 
   # Return
   d
