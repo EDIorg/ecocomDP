@@ -1,8 +1,5 @@
 #' Write ecocomDP tables to file
 #'
-#' @description  
-#'     Write ecocomDP tables to file
-#'
 #' @param path
 #'     (character) Directory to which the files will be written.
 #' @param sep
@@ -33,13 +30,10 @@
 #'     
 #' @export
 #'
-
-write_ecocomDP_tables <- function(path, sep, study.name, observation, location, 
-                                  taxon, dataset_summary, 
-                                  observation_ancillary = NULL, 
-                                  location_ancillary = NULL, 
-                                  taxon_ancillary = NULL, 
-                                  variable_mapping = NULL){
+write_tables <- function(path, sep, study.name, observation, location, 
+                         taxon, dataset_summary, observation_ancillary = NULL, 
+                         location_ancillary = NULL, taxon_ancillary = NULL, 
+                         variable_mapping = NULL){
   
   # Validate arguments --------------------------------------------------------
   
