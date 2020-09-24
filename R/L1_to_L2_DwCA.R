@@ -22,9 +22,11 @@ L1_to_L2_DwCA <- function(core.name, L1.id) {
   # occurence is simpler (sightings), event is a better fit for most of our data
   # TODO: Support event-core
   
-  parent_path <- "."
-  dwca_config_file <- readr::read_csv(system.file("dwca_occurrence_core_config.csv", package = "ecocomDP"))
-  dwca_mappings_file <- readr::read_csv(system.file("dwca_occurrence_core_mappings.csv", package = "ecocomDP"))
+  # parent_path <- "."
+  dwca_config_file <- readr::read_csv(
+    system.file("dwca_occurrence_core_config.csv", package = "ecocomDP"))
+  dwca_mappings_file <- readr::read_csv(
+    system.file("dwca_occurrence_core_mappings.csv", package = "ecocomDP"))
 
   # msg the user
   message(
@@ -36,47 +38,32 @@ L1_to_L2_DwCA <- function(core.name, L1.id) {
   # TODO: write a function that reads pkg metadata and dataTables. copy 
   # something from one of the L0 conversion scripts.
   
-  source(system.file("/edi_193_3.R", package = "ecocomDP"))
-  
-  
-  
-  # assign tables to a var for that type (read pkg function will use their 
-  # actual names, assign based on known str frag)
-  # TODO: Use the entity name to determine which of the ecocomDP tables that 
-  # entity actually is.
-  
-  dt_obs <- dt1
-  dt_obs_ancil <- dt2
-  dt_loc_ancil <- dt3
-  dt_tax_ancil <- dt4
-  dt_summary <- dt5
-  dt_loc <- dt6
-  dt_tax <- dt7
-  # dt_var_mapping <- ___
+  d <- ecocomDP::read_data(L1.id)
+  d <- d[[1]]$tables
+  if (L1.id == "edi.323.1") {
+    # FIXME: Remove this once edi.323.1 has been updated
+    rows_to_remove <- c(
+      1020, 1026, 1030, 1042, 1048, 1049, 1055, 1056, 1058, 1059, 1065, 1066, 
+      1069, 1073, 1082, 1085, 1086, 1093, 1094, 1097, 2396, 2402, 2406, 2418, 
+      2424, 2425, 2431, 2432, 2434, 2435, 2441, 2442, 2445, 2449, 2458, 2461, 
+      2462, 2469, 2470, 2473)
+    d$observation <- d$observation[-rows_to_remove, ]
+  }
   
   # Convert tables ------------------------------------------------------------
   
   if (core.name == 'occurrence') {
     
-    # call a function to create occurrence core. inputs: data objects, dwca_mappings, dwca_config
-    message('calling function to create DwC-A, occurrence core')
+    # call a function to create occurrence core. inputs: data objects, 
+    # dwca_mappings, dwca_config
     
-    if (exists("dt_loc_ancil")) {
-      occurrence_table <- create_table_dwca_occurrence_core(
-        dwca_occurrence_core_config = dwca_config_file,
-        dwca_occurrence_core_mapping = dwca_mappings_file,
-        dt_obs = dt_obs,
-        dt_loc = dt_loc,
-        dt_tax = dt_tax,
-        dt_loc_ancil = dt_loc_ancil)
-    } else {
-      occurrence_table <- create_table_dwca_occurrence_core(
-        dwca_occurrence_core_config = dwca_config_file,
-        dwca_occurrence_core_mapping = dwca_mappings_file,
-        dt_obs = dt_obs,
-        dt_loc = dt_loc,
-        dt_tax = dt_tax)
-    }
+    r <- create_table_dwca_occurrence_core(
+      dwca_occurrence_core_config = dwca_config_file,
+      dwca_occurrence_core_mapping = dwca_mappings_file,
+      dt_obs = d$observation,
+      dt_loc = d$location,
+      dt_tax = d$taxon,
+      dt_loc_ancil = d$location_ancillary)
     
   } else if (core.name == 'event') {
     
@@ -128,18 +115,25 @@ create_table_dwca_occurrence_core <- function(
   dt_tax,
   dt_loc_ancil = NULL) {
   
-  # Validate function inputs --------------------------------------------------
-  # Do you have what you need to get these vars? confirm fields used by mapping table are present.
-  # anything that is required by the ecocomDP model already, you can assume is present.
-  # location_ancillary.value, or observation_anncillary.value ?? what does this note mean? do I need these?
+  message('calling function to create DwC-A, occurrence core')
   
+  # Validate function inputs --------------------------------------------------
+  # Do you have what you need to get these vars? confirm fields used by mapping 
+  # table are present. Anything that is required by the ecocomDP model already, 
+  # you can assume is present. location_ancillary.value, or 
+  # observation_anncillary.value ?? what does this note mean? do I need these?
+  
+  # If dt_loc_ancil exists, then the occurence table can have sampleValueUnit
   if (!is.null(dt_loc_ancil)) {
-    # If dt_loc_ancil exists, then the occurence table can have sampleValueUnit
+    include_sampleSizeUnit_sampleSizeValue <- FALSE
+    # TODO: include_sampleSizeUnit_sampleSizeValue <- TRUE
+  } else {
+    include_sampleSizeUnit_sampleSizeValue <- FALSE
   }
   
   # Join the tables -----------------------------------------------------------
-  # TODO: Don't forget locationn ancillary
   
+  # TODO: Don't forget locationn ancillary (MOB add issue #)
   obs_loc_tax <- long2wide_obs_loc_tax(
     dt_obs = dt_obs, 
     dt_loc = dt_loc, 
