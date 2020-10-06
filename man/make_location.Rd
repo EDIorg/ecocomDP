@@ -29,10 +29,14 @@ corresponds with with the column named 'site' then enter 'site' for the
 col argument.}
 
 \item{parent.package.id}{(character) Parent data package ID (e.g. "knb-lter-nin.9.1") from which 
-geographicCoverage will be extracted.}
+geographicCoverage will be extracted. Currently only works for EDI
+data.}
 }
 \value{
-A data frame of the location table.
+A list containing:
+\item{location}{A data frame of the location table}
+\item{x}{The input data frame \code{x} but with an added location_id column.
+This simplifies alignment of values between \code{x} and location.}
 }
 \description{
 Make the ecocomDP location table.

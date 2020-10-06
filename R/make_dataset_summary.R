@@ -14,23 +14,37 @@
 #'     dataset_summary table.
 #' @param taxon.table
 #'     (data frame) The ecocomDP taxon table.
+#' @param north
+#'     (numeric) North bounding coordinate of the study area in decimal 
+#'     degrees with values north of the equator being positive.
+#' @param south
+#'     (numeric) South bounding coordinate of the study area in decimal 
+#'     degrees with values south of the equator being negative.
+#' @param east
+#'     (numeric) East bounding coordinate of the study area in decimal 
+#'     degrees with values west of the prime meridian being negative.
+#' @param west
+#'     (numeric) West bounding coordinate of the study area in decimal 
+#'     degrees with values west of the equator being negative.
 #'
 #' @return 
-#'     A data frame of the dataset_summary table.
+#'     (data frame) A data frame of the dataset_summary table
 #'     
 #' @export
 #'
-
-make_dataset_summary <- function(parent.package.id, child.package.id, sample.dates, taxon.table){
+make_dataset_summary <- function(parent.package.id, 
+                                 child.package.id, 
+                                 sample.dates, 
+                                 taxon.table){
   
+  message('Creating dataset_summary')
+    
+  # Validate inputs
   if (!is.character(sample.dates)){
     stop('Input argument "sample.dates" must be of class = character.')
   }
-  
-  message('Creating dataset_summary table')
 
   # Initialize dataset_summary table
-  
   dataset_summary <- data.frame(
     package_id = rep(NA_character_, length(child.package.id)),
     original_package_id = rep(NA_character_, length(child.package.id)),
@@ -39,125 +53,81 @@ make_dataset_summary <- function(parent.package.id, child.package.id, sample.dat
     std_dev_interval_betw_years = rep(NA, length(child.package.id)),
     max_num_taxa = rep(NA, length(child.package.id)),
     geo_extent_bounding_box_m2 = rep(NA, length(child.package.id)),
-    stringsAsFactors = FALSE
-  )
+    stringsAsFactors = FALSE)
   
-  # Add content to fields
-  
+  # Add package_id and original_package_id
   dataset_summary$package_id <- child.package.id
-  
   dataset_summary$original_package_id <- parent.package.id
   
+  # Add temporal metrics
   dates <- dataCleanr::iso8601_read(sample.dates)
-  
-  if (is.integer(dates)){
-
+  if (is.integer(dates)) {
     dataset_summary$length_of_survey_years <- max(dates) - min(dates)
-    
     dataset_summary$number_of_years_sampled <- length(unique(dates))
-
     dataset_summary$std_dev_interval_betw_years <- round(sd(diff(unique(dates))/1), 2)
-
-  } else if (is.POSIXct(dates)){
-
-    dates <- dates[order(dates)]
-    dates <- dates[!is.na(dates)]
-    dates_int <- interval(
-      dates[1],
-      dates[length(dates)]
-    )
-    
+  } else {
+    dates <- dates %>% na.omit() %>% sort()
+    # length_of_survey_years
     dataset_summary$length_of_survey_years <-  round(
       lubridate::time_length(
-        interval(
-          min(dates),
-          max(dates)
-        ), 
-        unit = 'year'
-      ), 
-      2
-    )
-    
+        lubridate::interval(min(dates), max(dates)), 
+        unit = 'year'))
+    # number_of_years_sampled
     dataset_summary$number_of_years_sampled <- length(
       unique(
-        lubridate::year(
-          dates
-        )
-      )
-    )
-    
-    dataset_summary$std_dev_interval_betw_years <- sd(
-      diff(
-        lubridate::year(
-          dates
-        )
-      )
-    )
-
+        lubridate::year(dates)))
+    # std_dev_interval_betw_years
+    dataset_summary$std_dev_interval_betw_years <- round(
+      sd(
+        diff(
+          lubridate::year(dates))),
+      2)
   }
   
+  # Add max_num_taxa
   dataset_summary$max_num_taxa <- nrow(taxon.table)
   
-  eml <- suppressMessages(
-    EDIutils::api_read_metadata(
-      parent.package.id
-    )
-  )
+  # Add geo_extent_bounding_box_m2
   
-  # Add column geo_extent_bounding box_m2 ---------------------------------
-  # https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
-  
-  westBoundingCoordinate <- min(
-    as.numeric(
-      xml2::xml_text(
-        xml2::xml_find_all(
-          eml,
-          "//dataset/coverage/geographicCoverage/boundingCoordinates/westBoundingCoordinate"
-        )
-      )
-    )
-  )
+  if (stringr::str_detect(
+    parent.package.id, 
+    "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)")) {
+    # Source is EDI
+    eml <- suppressMessages(EDIutils::api_read_metadata(parent.package.id))
+    west <- min(
+      as.numeric(
+        xml2::xml_text(
+          xml2::xml_find_all(
+            eml,
+            "//dataset/coverage/geographicCoverage/boundingCoordinates/westBoundingCoordinate"))))
+    east <- max(
+      as.numeric(
+        xml2::xml_text(
+          xml2::xml_find_all(
+            eml,
+            "//dataset/coverage/geographicCoverage/boundingCoordinates/eastBoundingCoordinate"))))
+    south <- min(
+      as.numeric(
+        xml2::xml_text(
+          xml2::xml_find_all(
+            eml,
+            "//dataset/coverage/geographicCoverage/boundingCoordinates/southBoundingCoordinate"))))
+    north <- max(
+      as.numeric(
+        xml2::xml_text(
+          xml2::xml_find_all(
+            eml,
+            "//dataset/coverage/geographicCoverage/boundingCoordinates/northBoundingCoordinate"))))
+  } else if (stringr::str_detect(x, "^DP.\\.[:digit:]+\\.[:digit:]+")) {
+    # Source is NEON
+    # TODO: Add methods for extracting this info from a NEON data product
+  }
 
-  eastBoundingCoordinate <- max(
-    as.numeric(
-      xml2::xml_text(
-        xml2::xml_find_all(
-          eml,
-          "//dataset/coverage/geographicCoverage/boundingCoordinates/eastBoundingCoordinate"
-        )
-      )
-    )
-  )
-  
-  southBoundingCoordinate <- min(
-    as.numeric(
-      xml2::xml_text(
-        xml2::xml_find_all(
-          eml,
-          "//dataset/coverage/geographicCoverage/boundingCoordinates/southBoundingCoordinate"
-        )
-      )
-    )
-  )
-  
-  northBoundingCoordinate <- max(
-    as.numeric(
-      xml2::xml_text(
-        xml2::xml_find_all(
-          eml,
-          "//dataset/coverage/geographicCoverage/boundingCoordinates/northBoundingCoordinate"
-        )
-      )
-    )
-  )
-  
   dataset_summary$geo_extent_bounding_box_m2 <- round(
     calulate_geo_extent_bounding_box_m2(
-      westBoundingCoordinate,
-      eastBoundingCoordinate,
-      northBoundingCoordinate,
-      southBoundingCoordinate))
+      west, east, north, south))
   
+  # Return
   dataset_summary
   
 }
@@ -188,38 +158,9 @@ make_dataset_summary <- function(parent.package.id, child.package.id, sample.dat
 #' @export
 #'
 calulate_geo_extent_bounding_box_m2 <- function(
-  lon_west, 
-  lon_east, 
-  lat_north, 
-  lat_south) {
-  
-  getDistanceFromLatLonInKm<-function(lat1,lon1,lat2,lon2) {
-    R <- 6371; # Radius of the earth in km
-    dLat <- deg2rad(lat2-lat1);	# deg2rad below
-    dLon = deg2rad(lon2-lon1); 
-    a <- sin(dLat/2) * sin(dLat/2) + cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * sin(dLon/2) * sin(dLon/2) 
-    c <- 2 * atan2(sqrt(a), sqrt(1-a)) 
-    d <- R * c # Distance in km
-    return(d)
-  }
-  
-  deg2rad<-function(deg) {
-    return(deg * (pi/180))
-  }
-  
-  get_area_square_meters<-function(lon_west,lon_east,lat_north,lat_south){
-    xdistN<-1000*getDistanceFromLatLonInKm(lat_north,lon_east,lat_north,lon_west) 
-    xdistS<-1000*getDistanceFromLatLonInKm(lat_south,lon_east,lat_south,lon_west) 
-    ydist<-1000*getDistanceFromLatLonInKm(lat_north,lon_east,lat_south,lon_east)
-    area<-ydist*(xdistN+xdistS/2)
-    return(area)
-  }
-  
-  round(
-    get_area_square_meters(
-      westBoundingCoordinate,
-      eastBoundingCoordinate,
-      northBoundingCoordinate,
-      southBoundingCoordinate))
-  
+  lon_west, lon_east, lat_north, lat_south) {
+  df <- data.frame(
+    longitude = c(lon_west, lon_east, lon_east, lon_west),
+    latitude = c(lat_north, lat_north, lat_south, lat_south))
+  geosphere::areaPolygon(df)
 }
