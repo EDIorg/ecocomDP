@@ -215,8 +215,10 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
   
   # make ecocomDP format location table, identifying hierarchical spatial structure
   table_location <- suppressMessages(
-    table_observation_raw %>% 
-      ecocomDP::make_location(cols = c("domainID", "siteID", "namedLocation")))
+    ecocomDP::make_location(
+      table_observation_raw,
+      cols = c("domainID", "siteID", "namedLocation")))
+  table_location <- table_location$location
   
   # populate latitude
   table_location$latitude <- table_location_raw$decimalLatitude[match(table_location$location_name, table_location_raw$namedLocation)] 

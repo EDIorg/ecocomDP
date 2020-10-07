@@ -27,6 +27,8 @@
 make_variable_mapping <- function(observation, observation_ancillary = NULL, 
                                   location_ancillary = NULL, taxon_ancillary = NULL){
   
+  message("Creating variable_mapping")
+  
   # Check arguments -----------------------------------------------------------
   
   if (missing(observation)){

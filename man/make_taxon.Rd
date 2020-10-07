@@ -2,30 +2,41 @@
 % Please edit documentation in R/make_taxon.R
 \name{make_taxon}
 \alias{make_taxon}
-\title{Make taxon table}
+\title{Make the taxon table}
 \usage{
-make_taxon(taxa, taxon.id = NULL, name.type, data.sources)
+make_taxon(
+  x = NULL,
+  cols = NULL,
+  taxa = NULL,
+  name.type = "scientific",
+  data.sources = NULL
+)
 }
 \arguments{
-\item{taxa}{(character) Taxa names to be resolved}
+\item{x}{(data frame) A data frame containing taxa names (in one or more 
+columns).}
 
-\item{taxon.id}{(character) Primary key for the taxon table (i.e. taxon_id) 
-corresponding to the order of taxa names provided to the taxa argument.
-If left blank, then taxon_id values are auto generated.}
+\item{cols}{(character) One or more columns in \code{x} that when combined form a 
+unique taxa that may be resolvable to a taxonomic authority system. 
+(e.g. \code{cols = c("genus", "species")}).}
+
+\item{taxa}{(character) If not using \code{x} and \code{cols}, then a list of 
+unique taxa can be input using this argument.}
 
 \item{name.type}{(character) Taxonomic name type. Can be: 'scientific', 'common', or 
 'both'.}
 
-\item{data.sources}{(integer) An ordered numeric vector of ID's corresponding to data 
-sources (i.e. taxonomic authorities) you'd like to query, in the order 
-of decreasing preference. Run `taxonomyCleanr::view_taxa_authorities` 
-to see supported data sources. Columns `resolve_sci_taxa`, and 
-`resolve_comm_taxa` correspond to scientific and common searches.}
+\item{data.sources}{(integer) An ordered numeric vector of ID's corresponding to taxonomic 
+authorities to resolve taxa to (in the order of decreasing preference). 
+Run \code{taxonomyCleanr::view_taxa_authorities()} to see supported 
+authorities.}
 }
 \value{
-(data frame) A fully populated taxon table. NA's are listed when an 
-    authority match could not be made.
+A list containing:
+\item{taxon}{A data frame of the taxon table}
+\item{x}{The input \code{x} with an added taxon_id column linking unique
+\code{cols} to the list of taxa in the taxon table.}
 }
 \description{
-Make a data frame of the taxon table.
+Make the taxon table
 }

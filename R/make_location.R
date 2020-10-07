@@ -34,14 +34,17 @@
 #'     not support kml data for more than one col.
 #'
 #' @return 
-#'     A data frame of the location table.
+#' A list containing:
+#' \item{location}{A data frame of the location table}
+#' \item{x}{The input data frame \code{x} but with an added location_id column.
+#' This simplifies alignment of values between \code{x} and location.}
 #'     
 #' @export
 #'
 
 make_location <- function(
   x, cols, kml = NULL, col = NULL, parent.package.id = NULL){
-  message('Creating the ecocomDP location table')
+  message('Creating location')
   
   # Check arguments -----------------------------------------------------------
   
@@ -66,7 +69,14 @@ make_location <- function(
   if (length(col_i) > 0) {
     
     # Make keys in observation table for linking to the location table
-    x$keys <- apply(x[ , col_i], 1, paste, collapse = "_")
+    x$keys <- apply(
+      x[ , col_i], 
+      1, 
+      function(x) {
+        paste(
+          paste0(names(x), "=", x),
+          collapse = "/")
+      })
     
     # Form location working table. This table is an intermediary between 
     # the observation and location tables.
@@ -83,6 +93,10 @@ make_location <- function(
     if (length(col_i) > 1) {
       col_names <- cols
       for (j in (rev(head(seq_along(col_i), -1)))) {
+        
+        # if (j == 1) {
+        #   browser()
+        # }
         
         # Create table of next coarser spatial scale
         df[[j]] <- x[ , col_i[1:j]]
@@ -102,23 +116,34 @@ make_location <- function(
         # Create key at this level and create at next finer level.
         # This links info here to the parent of the next finer level.
         if (j == 1) {
-          df[[j]]['key'] <- df[[j]][1]
+          df[[j]]['key'] <- paste0(
+            colnames(df[[j]][1]), 
+            "=",
+            df[[j]][[1]])
         } else {
           df[[j]]['key'] <- apply( # Create key at this level
             df[[j]][ , 1:(ncol(df[[j]])-1)],
             1,
-            paste,
-            collapse = '_')
+            function(x) {
+              paste(
+                paste0(names(x), "=", x),
+                collapse = "/")
+            })
         }
-        
         if (j == 1) {
-          df[[j+1]][paste0('key_to_L', j)] <- df[[j+1]][ , 1:length(col_i[1:(j)])]
+          df[[j+1]][paste0('key_to_L', j)] <- paste0(
+            cols[j], 
+            "=", 
+            df[[j+1]][ , 1:length(col_i[1:(j)])])
         } else {
           df[[j+1]][paste0('key_to_L', j)] <- apply( # Create same key in next finer level 
             df[[j+1]][ , 1:length(col_i[1:(j)])],
             1,
-            paste,
-            collapse = '_')
+            function(x) {
+              paste(
+                paste0(names(x), "=", x),
+                collapse = "/")
+            })
         }
         
         # Add srl_j_key to level = j+1 (essentially we are adding the parent_location_id)
@@ -134,26 +159,24 @@ make_location <- function(
     }
     
     # Coarsest level does not have a parent. Add NA as parent value.
-    
     df[[j]]['parent'] <- rep(
       NA_character_,
       nrow(df[[j]]))
     
     # Compile the location table.
-    
     location_id <- c() # initialize vectors
     location_name <- c()
     latitude <- c()
     longitude <- c()
     elevation <- c()
     parent_location_id <- c()
-    
+    keys <- c()
     for (j in (length(col_i)):1){ # Populate the vectors
       location_id <- c(
         df[[j]][[paste0('srl_key_', j)]],
         location_id)
       location_name <- c(
-        paste(cols[j], as.character(df[[j]][[cols[j]]]) ),
+        df[[j]][['key']],
         location_name)
       latitude <- c(
         latitude,
@@ -341,7 +364,14 @@ make_location <- function(
     
   }
   
+  # Add location_id to x ------------------------------------------------------
+  
+  x$keys <- location_table$location_id[
+    match(x$keys, location_table$location_name)]
+  x <- dplyr::rename(x, location_id = keys)
+  
   # Return --------------------------------------------------------------------
-  location_table
+  
+  list(location = location_table, x = x)
   
 }
