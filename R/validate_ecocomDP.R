@@ -121,10 +121,12 @@ validate_ecocomDP <- function(
       issues_validate_latitude_longitude_range,
       issues_validate_elevation))
   
-  if (!is.null(validation_issues)) {
+  if (length(validation_issues) != 0) {
     warning("  Validation issues found for ", id, call. = FALSE)
   }
+  
   validation_issues
+  
 }
 
 
