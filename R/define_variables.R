@@ -22,106 +22,52 @@
 #' @export
 #'
 
-define_variables <- function(data.path, parent.pkg.id){
-  
+define_variables <- function(data.path, parent.pkg.id) {
   message('Retrieving variable definitions and units')
   
   # Define what a variable is
-  
-  criteria <- read.table(
-    system.file('validation_criteria.txt', package = 'ecocomDP'),
-    header = T,
-    sep = "\t",
-    as.is = T,
-    na.strings = "NA"
-  )
-  
+  criteria <- criteria <- data.table::fread(
+    system.file('validation_criteria.txt', package = 'ecocomDP'))
   L1_table_names <- criteria$table[is.na(criteria$column)]
   
-  file_names <- suppressMessages(
-    validate_table_names(
-      data.path = data.path,
-      criteria = criteria
-    )
-  )
+  # Read ecocomDP tables
+  data.list <- ecocomDP::read_from_files(data.path)
   
-  # Load tables
-  
-  data.list <- lapply(
-    file_names, 
-    read_ecocomDP_table, 
-    data.path = data.path
-  )
-  
-  names(data.list) <- unlist(
-    lapply(
-      file_names, 
-      is_table_rev, 
-      L1_table_names
-    )
-  )
-  
-  # Get variable names and create data.frame
-  
-  cat_vars <- make_variable_mapping(
-    observation = data.list$observation$data,
-    observation_ancillary = data.list$observation_ancillary$data,
-    taxon_ancillary = data.list$taxon_ancillary$data,
-    location_ancillary = data.list$location_ancillary$data
-  )[ , c('variable_name', 'table_name')]
-  
-  cat_vars$attributeName <- rep('variable_name', nrow(cat_vars))
+  # Get values listed in variable_name columns of ecocomDP tables and retrieve
+  # definitions for them from the L0 EML metadata.
+  cat_vars <- dplyr::select(
+    data.list[[1]]$tables$variable_mapping, 
+    variable_name, table_name)
+  cat_vars$attributeName <- 'variable_name'
   cat_vars$definition <- NA_character_
   cat_vars$unit <- NA_character_
-  
   cat_vars <- dplyr::select(
     cat_vars,
     table_name,
     attributeName,
     variable_name,
     definition,
-    unit
-  )
-  
+    unit)
   colnames(cat_vars) <- c(
-    'tableName',
-    'attributeName',
-    'code', 
-    'definition', 
-    'unit'
-  )
-  
-  # This work around turns vectors into data.frames, get_eml_attribute will
-  # otherwise break.
-  
-  cat_vars[nrow(cat_vars)+1, ] <- NA_character_
-  
+    'tableName', 'attributeName', 'code', 'definition', 'unit')
   
   # Get definitions and reshape output
-  
   var_metadata <- mapply(
     EDIutils::get_eml_attribute, 
     attr.name = cat_vars$code, 
-    MoreArgs = list(package.id = parent.pkg.id)
-  )
-  
+    MoreArgs = list(package.id = parent.pkg.id))
   var_metadata <- as.data.frame(t(var_metadata), row.names = F)
   
   # Combine into cat_vars object
-  
   cat_vars[ , c('definition', 'unit')] <- var_metadata[ , c('definition', 'unit')]
-  
   use_i <- stringr::str_detect(cat_vars$definition, 'Error in UseMethod')
   use_i[is.na(use_i)] <- FALSE
   cat_vars[use_i , c('definition', 'unit')] <- NA_character_
   
   # Remove place holder added above
-  
   cat_vars <- cat_vars[1:(nrow(cat_vars)-1), ]
   
-  
-  # Return --------------------------------------------------------------------
-  
+  # Return
   cat_vars
   
 }

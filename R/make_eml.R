@@ -146,9 +146,7 @@ make_eml <- function(path,
                      user.domain,
                      data.url = NULL) {
   
-  message(
-    paste0("Creating EML for derived data package (", child.package.id, ")")
-  )
+  message("Creating EML for derived data package (" , child.package.id, ")")
   
   # Validate inputs -----------------------------------------------------------
   
@@ -498,10 +496,10 @@ make_eml <- function(path,
     tc <- taxonomyCleanr::make_taxonomicCoverage(
       taxa.clean = df$taxon_name,
       authority = df$authority_system,
-      authority.id = df$authority_taxon_id
-    )
+      authority.id = df$authority_taxon_id, 
+      write.file = FALSE)
     
-    dataset$coverage$taxonomicCoverage <- tc
+    eml$dataset$coverage$taxonomicCoverage <- tc
     
   }
   
@@ -510,14 +508,27 @@ make_eml <- function(path,
   message("    <contact>")
   
   # Add ecocomDP creator as a contact incase questions arise
-  eml$dataset$contact[[length(eml$dataset$contact) + 1]] <- list(
-    individualName = list(
-      givenName = contact$givenName,
-      surName = contact$surName
-    ),
-    organizationName = contact$organizationName,
-    electronicMailAddress = contact$electronicMailAddress
+  
+  eml$dataset$contact <- list(
+    eml$dataset$contact, 
+    list(
+      individualName = list(
+        givenName = contact$givenName,
+        surName = contact$surName
+      ),
+      organizationName = contact$organizationName,
+      electronicMailAddress = contact$electronicMailAddress
+    )
   )
+  # 
+  # eml$dataset$contact[[length(eml$dataset$contact) + 1]] <- list(
+  #   individualName = list(
+  #     givenName = contact$givenName,
+  #     surName = contact$surName
+  #   ),
+  #   organizationName = contact$organizationName,
+  #   electronicMailAddress = contact$electronicMailAddress
+  # )
 
   # Update <methods> ----------------------------------------------------------
   # Update parent methods with ecocomDP creation process and provenance 
@@ -743,13 +754,9 @@ make_eml <- function(path,
   
   # Update <eml> --------------------------------------------------------------
   
-  eml_out <- list(
-    schemaLocation = "eml://ecoinformatics.org/eml-2.1.1  http://nis.lternet.edu/schemas/EML/eml-2.1.1/eml.xsd",
-    packageId = child.package.id,
-    system = "edi",
-    access = eml$access,
-    dataset = eml$dataset
-  )
+  eml$schemaLocation <- "https://eml.ecoinformatics.org/eml-2.2.0  https://nis.lternet.edu/schemas/EML/eml-2.2.0/xsd/eml.xsd"
+  eml$packageId <- child.package.id
+  eml$system <- "edi"
   
   message("  </dataset>")
   message("</eml>")
@@ -757,17 +764,16 @@ make_eml <- function(path,
   # Write EML -----------------------------------------------------------------
 
   message("Writing EML")
-
+  emld::eml_version("eml-2.2.0")
   EML::write_eml(
-    eml_out, 
-    paste0(path, "/", child.package.id, ".xml")
-  )
+    eml, 
+    paste0(path, "/", child.package.id, ".xml"))
 
   # Validate EML --------------------------------------------------------------
 
   message("Validating EML")
 
-  validation_result <- EML::eml_validate(eml_out)
+  validation_result <- EML::eml_validate(eml)
 
   if (validation_result == "TRUE"){
     message("EML passed validation!")
