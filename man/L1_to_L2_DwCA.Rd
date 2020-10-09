@@ -4,14 +4,16 @@
 \alias{L1_to_L2_DwCA}
 \title{Creates Darwin Core Archive package from an ecocomDP formatted level-1}
 \usage{
-L1_to_L2_DwCA(core.name, L1.id)
+L1_to_L2_DwCA(core.name, parent.package.id, child.package.id)
 }
 \arguments{
 \item{core.name}{(character) The Darwin Core central table of the package. Can be: 
 "occurence" (occurrence core) or "event" (event core).}
 
-\item{L1.id}{(character) Package ID of an ecocomDP dataset from PASTA. Other level-1 
-types TBD.}
+\item{parent.package.id}{(character) ID of an ecocomDP data package. Only 
+EDI Data Repository package IDs are currently supported.}
+
+\item{child.package.id}{(character) ID of DWcA occurrence data package being created.}
 }
 \value{
 Data entities in either the occurrence or event core formats with a

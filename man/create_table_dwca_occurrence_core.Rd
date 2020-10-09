@@ -10,7 +10,8 @@ create_table_dwca_occurrence_core(
   dt_obs,
   dt_loc,
   dt_tax,
-  dt_loc_ancil = NULL
+  dt_loc_ancil = NULL,
+  parent.package.id
 )
 }
 \arguments{
@@ -25,6 +26,9 @@ create_table_dwca_occurrence_core(
 \item{dt_tax}{}
 
 \item{dt_loc_ancil}{}
+
+\item{parent.package.id}{(character) ID of an ecocomDP data package. Only 
+EDI Data Repository package IDs are currently supported.}
 }
 \value{
 

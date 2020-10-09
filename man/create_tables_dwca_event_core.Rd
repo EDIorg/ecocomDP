@@ -11,7 +11,8 @@ create_tables_dwca_event_core(
   dt_obs_ancil,
   dt_loc_ancil,
   dt_loc,
-  dt_tax
+  dt_tax,
+  parent.package.id
 )
 }
 \arguments{
@@ -28,6 +29,9 @@ create_tables_dwca_event_core(
 \item{dt_loc}{}
 
 \item{dt_tax}{}
+
+\item{parent.package.id}{(character) ID of an ecocomDP data package. Only 
+EDI Data Repository package IDs are currently supported.}
 }
 \value{
 three tables, event, occurrence, measurementOrFact

@@ -3,9 +3,11 @@
 #' @param core.name
 #'     (character) The Darwin Core central table of the package. Can be: 
 #'     "occurence" (occurrence core) or "event" (event core).
-#' @param L1.id 
-#'     (character) Package ID of an ecocomDP dataset from PASTA. Other level-1 
-#'     types TBD.
+#' @param parent.package.id
+#'     (character) ID of an ecocomDP data package. Only 
+#'     EDI Data Repository package IDs are currently supported.
+#' @param child.package.id
+#'     (character) ID of DWcA occurrence data package being created.
 #' @details
 #'     TODO: Add details
 #' @return
@@ -15,18 +17,17 @@
 #'
 #' @examples
 #' 
-L1_to_L2_DwCA <- function(core.name, L1.id) {
+L1_to_L2_DwCA <- function(core.name, parent.package.id, child.package.id) {
   
   # Config script -------------------------------------------------------------
   # Eventually will support 2 DwC types: choose occurence-core or event-core. 
   # occurence is simpler (sightings), event is a better fit for most of our data
   # TODO: Support event-core
   
-  # parent_path <- "."
   dwca_config_file <- readr::read_csv(
-    system.file("dwca_occurrence_core_config.csv", package = "ecocomDP"))
+    system.file("/dwca_occurrence_core/dwca_occurrence_core_config.csv", package = "ecocomDP"))
   dwca_mappings_file <- readr::read_csv(
-    system.file("dwca_occurrence_core_mappings.csv", package = "ecocomDP"))
+    system.file("/dwca_occurrence_core/dwca_occurrence_core_mappings.csv", package = "ecocomDP"))
 
   # msg the user
   message(
@@ -35,20 +36,9 @@ L1_to_L2_DwCA <- function(core.name, L1.id) {
   message('Making ', core.name)
   
   # Load data -----------------------------------------------------------------
-  # TODO: write a function that reads pkg metadata and dataTables. copy 
-  # something from one of the L0 conversion scripts.
   
-  d <- ecocomDP::read_data(L1.id)
+  d <- ecocomDP::read_data(parent.package.id)
   d <- d[[1]]$tables
-  if (L1.id == "edi.323.1") {
-    # FIXME: Remove this once edi.323.1 has been updated
-    rows_to_remove <- c(
-      1020, 1026, 1030, 1042, 1048, 1049, 1055, 1056, 1058, 1059, 1065, 1066, 
-      1069, 1073, 1082, 1085, 1086, 1093, 1094, 1097, 2396, 2402, 2406, 2418, 
-      2424, 2425, 2431, 2432, 2434, 2435, 2441, 2442, 2445, 2449, 2458, 2461, 
-      2462, 2469, 2470, 2473)
-    d$observation <- d$observation[-rows_to_remove, ]
-  }
   
   # Convert tables ------------------------------------------------------------
   
@@ -63,7 +53,10 @@ L1_to_L2_DwCA <- function(core.name, L1.id) {
       dt_obs = d$observation,
       dt_loc = d$location,
       dt_tax = d$taxon,
-      dt_loc_ancil = d$location_ancillary)
+      dt_loc_ancil = d$location_ancillary,
+      parent.package.id = parent.package.id)
+    
+    return(r)
     
   } else if (core.name == 'event') {
     
@@ -76,7 +69,10 @@ L1_to_L2_DwCA <- function(core.name, L1.id) {
       dt_loc = dt_loc,
       dt_tax = dt_tax,
       dt_loc_ancil = dt_loc_ancil,
-      dt_obs_ancil = dt_obs_ancil)
+      dt_obs_ancil = dt_obs_ancil,
+      parent.package.id = parent.package.id)
+    
+    return(event_table_list)
     
   }
   
@@ -102,6 +98,9 @@ L1_to_L2_DwCA <- function(core.name, L1.id) {
 #' @param dt_loc 
 #' @param dt_tax 
 #' @param dt_loc_ancil 
+#' @param parent.package.id
+#'     (character) ID of an ecocomDP data package. Only 
+#'     EDI Data Repository package IDs are currently supported.
 #'
 #' @return
 #' @export
@@ -113,7 +112,8 @@ create_table_dwca_occurrence_core <- function(
   dt_obs,
   dt_loc,
   dt_tax,
-  dt_loc_ancil = NULL) {
+  dt_loc_ancil = NULL,
+  parent.package.id) {
   
   message('calling function to create DwC-A, occurrence core')
   
@@ -134,7 +134,7 @@ create_table_dwca_occurrence_core <- function(
   # Join the tables -----------------------------------------------------------
   
   # TODO: Don't forget locationn ancillary (MOB add issue #)
-  obs_loc_tax <- long2wide_obs_loc_tax(
+  obs_loc_tax <- join_obs_loc_tax(
     dt_obs = dt_obs, 
     dt_loc = dt_loc, 
     dt_tax = dt_tax)
@@ -143,66 +143,78 @@ create_table_dwca_occurrence_core <- function(
   # Create computed vectors:
   
   # Define new cols specifically needed for DwC-A
-  obs_loc_tax$lsid <- NA_character_
-  obs_loc_tax$comb_id <- NA_character_
-  obs_loc_tax$dc_basisofrecord <- NA_character_
-  obs_loc_tax$dc_occurrencestatus <-NA_character_
-  obs_loc_tax$dc_samplingprotocol <-NA_character_
-  obs_loc_tax$dc_quantitytype <-NA_character_
-  
+  obs_loc_tax$lsid <- NA_character_ # TODO: This will be an LSID
+  obs_loc_tax$dc_occurrence_id <- NA_character_ # TODO: Globally unique and persistentt
+  obs_loc_tax$dc_basisofrecord <- NA_character_ # TODO: Will be "MachineObservation" or "MumanObservation" depending on sample type
+  obs_loc_tax$dc_occurrencestatus <-NA_character_ # TODO: Presence (1) or absence (0) and depends on obundance column. Optional.
+  obs_loc_tax$dc_samplingprotocol <-NA_character_ # TODO: The name of, reference to, or description of the method or protocol used during an Event. A string that will be derived from the L1 metadata. Optional.
+  obs_loc_tax$dc_samplesizeunit <-NA_character_ 
+  obs_loc_tax$dc_samplesizevalue <-NA_character_ 
+  # obs_loc_tax$dc_organismquantitytype <-NA_character_ # TODO: The type of quantification system used for the quantity of organisms. Required.
   
   # comb_id 
-  # TODO: globally unique, see notes.
-  obs_loc_tax$comb_id <- paste(sep='.', obs_loc_tax$package_id,
-                               obs_loc_tax$observation_id,
-                               obs_loc_tax$location_id,
-                               obs_loc_tax$event_id,
-                               obs_loc_tax$taxon_id,
-                               obs_loc_tax$observation_datetime)
+  # TODO: Form globally unique IDs. See notes.
+  obs_loc_tax$dc_occurrence_id <- paste(
+    stringr::str_remove(child.package.id, "\\.[:digit:]$"),
+    seq(nrow(obs_loc_tax)),
+    sep = '.')
   
   # occurrence status: choice of present|absent, based on value.
-  if (obs_loc_tax$value == 0) {
-    obs_loc_tax$dc_occurrencestatus <- 'absent'
-  } else {
-    obs_loc_tax$dc_occurrencestatus <-'present'
+  obs_loc_tax$dc_occurrencestatus[obs_loc_tax$value %in% 0] <- 'absent'
+  obs_loc_tax$dc_occurrencestatus[
+    obs_loc_tax$value != 0 |
+      !is.na(obs_loc_tax$value)] <-'present'
+  
+  # Use the DOI of the L1 and construct as: "See methods in DOI"
+  obs_loc_tax$dc_samplingprotocol <- paste0(
+    "See methods in ",
+    suppressMessages(
+      EDIutils::api_read_data_package_doi(parent.package.id)))
+  
+  # TODO: Determine if observation was made by an instrument or human. This 
+  # info is stored in the L1 EML keywordSet
+  
+  keywords <- xml2::xml_text(
+      xml2::xml_find_all(
+        suppressMessages(
+          EDIutils::api_read_metadata(parent.package.id)), ".//keyword"))
+  
+  basis_of_record <- trimws(
+    stringr::str_remove(
+      keywords[stringr::str_detect(keywords, "basisOfRecord:")],
+      "basisOfRecord:"))
+  
+  if (length(basis_of_record) == 1) {
+    obs_loc_tax$dc_basisofrecord <- basis_of_record
   }
   
-  # sampling protocol: string description of the method. ouch.
-  obs_loc_tax$dc_samplingprotocol <- 'ad hoc observation'
+  # TODO: Determine if these have to be here
+  # obs_loc_tax$dc_samplesizevalue
   
-  
-  # TODO: not all will be human obs.  need logic to determine if this is an instrument or not
-  obs_loc_tax$dc_basisofrecord <- 'HumanObservation'
-  
-  # TODO: not all will be counts of individuals.
-  obs_loc_tax$dc_quantitytype <-'individuals'
-  
-  # resume here:
-  # browser()
-  
+  # TODO: Determine if these have to be here
+  # obs_loc_tax$dc_samplesizeunit
   
   # Create DF for export 
-  # TODO: proper headers. probably want the mapping table for this.
-  occurrence_core <- dplyr::select(obs_loc_tax, comb_id,
-                                   dc_basisofrecord,
-                                   dc_occurrencestatus,
-                                   location_id,
-                                   latitude,
-                                   longitude,
-                                   dc_samplingprotocol,
-                                   observation_datetime,
-                                   dc_samplingprotocol,
-                                   taxon_name,
-                                   authority_system,
-                                   authority_taxon_id,
-                                   taxon_id,
-                                   lsid,
-                                   dc_quantitytype,
-                                   value
-  )
   
+  occurrence_core <- data.frame(
+    occurrenceId = obs_loc_tax$dc_occurrence_id,
+    basisOfRecord = obs_loc_tax$dc_basisofrecord,
+    locationID = obs_loc_tax$location_id,
+    decimalLatitude = obs_loc_tax$latitude,
+    decimalLongitude = obs_loc_tax$longitude,
+    eventDate = obs_loc_tax$observation_datetime, # TODO: Split date and time
+    samplingProtocol = obs_loc_tax$dc_samplingprotocol,
+    sampleSizeValue = obs_loc_tax$dc_samplesizevalue,
+    sampleSizeUnit = obs_loc_tax$dc_samplesizeunit,
+    scientificName = obs_loc_tax$taxon_name,
+    taxonID = obs_loc_tax$authority_taxon_id,
+    nameAccordingTo = obs_loc_tax$authority_system,
+    scientificNameID = obs_loc_tax$lsid,
+    occurrenceStatus = obs_loc_tax$dc_occurrencestatus,
+    organismQuantityType = obs_loc_tax$value,
+    measurementUnit = obs_loc_tax$unit,
+    stringsAsFactors = FALSE)
   
-  # send it back.
   return(occurrence_core)
   
 }
@@ -220,6 +232,9 @@ create_table_dwca_occurrence_core <- function(
 #' @param dt_loc_ancil 
 #' @param dt_loc 
 #' @param dt_tax 
+#' @param parent.package.id
+#'     (character) ID of an ecocomDP data package. Only 
+#'     EDI Data Repository package IDs are currently supported.
 #'
 #' @return
 #'     three tables, event, occurrence, measurementOrFact
@@ -234,7 +249,8 @@ create_tables_dwca_event_core <- function(
   dt_obs_ancil,
   dt_loc_ancil,
   dt_loc,
-  dt_tax) {
+  dt_tax,
+  parent.package.id) {
   
   # validate ecocomDP. do you have what you need to get these vars? confirm fields used by mapping table are present.
   
