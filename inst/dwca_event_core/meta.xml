@@ -1,52 +1,48 @@
-<?xml version="1.0"?>
-<archive xmlns="http://rs.tdwg.org/dwc/text/">
-	<core encoding="UTF-8" linesTerminatedBy="\r\n" fieldsTerminatedBy="," fieldsEnclosedBy="&quot;" ignoreHeaderLines="1" rowType="http://rs.tdwg.org/dwc/terms/Event">
-		<files>
-			<location>dwc_occurrence.csv</location>
-		</files>
-		<id index="0"/>
-		<field index="1" term="http://rs.tdwg.org/dwc/terms/basisOfRecord"/>
-		<field index="2" term="http://rs.tdwg.org/dwc/terms/locationID"/>
-		<field index="3" term="http://rs.tdwg.org/dwc/terms/decimalLatitude"/>
-		<field index="4" term="http://rs.tdwg.org/dwc/terms/decimalLongitude"/>
-		<field index="5" term="http://rs.tdwg.org/dwc/terms/eventDate"/>
-		<field index="6" term="http://rs.tdwg.org/dwc/terms/eventRemarks"/>
-		<field index="7" term="http://rs.tdwg.org/dwc/terms/samplingProtocol"/>
- 		<field index="8" term="http://rs.tdwg.org/dwc/terms/sampleSizeValue"/>
-		<field index="9" term="http://rs.tdwg.org/dwc/terms/sampleSizeUnit"/> 
-		<field index="10" term="http://rs.tdwg.org/dwc/terms/scientificName"/>
-		<field index="11" term="http://rs.tdwg.org/dwc/terms/taxonID"/>
-		<field index="12" term="http://rs.tdwg.org/dwc/terms/nameAccordingToID"/>
-		<field index="13" term="http://rs.tdwg.org/dwc/terms/organismQuantity"/> 
-		<field index="14" term="http://rs.tdwg.org/dwc/terms/occurrenceStatus"/>
- 		<field index="15" term="http://rs.tdwg.org/dwc/terms/organismQuantityType"/> 
-	</core>
-	
-	<core encoding="UTF-8" linesTerminatedBy="\r\n" fieldsTerminatedBy="," fieldsEnclosedBy="&quot;" ignoreHeaderLines="1" rowType="http://rs.tdwg.org/dwc/terms/Event">
-		<files>
-			<location>dwc_event.csv</location>
-		</files>
-		<id index="1"/>
-		<field index="1" term="http://rs.tdwg.org/dwc/terms/basisOfRecord"/>
-		<field index="2" term="http://rs.tdwg.org/dwc/terms/locationID"/>
-		<field index="3" term="http://rs.tdwg.org/dwc/terms/decimalLatitude"/>
-		<field index="4" term="http://rs.tdwg.org/dwc/terms/decimalLongitude"/>
-		<field index="5" term="http://rs.tdwg.org/dwc/terms/eventDate"/>
-		<field index="6" term="http://rs.tdwg.org/dwc/terms/eventRemarks"/>
-	</core>
-	
-	<core encoding="UTF-8" linesTerminatedBy="\r\n" fieldsTerminatedBy="," fieldsEnclosedBy="&quot;" ignoreHeaderLines="1" rowType="http://rs.tdwg.org/dwc/terms/Event">
-		<files>
-			<location>dwc_measurementOrFact.csv</location>
-		</files>
-		<id index="2"/>
-		<field index="1" term="http://rs.tdwg.org/dwc/terms/basisOfRecord"/>
-		<field index="2" term="http://rs.tdwg.org/dwc/terms/locationID"/>
-		<field index="3" term="http://rs.tdwg.org/dwc/terms/decimalLatitude"/>
-		<field index="4" term="http://rs.tdwg.org/dwc/terms/decimalLongitude"/>
-		<field index="5" term="http://rs.tdwg.org/dwc/terms/eventDate"/>
-		<field index="6" term="http://rs.tdwg.org/dwc/terms/eventRemarks"/>
-	</core>
-	
-	
+<archive xmlns="http://rs.tdwg.org/dwc/text/" metadata="eml.xml">
+<core encoding="UTF-8" linesTerminatedBy="\r\n" fieldsTerminatedBy="," fieldsEnclosedBy="&quot;" ignoreHeaderLines="1" rowType="http://rs.tdwg.org/dwc/terms/Event">
+ <!-- coped from /Users/mob/Downloads/gbif/meta.xml (2020-10-09) i
+downloaded from the ipt test server (first event core ds I saw). appears incomplete; tables do not match the meta file.
+edited manually. 
+not sure what this is for: http://purl.org/dc/terms/type
+
+-->
+    <files>
+      <location>event.csv</location>
+    </files>
+    <id index="0" />
+    <field index="1" term="http://rs.tdwg.org/dwc/terms/datasetName"/>
+    <field index="2" term="http://rs.tdwg.org/dwc/terms/eventID"/>
+    <field index="3" term="http://rs.tdwg.org/dwc/terms/samplingProtocol"/>
+    <field index="4" term="http://rs.tdwg.org/dwc/terms/eventDate"/>
+    <field index="5" term="http://rs.tdwg.org/dwc/terms/eventRemarks"/>
+    <field index="6" term="http://rs.tdwg.org/dwc/terms/decimalLatitude"/>
+    <field index="7" term="http://rs.tdwg.org/dwc/terms/decimalLongitude"/>
+    <field index="8" term="http://rs.tdwg.org/dwc/terms/georeferenceRemarks"/>
+  </core>
+  <extension encoding="UTF-8" linesTerminatedBy="\r\n" fieldsTerminatedBy="," fieldsEnclosedBy="&quot;" ignoreHeaderLines="1" rowType="http://rs.tdwg.org/dwc/terms/Occurrence">
+    <files>
+      <location>occurrence.csv</location>
+    </files>
+    <coreid index="0" />
+    <field index="1" term="http://rs.tdwg.org/dwc/terms/occurrenceID"/>    
+    <field index="2" term="http://rs.tdwg.org/dwc/terms/eventID"/>
+    <field index="3" term="http://rs.tdwg.org/dwc/terms/identificationID"/>
+    <field index="4" term="http://rs.tdwg.org/dwc/terms/scientificName"/>
+    <field index="5" term="http://rs.tdwg.org/dwc/terms/specificEpithet"/>
+
+
+  </extension>
+  
+  <extension encoding="UTF-8" linesTerminatedBy="\r\n" fieldsTerminatedBy="," fieldsEnclosedBy="&quot;" ignoreHeaderLines="1" rowType="http://rs.tdwg.org/dwc/terms/ExtendedMeasurementOrFact">
+    <files>
+      <location>extendedmeasurementorfact.csv</location>
+    </files>
+    <coreid index="0" />
+    <field index="1" term="http://rs.tdwg.org/dwc/terms/occurrenceID"/>    
+    <field index="2" term="http://rs.tdwg.org/dwc/terms/eventID"/>
+    <field index="3" term="http://rs.tdwg.org/dwc/terms/measurementType"/>
+    <field index="4" term="http://rs.tdwg.org/dwc/terms/measurementValue"/>
+    <field index="5" term="http://rs.tdwg.org/dwc/terms/measurementUnit"/>
+    <field index="6" term="http://rs.iobis.org/obis/terms/measurementTypeID"/>
+  </extension>
 </archive>
