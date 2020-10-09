@@ -1,11 +1,11 @@
 <archive xmlns="http://rs.tdwg.org/dwc/text/" metadata="eml.xml">
-<core encoding="UTF-8" linesTerminatedBy="\r\n" fieldsTerminatedBy="," fieldsEnclosedBy="&quot;" ignoreHeaderLines="1" rowType="http://rs.tdwg.org/dwc/terms/Event">
  <!-- coped from /Users/mob/Downloads/gbif/meta.xml (2020-10-09) i
 downloaded from the ipt test server (first event core ds I saw). appears incomplete; tables do not match the meta file.
 edited manually. 
 not sure what this is for: http://purl.org/dc/terms/type
-
 -->
+
+<core encoding="UTF-8" linesTerminatedBy="\r\n" fieldsTerminatedBy="," fieldsEnclosedBy="&quot;" ignoreHeaderLines="1" rowType="http://rs.tdwg.org/dwc/terms/Event">
     <files>
       <location>event.csv</location>
     </files>
@@ -29,8 +29,6 @@ not sure what this is for: http://purl.org/dc/terms/type
     <field index="3" term="http://rs.tdwg.org/dwc/terms/identificationID"/>
     <field index="4" term="http://rs.tdwg.org/dwc/terms/scientificName"/>
     <field index="5" term="http://rs.tdwg.org/dwc/terms/specificEpithet"/>
-
-
   </extension>
   
   <extension encoding="UTF-8" linesTerminatedBy="\r\n" fieldsTerminatedBy="," fieldsEnclosedBy="&quot;" ignoreHeaderLines="1" rowType="http://rs.tdwg.org/dwc/terms/ExtendedMeasurementOrFact">
