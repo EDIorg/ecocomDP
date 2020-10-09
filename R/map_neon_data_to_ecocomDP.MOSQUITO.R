@@ -165,6 +165,21 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
     mos_dat %>%
       ecocomDP::make_location(cols = c("domainID", "siteID", "namedLocation")))
   
+  # code to handle updated make_location (updated 18 Sep 2020 in make_location branch)
+  if(class(table_location) == "list" &&
+     "location" %in% names(table_location)){
+    
+    table_location <- table_location$location %>%
+      dplyr::rowwise() %>%
+      dplyr::mutate(
+        location_name = location_name %>% 
+          strsplit("=") %>%
+          unlist() %>%
+          dplyr::last()) 
+  }
+  
+ 
+  
   # populate latitude
   table_location$latitude <- table_location_raw$decimalLatitude[match(table_location$location_name, table_location_raw$namedLocation)] 
   
@@ -212,7 +227,6 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
     }
   }
   
-
   
   # make ancillary table that indicates the location type 
   table_location_ancillary <- table_location_raw %>% 
@@ -227,7 +241,6 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
     dplyr::distinct()
   
 
-  
   # taxon ----
   table_taxon <- mos_dat %>%
     dplyr::select(taxonID, taxonRank, scientificName,identificationReferences) %>%

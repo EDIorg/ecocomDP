@@ -19,24 +19,12 @@
 map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
   neon.data.product.id ="DP1.20120.001",
   ...){
-  
-  
-  
-  # browser()
-  
-  
-  
+ 
   # get all tables for this data product for the specified sites in my_site_list, store them in a list called all_tabs
   all_tabs <- neonUtilities::loadByProduct(
     dpID = neon.data.product.id,
     ...)
-  
-  
-  
-  
-  # browser()
-  
-  
+   
   
   # extract the table with the field data from the all_tabs list of tables
   if("inv_fieldData" %in% names(all_tabs)){
@@ -48,13 +36,7 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
       neon.data.product.id, " for the dates and sites selected."))
     return(list())
   }
-  
-  
-  
-  
-  # browser()
-  
-  
+ 
   
   # extract the table with the taxonomy data from all_tabls list of tables
   if("inv_taxonomyProcessed" %in% names(all_tabs)){
@@ -66,16 +48,7 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
       neon.data.product.id, " for the dates and sites selected."))
     return(list())
   }
-  
-  
-  
-  
-  browser()
-  
-  
-  
-  
-  
+ 
 
   # location ----
   # get relevant location info from the data
@@ -88,16 +61,19 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
     inv_fielddata %>% 
       ecocomDP::make_location(cols = c("domainID", "siteID", "namedLocation")))
   
-  
-  
 
-  
-  
-  browser()
-  
-  
-  
-  
+  # code to handle updated make_location (updated 18 Sep 2020 in make_location branch)
+  if(class(table_location) == "list" &&
+     "location" %in% names(table_location)){
+    
+    table_location <- table_location$location %>%
+      dplyr::rowwise() %>%
+      dplyr::mutate(
+        location_name = location_name %>% 
+          strsplit("=") %>%
+          unlist() %>%
+          dplyr::last()) 
+  }
   
   
   # populate latitude
@@ -125,13 +101,6 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
     dplyr::select(-c(`Domain Number`,`Domain Name`)) %>%
     dplyr::distinct()
   
-
-  
-  
-  browser()
-  
-  
-  
   
   # update location_names and lat longs where possible
   for(location_id in table_location$location_id){
@@ -151,16 +120,7 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
     }
   }
   
-  
-
-  
-  
-  browser()
-  
-  
-  
-  
-  
+ 
   # make ancillary table that indicates the location type 
   table_location_ancillary <- table_location_raw %>% 
     dplyr::select(domainID, siteID, namedLocation) %>%
@@ -174,17 +134,6 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
     dplyr::distinct()
   
 
-  
-  
-  
-  browser()
-  
-  
-  
-  
-  
-  
-  
   
   # taxon ----
   # create a taxon table, which describes each taxonID that appears in the data set

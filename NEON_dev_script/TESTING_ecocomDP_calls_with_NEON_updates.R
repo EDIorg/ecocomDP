@@ -50,18 +50,14 @@ all_tables <- ecocomDP::read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
+my_result_mos_mapping %>% ecocomDP::flatten_ecocomDP()
+
 
 
 
 # testing with NEON macroinvert "DP1.20120.001"
-my_result_inv_mapping <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(
-  site= c('COMO','LECO'), 
-  startdate = "2019-06",
-  enddate = "2019-09",
-  token = Sys.getenv("NEON_TOKEN"),
-  check.size = FALSE)
 
-
+# test neonUtilities call
 my_result_inv_neonUtilities <- neonUtilities::loadByProduct(
   dpID = "DP1.20120.001",
   site= c('COMO','LECO'), 
@@ -70,6 +66,15 @@ my_result_inv_neonUtilities <- neonUtilities::loadByProduct(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
+# test mapping
+my_result_inv_mapping <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(
+  site= c('COMO','LECO'), 
+  startdate = "2019-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+# test read_data
 all_tables <- ecocomDP::read_data(
   id = "DP1.20120.001",
   site= c('COMO','LECO'), 
@@ -78,6 +83,10 @@ all_tables <- ecocomDP::read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
+# test flatten function
+all_tables[[1]]$tables %>% 
+  ecocomDP::flatten_ecocomDP() %>% 
+  as.data.frame() %>% head()
 
 
 

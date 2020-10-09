@@ -61,22 +61,26 @@ make_location <- function(
   
   # Make from data frame ------------------------------------------------------
   
+
   # Index spatial columns and initialize storage of intermediary dataframes
   col_i <- which(colnames(x) %in% cols)
   df <- rep(list(NULL), length(col_i))
   
+  cols_checked <- dplyr::intersect(cols, colnames(x))
+  
   # Continue if spatial columns are specified
-  if (length(col_i) > 0) {
+  if (length(cols_checked) > 0) {
     
     # Make keys in observation table for linking to the location table
     x$keys <- apply(
-      x[ , col_i], 
+      x[ , cols_checked], 
       1, 
       function(x) {
         paste(
           paste0(names(x), "=", x),
           collapse = "/")
       })
+    
     
     # Form location working table. This table is an intermediary between 
     # the observation and location tables.
