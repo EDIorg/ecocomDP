@@ -70,7 +70,7 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
   
   
   
-  # browser()
+  browser()
   
   
   
@@ -91,7 +91,13 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
   
   
 
- 
+  
+  
+  browser()
+  
+  
+  
+  
   
   
   # populate latitude
@@ -121,6 +127,12 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
   
 
   
+  
+  browser()
+  
+  
+  
+  
   # update location_names and lat longs where possible
   for(location_id in table_location$location_id){
     if(location_id %in% neon_domain_list$`Domain Number`){
@@ -141,6 +153,14 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
   
   
 
+  
+  
+  browser()
+  
+  
+  
+  
+  
   # make ancillary table that indicates the location type 
   table_location_ancillary <- table_location_raw %>% 
     dplyr::select(domainID, siteID, namedLocation) %>%
@@ -154,6 +174,15 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
     dplyr::distinct()
   
 
+  
+  
+  
+  browser()
+  
+  
+  
+  
+  
   
   
   
