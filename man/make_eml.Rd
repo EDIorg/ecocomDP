@@ -14,7 +14,7 @@ make_eml(
   contact,
   user.id,
   user.domain,
-  darwin.core.terms = NULL,
+  basis.of.record = NULL,
   data.url = NULL
 )
 }
@@ -57,15 +57,12 @@ Repository IDs are currently supported.}
 currently supported. If more than one, then supply as a vector of 
 character strings in the same order as the corresponding \code{user.id}.}
 
-\item{darwin.core.terms}{(character) If wanting to create a Darwin Core record for this ecocomDP,
-then Darwin Core Terms (\url{https://dwc.tdwg.org/terms/}) 
-describing this dataset should be included. These terms are used in 
-downstream processing of this dataset into a Darwin Core data package 
-with \code{L1_to_L2_DwCA()}. Of particular importance is the 
-"basisOfRecord" property 
-(\url{https://dwc.tdwg.org/terms/#dwc:basisOfRecord}) with one of
-the corresponding classes "HumanObservation" and "MachineObservation" 
-(e.g. "basisOfRecord: HumanObservation").}
+\item{basis.of.record}{(character) To create a Darwin Core record from this ecocomDP using
+\code{L1_to_L2_DwCA()} then the Darwin Core property 
+\href{basisOfRecord}{https://dwc.tdwg.org/terms/#dwc:basisOfRecord}
+requires definition as 
+\href{HumanObservation}{http://rs.tdwg.org/dwc/terms/HumanObservation} or 
+\href{MachineObservation}{http://rs.tdwg.org/dwc/terms/MachineObservation}.}
 
 \item{data.url}{(character) An optional argument specifying the publicly accessible URL 
 from which the ecocomDP tables and objects listed under the 
@@ -100,7 +97,7 @@ This function creates an EML record for an Ecological Community Data
         "communities", "community composition", "community dynamics", 
         "community patterns", "species composition", "species diversity",
         and "species richness". Darwin Core Terms listed under \code{
-        darwin.core.terms} are listed and used by \code{L1_to_L2_DwCA()} 
+        basis.of.record} are listed and used by \code{L1_to_L2_DwCA()} 
         to create a Darwin Core Archive of this ecocomDP data package.
         \item \strong{<intellectualRights>} Keeps intact the intellectual
         rights license of the parent data package, or replaces it with

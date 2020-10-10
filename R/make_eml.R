@@ -473,6 +473,7 @@ make_eml <- function(path,
     as.is = T,
     na.strings = "NA")
   
+  # TODO: Check the ecocomDP term is not listed under the LTER thesaurus
   # Add ecocomDP keywords to the parent keyword set
   eml$dataset$keywordSet[[length(eml$dataset$keywordSet) + 1]] <- list(
     keywordThesaurus = keywordSet$keywordThesaurus[1],
