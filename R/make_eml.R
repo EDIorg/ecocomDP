@@ -41,6 +41,16 @@
 #'     (character) Domain of the \code{user.id}(s). Only "EDI" and "LTER" are 
 #'     currently supported. If more than one, then supply as a vector of 
 #'     character strings in the same order as the corresponding \code{user.id}.
+#' @param darwin.core.terms
+#'     (character) If wanting to create a Darwin Core record for this ecocomDP,
+#'     then Darwin Core Terms (\url{https://dwc.tdwg.org/terms/}) 
+#'     describing this dataset should be included. These terms are used in 
+#'     downstream processing of this dataset into a Darwin Core data package 
+#'     with \code{L1_to_L2_DwCA()}. Of particular importance is the 
+#'     "basisOfRecord" property 
+#'     (\url{https://dwc.tdwg.org/terms/#dwc:basisOfRecord}) with one of
+#'     the corresponding classes "HumanObservation" and "MachineObservation" 
+#'     (e.g. "basisOfRecord: HumanObservation").
 #' @param data.url
 #'     (character) An optional argument specifying the publicly accessible URL 
 #'     from which the ecocomDP tables and objects listed under the 
@@ -70,7 +80,9 @@
 #'         Repository, and 7 terms from the LTER Controlled vocabulary:
 #'         "communities", "community composition", "community dynamics", 
 #'         "community patterns", "species composition", "species diversity",
-#'         and "species richness".
+#'         and "species richness". Darwin Core Terms listed under \code{
+#'         darwin.core.terms} are listed and used by \code{L1_to_L2_DwCA()} 
+#'         to create a Darwin Core Archive of this ecocomDP data package.
 #'         \item \strong{<intellectualRights>} Keeps intact the intellectual
 #'         rights license of the parent data package, or replaces it with
 #'         "CCO" (https://creativecommons.org/publicdomain/zero/1.0/legalcode).
@@ -144,6 +156,7 @@ make_eml <- function(path,
                      contact,
                      user.id, 
                      user.domain,
+                     darwin.core.terms = NULL,
                      data.url = NULL) {
   
   message("Creating EML for derived data package (" , child.package.id, ")")
@@ -305,6 +318,18 @@ make_eml <- function(path,
     )
   }
   
+  if (!is.null(darwin.core.terms)) {
+    # Terms required by downstream conversion of ecocomDP to DwC-A
+    required_terms <- stringr::str_detect(darwin.core.terms, "basisOfRecord:")
+    if (!any(required_terms)) {
+      warning(
+        "No 'basisOfRecord' found in the 'darwin.core.terms' argument. ",
+        "Adding 'basisOfRecord: HumanObservation' or basisOfRecord: ",
+        "MachineObservation, enables conversion of this ecocomDP into a ",
+        "Darwin Core Archive.", call. = FALSE)
+    }
+  }
+  
   # FIXME: Add check for publicly accessible 'data.url' argument
 
   # Read parent EML -----------------------------------------------------------
@@ -439,14 +464,19 @@ make_eml <- function(path,
     header = T, 
     sep = ",",
     as.is = T,
-    na.strings = "NA"
-  )
+    na.strings = "NA")
   
-  # Add to the parent keyword set
+  # Add ecocomDP keywords to the parent keyword set
   eml$dataset$keywordSet[[length(eml$dataset$keywordSet) + 1]] <- list(
     keywordThesaurus = keywordSet$keywordThesaurus[1],
-    keyword = as.list(keywordSet$keyword)
-  )
+    keyword = as.list(keywordSet$keyword))
+  
+  # Add Darwin Core Terms
+  if (!is.null(darwin.core.terms)) {
+    eml$dataset$keywordSet[[length(eml$dataset$keywordSet) + 1]] <- list(
+      keywordThesaurus = "Darwin Core Terms",
+      keyword = as.list(darwin.core.terms))
+  }
 
   # Update <intellectualRights> -----------------------------------------------
   # Use parent intellectual rights or CC0 if none exists

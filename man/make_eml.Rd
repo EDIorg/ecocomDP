@@ -14,6 +14,7 @@ make_eml(
   contact,
   user.id,
   user.domain,
+  darwin.core.terms = NULL,
   data.url = NULL
 )
 }
@@ -56,6 +57,16 @@ Repository IDs are currently supported.}
 currently supported. If more than one, then supply as a vector of 
 character strings in the same order as the corresponding \code{user.id}.}
 
+\item{darwin.core.terms}{(character) If wanting to create a Darwin Core record for this ecocomDP,
+then Darwin Core Terms (\url{https://dwc.tdwg.org/terms/}) 
+describing this dataset should be included. These terms are used in 
+downstream processing of this dataset into a Darwin Core data package 
+with \code{L1_to_L2_DwCA()}. Of particular importance is the 
+"basisOfRecord" property 
+(\url{https://dwc.tdwg.org/terms/#dwc:basisOfRecord}) with one of
+the corresponding classes "HumanObservation" and "MachineObservation" 
+(e.g. "basisOfRecord: HumanObservation").}
+
 \item{data.url}{(character) An optional argument specifying the publicly accessible URL 
 from which the ecocomDP tables and objects listed under the 
 \code{script} argument can be downloaded by the EDI Data Repository. 
@@ -88,7 +99,9 @@ This function creates an EML record for an Ecological Community Data
         Repository, and 7 terms from the LTER Controlled vocabulary:
         "communities", "community composition", "community dynamics", 
         "community patterns", "species composition", "species diversity",
-        and "species richness".
+        and "species richness". Darwin Core Terms listed under \code{
+        darwin.core.terms} are listed and used by \code{L1_to_L2_DwCA()} 
+        to create a Darwin Core Archive of this ecocomDP data package.
         \item \strong{<intellectualRights>} Keeps intact the intellectual
         rights license of the parent data package, or replaces it with
         "CCO" (https://creativecommons.org/publicdomain/zero/1.0/legalcode).
