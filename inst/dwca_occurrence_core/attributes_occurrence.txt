@@ -1,17 +1,17 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-occurrenceID	occurrence ID	character				
-basisOfRecord	basis Of Record	character				
-locationID	location ID	character				
-decimalLatitude	Site latitude	numeric	degree		NA	Value not recorded or not available
-decimalLongitude	Site longitude	numeric	degree		NA	Value not recorded or not available
-eventDate	Date of survey	Date		yyyy-mm-dd		
-eventRemark	event Remark	character				
-samplingProtocol	"Water column a fish survey located: Canopy, Midwater, or Bottom."	character				
-sampleSizeValue	The area or volume of the sampling size	numeric	number		NA	Value not recorded or not available
-sampleSizeUnit	The unit for the sampling area or volume	character				
-ScientificName	"Taxon name, usually species binomial or other taxon name"	character				
-taxonID	Taxon code assigned by an authoritative source	character				
-nameAccordingtoID	Name of the athority or registry assigning the Authoritative Taxon Code	character				
-organismQuantity	Number of organisms counted	numeric	number		NA	Value not recorded or not available
-occurrenceStatus	occurrentce Status	character				
-organismQuantityType	organismQuantityType	character				
+occurrenceID	"An identifier for the Occurrence (as opposed to a particular digital record of the occurrence). In the absence of a persistent global unique identifier, construct one from a combination of identifiers in the record that will most closely make the occurrenceID globally unique."	character				
+basisOfRecord	The specific nature of the data record.	character				
+locationID	An identifier for the set of location information (data associated with dcterms:Location). May be a global unique identifier or an identifier specific to the data set.	character				
+decimalLatitude	"The geographic latitude (in decimal degrees, using the spatial reference system given in geodeticDatum) of the geographic center of a Location. Positive values are north of the Equator, negative values are south of it. Legal values lie between -90 and 90, inclusive."	numeric	degree		NA	Value not recorded or not available
+decimalLongitude	"The geographic longitude (in decimal degrees, using the spatial reference system given in geodeticDatum) of the geographic center of a Location. Positive values are east of the Greenwich Meridian, negative values are west of it. Legal values lie between -180 and 180, inclusive."	numeric	degree		NA	Value not recorded or not available
+eventDate	"The date-time or interval during which an Event occurred. For occurrences, this is the date-time when the event was recorded. Not suitable for a time in a geological context."	Date				
+eventRemarks	Comments or notes about the Event.	character				
+samplingProtocol	The method or protocol used during an Event.	character				
+sampleSizeValue	"A numeric value for a measurement of the size (time duration, length, area, or volume) of a sample in a sampling event."	numeric	number		NA	Value not recorded or not available
+sampleSizeUnit	"The unit of measurement of the size (time duration, length, area, or volume) of a sample in a sampling event."	character				
+scientificName	"The full scientific name, with authorship and date information if known. When forming part of an Identification, this should be the name in lowest level taxonomic rank that can be determined. This term should not contain identification qualifications, which should instead be supplied in the IdentificationQualifier term."	character				
+taxonID	An identifier for the set of taxon information (data associated with the Taxon class). May be a global unique identifier or an identifier specific to the data set.	character				
+nameAccordingtoID	An identifier for the source in which the specific taxon concept circumscription is defined or implied. See nameAccordingTo.	character				
+organismQuantity	A number or enumeration value for the quantity of organisms.	numeric	number		NA	Value not recorded or not available
+occurrenceStatus	A statement about the presence or absence of a Taxon at a Location.	character				
+organismQuantityType	The type of quantification system used for the quantity of organisms.	character				

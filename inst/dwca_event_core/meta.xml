@@ -42,6 +42,6 @@ not sure what this is for: http://purl.org/dc/terms/type
     <field index="3" term="http://rs.tdwg.org/dwc/terms/measurementType"/>
     <field index="4" term="http://rs.tdwg.org/dwc/terms/measurementValue"/>
     <field index="5" term="http://rs.tdwg.org/dwc/terms/measurementUnit"/>
-    <field index="6" term="http://rs.iobis.org/obis/terms/measurementTypeID"/>
+    <field index="6" term="http://rs.iobis.org/obis/terms/measurementID"/>
   </extension>
 </archive>
