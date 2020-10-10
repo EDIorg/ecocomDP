@@ -26,9 +26,10 @@ not sure what this is for: http://purl.org/dc/terms/type
     <coreid index="0" />
     <field index="1" term="http://rs.tdwg.org/dwc/terms/occurrenceID"/>    
     <field index="2" term="http://rs.tdwg.org/dwc/terms/eventID"/>
-    <field index="3" term="http://rs.tdwg.org/dwc/terms/identificationID"/>
-    <field index="4" term="http://rs.tdwg.org/dwc/terms/scientificName"/>
-    <field index="5" term="http://rs.tdwg.org/dwc/terms/specificEpithet"/>
+    <field index="3" term="http://rs.tdwg.org/dwc/terms/scientificName"/>
+    <field index="4" term="http://rs.tdwg.org/dwc/terms/taxonID"/>
+    <field index="5" term="http://rs.tdwg.org/dwc/terms/nameAccordingTo"/>
+    <field index="6" term="http://rs.tdwg.org/dwc/terms/scientificNameID"/>
   </extension>
   
   <extension encoding="UTF-8" linesTerminatedBy="\r\n" fieldsTerminatedBy="," fieldsEnclosedBy="&quot;" ignoreHeaderLines="1" rowType="http://rs.tdwg.org/dwc/terms/ExtendedMeasurementOrFact">
