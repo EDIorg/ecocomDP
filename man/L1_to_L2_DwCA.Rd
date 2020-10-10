@@ -4,9 +4,12 @@
 \alias{L1_to_L2_DwCA}
 \title{Creates Darwin Core Archive package from an ecocomDP formatted level-1}
 \usage{
-L1_to_L2_DwCA(core.name, parent.package.id, child.package.id)
+L1_to_L2_DwCA(path, core.name, parent.package.id, child.package.id)
 }
 \arguments{
+\item{path}{(character) Path to the where the DwC-A data objects and EML will be 
+written.}
+
 \item{core.name}{(character) The Darwin Core central table of the package. Can be: 
 "occurence" (occurrence core) or "event" (event core).}
 

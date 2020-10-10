@@ -1,5 +1,8 @@
 #' Creates Darwin Core Archive package from an ecocomDP formatted level-1
 #'
+#' @param path 
+#'     (character) Path to the where the DwC-A data objects and EML will be 
+#'     written.
 #' @param core.name
 #'     (character) The Darwin Core central table of the package. Can be: 
 #'     "occurence" (occurrence core) or "event" (event core).
@@ -17,9 +20,9 @@
 #'
 #' @examples
 #' 
-L1_to_L2_DwCA <- function(core.name, parent.package.id, child.package.id) {
+L1_to_L2_DwCA <- function(path, core.name, parent.package.id, child.package.id) {
   
-  # Config script -------------------------------------------------------------
+  # Parameterize --------------------------------------------------------------
   # Eventually will support 2 DwC types: choose occurence-core or event-core. 
   # occurence is simpler (sightings), event is a better fit for most of our data
   # TODO: Support event-core
@@ -56,13 +59,11 @@ L1_to_L2_DwCA <- function(core.name, parent.package.id, child.package.id) {
       dt_loc_ancil = d$location_ancillary,
       parent.package.id = parent.package.id)
     
-    return(r)
-    
   } else if (core.name == 'event') {
     
     # call a function to create event core. inputs: data objects, dwca_mappings, dwca_config  
     # print('calling function to create DwC-A, event core')
-    event_table_list <- create_table_dwca_occurrence_core(
+    r <- create_table_dwca_occurrence_core(
       dwca_occurrence_core_config = dwca_config_file,
       dwca_occurrence_core_mapping = dwca_mappings_file,
       dt_obs = dt_obs,
@@ -71,15 +72,14 @@ L1_to_L2_DwCA <- function(core.name, parent.package.id, child.package.id) {
       dt_loc_ancil = dt_loc_ancil,
       dt_obs_ancil = dt_obs_ancil,
       parent.package.id = parent.package.id)
-    
-    return(event_table_list)
-    
+
   }
   
-  # Export tables -------------------------------------------------------------
+  # Write tables to file ------------------------------------------------------
   
-  # 5. construct EML 
-  # again, reuse functions from L1 build
+  # Write meta.xml ------------------------------------------------------------
+  
+  # Write EML to file ---------------------------------------------------------
   
   
 }
@@ -195,14 +195,13 @@ create_table_dwca_occurrence_core <- function(
   # obs_loc_tax$dc_samplesizeunit
   
   # Create DF for export 
-  
   occurrence_core <- data.frame(
     occurrenceId = obs_loc_tax$dc_occurrence_id,
     basisOfRecord = obs_loc_tax$dc_basisofrecord,
     locationID = obs_loc_tax$location_id,
     decimalLatitude = obs_loc_tax$latitude,
     decimalLongitude = obs_loc_tax$longitude,
-    eventDate = obs_loc_tax$observation_datetime, # TODO: Split date and time
+    eventDate = obs_loc_tax$observation_datetime,
     samplingProtocol = obs_loc_tax$dc_samplingprotocol,
     sampleSizeValue = obs_loc_tax$dc_samplesizevalue,
     sampleSizeUnit = obs_loc_tax$dc_samplesizeunit,
