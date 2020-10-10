@@ -48,13 +48,16 @@ flatten_ecocomDP <- function(data.list){
       data.list$taxon %>% dplyr::select_if(not_all_NAs), 
       by = "taxon_id")
   
+  
   # merge all_merged with observation_ancillary
   if("observation_ancillary" %in% names(data.list)){
     observation_ancillary_long <- data.list$observation_ancillary 
     
     observation_ancillary_long_wide <- observation_ancillary_long[
       ,!names(observation_ancillary_long) %in% c("observation_ancillary_id","unit")] %>%
-      tidyr::pivot_wider(names_from = variable_name, values_from = value) %>%
+      tidyr::pivot_wider(
+        names_from = variable_name, 
+        values_from = value) %>%
       dplyr::select_if(not_all_NAs)
     
     all_merged <- all_merged %>%
@@ -63,8 +66,6 @@ flatten_ecocomDP <- function(data.list){
                        suffix = c("", "_observation_ancillary"))
   }
   
-  
- 
   
   # merge location data and using "NEON location type" from location ancillary data
   if("location_ancillary" %in% names(data.list) && 
@@ -169,7 +170,9 @@ flatten_ecocomDP <- function(data.list){
     location_ancillary <- data.list$location_ancillary %>%
       # dplyr::filter(variable_name != "NEON location type") %>%
       dplyr::select(-location_ancillary_id) %>%
-      tidyr::pivot_wider(names_from = variable_name, values_from = value)
+      tidyr::pivot_wider(
+        names_from = variable_name, 
+        values_from = value)
     
     all_merged <- all_merged %>%
       dplyr::left_join(
@@ -180,8 +183,6 @@ flatten_ecocomDP <- function(data.list){
   }
   
   
-  
-
   return(all_merged)
   
 } # end of flatten_ecocomDP

@@ -23,8 +23,10 @@ all_tables <- ecocomDP::read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-
-flat_data <- ecocomDP::flatten_ecocomDP(all_tables$DP1.10022.001$tables)
+all_tables[[1]]$tables %>% 
+  ecocomDP::flatten_ecocomDP() %>%
+  as.data.frame() %>%
+  head()
 
 
 
@@ -50,7 +52,9 @@ all_tables <- ecocomDP::read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_mos_mapping %>% ecocomDP::flatten_ecocomDP()
+my_result_mos_mapping %>% ecocomDP::flatten_ecocomDP() %>%
+  as.data.frame() %>%
+  head()
 
 
 
@@ -107,7 +111,9 @@ my_result_alg_read_data <- ecocomDP::read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-
+my_result_alg_read_data[[1]]$tables %>% 
+  ecocomDP::flatten_ecocomDP() %>% 
+  as.data.frame() %>% head()
 
 
 

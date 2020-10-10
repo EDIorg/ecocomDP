@@ -34,7 +34,6 @@
 #'     not support kml data for more than one col.
 #'
 #' @return 
-#' A list containing:
 #' \item{location}{A data frame of the location table}
 #' \item{x}{The input data frame \code{x} but with an added location_id column.
 #' This simplifies alignment of values between \code{x} and location.}
@@ -61,26 +60,22 @@ make_location <- function(
   
   # Make from data frame ------------------------------------------------------
   
-
   # Index spatial columns and initialize storage of intermediary dataframes
-  col_i <- which(colnames(x) %in% cols)
+  col_i <- match(cols, colnames(x))
   df <- rep(list(NULL), length(col_i))
   
-  cols_checked <- dplyr::intersect(cols, colnames(x))
-  
   # Continue if spatial columns are specified
-  if (length(cols_checked) > 0) {
+  if (length(col_i) > 0) {
     
     # Make keys in observation table for linking to the location table
     x$keys <- apply(
-      x[ , cols_checked], 
+      x[ , col_i], 
       1, 
       function(x) {
         paste(
           paste0(names(x), "=", x),
           collapse = "/")
       })
-    
     
     # Form location working table. This table is an intermediary between 
     # the observation and location tables.

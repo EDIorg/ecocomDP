@@ -123,18 +123,19 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
       package_id = paste0(neon.data.product.id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
     dplyr::rename(
       observation_id = uid, 
-      event_id = eventID,
+      neon_sample_id = sampleID,
+      neon_event_id = eventID,
       location_id = namedLocation,
       observation_datetime = collectDate,
       taxon_id = acceptedTaxonID,
       variable_name = algalParameter,
       value = density,
-      unit = cell_density_standardized_unit) 
+      unit = cell_density_standardized_unit) %>%
+    dplyr::mutate(
+      event_id = neon_sample_id
+    )
   
 
-  
-  
-  
   # make observation table
   table_observation <- table_observation_ecocomDP %>%
     dplyr::select(
@@ -150,50 +151,47 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
     dplyr::distinct()
   
   
-
+  
   # make observation ancillary table. First convert POSIXct POSIXt classed
   # variables to character, otherwise gathering will produce a warning.
   table_observation_ecocomDP$identifiedDate <- as.character(
     table_observation_ecocomDP$identifiedDate)
-  table_observation_ancillary <- table_observation_ecocomDP %>%
-    dplyr::select(
-      -c(
-        observation_id,
-        package_id,
-        location_id,
-        observation_datetime,
-        taxon_id,
-        variable_name,
-        value,
-        unit,
-        domainID,
-        siteID,
-        algalType,
-        scientificName,
-        division,
-        class,
-        order,
-        family,
-        genus,
-        specificEpithet,
-        infraspecificEpithet,
-        scientificNameAuthorship,
-        identificationQualifier,
-        taxonRank,
-        identificationReferences,
-        decimalLatitude,
-        decimalLongitude,
-        coordinateUncertainty,
-        elevation,
-        elevationUncertainty,
-        geodeticDatum,
-        habitatType,
-        benthicArea
-        )) %>% 
-    dplyr::distinct() %>% 
-    tidyr::gather(key = "variable_name", value = "value", -c(event_id))
-  table_observation_ancillary$observation_ancillary_id <- 
-    paste0("obsan_", seq(nrow(table_observation_ancillary)))
+  
+  col_names_to_keep <- c(
+    "event_id",
+    "neon_sample_id",
+    "neon_event_id",
+    "parentSampleID",
+    "sampleCondition",
+    "laboratoryName",
+    "perBottleSampleVolume",
+    "aquaticSiteType",
+    "habitatType",
+    "algalSampleType",
+    "samplerType",
+    "benthicArea",
+    "samplingProtocolVersion",
+    "phytoDepth1","phytoDepth2","phytoDepth3",
+    "substratumSizeClass")
+  
+  table_observation_ancillary <- table_observation_ecocomDP[
+    ,names(table_observation_ecocomDP) %in% col_names_to_keep
+  ] %>%
+    dplyr::distinct() 
+  
+  table_observation_ancillary <- table_observation_ancillary %>% 
+    dplyr::mutate_all(as.character) %>%
+    tidyr::pivot_longer(
+      cols = -event_id,
+      names_to = "variable_name", 
+      values_to = "value") %>% 
+    dplyr::mutate(
+      observation_ancillary_id = paste0(variable_name, "_for_", event_id)) %>%
+    dplyr::filter(!is.na(value))
+  
+  # table_observation_ancillary$observation_ancillary_id <- 
+  #   paste0("obsan_", seq(nrow(table_observation_ancillary)))
+  
   table_observation_ancillary$unit <- NA_character_
   table_observation_ancillary <- dplyr::select(
     table_observation_ancillary,
@@ -204,7 +202,6 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
     unit)
   
   
-
   
   # ecocomDP location table
   
@@ -218,7 +215,19 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
     ecocomDP::make_location(
       table_observation_raw,
       cols = c("domainID", "siteID", "namedLocation")))
-  table_location <- table_location$location
+
+  # code to handle updated make_location (updated 18 Sep 2020 in make_location branch)
+  if(class(table_location) == "list" &&
+     "location" %in% names(table_location)){
+    
+    table_location <- table_location$location %>%
+      dplyr::rowwise() %>%
+      dplyr::mutate(
+        location_name = location_name %>% 
+          strsplit("=") %>%
+          unlist() %>%
+          dplyr::last()) 
+  }
   
   # populate latitude
   table_location$latitude <- table_location_raw$decimalLatitude[match(table_location$location_name, table_location_raw$namedLocation)] 
@@ -313,8 +322,6 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
   #   )
   
   
-  
-  
   table_taxon <- tax_long_in %>%
     
     # keep only the coluns listed below
@@ -335,16 +342,19 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
                   taxon_rank = taxonRank,
                   taxon_name = scientificName,
                   authority_system = identificationReferences) %>%
-    dplyr::select(taxon_id, taxon_rank, taxon_name, authority_system)
+    dplyr::select(taxon_id, taxon_rank, taxon_name, authority_system) %>%
+    
+    dplyr::group_by(taxon_id, taxon_rank, taxon_name) %>%
+    dplyr::summarize(
+      authority_system = paste(authority_system, collapse = " | ")
+    )
   
   
   # make dataset_summary -- required table
   years_in_data <- table_observation$observation_datetime %>% lubridate::year()
   # years_in_data %>% ordered()
   
-  
  
-  
   table_dataset_summary <- data.frame(
     package_id = table_observation$package_id[1],
     original_package_id = neon.data.product.id,
@@ -354,9 +364,6 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
       unique() %>% sort() %>% diff() %>% stats::sd(),
     max_num_taxa = table_taxon$taxon_id %>% unique() %>% length()
   )
-  
-  
- 
   
   
   # list of tables to be returned, with standardized names for elements

@@ -247,12 +247,6 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
       ecocomDP::make_location(cols = c("domainID", "siteID", "namedLocation")))
   
   
-  
-  browser()
-  
-  
-  
-  
   # code to handle updated make_location (updated 18 Sep 2020 in make_location branch)
   if(class(table_location) == "list" &&
      "location" %in% names(table_location)){
@@ -265,15 +259,6 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
           unlist() %>%
           dplyr::last()) 
   }
-  
-  
-  
-  
-  
-  
-  browser()
-  
-  
   
   
   # populate latitude
@@ -302,16 +287,6 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
     dplyr::distinct()
   
   
-  
-  
-  
-  
-  browser()
-  
-  
-  
-  
-  
   # update location_names and lat longs where possible
   for(location_id in table_location$location_id){
     if(location_id %in% neon_domain_list$`Domain Number`){
@@ -331,15 +306,6 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
   }
   
   
-  
-  
-  
-  
-  browser()
-  
-  
-  
-
   # make ancillary table that indicates the location type 
   table_location_ancillary <- table_location_raw %>% 
     dplyr::select(domainID, siteID, namedLocation) %>%
@@ -366,16 +332,6 @@ map_neon_data_to_ecocomDP.BEETLE <- function(
     dplyr::bind_rows(., table_location_ancillary)
   
  
-  
-  
-  
-  
-  browser()
-  
-  
-  
-  
-  
   # # load neon taxon list
   # neon_taxon_list <- neonUtilities::getTaxonTable(taxonType = "BEETLE",
   #                              token = my_neon_token)
