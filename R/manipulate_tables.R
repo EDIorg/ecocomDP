@@ -26,6 +26,8 @@
 #' 
 join_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
 
+  # TODO: Add variable_mapping table if present
+  
   # Flatten location ----------------------------------------------------------
   
   dt_loc_expanded <- flatten_location(dt_loc)

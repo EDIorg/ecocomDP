@@ -63,19 +63,36 @@ L1_to_L2_DwCA <- function(path, core.name, parent.package.id, child.package.id) 
     
     # call a function to create event core. inputs: data objects, dwca_mappings, dwca_config  
     # print('calling function to create DwC-A, event core')
-    r <- create_table_dwca_occurrence_core(
+    r <- create_tables_dwca_event_core(
       dwca_occurrence_core_config = dwca_config_file,
       dwca_occurrence_core_mapping = dwca_mappings_file,
-      dt_obs = dt_obs,
-      dt_loc = dt_loc,
-      dt_tax = dt_tax,
-      dt_loc_ancil = dt_loc_ancil,
-      dt_obs_ancil = dt_obs_ancil,
-      parent.package.id = parent.package.id)
+      dt_obs = d$observation,
+      dt_loc = d$location,
+      dt_tax = d$taxon,
+      dt_loc_ancil = d$location_ancillary,
+      dt_obs_ancil = d$observation_ancillary,
+      parent.package.id = parent.package.id,
+      child.package.id = child.package.id)
 
   }
   
   # Write tables to file ------------------------------------------------------
+  
+  for (i in names(r)) {
+    
+    # TODO: Explicitly state system independent eol and file encoding 
+    utils::write.table(
+      x = r[[i]],
+      file = paste0(path, "/", i, ".csv"), 
+      quote = TRUE, 
+      sep = ",",
+      row.names = FALSE, 
+      col.names = TRUE,
+      fileEncoding = "UTF-8")
+    
+    
+    
+  }
   
   # Write meta.xml ------------------------------------------------------------
   
@@ -155,7 +172,7 @@ create_table_dwca_occurrence_core <- function(
   # comb_id 
   # TODO: Form globally unique IDs. See notes.
   obs_loc_tax$dc_occurrence_id <- paste(
-    stringr::str_remove(child.package.id, "\\.[:digit:]$"),
+    child.package.id,
     seq(nrow(obs_loc_tax)),
     sep = '.')
   
@@ -214,7 +231,8 @@ create_table_dwca_occurrence_core <- function(
     measurementUnit = obs_loc_tax$unit,
     stringsAsFactors = FALSE)
   
-  return(occurrence_core)
+  return(
+    list(occurrence = occurrence_core))
   
 }
 
@@ -234,6 +252,7 @@ create_table_dwca_occurrence_core <- function(
 #' @param parent.package.id
 #'     (character) ID of an ecocomDP data package. Only 
 #'     EDI Data Repository package IDs are currently supported.
+#' @param child.package.id
 #'
 #' @return
 #'     three tables, event, occurrence, measurementOrFact
@@ -249,24 +268,130 @@ create_tables_dwca_event_core <- function(
   dt_loc_ancil,
   dt_loc,
   dt_tax,
-  parent.package.id) {
+  parent.package.id,
+  child.package.id) {
   
-  # validate ecocomDP. do you have what you need to get these vars? confirm fields used by mapping table are present.
+  message('calling function to create DwC-A, event core')
   
-  # create 3 tables: fields in the config are the column headers. 
+  # Validate function inputs --------------------------------------------------
+  # Do you have what you need to get these vars? confirm fields used by mapping 
+  # table are present. Anything that is required by the ecocomDP model already, 
+  # you can assume is present. location_ancillary.value, or 
+  # observation_anncillary.value ?? what does this note mean? do I need these?
   
-  string1<-'hello world'
-  return(string1)
+  # Join the tables -----------------------------------------------------------
   
-  # return(event)
-  # return(occurrence)
-  # return(measurementOrFact)
+  # TODO: Don't forget locationn ancillary (MOB add issue #). An enhancement.
+  obs_loc_tax <- join_obs_loc_tax(
+    dt_obs = dt_obs, 
+    dt_loc = dt_loc, 
+    dt_tax = dt_tax)
   
-  # return(
-  #   list(
-  #     event = event_df,
-  #     occurrence = occurrence_df,
-  #     measurementOrFact = measurementOrFact_df))
+  # Add column
+  # Create computed vectors:
+  
+  # Define new cols specifically needed for DwC-A
+  obs_loc_tax$lsid <- NA_character_ # TODO: This will be an LSID
+  obs_loc_tax$dc_occurrence_id <- NA_character_ # TODO: Globally unique and persistentt
+  obs_loc_tax$dc_samplingprotocol <-NA_character_ # TODO: The name of, reference to, or description of the method or protocol used during an Event. A string that will be derived from the L1 metadata. Optional.
+  obs_loc_tax$dc_event_id <-NA_character_
+  obs_loc_tax$dc_dataset_name <-NA_character_
+  
+  # comb_id 
+  # TODO: Form globally unique IDs. See notes.
+  obs_loc_tax$dc_occurrence_id <- paste(
+    "occ",
+    child.package.id,
+    seq(nrow(obs_loc_tax)),
+    sep = '.')
+  
+  # TODO: Form globally unique IDs. See notes.
+  obs_loc_tax$dc_event_id <- paste(
+    child.package.id,
+    obs_loc_tax$event_id,
+    sep = '.')
+  
+  # Use the DOI of the L1 and construct as: "See methods in DOI"
+  obs_loc_tax$dc_samplingprotocol <- paste0(
+    "See methods in ",
+    suppressMessages(
+      EDIutils::api_read_data_package_doi(parent.package.id)))
+  
+  # TODO: Determine if observation was made by an instrument or human. This 
+  # info is stored in the L1 EML keywordSet
+  
+  keywords <- xml2::xml_text(
+    xml2::xml_find_all(
+      suppressMessages(
+        EDIutils::api_read_metadata(parent.package.id)), ".//keyword"))
+  
+  basis_of_record <- trimws(
+    stringr::str_remove(
+      keywords[stringr::str_detect(keywords, "basisOfRecord:")],
+      "basisOfRecord:"))
+  
+  if (length(basis_of_record) == 1) {
+    obs_loc_tax$dc_basisofrecord <- basis_of_record
+  } else {
+    obs_loc_tax$dc_basisofrecord <- NA_character_
+  }
+
+  # datasetName 
+  # TODO: Determine method. Maybe use title of L0, because we add note about 
+  # ecocomDP in level 1. Could shortname if exists and title if not.
+  dc_dataset_name <- "Dataset name"
+  
+  # Create event --------------------------------------------------------------
+  
+  event_table <- data.frame(
+    datasetName = dc_dataset_name,
+    eventID = obs_loc_tax$dc_event_id,
+    samplingProtocol = obs_loc_tax$dc_samplingprotocol,
+    eventDate = obs_loc_tax$observation_datetime,
+    decimalLatitude = obs_loc_tax$latitude,
+    decimalLongitude = obs_loc_tax$longitude,
+    georeferenceRemarks = obs_loc_tax$location_name,
+    stringsAsFactors = FALSE)
+  
+  # Unique event_table based on all columns
+  event_table <- unique.data.frame(
+    event_table)
+  
+  # Create occurrence ---------------------------------------------------------
+  
+  occurrence_table <- data.frame(
+    occurrenceID = obs_loc_tax$dc_occurrence_id,
+    eventID = obs_loc_tax$dc_event_id,
+    basisOfRecord = obs_loc_tax$dc_basisofrecord,
+    scientificName = obs_loc_tax$taxon_name,
+    taxonID = obs_loc_tax$authority_taxon_id,
+    nameAccordingTo = obs_loc_tax$authority_system,
+    scientificNameID = obs_loc_tax$lsid,
+    stringsAsFactors = FALSE)
+  
+  # Unique occurrence_table based on all columns except occurrenceID
+  occurrence_table <- dplyr::distinct_at(
+    occurrence_table, 
+    .vars = c("eventID", "basisOfRecord", "scientificName", "taxonID",
+              "nameAccordingTo", "scientificNameID"),
+    .keep_all = TRUE)
+  
+  # Create extendedmeasurementorfact ------------------------------------------
+  
+  extendedmeasurementorfact_table <- data.frame(
+    occurrenceID = obs_loc_tax$dc_occurrence_id,
+    eventID = obs_loc_tax$dc_event_id,
+    measurementType = obs_loc_tax$variable_name,
+    measurementTypeID = NA_character_, # TODO: the variable mapping annotation (obs_loc_tax$variable_mapping)
+    measurementValue = obs_loc_tax$value,
+    measurementUnit = obs_loc_tax$unit,
+    stringsAsFactors = FALSE)
+  
+  return(
+    list(
+      event = event_table,
+      occurrence = occurrence_table,
+      extendedmeasurementorfact = extendedmeasurementorfact_table))
   
 }
 

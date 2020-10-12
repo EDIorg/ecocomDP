@@ -138,6 +138,11 @@ make_eml_dwca <- function(
   
   # Create (some) child EML ---------------------------------------------------
   
+  # TODO: Get date time format from DwC-A tables, or L1, to be added to the 
+  # table attributes templates for the L2 EML.
+  
+  # TODO: Set physical attributes of tables in meta.xml and write to file.
+  
   # TODO: Run make_eml() to create child EML elements to be added with the 
   # parent EML
   
@@ -250,6 +255,11 @@ make_eml_dwca <- function(
   # Update <keywordSet> -------------------------------------------------------
   
   message("    <keywordSet>")
+  
+  # TODO: Add measurement variable in a standardized and human readable way. Could
+  # also annotate /eml/dataset with variable mapping values.
+  
+  # TODO: Add GBIF terms at /eml/dataset (first) and /eml/dataset/dataTable (second)
   
   # TODO: Remove "ecocomDP" since this is no longer an ecocomDP data package
   
