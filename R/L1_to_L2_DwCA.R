@@ -11,6 +11,32 @@
 #'     EDI Data Repository package IDs are currently supported.
 #' @param child.package.id
 #'     (character) ID of DWcA occurrence data package being created.
+#' @param data.table.url
+#'     (character; optional) The publicly accessible URL from which 
+#'     \code{data.table} can be downloaded. If more than one, then supply as 
+#'     a vector of character strings in the same order as listed in 
+#'     \code{data.table}. If wanting to include URLs for some but not all
+#'     \code{data.table}, then use a "" for those that don't have a URL
+#'     (e.g. \code{data.table.url = c("", "/url/to/decomp.csv")}).
+#' @param user.id
+#'     (character; optional) Repository user identifier. If more than one, 
+#'     then enter as a vector of character strings (e.g. 
+#'     \code{c("user_id_1", "user_id_2")}). \code{user.id} sets the 
+#'     /eml/access/principal element for all \code{user.domain} except
+#'     "KNB", "ADC", and if \code{user.domain = NULL}.
+#' @param user.domain
+#'     (character; optional) Repository domain associated with 
+#'     \code{user.id}. Currently supported values are "EDI" 
+#'     (Environmental Data Initiative), "LTER" (Long-Term Ecological Research 
+#'     Network), "KNB" (The Knowledge Network for Biocomplexity), "ADC" (The 
+#'     Arctic Data Center). If you'd like your system supported please contact
+#'     maintainers of the EMLassemblyline R package. If using more than one 
+#'     \code{user.domain}, then enter as a vector of character strings (e.g. 
+#'     \code{c("user_domain_1", "user_domain_2")}) in the same order as 
+#'     corresponding \code{user.id}. If \code{user.domain} is missing then a 
+#'     default value "unknown" is assigned. \code{user.domain} sets the EML 
+#'     header "system" attribute and for all \code{user.domain}, except "KNB" 
+#'     and "ADC", sets the /eml/access/principal element attributes and values.
 #' @details
 #'     TODO: Add details
 #' @return
@@ -20,7 +46,13 @@
 #'
 #' @examples
 #' 
-L1_to_L2_DwCA <- function(path, core.name, parent.package.id, child.package.id) {
+L1_to_L2_DwCA <- function(path, 
+                          core.name, 
+                          parent.package.id, 
+                          child.package.id,
+                          data.table.url = NULL,
+                          user.id,
+                          user.domain) {
   
   # Parameterize --------------------------------------------------------------
   # Eventually will support 2 DwC types: choose occurence-core or event-core. 
@@ -80,23 +112,58 @@ L1_to_L2_DwCA <- function(path, core.name, parent.package.id, child.package.id) 
   
   for (i in names(r)) {
     
-    # TODO: Explicitly state system independent eol and file encoding 
-    utils::write.table(
+    # Set physical attributes here so they will match what is listed in 
+    # meta.xml.
+    readr::write_delim(
       x = r[[i]],
-      file = paste0(path, "/", i, ".csv"), 
-      quote = TRUE, 
-      sep = ",",
-      row.names = FALSE, 
-      col.names = TRUE,
-      fileEncoding = "UTF-8")
-    
-    
-    
+      file = paste0(path, "/", i, ".csv"),
+      delim = ",",
+      quote_escape = "double",
+      eol = "\r\n")
+
   }
   
   # Write meta.xml ------------------------------------------------------------
   
+  if (core.name == "event") {
+    
+    file.copy(
+      from = system.file("/dwca_event_core/meta.xml", package = "ecocomDP"),
+      to = path)
+    
+  } else if (core.name == "occurrence") {
+    
+    file.copy(
+      from = system.file("/dwca_occurrence_core/meta.xml", package = "ecocomDP"),
+      to = path)
+    
+  }
+
   # Write EML to file ---------------------------------------------------------
+  
+  if (core.name == "event") {
+    
+    # Description order matches a sorted list of data.table
+    data.table.description <- c(
+      "DwC-A Event Table", 
+      "DwC-A Occurrence Table",
+      "DwC-A Extended Measurement Or Fact Table")
+    
+  } else if (core.name == "occurrence") {
+    
+    data.table.description <- "DwC-A Occurrence Table"
+    
+  }
+  
+  make_eml_dwca(
+    path = path,
+    data.table = sort(paste0(names(r), ".csv")), # Change to core.type (data.table will be searched for in path) 
+    data.table.description = data.table.description, # This will be determined by core.type. Move lines 123 - 135 to make_eml_dwca()
+    data.table.url = data.table.url,
+    parent.package.id = parent.package.id, 
+    child.package.id = child.package.id, 
+    user.id = user.id, 
+    user.domain = user.domain)
   
   
 }
