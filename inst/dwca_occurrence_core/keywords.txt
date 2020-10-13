@@ -1,2 +1,5 @@
 keyword	keywordThesaurus
-Darwin Core Archive (DwC-A) Occurrence Core	ecocomDP
+Darwin Core Archive (DwC-A) Occurrence Core	
+Taxon: ScientificName	Darwin Core Terms
+Population Abundance	Essential Biodiversity Variables
+Occurrence	Darwin Core Terms

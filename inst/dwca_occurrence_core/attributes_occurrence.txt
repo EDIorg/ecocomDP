@@ -11,7 +11,7 @@ sampleSizeValue	"A numeric value for a measurement of the size (time duration, l
 sampleSizeUnit	"The unit of measurement of the size (time duration, length, area, or volume) of a sample in a sampling event."	character				
 scientificName	"The full scientific name, with authorship and date information if known. When forming part of an Identification, this should be the name in lowest level taxonomic rank that can be determined. This term should not contain identification qualifications, which should instead be supplied in the IdentificationQualifier term."	character				
 taxonID	An identifier for the set of taxon information (data associated with the Taxon class). May be a global unique identifier or an identifier specific to the data set.	character				
-nameAccordingtoID	An identifier for the source in which the specific taxon concept circumscription is defined or implied. See nameAccordingTo.	character				
+nameAccordingToID	An identifier for the source in which the specific taxon concept circumscription is defined or implied. See nameAccordingTo.	character				
 organismQuantity	A number or enumeration value for the quantity of organisms.	numeric	number		NA	Value not recorded or not available
 occurrenceStatus	A statement about the presence or absence of a Taxon at a Location.	character				
 organismQuantityType	The type of quantification system used for the quantity of organisms.	character				
