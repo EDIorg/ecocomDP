@@ -6,9 +6,7 @@
 \usage{
 make_eml_dwca(
   path,
-  data.table,
-  data.table.url,
-  contact,
+  core.name,
   parent.package.id,
   child.package.id,
   user.id,
@@ -16,51 +14,17 @@ make_eml_dwca(
 )
 }
 \arguments{
-\item{path}{(character) Path to the directory containing ecocomDP data tables, 
-conversion scripts, and where EML metadata will be written.}
+\item{path}{(character) Path to the directory containing ecocomDP data tables, conversion scripts, and where EML metadata will be written. This \code{path}, when defined on a web server, also serves as the publicly accessible URL from which the data objects can be downloaded.}
 
-\item{data.table}{(character) DWcA table to create EML for. Can be: "event.csv", 
-"occurrence.csv", or "measurementOrFact.csv".}
+\item{core.name}{(character) The Darwin Core central table of the package. Can be: "occurence" (occurrence core) or "event" (event core).}
 
-\item{data.table.url}{(character; optional) The publicly accessible URL from which 
-\code{data.table} can be downloaded. If more than one, then supply as 
-a vector of character strings in the same order as listed in 
-\code{data.table}. If wanting to include URLs for some but not all
-\code{data.table}, then use a "" for those that don't have a URL
-(e.g. \code{data.table.url = c("", "/url/to/decomp.csv")}).}
-
-\item{contact}{(data frame) Contact information of person creating this DWcA occurrence 
-record with these columns:
-\itemize{
-    \item{givenName}
-    \item{surName}
-    \item{organizationName}
-    \item{electronicMailAddress}
-}}
-
-\item{parent.package.id}{(character) ID of an ecocomDP data package. Only 
-EDI Data Repository package IDs are currently supported.}
+\item{parent.package.id}{(character) ID of an ecocomDP data package. Only EDI Data Repository package IDs are currently supported.}
 
 \item{child.package.id}{(character) ID of DWcA occurrence data package being created.}
 
-\item{user.id}{(character; optional) Repository user identifier. If more than one, 
-then enter as a vector of character strings (e.g. 
-\code{c("user_id_1", "user_id_2")}). \code{user.id} sets the 
-/eml/access/principal element for all \code{user.domain} except
-"KNB", "ADC", and if \code{user.domain = NULL}.}
+\item{user.id}{(character; optional) Repository user identifier. If more than one, then enter as a vector of character strings (e.g. \code{c("user_id_1", "user_id_2")}). \code{user.id} sets the /eml/access/principal element for all \code{user.domain} except "KNB", "ADC", and if \code{user.domain = NULL}.}
 
-\item{user.domain}{(character; optional) Repository domain associated with 
-\code{user.id}. Currently supported values are "EDI" 
-(Environmental Data Initiative), "LTER" (Long-Term Ecological Research 
-Network), "KNB" (The Knowledge Network for Biocomplexity), "ADC" (The 
-Arctic Data Center). If you'd like your system supported please contact
-maintainers of the EMLassemblyline R package. If using more than one 
-\code{user.domain}, then enter as a vector of character strings (e.g. 
-\code{c("user_domain_1", "user_domain_2")}) in the same order as 
-corresponding \code{user.id}. If \code{user.domain} is missing then a 
-default value "unknown" is assigned. \code{user.domain} sets the EML 
-header "system" attribute and for all \code{user.domain}, except "KNB" 
-and "ADC", sets the /eml/access/principal element attributes and values.}
+\item{user.domain}{(character; optional) Repository domain associated with \code{user.id}. Currently supported values are "EDI" (Environmental Data Initiative), "LTER" (Long-Term Ecological Research Network), "KNB" (The Knowledge Network for Biocomplexity), "ADC" (The Arctic Data Center). If you'd like your system supported please contact maintainers of the EMLassemblyline R package. If using more than one \code{user.domain}, then enter as a vector of character strings (e.g. \code{c("user_domain_1", "user_domain_2")}) in the same order as corresponding \code{user.id}. If \code{user.domain} is missing then a default value "unknown" is assigned. \code{user.domain} sets the EML header "system" attribute and for all \code{user.domain}, except "KNB" and "ADC", sets the /eml/access/principal element attributes and values.}
 }
 \value{
 An EML metadata record for the DWcA table defined by \code{data.table}.

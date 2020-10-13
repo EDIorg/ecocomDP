@@ -1,51 +1,17 @@
 #' Make EML metadata for a DWcA occurrence from an ecocomDP data package
 #'
 #' @param path 
-#'     (character) Path to the directory containing ecocomDP data tables, 
-#'     conversion scripts, and where EML metadata will be written.
-#' @param data.table
-#'     (character) DWcA table to create EML for. Can be: "event.csv", 
-#'     "occurrence.csv", or "measurementOrFact.csv".
-#' @param data.table.url
-#'     (character; optional) The publicly accessible URL from which 
-#'     \code{data.table} can be downloaded. If more than one, then supply as 
-#'     a vector of character strings in the same order as listed in 
-#'     \code{data.table}. If wanting to include URLs for some but not all
-#'     \code{data.table}, then use a "" for those that don't have a URL
-#'     (e.g. \code{data.table.url = c("", "/url/to/decomp.csv")}).
-#' @param contact
-#'    (data frame) Contact information of person creating this DWcA occurrence 
-#'    record with these columns:
-#'    \itemize{
-#'        \item{givenName}
-#'        \item{surName}
-#'        \item{organizationName}
-#'        \item{electronicMailAddress}
-#'    }
+#'     (character) Path to the directory containing ecocomDP data tables, conversion scripts, and where EML metadata will be written. This \code{path}, when defined on a web server, also serves as the publicly accessible URL from which the data objects can be downloaded.
+#' @param core.name
+#'     (character) The Darwin Core central table of the package. Can be: "occurence" (occurrence core) or "event" (event core).
 #' @param parent.package.id
-#'     (character) ID of an ecocomDP data package. Only 
-#'     EDI Data Repository package IDs are currently supported.
+#'     (character) ID of an ecocomDP data package. Only EDI Data Repository package IDs are currently supported.
 #' @param child.package.id
 #'     (character) ID of DWcA occurrence data package being created.
 #' @param user.id
-#'     (character; optional) Repository user identifier. If more than one, 
-#'     then enter as a vector of character strings (e.g. 
-#'     \code{c("user_id_1", "user_id_2")}). \code{user.id} sets the 
-#'     /eml/access/principal element for all \code{user.domain} except
-#'     "KNB", "ADC", and if \code{user.domain = NULL}.
+#'     (character; optional) Repository user identifier. If more than one, then enter as a vector of character strings (e.g. \code{c("user_id_1", "user_id_2")}). \code{user.id} sets the /eml/access/principal element for all \code{user.domain} except "KNB", "ADC", and if \code{user.domain = NULL}.
 #' @param user.domain
-#'     (character; optional) Repository domain associated with 
-#'     \code{user.id}. Currently supported values are "EDI" 
-#'     (Environmental Data Initiative), "LTER" (Long-Term Ecological Research 
-#'     Network), "KNB" (The Knowledge Network for Biocomplexity), "ADC" (The 
-#'     Arctic Data Center). If you'd like your system supported please contact
-#'     maintainers of the EMLassemblyline R package. If using more than one 
-#'     \code{user.domain}, then enter as a vector of character strings (e.g. 
-#'     \code{c("user_domain_1", "user_domain_2")}) in the same order as 
-#'     corresponding \code{user.id}. If \code{user.domain} is missing then a 
-#'     default value "unknown" is assigned. \code{user.domain} sets the EML 
-#'     header "system" attribute and for all \code{user.domain}, except "KNB" 
-#'     and "ADC", sets the /eml/access/principal element attributes and values.
+#'     (character; optional) Repository domain associated with \code{user.id}. Currently supported values are "EDI" (Environmental Data Initiative), "LTER" (Long-Term Ecological Research Network), "KNB" (The Knowledge Network for Biocomplexity), "ADC" (The Arctic Data Center). If you'd like your system supported please contact maintainers of the EMLassemblyline R package. If using more than one \code{user.domain}, then enter as a vector of character strings (e.g. \code{c("user_domain_1", "user_domain_2")}) in the same order as corresponding \code{user.id}. If \code{user.domain} is missing then a default value "unknown" is assigned. \code{user.domain} sets the EML header "system" attribute and for all \code{user.domain}, except "KNB" and "ADC", sets the /eml/access/principal element attributes and values.
 #'
 #' @return 
 #'     An EML metadata record for the DWcA table defined by \code{data.table}.
@@ -90,103 +56,146 @@
 #' 
 #' }
 #'
-make_eml_dwca <- function(
-  path, data.table, data.table.url, contact, parent.package.id, 
-  child.package.id, user.id, user.domain) {
+make_eml_dwca <- function(path, 
+                          core.name, 
+                          parent.package.id, 
+                          child.package.id, 
+                          user.id, 
+                          user.domain) {
   
-  message("Creating DwC-A EML for derived data package (" , child.package.id, ")")
+  message(
+    "Creating Darwin Core ", stringr::str_to_title(core.name), " Core EML ",
+    "for data package ", child.package.id)
   
   # Validate inputs -----------------------------------------------------------
   
-  # TODO: Check the data package exists
-  
-  # Check contact info
-  if (!all(
-    c('givenName', 'surName', 'organizationName', 'electronicMailAddress') %in% 
-    names(contact))) {
-    stop(
-      "Input argument 'contact' is missing required columns.", 
-      "This data frame should have the columns: 'givenName',",
-      "'surName', 'organizationName', 'electronicMailAddress'.",
-      call. = FALSE)
-  }
+  # TODO: Check the child data package exists
   
   # A user.id is required for each user.domain
   if (length(user.id) != length(user.domain)) {
     stop(
-      "The number of items listed under the 'user.id' and",
-      "'user.domain' arguments must match.", call. = FALSE)
+      "The number of items listed under the 'user.id' and 'user.domain' ",
+      "arguments must match.", call. = FALSE)
   }
   
-  # FIXME: Add check for publicly accessible 'data.url' argument
+  # Parameterize --------------------------------------------------------------
+  
+  # Table names, types, and descriptions are standardized to core.name
+  if (core.name == "event") {
+    data.table <- c(
+      "event.csv", 
+      "occurrence.csv",
+      "extendedmeasurementorfact.csv")
+    data.table.description <- c(
+      "DwC-A Event Table", 
+      "DwC-A Occurrence Table",
+      "DwC-A Extended Measurement Or Fact Table")
+  } else if (core.name == "occurrence") {
+    data.table <- "occurrence.csv"
+    data.table.description <- "DwC-A Occurrence Table"
+  }
+  
+  # Other entity name, type, and description is standardized for any core.name
+  other.entity <- "meta.xml"
+  other.entity.description <- "The meta file associated with this dataset"
+  
+  # Error if the expected standards required by this function are not followed
+  missing_data_objects <- c(
+    !(data.table %in% dir(path)),
+    !("meta.xml" %in% dir(path)))
+  if (any(missing_data_objects)) {
+    stop(
+      "Missing data objects: ",
+      paste(c(data.table, "meta.xml")[missing_data_objects], collapse = ","),
+      call. = FALSE)
+  }
   
   # Read parent EML -----------------------------------------------------------
   
-  message(paste0("Reading parent data package EML (", parent.package.id, ")"))
+  message("Reading EML of parent data package ", parent.package.id)
   
-  scope <- unlist(strsplit(parent.package.id, split = ".", fixed = T))[1]
-  identifier <- unlist(strsplit(parent.package.id, split = ".", fixed = T))[2]
-  revision <- unlist(strsplit(parent.package.id, split = ".", fixed = T))[3]
-  
+  # Create two objects of the same metadata, eml_parent (emld list object) for
+  # editing, and xml_parent (xml_document) for easy parsing
   eml_parent <- EML::read_eml(
     paste0(
-      "https://pasta.lternet.edu/package/metadata/eml_parent", "/", scope, "/",
-      identifier, "/", revision))
+      "https://pasta.lternet.edu/package/metadata/eml/", 
+      stringr::str_replace_all(parent.package.id, "\\.", "/")))
+  xml_parent <- suppressMessages(
+    EDIutils::api_read_metadata(parent.package.id))
   
-  message("Updating nodes ...")
-  message("<eml>")
+  # Create child EML ----------------------------------------------------------
+  # This is not a full EML record, it is only the sections of EML that will be 
+  # added to the parent EML.
   
-  # Create (some) child EML ---------------------------------------------------
+  # Create list of inputs to EMLassemblyline::make_eml()
+  eal_inputs <- EMLassemblyline::template_arguments(
+    path = system.file("/dwca_event_core", package = "ecocomDP"), 
+    data.path = path, 
+    data.table = data.table,
+    other.entity = "meta.xml")
+  eal_inputs$path <- system.file("/dwca_event_core", package = "ecocomDP")
+  eal_inputs$data.path <- path
+  eal_inputs$eml.path <- path
+  eal_inputs$dataset.title <- "placeholder"
+  eal_inputs$data.table <- data.table
+  eal_inputs$data.table.description <- data.table.description
+  eal_inputs$data.table.url <- paste0(path, "/", data.table)
+  eal_inputs$data.table.quote.character <- rep('"', length(data.table))
+  eal_inputs$other.entity <- other.entity
+  eal_inputs$other.entity.description <- other.entity.description
+  eal_inputs$other.entity.url <- paste0(path, "/", other.entity)
+  eal_inputs$package.id <- child.package.id
+  eal_inputs$user.id <- user.id
+  eal_inputs$user.domain <- user.domain
+  eal_inputs$return.obj <- TRUE
   
-  # TODO: Get date time format from DwC-A tables, or L1, to be added to the 
-  # table attributes templates for the L2 EML.
+  # Get date and time format string from the L1 EML and add to the event table 
+  # attributes template (attributes_event.txt) of the L2 since this 
+  # information can vary with the L1.
+  data_table_nodes_parent <- xml2::xml_find_all(
+    xml_parent,
+    ".//dataTable")
+  observation_table_node_parent <- data_table_nodes_parent[
+    stringr::str_detect(
+      xml2::xml_text(
+        xml2::xml_find_all(
+          xml_parent, 
+          ".//physical/objectName")), 
+      "observation\\..*$")]
+  format_string <- xml2::xml_text(
+    xml2::xml_find_all(
+      observation_table_node_parent, 
+      ".//formatString"))
+  use_i <- eal_inputs$x$template$attributes_event.txt$content$attributeName == 
+    "eventDate"
+  eal_inputs$x$template$attributes_event.txt$content$dateTimeFormatString[
+    use_i] <- format_string
   
-  # TODO: Set physical attributes of tables in meta.xml and write to file.
-  
-  # TODO: Run make_eml() to create child EML elements to be added with the 
-  # parent EML
-  
+  # Create child EML
+  eml_child <- suppressWarnings(
+    suppressMessages(
+      do.call(
+        EMLassemblyline::make_eml, 
+        eal_inputs[
+          names(eal_inputs) %in% names(formals(EMLassemblyline::make_eml))])))
+
   # Update <access> of parent -------------------------------------------------
-  # Update <access> to enable repository upload by ecocomDP 
-  # creator(s)/maintainer(s).
   
-  # TODO: Update LDAP handling in EMLassemblyline and add the corresponding 
-  # access control rules
-  
+  # Access control rules are used by some repositories to manage 
+  # editing, viewing, downloading permissions. Adding the user.id and 
+  # user.domain here expands editing permission to the creator of the DwC-A 
+  # data package this EML will be apart of.
+  message("Updating:")
   message("  <access>")
-  
-  for (i in 1:length(user.id)){
-    
-    if (user.domain[i] == 'LTER'){
-      
-      eml_parent$access$allow[[length(eml_parent$access$allow) + 1]] <- list(
-        principal = paste0(
-          'uid=', user.id[i], ',o=', user.domain[i], ',dc=ecoinformatics,dc=org'
-        ),
-        permission = "all"
-      )
-      
-    } else if (user.domain[i] == 'EDI'){
-      
-      eml_parent$access$allow[[length(eml_parent$access$allow) + 1]] <- list(
-        principal = paste0(
-          'uid=', user.id[i], ',o=', user.domain[i], ',dc=edirepository,dc=org'
-        ),
-        permission = "all"
-      )
-      
-    }
-    
-  }
+  eml_parent$access$allow <- unique(
+    c(eml_parent$access$allow, 
+      eml_child$access$allow))
   
   # Remove <alternateIdentifier> ----------------------------------------------
-  # Remove <alternateIdentifier> to prevent downstream errors
   
+  # Some repositories assign a DOI to this element. Not removing it here 
+  # an error when uploading to the repository.
   eml_parent$dataset$alternateIdentifier <- NULL
-  
-  # Update <dataset> ----------------------------------------------------------
-  
-  message("  <dataset>")
   
   # Update <title> ------------------------------------------------------------
   
