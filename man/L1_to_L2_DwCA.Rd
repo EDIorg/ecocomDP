@@ -26,13 +26,6 @@ EDI Data Repository package IDs are currently supported.}
 
 \item{child.package.id}{(character) ID of DWcA occurrence data package being created.}
 
-\item{data.table.url}{(character; optional) The publicly accessible URL from which 
-\code{data.table} can be downloaded. If more than one, then supply as 
-a vector of character strings in the same order as listed in 
-\code{data.table}. If wanting to include URLs for some but not all
-\code{data.table}, then use a "" for those that don't have a URL
-(e.g. \code{data.table.url = c("", "/url/to/decomp.csv")}).}
-
 \item{user.id}{(character; optional) Repository user identifier. If more than one, 
 then enter as a vector of character strings (e.g. 
 \code{c("user_id_1", "user_id_2")}). \code{user.id} sets the 

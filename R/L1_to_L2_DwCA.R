@@ -11,13 +11,6 @@
 #'     EDI Data Repository package IDs are currently supported.
 #' @param child.package.id
 #'     (character) ID of DWcA occurrence data package being created.
-#' @param data.table.url
-#'     (character; optional) The publicly accessible URL from which 
-#'     \code{data.table} can be downloaded. If more than one, then supply as 
-#'     a vector of character strings in the same order as listed in 
-#'     \code{data.table}. If wanting to include URLs for some but not all
-#'     \code{data.table}, then use a "" for those that don't have a URL
-#'     (e.g. \code{data.table.url = c("", "/url/to/decomp.csv")}).
 #' @param user.id
 #'     (character; optional) Repository user identifier. If more than one, 
 #'     then enter as a vector of character strings (e.g. 
@@ -78,10 +71,8 @@ L1_to_L2_DwCA <- function(path,
   # Convert tables ------------------------------------------------------------
   
   if (core.name == 'occurrence') {
-    
     # call a function to create occurrence core. inputs: data objects, 
     # dwca_mappings, dwca_config
-    
     r <- create_table_dwca_occurrence_core(
       dwca_occurrence_core_config = dwca_config_file,
       dwca_occurrence_core_mapping = dwca_mappings_file,
@@ -90,9 +81,7 @@ L1_to_L2_DwCA <- function(path,
       dt_tax = d$taxon,
       dt_loc_ancil = d$location_ancillary,
       parent.package.id = parent.package.id)
-    
   } else if (core.name == 'event') {
-    
     # call a function to create event core. inputs: data objects, dwca_mappings, dwca_config  
     # print('calling function to create DwC-A, event core')
     r <- create_tables_dwca_event_core(
@@ -105,66 +94,41 @@ L1_to_L2_DwCA <- function(path,
       dt_obs_ancil = d$observation_ancillary,
       parent.package.id = parent.package.id,
       child.package.id = child.package.id)
-
   }
   
   # Write tables to file ------------------------------------------------------
   
+  # Set physical attributes here so they will match what is listed in meta.xml
   for (i in names(r)) {
-    
-    # Set physical attributes here so they will match what is listed in 
-    # meta.xml.
     readr::write_delim(
       x = r[[i]],
       file = paste0(path, "/", i, ".csv"),
       delim = ",",
       quote_escape = "double",
       eol = "\r\n")
-
   }
   
   # Write meta.xml ------------------------------------------------------------
   
   if (core.name == "event") {
-    
     file.copy(
       from = system.file("/dwca_event_core/meta.xml", package = "ecocomDP"),
       to = path)
-    
   } else if (core.name == "occurrence") {
-    
     file.copy(
       from = system.file("/dwca_occurrence_core/meta.xml", package = "ecocomDP"),
       to = path)
-    
   }
 
   # Write EML to file ---------------------------------------------------------
   
-  if (core.name == "event") {
-    
-    # Description order matches a sorted list of data.table
-    data.table.description <- c(
-      "DwC-A Event Table", 
-      "DwC-A Occurrence Table",
-      "DwC-A Extended Measurement Or Fact Table")
-    
-  } else if (core.name == "occurrence") {
-    
-    data.table.description <- "DwC-A Occurrence Table"
-    
-  }
-  
   make_eml_dwca(
     path = path,
-    data.table = sort(paste0(names(r), ".csv")), # Change to core.type (data.table will be searched for in path) 
-    data.table.description = data.table.description, # This will be determined by core.type. Move lines 123 - 135 to make_eml_dwca()
-    data.table.url = data.table.url,
+    core.name = core.name,
     parent.package.id = parent.package.id, 
     child.package.id = child.package.id, 
     user.id = user.id, 
     user.domain = user.domain)
-  
   
 }
 
@@ -411,8 +375,9 @@ create_tables_dwca_event_core <- function(
   # Create event --------------------------------------------------------------
   
   event_table <- data.frame(
-    datasetName = dc_dataset_name,
+    id = seq(nrow(obs_loc_tax)),
     eventID = obs_loc_tax$dc_event_id,
+    datasetName = dc_dataset_name,
     samplingProtocol = obs_loc_tax$dc_samplingprotocol,
     eventDate = obs_loc_tax$observation_datetime,
     decimalLatitude = obs_loc_tax$latitude,
@@ -427,16 +392,18 @@ create_tables_dwca_event_core <- function(
   # Create occurrence ---------------------------------------------------------
   
   occurrence_table <- data.frame(
-    occurrenceID = obs_loc_tax$dc_occurrence_id,
+    id = seq(nrow(obs_loc_tax)),
     eventID = obs_loc_tax$dc_event_id,
-    basisOfRecord = obs_loc_tax$dc_basisofrecord,
+    occurrenceID = obs_loc_tax$dc_occurrence_id,
+    basisOfRecord = "humanObservation",#obs_loc_tax$dc_basisofrecord,
     scientificName = obs_loc_tax$taxon_name,
     taxonID = obs_loc_tax$authority_taxon_id,
     nameAccordingTo = obs_loc_tax$authority_system,
     scientificNameID = obs_loc_tax$lsid,
     stringsAsFactors = FALSE)
   
-  # Unique occurrence_table based on all columns except occurrenceID
+  # Unique occurrence_table based on all columns except occurrenceID to reduce
+  # redundancy
   occurrence_table <- dplyr::distinct_at(
     occurrence_table, 
     .vars = c("eventID", "basisOfRecord", "scientificName", "taxonID",
@@ -446,8 +413,9 @@ create_tables_dwca_event_core <- function(
   # Create extendedmeasurementorfact ------------------------------------------
   
   extendedmeasurementorfact_table <- data.frame(
-    occurrenceID = obs_loc_tax$dc_occurrence_id,
+    id = seq(nrow(obs_loc_tax)),
     eventID = obs_loc_tax$dc_event_id,
+    occurrenceID = obs_loc_tax$dc_occurrence_id,
     measurementType = obs_loc_tax$variable_name,
     measurementTypeID = NA_character_, # TODO: the variable mapping annotation (obs_loc_tax$variable_mapping)
     measurementValue = obs_loc_tax$value,
