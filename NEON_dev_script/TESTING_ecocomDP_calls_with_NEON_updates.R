@@ -4,6 +4,10 @@
 
 library(ecocomDP)
 
+# edi test data for app
+# "edi.284.1" -- NTL pelagic macroinvert summary -- works for this
+
+
 
 
 
