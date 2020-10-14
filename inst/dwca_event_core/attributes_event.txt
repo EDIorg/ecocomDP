@@ -1,4 +1,5 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+Id	Row identifier	Numeric	count			
 datasetName	The name identifying the data set from which the record was derived.	character				
 eventID	An identifier for the set of information associated with an Event (something that occurs at a place and time). May be a global unique identifier or an identifier specific to the data set.	character				
 samplingProtocol	"The name of, reference to, or description of the method or protocol used during an Event."	character				
