@@ -100,19 +100,20 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
   field_data_in <- field_data_in[,field_data_names_to_keep] %>%
     dplyr::distinct()
   
+  
+ 
   # create the observation table by joining with field_data_in
   table_observation_raw <- alg_tax_biomass %>% 
     dplyr::left_join(field_data_in, by = "parentSampleID") %>%
-    dplyr::filter(algalParameterUnit=="cellsPerBottle")%>%
+    dplyr::filter(algalParameterUnit=="cellsPerBottle") %>%
     dplyr::mutate(
       density = dplyr::case_when(
-        algalSampleType %in% c("seston") ~ algalParameterValue / perBottleSampleVolume,
+        algalSampleType %in% c("seston", "phytoplankton") ~ algalParameterValue / perBottleSampleVolume,
         #add phytoplankton back in when applicable
-        TRUE ~ (algalParameterValue / perBottleSampleVolume) * (fieldSampleVolume / benthicArea)),
+        TRUE ~ (algalParameterValue / perBottleSampleVolume) * (fieldSampleVolume / (benthicArea * 10000))),
       cell_density_standardized_unit = dplyr::case_when(
-        algalSampleType == "phytoplankton" ~ "cells/mL",
-        TRUE ~ "cells/m2"))
-  
+        algalSampleType %in% c("phytoplankton","seston") ~ "cells/mL",
+        TRUE ~ "cells/cm2"))
 
   
   
@@ -199,7 +200,8 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
     event_id,
     variable_name,
     value,
-    unit)
+    unit) %>% 
+    dplyr::distinct()
   
   
   

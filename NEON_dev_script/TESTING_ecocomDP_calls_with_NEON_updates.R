@@ -97,7 +97,7 @@ all_tables[[1]]$tables %>%
 # DATA
 # testing with NEON algae "DP1.20166.001" -- returns data
 my_result_alg <- map_neon_data_to_ecocomDP.ALGAE(
-  site= c('COMO','LECO'), 
+  site= c('COMO','LECO','SUGG'), 
   startdate = "2017-06",
   enddate = "2019-09",
   token = Sys.getenv("NEON_TOKEN"),
@@ -105,17 +105,20 @@ my_result_alg <- map_neon_data_to_ecocomDP.ALGAE(
 
 my_result_alg_read_data <- ecocomDP::read_data(
   id = "DP1.20166.001",
-  site = c('COMO','LECO'), 
+  site = c('COMO','SUGG'), 
   startdate = "2017-06",
   enddate = "2019-09",
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_alg_read_data[[1]]$tables %>% 
+tab_flat <- my_result_alg_read_data[[1]]$tables %>% 
   ecocomDP::flatten_ecocomDP() %>% 
-  as.data.frame() %>% head()
+  as.data.frame()
 
+prob_rec <- observation_ancillary_long %>% dplyr::filter(event_id == "SUGG.20170710.PHYTOPLANKTON.2")
 
+obs_anci <- my_result_alg_read_data$DP1.20166.001$tables$observation_ancillary
+obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
 
 
 

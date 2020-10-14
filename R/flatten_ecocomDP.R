@@ -40,6 +40,16 @@ flatten_ecocomDP <- function(data.list){
   # returns boolean
   not_all_NAs <- function(x)!all(is.na(x))
   
+  dup_fxn <- function(x){
+    x <- unlist(x)
+    if(class(x) == "numeric"){
+      message(paste0("WARNING: duplicate values observed for during pivot_wider"))
+      return(mean(x, na.rm = TRUE))
+    }else{
+      return(paste(x, collapse = " | "))
+    }
+  }
+  
   
   # merge observation table with taxon table
   all_merged <- data.list$observation %>%
@@ -57,7 +67,8 @@ flatten_ecocomDP <- function(data.list){
       ,!names(observation_ancillary_long) %in% c("observation_ancillary_id","unit")] %>%
       tidyr::pivot_wider(
         names_from = variable_name, 
-        values_from = value) %>%
+        values_from = value,
+        values_fn = dup_fxn) %>%
       dplyr::select_if(not_all_NAs)
     
     all_merged <- all_merged %>%
@@ -181,7 +192,6 @@ flatten_ecocomDP <- function(data.list){
         by = "location_id",
         suffix = c("", "_location_ancillary"))
   }
-  
   
   return(all_merged)
   

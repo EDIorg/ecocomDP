@@ -58,7 +58,7 @@ explore_data_app <- function(
         shiny::br(),
         
         shiny::textInput("search_value", shiny::h5("Search ecocomDP data packages"), 
-                         value = "macroinvertebrate"),
+                         value = "enter search term(s) here"),
         shiny::helpText("Find data packages by searching dataset titles, descriptions, and abstracts. See 'Help' tab for more information."),
         
         shinyWidgets::actionBttn(
@@ -429,7 +429,7 @@ explore_data_app <- function(
                   choices = c(
                     # "bar", 
                     "box",
-                    "scatter")) #selectInput
+                    "point")) #selectInput
     })
     
     output$graph_button_richness <- shiny::renderUI({
@@ -479,9 +479,12 @@ explore_data_app <- function(
     full_name <- shiny::eventReactive(
       input$search_button,{
         all_searches <- ecocomDP::search_data(input$search_value)
+        
         all_searches <- all_searches  %>% 
           dplyr::select(id,title) %>% 
-          tidyr::unite("id_and_title",id,title,sep = ":   ")
+          tidyr::unite("id_and_title",id,title,sep = ":   ") %>%
+          unlist(use.names = FALSE)
+        
         return(all_searches)
       }
     )
@@ -616,7 +619,8 @@ explore_data_app <- function(
       
       data <- make_table()
       
-      return(paste("Fixed y value: ", data$variable_name[1]," (", data$unit[1], ")", sep = ""))
+      return(paste("Fixed y value: ", data$variable_name[1]," (", 
+                   paste(unique(data$unit), collapse = " or " ), ")", sep = ""))
       
     })
     
@@ -648,37 +652,112 @@ explore_data_app <- function(
         grouped_summary <- make_table() %>% as.data.frame()
         
         if(input$y_transform==1){
-          y_to_plot <- grouped_summary[,paste(grouped_summary$variable_name[1],grouped_summary$unit[1], sep = " in ")]
-          y_lab <- paste(grouped_summary$variable_name[1],grouped_summary$unit[1], sep = " in ")
+          
+          y_to_plot <- grouped_summary[,paste(
+            grouped_summary$variable_name[1],
+            grouped_summary$unit[1], 
+            sep = " in ")]
+          
+          # y_lab <- paste(
+          #   grouped_summary$variable_name[1],
+          #   grouped_summary$unit[1], 
+          #   sep = " in ")
+          
+          y_lab <- grouped_summary$variable_name[1]
+          
+          
         }else if(input$y_transform==2){
+          
           y_to_plot <- log(
-            grouped_summary[,paste(grouped_summary$variable_name[1],grouped_summary$unit[1], sep = " in ")] + 1)
-          y_lab <- paste0("log ([",grouped_summary$variable_name[1]," in ",grouped_summary$unit[1],"] + 1)")
+            grouped_summary[,paste(
+              grouped_summary$variable_name[1],
+              grouped_summary$unit[1], sep = " in ")] + 1)
+          
+          # y_lab <- paste0("ln ([",
+          #                 grouped_summary$variable_name[1],
+          #                 " in ",
+          #                 grouped_summary$unit[1],
+          #                 "] + 1)")
+          
+          y_lab <- paste0("ln (",
+                          grouped_summary$variable_name[1],
+                          " + 1)")
         }
         
+        
+        # browser()
         
         if(input$type_graph == "box"){
-          fig <- plotly::plot_ly(
+          # fig <- plotly::plot_ly(
+          #   x = grouped_summary[,input$x],
+          #   y = y_to_plot,
+          #   color = grouped_summary[,input$color],
+          #   type = input$type_graph,
+          #   boxpoints = FALSE) %>% 
+          #   plotly::layout(
+          #     boxmode = "group",
+          #     xaxis = list(title = input$x),
+          #     yaxis = list(title = y_lab))
+          
+          p <- data.frame(
             x = grouped_summary[,input$x],
             y = y_to_plot,
-            color = grouped_summary[,input$color],
-            type = input$type_graph,
-            boxpoints = FALSE) %>% 
-            plotly::layout(
-              boxmode = "group",
-              xaxis = list(title = input$x),
-              yaxis = list(title = y_lab))
+            grouping_var = grouped_summary[,input$color],
+            unit = grouped_summary$unit) %>%
+            dplyr::filter(!is.na(y)) %>%
+            ggplot2::ggplot(
+              ggplot2::aes(x, y, color = grouping_var)) +
+            ggplot2::facet_wrap( ~ unit, scales = "free_y") +
+            ggplot2::geom_boxplot() +
+            ggplot2::xlab(input$x) +
+            ggplot2::ylab(y_lab) +
+            ggplot2::theme_bw() +
+            ggplot2::theme(axis.text.x = 
+                             ggplot2::element_text(angle = 45,
+                                                   hjust = 1,
+                                                   vjust = 1))
+          
+          fig <- plotly::ggplotly(p)  %>%
+            plotly::layout(boxmode = "group")
+            
         }else{
-          fig <- plotly::plot_ly(
+          # fig <- plotly::plot_ly(
+          #   x = grouped_summary[,input$x],
+          #   y = y_to_plot,
+          #   color = grouped_summary[,input$color],
+          #   type = input$type_graph) %>% 
+          #   plotly::layout(
+          #     xaxis = list(title = input$x),
+          #     yaxis = list(title = y_lab))
+          
+          p <- data.frame(
             x = grouped_summary[,input$x],
             y = y_to_plot,
-            color = grouped_summary[,input$color],
-            type = input$type_graph) %>% 
-            plotly::layout(
-              xaxis = list(title = input$x),
-              yaxis = list(title = y_lab))
+            grouping_var = grouped_summary[,input$color],
+            unit = grouped_summary$unit) %>%
+            dplyr::filter(!is.na(y)) %>%
+            ggplot2::ggplot(
+              ggplot2::aes(x, y, color = grouping_var)) +
+            # ggplot2::facet_grid(unit ~ ., switch = "y") +
+            ggplot2::facet_wrap( ~ unit, scales = "free_y") +
+            ggplot2::geom_jitter(alpha = 0.5) +
+            # ggplot2::geom_point(position = ggplot2::position_jitterdodge(), 
+            #                     alpha = 0.5)
+            # ggplot2::geom_point() +
+            ggplot2::xlab(input$x) +
+            ggplot2::ylab(y_lab) +
+            ggplot2::theme_bw() +
+            ggplot2::theme(axis.text.x = 
+                             ggplot2::element_text(angle = 45,
+                                                   hjust = 1,
+                                                   vjust = 1))
+          
+          fig <- plotly::ggplotly(p)
+          
         }
         
+        
+        # browser()
         
         return(fig)
         
