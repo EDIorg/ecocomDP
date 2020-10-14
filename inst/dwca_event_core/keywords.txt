@@ -1,4 +1,6 @@
 keyword	keywordThesaurus
+GBIF	
+Global Biodiversity Information Facility	
 Darwin Core Archive (DwC-A) Event Core	
 Taxon: ScientificName	Darwin Core Terms
 Population Abundance	Essential Biodiversity Variables
