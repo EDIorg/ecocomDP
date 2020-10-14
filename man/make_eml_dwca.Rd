@@ -53,8 +53,6 @@ This function creates an EML record for an Darwin Core Archive record
         \item \strong{<intellectualRights>} Keeps intact the intellectual
         rights license of the parent data package, or replaces it with
         "CCO" (https://creativecommons.org/publicdomain/zero/1.0/legalcode).
-        \item \strong{<contact>} Adds contact information of the DwC-A
-        creator to the list of contacts in the parent data package EML.
         \item \strong{<methodStep>} Adds a note that this data package was
         created by methods within the ecocomDP R package and adds provenance 
         metadata noting that this is a derived data and describing where 

@@ -37,8 +37,6 @@
 #'         \item \strong{<intellectualRights>} Keeps intact the intellectual
 #'         rights license of the parent data package, or replaces it with
 #'         "CCO" (https://creativecommons.org/publicdomain/zero/1.0/legalcode).
-#'         \item \strong{<contact>} Adds contact information of the DwC-A
-#'         creator to the list of contacts in the parent data package EML.
 #'         \item \strong{<methodStep>} Adds a note that this data package was
 #'         created by methods within the ecocomDP R package and adds provenance 
 #'         metadata noting that this is a derived data and describing where 
@@ -65,11 +63,33 @@ make_eml_dwca <- function(path,
   
   message(
     "Creating Darwin Core ", stringr::str_to_title(core.name), " Core EML ",
-    "for data package ", child.package.id)
+    "for L1 data package ", child.package.id)
   
   # Validate inputs -----------------------------------------------------------
   
-  # TODO: Check the child data package exists
+  # The parent data package should exist
+  missing_parent_data_package <- suppressWarnings(
+    stringr::str_detect(
+      suppressMessages(
+        EDIutils::api_read_metadata(parent.package.id)), 
+      "Unable to access metadata for packageId:"))
+  if (missing_parent_data_package) {
+    stop(
+      "The L1 data package '", parent.package.id, "' does not exist.",
+      call. = FALSE)
+  }
+  
+  # The child data package should not exist since it's being created here
+  missing_child_data_package <- suppressWarnings(
+    stringr::str_detect(
+      suppressMessages(
+        EDIutils::api_read_metadata(child.package.id)), 
+      "Unable to access metadata for packageId:"))
+  if (!missing_child_data_package) {
+    stop(
+      "The L0 data package '", child.package.id, "' already exists.",
+      call. = FALSE)
+  }
   
   # A user.id is required for each user.domain
   if (length(user.id) != length(user.domain)) {
@@ -110,22 +130,47 @@ make_eml_dwca <- function(path,
       call. = FALSE)
   }
   
-  # Read parent EML -----------------------------------------------------------
+  # Read L1 EML ---------------------------------------------------------------
   
-  message("Reading EML of parent data package ", parent.package.id)
+  message("Reading EML of L1 data package ", parent.package.id)
   
-  # Create two objects of the same metadata, eml_parent (emld list object) for
-  # editing, and xml_parent (xml_document) for easy parsing
-  eml_parent <- EML::read_eml(
-    paste0(
-      "https://pasta.lternet.edu/package/metadata/eml/", 
-      stringr::str_replace_all(parent.package.id, "\\.", "/")))
-  xml_parent <- suppressMessages(
+  # Create two objects of the same metadata, eml_L1 (emld list object) for
+  # editing, and xml_L1 (xml_document) for easy parsing
+  url_parent <- paste0(
+    "https://pasta.lternet.edu/package/metadata/eml/", 
+    stringr::str_replace_all(parent.package.id, "\\.", "/"))
+  eml_L1 <- EML::read_eml(url_parent)
+  xml_L1 <- suppressMessages(
     EDIutils::api_read_metadata(parent.package.id))
   
-  # Create child EML ----------------------------------------------------------
+  # Read L0 EML ---------------------------------------------------------------
+  
+  # Some metadata from the L0 is required by the L2 and simpler to get from the
+  # L0 than parsing from the L1
+  url_grandparent <- xml2::xml_text(
+    xml2::xml_find_all(
+      xml_L1,
+      ".//methodStep/dataSource/distribution/online/url"))
+  grandparent.package.id <- stringr::str_replace_all(
+    stringr::str_extract(
+      url_grandparent,
+      "(?<=eml/).*"),
+    "/",
+    ".")
+  
+  # Create two objects of the same metadata, eml_L0 (emld list object) for
+  # editing, and xml_L0 (xml_document) for easy parsing
+  message("Reading EML of L0 data package ", grandparent.package.id)
+  xml_L0 <- suppressMessages(
+    EDIutils::api_read_metadata(grandparent.package.id))
+  eml_L0 <- suppressMessages(
+    EML::read_eml(url_grandparent))
+
+  # Create L2 EML -------------------------------------------------------------
   # This is not a full EML record, it is only the sections of EML that will be 
   # added to the parent EML.
+  
+  message("Creating EML of L2 data package ", child.package.id)
   
   # Create list of inputs to EMLassemblyline::make_eml()
   eal_inputs <- EMLassemblyline::template_arguments(
@@ -153,13 +198,13 @@ make_eml_dwca <- function(path,
   # attributes template (attributes_event.txt) of the L2 since this 
   # information can vary with the L1.
   data_table_nodes_parent <- xml2::xml_find_all(
-    xml_parent,
+    xml_L1,
     ".//dataTable")
   observation_table_node_parent <- data_table_nodes_parent[
     stringr::str_detect(
       xml2::xml_text(
         xml2::xml_find_all(
-          xml_parent, 
+          xml_L1, 
           ".//physical/objectName")), 
       "observation\\..*$")]
   format_string <- xml2::xml_text(
@@ -172,7 +217,7 @@ make_eml_dwca <- function(path,
     use_i] <- format_string
   
   # Create child EML
-  eml_child <- suppressWarnings(
+  eml_L2 <- suppressWarnings(
     suppressMessages(
       do.call(
         EMLassemblyline::make_eml, 
@@ -181,206 +226,101 @@ make_eml_dwca <- function(path,
 
   # Update <access> of parent -------------------------------------------------
   
+  message("Updating:")
+  message("    <access>")
+  
   # Access control rules are used by some repositories to manage 
   # editing, viewing, downloading permissions. Adding the user.id and 
   # user.domain here expands editing permission to the creator of the DwC-A 
   # data package this EML will be apart of.
-  message("Updating:")
-  message("  <access>")
-  eml_parent$access$allow <- unique(
-    c(eml_parent$access$allow, 
-      eml_child$access$allow))
+  eml_L1$access$allow <- unique(
+    c(eml_L1$access$allow, 
+      eml_L2$access$allow))
   
   # Remove <alternateIdentifier> ----------------------------------------------
   
   # Some repositories assign a DOI to this element. Not removing it here 
   # an error when uploading to the repository.
-  eml_parent$dataset$alternateIdentifier <- NULL
+  eml_L1$dataset$alternateIdentifier <- NULL
   
   # Update <title> ------------------------------------------------------------
   
   message("    <title>")
   
-  # Notify the user that this is a Darwin Core Archive
-  eml_parent$dataset$title <- paste(
-    eml_parent$dataset$title, "(Reformatted to a Darwin Core Archive)")
+  # Add notification the user that this is a Darwin Core Archive
+  eml_L1$dataset$title <- paste(
+    eml_L0$dataset$title, "(Reformatted to a Darwin Core Archive)")
   
   # Update <pubDate> ----------------------------------------------------------
   
   message("    <pubDate>")
+  eml_L1$dataset$pubDate <- format(Sys.time(), "%Y-%m-%d")
   
-  eml_parent$dataset$pubDate <- format(Sys.time(), "%Y-%m-%d")
-  
-  # Updating <abstract> -------------------------------------------------------
+  # Update <abstract> ---------------------------------------------------------
   
   message("    <abstract>")
   
-  # Get parent abstract
-  src_abstract <- unname(
-    unlist(
-      stringr::str_remove_all(
-        eml_parent$dataset$abstract, 
-        "</?para>"
-      )
-    )
-  )
+  # Add links to L0 and L1 data packages
+  eml_L2$dataset$abstract$para[[1]] <- stringr::str_replace(
+    eml_L2$dataset$abstract$para[[1]], 
+    "L0_PACKAGE_URL", 
+    url_grandparent)
+  eml_L2$dataset$abstract$para[[1]] <- stringr::str_replace(
+    eml_L2$dataset$abstract$para[[1]], 
+    "L1_PACKAGE_URL", 
+    url_parent)
   
-  # Reset abstract node
-  eml_parent$dataset$abstract <- list()
-  eml_parent$dataset$abstract$section <- list()
-  eml_parent$dataset$abstract$para <- list()
-  
-  # Add boiler-plate ecocomDP (paragraph 1)
-  eml_parent$dataset$abstract$para[[length(eml_parent$dataset$abstract$para) + 1]] <- paste(
-    "This data package is formatted according to the 'ecocomDP', a data",
-    "package design pattern for ecological community surveys, and data from",
-    "studies of composition and biodiversity. For more information on the",
-    "ecocomDP project see https://github.com/EDIorg/ecocomDP/tree/master, or",
-    "contact EDI https://environmentaldatainitiative.org."
-  )
-  
-  # Add boiler-plate ecocomDP (paragraph 2)  
-  eml_parent$dataset$abstract$para[[length(eml_parent$dataset$abstract$para) + 1]] <- paste(
-    "This Level-1 data package was derived from the Level-0 data package",
-    "found here:",
-    paste0(
-      'https://portal.edirepository.org/nis/mapbrowse?scope=', scope,
-      '&identifier=', identifier, '&revision=', revision
-    )
-  )
-  
-  # Add boiler-plate ecocomDP (paragraph 3)
-  eml_parent$dataset$abstract$para[[length(eml_parent$dataset$abstract$para) + 1]] <- paste(
-    "The abstract below was extracted from the Level-0 data package and is",
-    "included for context:"
-  )
-  
-  # Add parent abstract (paragraph 4)
-  for (i in 1:length(src_abstract)) {
-    eml_parent$dataset$abstract$para[[length(eml_parent$dataset$abstract$para) + 1]] <- 
-      src_abstract[i]
-  }
-  
+  # Create L2 abstract
+  eml_L2$dataset$abstract <- c(
+    eml_L2$dataset$abstract,
+    eml_L0$dataset$abstract)
+
   # Update <keywordSet> -------------------------------------------------------
   
   message("    <keywordSet>")
+  
+  # Preserve the L0 keywords, all L1 keywords except "ecocomDP" (since this is 
+  # no longer an ecocomDP data package), and add L2 keywords.
+  keywords_L1_to_keep <- lapply(
+    eml_L1$dataset$keywordSet, 
+    function(x) {
+      if (!("EDI Controlled Vocabulary" %in% x$keywordThesaurus)) {
+        x
+      }
+    })
+  eml_L2$dataset$keywordSet <- c(eml_L2$dataset$keywordSet, keywords_L1_to_keep)
   
   # TODO: Add measurement variable in a standardized and human readable way. Could
   # also annotate /eml/dataset with variable mapping values.
   
   # TODO: Add GBIF terms at /eml/dataset (first) and /eml/dataset/dataTable (second)
   
-  # TODO: Remove "ecocomDP" since this is no longer an ecocomDP data package
-  
-  # TODO: This looks like it will be dependent on the core type specified. Revisit this feature once we know if we will be supporting multiple Darwin core types. 
-  # Read boiler-plate DwC-A keywords
-  keywordSet <- read.table(
-    system.file("/controlled_vocabulary.csv", package = "ecocomDP"),
-    header = T, 
-    sep = ",",
-    as.is = T,
-    na.strings = "NA")
-  
-  # Add to the parent keywordSet
-  eml_parent$dataset$keywordSet[[length(eml_parent$dataset$keywordSet) + 1]] <- list(
-    keywordThesaurus = keywordSet$keywordThesaurus[1],
-    keyword = as.list(keywordSet$keyword))
-  
   # Update <intellectualRights> -----------------------------------------------
-  # Use parent intellectual rights or CC0 if none exists
   
-  if (is.null(eml_parent$dataset$intellectualRights)) {
+  # Use parent intellectual rights or CC0 if none exists
+  if (is.null(eml_L1$dataset$intellectualRights)) {
     message("    <intellectualRights>")
-    eml_parent$dataset$intellectualRights <- EML::set_TextType(
+    eml_L1$dataset$intellectualRights <- EML::set_TextType(
       system.file('intellectual_rights_cc0_1.txt', package = 'ecocomDP'))
   }
   
-  # Update <contact> ----------------------------------------------------------
-  # Add ecocomDP creator as a contact incase questions arise
-  
-  message("    <contact>")
-  eml_parent$dataset$contact <- list(
-    eml_parent$dataset$contact, 
-    list(
-      individualName = list(
-        givenName = contact$givenName,
-        surName = contact$surName),
-      organizationName = contact$organizationName,
-      electronicMailAddress = contact$electronicMailAddress))
-  
   # Update <methods> ----------------------------------------------------------
-  # Update parent methods with ecocomDP creation process and provenance 
-  # metadata to provide the user with a full understanding of how these data 
-  # were created
   
   message("    <methods>")
   
-  # Get parent methods
-  src_methods <- eml_parent$data$methods$methodStep
+  # Get L1 provenance
+  provenance_L1 <- suppressMessages(
+    emld::as_emld(
+      EDIutils::api_get_provenance_metadata(parent.package.id)))
   
-  # TODO: Add boiler plate as first para of methods followed by the L0 methods
-  
-  eml_parent$dataset$methods <- list()
-  eml_parent$dataset$methods$methodStep <- list()
-  
-  # Add ecocomDP methods (paragraph 1)
-  eml_parent$dataset$methods$methodStep[[length(eml_parent$dataset$methods$methodStep) + 1]] <- 
+  # Combine L2 methods, L0 methods, and L1 provenance
+  eml_L2$dataset$methods$methodStep <- c(
+    eml_L2$dataset$methods$methodStep,
+    list(eml_L0$data$methods$methodStep), 
     list(
-      description = list(
-        para = paste0(
-          "The source data package is programmatically converted into an ",
-          "ecocomDP data package using the scripts: ", 
-          paste(script, collapse = ", "), ". For more information on the ",
-          "ecocomDP project see: ",
-          "'https://github.com/EDIorg/ecocomDP/tree/master' or contact EDI ",
-          "(https://environmentaldatainitiative.org). Below are the source ",
-          "data methods:"
-        )
-      )
-    )
-  
-  # Add parent methods (paragraph 2)
-  eml_parent$dataset$methods$methodStep[[length(eml_parent$dataset$methods$methodStep) + 1]] <- 
-    src_methods
-  
-  # Add provenance metadata (paragraph 3). Read provenance from the EDI Data 
-  # Repository and remove creator and contact IDs to preempt ID clashes. 
-  # Metadata is written to tempdir() so EML::read_eml() can apply its unique 
-  # parsing algorithm.
-  provenance <- xml2::read_xml(
-    paste0(
-      "https://pasta.lternet.edu/package/provenance/eml_parent", "/", scope,
-      "/", identifier, "/", revision
-    )
-  )
-  
-  xml2::xml_set_attr(
-    xml2::xml_find_all(provenance, './/dataSource/creator'),
-    'id', 
-    NULL
-  )
-  
-  xml2::xml_set_attr(
-    xml2::xml_find_all(provenance, './/dataSource/contact'),
-    'id',
-    NULL
-  )
-  
-  xml2::write_xml(
-    provenance,
-    paste0(tempdir(), "/provenance.xml")
-  )
-  
-  provenance <- EML::read_eml(
-    paste0(tempdir(), "/provenance.xml")
-  )
-  
-  provenance$`@context` <- NULL
-  provenance$`@type` <- NULL
-  unlink(paste0(tempdir(), "/provenance.xml"))
-  
-  eml_parent$dataset$methods$methodStep[[length(eml_parent$dataset$methods$methodStep) + 1]] <- 
-    provenance
+      list(
+        description = provenance_L1$description,
+        dataSource = provenance_L1$dataSource)))
   
   # Update <dataTable> --------------------------------------------------------
   
@@ -390,28 +330,28 @@ make_eml_dwca <- function(path,
   
   # TODO: Add meta.xml
   
-  # Update <eml_parent> --------------------------------------------------------------
+  # Update <eml_L1> --------------------------------------------------------------
   
-  eml_parent$schemaLocation <- "https://eml_parent.ecoinformatics.org/eml_parent-2.2.0  https://nis.lternet.edu/schemas/EML/eml_parent-2.2.0/xsd/eml_parent.xsd"
-  eml_parent$packageId <- child.package.id
-  eml_parent$system <- "edi"
+  eml_L1$schemaLocation <- "https://eml_L1.ecoinformatics.org/eml_L1-2.2.0  https://nis.lternet.edu/schemas/EML/eml_L1-2.2.0/xsd/eml_L1.xsd"
+  eml_L1$packageId <- child.package.id
+  eml_L1$system <- "edi"
   
   message("  </dataset>")
-  message("</eml_parent>")
+  message("</eml_L1>")
   
   # Write EML -----------------------------------------------------------------
   
   message("Writing EML")
-  emld::eml_version("eml_parent-2.2.0")
+  emld::eml_version("eml_L1-2.2.0")
   EML::write_eml(
-    eml_parent, 
+    eml_L1, 
     paste0(path, "/", child.package.id, ".xml"))
   
   # Validate EML --------------------------------------------------------------
   
   message("Validating EML")
   
-  validation_result <- EML::eml_validate(eml_parent)
+  validation_result <- EML::eml_validate(eml_L1)
   
   if (validation_result == "TRUE"){
     message("EML passed validation!")
