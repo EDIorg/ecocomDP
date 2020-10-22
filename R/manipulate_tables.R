@@ -152,21 +152,27 @@ flatten_location <- function(dt_loc) {
         dt_loc$location_name[
           dt_loc$location_id %in% rev(id_out)], 
         collapse = ".")
-      lat_i <- max(
-        which(
-          !is.na(
-            dt_loc$latitude[
-              dt_loc$location_id %in% rev(id_out)])))
-      lon_i <- max(
-        which(
-          !is.na(
-            dt_loc$longitude[
-              dt_loc$location_id %in% rev(id_out)])))
-      elv_i <- max(
-        which(
-          !is.na(
-            dt_loc$elevation[
-              dt_loc$location_id %in% rev(id_out)])))
+      # Supress warnings for cases when no latitude is available
+      lat_i <- suppressWarnings(
+        max(
+          which(
+            !is.na(
+              dt_loc$latitude[
+                dt_loc$location_id %in% rev(id_out)]))))
+      # Supress warnings for cases when no longitude is available
+      lon_i <- suppressWarnings(
+        max(
+          which(
+            !is.na(
+              dt_loc$longitude[
+                dt_loc$location_id %in% rev(id_out)]))))
+      # Supress warnings for cases when no elevation is available
+      elv_i <- suppressWarnings(
+        max(
+          which(
+            !is.na(
+              dt_loc$elevation[
+                dt_loc$location_id %in% rev(id_out)]))))
       if (!is.na(lat_i) & !is.na(lon_i)) {
         if (lat_i == lon_i) {
           fill <- dt_loc$latitude[dt_loc$location_id %in% rev(id_out)]
