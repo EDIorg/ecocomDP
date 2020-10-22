@@ -63,7 +63,7 @@ make_eml_dwca <- function(path,
   
   message(
     "Creating Darwin Core ", stringr::str_to_title(core.name), " Core EML ",
-    "for L1 data package ", child.package.id)
+    "for L1 data package ", parent.package.id)
   
   # Validate inputs -----------------------------------------------------------
   
@@ -79,19 +79,20 @@ make_eml_dwca <- function(path,
       call. = FALSE)
   }
   
-  # The child data package should not exist since it's being created here
-  missing_child_data_package <- suppressWarnings(
-    stringr::str_detect(
+  # The child data package should not exist since it's being created here, but
+  # could in a non-production environment
+  child_data_package_exists <- suppressWarnings(
+    !stringr::str_detect(
       suppressMessages(
         EDIutils::api_read_metadata(child.package.id)), 
       "Unable to access metadata for packageId:"))
-  if (!missing_child_data_package) {
-    stop(
+  if (child_data_package_exists) {
+    warning(
       "The L0 data package '", child.package.id, "' already exists.",
       call. = FALSE)
   }
   
-  # A user.id is required for each user.domain
+  # A "user.id" is required for each "user.domain"
   if (length(user.id) != length(user.domain)) {
     stop(
       "The number of items listed under the 'user.id' and 'user.domain' ",
@@ -100,7 +101,8 @@ make_eml_dwca <- function(path,
   
   # Parameterize --------------------------------------------------------------
   
-  # Table names, types, and descriptions are standardized to core.name
+  # Table names, types, and descriptions are standardized for the input 
+  # "core.name"
   if (core.name == "event") {
     data.table <- c(
       "event.csv", 
@@ -115,7 +117,8 @@ make_eml_dwca <- function(path,
     data.table.description <- "DwC-A Occurrence Table"
   }
   
-  # Other entity name, type, and description is standardized for any core.name
+  # Other entity name, type, and description is standardized for the input 
+  # "core.name"
   other.entity <- "meta.xml"
   other.entity.description <- "The meta file associated with this dataset"
   
@@ -224,10 +227,20 @@ make_eml_dwca <- function(path,
         eal_inputs[
           names(eal_inputs) %in% names(formals(EMLassemblyline::make_eml))])))
 
-  # Update <access> of parent -------------------------------------------------
+  
+  # Update <eml> --------------------------------------------------------------
   
   message("Updating:")
-  message("    <access>")
+  message("<eml>")
+  eml_L1$schemaLocation <- paste0(
+    "https://eml.ecoinformatics.org/eml-2.2.0  ",
+    "https://nis.lternet.edu/schemas/EML/eml-2.2.0/xsd/eml.xsd")
+  eml_L1$packageId <- child.package.id
+  eml_L1$system <- "edi"
+  
+  # Update <access> of parent -------------------------------------------------
+  
+  message("  <access>")
   
   # Access control rules are used by some repositories to manage 
   # editing, viewing, downloading permissions. Adding the user.id and 
@@ -237,10 +250,14 @@ make_eml_dwca <- function(path,
     c(eml_L1$access$allow, 
       eml_L2$access$allow))
   
-  # Remove <alternateIdentifier> ----------------------------------------------
+  # Update <alternateIdentifier> ----------------------------------------------
+  
+  message("  <dataset>")
+  message("    <alternateIdentifier>")
   
   # Some repositories assign a DOI to this element. Not removing it here 
   # an error when uploading to the repository.
+  
   eml_L1$dataset$alternateIdentifier <- NULL
   
   # Update <title> ------------------------------------------------------------
@@ -324,25 +341,20 @@ make_eml_dwca <- function(path,
   
   # Update <dataTable> --------------------------------------------------------
   
-  # TODO: Combine boiler-plate DwC-A table attributes with table specific metadata
+  message("    <dataTable>")
+  eml_L1$dataset$dataTable <- eml_L2$dataset$dataTable
 
   # Add <otherEntity> ---------------------------------------------------------
   
-  # TODO: Add meta.xml
-  
-  # Update <eml_L1> --------------------------------------------------------------
-  
-  eml_L1$schemaLocation <- "https://eml_L1.ecoinformatics.org/eml_L1-2.2.0  https://nis.lternet.edu/schemas/EML/eml_L1-2.2.0/xsd/eml_L1.xsd"
-  eml_L1$packageId <- child.package.id
-  eml_L1$system <- "edi"
-  
-  message("  </dataset>")
-  message("</eml_L1>")
+  message("    <otherEntity>")
+  eml_L1$dataset$otherEntity <- eml_L2$dataset$otherEntity
   
   # Write EML -----------------------------------------------------------------
   
+  message("</eml>")
   message("Writing EML")
-  emld::eml_version("eml_L1-2.2.0")
+  
+  emld::eml_version("eml-2.2.0")
   EML::write_eml(
     eml_L1, 
     paste0(path, "/", child.package.id, ".xml"))
@@ -351,12 +363,12 @@ make_eml_dwca <- function(path,
   
   message("Validating EML")
   
-  validation_result <- EML::eml_validate(eml_L1)
-  
-  if (validation_result == "TRUE"){
-    message("EML passed validation!")
+  r <- EML::eml_validate(eml_L1)
+  if (isTRUE(r)) {
+    message("  Validation passed :)")
   } else {
-    message("EML validaton failed. See warnings for details.")
+    message("  Validation failed :(")
   }
+  message("Done.")
   
 }
