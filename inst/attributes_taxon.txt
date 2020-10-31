@@ -1,6 +1,0 @@
-attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-taxon_id	Identifier used in the dataset.	character				
-taxon_rank	Taxonomic rank of the organism name.	character				
-taxon_name	Taxonomic name of the organism.	character				
-authority_system	Name of the system assigning the taxon identifier.	character				
-authority_taxon_id	Identifier in the authority system.	character				

@@ -1,2 +1,0 @@
-methodDescription	title	creatorGivenName	creatorSurName	distributionOnlineDescription	distributionOnlineURL	contactGivenName	contactSurName	contactOrganizationName	contactPositionName	contactEmailAddress
-This data package is a child of the parent data package listed in the dataSource element below. The script used to create the child from the parent is listed in the otherEntity element below.										

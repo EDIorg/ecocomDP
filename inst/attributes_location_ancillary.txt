@@ -1,7 +1,0 @@
-attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-location_ancillary_id	Identifier of the sampling location ancillary.	character				
-location_id	Identifier of the location for reference.	character				
-datetime	Date and time of the ancillary information.	Date				
-variable_name	Meaured variable.	categorical				
-value	Value of the measured variable.	character				
-unit	Unit of the measured variable.	character				

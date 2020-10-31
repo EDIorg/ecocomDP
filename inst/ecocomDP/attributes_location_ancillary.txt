@@ -1,0 +1,7 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+location_ancillary_id	Identifier of the sampling location ancillary.	character			NA	Not available
+location_id	Identifier of the location for reference.	character			NA	Not available
+datetime	Date and time of the ancillary information.	Date			NA	Not available
+variable_name	Meaured variable.	categorical			NA	Not available
+value	Value of the measured variable.	character			NA	Not available
+unit	Unit of the measured variable.	character			NA	Not available
