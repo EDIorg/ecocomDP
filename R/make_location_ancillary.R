@@ -19,7 +19,9 @@
 #'     \code{xml2::read_xml()} to read the EML file.
 #'
 #' @return 
-#'     (data frame) The location_ancillary table.
+#' A list containing:
+#' \item{location_ancillary}{A data frame of the location_ancillary table}
+#' \item{x}{The input \code{x} with an added location_ancillary_id column linking unique \code{cols} to the location_ancillary table.}
 #'     
 #' @details 
 #'     This is possible because at this point we can distinguish between 
