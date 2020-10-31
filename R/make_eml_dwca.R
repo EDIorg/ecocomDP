@@ -317,8 +317,7 @@ make_eml_dwca <- function(path,
   # Use parent intellectual rights or CC0 if none exists
   if (is.null(eml_L1$dataset$intellectualRights)) {
     message("    <intellectualRights>")
-    eml_L1$dataset$intellectualRights <- EML::set_TextType(
-      system.file('intellectual_rights_cc0_1.txt', package = 'ecocomDP'))
+    eml_L1$dataset$intellectualRights <- eml_L2$dataset$intellectualRights
   }
   
   # Update <methods> ----------------------------------------------------------
