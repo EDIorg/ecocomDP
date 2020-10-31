@@ -10,17 +10,17 @@ make_eml(
   child.package.id,
   script,
   script.description,
+  is.about = NULL,
   cat.vars,
   contact,
   user.id,
   user.domain,
   basis.of.record = NULL,
-  data.url = NULL
+  url = NULL
 )
 }
 \arguments{
-\item{path}{(character) Path to the directory containing ecocomDP data tables, 
-conversion scripts, and where EML metadata will be written.}
+\item{path}{(character) Path to the directory containing ecocomDP data tables, conversion scripts, and where EML metadata will be written.}
 
 \item{parent.package.id}{(character) Parent data package ID (e.g. "knb-lter-hfr.118.28"). Only 
 EDI Data Repository package IDs are currently supported.}
@@ -32,6 +32,8 @@ EDI Data Repository.}
 data into the ecocomDP.}
 
 \item{script.description}{(character) A description for each object listed under \code{script}.}
+
+\item{is.about}{(named character) Dataset level annotations describing what this dataset "is about" (L0 keywords converted to object label + URI pairs) describing what the L1 dataset is about. (e.g. \code{is.about = c('level of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002588",' type of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002589")}).}
 
 \item{cat.vars}{(data frame) Categorical variables with associated definitions and 
 units. Create a cat.vars data frame with the 
@@ -64,10 +66,7 @@ requires definition as
 \href{HumanObservation}{http://rs.tdwg.org/dwc/terms/HumanObservation} or 
 \href{MachineObservation}{http://rs.tdwg.org/dwc/terms/MachineObservation}.}
 
-\item{data.url}{(character) An optional argument specifying the publicly accessible URL 
-from which the ecocomDP tables and objects listed under the 
-\code{script} argument can be downloaded by the EDI Data Repository. 
-Don't use this argument if manually uploading to the repository.}
+\item{url}{(character) URL to the publicly accessible directory containing ecocomDP data tables, conversion scripts, and EML metadata. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and upload of ecocomDP data packages and derived products.}
 }
 \value{
 An EML metadata record for the ecocomDP dataset defined by the arguments

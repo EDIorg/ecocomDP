@@ -4,8 +4,7 @@
 #' \code{ecocomDP::validate_ecocomDP()}.
 #'
 #' @param path 
-#'     (character) Path to the directory containing ecocomDP data tables, 
-#'     conversion scripts, and where EML metadata will be written.
+#'     (character) Path to the directory containing ecocomDP data tables, conversion scripts, and where EML metadata will be written.
 #' @param parent.package.id
 #'     (character) Parent data package ID (e.g. "knb-lter-hfr.118.28"). Only 
 #'     EDI Data Repository package IDs are currently supported.
@@ -17,6 +16,8 @@
 #'     data into the ecocomDP.
 #' @param script.description
 #'     (character) A description for each object listed under \code{script}.
+#' @param is.about
+#'     (named character) Dataset level annotations describing what this dataset "is about" (L0 keywords converted to object label + URI pairs) describing what the L1 dataset is about. (e.g. \code{is.about = c('level of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002588",' type of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002589")}).
 #' @param cat.vars
 #'     (data frame) Categorical variables with associated definitions and 
 #'     units. Create a cat.vars data frame with the 
@@ -48,11 +49,8 @@
 #'     requires definition as 
 #'     \href{HumanObservation}{http://rs.tdwg.org/dwc/terms/HumanObservation} or 
 #'     \href{MachineObservation}{http://rs.tdwg.org/dwc/terms/MachineObservation}.
-#' @param data.url
-#'     (character) An optional argument specifying the publicly accessible URL 
-#'     from which the ecocomDP tables and objects listed under the 
-#'     \code{script} argument can be downloaded by the EDI Data Repository. 
-#'     Don't use this argument if manually uploading to the repository.
+#' @param url
+#'     (character) URL to the publicly accessible directory containing ecocomDP data tables, conversion scripts, and EML metadata. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and upload of ecocomDP data packages and derived products.
 #'
 #' @return 
 #'     An EML metadata record for the ecocomDP dataset defined by the arguments
@@ -149,12 +147,13 @@ make_eml <- function(path,
                      child.package.id, 
                      script,
                      script.description,
+                     is.about = NULL,
                      cat.vars,
                      contact,
                      user.id, 
                      user.domain,
                      basis.of.record = NULL,
-                     data.url = NULL) {
+                     url = NULL) {
   
   message("Creating EML for derived data package (" , child.package.id, ")")
   
@@ -225,6 +224,17 @@ make_eml <- function(path,
         "'script.description' arguments must match."
       )
     )
+  }
+  
+  
+  if (!is.null(is.about)) {
+    names <- names(is.about)
+    uris <- unname(is.about)
+    if (any(names == "") | any(uris == "")) {
+      stop(
+        "Input argument 'is.about' must be a named character vector", 
+        call. = FALSE)
+    }
   }
   
   if (is.null(cat.vars)) {
@@ -315,7 +325,7 @@ make_eml <- function(path,
     )
   }
   
-  if (!is.null(basis.of.record)) {
+  if (is.null(basis.of.record)) {
     
     # Valuable information a user may want to know.
     warning(
@@ -335,22 +345,269 @@ make_eml <- function(path,
     
   }
   
-  # FIXME: Add check for publicly accessible 'data.url' argument
-
-  # Read parent EML -----------------------------------------------------------
+  # TODO: Check "url"
   
-  message(paste0("Reading parent data package EML (", parent.package.id, ")"))
-
-  scope <- unlist(strsplit(parent.package.id, split = ".", fixed = T))[1]
-  identifier <- unlist(strsplit(parent.package.id, split = ".", fixed = T))[2]
-  revision <- unlist(strsplit(parent.package.id, split = ".", fixed = T))[3]
+  # Parameterize --------------------------------------------------------------
   
-  eml <- EML::read_eml(
-    paste0(
-      "https://pasta.lternet.edu/package/metadata/eml", "/", scope, "/",
-      identifier, "/", revision
-    )
-  )
+  # Read attributes of ecocomDP tables for reference
+  
+  attr_tbl <- data.table::fread(
+    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  attr_tbl <- attr_tbl[!is.na(attr_tbl$column), ]
+  
+  # Get table names for this L1 dataset for use in EMLassemblyline::make_eml()
+  
+  data.table <- unlist(
+    lapply(
+      unique(attr_tbl$table),
+      function(x) {
+        ecocomDP_table <- stringr::str_detect(
+          list.files(path), 
+          paste0("(?<=.{0,10000})", x, "(?=\\.[:alnum:]*$)"))
+        if (any(ecocomDP_table)) {
+          list.files(path)[ecocomDP_table]
+        }
+      }))
+  
+  # Match table names of this L1 to their boiler plate descriptions for use in 
+  # EMLassemblyline::make_eml()
+  
+  descriptions <- data.table::fread(
+    system.file("table_descriptions.txt", package = "ecocomDP"))
+  
+  data.table.description <- descriptions$description[
+    match(
+      stringr::str_remove_all(
+        data.table, 
+        "(\\.[:alnum:]*$)"), 
+      descriptions$table_name)]
+  
+  # Map scripts and their descriptions to their EMLassemblyline::make_eml() 
+  # equivalents
+  
+  if (!is.null(script)) {
+    other.entity <- script
+    other.entity.description <- script.description
+  } else {
+    other.entity <- NULL
+    other.entity.description <- NULL
+  }
+  
+  # Expand url for each data object of this L1 for use in 
+  # EMLassemblyline: make_eml()
+  
+  if (!is.null(url)) {
+    if (!is.null(data.table)) {
+      data.table.url <- paste0(url, "/", data.table)
+    }
+    if (!is.null(other.entity)) {
+      other.entity.url <- paste0(url, "/", other.entity)
+    }
+  } else {
+    data.table.url <- NULL
+    other.entity.url <- NULL
+  }
+
+  # Read L0 EML ---------------------------------------------------------------
+  
+  message("Reading EML of L0 data package ", parent.package.id)
+  
+  # Create two objects of the same metadata, eml_L0 (emld list object) for
+  # editing, and xml_L0 (xml_document) for easy parsing
+  
+  url_parent <- paste0(
+    "https://pasta.lternet.edu/package/metadata/eml/", 
+    stringr::str_replace_all(parent.package.id, "\\.", "/"))
+  
+  eml_L0 <- EML::read_eml(url_parent)
+  
+  xml_L0 <- suppressMessages(
+    EDIutils::api_read_metadata(parent.package.id))
+  
+  # Create L1 EML -------------------------------------------------------------
+  
+  message("Creating EML of L1 data package ", child.package.id)
+  
+  # This will not be a full EML record, it will only contain sections of the L1 
+  # EML to combined with the L0 EML.
+  
+  # Create list of inputs to EMLassemblyline::make_eml()
+  
+  eal_inputs <- EMLassemblyline::template_arguments(
+    path = system.file("/ecocomDP", package = "ecocomDP"), 
+    data.path = path, 
+    data.table = data.table,
+    other.entity = script)
+  
+  eal_inputs$path <- system.file("/ecocomDP", package = "ecocomDP")
+  eal_inputs$data.path <- path
+  eal_inputs$eml.path <- path
+  eal_inputs$dataset.title <- "placeholder"
+  eal_inputs$data.table <- data.table
+  eal_inputs$data.table.description <- data.table.description
+  eal_inputs$data.table.url <- data.table.url
+  eal_inputs$data.table.quote.character <- rep('"', length(data.table))
+  eal_inputs$other.entity <- other.entity
+  eal_inputs$other.entity.description <- other.entity.description
+  eal_inputs$other.entity.url <- other.entity.url
+  eal_inputs$package.id <- child.package.id
+  eal_inputs$user.id <- user.id
+  eal_inputs$user.domain <- user.domain
+  eal_inputs$return.obj <- TRUE
+  
+  
+  # Remove unused data table attributes templates. All boiler plate attributes*
+  # files are read in with EMLassemblyline::template_arguments() above, but 
+  # only the ones being used should be kept and used in 
+  # EMLassemblyline::make_eml().
+  
+  all_attribute_templates <- names(eal_inputs$x$template)[
+    stringr::str_detect(
+      names(eal_inputs$x$template),
+      "attributes_")]
+  
+  expected_attribute_templates <- paste0(
+    "attributes_", 
+    stringr::str_remove(data.table, "\\.[:alnum:]*$"), 
+    ".txt")
+  
+  unused_attribute_templates <- all_attribute_templates[
+    !(all_attribute_templates %in% expected_attribute_templates)]
+  
+  eal_inputs$x$template[
+    names(eal_inputs$x$template) %in% unused_attribute_templates] <- NULL
+  
+  # Detect date and time format string directly from each table and add to the
+  # corresponding data table attributes template as required by 
+  # EMLassemblyline::make_eml().
+  
+  for (i in expected_attribute_templates) {
+    
+    date_column <- eal_inputs$x$template[[i]]$content$attributeName[
+      eal_inputs$x$template[[i]]$content$class == "Date"]
+    
+    if (length(date_column) != 0) {
+      
+      data_table <- which(
+        stringr::str_detect(
+          names(eal_inputs$x$data.table),
+          paste0(
+            "^",
+            stringr::str_extract(i, "(?<=attributes_).*(?=\\.txt)"),
+            "\\.[:alnum:]*$")))
+      
+      datetime <- eal_inputs$x$data.table[[data_table]]$content[[date_column]]
+      
+      na_coerced <- suppressWarnings(
+        c(
+          sum(is.na(lubridate::parse_date_time(datetime, "ymdHMS"))),
+          sum(is.na(lubridate::parse_date_time(datetime, "ymdHM"))),
+          sum(is.na(lubridate::parse_date_time(datetime, "ymdH"))),
+          sum(is.na(lubridate::parse_date_time(datetime, "ymd")))))
+      
+      datetime_format <- c(
+        "YYYY-MM-DD hh:mm:ss",
+        "YYYY-MM-DD hh:mm",
+        "YYYY-MM-DD hh",
+        "YYYY-MM-DD")[
+          which(na_coerced == min(na_coerced))[1]]
+      
+      eal_inputs$x$template[[i]]$content$dateTimeFormatString[
+        eal_inputs$x$template[[i]]$content$attributeName == date_column] <- 
+        datetime_format
+      
+    }
+  }
+  
+  # Create categorical variables templates from input "cat.vars" and add to
+  # the list of inputs to EMLassemblyline::make_eml()
+  
+  r <- lapply(
+    unique(cat.vars$tableName),
+    function(table) {
+      categorical_variables_template <- dplyr::select(
+        dplyr::filter(cat.vars, tableName == table),
+        attributeName, code, definition)
+      return(list(content = categorical_variables_template))
+    })
+  
+  names(r) <- paste0("catvars_", unique(cat.vars$tableName), ".txt")
+  eal_inputs$x$template <- c(eal_inputs$x$template, r)
+
+  # The annotations template read in with EMLassemblyline::template_arguments()
+  # serves as a map from tables of this L1 to the boilerplate annotations 
+  # which are compiled here.
+  
+  annotations_map <- eal_inputs$x$template$annotations.txt$content
+  annotations <- annotations_map[0, ]
+  
+  annotations <- rbind(
+    annotations,
+    annotations_map[annotations_map$context %in% "eml", ])
+  if (!is.null(is.about)) {
+    additional_dataset_annotations <- data.frame(
+      id = "/dataset",
+      element = "/dataset",
+      context = "eml",
+      subject = "dataset",
+      predicate_label = "is about",
+      predicate_uri = "http://purl.obolibrary.org/obo/IAO_0000136",
+      object_label = names(is.about),
+      object_uri = unname(is.about),
+      stringsAsFactors = FALSE)
+    annotations <- rbind(annotations, additional_dataset_annotations)
+  }
+  
+  other_entity_annotations <- data.frame(
+    id = paste0("/", script),
+    element = "/otherEntity",
+    context = "dataset",
+    subject = script,
+    predicate_label = "is about",
+    predicate_uri = "http://purl.obolibrary.org/obo/IAO_0000136",
+    object_label = "analysis code",
+    object_uri = "http://purl.dataone.org/odo/ECSO_00002489",
+    stringsAsFactors = FALSE)
+  annotations <- rbind(annotations, other_entity_annotations)
+  
+  for (i in data.table) {
+    table <- stringr::str_remove(i, "\\.[:alpha:]*$")
+    annotations_subset <- dplyr::filter(
+      annotations_map,
+      subject %in% table | context %in% table)
+    table_annotations <- annotations_subset[
+      annotations_subset$subject %in% 
+        c(colnames(eal_inputs$x$data.table[[i]]$content), table), ]
+    table_annotations$id <- stringr::str_replace(
+      annotations_subset$id, 
+      paste0("(?<=/)", table, "(?=$|/)"),
+      i)
+    table_annotations$context <- stringr::str_replace(
+      annotations_subset$context, table, i)
+    table_annotations$subject <- stringr::str_replace(
+      annotations_subset$subject, table, i)
+    annotations <- rbind(annotations, table_annotations)
+  }
+  
+  annotations[annotations == ""] <- NA_character_
+  annotations <- annotations[complete.cases(annotations), ]
+  
+  eal_inputs$x$template$annotations.txt$content <- annotations
+  
+  browser()
+  
+  # Call EMLassemblyline::make_eml()
+  
+  eml_L1 <- suppressWarnings(
+    suppressMessages(
+      do.call(
+        EMLassemblyline::make_eml, 
+        eal_inputs[
+          names(eal_inputs) %in% names(formals(EMLassemblyline::make_eml))])))
+  
+  browser()
+  
+  # Update <eml> --------------------------------------------------------------
   
   message("Updating nodes ...")
   message("<eml>")
@@ -358,6 +615,8 @@ make_eml <- function(path,
   # Update <access> -----------------------------------------------------------
   # Update <access> to enable repository upload by ecocomDP 
   # creator(s)/maintainer(s).
+  
+  browser()
   
   message("  <access>")
   
@@ -527,7 +786,9 @@ make_eml <- function(path,
   if (any(!is.na(df$authority_taxon_id))) {
     
     message("    <taxonomicCoverage>")
-    
+  
+    # FIXME: Ensure unresolved taxa are included in the EML
+      
     # FIXME: This assumes taxonomyCleanr adoption of authority systems.
     # A solution might reference an authority system URI rather than
     # taxonomyCleanr synonyms. Implement at taxonomyCleanr
@@ -700,14 +961,6 @@ make_eml <- function(path,
       )
     )
     
-    if (!is.null(data.url)) {
-      physical$distribution$online$url[[1]] <- paste0(
-        data.url, "/", r$tables_found[i]
-      )
-    } else {
-      physical$distribution <- list()
-    }
-    
     # Read the data table and get number of records
     df <- read.table(
       paste0(path, "/", r$tables_found[i]),
@@ -774,21 +1027,16 @@ make_eml <- function(path,
     otherEntity$physical$dataFormat$externallyDefinedFormat$formatName <- format_name
     otherEntity$entityType <- entity_type
     
-    # Add download url
-    if (!is.null(data.url)) {
-      otherEntity$physical$distribution$online$url[[1]] <- paste0(
-        data.url, "/", script[i]
-      )
-    } else {
-      otherEntity$physical$distribution <- list()
-    }
-    
     # Add otherEntity to list
     other_entity[[i]] <- otherEntity
     
   }
   
   eml$dataset$otherEntity <- other_entity
+  
+  # Update <annotations> ------------------------------------------------------
+  
+  # TODO: Remove all entity level annotations (i.e. dataTable, otherEntity)
   
   # Update <eml> --------------------------------------------------------------
   
@@ -821,295 +1069,3 @@ make_eml <- function(path,
   
 }
 
-
-
-
-# Compile attributes
-#
-# @description  
-#     This is a helper function for make_eml.R. It compiles attributes, 
-#     retrieves minimum and maximum values for numeric data and reformats the 
-#     attributes table.
-#
-# @usage 
-#     make_eml(path, parent.package.id, child.package.id)
-#
-# @param path 
-#     A path to the dataset working directory containing the validated 
-#     ecocomDP tables.
-#
-# @return 
-#     Attributes formatted for make_eml.R
-#     
-# @export
-#
-compile_attributes <- function(path){
-  
-  message('Compiling table attributes:')
-  
-  # Parameterize --------------------------------------------------------------
-  
-  table_patterns <- c(
-    "observation\\b", 
-    "observation_ancillary\\b", 
-    "location_ancillary\\b", 
-    "taxon_ancillary\\b", 
-    "dataset_summary\\b", 
-    "location\\b", 
-    "taxon\\b", 
-    "variable_mapping\\b"
-  )
-  
-  table_names <- c(
-    "observation", 
-    "observation_ancillary", 
-    "location_ancillary", 
-    "taxon_ancillary", 
-    "dataset_summary", 
-    "location", 
-    "taxon", 
-    "variable_mapping"
-  )
-  
-  table_descriptions <- c(
-    "Observation table", 
-    "Observation ancillary table", 
-    "Location ancillary table", 
-    "Taxon ancillary table", 
-    "Dataset summary table", 
-    "Location table", 
-    "Taxon table", 
-    "Variable mapping table"
-  )
-  
-  dir_files <- list.files(path)
-  table_names_found <- list()
-  table_descriptions_found <- list()
-  tables_found <- list()
-  
-  for (i in 1:length(table_patterns)){
-    tables_found[[i]] <- dir_files[
-      grep(
-        paste0(
-          "^(?=.*",
-          table_patterns[i],
-          ")(?!.*variables)"
-        ), 
-        dir_files,
-        perl=TRUE
-      )
-    ]
-    if (!identical(tables_found[[i]], character(0))){
-      table_names_found[[i]] <- table_names[i]
-    }
-    if (!identical(tables_found[[i]], character(0))){
-      table_descriptions_found[[i]] <- table_descriptions[i]
-    }
-  }
-  
-  tables_found <- unlist(tables_found)
-  table_names <- unlist(table_names_found)
-  table_descriptions <- unlist(table_descriptions_found)
-  delimiter <- EDIutils::detect_delimeter(path, tables_found, EDIutils::detect_os())
-  
-  # Loop through each ecocomDP table that is present --------------------------
-  
-  attributes_stored <- list()
-  
-  for (i in 1:length(table_names)){
-    
-    message(table_names[i])
-    
-    if (delimiter[i] == ","){
-      
-      df_table <- read.csv(
-        paste0(
-          path,
-          "/",
-          tables_found[i]
-        )
-      )
-      
-    } else {
-      
-      df_table <- read.table(
-        paste0(
-          path,
-          "/",
-          tables_found[i]
-          ),
-        header = T,
-        sep = delimiter[i],
-        as.is = T,
-        na.strings = "NA"
-      ) 
-      
-    }
-    
-    # Read attributes_draft table
-    
-    df_attributes <- read.table(
-      system.file(
-        paste0(
-          '/attributes_',
-          table_names[i],
-          '.txt'
-        ),
-        package = 'ecocomDP'
-      ),
-      header = T,
-      sep = "\t",
-      as.is = T,
-      na.strings = "NA",
-      colClasses = rep("character", 7)
-    )
-    
-    # Synchronize data table and attributes table
-    
-    use_i <- match(
-      colnames(df_table), 
-      df_attributes[["attributeName"]]
-    )
-    
-    df_attributes <- df_attributes[use_i, ]
-    
-    # Initialize outgoing attribute table 
-    
-    rows <- nrow(df_attributes)
-    attributes <- data.frame(
-      attributeName = character(rows),
-      formatString = character(rows),
-      unit = character(rows),
-      numberType = character(rows),
-      definition = character(rows),
-      attributeDefinition = character(rows),
-      columnClasses = character(rows),
-      minimum = character(rows),
-      maximum = character(rows),
-      missingValueCode = character(rows),
-      missingValueCodeExplanation = character(rows),
-      stringsAsFactors = FALSE
-    )
-    
-    # Set attribute names
-    
-    attributes$attributeName <- df_attributes$attributeName
-    
-    # Set attribute definition (i.e. "attributeDefinition")
-    
-    attributes$attributeDefinition <- df_attributes$attributeDefinition
-    
-    # Set attribute class
-    
-    attributes$columnClasses <- df_attributes$class
-    
-    # Set attribute units
-    
-    attributes$unit <- df_attributes$unit
-    
-    # Set attribute date time format string
-    
-    attributes$formatString <- df_attributes$dateTimeFormatString
-    
-    # Set attribute missing value code
-    
-    attributes$missingValueCode <- df_attributes$missingValueCode
-    
-    use_i <- is.na(attributes$missingValueCode)
-    attributes$missingValueCode[use_i] <- "NA"
-    
-    # Set attribute missing value code explanation
-    
-    attributes$missingValueCodeExplanation <- df_attributes$missingValueCodeExplanation
-    
-    # Set attribute number type, then minimumm and maximum values
-    
-    is_numeric <- which(attributes$columnClasses == "numeric")
-    attributes$minimum <- as.numeric(attributes$minimum)
-    attributes$maximum <- as.numeric(attributes$maximum)
-    
-    if (!identical(is_numeric, integer(0))){
-      for (j in 1:length(is_numeric)){
-        raw <- df_table[ ,is_numeric[j]]
-        if (attributes$missingValueCode[is_numeric[j]] != ""){
-          useI <- raw == attributes$missingValueCode[is_numeric[j]]
-          raw <- as.numeric(raw[!useI])
-        }
-        if (sum(is.na(raw)) == length(raw)){
-          attributes$columnClasses[is_numeric[j]] <- "character"
-          attributes$unit[is_numeric[j]] <- ""
-        } else {
-          rounded <- floor(raw)
-          if (length(raw) - sum(raw == rounded, na.rm = T) > 0){
-            attributes$numberType[is_numeric[j]] <- "real"
-          } else if (min(raw, na.rm = T) > 0){
-            attributes$numberType[is_numeric[j]] <- "natural"
-          } else if (min(raw, na.rm = T) < 0){
-            attributes$numberType[is_numeric[j]] <- "integer"
-          } else {
-            attributes$numberType[is_numeric[j]] <- "whole"
-          }
-          attributes$minimum[is_numeric[j]] <- round(
-            min(
-              raw,
-              na.rm = TRUE
-            ),
-            digits = 2
-          )
-          attributes$maximum[is_numeric[j]] <- round(
-            max(
-              raw,
-              na.rm = TRUE
-              ),
-            digits = 2
-          )
-        }
-      }
-    }
-    
-    is_character <- which(attributes$columnClasses == "character") 
-    is_catvar <- which(attributes$columnClasses == "categorical")
-    use_i <- c(is_character, is_catvar)
-    attributes$numberType[use_i] <- "character"
-    attributes$columnClasses[is_catvar] <- "factor"
-    
-    # Set attribute definition
-    
-    use_i <- c(is_character, is_catvar)
-    if (length(use_i) > 0){
-      attributes$definition[use_i] <- attributes$attributeDefinition[use_i]
-    }
-    
-    # Define datetime format string. Remove datetime column if empty (i.e. NA).
-    
-    if (sum(use_i <- attributes$columnClasses == "Date") > 0){
-      use_i <- attributes$columnClasses == "Date"
-      colname <- attributes$attributeName[use_i]
-      if (sum(is.na(df_table[ , colname])) == nrow(df_table)){
-        attributes$formatString[use_i] <- 'YYYY'
-      } else {
-        datetime_format <- dataCleanr::iso8601_get_format_string(df_table[ , colname])
-        attributes$formatString[use_i] <- datetime_format
-      }
-    }
-    
-    # Add missing value codes
-    
-    attributes$missingValueCode <- 'NA'
-    attributes$missingValueCodeExplanation <- 'Missing value'
-    
-    # Store attributes
-    
-    attributes_stored[[i]] <- attributes
-    
-  }
-  
-  list(
-    attributes = attributes_stored,
-    tables_found = tables_found,
-    table_names = unlist(table_names_found),
-    table_descriptions = unlist(table_descriptions_found),
-    delimiter = delimiter
-  )
-  
-}
