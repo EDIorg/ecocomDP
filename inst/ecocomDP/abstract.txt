@@ -1,0 +1,1 @@
+This data package is formatted as an ecocomDP (Ecological Community Data Pattern). For more information on ecocomDP see https://github.com/EDIorg/ecocomDP. This Level 1 data package was derived from the Level 0 data package found here: L0_PACKAGE_URL. The abstract below was extracted from the Level 0 data package and is included for context:
