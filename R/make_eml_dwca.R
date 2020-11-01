@@ -192,6 +192,7 @@ make_eml_dwca <- function(path,
   eal_inputs$other.entity <- other.entity
   eal_inputs$other.entity.description <- other.entity.description
   eal_inputs$other.entity.url <- paste0(path, "/", other.entity)
+  eal_inputs$provenance <- parent.package.id
   eal_inputs$package.id <- child.package.id
   eal_inputs$user.id <- user.id
   eal_inputs$user.domain <- user.domain
@@ -219,6 +220,19 @@ make_eml_dwca <- function(path,
   eal_inputs$x$template$attributes_event.txt$content$dateTimeFormatString[
     use_i] <- format_string
   
+  # All annotations in the annotations template used by 
+  # EMLassemblyline::template_arguments() are used here since the DwC-A format
+  # is constant (i.e. the table attributes don't change). Some annotations
+  # in this template may not yet have definition, so incomplete cases will be
+  # dropped.
+  
+  eal_inputs$x$template$annotations.txt$content[
+    eal_inputs$x$template$annotations.txt$content == ""] <- NA_character_
+  
+  eal_inputs$x$template$annotations.txt$content <- 
+    eal_inputs$x$template$annotations.txt$content[
+      complete.cases(eal_inputs$x$template$annotations.txt$content), ]
+  
   # Create child EML
   eml_L2 <- suppressWarnings(
     suppressMessages(
@@ -227,7 +241,6 @@ make_eml_dwca <- function(path,
         eal_inputs[
           names(eal_inputs) %in% names(formals(EMLassemblyline::make_eml))])))
 
-  
   # Update <eml> --------------------------------------------------------------
   
   message("Updating:")
@@ -250,6 +263,14 @@ make_eml_dwca <- function(path,
     c(eml_L1$access$allow, 
       eml_L2$access$allow))
   
+  # Update <dataset> ----------------------------------------------------------
+  
+  # For purposes of annotation references, the <dataset> attribute (which may
+  # have been set by the L1 creator) needs to be set to "dataset", which is 
+  # expected by the L2 dataset annotation.
+  
+  eml_L1$dataset$id <- "dataset"
+  
   # Update <alternateIdentifier> ----------------------------------------------
   
   message("  <dataset>")
@@ -264,7 +285,7 @@ make_eml_dwca <- function(path,
   
   message("    <title>")
   
-  # Add notification the user that this is a Darwin Core Archive
+  # Add notification to indicate this is a Darwin Core Archive
   eml_L1$dataset$title <- paste(
     eml_L0$dataset$title, "(Reformatted to a Darwin Core Archive)")
   
@@ -287,10 +308,16 @@ make_eml_dwca <- function(path,
     "L1_PACKAGE_URL", 
     url_parent)
   
+  # Parse para from xml object because emld parsing is irregular
+  L2_para <- eml_L2$dataset$abstract$para[[1]]
+  L0_para <- xml2::xml_text(
+    xml2::xml_find_all(xml_L0, ".//abstract//para"))
+  eml_L1$dataset$abstract <- NULL
+  
   # Create L2 abstract
-  eml_L2$dataset$abstract <- c(
-    eml_L2$dataset$abstract,
-    eml_L0$dataset$abstract)
+  eml_L1$dataset$abstract$para <- c(
+    list(L2_para),
+    list(L0_para))
 
   # Update <keywordSet> -------------------------------------------------------
   
@@ -298,6 +325,7 @@ make_eml_dwca <- function(path,
   
   # Preserve the L0 keywords, all L1 keywords except "ecocomDP" (since this is 
   # no longer an ecocomDP data package), and add L2 keywords.
+  
   keywords_L1_to_keep <- lapply(
     eml_L1$dataset$keywordSet, 
     function(x) {
@@ -305,10 +333,12 @@ make_eml_dwca <- function(path,
         x
       }
     })
-  eml_L2$dataset$keywordSet <- c(eml_L2$dataset$keywordSet, keywords_L1_to_keep)
   
-  # TODO: Add measurement variable in a standardized and human readable way. Could
-  # also annotate /eml/dataset with variable mapping values.
+  eml_L1$dataset$keywordSet <- c(
+    eml_L2$dataset$keywordSet, 
+    keywords_L1_to_keep)
+  
+  # TODO: Add measurement variable in a standardized and human readable way.
   
   # TODO: Add GBIF terms at /eml/dataset (first) and /eml/dataset/dataTable (second)
   
@@ -324,19 +354,20 @@ make_eml_dwca <- function(path,
   
   message("    <methods>")
   
-  # Get L1 provenance
-  provenance_L1 <- suppressMessages(
-    emld::as_emld(
-      EDIutils::api_get_provenance_metadata(parent.package.id)))
+  # Parse components to be reordered and recombined. Parse para from xml 
+  # object because emld parsing is irregular
+  methods_L2 <- eml_L2$dataset$methods$methodStep[[1]]
+  eml_L2$dataset$methods$methodStep[[1]] <- NULL
+  provenance_L1 <- eml_L2$dataset$methods$methodStep
+  L0_para <- xml2::xml_text(
+    xml2::xml_find_all(xml_L0, ".//methods//para"))
+  eml_L1$dataset$methods <- NULL
   
   # Combine L2 methods, L0 methods, and L1 provenance
-  eml_L2$dataset$methods$methodStep <- c(
-    eml_L2$dataset$methods$methodStep,
-    list(eml_L0$data$methods$methodStep), 
-    list(
-      list(
-        description = provenance_L1$description,
-        dataSource = provenance_L1$dataSource)))
+  eml_L1$dataset$methods$methodStep <- c(
+    list(methods_L2),
+    list(list(description = list(para = L0_para))), # should be a methodStep - $description$para
+    list(provenance_L1))
   
   # Update <dataTable> --------------------------------------------------------
   
@@ -347,6 +378,11 @@ make_eml_dwca <- function(path,
   
   message("    <otherEntity>")
   eml_L1$dataset$otherEntity <- eml_L2$dataset$otherEntity
+  
+  # Update <annotations> ------------------------------------------------------
+  
+  message("    <annotations>")
+  eml_L1$annotations <- eml_L2$annotations
   
   # Write EML -----------------------------------------------------------------
   
@@ -369,5 +405,9 @@ make_eml_dwca <- function(path,
     message("  Validation failed :(")
   }
   message("Done.")
+  
+  # Return --------------------------------------------------------------------
+  
+  return(eml_L1)
   
 }

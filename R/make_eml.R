@@ -791,6 +791,9 @@ make_eml <- function(path,
   
   message("    <methods>")
   
+  # FIXME: Parse L0 methods from xml rather than emld since the latter can be
+  # irregular
+  
   # Parse components to be reordered and combined for the L1
   methods_L1 <- eml_L1$dataset$methods$methodStep[[1]]
   eml_L1$dataset$methods$methodStep[[1]] <- NULL
@@ -814,7 +817,7 @@ make_eml <- function(path,
   
   # Update <annotations> ------------------------------------------------------
   
-  # TODO: Remove all entity level annotations (i.e. dataTable, otherEntity)
+  message("    <annotations>")
   eml_L0$annotations <- eml_L1$annotations
   
   # Write EML -----------------------------------------------------------------
