@@ -414,13 +414,13 @@ make_eml <- function(path,
   
   # Create two objects of the same metadata, eml_L0 (emld list object) for
   # editing, and xml_L0 (xml_document) for easy parsing
-  
+    
   url_parent <- paste0(
-    "https://pasta.lternet.edu/package/metadata/eml/", 
+    "https://pasta.lternet.edu/package/metadata/eml/",
     stringr::str_replace_all(parent.package.id, "\\.", "/"))
-  
+
   eml_L0 <- EML::read_eml(url_parent)
-  
+
   xml_L0 <- suppressMessages(
     EDIutils::api_read_metadata(parent.package.id))
   
@@ -450,6 +450,7 @@ make_eml <- function(path,
   eal_inputs$other.entity <- other.entity
   eal_inputs$other.entity.description <- other.entity.description
   eal_inputs$other.entity.url <- other.entity.url
+  eal_inputs$provenance <- parent.package.id
   eal_inputs$package.id <- child.package.id
   eal_inputs$user.id <- user.id
   eal_inputs$user.domain <- user.domain
@@ -534,6 +535,24 @@ make_eml <- function(path,
   names(r) <- paste0("catvars_", unique(cat.vars$tableName), ".txt")
   eal_inputs$x$template <- c(eal_inputs$x$template, r)
 
+  # Create the taxonomic_coverage template used by EMLassemblyline::make_eml()
+  # from the taxon table of ecocomDP.
+
+  f <- stringr::str_subset(
+    names(eal_inputs$x$data.table),
+    "taxon\\.[:alpha:]*$")
+  taxon <- eal_inputs$x$data.table[[f]]$content
+  
+  taxonomic_coverage <- data.frame(
+    name = taxon$taxon_name,
+    name_type = "scientific",
+    name_resolved = taxon$taxon_name,
+    authority_system = taxon$authority_system,
+    authority_id = taxon$authority_taxon_id,
+    stringsAsFactors = FALSE)
+  
+  eal_inputs$x$template$taxonomic_coverage.txt$content <- taxonomic_coverage
+
   # The annotations template read in with EMLassemblyline::template_arguments()
   # serves as a map from tables of this L1 to the boilerplate annotations 
   # which are compiled here.
@@ -589,483 +608,239 @@ make_eml <- function(path,
     annotations <- rbind(annotations, table_annotations)
   }
   
+  variable_mapping <- stringr::str_subset(
+    names(eal_inputs$x$data.table),
+    "variable_mapping")
+  if (length(variable_mapping) != 0) {
+    variable_mappings_annotations <- lapply(
+      unique(eal_inputs$x$data.table[[variable_mapping]]$content$table_name),
+      function(table) {
+        variable_mapping_subset <- dplyr::filter(
+          eal_inputs$x$data.table[[variable_mapping]]$content, 
+          table_name == table)
+        file_name <- stringr::str_subset(
+          names(eal_inputs$x$data.table),
+          paste0(table, "\\.[:alpha:]*$"))
+        annotation <- data.frame(
+          id = paste0("/", file_name, "/variable_name"),
+          element = "/dataTable/attribute",
+          context = file_name,
+          subject = "variable_name",
+          predicate_label = "is about",
+          predicate_uri = "http://purl.obolibrary.org/obo/IAO_0000136",
+          object_label = variable_mapping_subset$mapped_label,
+          object_uri = variable_mapping_subset$mapped_id,
+          stringsAsFactors = FALSE)
+        # Remove duplicate annotations or the variable_name attribute (a column
+        # containing multiple variables as apart of a "long" table) will have 
+        # more than one of the same annotation
+        annotation <- dplyr::distinct(
+          annotation, 
+          object_label, 
+          object_uri, 
+          .keep_all = TRUE)
+        return(annotation)
+      })
+    annotations <- rbind(
+      annotations, 
+      data.table::rbindlist(variable_mappings_annotations))
+  }
+  
   annotations[annotations == ""] <- NA_character_
   annotations <- annotations[complete.cases(annotations), ]
   
   eal_inputs$x$template$annotations.txt$content <- annotations
-  
-  browser()
   
   # Call EMLassemblyline::make_eml()
   
   eml_L1 <- suppressWarnings(
     suppressMessages(
       do.call(
-        EMLassemblyline::make_eml, 
+        EMLassemblyline::make_eml,
         eal_inputs[
           names(eal_inputs) %in% names(formals(EMLassemblyline::make_eml))])))
   
-  browser()
-  
   # Update <eml> --------------------------------------------------------------
   
-  message("Updating nodes ...")
+  message("Updating:")
   message("<eml>")
+  eml_L0$schemaLocation <- paste0(
+    "https://eml.ecoinformatics.org/eml-2.2.0  ",
+    "https://nis.lternet.edu/schemas/EML/eml-2.2.0/xsd/eml.xsd")
+  eml_L0$packageId <- child.package.id
+  eml_L0$system <- "edi"
   
   # Update <access> -----------------------------------------------------------
-  # Update <access> to enable repository upload by ecocomDP 
-  # creator(s)/maintainer(s).
   
-  browser()
+  # Access control rules are used by some repositories to manage 
+  # editing, viewing, downloading permissions. Adding the user.id and 
+  # user.domain here expands editing permission to the creator of the DwC-A 
+  # data package this EML will be apart of.
   
-  message("  <access>")
-  
-  for (i in 1:length(user.id)){
-    
-    if (user.domain[i] == 'LTER'){
-      
-      eml$access$allow[[length(eml$access$allow) + 1]] <- list(
-        principal = paste0(
-          'uid=', user.id[i], ',o=', user.domain[i], ',dc=ecoinformatics,dc=org'
-        ),
-        permission = "all"
-      )
-      
-    } else if (user.domain[i] == 'EDI'){
-      
-      eml$access$allow[[length(eml$access$allow) + 1]] <- list(
-        principal = paste0(
-          'uid=', user.id[i], ',o=', user.domain[i], ',dc=edirepository,dc=org'
-        ),
-        permission = "all"
-      )
-      
-    }
-    
-  }
-
-  # Remove <alternateIdentifier> ----------------------------------------------
-  # Remove <alternateIdentifier> to prevent downstream errors
-
-  eml$dataset$alternateIdentifier <- NULL
+  eml_L0$access$allow <- unique(
+    c(eml_L0$access$allow, 
+      eml_L1$access$allow))
 
   # Update <dataset> ----------------------------------------------------------
   
+  # For purposes of annotation references, the <dataset> attribute (which may
+  # have been set by the L0 creator) needs to be set to "dataset", which is 
+  # expected by the L1 dataset annotation.
+  
+  eml_L0$dataset$id <- "dataset"
+  
+  # Remove <alternateIdentifier> ----------------------------------------------
+  
+  # Some repositories assign a DOI to this element. Not removing it here 
+  # an error when uploading to the repository.
+  
   message("  <dataset>")
+  message("    <alternateIdentifier>")
+  eml_L0$dataset$alternateIdentifier <- NULL
   
   # Update <title> ------------------------------------------------------------
   
-  message("    <title>")
+  # Add notification the user that this is an ecocomDP data package
   
-  # Append note about ecocomDP format
-  eml$dataset$title <- paste(
-    eml$dataset$title, "(Reformatted to the ecocomDP Design Pattern)"
-  )
+  message("    <title>")
+  eml_L0$dataset$title <- paste(
+    eml_L0$dataset$title, "(Reformatted to the ecocomDP Design Pattern)")
   
   # Update <pubDate> ----------------------------------------------------------
   
   message("    <pubDate>")
-  
-  eml$dataset$pubDate <- format(Sys.time(), "%Y-%m-%d")
+  eml_L0$dataset$pubDate <- format(Sys.time(), "%Y-%m-%d")
   
   # Updating <abstract> -------------------------------------------------------
   
-  message("    <abstract>")
+  # Add link to L0 data packages and combine L0 and L1 abstracts
   
-  # FIXME: Parent abstract is missing from the child
+  eml_L1$dataset$abstract$para[[1]] <- stringr::str_replace(
+    eml_L1$dataset$abstract$para[[1]], 
+    "L0_PACKAGE_URL", 
+    url_parent)
   
-  # Get parent abstract
-  src_abstract <- unname(
-    unlist(
-      stringr::str_remove_all(
-        eml$dataset$abstract, 
-        "</?para>"
-      )
-    )
-  )
-
-  # Reset abstract node
-  eml$dataset$abstract <- list()
-  eml$dataset$abstract$section <- list()
-  eml$dataset$abstract$para <- list()
+  L1_para <- eml_L1$dataset$abstract$para[[1]]
+  L0_para <- xml2::xml_text(
+    xml2::xml_find_all(xml_L0, ".//abstract//para"))
+  eml_L0$dataset$abstract <- NULL
   
-  # Add boiler-plate ecocomDP (paragraph 1)
-  eml$dataset$abstract$para[[length(eml$dataset$abstract$para) + 1]] <- paste(
-    "This data package is formatted according to the 'ecocomDP', a data",
-    "package design pattern for ecological community surveys, and data from",
-    "studies of composition and biodiversity. For more information on the",
-    "ecocomDP project see https://github.com/EDIorg/ecocomDP/tree/master, or",
-    "contact EDI https://environmentaldatainitiative.org."
-  )
-  
-  # Add boiler-plate ecocomDP (paragraph 2)  
-  eml$dataset$abstract$para[[length(eml$dataset$abstract$para) + 1]] <- paste(
-    "This Level-1 data package was derived from the Level-0 data package",
-    "found here:",
-    paste0(
-      'https://portal.edirepository.org/nis/mapbrowse?scope=', scope,
-      '&identifier=', identifier, '&revision=', revision
-    )
-  )
-
-  # Add boiler-plate ecocomDP (paragraph 3)
-  eml$dataset$abstract$para[[length(eml$dataset$abstract$para) + 1]] <- paste(
-    "The abstract below was extracted from the Level-0 data package and is",
-    "included for context:"
-  )
-
-  # Add parent abstract (paragraph 4)
-  for (i in 1:length(src_abstract)) {
-    eml$dataset$abstract$para[[length(eml$dataset$abstract$para) + 1]] <- 
-      src_abstract[i]
-  }
+  eml_L0$dataset$abstract$para <- c(
+    list(L1_para),
+    list(L0_para))
   
   # Update <keywordSet> -------------------------------------------------------
   
+  # Add ecocomDP specific keywords to the L0 keywords
+  
   message("    <keywordSet>")
   
-  # Read boiler-plate ecocomDP keywords
-  keywordSet <- read.table(
-    system.file("/controlled_vocabulary.csv", package = "ecocomDP"),
-    header = T, 
-    sep = ",",
-    as.is = T,
-    na.strings = "NA")
-  
-  # TODO: Check the ecocomDP term is not listed under the LTER thesaurus
-  # Add ecocomDP keywords to the parent keyword set
-  eml$dataset$keywordSet[[length(eml$dataset$keywordSet) + 1]] <- list(
-    keywordThesaurus = keywordSet$keywordThesaurus[1],
-    keyword = as.list(keywordSet$keyword))
+  eml_L0$dataset$keywordSet <- c(
+    eml_L0$dataset$keywordSet,
+    eml_L1$dataset$keywordSet)
   
   # Add Darwin Core basisOfRecord
   if (!is.null(basis.of.record)) {
-    eml$dataset$keywordSet[[length(eml$dataset$keywordSet) + 1]] <- list(
-      keywordThesaurus = "Darwin Core Terms",
-      keyword = as.list(basis.of.record))
+    eml_L0$dataset$keywordSet <- c(
+      eml_L0$dataset$keywordSet,
+      list(
+        list(
+          keywordThesaurus = "Darwin Core Terms",
+          keyword = as.list(basis.of.record))))
   }
 
   # Update <intellectualRights> -----------------------------------------------
+  
   # Use parent intellectual rights or CC0 if none exists
   
-  if (is.null(eml$dataset$intellectualRights)) {
-    
+  if (is.null(eml_L0$dataset$intellectualRights)) {
     message("    <intellectualRights>")
-    
-    eml$dataset$intellectualRights <- EML::set_TextType(
-      system.file('intellectual_rights_cc0_1.txt', package = 'ecocomDP')
-    )
-    
+    eml_L0$dataset$intellectualRights <- eml_L2$dataset$intellectualRights
   }
 
   # Update <taxonomicCoverage> ------------------------------------------------
-  # Update the taxonomic coverage element using information from the taxon 
-  # table, specifically data in the authority system and authority ID fields
-  # (if it exists)
   
-  # Reset the taxonomic coverage element
-  eml$dataset$coverage$taxonomicCoverage <- NULL
-  
-  # Read the taxon table
-  dir_files <- list.files(path)
-  df <- read.table(
-    paste0(
-      path, "/", dir_files[stringr::str_detect(dir_files, "taxon\\b")]
-    ),
-    header = TRUE,
-    sep = EDIutils::detect_delimeter(
-      path,
-      dir_files[stringr::str_detect(dir_files, "taxon\\b")],
-      EDIutils::detect_os()
-    ),
-    quote = "\"",
-    as.is = TRUE
-  )
-  
-  # Create new taxonomic coverage (if supporting data exists)
-  if (any(!is.na(df$authority_taxon_id))) {
-    
-    message("    <taxonomicCoverage>")
-  
-    # FIXME: Ensure unresolved taxa are included in the EML
-      
-    # FIXME: This assumes taxonomyCleanr adoption of authority systems.
-    # A solution might reference an authority system URI rather than
-    # taxonomyCleanr synonyms. Implement at taxonomyCleanr
-    tc <- taxonomyCleanr::make_taxonomicCoverage(
-      taxa.clean = df$taxon_name,
-      authority = df$authority_system,
-      authority.id = df$authority_taxon_id, 
-      write.file = FALSE)
-    
-    eml$dataset$coverage$taxonomicCoverage <- tc
-    
-  }
+  # Combine taxonomic coverage of L0 and L1. While this may provide redundant 
+  # information, there isn't any harm in this.
+
+  eml_L0$dataset$coverage$taxonomicCoverage$taxonomicClassification <- c(
+    eml_L0$dataset$coverage$taxonomicCoverage$taxonomicClassification,
+    eml_L1$dataset$coverage$taxonomicCoverage$taxonomicClassification)
   
   # Update <contact> ----------------------------------------------------------
   
+  # Add ecocomDP creator to list of contacts
+  
   message("    <contact>")
   
-  # Add ecocomDP creator as a contact incase questions arise
-  
-  eml$dataset$contact <- list(
-    eml$dataset$contact, 
+  eml_L0$dataset$contact <- c(
     list(
-      individualName = list(
-        givenName = contact$givenName,
-        surName = contact$surName
-      ),
-      organizationName = contact$organizationName,
-      electronicMailAddress = contact$electronicMailAddress
-    )
-  )
-  # 
-  # eml$dataset$contact[[length(eml$dataset$contact) + 1]] <- list(
-  #   individualName = list(
-  #     givenName = contact$givenName,
-  #     surName = contact$surName
-  #   ),
-  #   organizationName = contact$organizationName,
-  #   electronicMailAddress = contact$electronicMailAddress
-  # )
+      list(
+        individualName = list(
+          givenName = contact$givenName,
+          surName = contact$surName),
+        organizationName = contact$organizationName,
+        electronicMailAddress = contact$electronicMailAddress)),
+    list(eml_L0$dataset$contact))
 
   # Update <methods> ----------------------------------------------------------
+  
   # Update parent methods with ecocomDP creation process and provenance 
   # metadata to provide the user with a full understanding of how these data 
   # were created
   
   message("    <methods>")
   
-  # Get parent methods
-  src_methods <- eml$data$methods$methodStep
+  # Parse components to be reordered and combined for the L1
+  methods_L1 <- eml_L1$dataset$methods$methodStep[[1]]
+  eml_L1$dataset$methods$methodStep[[1]] <- NULL
+  provenance_L1 <- eml_L1$dataset$methods$methodStep
   
-  # Reset methods node
-  eml$dataset$methods <- list()
-  eml$dataset$methods$methodStep <- list()
-  
-  # Add ecocomDP methods (paragraph 1)
-  eml$dataset$methods$methodStep[[length(eml$dataset$methods$methodStep) + 1]] <- 
-    list(
-      description = list(
-        para = paste0(
-          "The source data package is programmatically converted into an ",
-          "ecocomDP data package using the scripts: ", 
-          paste(script, collapse = ", "), ". For more information on the ",
-          "ecocomDP project see: ",
-          "'https://github.com/EDIorg/ecocomDP/tree/master' or contact EDI ",
-          "(https://environmentaldatainitiative.org). Below are the source ",
-          "data methods:"
-        )
-      )
-    )
-  
-  # Add parent methods (paragraph 2)
-  eml$dataset$methods$methodStep[[length(eml$dataset$methods$methodStep) + 1]] <- 
-    src_methods
-  
-  # Add provenance metadata (paragraph 3). Read provenance from the EDI Data 
-  # Repository and remove creator and contact IDs to preempt ID clashes. 
-  # Metadata is written to tempdir() so EML::read_eml() can apply its unique 
-  # parsing algorithm.
-  provenance <- xml2::read_xml(
-    paste0(
-      "https://pasta.lternet.edu/package/provenance/eml", "/", scope,
-      "/", identifier, "/", revision
-    )
-  )
-  
-  xml2::xml_set_attr(
-    xml2::xml_find_all(provenance, './/dataSource/creator'),
-    'id', 
-    NULL
-  )
-  
-  xml2::xml_set_attr(
-    xml2::xml_find_all(provenance, './/dataSource/contact'),
-    'id',
-    NULL
-  )
-  
-  xml2::write_xml(
-    provenance,
-    paste0(tempdir(), "/provenance.xml")
-  )
-  
-  provenance <- EML::read_eml(
-    paste0(tempdir(), "/provenance.xml")
-  )
-  
-  provenance$`@context` <- NULL
-  provenance$`@type` <- NULL
-  unlink(paste0(tempdir(), "/provenance.xml"))
-  
-  eml$dataset$methods$methodStep[[length(eml$dataset$methods$methodStep) + 1]] <- 
-    provenance
+  # Combine L1 methods, L0 methods, and L0 provenance
+  eml_L0$dataset$methods$methodStep <- c(
+    list(methods_L1),
+    list(eml_L0$data$methods$methodStep),
+    list(provenance_L1))
   
   # Update <dataTable> --------------------------------------------------------
-  # Combine boiler-plate ecocomDP table attributes with table specific 
-  # metadata
   
-  r <- suppressMessages(
-    compile_attributes(path)
-  )
-  data_table <- list()
-  
-  for (i in 1:length(r$tables_found)) {
-    
-    message("    <dataTable>")
-
-    # Remove white space from categorical variables
-    cat.vars <- as.data.frame(
-      apply(cat.vars, 2, trimws, which = "both"), 
-      stringsAsFactors = FALSE
-    )
-    
-    # Remove white space from attributes variables
-    r$attributes[[i]] <- as.data.frame(
-      apply(r$attributes[[i]], 2, trimws, which = "both"), 
-      stringsAsFactors = FALSE
-    )
-    
-    # Create the attribute list
-    attributeList <- suppressWarnings(
-      EML::set_attributes(
-        r$attributes[[i]][ , c(
-          'attributeName', 
-          'formatString',
-          'unit',
-          'numberType',
-          'definition',
-          'attributeDefinition',
-          'minimum',
-          'maximum',
-          'missingValueCode',
-          'missingValueCodeExplanation')],
-        factors = cat.vars,
-        col_classes = r$attributes[[i]][ ,"columnClasses"]
-      )
-    )
-
-    # Set physical
-    physical <- suppressMessages(
-      EML::set_physical(
-        paste0(path, '/', r$tables_found[i]),
-        numHeaderLines = "1",
-        recordDelimiter = EDIutils::get_eol(
-          path = path,
-          file.name = r$tables_found[i],
-          os = EDIutils::detect_os()
-        ),
-        attributeOrientation = "column",
-        url = 'placeholder'
-      )
-    )
-    
-    # Read the data table and get number of records
-    df <- read.table(
-      paste0(path, "/", r$tables_found[i]),
-      header = TRUE,
-      sep = r$delimiter[i],
-      quote = "\"",
-      as.is = TRUE,
-      comment.char = ""
-    )
-    
-    # Pull together information for the data table
-    data_table[[i]] <- list(
-      entityName = r$table_descriptions[i],
-      entityDescription = r$table_descriptions[i],
-      physical = physical,
-      attributeList = attributeList,
-      numberOfRecords = as.character(nrow(df))
-    )
-
-  }
-  
-  # Compile data tables
-  
-  eml$dataset$dataTable <- data_table
+  message("    <dataTable>")
+  eml_L0$dataset$dataTable <- eml_L1$dataset$dataTable
   
   # Add <otherEntity> ---------------------------------------------------------
-  # Add items listed under the "script" argument as other entities
-    
-  other_entity <- list()
   
-  for (i in 1:length(script)) {
-    
-    message("    <otherEntity>")
-    
-    # Create other entity
-    otherEntity <- list(
-      entityName = script[i],
-      entityDescription = script.description[i],
-      physical = suppressMessages(
-        EML::set_physical(
-          paste0(path, '/', script[i])
-        )
-      )
-    )
-    
-    otherEntity$physical$dataFormat$textFormat <- NULL
-    
-    # Get and add file format name and entity type
-    file_extension <- stringr::str_extract(script[i], "\\.[:alpha:]*$")
-    if (file_extension == ".R") {
-      format_name <- "application/R"
-      entity_type <- "text/x-rsrc"
-    } else if (file_extension == ".m") {
-      format_name <- "application/MATLAB"
-      entity_type <- "text/x-matlab"
-    } else if (file_extension == ".py") {
-      format_name <- "application/Python"
-      entity_type <- "text/x-python"
-    } else {
-      format_name <- "unknown"
-      entity_type <- "unknown"
-    }
-    
-    otherEntity$physical$dataFormat$externallyDefinedFormat$formatName <- format_name
-    otherEntity$entityType <- entity_type
-    
-    # Add otherEntity to list
-    other_entity[[i]] <- otherEntity
-    
-  }
-  
-  eml$dataset$otherEntity <- other_entity
+  message("    <otherEntity>")
+  eml_L0$dataset$otherEntity <- eml_L1$dataset$otherEntity
   
   # Update <annotations> ------------------------------------------------------
   
   # TODO: Remove all entity level annotations (i.e. dataTable, otherEntity)
-  
-  # Update <eml> --------------------------------------------------------------
-  
-  eml$schemaLocation <- "https://eml.ecoinformatics.org/eml-2.2.0  https://nis.lternet.edu/schemas/EML/eml-2.2.0/xsd/eml.xsd"
-  eml$packageId <- child.package.id
-  eml$system <- "edi"
-  
-  message("  </dataset>")
-  message("</eml>")
+  eml_L0$annotations <- eml_L1$annotations
   
   # Write EML -----------------------------------------------------------------
 
+  message("</eml>")
   message("Writing EML")
+  
   emld::eml_version("eml-2.2.0")
   EML::write_eml(
-    eml, 
+    eml_L0, 
     paste0(path, "/", child.package.id, ".xml"))
 
   # Validate EML --------------------------------------------------------------
 
   message("Validating EML")
-
-  validation_result <- EML::eml_validate(eml)
-
-  if (validation_result == "TRUE"){
-    message("EML passed validation!")
+  
+  r <- EML::eml_validate(eml_L0)
+  if (isTRUE(r)) {
+    message("  Validation passed :)")
   } else {
-    message("EML validaton failed. See warnings for details.")
+    message("  Validation failed :(")
   }
+  message("Done.")
+  
+  # Return --------------------------------------------------------------------
+  
+  return(eml_L0)
   
 }
-
