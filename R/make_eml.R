@@ -746,7 +746,7 @@ make_eml <- function(path,
       list(
         list(
           keywordThesaurus = "Darwin Core Terms",
-          keyword = as.list(basis.of.record))))
+          keyword = as.list(paste0("basisOfRecord: ", basis.of.record)))))
   }
 
   # Update <intellectualRights> -----------------------------------------------
