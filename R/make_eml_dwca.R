@@ -12,6 +12,8 @@
 #'     (character; optional) Repository user identifier. If more than one, then enter as a vector of character strings (e.g. \code{c("user_id_1", "user_id_2")}). \code{user.id} sets the /eml/access/principal element for all \code{user.domain} except "KNB", "ADC", and if \code{user.domain = NULL}.
 #' @param user.domain
 #'     (character; optional) Repository domain associated with \code{user.id}. Currently supported values are "EDI" (Environmental Data Initiative), "LTER" (Long-Term Ecological Research Network), "KNB" (The Knowledge Network for Biocomplexity), "ADC" (The Arctic Data Center). If you'd like your system supported please contact maintainers of the EMLassemblyline R package. If using more than one \code{user.domain}, then enter as a vector of character strings (e.g. \code{c("user_domain_1", "user_domain_2")}) in the same order as corresponding \code{user.id}. If \code{user.domain} is missing then a default value "unknown" is assigned. \code{user.domain} sets the EML header "system" attribute and for all \code{user.domain}, except "KNB" and "ADC", sets the /eml/access/principal element attributes and values.
+#' @param url
+#'     (character) URL to the publicly accessible directory containing DwC-A tables and meta.xml. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and upload of ecocomDP data packages and derived products.
 #'
 #' @return 
 #'     An EML metadata record for the DWcA table defined by \code{data.table}.
@@ -59,7 +61,8 @@ make_eml_dwca <- function(path,
                           parent.package.id, 
                           child.package.id, 
                           user.id, 
-                          user.domain) {
+                          user.domain,
+                          url = NULL) {
   
   message(
     "Creating Darwin Core ", stringr::str_to_title(core.name), " Core EML ",
@@ -99,6 +102,8 @@ make_eml_dwca <- function(path,
       "arguments must match.", call. = FALSE)
   }
   
+  # TODO: Check "url"
+  
   # Parameterize --------------------------------------------------------------
   
   # Table names, types, and descriptions are standardized for the input 
@@ -131,6 +136,14 @@ make_eml_dwca <- function(path,
       "Missing data objects: ",
       paste(c(data.table, "meta.xml")[missing_data_objects], collapse = ","),
       call. = FALSE)
+  }
+  
+  # Expand url for each data object of this L1 for use in 
+  # EMLassemblyline: make_eml()
+  
+  if (!is.null(url)) {
+    data.table.url <- paste0(url, "/", data.table)
+    other.entity.url <- paste0(url, "/", other.entity)
   }
   
   # Read L1 EML ---------------------------------------------------------------
@@ -187,11 +200,11 @@ make_eml_dwca <- function(path,
   eal_inputs$dataset.title <- "placeholder"
   eal_inputs$data.table <- data.table
   eal_inputs$data.table.description <- data.table.description
-  eal_inputs$data.table.url <- paste0(path, "/", data.table)
+  eal_inputs$data.table.url <- data.table.url
   eal_inputs$data.table.quote.character <- rep('"', length(data.table))
   eal_inputs$other.entity <- other.entity
   eal_inputs$other.entity.description <- other.entity.description
-  eal_inputs$other.entity.url <- paste0(path, "/", other.entity)
+  eal_inputs$other.entity.url <- other.entity.url
   eal_inputs$provenance <- parent.package.id
   eal_inputs$package.id <- child.package.id
   eal_inputs$user.id <- user.id
