@@ -19,7 +19,7 @@ install_missing_libraries <- function(conversion.script) {
   
   if (!(all(libraries %in% installed_libraries))) {
     missing_libraries <- libraries[which(!(libraries %in% installed_libraries))]
-    try(install.packages(missing_libraries))
+    install.packages(missing_libraries)
   }
 
 }
