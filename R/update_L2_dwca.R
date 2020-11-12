@@ -26,4 +26,8 @@ update_L2_dwca <- function(package.id.L1,
                            user.id,
                            user.pass) {
   
+  # Read EML (L1) -------------------------------------------------------------
+  
+  
+  
 }

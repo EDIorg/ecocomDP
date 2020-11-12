@@ -4,16 +4,16 @@
 \alias{download_and_source_conversion_script}
 \title{Download and source L0 to L1 conversion script}
 \usage{
-download_and_source_conversion_script(eml.L0, path)
+download_and_source_conversion_script(script, path)
 }
 \arguments{
-\item{eml.L0}{(xml_document, xml_node) L0 EML metadata returned from \code{read_eml()}.}
+\item{script}{(character) URL to download the L0 to L1 conversion script.}
 
-\item{path}{(character) Directory to which create_ecocomDP.R will be written. Should be the same directory tables, and metadata will be written to.}
+\item{path}{(character) Directory to which create_ecocomDP.R will be written. Should be the same directory tables and metadata will be written to.}
 }
 \description{
-Follows provenance from the newest L0 to the newest L1 (which, in the context of \code{update_L1()} was derived from the previous L0), downloads the create_ecocomDP.R script, installs listed dependencies, and sources the script to memory for use.
+Download and source L0 to L1 conversion script
 }
 \details{
-Logic follows data package provenance to the newest L1 data package, not older L1 revisions or any other derived data packages. Dependencies are written to dependencies_update_L1.txt, a global listing of dependencies used among L0 to L1 create_ecocomDP.R scripts. Dependencies are installed if not yet available.
+The script is downloaded \code{path} and then parsed to identify R libraries used by the script which are installed if not already.
 }

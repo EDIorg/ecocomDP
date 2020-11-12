@@ -17,7 +17,7 @@ read_eml(package.id, repository = "EDI", environment = "production")
 (xml_document, xml_node) EML metadata
 }
 \description{
-A wrapper function to repository specific read methods (the user.domain arg drives the logic).
+A wrapper function to repository specific read methods (the repository arg drives the logic).
 }
 \examples{
 
