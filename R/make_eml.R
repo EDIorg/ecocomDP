@@ -464,7 +464,6 @@ make_eml <- function(path,
   eal_inputs$other.entity <- other.entity
   eal_inputs$other.entity.description <- other.entity.description
   eal_inputs$other.entity.url <- other.entity.url
-  eal_inputs$provenance <- parent.package.id
   eal_inputs$package.id <- child.package.id
   eal_inputs$user.id <- user.id
   eal_inputs$user.domain <- user.domain
@@ -810,9 +809,18 @@ make_eml <- function(path,
   
   # Parse components to be reordered and combined for the L1
   methods_L1 <- eml_L1$dataset$methods$methodStep[[1]]
-  eml_L1$dataset$methods$methodStep[[1]] <- NULL
-  provenance_L1 <- eml_L1$dataset$methods$methodStep
   
+  # Get provenance metadata
+  # TODO: Support other repository systems
+  r <- suppressMessages(
+    EDIutils::api_get_provenance_metadata(
+      package.id = parent.package.id,
+      environment = environment))
+  r <- EML::read_eml(r)
+  provenance_L1 <- list(
+    dataSource = r$dataSource,
+    description = r$description)
+
   # Combine L1 methods, L0 methods, and L0 provenance
   eml_L0$dataset$methods$methodStep <- c(
     list(methods_L1),
