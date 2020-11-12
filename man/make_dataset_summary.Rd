@@ -8,7 +8,12 @@ make_dataset_summary(
   parent.package.id,
   child.package.id,
   sample.dates,
-  taxon.table
+  taxon.table,
+  north,
+  east,
+  south,
+  west,
+  environment = "production"
 )
 }
 \arguments{
@@ -26,14 +31,16 @@ dataset_summary table.}
 \item{north}{(numeric) North bounding coordinate of the study area in decimal 
 degrees with values north of the equator being positive.}
 
-\item{south}{(numeric) South bounding coordinate of the study area in decimal 
-degrees with values south of the equator being negative.}
-
 \item{east}{(numeric) East bounding coordinate of the study area in decimal 
 degrees with values west of the prime meridian being negative.}
 
+\item{south}{(numeric) South bounding coordinate of the study area in decimal 
+degrees with values south of the equator being negative.}
+
 \item{west}{(numeric) West bounding coordinate of the study area in decimal 
 degrees with values west of the equator being negative.}
+
+\item{evironment}{(character) EDI Data Repository environment in which the L0 exists, and which will be used to get the geographic bounding area from the EML metadata. Default is "production".}
 }
 \value{
 (data frame) A data frame of the dataset_summary table
