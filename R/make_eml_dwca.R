@@ -8,6 +8,8 @@
 #'     (character) ID of an ecocomDP data package. Only EDI Data Repository package IDs are currently supported.
 #' @param child.package.id
 #'     (character) ID of DWcA occurrence data package being created.
+#' @param repository (character) Data repository in which \code{package.id} resides and associated with \code{environment}. Currently supported repositories are: "EDI" (Environmental Data Initiative). Requests for support of other repositories can be made via \href{https://github.com/EDIorg/ecocomDP}{ecocomDP GitHub} issues. Default is "EDI".
+#' @param evironment (character) Repository environment in which \code{package.id} exists. Some repositories have development, staging, and production environments which are distinct from one another. This argument allows reading of EML from different environments. Default is "production".
 #' @param user.id
 #'     (character; optional) Repository user identifier. If more than one, then enter as a vector of character strings (e.g. \code{c("user_id_1", "user_id_2")}). \code{user.id} sets the /eml/access/principal element for all \code{user.domain} except "KNB", "ADC", and if \code{user.domain = NULL}.
 #' @param user.domain
@@ -60,6 +62,8 @@ make_eml_dwca <- function(path,
                           core.name, 
                           parent.package.id, 
                           child.package.id, 
+                          repository,
+                          environment,
                           user.id, 
                           user.domain,
                           url = NULL) {
