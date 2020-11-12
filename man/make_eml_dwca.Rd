@@ -9,8 +9,8 @@ make_eml_dwca(
   core.name,
   parent.package.id,
   child.package.id,
-  repository,
-  environment,
+  repository = "EDI",
+  environment = "production",
   user.id,
   user.domain,
   url = NULL

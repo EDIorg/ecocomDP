@@ -147,8 +147,8 @@
 make_eml <- function(path,
                      parent.package.id, 
                      child.package.id, 
-                     repository,
-                     environment,
+                     repository = "EDI",
+                     environment = "production",
                      script,
                      script.description,
                      is.about = NULL,
@@ -419,18 +419,24 @@ make_eml <- function(path,
   # Create two objects of the same metadata, eml_L0 (emld list object) for
   # editing, and xml_L0 (xml_document) for easy parsing
     
-  url_parent <- paste0(
-    "https://pasta.lternet.edu/package/metadata/eml/",
-    stringr::str_replace_all(parent.package.id, "\\.", "/"))
+  # FIXME: Extend support to environments in other repository systems
+  if (environment == "production") {
+    url_parent <- paste0(
+      "https://pasta.lternet.edu/package/metadata/eml/",
+      stringr::str_replace_all(parent.package.id, "\\.", "/"))
+  } else if (environment == "staging") {
+    url_parent <- paste0(
+      "https://pasta-s.lternet.edu/package/metadata/eml/",
+      stringr::str_replace_all(parent.package.id, "\\.", "/"))
+  }
 
   eml_L0 <- EML::read_eml(url_parent)
 
   xml_L0 <- suppressMessages(
-    EDIutils::api_read_metadata(parent.package.id))
-  ecocomDP::read_eml(
-    package.id = parent.package.id,
-    repository = repository, 
-    environment = environment)
+    ecocomDP::read_eml(
+      package.id = parent.package.id,
+      repository = repository, 
+      environment = environment))
   
   # Create L1 EML -------------------------------------------------------------
   

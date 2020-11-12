@@ -62,8 +62,8 @@ make_eml_dwca <- function(path,
                           core.name, 
                           parent.package.id, 
                           child.package.id, 
-                          repository,
-                          environment,
+                          repository = "EDI",
+                          environment = "production",
                           user.id, 
                           user.domain,
                           url = NULL) {
@@ -156,12 +156,24 @@ make_eml_dwca <- function(path,
   
   # Create two objects of the same metadata, eml_L1 (emld list object) for
   # editing, and xml_L1 (xml_document) for easy parsing
-  url_parent <- paste0(
-    "https://pasta.lternet.edu/package/metadata/eml/", 
-    stringr::str_replace_all(parent.package.id, "\\.", "/"))
+  
+  # FIXME: Extend support to environments in other repository systems
+  if (environment == "production") {
+    url_parent <- paste0(
+      "https://pasta.lternet.edu/package/metadata/eml/",
+      stringr::str_replace_all(parent.package.id, "\\.", "/"))
+  } else if (environment == "staging") {
+    url_parent <- paste0(
+      "https://pasta-s.lternet.edu/package/metadata/eml/",
+      stringr::str_replace_all(parent.package.id, "\\.", "/"))
+  }
+  
   eml_L1 <- EML::read_eml(url_parent)
   xml_L1 <- suppressMessages(
-    EDIutils::api_read_metadata(parent.package.id))
+    ecocomDP::read_eml(
+      package.id = parent.package.id,
+      repository = repository, 
+      environment = environment))
   
   # Read L0 EML ---------------------------------------------------------------
   
@@ -181,8 +193,14 @@ make_eml_dwca <- function(path,
   # Create two objects of the same metadata, eml_L0 (emld list object) for
   # editing, and xml_L0 (xml_document) for easy parsing
   message("Reading EML of L0 data package ", grandparent.package.id)
+  
   xml_L0 <- suppressMessages(
-    EDIutils::api_read_metadata(grandparent.package.id))
+    ecocomDP::read_eml(
+      package.id = grandparent.package.id,
+      repository = repository, 
+      environment = environment))
+  
+  
   eml_L0 <- suppressMessages(
     EML::read_eml(url_grandparent))
 
