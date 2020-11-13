@@ -9,11 +9,14 @@
 #'
 download_and_source_conversion_script <- function(script, path) {
   
-  download.file(url = script, destfile = paste0(path, "/convert_ecocomDP.R"))
+  r <- httr::GET(
+    url = script, 
+    httr::write_disk(paste0(path, "/create_ecocomDP.R"), overwrite=TRUE), 
+    httr::user_agent("ecocomDP"))
   
   install_missing_libraries(
-    conversion.script = paste0(path, "/convert_ecocomDP.R"))
+    conversion.script = paste0(path, "/create_ecocomDP.R"))
   
-  source(paste0(path, "/convert_ecocomDP.R"))
+  suppressMessages(source(paste0(path, "/create_ecocomDP.R")))
   
 }

@@ -19,8 +19,9 @@ get_previous_L0_id_and_L1_conversion_script(
 }
 \value{
 (list) A list containing:
-\item{id}{Identifier of previous L0 data package}
-\item{script}{Download URL of the script used to convert the L0 to L1}
+\item{id.L0}{Identifier of previous L0 data package}
+\item{id.L1}{Identifier of L1 that is a descendant of L0 and from which the \code{url} was obtained}
+\item{url}{Download URL of the script used to convert the L0 to L1}
 Otherwise NULL
 }
 \description{

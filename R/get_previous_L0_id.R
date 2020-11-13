@@ -9,8 +9,9 @@
 #' @details For the most recent L0 data package, which may not have a corresponding L1, follow all provenance traces to data packages containing the "ecocomDP" keyword. If more than one, select the most recent L0 identifier, read the corresponding EML, look for a valid L0 to L1 conversion script (convert_ecocomDP.R), and break if found. Otherwise try this process again for the next oldest L0 data package and so on.
 #'
 #' @return (list) A list containing:
-#' \item{id}{Identifier of previous L0 data package}
-#' \item{script}{Download URL of the script used to convert the L0 to L1}
+#' \item{id.L0}{Identifier of previous L0 data package}
+#' \item{id.L1}{Identifier of L1 that is a descendant of L0 and from which the \code{url} was obtained}
+#' \item{url}{Download URL of the script used to convert the L0 to L1}
 #' Otherwise NULL
 #' 
 #' @export
@@ -66,16 +67,16 @@ get_previous_L0_id_and_L1_conversion_script <- function(package.id,
                   xml2::xml_text(xml2::xml_find_all(eml, ".//keyword"))) {
                 other_entities <- xml2::xml_text(
                   xml2::xml_find_all(eml, ".//otherEntity/physical/objectName"))
-                # script <- stringr::str_detect(
-                #     tolower(other_entities), "^create_ecocomdp.r$") # Exact match
                 script <- stringr::str_detect(
-                    tolower(other_entities), "_ecocomdp.r$") # Fuzzy match
+                    tolower(other_entities), "^create_ecocomdp.r$") # Exact match
+                # script <- stringr::str_detect(
+                #     tolower(other_entities), "_ecocomdp.r$") # Fuzzy match
                 urls <- xml2::xml_text(
                   xml2::xml_find_all(eml, ".//otherEntity/physical/distribution/online/url"))
                 if (any(script)) {
                   pubdate <- xml2::xml_text(
                     xml2::xml_find_all(eml, ".//pubDate"))
-                  return(list(id = version, script_url = urls[script], pubdate = pubdate))
+                  return(list(id = version, script_url = urls[script], pubdate = pubdate, descendant = descendant))
                 } else {
                   return(NULL)
                 }
@@ -108,8 +109,9 @@ get_previous_L0_id_and_L1_conversion_script <- function(package.id,
     if (!is.null(unlist(r))) {
       r <- data.table::rbindlist(r)
       r <- list(
-        id = r[1, "id"],
-        script = r[1, "script_url"])
+        id.L0 = r[1, "id"],
+        id.L1 = r[1, "descendant"],
+        url = r[1, "script_url"])
       return(r)
     } else {
       return(NULL)

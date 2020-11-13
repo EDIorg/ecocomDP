@@ -282,7 +282,17 @@ read_data_edi <- function(id) {
     delimiter = './/dataset/dataTable/physical/dataFormat/textFormat/simpleDelimited/fieldDelimiter',
     nrecord = './/dataset/dataTable/numberOfRecords')
   
-  eml <- suppressMessages(EDIutils::api_read_metadata(id))
+  # Use alternate repository "environment" if specified in the global 
+  # environment
+  if (exists("environment", envir = .GlobalEnv)) {
+    eml <- suppressMessages(
+      EDIutils::api_read_metadata(
+        id, 
+        environment = get("environment", envir = .GlobalEnv)))
+  } else {
+    eml <- suppressMessages(EDIutils::api_read_metadata(id))
+  }
+  
   invisible(
     lapply(
       names(tbl_attrs),

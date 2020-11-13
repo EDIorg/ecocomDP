@@ -35,6 +35,8 @@ update_L1 <- function(package.id.L0,
     repository = repository, 
     environment = environment)
   
+  # TODO: Write to log
+  
   # Find the previous containing a valid L0 to L1 conversion script
   
   r <- ecocomDP::get_previous_L0_id_and_L1_conversion_script(
@@ -42,18 +44,35 @@ update_L1 <- function(package.id.L0,
     repository = repository, 
     environment = environment)
   
+  # TODO: Write to log
+  
   if (is.null(r)) {
     # TODO: Write "no script found" to log
     stop("No L0 to L1 conversion script found", call. = FALSE)
   } else {
-    L0_previous <- r$id
-    L0_previous_script_url <- r$script
+    L0_previous <- r$id.L0
+    L0_previous_script_url <- r$url
+    L1_new <- stringr::str_split(r$id.L1, "\\.")[[1]]
+    L1_new[3] <- as.character(as.numeric(L1_new[3]) + 1)
+    L1_new <- paste(L1_new, collapse = ".")
   }
+  
+  # TODO: Write to log
+  
+  if (L0_previous == package.id.L0) {
+    stop(
+      "The L0 data package ", package.id.L0, " has an L1 descendant.", 
+      call. = FALSE)
+  }
+  
+  # TODO: Write to log
   
   eml_L0_previous <- ecocomDP::read_eml(
     package.id = L0_previous,
     repository = repository, 
     environment = environment)
+  
+  # TODO: Write to log
   
   # Compare EML (L0) ----------------------------------------------------------
   
@@ -69,7 +88,7 @@ update_L1 <- function(package.id.L0,
   tables_L0_previous <- EDIutils::read_tables(eml = eml_L0_previous)
   
   # Compare tables (L0 newest to L0 previous) ---------------------------------
-  
+    
   r <- EDIutils::compare_tables(
     newest = tables_L0_newest,
     previous = tables_L0_previous)
@@ -82,35 +101,34 @@ update_L1 <- function(package.id.L0,
     script = L0_previous_script_url,
     path = path)
   
+  # TODO: Write to log
+  
   # Run conversion script -----------------------------------------------------
   
-  # r <- create_ecocomDP()
+  # Repository specific methods
+  r <- run_conversion_script(
+    path = path,
+    package.id.L0 = package.id.L0, 
+    package.id.L1 = L1_new, 
+    repository = repository,
+    environment = environment,
+    url = url)
   
-  browser()
+  # TODO: Write to log
   
   # Upload to repository ------------------------------------------------------
   
   # TODO: Authenticate and use token instead of password
-  
+
   r <- ecocomDP::upload_to_repository(
     path = path,
-    package.id = L1.package.id, # Need to derive this 
+    package.id = L1_new,
     repository = repository, 
     environment = environment, 
     user.id = user.id, 
-    user.pass = somepassword)
+    user.pass = user.pass)
   
-  # Update dirty bit ----------------------------------------------------------
-  
-  r <- update_dirty_bit()
-  
-  # Message maintainers -------------------------------------------------------
-  
-  message_maintainers()
-  
-  # Clear workspace -----------------------------------------------------------
-  
-  r <- clear_workspace(path = path)
+  # TODO: Write to log
   
 }
 

@@ -62,7 +62,6 @@ make_eml_dwca <- function(path,
                           core.name, 
                           parent.package.id, 
                           child.package.id, 
-                          repository = "EDI",
                           environment = "production",
                           user.id, 
                           user.domain,
@@ -74,11 +73,18 @@ make_eml_dwca <- function(path,
   
   # Validate inputs -----------------------------------------------------------
   
+  # For API calls to the correct repository environment
+  if (exists("environment", envir = .GlobalEnv)) {
+    environment <- get("environment", envir = .GlobalEnv)
+  } else {
+    environment <- "production"
+  }
+  
   # The parent data package should exist
   missing_parent_data_package <- suppressWarnings(
     stringr::str_detect(
       suppressMessages(
-        EDIutils::api_read_metadata(parent.package.id)), 
+        EDIutils::api_read_metadata(parent.package.id, environment = environment)), 
       "Unable to access metadata for packageId:"))
   if (missing_parent_data_package) {
     stop(
@@ -91,7 +97,7 @@ make_eml_dwca <- function(path,
   child_data_package_exists <- suppressWarnings(
     !stringr::str_detect(
       suppressMessages(
-        EDIutils::api_read_metadata(child.package.id)), 
+        EDIutils::api_read_metadata(child.package.id, environment = environment)), 
       "Unable to access metadata for packageId:"))
   if (child_data_package_exists) {
     warning(
