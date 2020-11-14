@@ -9,7 +9,6 @@ L1_to_L2_DwCA(
   core.name,
   parent.package.id,
   child.package.id,
-  environment = "production",
   data.table.url = NULL,
   user.id,
   user.domain
@@ -45,8 +44,6 @@ corresponding \code{user.id}. If \code{user.domain} is missing then a
 default value "unknown" is assigned. \code{user.domain} sets the EML 
 header "system" attribute and for all \code{user.domain}, except "KNB" 
 and "ADC", sets the /eml/access/principal element attributes and values.}
-
-\item{evironment}{(character) Repository environment in which the L0 and L1 exist. Some repositories have development, staging, and production environments which are distinct from one another. This argument allows execution for the \code{update_L1} workflow within the context of one of these environments. Default is "production".}
 }
 \value{
 Data entities in either the occurrence or event core formats with a

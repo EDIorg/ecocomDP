@@ -3,8 +3,6 @@
 #' @description Updates an L1 data package when it’s L0 parent data package has been updated. This function is a wrapper to several subroutines.
 #'
 #' @param package.id.L0 (character) Identifier of newest L0 data package.
-#' @param repository (character) Data repository in which \code{package.id.L0} resides and associated with \code{environment}, \code{user.id}, and \code{user.pass}. Currently supported repositories are: "EDI" (Environmental Data Initiative). Requests for support of other repositories can be made via \href{https://github.com/EDIorg/ecocomDP}{ecocomDP GitHub} issues. Default is "EDI".
-#' @param evironment (character) Repository environment in which the L0 and L1 exist. Some repositories have development, staging, and production environments which are distinct from one another. This argument allows execution for the \code{update_L1} workflow within the context of one of these environments. Default is "production".
 #' @param path (character) Directory to which L1 tables, scripts, and metadata will be written.
 #' @param url (character) Publicly accessible URL to \code{path} for download by a data repository.
 #' @param user.id (character) User identifier within a specified \code{repository}. This controls editing access in some \code{repository}.
@@ -19,30 +17,36 @@
 #' @export
 #'
 update_L1 <- function(package.id.L0, 
-                      repository = "EDI",
-                      environment = "production",
                       path, 
                       url, 
                       user.id, 
                       user.pass) {
   
+  # Load Global Environment config --------------------------------------------
+  
+  if (exists("config.repository", envir = .GlobalEnv)) {
+    repository <- get("config.repository", envir = .GlobalEnv)
+  } else {
+    repository <- "EDI"
+  }
+  
+  if (exists("config.environment", envir = .GlobalEnv)) {
+    environment <- get("config.environment", envir = .GlobalEnv)
+  } else {
+    environment <- "production"
+  }
+  
   # Read EML (L0) -------------------------------------------------------------
   
   # Newest
   
-  eml_L0_newest <- ecocomDP::read_eml(
-    package.id = package.id.L0, 
-    repository = repository, 
-    environment = environment)
+  eml_L0_newest <- ecocomDP::read_eml(package.id.L0)
   
   # TODO: Write to log
   
   # Find the previous containing a valid L0 to L1 conversion script
   
-  r <- ecocomDP::get_previous_L0_id_and_L1_conversion_script(
-    package.id = package.id.L0, 
-    repository = repository, 
-    environment = environment)
+  r <- ecocomDP::get_previous_L0_id_and_L1_conversion_script(package.id.L0)
   
   # TODO: Write to log
   
@@ -67,39 +71,30 @@ update_L1 <- function(package.id.L0,
   
   # TODO: Write to log
   
-  eml_L0_previous <- ecocomDP::read_eml(
-    package.id = L0_previous,
-    repository = repository, 
-    environment = environment)
+  eml_L0_previous <- ecocomDP::read_eml(L0_previous)
   
   # TODO: Write to log
   
   # Compare EML (L0) ----------------------------------------------------------
   
-  r <- EDIutils::compare_eml(
-    newest = eml_L0_newest,
-    previous = eml_L0_previous)
+  r <- EDIutils::compare_eml(eml_L0_newest, eml_L0_previous)
   
   # TODO: Write to log
   
   # Read tables (L0) ----------------------------------------------------------
   
-  tables_L0_newest <- EDIutils::read_tables(eml = eml_L0_newest)
-  tables_L0_previous <- EDIutils::read_tables(eml = eml_L0_previous)
+  tables_L0_newest <- EDIutils::read_tables(eml_L0_newest)
+  tables_L0_previous <- EDIutils::read_tables(eml_L0_previous)
   
   # Compare tables (L0 newest to L0 previous) ---------------------------------
     
-  r <- EDIutils::compare_tables(
-    newest = tables_L0_newest,
-    previous = tables_L0_previous)
+  r <- EDIutils::compare_tables(tables_L0_newest, tables_L0_previous)
   
   # TODO: Write to log
   
   # Download and source conversion script -------------------------------------
   
-  ecocomDP::download_and_source_conversion_script(
-    script = L0_previous_script_url,
-    path = path)
+  ecocomDP::download_and_source_conversion_script(L0_previous_script_url, path)
   
   # TODO: Write to log
   
@@ -109,9 +104,7 @@ update_L1 <- function(package.id.L0,
   r <- run_conversion_script(
     path = path,
     package.id.L0 = package.id.L0, 
-    package.id.L1 = L1_new, 
-    repository = repository,
-    environment = environment,
+    package.id.L1 = L1_new,
     url = url)
   
   # TODO: Write to log
@@ -123,8 +116,6 @@ update_L1 <- function(package.id.L0,
   r <- ecocomDP::upload_to_repository(
     path = path,
     package.id = L1_new,
-    repository = repository, 
-    environment = environment, 
     user.id = user.id, 
     user.pass = user.pass)
   

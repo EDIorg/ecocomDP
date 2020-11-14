@@ -23,36 +23,39 @@ routine_handler <- function(package.id, environment, index) {
   
   if (r$id == "L0") {
     
+    # update_L1(
+    #   package.id.L0 = package.id, # newest L0 id arriving via event notification
+    #   path = config.path, 
+    #   url = config.www, 
+    #   user.id = config.user.id,
+    #   user.pass = config.user.pass)
+    
     update_L1(
-      package.id.L0 = package.id, # newest L0 id arriving via event notification
-      path = path, 
-      repository = repository,
-      environment = environment,
-      url = "someurl", 
-      user.id = user.id,
-      user.pass = user.pass)
+      package.id.L0 = "edi.95.5", # manual testing
+      path = config.path, 
+      url = config.www, 
+      user.id = config.user.id,
+      user.pass = config.user.pass)
     
   } else if (r$id == "L1_w_dwca_package_descendant") {
     
-    # update_L2_dwca(
-    #   package.id.L1 = package.id,
-    #   repository = repository,
-    #   environment = environment,
-    #   core.name = "event",
-    #   path = path,
-    #   url = url,
-    #   user.id = user.id,
-    #   user.pass = user.pass)
+    # L1_to_L2_DwCA(
+    #   path = config.path, 
+    #   core.name = "event", 
+    #   parent.package.id = id.L1, 
+    #   child.package.id = id.L2, 
+    #   data.table.url = config.www, 
+    #   user.id = config.user.id,
+    #   user.domain = config.repository)
     
     L1_to_L2_DwCA( # For manually getting the first revision in the repo
-      path = path, 
+      path = config.path, 
       core.name = "event", 
       parent.package.id = "edi.96.2", 
       child.package.id = "edi.97.1", 
-      environment = "staging", 
-      data.table.url = url, 
-      user.id = user.id,
-      user.domain = repository)
+      data.table.url = config.www, 
+      user.id = config.user.id,
+      user.domain = config.repository)
     
   }
 

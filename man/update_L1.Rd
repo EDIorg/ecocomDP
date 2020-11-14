@@ -4,20 +4,10 @@
 \alias{update_L1}
 \title{Update L1 from updated L0}
 \usage{
-update_L1(
-  package.id.L0,
-  repository = "EDI",
-  environment = "production",
-  path,
-  url,
-  user.id,
-  user.pass
-)
+update_L1(package.id.L0, path, url, user.id, user.pass)
 }
 \arguments{
 \item{package.id.L0}{(character) Identifier of newest L0 data package.}
-
-\item{repository}{(character) Data repository in which \code{package.id.L0} resides and associated with \code{environment}, \code{user.id}, and \code{user.pass}. Currently supported repositories are: "EDI" (Environmental Data Initiative). Requests for support of other repositories can be made via \href{https://github.com/EDIorg/ecocomDP}{ecocomDP GitHub} issues. Default is "EDI".}
 
 \item{path}{(character) Directory to which L1 tables, scripts, and metadata will be written.}
 
@@ -26,8 +16,6 @@ update_L1(
 \item{user.id}{(character) User identifier within a specified \code{repository}. This controls editing access in some \code{repository}.}
 
 \item{user.pass}{(character) Password associated with \code{user.id} for repository upload.}
-
-\item{evironment}{(character) Repository environment in which the L0 and L1 exist. Some repositories have development, staging, and production environments which are distinct from one another. This argument allows execution for the \code{update_L1} workflow within the context of one of these environments. Default is "production".}
 }
 \description{
 Updates an L1 data package when it’s L0 parent data package has been updated. This function is a wrapper to several subroutines.

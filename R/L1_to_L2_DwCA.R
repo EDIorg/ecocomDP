@@ -11,7 +11,6 @@
 #'     EDI Data Repository package IDs are currently supported.
 #' @param child.package.id
 #'     (character) ID of DWcA occurrence data package being created.
-#' @param evironment (character) Repository environment in which the L0 and L1 exist. Some repositories have development, staging, and production environments which are distinct from one another. This argument allows execution for the \code{update_L1} workflow within the context of one of these environments. Default is "production".
 #' @param user.id
 #'     (character; optional) Repository user identifier. If more than one, 
 #'     then enter as a vector of character strings (e.g. 
@@ -44,23 +43,23 @@ L1_to_L2_DwCA <- function(path,
                           core.name, 
                           parent.package.id, 
                           child.package.id,
-                          environment = "production",
                           data.table.url = NULL,
                           user.id,
                           user.domain) {
+  
+  # Load Global Environment config --------------------------------------------
+  
+  if (exists("environment", envir = .GlobalEnv)) {
+    environment <- get("environment", envir = .GlobalEnv)
+  } else {
+    environment <- "production"
+  }
   
   # Parameterize --------------------------------------------------------------
   
   # Eventually will support 2 DwC types: choose occurence-core or event-core. 
   # occurence is simpler (sightings), event is a better fit for most of our data
   # TODO: Support event-core
-  
-  # For API calls to the correct repository environment
-  if (exists("environment", envir = .GlobalEnv)) {
-    environment <- get("environment", envir = .GlobalEnv)
-  } else {
-    environment <- "production"
-  }
   
   dwca_config_file <- readr::read_csv(
     system.file("/dwca_occurrence_core/dwca_occurrence_core_config.csv", package = "ecocomDP"))
@@ -138,7 +137,6 @@ L1_to_L2_DwCA <- function(path,
     core.name = core.name,
     parent.package.id = parent.package.id, 
     child.package.id = child.package.id, 
-    environment = environment,
     user.id = user.id, 
     user.domain = user.domain,
     url = data.table.url)
@@ -178,11 +176,10 @@ create_table_dwca_occurrence_core <- function(
   
   message('calling function to create DwC-A, occurrence core')
   
-  # Parameterize --------------------------------------------------------------
+  # Load Global Environment config --------------------------------------------
   
-  # For API calls to the correct repository environment
-  if (exists("environment", envir = .GlobalEnv)) {
-    environment <- get("environment", envir = .GlobalEnv)
+  if (exists("config.environment", envir = .GlobalEnv)) {
+    environment <- get("config.environment", envir = .GlobalEnv)
   } else {
     environment <- "production"
   }
@@ -239,7 +236,7 @@ create_table_dwca_occurrence_core <- function(
   obs_loc_tax$dc_samplingprotocol <- paste0(
     "See methods in ",
     suppressMessages(
-      EDIutils::api_read_data_package_doi(parent.package.id, environment = environment)))
+      EDIutils::api_read_data_package_doi(parent.package.id, environment)))
   
   # TODO: Determine if observation was made by an instrument or human. This 
   # info is stored in the L1 EML keywordSet
@@ -247,7 +244,7 @@ create_table_dwca_occurrence_core <- function(
   keywords <- xml2::xml_text(
       xml2::xml_find_all(
         suppressMessages(
-          EDIutils::api_read_metadata(parent.package.id, environment = environment)), ".//keyword"))
+          EDIutils::api_read_metadata(parent.package.id, environment)), ".//keyword"))
   
   basis_of_record <- trimws(
     stringr::str_remove(
@@ -326,11 +323,10 @@ create_tables_dwca_event_core <- function(
   
   message('calling function to create DwC-A, event core')
   
-  # Parameterize --------------------------------------------------------------
+  # Load Global Environment config --------------------------------------------
   
-  # For API calls to the correct repository environment
-  if (exists("environment", envir = .GlobalEnv)) {
-    environment <- get("environment", envir = .GlobalEnv)
+  if (exists("config.environment", envir = .GlobalEnv)) {
+    environment <- get("config.environment", envir = .GlobalEnv)
   } else {
     environment <- "production"
   }
@@ -377,7 +373,7 @@ create_tables_dwca_event_core <- function(
   obs_loc_tax$dc_samplingprotocol <- paste0(
     "See methods in ",
     suppressMessages(
-      EDIutils::api_read_data_package_doi(parent.package.id, environment = environment)))
+      EDIutils::api_read_data_package_doi(parent.package.id, environment)))
   
   # TODO: Determine if observation was made by an instrument or human. This 
   # info is stored in the L1 EML keywordSet
@@ -385,7 +381,7 @@ create_tables_dwca_event_core <- function(
   keywords <- xml2::xml_text(
     xml2::xml_find_all(
       suppressMessages(
-        EDIutils::api_read_metadata(parent.package.id, environment = environment)), ".//keyword"))
+        EDIutils::api_read_metadata(parent.package.id, environment)), ".//keyword"))
   
   basis_of_record <- trimws(
     stringr::str_remove(

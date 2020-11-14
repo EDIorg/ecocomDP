@@ -3,8 +3,6 @@
 #' @description Get the most recent L0 data package identifier containing a recognizable L0 to L1 conversion script and get the URL to download the script as well.
 #'
 #' @param package.id (character) Newest L0 data package identifier
-#' @param repository (character) Data repository in which \code{package.id} resides and associated with \code{environment}. Currently supported repositories are: "EDI" (Environmental Data Initiative). Requests for support of other repositories can be made via \href{https://github.com/EDIorg/ecocomDP}{ecocomDP GitHub} issues. Default is "EDI".
-#' @param evironment (character) Repository environment in which \code{package.id} exists. Some repositories have development, staging, and production environments which are distinct from one another. This argument allows reading of EML from different environments. Default is "production".
 #' 
 #' @details For the most recent L0 data package, which may not have a corresponding L1, follow all provenance traces to data packages containing the "ecocomDP" keyword. If more than one, select the most recent L0 identifier, read the corresponding EML, look for a valid L0 to L1 conversion script (convert_ecocomDP.R), and break if found. Otherwise try this process again for the next oldest L0 data package and so on.
 #'
@@ -16,11 +14,23 @@
 #' 
 #' @export
 #'
-get_previous_L0_id_and_L1_conversion_script <- function(package.id,
-                                                        repository = "EDI",
-                                                        environment = "production") {
+get_previous_L0_id_and_L1_conversion_script <- function(package.id) {
   
-  # Repository specific methods
+  # Load Global Environment config --------------------------------------------
+  
+  if (exists("config.repository", envir = .GlobalEnv)) {
+    repository <- get("config.repository", envir = .GlobalEnv)
+  } else {
+    repository <- "EDI"
+  }
+  
+  if (exists("config.environment", envir = .GlobalEnv)) {
+    environment <- get("config.environment", envir = .GlobalEnv)
+  } else {
+    environment <- "production"
+  }
+  
+  # Repository specific methods -----------------------------------------------
   
   if (repository == "EDI") {
     

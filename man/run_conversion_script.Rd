@@ -4,14 +4,7 @@
 \alias{run_conversion_script}
 \title{Run L0 to L1 conversion script}
 \usage{
-run_conversion_script(
-  path,
-  package.id.L0,
-  package.id.L1,
-  repository,
-  environment,
-  url
-)
+run_conversion_script(path, package.id.L0, package.id.L1, url)
 }
 \arguments{
 \item{path}{(character) Directory to which L1 tables, scripts, and metadata will be written.}
@@ -20,11 +13,7 @@ run_conversion_script(
 
 \item{package.id.L1}{(character) Identifier of new L1}
 
-\item{repository}{(character) Data repository in which \code{package.id.L0} resides and associated with \code{environment}, \code{user.id}, and \code{user.pass}. Currently supported repositories are: "EDI" (Environmental Data Initiative). Requests for support of other repositories can be made via \href{https://github.com/EDIorg/ecocomDP}{ecocomDP GitHub} issues. Default is "EDI".}
-
 \item{url}{(character) Publicly accessible URL to \code{path} for download by a data repository.}
-
-\item{evironment}{(character) Repository environment in which the L0 and L1 exist. Some repositories have development, staging, and production environments which are distinct from one another. This argument allows execution for the \code{update_L1} workflow within the context of one of these environments. Default is "production".}
 }
 \value{
 

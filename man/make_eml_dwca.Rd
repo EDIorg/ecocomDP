@@ -9,7 +9,6 @@ make_eml_dwca(
   core.name,
   parent.package.id,
   child.package.id,
-  environment = "production",
   user.id,
   user.domain,
   url = NULL
@@ -31,8 +30,6 @@ make_eml_dwca(
 \item{url}{(character) URL to the publicly accessible directory containing DwC-A tables and meta.xml. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and upload of ecocomDP data packages and derived products.}
 
 \item{repository}{(character) Data repository in which \code{package.id} resides and associated with \code{environment}. Currently supported repositories are: "EDI" (Environmental Data Initiative). Requests for support of other repositories can be made via \href{https://github.com/EDIorg/ecocomDP}{ecocomDP GitHub} issues. Default is "EDI".}
-
-\item{evironment}{(character) Repository environment in which \code{package.id} exists. Some repositories have development, staging, and production environments which are distinct from one another. This argument allows reading of EML from different environments. Default is "production".}
 }
 \value{
 An EML metadata record for the DWcA table defined by \code{data.table}.

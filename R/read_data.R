@@ -262,6 +262,14 @@ read_data_edi <- function(id) {
   
   message("Reading ", id)
   
+  # Parameterize
+  
+  if (exists("environment", envir = .GlobalEnv)) {
+    environment <- get("config.environment", envir = .GlobalEnv)
+  } else {
+    environment <- "production"
+  }
+  
   # Get ecocomDP attributes for validation and coercion
   
   attr_tbl <- data.table::fread(
@@ -282,16 +290,8 @@ read_data_edi <- function(id) {
     delimiter = './/dataset/dataTable/physical/dataFormat/textFormat/simpleDelimited/fieldDelimiter',
     nrecord = './/dataset/dataTable/numberOfRecords')
   
-  # Use alternate repository "environment" if specified in the global 
-  # environment
-  if (exists("environment", envir = .GlobalEnv)) {
-    eml <- suppressMessages(
-      EDIutils::api_read_metadata(
-        id, 
-        environment = get("environment", envir = .GlobalEnv)))
-  } else {
-    eml <- suppressMessages(EDIutils::api_read_metadata(id))
-  }
+  eml <- suppressMessages(
+    EDIutils::api_read_metadata(id, environment))
   
   invisible(
     lapply(

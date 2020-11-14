@@ -4,18 +4,10 @@
 \alias{get_previous_L0_id_and_L1_conversion_script}
 \title{Get previous L0 data package identifier and URL link to conversion script}
 \usage{
-get_previous_L0_id_and_L1_conversion_script(
-  package.id,
-  repository = "EDI",
-  environment = "production"
-)
+get_previous_L0_id_and_L1_conversion_script(package.id)
 }
 \arguments{
 \item{package.id}{(character) Newest L0 data package identifier}
-
-\item{repository}{(character) Data repository in which \code{package.id} resides and associated with \code{environment}. Currently supported repositories are: "EDI" (Environmental Data Initiative). Requests for support of other repositories can be made via \href{https://github.com/EDIorg/ecocomDP}{ecocomDP GitHub} issues. Default is "EDI".}
-
-\item{evironment}{(character) Repository environment in which \code{package.id} exists. Some repositories have development, staging, and production environments which are distinct from one another. This argument allows reading of EML from different environments. Default is "production".}
 }
 \value{
 (list) A list containing:
