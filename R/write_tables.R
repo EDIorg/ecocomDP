@@ -60,7 +60,7 @@ write_tables <- function(
   }
   
   if (!is.null(observation)) {
-    message("observation")
+    message("  observation")
     f <- paste0(
       path, 
       "/", 
@@ -71,7 +71,7 @@ write_tables <- function(
   }
   
   if (!is.null(location)) {
-    message("location")
+    message("  location")
     f <- paste0(
       path, 
       "/", 
@@ -82,7 +82,7 @@ write_tables <- function(
   }
   
   if (!is.null(taxon)) {
-    message("taxon")
+    message("  taxon")
     f <- paste0(
       path, 
       "/", 
@@ -93,7 +93,7 @@ write_tables <- function(
   }
   
   if (!is.null(dataset_summary)) {
-    message("dataset_summary")
+    message("  dataset_summary")
     f <- paste0(
       path, 
       "/", 
@@ -104,7 +104,7 @@ write_tables <- function(
   }
   
   if (!is.null(observation_ancillary)) {
-    message("observation_ancillary")
+    message("  observation_ancillary")
     f <- paste0(
       path, 
       "/", 
@@ -115,7 +115,7 @@ write_tables <- function(
   }
   
   if (!is.null(location_ancillary)) {
-    message("location_ancillary")
+    message("  location_ancillary")
     f <- paste0(
       path, 
       "/", 
@@ -126,7 +126,7 @@ write_tables <- function(
   }
   
   if (!is.null(taxon_ancillary)) {
-    message("taxon_ancillary")
+    message("  taxon_ancillary")
     f <- paste0(
       path, 
       "/", 
@@ -137,7 +137,7 @@ write_tables <- function(
   }
   
   if (!is.null(variable_mapping)) {
-    message("variable_mapping")
+    message("  variable_mapping")
     f <- paste0(
       path, 
       "/", 

@@ -4,14 +4,46 @@
 \alias{L1_to_L2_DwCA}
 \title{Creates Darwin Core Archive package from an ecocomDP formatted level-1}
 \usage{
-L1_to_L2_DwCA(core.name, L1.id)
+L1_to_L2_DwCA(
+  path,
+  core.name,
+  parent.package.id,
+  child.package.id,
+  data.table.url = NULL,
+  user.id,
+  user.domain
+)
 }
 \arguments{
+\item{path}{(character) Path to the where the DwC-A data objects and EML will be 
+written.}
+
 \item{core.name}{(character) The Darwin Core central table of the package. Can be: 
 "occurence" (occurrence core) or "event" (event core).}
 
-\item{L1.id}{(character) Package ID of an ecocomDP dataset from PASTA. Other level-1 
-types TBD.}
+\item{parent.package.id}{(character) ID of an ecocomDP data package. Only 
+EDI Data Repository package IDs are currently supported.}
+
+\item{child.package.id}{(character) ID of DWcA occurrence data package being created.}
+
+\item{user.id}{(character; optional) Repository user identifier. If more than one, 
+then enter as a vector of character strings (e.g. 
+\code{c("user_id_1", "user_id_2")}). \code{user.id} sets the 
+/eml/access/principal element for all \code{user.domain} except
+"KNB", "ADC", and if \code{user.domain = NULL}.}
+
+\item{user.domain}{(character; optional) Repository domain associated with 
+\code{user.id}. Currently supported values are "EDI" 
+(Environmental Data Initiative), "LTER" (Long-Term Ecological Research 
+Network), "KNB" (The Knowledge Network for Biocomplexity), "ADC" (The 
+Arctic Data Center). If you'd like your system supported please contact
+maintainers of the EMLassemblyline R package. If using more than one 
+\code{user.domain}, then enter as a vector of character strings (e.g. 
+\code{c("user_domain_1", "user_domain_2")}) in the same order as 
+corresponding \code{user.id}. If \code{user.domain} is missing then a 
+default value "unknown" is assigned. \code{user.domain} sets the EML 
+header "system" attribute and for all \code{user.domain}, except "KNB" 
+and "ADC", sets the /eml/access/principal element attributes and values.}
 }
 \value{
 Data entities in either the occurrence or event core formats with a

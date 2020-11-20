@@ -1,0 +1,9 @@
+keyword	keywordThesaurus
+Darwin Core Archive (DwC-A) Event Core	EDI Controlled Vocabulary
+GBIF	
+Global Biodiversity Information Facility	
+Taxon: ScientificName	Darwin Core Terms
+Population Abundance	Essential Biodiversity Variables
+ExtendedMeasurementOrFact	Darwin Core Terms
+Event	Darwin Core Terms
+Occurrence	Darwin Core Terms
