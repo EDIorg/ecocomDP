@@ -1,6 +1,6 @@
 #' Event notification handler
 #'
-#' @description Checks for unprocessed items in SQlite and pops the longest waiting item into \code{update_L1()} or \code{update_L2_dwca()}.
+#' @description Runs on a chron. Checks for unprocessed items in SQlite and pops the longest waiting item into \code{update_L1()} or \code{update_L2_dwca()}. While in process
 #'
 #' @export
 #'
@@ -11,7 +11,7 @@ routine_handler <- function(package.id, environment, index) {
   # Read config.R for user name and password
   source("C:\\Users\\Colin\\Documents\\EDI\\data_sets\\event_notification_workflow\\config.R")
   
-  # Get next item in SQLite and run related workflow --------------------------
+  # Get next item in SQLite ---------------------------------------------------
   
   r <- httr::GET("https://regan.edirepository.org/ecocom-listener/package.lternet.edu")
   r <- httr::GET("https://regan.edirepository.org/ecocom-listener/package-s.lternet.edu")
@@ -20,6 +20,11 @@ routine_handler <- function(package.id, environment, index) {
   # Parse response
   # Is it L0?
   # Is it L1? If so does it have an L2-DwC-A derivative?
+  
+  # Create lock file ----------------------------------------------------------
+  #TODO: Create lock file
+  
+  # Call appropriate workflow -------------------------------------------------
   
   if (r$id == "L0") {
     
@@ -66,6 +71,9 @@ routine_handler <- function(package.id, environment, index) {
     paste0("https://regan.edirepository.org/ecocom-listener/", event_id_index))
   
   # TODO: Write to log
+  
+  # Remove lock file ----------------------------------------------------------
+  #TODO: Remove lock file
   
   # Message maintainers -------------------------------------------------------
   

@@ -7,5 +7,5 @@
 routine_handler(package.id, environment, index)
 }
 \description{
-Checks for unprocessed items in SQlite and pops the longest waiting item into \code{update_L1()} or \code{update_L2_dwca()}.
+Runs on a chron. Checks for unprocessed items in SQlite and pops the longest waiting item into \code{update_L1()} or \code{update_L2_dwca()}. While in process
 }
