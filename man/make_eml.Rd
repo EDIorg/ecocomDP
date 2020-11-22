@@ -8,8 +8,6 @@ make_eml(
   path,
   parent.package.id,
   child.package.id,
-  repository = "EDI",
-  environment = "production",
   script,
   script.description,
   is.about = NULL,
@@ -29,8 +27,6 @@ EDI Data Repository package IDs are currently supported.}
 
 \item{child.package.id}{(character) Child data package ID (e.g. "edi.53.1") to be uploaded to 
 EDI Data Repository.}
-
-\item{repository}{(character) Data repository in which \code{package.id} resides and associated with \code{environment}. Currently supported repositories are: "EDI" (Environmental Data Initiative). Requests for support of other repositories can be made via \href{https://github.com/EDIorg/ecocomDP}{ecocomDP GitHub} issues. Default is "EDI".}
 
 \item{script}{(character) Names of scripts used to convert and repackage the source 
 data into the ecocomDP.}
@@ -71,8 +67,6 @@ requires definition as
 \href{MachineObservation}{http://rs.tdwg.org/dwc/terms/MachineObservation}.}
 
 \item{url}{(character) URL to the publicly accessible directory containing ecocomDP data tables, conversion scripts, and EML metadata. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and upload of ecocomDP data packages and derived products.}
-
-\item{evironment}{(character) Repository environment in which \code{package.id} exists. Some repositories have development, staging, and production environments which are distinct from one another. This argument allows reading of EML from different environments. Default is "production".}
 }
 \value{
 An EML metadata record for the ecocomDP dataset defined by the arguments

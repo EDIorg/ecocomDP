@@ -11,8 +11,6 @@
 #' @param child.package.id
 #'     (character) Child data package ID (e.g. "edi.53.1") to be uploaded to 
 #'     EDI Data Repository.
-#' @param repository (character) Data repository in which \code{package.id} resides and associated with \code{environment}. Currently supported repositories are: "EDI" (Environmental Data Initiative). Requests for support of other repositories can be made via \href{https://github.com/EDIorg/ecocomDP}{ecocomDP GitHub} issues. Default is "EDI".
-#' @param evironment (character) Repository environment in which \code{package.id} exists. Some repositories have development, staging, and production environments which are distinct from one another. This argument allows reading of EML from different environments. Default is "production".
 #' @param script
 #'     (character) Names of scripts used to convert and repackage the source 
 #'     data into the ecocomDP.
@@ -147,8 +145,6 @@
 make_eml <- function(path,
                      parent.package.id, 
                      child.package.id, 
-                     repository = "EDI",
-                     environment = "production",
                      script,
                      script.description,
                      is.about = NULL,
@@ -160,6 +156,20 @@ make_eml <- function(path,
                      url = NULL) {
   
   message("Creating EML for derived data package (" , child.package.id, ")")
+  
+  # Load Global Environment config --------------------------------------------
+  
+  if (exists("config.repository", envir = .GlobalEnv)) {
+    repository <- get("config.repository", envir = .GlobalEnv)
+  } else {
+    repository <- "EDI"
+  }
+  
+  if (exists("config.environment", envir = .GlobalEnv)) {
+    environment <- get("config.environment", envir = .GlobalEnv)
+  } else {
+    environment <- "production"
+  }
   
   # Validate inputs -----------------------------------------------------------
   
