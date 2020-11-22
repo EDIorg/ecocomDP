@@ -14,6 +14,7 @@ read_data(
   check.size = FALSE,
   nCores = 1,
   forceParallel = FALSE,
+  token = NA,
   globally.unique.keys = FALSE
 )
 }
@@ -48,6 +49,9 @@ stacking procedure. Defaults to 1.}
 \item{forceParallel}{(logical; NEON data only) If the data volume to be processed does not 
 meet minimum requirements to run in parallel, this overrides. Defaults 
 to FALSE.}
+
+\item{token}{(character; NEON data only) User specific API token (generated within 
+neon.datascience user accounts)}
 
 \item{globally.unique.keys}{(logical) Whether to create globally unique primary keys (and associated
 foreign keys). Reading multiple datasets raises the issue of referential 

@@ -34,7 +34,6 @@
 #'     not support kml data for more than one col.
 #'
 #' @return 
-#' A list containing:
 #' \item{location}{A data frame of the location table}
 #' \item{x}{The input data frame \code{x} but with an added location_id column.
 #' This simplifies alignment of values between \code{x} and location.}
@@ -62,7 +61,7 @@ make_location <- function(
   # Make from data frame ------------------------------------------------------
   
   # Index spatial columns and initialize storage of intermediary dataframes
-  col_i <- which(colnames(x) %in% cols)
+  col_i <- match(cols, colnames(x))
   df <- rep(list(NULL), length(col_i))
   
   # Continue if spatial columns are specified

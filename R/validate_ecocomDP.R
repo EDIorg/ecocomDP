@@ -373,25 +373,37 @@ validate_datetime <- function(data.list) {
         v <- data.list[[x]][[datetime_column]]
         # Difference in NA count induced by coercion indicates a non-valid 
         # format
+        
+        # count NAs in datetime field
         na_count_raw <- sum(is.na(v))
+        
+        # check different date time formats to see if one matches the data
         use_i <- suppressWarnings(
           list(
             lubridate::parse_date_time(v, "ymdHMS"),
             lubridate::parse_date_time(v, "ymdHM"),
             lubridate::parse_date_time(v, "ymdH"),
             lubridate::parse_date_time(v, "ymd")))
+        
+        # count NAs for each attempt to parse datetime
         na_count_parsed <- unlist(
           lapply(
             use_i,
             function(k) {
               sum(is.na(k))
             }))
+        
+        # return info on datetime problems
         if (min(na_count_parsed) > na_count_raw) {
+          
+  
           use_i <- seq(
             length(v))[
               is.na(
                 use_i[[
-                  which(na_count_parsed %in% min(na_count_parsed))]])]
+                  (which(na_count_parsed %in% min(na_count_parsed)))[1]]])]
+          
+          
           paste0(
             "Datetime format. The ", x, " table has unsupported ",
             "datetime formats in rows: ", 
