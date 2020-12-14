@@ -46,6 +46,9 @@
 #'         \item url - URL to dataset
 #'     }
 #'     
+#' @details 
+#'     Currently, to accomodate multiple L1 versions of NEON data products, search results for a NEON L0 will also list all the L1 versions available for the match. This method is based on the assumption that the summary data among L1 versions is the same, which may need to be addressed in the future. A list of L0 and corresponding L1 identifiers are listed in /inst/L1_versions.txt. Each L1 version is accompanied by qualifying text that's appended to the title, abstract, and descriptions for comprehension of the differences among L1 versions.
+#'     
 #' @examples
 #' # Empty search returns all available data
 #' r <- search_data()
@@ -344,10 +347,90 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
       }))
   
   if (nrow(output) == 0) {
-    output <- "No results found."
-    output
+    return("No results found.")
   } else {
-    output
+    output <- format_search_results(output)
+    return(output)
   }
 
+}
+
+
+
+
+
+
+
+
+#' Reformat search results
+#' 
+#' This temporarily accomodates NEON's plan for multiple L1 versions and will have to be refactored to support other data sources adopting this use case. A permanent solution is to refactor the \code{summarize_data_neon()} and \code{summarize_data_edi()} functions to return the exact objects of interest.
+#'
+#'
+#' @param x (data.frame) Current output of \code{search_data()}
+#'
+#' @return (data.frame) New output of \code{search_data()} reformatted to support L1 versioning
+#' 
+#' @details Joins /inst/L1_versions.txt (a file holding version info) with \code{x} and does a little reformatting.
+#'
+format_search_results <- function(x) {
+  
+  # Join
+  
+  x <- dplyr::left_join(
+    x, 
+    data.table::fread(
+      system.file("/inst/L1_versions.txt", package = "ecocomDP")),
+    by = "id")
+  
+  # Shift IDs
+  
+  x <- dplyr::mutate(
+    x,
+    source_id = ifelse(x$source == "NEON", x$id, NA_character_))
+  
+  x <- dplyr::mutate(
+    x, 
+    id = ifelse(x$source == "NEON", x$derived_id, x$id))
+  
+  # Shift URLs
+  
+  x <- dplyr::mutate(
+    x, 
+    source_id_url = ifelse(x$source == "NEON", x$url, NA_character_))
+  
+  x <- dplyr::mutate(
+    x, 
+    url = ifelse(x$source != "NEON", x$url, NA_character_))
+  
+  # Add qualifiers to title, description, abstract
+  
+  x <- dplyr::mutate(
+    x, 
+    title = ifelse(
+      !is.na(x$title_qualifier),
+      paste(x$title_qualifier, x$title), 
+      x$title))
+  
+  x <- dplyr::mutate(
+    x, 
+    description = ifelse(
+      !is.na(x$description_qualifier), 
+      paste(x$description_qualifier, x$description), 
+      x$description))
+  
+  x <- dplyr::mutate(
+    x, 
+    abstract = ifelse(
+      !is.na(x$abstract_qualifier),
+      paste(x$abstract_qualifier, x$abstract), 
+      x$abstract))
+  
+  # Select cols to keep
+  
+  x <- dplyr::select(
+    x, id, title, abstract, description, years, sampling_interval, sites, url, 
+    source, source_id, source_id_url)
+  
+  return(x)
 }

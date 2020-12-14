@@ -1,9 +1,11 @@
 #' Summarize supported NEON data products
 #' 
-#' This is a helper function for project maintainers. It summarizes supported
-#' NEON data products and saves it as an .rda data object to the /data 
-#' directory of the ecocomDP R package, which is called upon by 
-#' \code{search_data()} to quickly identify datasets of potential interest.
+#' This is a helper function for project maintainers. It summarizes supported NEON data products for \code{search_data()}. This object essentially serves as an index of searchable terms.
+#' 
+#' @return 
+#' \item{summary_data_neon.rda}{Saved to /data}
+#' 
+#' @details Currently, only one L1 is derived form a NEON data product but there is already talk of supporting multiple L1 versions to meet user preferences. To do so, the content of summary_data_neon.rda shouldn't have to change but parsing to the searchable object used in \code{search_data()} may. See \code{search_data()} details for more.
 #'     
 #' @examples
 #' \dontrun{
