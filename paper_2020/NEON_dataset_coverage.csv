@@ -1,391 +1,391 @@
-dpid,dp_name,taxon_type,site_id,field_domain_id,field_site_name,site_type,field_dominant_nlcd_classes,min_year,max_year,n_years,areaKm2,query_date
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,ARIK,D10,Arikaree River,Wadeable Stream,Emergent Herbaceous Wetlands|Grassland/Herbaceous|Woody Wetlands,2014,2020,7,0.40915498919,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,BARC,D03,Ordway-Swisher Biological Station - Barco Lake,Lake,Shrub/Scrub,2014,2020,7,0.119733,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,BIGC,D17,Upper Big Creek,Wadeable Stream,Evergreen Forest,2018,2020,3,2.67142367476,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,BLDE,D12,Blacktail Deer Creek,Wadeable Stream,Emergent Herbaceous Wetlands|Shrub/Scrub,2018,2020,3,0.15751924304,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,BLUE,D11,Blue River,Non-wadeable River,Grassland/Herbaceous|Pasture/Hay,2017,2020,4,0.27099930994,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,BLWA,D08,Black Warrior River near Dead Lake,Non-wadeable River,Woody Wetlands,2016,2020,5,0.12137104561,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,CARI,D19,"Caribou Creek, Caribou-Poker Creeks Research Watershed",Wadeable Stream,Woody Wetlands,2016,2020,5,0.44187954121,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,COMO,D13,Como Creek,Wadeable Stream,Shrub/Scrub,2015,2020,6,0.4113027443,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,CRAM,D05,Crampton Lake,Lake,Woody Wetlands,2015,2020,6,0.265836,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,CUPE,D04,Rio Cupeyes,Wadeable Stream,Evergreen Forest,2015,2020,6,0.23068260117,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,FLNT,D03,Flint River,Non-wadeable River,Mixed Forest,2017,2020,4,0.41109826801,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,GUIL,D04,Rio Guilarte,Wadeable Stream,Evergreen Forest|Grassland/Herbaceous,2015,2020,6,0.39871927692,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,HOPB,D01,Lower Hop Brook,Wadeable Stream,Evergreen Forest|Mixed Forest,2016,2020,5,0.31972397454,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,KING,D06,Kings Creek,Wadeable Stream,Deciduous Forest,2015,2020,6,0.27455940575,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,LECO,D07,LeConte Creek,Wadeable Stream,Deciduous Forest,2015,2020,6,0.39756788466,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,LEWI,D02,Lewis Run,Wadeable Stream,Deciduous Forest,2016,2020,5,0.26955141011,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,LIRO,D05,Little Rock Lake,Lake,Deciduous Forest|Mixed Forest,2017,2020,4,0.192374,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,MART,D16,Martha Creek,Wadeable Stream,Evergreen Forest,2018,2020,3,0.39867403159,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,MAYF,D08,Mayfield Creek,Wadeable Stream,Deciduous Forest|Mixed Forest,2015,2020,6,0.40659785258,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,MCDI,D06,McDiffett Creek,Wadeable Stream,Cultivated Crops|Grassland/Herbaceous,2017,2020,4,0.13359802998,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,MCRA,D16,McRae Creek,Wadeable Stream,Evergreen Forest,2017,2020,4,0.40338653655,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,OKSR,D18,Oksrukuyik Creek,Wadeable Stream,Shrub/Scrub,2016,2020,5,0.39148336156,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,POSE,D02,Posey Creek,Wadeable Stream,Deciduous Forest,2014,2020,7,0.39458563883,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,PRIN,D11,Pringle Creek,Wadeable Stream,Deciduous Forest|Grassland/Herbaceous,2016,2020,5,0.35468194023,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,PRLA,D09,Prairie Lake at Dakota Coteau Field School,Lake,Grassland/Herbaceous,2014,2020,7,0.309582,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,PRPO,D09,Prairie Pothole,Lake,Grassland/Herbaceous,2014,2020,7,0.114716,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,REDB,D15,Red Butte Creek,Wadeable Stream,Deciduous Forest,2015,2020,6,0.39894388726,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,SUGG,D03,Ordway-Swisher Biological Station - Suggs Lake,Lake,Evergreen Forest|Woody Wetlands,2014,2020,7,0.307362,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,SYCA,D14,Sycamore Creek,Wadeable Stream,Shrub/Scrub,2017,2020,4,0.39236480794,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,TECR,D17,Teakettle 2 Creek,Wadeable Stream,Evergreen Forest,2019,2019,1,0.24255126697,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,TOMB,D08,Lower Tombigbee River at Choctaw Refuge,Non-wadeable River,Mixed Forest,2016,2020,5,0.2250270652,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,TOOK,D18,Toolik Lake,Lake,Dwarf Scrub,2016,2020,5,1.478303,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,WALK,D07,Walker Branch,Wadeable Stream,Deciduous Forest,2015,2020,6,0.51767190335,2020-12-11
-DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,WLOU,D13,West St Louis Creek,Wadeable Stream,Evergreen Forest,2017,2020,4,0.39442941723,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,ABBY,D16,Abby Road,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,29.868771,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,BARR,D18,Utqiaġvik,Terrestrial,Emergent Herbaceous Wetlands,2017,2019,3,50.076533,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,BART,D01,Bartlett Experimental Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,15.657434,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,BLAN,D02,Blandy Experimental Farm,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,5.7282589999999995,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,BONA,D19,Caribou-Poker Creeks Research Watershed,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2017,2020,4,49.633223,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,CLBJ,D11,LBJ National Grassland,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2016,2020,5,41.883456,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,CPER,D10,Central Plains Experimental Range,Terrestrial,Grassland/Herbaceous,2013,2020,8,65.398127,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,DCFS,D09,Dakota Coteau Field School,Terrestrial,Grassland/Herbaceous,2017,2020,4,7.798688,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,DEJU,D19,Delta Junction,Terrestrial,Evergreen Forest|Shrub/Scrub|Woody Wetlands,2016,2020,5,29.903834,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,DELA,D08,Dead Lake,Terrestrial,Evergreen Forest|Woody Wetlands,2015,2020,6,4.103929,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,DSNY,D03,Disney Wilderness Preserve,Terrestrial,Pasture/Hay|Woody Wetlands,2013,2020,8,48.504342,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,GRSM,D07,"Great Smoky Mountains National Park, Twin Creeks",Terrestrial,Deciduous Forest|Evergreen Forest,2015,2020,6,32.72719,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,GUAN,D04,Guanica Forest,Terrestrial,Evergreen Forest,2015,2020,6,34.922655,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,HARV,D01,Harvard Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2013,2020,8,48.094725,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,HEAL,D19,Healy,Terrestrial,Dwarf Scrub|Evergreen Forest|Shrub/Scrub,2015,2020,6,45.168147,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,JERC,D03,Jones Ecological Research Center,Terrestrial,Cultivated Crops|Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,13.3259,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,JORN,D14,Jornada LTER,Terrestrial,Shrub/Scrub,2015,2020,6,45.746148,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,KONA,D06,Konza Prairie Biological Station - Relocatable,Terrestrial,Cultivated Crops,2017,2020,4,2.749077,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,KONZ,D06,Konza Prairie Biological Station,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2015,2020,6,34.868609,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,LAJA,D04,Lajas Experimental Station,Terrestrial,Cultivated Crops|Grassland/Herbaceous|Pasture/Hay,2016,2020,5,3.948086,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,LENO,D08,Lenoir Landing,Terrestrial,Deciduous Forest|Woody Wetlands,2016,2020,5,7.680081,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,MLBS,D07,Mountain Lake Biological Station,Terrestrial,Deciduous Forest,2017,2020,4,11.148950000000001,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,MOAB,D13,Moab,Terrestrial,Evergreen Forest|Shrub/Scrub,2015,2020,6,50.4276,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,NIWO,D13,Niwot Ridge Mountain Research Station,Terrestrial,Evergreen Forest|Grassland/Herbaceous,2015,2020,6,13.396032,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,NOGP,D09,Northern Great Plains Research Laboratory,Terrestrial,Grassland/Herbaceous,2016,2020,5,6.019261,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,OAES,D11,Klemme Range Research Station,Terrestrial,Grassland/Herbaceous|Shrub/Scrub,2015,2020,6,6.209108,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,ONAQ,D15,Onaqui,Terrestrial,Evergreen Forest|Shrub/Scrub,2014,2020,7,67.774086,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,ORNL,D07,Oak Ridge,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,57.371094,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,OSBS,D03,Ordway-Swisher Biological Station,Terrestrial,Emergent Herbaceous Wetlands|Evergreen Forest|Woody Wetlands,2013,2020,8,36.808639,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,PUUM,D20,Pu'u Maka'ala Natural Area Reserve,Terrestrial,Evergreen Forest,2019,2020,2,47.196598,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,RMNP,D10,"Rocky Mountain National Park, CASTNET",Terrestrial,Evergreen Forest,2017,2020,4,46.526444,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,SCBI,D02,Smithsonian Conservation Biology Institute,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,9.863216,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,SERC,D02,Smithsonian Environmental Research Center,Terrestrial,Cultivated Crops|Deciduous Forest,2015,2020,6,10.327769,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,SJER,D17,San Joaquin Experimental Range,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,18.222906,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,SOAP,D17,Soaproot Saddle,Terrestrial,Evergreen Forest|Shrub/Scrub,2018,2020,3,5.822705,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,SRER,D14,Santa Rita Experimental Range,Terrestrial,Shrub/Scrub,2016,2020,5,214.897271,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,STEI,D05,Steigerwaldt Land Services,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2015,2020,6,23.723814,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,STER,D10,"North Sterling, CO",Terrestrial,Cultivated Crops,2013,2020,8,3.234318,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,TALL,D08,Talladega National Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,52.342968,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,TEAK,D17,Lower Teakettle,Terrestrial,Evergreen Forest|Shrub/Scrub,2019,2020,2,51.381475,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,TOOL,D18,Toolik,Terrestrial,Dwarf Scrub|Shrub/Scrub,2017,2020,4,58.656826,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,TREE,D05,Treehaven,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2015,2020,6,5.431672000000001,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,UKFS,D06,The University of Kansas Field Station,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,6.201129,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,UNDE,D05,UNDERC,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2014,2020,7,29.39245,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,WOOD,D09,Woodworth,Terrestrial,Emergent Herbaceous Wetlands|Grassland/Herbaceous,2014,2020,7,10.630176,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,WREF,D16,Wind River Experimental Forest,Terrestrial,Evergreen Forest,2018,2020,3,41.939962,2020-12-11
-DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,YELL,D12,Yellowstone Northern Range (Frog Rock),Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2018,2020,3,72.50336,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,ABBY,D16,Abby Road,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2017,2019,3,29.868771,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,BARR,D18,Utqiaġvik,Terrestrial,Emergent Herbaceous Wetlands,2017,2019,3,50.076533,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,BART,D01,Bartlett Experimental Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2015,2019,5,15.657434,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,BLAN,D02,Blandy Experimental Farm,Terrestrial,Deciduous Forest|Pasture/Hay,2017,2019,3,5.7282589999999995,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,BONA,D19,Caribou-Poker Creeks Research Watershed,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2017,2019,3,49.633223,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,CLBJ,D11,LBJ National Grassland,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2017,2019,3,41.883456,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,CPER,D10,Central Plains Experimental Range,Terrestrial,Grassland/Herbaceous,2013,2019,6,65.398127,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,DCFS,D09,Dakota Coteau Field School,Terrestrial,Grassland/Herbaceous,2017,2019,3,7.798688,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,DEJU,D19,Delta Junction,Terrestrial,Evergreen Forest|Shrub/Scrub|Woody Wetlands,2017,2019,3,29.903834,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,DELA,D08,Dead Lake,Terrestrial,Evergreen Forest|Woody Wetlands,2015,2019,4,4.103929,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,DSNY,D03,Disney Wilderness Preserve,Terrestrial,Pasture/Hay|Woody Wetlands,2015,2019,5,48.504342,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,GRSM,D07,"Great Smoky Mountains National Park, Twin Creeks",Terrestrial,Deciduous Forest|Evergreen Forest,2016,2019,4,32.72719,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,GUAN,D04,Guanica Forest,Terrestrial,Evergreen Forest,2015,2019,4,34.922655,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,HARV,D01,Harvard Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2015,2019,5,48.094725,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,HEAL,D19,Healy,Terrestrial,Dwarf Scrub|Evergreen Forest|Shrub/Scrub,2017,2019,3,45.168147,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,JERC,D03,Jones Ecological Research Center,Terrestrial,Cultivated Crops|Deciduous Forest|Evergreen Forest|Mixed Forest,2016,2019,4,13.3259,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,JORN,D14,Jornada LTER,Terrestrial,Shrub/Scrub,2017,2019,3,45.746148,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,KONA,D06,Konza Prairie Biological Station - Relocatable,Terrestrial,Cultivated Crops,2018,2019,2,2.749077,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,KONZ,D06,Konza Prairie Biological Station,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2017,2019,3,34.868609,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,LAJA,D04,Lajas Experimental Station,Terrestrial,Cultivated Crops|Grassland/Herbaceous|Pasture/Hay,2017,2019,3,3.948086,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,LENO,D08,Lenoir Landing,Terrestrial,Deciduous Forest|Woody Wetlands,2017,2019,3,7.680081,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,MLBS,D07,Mountain Lake Biological Station,Terrestrial,Deciduous Forest,2018,2019,2,11.148950000000001,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,MOAB,D13,Moab,Terrestrial,Evergreen Forest|Shrub/Scrub,2015,2019,4,50.4276,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,NIWO,D13,Niwot Ridge Mountain Research Station,Terrestrial,Evergreen Forest|Grassland/Herbaceous,2015,2019,4,13.396032,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,NOGP,D09,Northern Great Plains Research Laboratory,Terrestrial,Grassland/Herbaceous,2017,2019,3,6.019261,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,OAES,D11,Klemme Range Research Station,Terrestrial,Grassland/Herbaceous|Shrub/Scrub,2017,2019,3,6.209108,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,ONAQ,D15,Onaqui,Terrestrial,Evergreen Forest|Shrub/Scrub,2017,2019,3,67.774086,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,ORNL,D07,Oak Ridge,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2016,2019,4,57.371094,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,OSBS,D03,Ordway-Swisher Biological Station,Terrestrial,Emergent Herbaceous Wetlands|Evergreen Forest|Woody Wetlands,2016,2019,4,36.808639,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,PUUM,D20,Pu'u Maka'ala Natural Area Reserve,Terrestrial,Evergreen Forest,2018,2018,1,47.196598,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,RMNP,D10,"Rocky Mountain National Park, CASTNET",Terrestrial,Evergreen Forest,2017,2019,3,46.526444,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,SCBI,D02,Smithsonian Conservation Biology Institute,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2015,2019,5,9.863216,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,SERC,D02,Smithsonian Environmental Research Center,Terrestrial,Cultivated Crops|Deciduous Forest,2017,2019,3,10.327769,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,SJER,D17,San Joaquin Experimental Range,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2017,2019,3,18.222906,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,SOAP,D17,Soaproot Saddle,Terrestrial,Evergreen Forest|Shrub/Scrub,2017,2019,3,5.822705,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,SRER,D14,Santa Rita Experimental Range,Terrestrial,Shrub/Scrub,2017,2019,3,214.897271,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,STEI,D05,Steigerwaldt Land Services,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2016,2019,4,23.723814,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,STER,D10,"North Sterling, CO",Terrestrial,Cultivated Crops,2013,2019,6,3.234318,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,TALL,D08,Talladega National Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2015,2019,5,52.342968,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,TEAK,D17,Lower Teakettle,Terrestrial,Evergreen Forest|Shrub/Scrub,2017,2019,3,51.381475,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,TOOL,D18,Toolik,Terrestrial,Dwarf Scrub|Shrub/Scrub,2017,2019,3,58.656826,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,TREE,D05,Treehaven,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2016,2019,4,5.431672000000001,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,UKFS,D06,The University of Kansas Field Station,Terrestrial,Deciduous Forest|Pasture/Hay,2017,2019,3,6.201129,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,UNDE,D05,UNDERC,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2016,2019,4,29.39245,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,WOOD,D09,Woodworth,Terrestrial,Emergent Herbaceous Wetlands|Grassland/Herbaceous,2015,2019,4,10.630176,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,WREF,D16,Wind River Experimental Forest,Terrestrial,Evergreen Forest,2018,2019,2,41.939962,2020-12-11
-DP1.10003.001,Breeding landbird point counts,bird,YELL,D12,Yellowstone Northern Range (Frog Rock),Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2018,2019,2,72.50336,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,ARIK,D10,Arikaree River,Wadeable Stream,Emergent Herbaceous Wetlands|Grassland/Herbaceous|Woody Wetlands,2016,2020,5,0.40915498919,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,BIGC,D17,Upper Big Creek,Wadeable Stream,Evergreen Forest,2018,2020,3,2.67142367476,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,BLDE,D12,Blacktail Deer Creek,Wadeable Stream,Emergent Herbaceous Wetlands|Shrub/Scrub,2018,2020,3,0.15751924304,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,BLUE,D11,Blue River,Non-wadeable River,Grassland/Herbaceous|Pasture/Hay,2017,2018,2,0.27099930994,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,CARI,D19,"Caribou Creek, Caribou-Poker Creeks Research Watershed",Wadeable Stream,Woody Wetlands,2016,2020,5,0.44187954121,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,CRAM,D05,Crampton Lake,Lake,Woody Wetlands,2016,2020,5,0.265836,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,CUPE,D04,Rio Cupeyes,Wadeable Stream,Evergreen Forest,2017,2020,4,0.23068260117,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,GUIL,D04,Rio Guilarte,Wadeable Stream,Evergreen Forest|Grassland/Herbaceous,2017,2020,4,0.39871927692,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,HOPB,D01,Lower Hop Brook,Wadeable Stream,Evergreen Forest|Mixed Forest,2016,2019,4,0.31972397454,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,KING,D06,Kings Creek,Wadeable Stream,Deciduous Forest,2016,2020,5,0.27455940575,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,LECO,D07,LeConte Creek,Wadeable Stream,Deciduous Forest,2016,2019,4,0.39756788466,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,LEWI,D02,Lewis Run,Wadeable Stream,Deciduous Forest,2017,2020,4,0.26955141011,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,LIRO,D05,Little Rock Lake,Lake,Deciduous Forest|Mixed Forest,2017,2020,4,0.192374,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,MART,D16,Martha Creek,Wadeable Stream,Evergreen Forest,2018,2020,3,0.39867403159,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,MAYF,D08,Mayfield Creek,Wadeable Stream,Deciduous Forest|Mixed Forest,2016,2020,5,0.40659785258,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,MCDI,D06,McDiffett Creek,Wadeable Stream,Cultivated Crops|Grassland/Herbaceous,2017,2020,4,0.13359802998,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,MCRA,D16,McRae Creek,Wadeable Stream,Evergreen Forest,2017,2019,3,0.40338653655,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,OKSR,D18,Oksrukuyik Creek,Wadeable Stream,Shrub/Scrub,2019,2020,2,0.39148336156,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,POSE,D02,Posey Creek,Wadeable Stream,Deciduous Forest,2016,2019,4,0.39458563883,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,PRIN,D11,Pringle Creek,Wadeable Stream,Deciduous Forest|Grassland/Herbaceous,2017,2020,4,0.35468194023,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,PRLA,D09,Prairie Lake at Dakota Coteau Field School,Lake,Grassland/Herbaceous,2016,2020,5,0.309582,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,PRPO,D09,Prairie Pothole,Lake,Grassland/Herbaceous,2016,2020,5,0.114716,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,REDB,D15,Red Butte Creek,Wadeable Stream,Deciduous Forest,2016,2020,5,0.39894388726,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,SYCA,D14,Sycamore Creek,Wadeable Stream,Shrub/Scrub,2017,2020,4,0.39236480794,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,TECR,D17,Teakettle 2 Creek,Wadeable Stream,Evergreen Forest,2019,2019,1,0.24255126697,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,TOOK,D18,Toolik Lake,Lake,Dwarf Scrub,2017,2019,3,1.478303,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,WALK,D07,Walker Branch,Wadeable Stream,Deciduous Forest,2016,2020,5,0.51767190335,2020-12-11
-DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,WLOU,D13,West St Louis Creek,Wadeable Stream,Evergreen Forest,2017,2020,4,0.39442941723,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,ARIK,D10,Arikaree River,Wadeable Stream,Emergent Herbaceous Wetlands|Grassland/Herbaceous|Woody Wetlands,2014,2020,7,0.40915498919,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,BARC,D03,Ordway-Swisher Biological Station - Barco Lake,Lake,Shrub/Scrub,2014,2020,7,0.119733,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,BIGC,D17,Upper Big Creek,Wadeable Stream,Evergreen Forest,2018,2020,3,2.67142367476,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,BLDE,D12,Blacktail Deer Creek,Wadeable Stream,Emergent Herbaceous Wetlands|Shrub/Scrub,2018,2020,3,0.15751924304,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,BLUE,D11,Blue River,Non-wadeable River,Grassland/Herbaceous|Pasture/Hay,2017,2019,3,0.27099930994,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,BLWA,D08,Black Warrior River near Dead Lake,Non-wadeable River,Woody Wetlands,2016,2020,5,0.12137104561,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,CARI,D19,"Caribou Creek, Caribou-Poker Creeks Research Watershed",Wadeable Stream,Woody Wetlands,2016,2020,5,0.44187954121,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,COMO,D13,Como Creek,Wadeable Stream,Shrub/Scrub,2015,2020,6,0.4113027443,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,CRAM,D05,Crampton Lake,Lake,Woody Wetlands,2015,2020,6,0.265836,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,CUPE,D04,Rio Cupeyes,Wadeable Stream,Evergreen Forest,2015,2020,6,0.23068260117,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,FLNT,D03,Flint River,Non-wadeable River,Mixed Forest,2017,2020,4,0.41109826801,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,GUIL,D04,Rio Guilarte,Wadeable Stream,Evergreen Forest|Grassland/Herbaceous,2015,2020,6,0.39871927692,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,HOPB,D01,Lower Hop Brook,Wadeable Stream,Evergreen Forest|Mixed Forest,2016,2020,5,0.31972397454,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,KING,D06,Kings Creek,Wadeable Stream,Deciduous Forest,2015,2020,6,0.27455940575,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,LECO,D07,LeConte Creek,Wadeable Stream,Deciduous Forest,2015,2020,6,0.39756788466,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,LEWI,D02,Lewis Run,Wadeable Stream,Deciduous Forest,2016,2020,5,0.26955141011,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,LIRO,D05,Little Rock Lake,Lake,Deciduous Forest|Mixed Forest,2017,2020,4,0.192374,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,MART,D16,Martha Creek,Wadeable Stream,Evergreen Forest,2018,2020,3,0.39867403159,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,MAYF,D08,Mayfield Creek,Wadeable Stream,Deciduous Forest|Mixed Forest,2014,2020,7,0.40659785258,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,MCDI,D06,McDiffett Creek,Wadeable Stream,Cultivated Crops|Grassland/Herbaceous,2017,2020,4,0.13359802998,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,MCRA,D16,McRae Creek,Wadeable Stream,Evergreen Forest,2017,2020,4,0.40338653655,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,OKSR,D18,Oksrukuyik Creek,Wadeable Stream,Shrub/Scrub,2016,2020,5,0.39148336156,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,POSE,D02,Posey Creek,Wadeable Stream,Deciduous Forest,2014,2020,7,0.39458563883,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,PRIN,D11,Pringle Creek,Wadeable Stream,Deciduous Forest|Grassland/Herbaceous,2016,2020,5,0.35468194023,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,PRLA,D09,Prairie Lake at Dakota Coteau Field School,Lake,Grassland/Herbaceous,2014,2020,7,0.309582,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,PRPO,D09,Prairie Pothole,Lake,Grassland/Herbaceous,2014,2020,7,0.114716,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,REDB,D15,Red Butte Creek,Wadeable Stream,Deciduous Forest,2015,2020,6,0.39894388726,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,SUGG,D03,Ordway-Swisher Biological Station - Suggs Lake,Lake,Evergreen Forest|Woody Wetlands,2014,2020,7,0.307362,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,SYCA,D14,Sycamore Creek,Wadeable Stream,Shrub/Scrub,2017,2020,4,0.39236480794,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,TECR,D17,Teakettle 2 Creek,Wadeable Stream,Evergreen Forest,2019,2020,2,0.24255126697,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,TOMB,D08,Lower Tombigbee River at Choctaw Refuge,Non-wadeable River,Mixed Forest,2016,2020,5,0.2250270652,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,TOOK,D18,Toolik Lake,Lake,Dwarf Scrub,2016,2020,5,1.478303,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,WALK,D07,Walker Branch,Wadeable Stream,Deciduous Forest,2015,2020,6,0.51767190335,2020-12-11
-DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,WLOU,D13,West St Louis Creek,Wadeable Stream,Evergreen Forest,2016,2020,5,0.39442941723,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,ABBY,D16,Abby Road,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,29.868771,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,BARR,D18,Utqiaġvik,Terrestrial,Emergent Herbaceous Wetlands,2017,2020,4,50.076533,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,BART,D01,Bartlett Experimental Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,6,15.657434,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,BLAN,D02,Blandy Experimental Farm,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,5.7282589999999995,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,BONA,D19,Caribou-Poker Creeks Research Watershed,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2017,2020,4,49.633223,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,CLBJ,D11,LBJ National Grassland,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2016,2020,5,41.883456,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,CPER,D10,Central Plains Experimental Range,Terrestrial,Grassland/Herbaceous,2014,2020,7,65.398127,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,DCFS,D09,Dakota Coteau Field School,Terrestrial,Grassland/Herbaceous,2017,2020,4,7.798688,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,DEJU,D19,Delta Junction,Terrestrial,Evergreen Forest|Shrub/Scrub|Woody Wetlands,2016,2020,5,29.903834,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,DELA,D08,Dead Lake,Terrestrial,Evergreen Forest|Woody Wetlands,2016,2020,5,4.103929,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,DSNY,D03,Disney Wilderness Preserve,Terrestrial,Pasture/Hay|Woody Wetlands,2014,2020,6,48.504342,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,GRSM,D07,"Great Smoky Mountains National Park, Twin Creeks",Terrestrial,Deciduous Forest|Evergreen Forest,2016,2020,5,32.72719,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,GUAN,D04,Guanica Forest,Terrestrial,Evergreen Forest,2014,2020,6,34.922655,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,HARV,D01,Harvard Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2014,2020,6,48.094725,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,HEAL,D19,Healy,Terrestrial,Dwarf Scrub|Evergreen Forest|Shrub/Scrub,2015,2020,6,45.168147,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,JERC,D03,Jones Ecological Research Center,Terrestrial,Cultivated Crops|Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,6,13.3259,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,JORN,D14,Jornada LTER,Terrestrial,Shrub/Scrub,2016,2020,5,45.746148,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,KONA,D06,Konza Prairie Biological Station - Relocatable,Terrestrial,Cultivated Crops,2017,2020,4,2.749077,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,KONZ,D06,Konza Prairie Biological Station,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2016,2020,5,34.868609,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,LAJA,D04,Lajas Experimental Station,Terrestrial,Cultivated Crops|Grassland/Herbaceous|Pasture/Hay,2016,2020,5,3.948086,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,LENO,D08,Lenoir Landing,Terrestrial,Deciduous Forest|Woody Wetlands,2016,2020,5,7.680081,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,MLBS,D07,Mountain Lake Biological Station,Terrestrial,Deciduous Forest,2017,2020,4,11.148950000000001,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,MOAB,D13,Moab,Terrestrial,Evergreen Forest|Shrub/Scrub,2016,2020,5,50.4276,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,NIWO,D13,Niwot Ridge Mountain Research Station,Terrestrial,Evergreen Forest|Grassland/Herbaceous,2017,2020,4,13.396032,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,NOGP,D09,Northern Great Plains Research Laboratory,Terrestrial,Grassland/Herbaceous,2016,2020,5,6.019261,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,OAES,D11,Klemme Range Research Station,Terrestrial,Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,6.209108,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,ONAQ,D15,Onaqui,Terrestrial,Evergreen Forest|Shrub/Scrub,2014,2020,6,67.774086,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,ORNL,D07,Oak Ridge,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,6,57.371094,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,OSBS,D03,Ordway-Swisher Biological Station,Terrestrial,Emergent Herbaceous Wetlands|Evergreen Forest|Woody Wetlands,2014,2020,6,36.808639,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,PUUM,D20,Pu'u Maka'ala Natural Area Reserve,Terrestrial,Evergreen Forest,2018,2020,3,47.196598,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,RMNP,D10,"Rocky Mountain National Park, CASTNET",Terrestrial,Evergreen Forest,2017,2020,4,46.526444,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,SCBI,D02,Smithsonian Conservation Biology Institute,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,9.863216,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,SERC,D02,Smithsonian Environmental Research Center,Terrestrial,Cultivated Crops|Deciduous Forest,2015,2020,6,10.327769,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,SJER,D17,San Joaquin Experimental Range,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,18.222906,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,SOAP,D17,Soaproot Saddle,Terrestrial,Evergreen Forest|Shrub/Scrub,2018,2020,3,5.822705,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,SRER,D14,Santa Rita Experimental Range,Terrestrial,Shrub/Scrub,2016,2020,5,214.897271,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,STEI,D05,Steigerwaldt Land Services,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2016,2020,5,23.723814,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,STER,D10,"North Sterling, CO",Terrestrial,Cultivated Crops,2014,2020,6,3.234318,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,TALL,D08,Talladega National Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,6,52.342968,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,TEAK,D17,Lower Teakettle,Terrestrial,Evergreen Forest|Shrub/Scrub,2019,2020,2,51.381475,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,TOOL,D18,Toolik,Terrestrial,Dwarf Scrub|Shrub/Scrub,2017,2020,4,58.656826,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,TREE,D05,Treehaven,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2016,2020,5,5.431672000000001,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,UKFS,D06,The University of Kansas Field Station,Terrestrial,Deciduous Forest|Pasture/Hay,2016,2020,5,6.201129,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,UNDE,D05,UNDERC,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2014,2020,6,29.39245,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,WOOD,D09,Woodworth,Terrestrial,Emergent Herbaceous Wetlands|Grassland/Herbaceous,2014,2020,6,10.630176,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,WREF,D16,Wind River Experimental Forest,Terrestrial,Evergreen Forest,2018,2020,3,41.939962,2020-12-11
-DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,YELL,D12,Yellowstone Northern Range (Frog Rock),Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2018,2020,3,72.50336,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,ABBY,D16,Abby Road,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2019,4,29.868771,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,BARR,D18,Utqiaġvik,Terrestrial,Emergent Herbaceous Wetlands,2016,2019,4,50.076533,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,BART,D01,Bartlett Experimental Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,15.657434,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,BLAN,D02,Blandy Experimental Farm,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,5.7282589999999995,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,BONA,D19,Caribou-Poker Creeks Research Watershed,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2017,2020,4,49.633223,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,CLBJ,D11,LBJ National Grassland,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2016,2019,4,41.883456,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,CPER,D10,Central Plains Experimental Range,Terrestrial,Grassland/Herbaceous,2013,2020,8,65.398127,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,DCFS,D09,Dakota Coteau Field School,Terrestrial,Grassland/Herbaceous,2017,2019,3,7.798688,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,DEJU,D19,Delta Junction,Terrestrial,Evergreen Forest|Shrub/Scrub|Woody Wetlands,2016,2020,5,29.903834,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,DELA,D08,Dead Lake,Terrestrial,Evergreen Forest|Woody Wetlands,2015,2019,5,4.103929,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,DSNY,D03,Disney Wilderness Preserve,Terrestrial,Pasture/Hay|Woody Wetlands,2013,2019,7,48.504342,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,GRSM,D07,"Great Smoky Mountains National Park, Twin Creeks",Terrestrial,Deciduous Forest|Evergreen Forest,2015,2020,6,32.72719,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,GUAN,D04,Guanica Forest,Terrestrial,Evergreen Forest,2015,2019,5,34.922655,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,HARV,D01,Harvard Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2014,2020,7,48.094725,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,HEAL,D19,Healy,Terrestrial,Dwarf Scrub|Evergreen Forest|Shrub/Scrub,2015,2019,5,45.168147,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,JERC,D03,Jones Ecological Research Center,Terrestrial,Cultivated Crops|Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2019,6,13.3259,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,JORN,D14,Jornada LTER,Terrestrial,Shrub/Scrub,2014,2019,6,45.746148,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,KONA,D06,Konza Prairie Biological Station - Relocatable,Terrestrial,Cultivated Crops,2017,2020,4,2.749077,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,KONZ,D06,Konza Prairie Biological Station,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2015,2019,5,34.868609,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,LAJA,D04,Lajas Experimental Station,Terrestrial,Cultivated Crops|Grassland/Herbaceous|Pasture/Hay,2016,2019,4,3.948086,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,LENO,D08,Lenoir Landing,Terrestrial,Deciduous Forest|Woody Wetlands,2016,2019,4,7.680081,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,MLBS,D07,Mountain Lake Biological Station,Terrestrial,Deciduous Forest,2017,2019,3,11.148950000000001,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,MOAB,D13,Moab,Terrestrial,Evergreen Forest|Shrub/Scrub,2015,2019,5,50.4276,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,NIWO,D13,Niwot Ridge Mountain Research Station,Terrestrial,Evergreen Forest|Grassland/Herbaceous,2015,2019,5,13.396032,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,NOGP,D09,Northern Great Plains Research Laboratory,Terrestrial,Grassland/Herbaceous,2016,2019,4,6.019261,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,OAES,D11,Klemme Range Research Station,Terrestrial,Grassland/Herbaceous|Shrub/Scrub,2015,2019,5,6.209108,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,ONAQ,D15,Onaqui,Terrestrial,Evergreen Forest|Shrub/Scrub,2014,2019,6,67.774086,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,ORNL,D07,Oak Ridge,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,57.371094,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,OSBS,D03,Ordway-Swisher Biological Station,Terrestrial,Emergent Herbaceous Wetlands|Evergreen Forest|Woody Wetlands,2013,2019,7,36.808639,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,PUUM,D20,Pu'u Maka'ala Natural Area Reserve,Terrestrial,Evergreen Forest,2018,2020,3,47.196598,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,RMNP,D10,"Rocky Mountain National Park, CASTNET",Terrestrial,Evergreen Forest,2017,2020,4,46.526444,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,SCBI,D02,Smithsonian Conservation Biology Institute,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,9.863216,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,SERC,D02,Smithsonian Environmental Research Center,Terrestrial,Cultivated Crops|Deciduous Forest,2015,2019,5,10.327769,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,SJER,D17,San Joaquin Experimental Range,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2015,2020,5,18.222906,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,SOAP,D17,Soaproot Saddle,Terrestrial,Evergreen Forest|Shrub/Scrub,2017,2019,3,5.822705,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,SRER,D14,Santa Rita Experimental Range,Terrestrial,Shrub/Scrub,2016,2020,5,214.897271,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,STEI,D05,Steigerwaldt Land Services,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2015,2019,5,23.723814,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,STER,D10,"North Sterling, CO",Terrestrial,Cultivated Crops,2014,2019,6,3.234318,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,TALL,D08,Talladega National Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2019,6,52.342968,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,TEAK,D17,Lower Teakettle,Terrestrial,Evergreen Forest|Shrub/Scrub,2017,2019,2,51.381475,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,TOOL,D18,Toolik,Terrestrial,Dwarf Scrub|Shrub/Scrub,2016,2019,4,58.656826,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,TREE,D05,Treehaven,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2015,2019,5,5.431672000000001,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,UKFS,D06,The University of Kansas Field Station,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,6.201129,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,UNDE,D05,UNDERC,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2014,2020,7,29.39245,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,WOOD,D09,Woodworth,Terrestrial,Emergent Herbaceous Wetlands|Grassland/Herbaceous,2014,2019,6,10.630176,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,WREF,D16,Wind River Experimental Forest,Terrestrial,Evergreen Forest,2016,2019,3,41.939962,2020-12-11
-DP1.10058.001,Plant presence and percent cover,plant,YELL,D12,Yellowstone Northern Range (Frog Rock),Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2018,2020,3,72.50336,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,ABBY,D16,Abby Road,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,29.868771,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,BARR,D18,Utqiaġvik,Terrestrial,Emergent Herbaceous Wetlands,2017,2020,4,50.076533,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,BART,D01,Bartlett Experimental Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,15.657434,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,BLAN,D02,Blandy Experimental Farm,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,5.7282589999999995,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,BONA,D19,Caribou-Poker Creeks Research Watershed,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2017,2020,4,49.633223,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,CLBJ,D11,LBJ National Grassland,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2016,2020,5,41.883456,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,CPER,D10,Central Plains Experimental Range,Terrestrial,Grassland/Herbaceous,2013,2020,8,65.398127,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,DCFS,D09,Dakota Coteau Field School,Terrestrial,Grassland/Herbaceous,2017,2020,4,7.798688,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,DEJU,D19,Delta Junction,Terrestrial,Evergreen Forest|Shrub/Scrub|Woody Wetlands,2016,2020,5,29.903834,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,DELA,D08,Dead Lake,Terrestrial,Evergreen Forest|Woody Wetlands,2015,2020,6,4.103929,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,DSNY,D03,Disney Wilderness Preserve,Terrestrial,Pasture/Hay|Woody Wetlands,2013,2020,8,48.504342,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,GRSM,D07,"Great Smoky Mountains National Park, Twin Creeks",Terrestrial,Deciduous Forest|Evergreen Forest,2015,2020,6,32.72719,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,GUAN,D04,Guanica Forest,Terrestrial,Evergreen Forest,2016,2017,2,34.922655,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,HARV,D01,Harvard Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2013,2020,8,48.094725,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,HEAL,D19,Healy,Terrestrial,Dwarf Scrub|Evergreen Forest|Shrub/Scrub,2015,2020,6,45.168147,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,JERC,D03,Jones Ecological Research Center,Terrestrial,Cultivated Crops|Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,13.3259,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,JORN,D14,Jornada LTER,Terrestrial,Shrub/Scrub,2015,2020,6,45.746148,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,KONA,D06,Konza Prairie Biological Station - Relocatable,Terrestrial,Cultivated Crops,2017,2020,4,2.749077,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,KONZ,D06,Konza Prairie Biological Station,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2015,2020,6,34.868609,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,LAJA,D04,Lajas Experimental Station,Terrestrial,Cultivated Crops|Grassland/Herbaceous|Pasture/Hay,2016,2016,1,3.948086,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,LENO,D08,Lenoir Landing,Terrestrial,Deciduous Forest|Woody Wetlands,2016,2019,4,7.680081,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,MLBS,D07,Mountain Lake Biological Station,Terrestrial,Deciduous Forest,2017,2020,4,11.148950000000001,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,MOAB,D13,Moab,Terrestrial,Evergreen Forest|Shrub/Scrub,2015,2020,6,50.4276,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,NIWO,D13,Niwot Ridge Mountain Research Station,Terrestrial,Evergreen Forest|Grassland/Herbaceous,2015,2020,6,13.396032,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,NOGP,D09,Northern Great Plains Research Laboratory,Terrestrial,Grassland/Herbaceous,2016,2020,5,6.019261,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,OAES,D11,Klemme Range Research Station,Terrestrial,Grassland/Herbaceous|Shrub/Scrub,2015,2020,6,6.209108,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,ONAQ,D15,Onaqui,Terrestrial,Evergreen Forest|Shrub/Scrub,2014,2020,7,67.774086,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,ORNL,D07,Oak Ridge,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,57.371094,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,OSBS,D03,Ordway-Swisher Biological Station,Terrestrial,Emergent Herbaceous Wetlands|Evergreen Forest|Woody Wetlands,2013,2020,8,36.808639,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,RMNP,D10,"Rocky Mountain National Park, CASTNET",Terrestrial,Evergreen Forest,2017,2020,4,46.526444,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,SCBI,D02,Smithsonian Conservation Biology Institute,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,9.863216,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,SERC,D02,Smithsonian Environmental Research Center,Terrestrial,Cultivated Crops|Deciduous Forest,2015,2020,6,10.327769,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,SJER,D17,San Joaquin Experimental Range,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,18.222906,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,SOAP,D17,Soaproot Saddle,Terrestrial,Evergreen Forest|Shrub/Scrub,2018,2020,3,5.822705,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,SRER,D14,Santa Rita Experimental Range,Terrestrial,Shrub/Scrub,2016,2020,5,214.897271,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,STEI,D05,Steigerwaldt Land Services,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2015,2020,6,23.723814,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,STER,D10,"North Sterling, CO",Terrestrial,Cultivated Crops,2014,2020,7,3.234318,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,TALL,D08,Talladega National Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,52.342968,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,TEAK,D17,Lower Teakettle,Terrestrial,Evergreen Forest|Shrub/Scrub,2019,2020,2,51.381475,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,TOOL,D18,Toolik,Terrestrial,Dwarf Scrub|Shrub/Scrub,2017,2020,4,58.656826,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,TREE,D05,Treehaven,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2015,2020,6,5.431672000000001,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,UKFS,D06,The University of Kansas Field Station,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,6.201129,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,UNDE,D05,UNDERC,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2014,2020,7,29.39245,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,WOOD,D09,Woodworth,Terrestrial,Emergent Herbaceous Wetlands|Grassland/Herbaceous,2014,2020,7,10.630176,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,WREF,D16,Wind River Experimental Forest,Terrestrial,Evergreen Forest,2017,2020,4,41.939962,2020-12-11
-DP1.10072.001,Small mammal box trapping,small_mammal,YELL,D12,Yellowstone Northern Range (Frog Rock),Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2018,2020,3,72.50336,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,ABBY,D16,Abby Road,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,29.868771,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,BARR,D18,Utqiaġvik,Terrestrial,Emergent Herbaceous Wetlands,2017,2019,3,50.076533,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,BART,D01,Bartlett Experimental Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,15.657434,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,BLAN,D02,Blandy Experimental Farm,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,5.7282589999999995,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,BONA,D19,Caribou-Poker Creeks Research Watershed,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2017,2020,4,49.633223,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,CLBJ,D11,LBJ National Grassland,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2014,2020,6,41.883456,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,CPER,D10,Central Plains Experimental Range,Terrestrial,Grassland/Herbaceous,2014,2020,6,65.398127,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,DCFS,D09,Dakota Coteau Field School,Terrestrial,Grassland/Herbaceous,2017,2020,4,7.798688,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,DEJU,D19,Delta Junction,Terrestrial,Evergreen Forest|Shrub/Scrub|Woody Wetlands,2016,2020,5,29.903834,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,DELA,D08,Dead Lake,Terrestrial,Evergreen Forest|Woody Wetlands,2015,2020,6,4.103929,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,DSNY,D03,Disney Wilderness Preserve,Terrestrial,Pasture/Hay|Woody Wetlands,2014,2020,7,48.504342,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,GRSM,D07,"Great Smoky Mountains National Park, Twin Creeks",Terrestrial,Deciduous Forest|Evergreen Forest,2015,2020,6,32.72719,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,GUAN,D04,Guanica Forest,Terrestrial,Evergreen Forest,2016,2020,5,34.922655,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,HARV,D01,Harvard Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2014,2020,7,48.094725,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,HEAL,D19,Healy,Terrestrial,Dwarf Scrub|Evergreen Forest|Shrub/Scrub,2016,2020,5,45.168147,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,JERC,D03,Jones Ecological Research Center,Terrestrial,Cultivated Crops|Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,13.3259,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,JORN,D14,Jornada LTER,Terrestrial,Shrub/Scrub,2016,2020,5,45.746148,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,KONA,D06,Konza Prairie Biological Station - Relocatable,Terrestrial,Cultivated Crops,2017,2020,4,2.749077,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,KONZ,D06,Konza Prairie Biological Station,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2015,2020,6,34.868609,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,LAJA,D04,Lajas Experimental Station,Terrestrial,Cultivated Crops|Grassland/Herbaceous|Pasture/Hay,2016,2020,5,3.948086,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,LENO,D08,Lenoir Landing,Terrestrial,Deciduous Forest|Woody Wetlands,2016,2020,5,7.680081,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,MLBS,D07,Mountain Lake Biological Station,Terrestrial,Deciduous Forest,2017,2020,4,11.148950000000001,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,MOAB,D13,Moab,Terrestrial,Evergreen Forest|Shrub/Scrub,2015,2020,6,50.4276,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,NIWO,D13,Niwot Ridge Mountain Research Station,Terrestrial,Evergreen Forest|Grassland/Herbaceous,2016,2020,5,13.396032,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,NOGP,D09,Northern Great Plains Research Laboratory,Terrestrial,Grassland/Herbaceous,2016,2020,5,6.019261,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,OAES,D11,Klemme Range Research Station,Terrestrial,Grassland/Herbaceous|Shrub/Scrub,2015,2020,6,6.209108,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,ONAQ,D15,Onaqui,Terrestrial,Evergreen Forest|Shrub/Scrub,2014,2020,6,67.774086,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,ORNL,D07,Oak Ridge,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,57.371094,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,OSBS,D03,Ordway-Swisher Biological Station,Terrestrial,Emergent Herbaceous Wetlands|Evergreen Forest|Woody Wetlands,2014,2020,7,36.808639,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,RMNP,D10,"Rocky Mountain National Park, CASTNET",Terrestrial,Evergreen Forest,2017,2020,4,46.526444,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,SCBI,D02,Smithsonian Conservation Biology Institute,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,9.863216,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,SERC,D02,Smithsonian Environmental Research Center,Terrestrial,Cultivated Crops|Deciduous Forest,2015,2020,6,10.327769,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,SJER,D17,San Joaquin Experimental Range,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,18.222906,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,SOAP,D17,Soaproot Saddle,Terrestrial,Evergreen Forest|Shrub/Scrub,2018,2020,3,5.822705,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,SRER,D14,Santa Rita Experimental Range,Terrestrial,Shrub/Scrub,2016,2020,5,214.897271,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,STEI,D05,Steigerwaldt Land Services,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2016,2020,5,23.723814,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,STER,D10,"North Sterling, CO",Terrestrial,Cultivated Crops,2014,2020,6,3.234318,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,TALL,D08,Talladega National Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,52.342968,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,TEAK,D17,Lower Teakettle,Terrestrial,Evergreen Forest|Shrub/Scrub,2019,2020,2,51.381475,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,TOOL,D18,Toolik,Terrestrial,Dwarf Scrub|Shrub/Scrub,2017,2020,4,58.656826,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,TREE,D05,Treehaven,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2016,2020,5,5.431672000000001,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,UKFS,D06,The University of Kansas Field Station,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,6.201129,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,UNDE,D05,UNDERC,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2014,2020,7,29.39245,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,WOOD,D09,Woodworth,Terrestrial,Emergent Herbaceous Wetlands|Grassland/Herbaceous,2014,2020,7,10.630176,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,WREF,D16,Wind River Experimental Forest,Terrestrial,Evergreen Forest,2018,2020,3,41.939962,2020-12-11
-DP1.10093.001,Ticks sampled using drag cloths,tick,YELL,D12,Yellowstone Northern Range (Frog Rock),Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2018,2020,3,72.50336,2020-12-11
-DP1.10092.001,Tick-borne pathogen status,tick_pathogen,BLAN,D02,Blandy Experimental Farm,Terrestrial,Deciduous Forest|Pasture/Hay,2016,2018,3,5.7282589999999995,2020-12-11
-DP1.10092.001,Tick-borne pathogen status,tick_pathogen,DELA,D08,Dead Lake,Terrestrial,Evergreen Forest|Woody Wetlands,2015,2018,2,4.103929,2020-12-11
-DP1.10092.001,Tick-borne pathogen status,tick_pathogen,HARV,D01,Harvard Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2014,2018,4,48.094725,2020-12-11
-DP1.10092.001,Tick-borne pathogen status,tick_pathogen,KONA,D06,Konza Prairie Biological Station - Relocatable,Terrestrial,Cultivated Crops,2017,2017,1,2.749077,2020-12-11
-DP1.10092.001,Tick-borne pathogen status,tick_pathogen,KONZ,D06,Konza Prairie Biological Station,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2015,2018,4,34.868609,2020-12-11
-DP1.10092.001,Tick-borne pathogen status,tick_pathogen,LENO,D08,Lenoir Landing,Terrestrial,Deciduous Forest|Woody Wetlands,2016,2018,2,7.680081,2020-12-11
-DP1.10092.001,Tick-borne pathogen status,tick_pathogen,MLBS,D07,Mountain Lake Biological Station,Terrestrial,Deciduous Forest,2018,2018,1,11.148950000000001,2020-12-11
-DP1.10092.001,Tick-borne pathogen status,tick_pathogen,ORNL,D07,Oak Ridge,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2018,4,57.371094,2020-12-11
-DP1.10092.001,Tick-borne pathogen status,tick_pathogen,OSBS,D03,Ordway-Swisher Biological Station,Terrestrial,Emergent Herbaceous Wetlands|Evergreen Forest|Woody Wetlands,2014,2018,5,36.808639,2020-12-11
-DP1.10092.001,Tick-borne pathogen status,tick_pathogen,SCBI,D02,Smithsonian Conservation Biology Institute,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2018,4,9.863216,2020-12-11
-DP1.10092.001,Tick-borne pathogen status,tick_pathogen,SERC,D02,Smithsonian Environmental Research Center,Terrestrial,Cultivated Crops|Deciduous Forest,2016,2018,3,10.327769,2020-12-11
-DP1.10092.001,Tick-borne pathogen status,tick_pathogen,TALL,D08,Talladega National Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2018,5,52.342968,2020-12-11
-DP1.10092.001,Tick-borne pathogen status,tick_pathogen,TREE,D05,Treehaven,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2016,2018,3,5.431672000000001,2020-12-11
-DP1.10092.001,Tick-borne pathogen status,tick_pathogen,UKFS,D06,The University of Kansas Field Station,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2018,4,6.201129,2020-12-11
+dpid,dp_name,taxon_type,site_id,field_domain_id,field_site_name,site_type,field_dominant_nlcd_classes,min_year,max_year,n_years,n_year_months,std_dev_interval_betw_year_months,std_dev_interval_betw_years,areaKm2,query_date
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,ARIK,D10,Arikaree River,Wadeable Stream,Emergent Herbaceous Wetlands|Grassland/Herbaceous|Woody Wetlands,2014,2020,7,18,0.13,0,0.40915498919,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,BARC,D03,Ordway-Swisher Biological Station - Barco Lake,Lake,Shrub/Scrub,2014,2020,7,19,0.07,0,0.119733,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,BIGC,D17,Upper Big Creek,Wadeable Stream,Evergreen Forest,2018,2020,3,8,0.19,0,2.67142367476,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,BLDE,D12,Blacktail Deer Creek,Wadeable Stream,Emergent Herbaceous Wetlands|Shrub/Scrub,2018,2020,3,8,0.25,0,0.15751924304,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,BLUE,D11,Blue River,Non-wadeable River,Grassland/Herbaceous|Pasture/Hay,2017,2020,4,10,0.06,0,0.27099930994,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,BLWA,D08,Black Warrior River near Dead Lake,Non-wadeable River,Woody Wetlands,2016,2020,5,12,0.06,0,0.12137104561,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,CARI,D19,"Caribou Creek, Caribou-Poker Creeks Research Watershed",Wadeable Stream,Woody Wetlands,2016,2020,5,14,0.3,0,0.44187954121,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,COMO,D13,Como Creek,Wadeable Stream,Shrub/Scrub,2015,2020,6,14,0.31,0,0.4113027443,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,CRAM,D05,Crampton Lake,Lake,Woody Wetlands,2015,2020,6,18,0.22,0,0.265836,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,CUPE,D04,Rio Cupeyes,Wadeable Stream,Evergreen Forest,2015,2020,6,17,0.12,0,0.23068260117,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,FLNT,D03,Flint River,Non-wadeable River,Mixed Forest,2017,2020,4,11,0.13,0,0.41109826801,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,GUIL,D04,Rio Guilarte,Wadeable Stream,Evergreen Forest|Grassland/Herbaceous,2015,2020,6,17,0.12,0,0.39871927692,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,HOPB,D01,Lower Hop Brook,Wadeable Stream,Evergreen Forest|Mixed Forest,2016,2020,5,12,0.13,0,0.31972397454,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,KING,D06,Kings Creek,Wadeable Stream,Deciduous Forest,2015,2020,6,17,0.12,0,0.27455940575,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,LECO,D07,LeConte Creek,Wadeable Stream,Deciduous Forest,2015,2020,6,15,0.15,0,0.39756788466,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,LEWI,D02,Lewis Run,Wadeable Stream,Deciduous Forest,2016,2020,5,12,0.08,0,0.26955141011,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,LIRO,D05,Little Rock Lake,Lake,Deciduous Forest|Mixed Forest,2017,2020,4,12,0.21,0,0.192374,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,MART,D16,Martha Creek,Wadeable Stream,Evergreen Forest,2018,2020,3,8,0.21,0,0.39867403159,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,MAYF,D08,Mayfield Creek,Wadeable Stream,Deciduous Forest|Mixed Forest,2015,2020,6,17,0.06,0,0.40659785258,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,MCDI,D06,McDiffett Creek,Wadeable Stream,Cultivated Crops|Grassland/Herbaceous,2017,2020,4,12,0.12,0,0.13359802998,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,MCRA,D16,McRae Creek,Wadeable Stream,Evergreen Forest,2017,2020,4,10,0.25,0,0.40338653655,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,OKSR,D18,Oksrukuyik Creek,Wadeable Stream,Shrub/Scrub,2016,2020,5,13,0.34,0,0.39148336156,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,POSE,D02,Posey Creek,Wadeable Stream,Deciduous Forest,2014,2020,7,18,0.05,0,0.39458563883,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,PRIN,D11,Pringle Creek,Wadeable Stream,Deciduous Forest|Grassland/Herbaceous,2016,2020,5,12,0.07,0,0.35468194023,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,PRLA,D09,Prairie Lake at Dakota Coteau Field School,Lake,Grassland/Herbaceous,2014,2020,7,19,0.23,0,0.309582,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,PRPO,D09,Prairie Pothole,Lake,Grassland/Herbaceous,2014,2020,7,21,0.22,0,0.114716,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,REDB,D15,Red Butte Creek,Wadeable Stream,Deciduous Forest,2015,2020,6,13,0.23,0,0.39894388726,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,SUGG,D03,Ordway-Swisher Biological Station - Suggs Lake,Lake,Evergreen Forest|Woody Wetlands,2014,2020,7,19,0.07,0,0.307362,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,SYCA,D14,Sycamore Creek,Wadeable Stream,Shrub/Scrub,2017,2020,4,13,0.17,0,0.39236480794,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,TECR,D17,Teakettle 2 Creek,Wadeable Stream,Evergreen Forest,2019,2019,1,2,NA,NA,0.24255126697,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,TOMB,D08,Lower Tombigbee River at Choctaw Refuge,Non-wadeable River,Mixed Forest,2016,2020,5,12,0.05,0,0.2250270652,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,TOOK,D18,Toolik Lake,Lake,Dwarf Scrub,2016,2020,5,13,0.34,0,1.478303,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,WALK,D07,Walker Branch,Wadeable Stream,Deciduous Forest,2015,2020,6,16,0.05,0,0.51767190335,2020-12-15
+DP1.20166.001,"Periphyton, seston, and phytoplankton collection",algae,WLOU,D13,West St Louis Creek,Wadeable Stream,Evergreen Forest,2017,2020,4,11,0.26,0,0.39442941723,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,ABBY,D16,Abby Road,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,22,0.23,0,29.868771,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,BARR,D18,Utqiaġvik,Terrestrial,Emergent Herbaceous Wetlands,2017,2019,3,5,0.5,0,50.076533,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,BART,D01,Bartlett Experimental Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,34,0.23,0,15.657434,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,BLAN,D02,Blandy Experimental Farm,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,37,0.16,0,5.7282589999999995,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,BONA,D19,Caribou-Poker Creeks Research Watershed,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2017,2020,4,11,0.36,0,49.633223,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,CLBJ,D11,LBJ National Grassland,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2016,2020,5,34,0.13,0,41.883456,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,CPER,D10,Central Plains Experimental Range,Terrestrial,Grassland/Herbaceous,2013,2020,8,43,0.2,0,65.398127,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,DCFS,D09,Dakota Coteau Field School,Terrestrial,Grassland/Herbaceous,2017,2020,4,19,0.22,0,7.798688,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,DEJU,D19,Delta Junction,Terrestrial,Evergreen Forest|Shrub/Scrub|Woody Wetlands,2016,2020,5,17,0.31,0,29.903834,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,DELA,D08,Dead Lake,Terrestrial,Evergreen Forest|Woody Wetlands,2015,2020,6,29,0.22,0,4.103929,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,DSNY,D03,Disney Wilderness Preserve,Terrestrial,Pasture/Hay|Woody Wetlands,2013,2020,8,48,0.17,0,48.504342,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,GRSM,D07,"Great Smoky Mountains National Park, Twin Creeks",Terrestrial,Deciduous Forest|Evergreen Forest,2015,2020,6,32,0.18,0,32.72719,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,GUAN,D04,Guanica Forest,Terrestrial,Evergreen Forest,2015,2020,6,35,0.16,0,34.922655,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,HARV,D01,Harvard Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2013,2020,8,38,0.23,0,48.094725,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,HEAL,D19,Healy,Terrestrial,Dwarf Scrub|Evergreen Forest|Shrub/Scrub,2015,2020,6,18,0.34,0,45.168147,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,JERC,D03,Jones Ecological Research Center,Terrestrial,Cultivated Crops|Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,41,0.17,0,13.3259,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,JORN,D14,Jornada LTER,Terrestrial,Shrub/Scrub,2015,2020,6,40,0.13,0,45.746148,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,KONA,D06,Konza Prairie Biological Station - Relocatable,Terrestrial,Cultivated Crops,2017,2020,4,21,0.18,0,2.749077,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,KONZ,D06,Konza Prairie Biological Station,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2015,2020,6,33,0.18,0,34.868609,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,LAJA,D04,Lajas Experimental Station,Terrestrial,Cultivated Crops|Grassland/Herbaceous|Pasture/Hay,2016,2020,5,32,0.16,0,3.948086,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,LENO,D08,Lenoir Landing,Terrestrial,Deciduous Forest|Woody Wetlands,2016,2020,5,28,0.17,0,7.680081,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,MLBS,D07,Mountain Lake Biological Station,Terrestrial,Deciduous Forest,2017,2020,4,17,0.22,0,11.148950000000001,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,MOAB,D13,Moab,Terrestrial,Evergreen Forest|Shrub/Scrub,2015,2020,6,37,0.16,0,50.4276,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,NIWO,D13,Niwot Ridge Mountain Research Station,Terrestrial,Evergreen Forest|Grassland/Herbaceous,2015,2020,6,21,0.3,0,13.396032,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,NOGP,D09,Northern Great Plains Research Laboratory,Terrestrial,Grassland/Herbaceous,2016,2020,5,27,0.2,0,6.019261,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,OAES,D11,Klemme Range Research Station,Terrestrial,Grassland/Herbaceous|Shrub/Scrub,2015,2020,6,42,0.14,0,6.209108,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,ONAQ,D15,Onaqui,Terrestrial,Evergreen Forest|Shrub/Scrub,2014,2020,7,31,0.25,0,67.774086,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,ORNL,D07,Oak Ridge,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,43,0.16,0,57.371094,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,OSBS,D03,Ordway-Swisher Biological Station,Terrestrial,Emergent Herbaceous Wetlands|Evergreen Forest|Woody Wetlands,2013,2020,8,50,0.16,0,36.808639,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,PUUM,D20,Pu'u Maka'ala Natural Area Reserve,Terrestrial,Evergreen Forest,2019,2020,2,14,0.12,NA,47.196598,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,RMNP,D10,"Rocky Mountain National Park, CASTNET",Terrestrial,Evergreen Forest,2017,2020,4,15,0.28,0,46.526444,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,SCBI,D02,Smithsonian Conservation Biology Institute,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,40,0.18,0,9.863216,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,SERC,D02,Smithsonian Environmental Research Center,Terrestrial,Cultivated Crops|Deciduous Forest,2015,2020,6,39,0.16,0,10.327769,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,SJER,D17,San Joaquin Experimental Range,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,30,0.13,0,18.222906,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,SOAP,D17,Soaproot Saddle,Terrestrial,Evergreen Forest|Shrub/Scrub,2018,2020,3,19,0.15,0,5.822705,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,SRER,D14,Santa Rita Experimental Range,Terrestrial,Shrub/Scrub,2016,2020,5,32,0.15,0,214.897271,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,STEI,D05,Steigerwaldt Land Services,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2015,2020,6,30,0.2,0,23.723814,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,STER,D10,"North Sterling, CO",Terrestrial,Cultivated Crops,2013,2020,8,41,0.17,0,3.234318,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,TALL,D08,Talladega National Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,39,0.19,0,52.342968,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,TEAK,D17,Lower Teakettle,Terrestrial,Evergreen Forest|Shrub/Scrub,2019,2020,2,8,0.19,NA,51.381475,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,TOOL,D18,Toolik,Terrestrial,Dwarf Scrub|Shrub/Scrub,2017,2020,4,9,0.42,0,58.656826,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,TREE,D05,Treehaven,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2015,2020,6,27,0.25,0,5.431672000000001,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,UKFS,D06,The University of Kansas Field Station,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,38,0.14,0,6.201129,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,UNDE,D05,UNDERC,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2014,2020,7,31,0.24,0,29.39245,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,WOOD,D09,Woodworth,Terrestrial,Emergent Herbaceous Wetlands|Grassland/Herbaceous,2014,2020,7,36,0.21,0,10.630176,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,WREF,D16,Wind River Experimental Forest,Terrestrial,Evergreen Forest,2018,2020,3,15,0.21,0,41.939962,2020-12-15
+DP1.10022.001,Ground beetles sampled from pitfall traps,beetle,YELL,D12,Yellowstone Northern Range (Frog Rock),Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2018,2020,3,12,0.25,0,72.50336,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,ABBY,D16,Abby Road,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2017,2019,3,5,0.49,0,29.868771,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,BARR,D18,Utqiaġvik,Terrestrial,Emergent Herbaceous Wetlands,2017,2019,3,3,0.06,0,50.076533,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,BART,D01,Bartlett Experimental Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2015,2019,5,5,0,0,15.657434,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,BLAN,D02,Blandy Experimental Farm,Terrestrial,Deciduous Forest|Pasture/Hay,2017,2019,3,6,0.45,0,5.7282589999999995,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,BONA,D19,Caribou-Poker Creeks Research Watershed,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2017,2019,3,4,0.51,0,49.633223,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,CLBJ,D11,LBJ National Grassland,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2017,2019,3,4,0.51,0,41.883456,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,CPER,D10,Central Plains Experimental Range,Terrestrial,Grassland/Herbaceous,2013,2019,6,7,0.58,0.45,65.398127,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,DCFS,D09,Dakota Coteau Field School,Terrestrial,Grassland/Herbaceous,2017,2019,3,5,0.51,0,7.798688,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,DEJU,D19,Delta Junction,Terrestrial,Evergreen Forest|Shrub/Scrub|Woody Wetlands,2017,2019,3,3,0,0,29.903834,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,DELA,D08,Dead Lake,Terrestrial,Evergreen Forest|Woody Wetlands,2015,2019,4,4,0.59,0.58,4.103929,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,DSNY,D03,Disney Wilderness Preserve,Terrestrial,Pasture/Hay|Woody Wetlands,2015,2019,5,5,0.04,0,48.504342,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,GRSM,D07,"Great Smoky Mountains National Park, Twin Creeks",Terrestrial,Deciduous Forest|Evergreen Forest,2016,2019,4,5,0.43,0,32.72719,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,GUAN,D04,Guanica Forest,Terrestrial,Evergreen Forest,2015,2019,4,5,0.78,0.58,34.922655,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,HARV,D01,Harvard Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2015,2019,5,6,0.41,0,48.094725,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,HEAL,D19,Healy,Terrestrial,Dwarf Scrub|Evergreen Forest|Shrub/Scrub,2017,2019,3,5,0.51,0,45.168147,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,JERC,D03,Jones Ecological Research Center,Terrestrial,Cultivated Crops|Deciduous Forest|Evergreen Forest|Mixed Forest,2016,2019,4,4,0.08,0,13.3259,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,JORN,D14,Jornada LTER,Terrestrial,Shrub/Scrub,2017,2019,3,5,0.48,0,45.746148,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,KONA,D06,Konza Prairie Biological Station - Relocatable,Terrestrial,Cultivated Crops,2018,2019,2,3,0.65,NA,2.749077,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,KONZ,D06,Konza Prairie Biological Station,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2017,2019,3,4,0.51,0,34.868609,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,LAJA,D04,Lajas Experimental Station,Terrestrial,Cultivated Crops|Grassland/Herbaceous|Pasture/Hay,2017,2019,3,4,0.53,0,3.948086,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,LENO,D08,Lenoir Landing,Terrestrial,Deciduous Forest|Woody Wetlands,2017,2019,3,3,0.12,0,7.680081,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,MLBS,D07,Mountain Lake Biological Station,Terrestrial,Deciduous Forest,2018,2019,2,2,NA,NA,11.148950000000001,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,MOAB,D13,Moab,Terrestrial,Evergreen Forest|Shrub/Scrub,2015,2019,4,4,0.53,0.58,50.4276,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,NIWO,D13,Niwot Ridge Mountain Research Station,Terrestrial,Evergreen Forest|Grassland/Herbaceous,2015,2019,4,4,0.58,0.58,13.396032,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,NOGP,D09,Northern Great Plains Research Laboratory,Terrestrial,Grassland/Herbaceous,2017,2019,3,3,0,0,6.019261,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,OAES,D11,Klemme Range Research Station,Terrestrial,Grassland/Herbaceous|Shrub/Scrub,2017,2019,3,5,0.49,0,6.209108,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,ONAQ,D15,Onaqui,Terrestrial,Evergreen Forest|Shrub/Scrub,2017,2019,3,4,0.51,0,67.774086,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,ORNL,D07,Oak Ridge,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2016,2019,4,5,0.45,0,57.371094,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,OSBS,D03,Ordway-Swisher Biological Station,Terrestrial,Emergent Herbaceous Wetlands|Evergreen Forest|Woody Wetlands,2016,2019,4,4,0,0,36.808639,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,PUUM,D20,Pu'u Maka'ala Natural Area Reserve,Terrestrial,Evergreen Forest,2018,2018,1,1,NA,NA,47.196598,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,RMNP,D10,"Rocky Mountain National Park, CASTNET",Terrestrial,Evergreen Forest,2017,2019,3,6,0.46,0,46.526444,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,SCBI,D02,Smithsonian Conservation Biology Institute,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2015,2019,5,9,0.44,0,9.863216,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,SERC,D02,Smithsonian Environmental Research Center,Terrestrial,Cultivated Crops|Deciduous Forest,2017,2019,3,4,0.51,0,10.327769,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,SJER,D17,San Joaquin Experimental Range,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2017,2019,3,3,0,0,18.222906,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,SOAP,D17,Soaproot Saddle,Terrestrial,Evergreen Forest|Shrub/Scrub,2017,2019,3,3,0,0,5.822705,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,SRER,D14,Santa Rita Experimental Range,Terrestrial,Shrub/Scrub,2017,2019,3,4,0.48,0,214.897271,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,STEI,D05,Steigerwaldt Land Services,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2016,2019,4,7,0.47,0,23.723814,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,STER,D10,"North Sterling, CO",Terrestrial,Cultivated Crops,2013,2019,6,7,0.58,0.45,3.234318,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,TALL,D08,Talladega National Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2015,2019,5,5,0.08,0,52.342968,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,TEAK,D17,Lower Teakettle,Terrestrial,Evergreen Forest|Shrub/Scrub,2017,2019,3,4,0.53,0,51.381475,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,TOOL,D18,Toolik,Terrestrial,Dwarf Scrub|Shrub/Scrub,2017,2019,3,3,0.12,0,58.656826,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,TREE,D05,Treehaven,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2016,2019,4,4,0,0,5.431672000000001,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,UKFS,D06,The University of Kansas Field Station,Terrestrial,Deciduous Forest|Pasture/Hay,2017,2019,3,3,0,0,6.201129,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,UNDE,D05,UNDERC,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2016,2019,4,5,0.45,0,29.39245,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,WOOD,D09,Woodworth,Terrestrial,Emergent Herbaceous Wetlands|Grassland/Herbaceous,2015,2019,4,5,0.79,0.58,10.630176,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,WREF,D16,Wind River Experimental Forest,Terrestrial,Evergreen Forest,2018,2019,2,3,0.59,NA,41.939962,2020-12-15
+DP1.10003.001,Breeding landbird point counts,bird,YELL,D12,Yellowstone Northern Range (Frog Rock),Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2018,2019,2,2,NA,NA,72.50336,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,ARIK,D10,Arikaree River,Wadeable Stream,Emergent Herbaceous Wetlands|Grassland/Herbaceous|Woody Wetlands,2016,2020,5,9,0.06,0,0.40915498919,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,BIGC,D17,Upper Big Creek,Wadeable Stream,Evergreen Forest,2018,2020,3,5,0.1,0,2.67142367476,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,BLDE,D12,Blacktail Deer Creek,Wadeable Stream,Emergent Herbaceous Wetlands|Shrub/Scrub,2018,2020,3,4,0.29,0,0.15751924304,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,BLUE,D11,Blue River,Non-wadeable River,Grassland/Herbaceous|Pasture/Hay,2017,2018,2,6,0.27,NA,0.27099930994,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,CARI,D19,"Caribou Creek, Caribou-Poker Creeks Research Watershed",Wadeable Stream,Woody Wetlands,2016,2020,5,11,0.32,0,0.44187954121,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,CRAM,D05,Crampton Lake,Lake,Woody Wetlands,2016,2020,5,12,0.21,0,0.265836,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,CUPE,D04,Rio Cupeyes,Wadeable Stream,Evergreen Forest,2017,2020,4,7,0.3,0,0.23068260117,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,GUIL,D04,Rio Guilarte,Wadeable Stream,Evergreen Forest|Grassland/Herbaceous,2017,2020,4,7,0.31,0,0.39871927692,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,HOPB,D01,Lower Hop Brook,Wadeable Stream,Evergreen Forest|Mixed Forest,2016,2019,4,9,0.19,0,0.31972397454,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,KING,D06,Kings Creek,Wadeable Stream,Deciduous Forest,2016,2020,5,13,0.17,0,0.27455940575,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,LECO,D07,LeConte Creek,Wadeable Stream,Deciduous Forest,2016,2019,4,7,0.33,0,0.39756788466,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,LEWI,D02,Lewis Run,Wadeable Stream,Deciduous Forest,2017,2020,4,8,0.16,0,0.26955141011,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,LIRO,D05,Little Rock Lake,Lake,Deciduous Forest|Mixed Forest,2017,2020,4,8,0.26,0,0.192374,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,MART,D16,Martha Creek,Wadeable Stream,Evergreen Forest,2018,2020,3,4,0.51,0,0.39867403159,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,MAYF,D08,Mayfield Creek,Wadeable Stream,Deciduous Forest|Mixed Forest,2016,2020,5,10,0.19,0,0.40659785258,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,MCDI,D06,McDiffett Creek,Wadeable Stream,Cultivated Crops|Grassland/Herbaceous,2017,2020,4,9,0.17,0,0.13359802998,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,MCRA,D16,McRae Creek,Wadeable Stream,Evergreen Forest,2017,2019,3,3,0,0,0.40338653655,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,OKSR,D18,Oksrukuyik Creek,Wadeable Stream,Shrub/Scrub,2019,2020,2,2,NA,NA,0.39148336156,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,POSE,D02,Posey Creek,Wadeable Stream,Deciduous Forest,2016,2019,4,9,0.16,0,0.39458563883,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,PRIN,D11,Pringle Creek,Wadeable Stream,Deciduous Forest|Grassland/Herbaceous,2017,2020,4,9,0.26,0,0.35468194023,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,PRLA,D09,Prairie Lake at Dakota Coteau Field School,Lake,Grassland/Herbaceous,2016,2020,5,9,0.17,0,0.309582,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,PRPO,D09,Prairie Pothole,Lake,Grassland/Herbaceous,2016,2020,5,9,0.19,0,0.114716,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,REDB,D15,Red Butte Creek,Wadeable Stream,Deciduous Forest,2016,2020,5,8,0.05,0,0.39894388726,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,SYCA,D14,Sycamore Creek,Wadeable Stream,Shrub/Scrub,2017,2020,4,10,0.23,0,0.39236480794,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,TECR,D17,Teakettle 2 Creek,Wadeable Stream,Evergreen Forest,2019,2019,1,1,NA,NA,0.24255126697,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,TOOK,D18,Toolik Lake,Lake,Dwarf Scrub,2017,2019,3,7,0.33,0,1.478303,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,WALK,D07,Walker Branch,Wadeable Stream,Deciduous Forest,2016,2020,5,12,0.23,0,0.51767190335,2020-12-15
+DP1.20107.001,"Fish electrofishing, gill netting, and fyke netting counts",fish,WLOU,D13,West St Louis Creek,Wadeable Stream,Evergreen Forest,2017,2020,4,7,0.25,0,0.39442941723,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,ARIK,D10,Arikaree River,Wadeable Stream,Emergent Herbaceous Wetlands|Grassland/Herbaceous|Woody Wetlands,2014,2020,7,20,0.11,0,0.40915498919,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,BARC,D03,Ordway-Swisher Biological Station - Barco Lake,Lake,Shrub/Scrub,2014,2020,7,19,0.08,0,0.119733,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,BIGC,D17,Upper Big Creek,Wadeable Stream,Evergreen Forest,2018,2020,3,7,0.16,0,2.67142367476,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,BLDE,D12,Blacktail Deer Creek,Wadeable Stream,Emergent Herbaceous Wetlands|Shrub/Scrub,2018,2020,3,11,0.18,0,0.15751924304,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,BLUE,D11,Blue River,Non-wadeable River,Grassland/Herbaceous|Pasture/Hay,2017,2019,3,9,0.05,0,0.27099930994,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,BLWA,D08,Black Warrior River near Dead Lake,Non-wadeable River,Woody Wetlands,2016,2020,5,12,0.06,0,0.12137104561,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,CARI,D19,"Caribou Creek, Caribou-Poker Creeks Research Watershed",Wadeable Stream,Woody Wetlands,2016,2020,5,16,0.26,0,0.44187954121,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,COMO,D13,Como Creek,Wadeable Stream,Shrub/Scrub,2015,2020,6,13,0.3,0,0.4113027443,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,CRAM,D05,Crampton Lake,Lake,Woody Wetlands,2015,2020,6,20,0.18,0,0.265836,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,CUPE,D04,Rio Cupeyes,Wadeable Stream,Evergreen Forest,2015,2020,6,18,0.15,0,0.23068260117,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,FLNT,D03,Flint River,Non-wadeable River,Mixed Forest,2017,2020,4,15,0.1,0,0.41109826801,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,GUIL,D04,Rio Guilarte,Wadeable Stream,Evergreen Forest|Grassland/Herbaceous,2015,2020,6,18,0.14,0,0.39871927692,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,HOPB,D01,Lower Hop Brook,Wadeable Stream,Evergreen Forest|Mixed Forest,2016,2020,5,16,0.14,0,0.31972397454,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,KING,D06,Kings Creek,Wadeable Stream,Deciduous Forest,2015,2020,6,19,0.11,0,0.27455940575,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,LECO,D07,LeConte Creek,Wadeable Stream,Deciduous Forest,2015,2020,6,17,0.12,0,0.39756788466,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,LEWI,D02,Lewis Run,Wadeable Stream,Deciduous Forest,2016,2020,5,14,0.1,0,0.26955141011,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,LIRO,D05,Little Rock Lake,Lake,Deciduous Forest|Mixed Forest,2017,2020,4,15,0.18,0,0.192374,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,MART,D16,Martha Creek,Wadeable Stream,Evergreen Forest,2018,2020,3,10,0.14,0,0.39867403159,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,MAYF,D08,Mayfield Creek,Wadeable Stream,Deciduous Forest|Mixed Forest,2014,2020,7,20,0.09,0,0.40659785258,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,MCDI,D06,McDiffett Creek,Wadeable Stream,Cultivated Crops|Grassland/Herbaceous,2017,2020,4,15,0.12,0,0.13359802998,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,MCRA,D16,McRae Creek,Wadeable Stream,Evergreen Forest,2017,2020,4,10,0.21,0,0.40338653655,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,OKSR,D18,Oksrukuyik Creek,Wadeable Stream,Shrub/Scrub,2016,2020,5,15,0.29,0,0.39148336156,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,POSE,D02,Posey Creek,Wadeable Stream,Deciduous Forest,2014,2020,7,20,0.08,0,0.39458563883,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,PRIN,D11,Pringle Creek,Wadeable Stream,Deciduous Forest|Grassland/Herbaceous,2016,2020,5,13,0.1,0,0.35468194023,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,PRLA,D09,Prairie Lake at Dakota Coteau Field School,Lake,Grassland/Herbaceous,2014,2020,7,22,0.2,0,0.309582,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,PRPO,D09,Prairie Pothole,Lake,Grassland/Herbaceous,2014,2020,7,22,0.21,0,0.114716,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,REDB,D15,Red Butte Creek,Wadeable Stream,Deciduous Forest,2015,2020,6,15,0.22,0,0.39894388726,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,SUGG,D03,Ordway-Swisher Biological Station - Suggs Lake,Lake,Evergreen Forest|Woody Wetlands,2014,2020,7,22,0.1,0,0.307362,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,SYCA,D14,Sycamore Creek,Wadeable Stream,Shrub/Scrub,2017,2020,4,14,0.14,0,0.39236480794,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,TECR,D17,Teakettle 2 Creek,Wadeable Stream,Evergreen Forest,2019,2020,2,3,0.23,NA,0.24255126697,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,TOMB,D08,Lower Tombigbee River at Choctaw Refuge,Non-wadeable River,Mixed Forest,2016,2020,5,11,0.04,0,0.2250270652,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,TOOK,D18,Toolik Lake,Lake,Dwarf Scrub,2016,2020,5,15,0.28,0,1.478303,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,WALK,D07,Walker Branch,Wadeable Stream,Deciduous Forest,2015,2020,6,17,0.07,0,0.51767190335,2020-12-15
+DP1.20120.001,Macroinvertebrate collection,macroinvertebrate,WLOU,D13,West St Louis Creek,Wadeable Stream,Evergreen Forest,2016,2020,5,15,0.22,0,0.39442941723,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,ABBY,D16,Abby Road,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,33,0.12,0,29.868771,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,BARR,D18,Utqiaġvik,Terrestrial,Emergent Herbaceous Wetlands,2017,2020,4,14,0.27,0,50.076533,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,BART,D01,Bartlett Experimental Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,6,41,0.26,0.45,15.657434,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,BLAN,D02,Blandy Experimental Farm,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,48,0.09,0,5.7282589999999995,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,BONA,D19,Caribou-Poker Creeks Research Watershed,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2017,2020,4,28,0.12,0,49.633223,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,CLBJ,D11,LBJ National Grassland,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2016,2020,5,54,0.01,0,41.883456,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,CPER,D10,Central Plains Experimental Range,Terrestrial,Grassland/Herbaceous,2014,2020,7,56,0.15,0,65.398127,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,DCFS,D09,Dakota Coteau Field School,Terrestrial,Grassland/Herbaceous,2017,2020,4,25,0.15,0,7.798688,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,DEJU,D19,Delta Junction,Terrestrial,Evergreen Forest|Shrub/Scrub|Woody Wetlands,2016,2020,5,27,0.19,0,29.903834,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,DELA,D08,Dead Lake,Terrestrial,Evergreen Forest|Woody Wetlands,2016,2020,5,44,0.06,0,4.103929,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,DSNY,D03,Disney Wilderness Preserve,Terrestrial,Pasture/Hay|Woody Wetlands,2014,2020,6,59,0.19,0.45,48.504342,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,GRSM,D07,"Great Smoky Mountains National Park, Twin Creeks",Terrestrial,Deciduous Forest|Evergreen Forest,2016,2020,5,46,0.06,0,32.72719,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,GUAN,D04,Guanica Forest,Terrestrial,Evergreen Forest,2014,2020,6,52,0.25,0.45,34.922655,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,HARV,D01,Harvard Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2014,2020,6,49,0.2,0.45,48.094725,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,HEAL,D19,Healy,Terrestrial,Dwarf Scrub|Evergreen Forest|Shrub/Scrub,2015,2020,6,32,0.2,0,45.168147,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,JERC,D03,Jones Ecological Research Center,Terrestrial,Cultivated Crops|Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,6,57,0.18,0.45,13.3259,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,JORN,D14,Jornada LTER,Terrestrial,Shrub/Scrub,2016,2020,5,46,0.05,0,45.746148,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,KONA,D06,Konza Prairie Biological Station - Relocatable,Terrestrial,Cultivated Crops,2017,2020,4,26,0.14,0,2.749077,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,KONZ,D06,Konza Prairie Biological Station,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2016,2020,5,55,0.02,0,34.868609,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,LAJA,D04,Lajas Experimental Station,Terrestrial,Cultivated Crops|Grassland/Herbaceous|Pasture/Hay,2016,2020,5,45,0.06,0,3.948086,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,LENO,D08,Lenoir Landing,Terrestrial,Deciduous Forest|Woody Wetlands,2016,2020,5,38,0.13,0,7.680081,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,MLBS,D07,Mountain Lake Biological Station,Terrestrial,Deciduous Forest,2017,2020,4,27,0.07,0,11.148950000000001,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,MOAB,D13,Moab,Terrestrial,Evergreen Forest|Shrub/Scrub,2016,2020,5,34,0.14,0,50.4276,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,NIWO,D13,Niwot Ridge Mountain Research Station,Terrestrial,Evergreen Forest|Grassland/Herbaceous,2017,2020,4,27,0.14,0,13.396032,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,NOGP,D09,Northern Great Plains Research Laboratory,Terrestrial,Grassland/Herbaceous,2016,2020,5,31,0.17,0,6.019261,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,OAES,D11,Klemme Range Research Station,Terrestrial,Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,54,0.01,0,6.209108,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,ONAQ,D15,Onaqui,Terrestrial,Evergreen Forest|Shrub/Scrub,2014,2020,6,50,0.21,0.45,67.774086,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,ORNL,D07,Oak Ridge,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,6,58,0.16,0.45,57.371094,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,OSBS,D03,Ordway-Swisher Biological Station,Terrestrial,Emergent Herbaceous Wetlands|Evergreen Forest|Woody Wetlands,2014,2020,6,61,0.17,0.45,36.808639,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,PUUM,D20,Pu'u Maka'ala Natural Area Reserve,Terrestrial,Evergreen Forest,2018,2020,3,25,0.02,0,47.196598,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,RMNP,D10,"Rocky Mountain National Park, CASTNET",Terrestrial,Evergreen Forest,2017,2020,4,21,0.19,0,46.526444,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,SCBI,D02,Smithsonian Conservation Biology Institute,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,73,0.02,0,9.863216,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,SERC,D02,Smithsonian Environmental Research Center,Terrestrial,Cultivated Crops|Deciduous Forest,2015,2020,6,51,0.08,0,10.327769,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,SJER,D17,San Joaquin Experimental Range,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,48,0,0,18.222906,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,SOAP,D17,Soaproot Saddle,Terrestrial,Evergreen Forest|Shrub/Scrub,2018,2020,3,24,0.06,0,5.822705,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,SRER,D14,Santa Rita Experimental Range,Terrestrial,Shrub/Scrub,2016,2020,5,51,0.05,0,214.897271,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,STEI,D05,Steigerwaldt Land Services,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2016,2020,5,33,0.15,0,23.723814,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,STER,D10,"North Sterling, CO",Terrestrial,Cultivated Crops,2014,2020,6,37,0.28,0.45,3.234318,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,TALL,D08,Talladega National Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,6,60,0.16,0.45,52.342968,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,TEAK,D17,Lower Teakettle,Terrestrial,Evergreen Forest|Shrub/Scrub,2019,2020,2,10,0.19,NA,51.381475,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,TOOL,D18,Toolik,Terrestrial,Dwarf Scrub|Shrub/Scrub,2017,2020,4,21,0.19,0,58.656826,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,TREE,D05,Treehaven,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2016,2020,5,34,0.14,0,5.431672000000001,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,UKFS,D06,The University of Kansas Field Station,Terrestrial,Deciduous Forest|Pasture/Hay,2016,2020,5,39,0.11,0,6.201129,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,UNDE,D05,UNDERC,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2014,2020,6,49,0.2,0.45,29.39245,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,WOOD,D09,Woodworth,Terrestrial,Emergent Herbaceous Wetlands|Grassland/Herbaceous,2014,2020,6,48,0.2,0.45,10.630176,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,WREF,D16,Wind River Experimental Forest,Terrestrial,Evergreen Forest,2018,2020,3,27,0.07,0,41.939962,2020-12-15
+DP1.10043.001,Mosquitoes sampled from CO2 traps,mosquito,YELL,D12,Yellowstone Northern Range (Frog Rock),Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2018,2020,3,22,0.09,0,72.50336,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,ABBY,D16,Abby Road,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2019,4,6,0.46,0,29.868771,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,BARR,D18,Utqiaġvik,Terrestrial,Emergent Herbaceous Wetlands,2016,2019,4,7,0.47,0,50.076533,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,BART,D01,Bartlett Experimental Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,9,0.41,0,15.657434,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,BLAN,D02,Blandy Experimental Farm,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,15,0.39,0,5.7282589999999995,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,BONA,D19,Caribou-Poker Creeks Research Watershed,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2017,2020,4,7,0.46,0,49.633223,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,CLBJ,D11,LBJ National Grassland,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2016,2019,4,10,0.38,0,41.883456,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,CPER,D10,Central Plains Experimental Range,Terrestrial,Grassland/Herbaceous,2013,2020,8,23,0.34,0,65.398127,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,DCFS,D09,Dakota Coteau Field School,Terrestrial,Grassland/Herbaceous,2017,2019,3,6,0.45,0,7.798688,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,DEJU,D19,Delta Junction,Terrestrial,Evergreen Forest|Shrub/Scrub|Woody Wetlands,2016,2020,5,7,0.43,0,29.903834,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,DELA,D08,Dead Lake,Terrestrial,Evergreen Forest|Woody Wetlands,2015,2019,5,10,0.42,0,4.103929,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,DSNY,D03,Disney Wilderness Preserve,Terrestrial,Pasture/Hay|Woody Wetlands,2013,2019,7,23,0.32,0,48.504342,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,GRSM,D07,"Great Smoky Mountains National Park, Twin Creeks",Terrestrial,Deciduous Forest|Evergreen Forest,2015,2020,6,16,0.31,0,32.72719,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,GUAN,D04,Guanica Forest,Terrestrial,Evergreen Forest,2015,2019,5,8,0.46,0,34.922655,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,HARV,D01,Harvard Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2014,2020,7,13,0.43,0,48.094725,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,HEAL,D19,Healy,Terrestrial,Dwarf Scrub|Evergreen Forest|Shrub/Scrub,2015,2019,5,6,0.42,0,45.168147,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,JERC,D03,Jones Ecological Research Center,Terrestrial,Cultivated Crops|Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2019,6,24,0.27,0,13.3259,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,JORN,D14,Jornada LTER,Terrestrial,Shrub/Scrub,2014,2019,6,9,0.26,0,45.746148,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,KONA,D06,Konza Prairie Biological Station - Relocatable,Terrestrial,Cultivated Crops,2017,2020,4,4,0.13,0,2.749077,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,KONZ,D06,Konza Prairie Biological Station,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2015,2019,5,14,0.36,0,34.868609,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,LAJA,D04,Lajas Experimental Station,Terrestrial,Cultivated Crops|Grassland/Herbaceous|Pasture/Hay,2016,2019,4,6,0.51,0,3.948086,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,LENO,D08,Lenoir Landing,Terrestrial,Deciduous Forest|Woody Wetlands,2016,2019,4,7,0.49,0,7.680081,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,MLBS,D07,Mountain Lake Biological Station,Terrestrial,Deciduous Forest,2017,2019,3,6,0.43,0,11.148950000000001,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,MOAB,D13,Moab,Terrestrial,Evergreen Forest|Shrub/Scrub,2015,2019,5,13,0.36,0,50.4276,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,NIWO,D13,Niwot Ridge Mountain Research Station,Terrestrial,Evergreen Forest|Grassland/Herbaceous,2015,2019,5,12,0.4,0,13.396032,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,NOGP,D09,Northern Great Plains Research Laboratory,Terrestrial,Grassland/Herbaceous,2016,2019,4,7,0.45,0,6.019261,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,OAES,D11,Klemme Range Research Station,Terrestrial,Grassland/Herbaceous|Shrub/Scrub,2015,2019,5,20,0.25,0,6.209108,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,ONAQ,D15,Onaqui,Terrestrial,Evergreen Forest|Shrub/Scrub,2014,2019,6,19,0.32,0,67.774086,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,ORNL,D07,Oak Ridge,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,18,0.39,0,57.371094,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,OSBS,D03,Ordway-Swisher Biological Station,Terrestrial,Emergent Herbaceous Wetlands|Evergreen Forest|Woody Wetlands,2013,2019,7,23,0.3,0,36.808639,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,PUUM,D20,Pu'u Maka'ala Natural Area Reserve,Terrestrial,Evergreen Forest,2018,2020,3,4,0.49,0,47.196598,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,RMNP,D10,"Rocky Mountain National Park, CASTNET",Terrestrial,Evergreen Forest,2017,2020,4,8,0.43,0,46.526444,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,SCBI,D02,Smithsonian Conservation Biology Institute,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,16,0.4,0,9.863216,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,SERC,D02,Smithsonian Environmental Research Center,Terrestrial,Cultivated Crops|Deciduous Forest,2015,2019,5,13,0.38,0,10.327769,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,SJER,D17,San Joaquin Experimental Range,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2015,2020,5,11,0.61,0.5,18.222906,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,SOAP,D17,Soaproot Saddle,Terrestrial,Evergreen Forest|Shrub/Scrub,2017,2019,3,5,0.48,0,5.822705,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,SRER,D14,Santa Rita Experimental Range,Terrestrial,Shrub/Scrub,2016,2020,5,16,0.2,0,214.897271,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,STEI,D05,Steigerwaldt Land Services,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2015,2019,5,15,0.35,0,23.723814,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,STER,D10,"North Sterling, CO",Terrestrial,Cultivated Crops,2014,2019,6,10,0.42,0,3.234318,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,TALL,D08,Talladega National Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2019,6,11,0.45,0,52.342968,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,TEAK,D17,Lower Teakettle,Terrestrial,Evergreen Forest|Shrub/Scrub,2017,2019,2,4,1.11,NA,51.381475,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,TOOL,D18,Toolik,Terrestrial,Dwarf Scrub|Shrub/Scrub,2016,2019,4,4,0,0,58.656826,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,TREE,D05,Treehaven,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2015,2019,5,16,0.32,0,5.431672000000001,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,UKFS,D06,The University of Kansas Field Station,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,12,0.42,0,6.201129,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,UNDE,D05,UNDERC,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2014,2020,7,15,0.42,0,29.39245,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,WOOD,D09,Woodworth,Terrestrial,Emergent Herbaceous Wetlands|Grassland/Herbaceous,2014,2019,6,9,0.47,0,10.630176,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,WREF,D16,Wind River Experimental Forest,Terrestrial,Evergreen Forest,2016,2019,3,5,0.88,0.71,41.939962,2020-12-15
+DP1.10058.001,Plant presence and percent cover,plant,YELL,D12,Yellowstone Northern Range (Frog Rock),Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2018,2020,3,7,0.39,0,72.50336,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,ABBY,D16,Abby Road,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,18,0.29,0,29.868771,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,BARR,D18,Utqiaġvik,Terrestrial,Emergent Herbaceous Wetlands,2017,2020,4,11,0.36,0,50.076533,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,BART,D01,Bartlett Experimental Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,29,0.24,0,15.657434,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,BLAN,D02,Blandy Experimental Farm,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,24,0.17,0,5.7282589999999995,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,BONA,D19,Caribou-Poker Creeks Research Watershed,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2017,2020,4,12,0.35,0,49.633223,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,CLBJ,D11,LBJ National Grassland,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2016,2020,5,27,0.13,0,41.883456,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,CPER,D10,Central Plains Experimental Range,Terrestrial,Grassland/Herbaceous,2013,2020,8,44,0.18,0,65.398127,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,DCFS,D09,Dakota Coteau Field School,Terrestrial,Grassland/Herbaceous,2017,2020,4,15,0.2,0,7.798688,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,DEJU,D19,Delta Junction,Terrestrial,Evergreen Forest|Shrub/Scrub|Woody Wetlands,2016,2020,5,15,0.33,0,29.903834,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,DELA,D08,Dead Lake,Terrestrial,Evergreen Forest|Woody Wetlands,2015,2020,6,22,0.29,0,4.103929,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,DSNY,D03,Disney Wilderness Preserve,Terrestrial,Pasture/Hay|Woody Wetlands,2013,2020,8,27,0.2,0,48.504342,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,GRSM,D07,"Great Smoky Mountains National Park, Twin Creeks",Terrestrial,Deciduous Forest|Evergreen Forest,2015,2020,6,24,0.18,0,32.72719,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,GUAN,D04,Guanica Forest,Terrestrial,Evergreen Forest,2016,2017,2,9,0.08,NA,34.922655,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,HARV,D01,Harvard Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2013,2020,8,44,0.2,0,48.094725,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,HEAL,D19,Healy,Terrestrial,Dwarf Scrub|Evergreen Forest|Shrub/Scrub,2015,2020,6,15,0.36,0,45.168147,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,JERC,D03,Jones Ecological Research Center,Terrestrial,Cultivated Crops|Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,29,0.21,0,13.3259,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,JORN,D14,Jornada LTER,Terrestrial,Shrub/Scrub,2015,2020,6,26,0.18,0,45.746148,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,KONA,D06,Konza Prairie Biological Station - Relocatable,Terrestrial,Cultivated Crops,2017,2020,4,15,0.2,0,2.749077,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,KONZ,D06,Konza Prairie Biological Station,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2015,2020,6,32,0.19,0,34.868609,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,LAJA,D04,Lajas Experimental Station,Terrestrial,Cultivated Crops|Grassland/Herbaceous|Pasture/Hay,2016,2016,1,4,0.05,NA,3.948086,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,LENO,D08,Lenoir Landing,Terrestrial,Deciduous Forest|Woody Wetlands,2016,2019,4,15,0.25,0,7.680081,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,MLBS,D07,Mountain Lake Biological Station,Terrestrial,Deciduous Forest,2017,2020,4,12,0.29,0,11.148950000000001,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,MOAB,D13,Moab,Terrestrial,Evergreen Forest|Shrub/Scrub,2015,2020,6,23,0.26,0,50.4276,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,NIWO,D13,Niwot Ridge Mountain Research Station,Terrestrial,Evergreen Forest|Grassland/Herbaceous,2015,2020,6,22,0.3,0,13.396032,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,NOGP,D09,Northern Great Plains Research Laboratory,Terrestrial,Grassland/Herbaceous,2016,2020,5,20,0.25,0,6.019261,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,OAES,D11,Klemme Range Research Station,Terrestrial,Grassland/Herbaceous|Shrub/Scrub,2015,2020,6,24,0.21,0,6.209108,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,ONAQ,D15,Onaqui,Terrestrial,Evergreen Forest|Shrub/Scrub,2014,2020,7,39,0.19,0,67.774086,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,ORNL,D07,Oak Ridge,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,39,0.17,0,57.371094,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,OSBS,D03,Ordway-Swisher Biological Station,Terrestrial,Emergent Herbaceous Wetlands|Evergreen Forest|Woody Wetlands,2013,2020,8,50,0.15,0,36.808639,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,RMNP,D10,"Rocky Mountain National Park, CASTNET",Terrestrial,Evergreen Forest,2017,2020,4,13,0.31,0,46.526444,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,SCBI,D02,Smithsonian Conservation Biology Institute,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,43,0.15,0,9.863216,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,SERC,D02,Smithsonian Environmental Research Center,Terrestrial,Cultivated Crops|Deciduous Forest,2015,2020,6,25,0.2,0,10.327769,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,SJER,D17,San Joaquin Experimental Range,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,25,0.16,0,18.222906,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,SOAP,D17,Soaproot Saddle,Terrestrial,Evergreen Forest|Shrub/Scrub,2018,2020,3,11,0.26,0,5.822705,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,SRER,D14,Santa Rita Experimental Range,Terrestrial,Shrub/Scrub,2016,2020,5,31,0.12,0,214.897271,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,STEI,D05,Steigerwaldt Land Services,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2015,2020,6,24,0.28,0,23.723814,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,STER,D10,"North Sterling, CO",Terrestrial,Cultivated Crops,2014,2020,7,28,0.21,0,3.234318,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,TALL,D08,Talladega National Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,38,0.15,0,52.342968,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,TEAK,D17,Lower Teakettle,Terrestrial,Evergreen Forest|Shrub/Scrub,2019,2020,2,7,0.27,NA,51.381475,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,TOOL,D18,Toolik,Terrestrial,Dwarf Scrub|Shrub/Scrub,2017,2020,4,11,0.36,0,58.656826,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,TREE,D05,Treehaven,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2015,2020,6,23,0.29,0,5.431672000000001,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,UKFS,D06,The University of Kansas Field Station,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,24,0.25,0,6.201129,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,UNDE,D05,UNDERC,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2014,2020,7,33,0.23,0,29.39245,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,WOOD,D09,Woodworth,Terrestrial,Emergent Herbaceous Wetlands|Grassland/Herbaceous,2014,2020,7,38,0.19,0,10.630176,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,WREF,D16,Wind River Experimental Forest,Terrestrial,Evergreen Forest,2017,2020,4,18,0.2,0,41.939962,2020-12-15
+DP1.10072.001,Small mammal box trapping,small_mammal,YELL,D12,Yellowstone Northern Range (Frog Rock),Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2018,2020,3,12,0.27,0,72.50336,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,ABBY,D16,Abby Road,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,25,0.19,0,29.868771,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,BARR,D18,Utqiaġvik,Terrestrial,Emergent Herbaceous Wetlands,2017,2019,3,5,0.41,0,50.076533,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,BART,D01,Bartlett Experimental Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,33,0.21,0,15.657434,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,BLAN,D02,Blandy Experimental Farm,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,43,0.13,0,5.7282589999999995,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,BONA,D19,Caribou-Poker Creeks Research Watershed,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2017,2020,4,11,0.3,0,49.633223,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,CLBJ,D11,LBJ National Grassland,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2014,2020,6,34,0.36,0.45,41.883456,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,CPER,D10,Central Plains Experimental Range,Terrestrial,Grassland/Herbaceous,2014,2020,6,32,0.27,0.45,65.398127,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,DCFS,D09,Dakota Coteau Field School,Terrestrial,Grassland/Herbaceous,2017,2020,4,19,0.21,0,7.798688,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,DEJU,D19,Delta Junction,Terrestrial,Evergreen Forest|Shrub/Scrub|Woody Wetlands,2016,2020,5,14,0.32,0,29.903834,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,DELA,D08,Dead Lake,Terrestrial,Evergreen Forest|Woody Wetlands,2015,2020,6,36,0.15,0,4.103929,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,DSNY,D03,Disney Wilderness Preserve,Terrestrial,Pasture/Hay|Woody Wetlands,2014,2020,7,41,0.17,0,48.504342,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,GRSM,D07,"Great Smoky Mountains National Park, Twin Creeks",Terrestrial,Deciduous Forest|Evergreen Forest,2015,2020,6,33,0.16,0,32.72719,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,GUAN,D04,Guanica Forest,Terrestrial,Evergreen Forest,2016,2020,5,24,0.14,0,34.922655,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,HARV,D01,Harvard Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2014,2020,7,44,0.16,0,48.094725,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,HEAL,D19,Healy,Terrestrial,Dwarf Scrub|Evergreen Forest|Shrub/Scrub,2016,2020,5,18,0.28,0,45.168147,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,JERC,D03,Jones Ecological Research Center,Terrestrial,Cultivated Crops|Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,35,0.19,0,13.3259,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,JORN,D14,Jornada LTER,Terrestrial,Shrub/Scrub,2016,2020,5,28,0.12,0,45.746148,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,KONA,D06,Konza Prairie Biological Station - Relocatable,Terrestrial,Cultivated Crops,2017,2020,4,19,0.19,0,2.749077,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,KONZ,D06,Konza Prairie Biological Station,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2015,2020,6,39,0.14,0,34.868609,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,LAJA,D04,Lajas Experimental Station,Terrestrial,Cultivated Crops|Grassland/Herbaceous|Pasture/Hay,2016,2020,5,27,0.14,0,3.948086,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,LENO,D08,Lenoir Landing,Terrestrial,Deciduous Forest|Woody Wetlands,2016,2020,5,27,0.16,0,7.680081,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,MLBS,D07,Mountain Lake Biological Station,Terrestrial,Deciduous Forest,2017,2020,4,19,0.18,0,11.148950000000001,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,MOAB,D13,Moab,Terrestrial,Evergreen Forest|Shrub/Scrub,2015,2020,6,29,0.15,0,50.4276,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,NIWO,D13,Niwot Ridge Mountain Research Station,Terrestrial,Evergreen Forest|Grassland/Herbaceous,2016,2020,5,14,0.36,0,13.396032,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,NOGP,D09,Northern Great Plains Research Laboratory,Terrestrial,Grassland/Herbaceous,2016,2020,5,29,0.17,0,6.019261,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,OAES,D11,Klemme Range Research Station,Terrestrial,Grassland/Herbaceous|Shrub/Scrub,2015,2020,6,43,0.12,0,6.209108,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,ONAQ,D15,Onaqui,Terrestrial,Evergreen Forest|Shrub/Scrub,2014,2020,6,26,0.38,0.45,67.774086,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,ORNL,D07,Oak Ridge,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,53,0.11,0,57.371094,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,OSBS,D03,Ordway-Swisher Biological Station,Terrestrial,Emergent Herbaceous Wetlands|Evergreen Forest|Woody Wetlands,2014,2020,7,48,0.15,0,36.808639,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,RMNP,D10,"Rocky Mountain National Park, CASTNET",Terrestrial,Evergreen Forest,2017,2020,4,13,0.27,0,46.526444,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,SCBI,D02,Smithsonian Conservation Biology Institute,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2020,7,52,0.12,0,9.863216,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,SERC,D02,Smithsonian Environmental Research Center,Terrestrial,Cultivated Crops|Deciduous Forest,2015,2020,6,42,0.13,0,10.327769,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,SJER,D17,San Joaquin Experimental Range,Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2016,2020,5,21,0.14,0,18.222906,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,SOAP,D17,Soaproot Saddle,Terrestrial,Evergreen Forest|Shrub/Scrub,2018,2020,3,15,0.19,0,5.822705,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,SRER,D14,Santa Rita Experimental Range,Terrestrial,Shrub/Scrub,2016,2020,5,27,0.16,0,214.897271,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,STEI,D05,Steigerwaldt Land Services,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2016,2020,5,29,0.19,0,23.723814,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,STER,D10,"North Sterling, CO",Terrestrial,Cultivated Crops,2014,2020,6,25,0.35,0.45,3.234318,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,TALL,D08,Talladega National Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2020,7,47,0.15,0,52.342968,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,TEAK,D17,Lower Teakettle,Terrestrial,Evergreen Forest|Shrub/Scrub,2019,2020,2,6,0.24,NA,51.381475,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,TOOL,D18,Toolik,Terrestrial,Dwarf Scrub|Shrub/Scrub,2017,2020,4,6,0.46,0,58.656826,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,TREE,D05,Treehaven,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2016,2020,5,28,0.2,0,5.431672000000001,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,UKFS,D06,The University of Kansas Field Station,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2020,6,43,0.12,0,6.201129,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,UNDE,D05,UNDERC,Terrestrial,Deciduous Forest|Mixed Forest|Woody Wetlands,2014,2020,7,30,0.27,0,29.39245,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,WOOD,D09,Woodworth,Terrestrial,Emergent Herbaceous Wetlands|Grassland/Herbaceous,2014,2020,7,43,0.17,0,10.630176,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,WREF,D16,Wind River Experimental Forest,Terrestrial,Evergreen Forest,2018,2020,3,12,0.24,0,41.939962,2020-12-15
+DP1.10093.001,Ticks sampled using drag cloths,tick,YELL,D12,Yellowstone Northern Range (Frog Rock),Terrestrial,Evergreen Forest|Grassland/Herbaceous|Shrub/Scrub,2018,2020,3,12,0.25,0,72.50336,2020-12-15
+DP1.10092.001,Tick-borne pathogen status,tick_pathogen,BLAN,D02,Blandy Experimental Farm,Terrestrial,Deciduous Forest|Pasture/Hay,2016,2018,3,9,0.36,0,5.7282589999999995,2020-12-15
+DP1.10092.001,Tick-borne pathogen status,tick_pathogen,DELA,D08,Dead Lake,Terrestrial,Evergreen Forest|Woody Wetlands,2015,2018,2,4,1.52,NA,4.103929,2020-12-15
+DP1.10092.001,Tick-borne pathogen status,tick_pathogen,HARV,D01,Harvard Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2014,2018,4,15,0.48,0.58,48.094725,2020-12-15
+DP1.10092.001,Tick-borne pathogen status,tick_pathogen,KONA,D06,Konza Prairie Biological Station - Relocatable,Terrestrial,Cultivated Crops,2017,2017,1,1,NA,NA,2.749077,2020-12-15
+DP1.10092.001,Tick-borne pathogen status,tick_pathogen,KONZ,D06,Konza Prairie Biological Station,Terrestrial,Deciduous Forest|Grassland/Herbaceous,2015,2018,4,13,0.33,0,34.868609,2020-12-15
+DP1.10092.001,Tick-borne pathogen status,tick_pathogen,LENO,D08,Lenoir Landing,Terrestrial,Deciduous Forest|Woody Wetlands,2016,2018,2,6,0.65,NA,7.680081,2020-12-15
+DP1.10092.001,Tick-borne pathogen status,tick_pathogen,MLBS,D07,Mountain Lake Biological Station,Terrestrial,Deciduous Forest,2018,2018,1,1,NA,NA,11.148950000000001,2020-12-15
+DP1.10092.001,Tick-borne pathogen status,tick_pathogen,ORNL,D07,Oak Ridge,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2018,4,19,0.42,0.58,57.371094,2020-12-15
+DP1.10092.001,Tick-borne pathogen status,tick_pathogen,OSBS,D03,Ordway-Swisher Biological Station,Terrestrial,Emergent Herbaceous Wetlands|Evergreen Forest|Woody Wetlands,2014,2018,5,32,0.16,0,36.808639,2020-12-15
+DP1.10092.001,Tick-borne pathogen status,tick_pathogen,SCBI,D02,Smithsonian Conservation Biology Institute,Terrestrial,Deciduous Forest|Evergreen Forest|Pasture/Hay,2014,2018,4,13,0.53,0.58,9.863216,2020-12-15
+DP1.10092.001,Tick-borne pathogen status,tick_pathogen,SERC,D02,Smithsonian Environmental Research Center,Terrestrial,Cultivated Crops|Deciduous Forest,2016,2018,3,16,0.21,0,10.327769,2020-12-15
+DP1.10092.001,Tick-borne pathogen status,tick_pathogen,TALL,D08,Talladega National Forest,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest,2014,2018,5,27,0.22,0,52.342968,2020-12-15
+DP1.10092.001,Tick-borne pathogen status,tick_pathogen,TREE,D05,Treehaven,Terrestrial,Deciduous Forest|Evergreen Forest|Mixed Forest|Woody Wetlands,2016,2018,3,11,0.3,0,5.431672000000001,2020-12-15
+DP1.10092.001,Tick-borne pathogen status,tick_pathogen,UKFS,D06,The University of Kansas Field Station,Terrestrial,Deciduous Forest|Pasture/Hay,2015,2018,4,18,0.23,0,6.201129,2020-12-15
