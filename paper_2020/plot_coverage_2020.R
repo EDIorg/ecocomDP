@@ -48,6 +48,10 @@ combined_geo_temporal_cov$Source <- ifelse(grepl("DP1.", combined_geo_temporal_c
 
 
 
+# taxon data:
+# df %>% separate(x, c("A", "B"))
+# not working:  foo <- data.frame(EDI_dataset_coverage$L1_id, EDI_dataset_coverage$class, stringsAsFactors = FALSE)
+
 
 
 # add column for taxonomic groups
