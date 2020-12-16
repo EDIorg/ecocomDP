@@ -67,6 +67,10 @@ combined_data$taxon_label <- ifelse(grepl("algae", combined_data$taxon_type, ign
 
 # plots
 
+# geo plot with 2 axes:
+# might work: https://www.r-graph-gallery.com/line-chart-dual-Y-axis-ggplot2.html
+
+
 # geographic coverage
 plot_geoCov <- ggplot(combined_geo_temporal_cov, aes(x=log10(area_km2), fill=Source ) ) + 
  # geom_histogram( binwidth=1, fill="#69b3a2", color="#e9ecef", alpha=0.7) +
@@ -74,18 +78,8 @@ plot_geoCov <- ggplot(combined_geo_temporal_cov, aes(x=log10(area_km2), fill=Sou
   # ggtitle("Bin size = 15") +
   theme_minimal_hgrid()  +
   ylab("Number of Datasets") + 
-  xlab("Log 10 (Area, km^2)")
-
-
-# geo plot with 2 axes:
-# might work: https://www.r-graph-gallery.com/line-chart-dual-Y-axis-ggplot2.html
-
-
-
-
-
-
-
+  xlab("Log 10 (Area, km^2)") + 
+  guides(fill=FALSE)
 
 
 # temporal coverage IN PROGRESS
@@ -94,7 +88,8 @@ plot_temCov <-   ggplot(combined_geo_temporal_cov, aes(x=n_years, fill=Source)) 
   geom_histogram( binwidth=3) +
   theme_minimal_hgrid()  +
   ylab("Number of Datasets") + 
-  xlab("Duration, years")      
+  xlab("Duration, years")  + 
+  guides(fill=FALSE) # removes legend
                         
                 
 # temporal evenness
@@ -104,7 +99,8 @@ plot_temEvenness <- ggplot(combined_geo_temporal_cov, aes(x=sd_year_interval, fi
   geom_histogram( binwidth=.3) +
   theme_minimal_hgrid()  +
   ylab("") + 
-  xlab("S.D. interval between years")
+  xlab("S.D. interval between years") + 
+  guides(fill=FALSE)
 
 # taxonomic coverage
 # with hints from:
