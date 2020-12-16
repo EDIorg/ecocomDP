@@ -57,6 +57,9 @@ Use this function to search across ecocomDP data made available by the
 Environmental Data Initiative (EDI) and the National Ecological Observatory
 Network (NEON).
 }
+\details{
+Currently, to accomodate multiple L1 versions of NEON data products, search results for a NEON L0 will also list all the L1 versions available for the match. This method is based on the assumption that the summary data among L1 versions is the same, which may need to be addressed in the future. A list of L0 and corresponding L1 identifiers are listed in /inst/L1_versions.txt. Each L1 version is accompanied by qualifying text that's appended to the title, abstract, and descriptions for comprehension of the differences among L1 versions.
+}
 \note{
 Searches across input arguments are combined with the "AND" boolean 
     operator.
