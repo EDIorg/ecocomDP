@@ -14,11 +14,14 @@ library(ggplot2)
 library(cowplot)
 library(readr)
 library(dplyr)
+library(data.table)
 
 
 # load data:
-NEON_dataset_coverage <- read_csv("NEON_dataset_coverage.csv")
-EDI_dataset_coverage <- read_csv("EDI_dataset_coverage.csv") 
+# NEON_dataset_coverage <- read_csv("NEON_dataset_coverage.csv")
+# EDI_dataset_coverage <- read_csv("EDI_dataset_coverage.csv") 
+NEON_dataset_coverage <- data.table::fread("NEON_dataset_coverage.csv")
+EDI_dataset_coverage <- data.table::fread("EDI_dataset_coverage.csv") 
 ## edit this file manually to remove some extra fields in rows 42, 60, 61
 
 #, col_types = ("ccnnnnnnnnnc"))
@@ -46,6 +49,29 @@ combined_geo_temporal_cov$Source <- ifelse(grepl("DP1.", combined_geo_temporal_c
                        ifelse(grepl("knb-lter", combined_geo_temporal_cov$L1_id, ignore.case = F), "EDI", 
                                "Other")))
 
+# Get EDI taxonomic info into long form
+df <- dplyr::select(EDI_dataset_coverage, L1_id, class)
+
+res <- data.frame(
+  L1_id = NA_character_,
+  class = NA_character_,
+  stringsAsFactors = FALSE)
+
+for (i in 1:nrow(df)) {
+  row <- df[i, ]
+  classes <- unlist(stringr::str_split(row$class, "\\|"))
+  res <- dplyr::bind_rows(
+    res,
+    data.frame(
+      L1_id = df[i, "L1_id"],
+      class = classes,
+      stringsAsFactors = FALSE))
+}
+res <- res[-1, ]
+res <- res[res$class != "NA", ]
+
+# Write to a file and manually add missing taxa classes
+# Add code here .....
 
 
 # taxon data:
