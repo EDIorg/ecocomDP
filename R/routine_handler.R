@@ -22,7 +22,6 @@ routine_handler <- function(package.id, environment, index) {
   # Is it L1? If so does it have an L2-DwC-A derivative?
   
   # Create lock file ----------------------------------------------------------
-  #TODO: Create lock file
   
   # Call appropriate workflow -------------------------------------------------
   
@@ -44,36 +43,29 @@ routine_handler <- function(package.id, environment, index) {
     
   } else if (r$id == "L1_w_dwca_package_descendant") {
     
-    # L1_to_L2_DwCA(
-    #   path = config.path, 
-    #   core.name = "event", 
-    #   parent.package.id = id.L1, 
-    #   child.package.id = id.L2, 
-    #   data.table.url = config.www, 
-    #   user.id = config.user.id,
-    #   user.domain = config.repository)
-    
-    L1_to_L2_DwCA( # For manually getting the first revision in the repo
-      path = config.path, 
-      core.name = "event", 
-      parent.package.id = "edi.96.2", 
-      child.package.id = "edi.97.1", 
-      data.table.url = config.www, 
-      user.id = config.user.id,
-      user.domain = config.repository)
+    # TODO: update this
+    update_L2_dwca(
+      package.id.L1,
+      repository = "EDI",
+      environment = "production",
+      core.name,
+      path,
+      url,
+      user.id,
+      user.pass)
     
   }
-
+  
+  # Upload to repository ------------------------------------------------------
   
   # Remove from queue ---------------------------------------------------------
   
   r <- httr::DELETE(
     paste0("https://regan.edirepository.org/ecocom-listener/", event_id_index))
   
-  # TODO: Write to log
-  
   # Remove lock file ----------------------------------------------------------
-  #TODO: Remove lock file
+  
+  # TODO: Write to log --------------------------------------------------------
   
   # Message maintainers -------------------------------------------------------
   
