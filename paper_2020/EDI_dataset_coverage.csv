@@ -40,7 +40,7 @@ edi.342.1,knb-lter-knz.69.15,1983,2018,35,0.12,39.1021,-96.5481,39.066,-96.6147,
 edi.341.1,knb-lter-knz.29.12,1982,2015,33,0.5,39.1021,-96.5534,39.0667,-96.6093,19008089.0569992,Insecta
 edi.343.1,knb-lter-knz.88.7,1981,2013,32,0.13,39.0922,-96.5594,39.0693,-96.6035,9701068.54080963,Mammalia
 edi.335.1,knb-lter-pie.33.16,2000,2018,18,0.19,42.730953216553,-70.842918395996,42.730953216553,-70.842918395996,0,Magnoliopsida
-edi.284.1,knb-lter-ntl.13.30,knb-lter-ntl.14.27,1983,2018,35,0,46.079,-89.5935,45.9989,-89.7045,76500455.6335602,Insecta|Malacostraca|Branchiopoda
+edi.284.1,knb-lter-ntl.13.30,1983,2018,35,0,46.079,-89.5935,45.9989,-89.7045,76500455.6335602,Insecta|Malacostraca|Branchiopoda
 edi.287.1,knb-lter-ntl.3.22,1981,2017,36,0,46.079,-89.3251,43.0451,-89.7045,10160570204.6072,Malacostraca
 edi.290.1,knb-lter-ntl.11.28,1981,2017,36,0.34,46.079,-89.5935,45.9989,-89.7045,76500455.6335602,Insecta|Gastropoda|Malacostraca|Arachnida|Ostracoda|Trepaxonemata|Branchiopoda|Maxillopoda|Hydrozoa|Clitellata|Collembola|Bivalvia
 edi.333.1,knb-lter-sev.29.175390,1992,2004,12,0.08,34.368,-106.535,34.3331,-106.736,71592937.7939453,
@@ -58,8 +58,8 @@ knb-lter-ntl.344.5,knb-lter-ntl.349.4,2005,2009,4,0.08,46.25,-89.3673,43.0766,-8
 edi.357.1,edi.291.1,1987,2019,32,0.22,18.31725847,-64.72,18.307,-64.73130735,1357292.36956501,Anthozoa
 edi.254.1,knb-lter-cap.41.14,1998,2018,20,0.05,33.8204250130355,-111.61479515834,33.3028279145498,-112.577118210717,5129953270.76886,Insecta|Arachnida|Malacostraca|Collembola|Chilopoda|Diplopoda
 edi.248.1,knb-lter-cap.643.1,2012,2016,4,0.1,33.76265,-111.7886,33.59724,-111.8574,117048569.44706,Insecta|Collembola|Euchelicerata|Chilopoda|Granuloreticulosea|Diplopoda|Arachnida|Malacostraca|Magnoliopsida
-edi.278.1,knb-lter-sbc.119.2,knb-lter-sbc.29.17,knb-lter-sbc.28.25,knb-lter-sbc.30.17,knb-lter-sbc.34.15,knb-lter-sbc.26.18,2008,2018,10,0.07,34.46774988,-119.5416933,34.3916319,-120.11905,448102317.049957,Hydrozoa|Teleostei|Anthozoa|Asteroidea|Florideophyceae|Gastropoda|Malacostraca|Maxillopoda|Gymnolaemata|Phaeophyceae|NA|Chondrichthyes|Entoprocta|Echinoidea|Ulvophyceae|Bivalvia|Ascidiacea|Polychaeta|Stenolaemata|Holothuroidea|Demospongiae|Calcarea|Cephalopoda|Ophiuroidea|Magnoliopsida|Actinopterygii
-edi.281.1,knb-lter-sbc.50.7,knb-lter-sbc.18.22,knb-lter-sbc.15.27,knb-lter-sbc.17.33,knb-lter-sbc.19.25,2000,2018,18,0.29,34.471817,-119.5416933,34.0444335,-120.33349,3457392559.69623,Hydrozoa|Anthozoa|Asteroidea|Florideophyceae|Teleostei|Gastropoda|Malacostraca|Maxillopoda|Gymnolaemata|Phaeophyceae|NA|Chondrichthyes|Entoprocta|Echinoidea|Ulvophyceae|Bivalvia|Ascidiacea|Polychaeta|Stenolaemata|Holothuroidea|Demospongiae|Calcarea|Cephalopoda|Ophiuroidea|Magnoliopsida|Elasmobranchii|Actinopterygii
+edi.278.1,knb-lter-sbc,2008,2018,10,0.07,34.46774988,-119.5416933,34.3916319,-120.11905,448102317.049957,Hydrozoa|Teleostei|Anthozoa|Asteroidea|Florideophyceae|Gastropoda|Malacostraca|Maxillopoda|Gymnolaemata|Phaeophyceae|NA|Chondrichthyes|Entoprocta|Echinoidea|Ulvophyceae|Bivalvia|Ascidiacea|Polychaeta|Stenolaemata|Holothuroidea|Demospongiae|Calcarea|Cephalopoda|Ophiuroidea|Magnoliopsida|Actinopterygii
+edi.281.1,knb-lter-sbc,2000,2018,18,0.29,34.471817,-119.5416933,34.0444335,-120.33349,3457392559.69623,Hydrozoa|Anthozoa|Asteroidea|Florideophyceae|Teleostei|Gastropoda|Malacostraca|Maxillopoda|Gymnolaemata|Phaeophyceae|NA|Chondrichthyes|Entoprocta|Echinoidea|Ulvophyceae|Bivalvia|Ascidiacea|Polychaeta|Stenolaemata|Holothuroidea|Demospongiae|Calcarea|Cephalopoda|Ophiuroidea|Magnoliopsida|Elasmobranchii|Actinopterygii
 edi.279.1,knb-lter-mcr.8.30,2005,2018,13,0.28,-17.45,-149.67,-17.62,-150,659253811.904694,Anthozoa|Phaeophyceae|Ulvophyceae|Florideophyceae|Hydrozoa|Cyanophyceae|Bivalvia
 edi.321.1,knb-lter-mcr.1038.9,2005,2018,13,0,-17.45,-149.67,-17.62,-150,659253811.904694,Hydrozoa
 edi.274.1,knb-lter-mcr.1039.9,2005,2018,13,0,-17.45,-149.67,-17.62,-150,659253811.904694,Asteroidea
