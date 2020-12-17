@@ -16,9 +16,12 @@
 
 ##### my version ----
 # updated by Eric on 6/9/2020 ~5:10pm
-map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
+map_neon_data_to_ecocomDP.NEON.20120.001.L2.01 <- function(
   neon.data.product.id ="DP1.20120.001",
   ...){
+  
+  #NEON target taxon group is ALGAE
+  neon_method_id <- "NEON.20120.001.L2.01"
  
   # get all tables for this data product for the specified sites in my_site_list, store them in a list called all_tabs
   all_tabs <- neonUtilities::loadByProduct(
@@ -193,7 +196,7 @@ map_neon_data_to_ecocomDP.MACROINVERTEBRATE <- function(
                   taxon_id = acceptedTaxonID) %>%
     
     # make a new column called package_id, assign it NA for all rows
-    dplyr::mutate(package_id = paste0(neon.data.product.id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>% 
+    dplyr::mutate(package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>% 
     dplyr::left_join(table_location, by = c("namedLocation" = "location_name")) %>% 
     dplyr::select(observation_id, 
                   event_id, 

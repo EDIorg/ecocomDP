@@ -88,25 +88,36 @@
 #'   forceParallel = FALSE)
 #'   
 read_data <- function(
-  id = NULL, path = NULL, file.type = ".rda", site = "all", startdate = NA, 
-  enddate = NA, check.size = FALSE, nCores = 1, forceParallel = FALSE,
-  token = NA,
+  id = NULL, path = NULL, file.type = ".rda", 
+  
+  # dots passed to neonUtilities::loadByProduct
+  ...,
+  # site = "all", startdate = NA, 
+  # enddate = NA, check.size = FALSE, nCores = 1, forceParallel = FALSE, token = NA,
   globally.unique.keys = FALSE) {
 
   # Validate input arguments --------------------------------------------------
+  
+  
+
   
   fun.args <- validate_arguments("read_data", as.list(environment()))
   id <- fun.args$id
   path <- fun.args$path
   file.type <- fun.args$file.type
-  site <- fun.args$site
-  startdate <- fun.args$startdate
-  enddate <- fun.args$enddate
-  check.size <- fun.args$check.size
-  nCores <- fun.args$nCores
-  token <- fun.args$token
-  forceParallel <- fun.args$forceParallel
+  # site <- fun.args$site
+  # startdate <- fun.args$startdate
+  # enddate <- fun.args$enddate
+  # check.size <- fun.args$check.size
+  # nCores <- fun.args$nCores
+  # token <- fun.args$token
+  # forceParallel <- fun.args$forceParallel
 
+  
+  
+
+  
+  
   # Parameterize --------------------------------------------------------------
 
   # Get ecocomDP attributes for validation and coercion
@@ -117,25 +128,31 @@ read_data <- function(
 
   # Read ----------------------------------------------------------------------
   
+  
+  
   d <- lapply(
     names(id),
     function(x) {
       if (stringr::str_detect(
         x, 
-        "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)")) {
+        "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)") && 
+        !grepl("^NEON\\.", x)) {
         read_data_edi(x)
-      } else if (stringr::str_detect(x, "^DP.\\.[:digit:]+\\.[:digit:]+")) {
+      } else if (stringr::str_detect(x, "^NEON\\.[:digit:]+\\.[:digit:]+")) {
         map_neon_data_to_ecocomDP(
           neon.data.product.id = x,
-          site = id[[x]]$site,
-          startdate = id[[x]]$startdate,
-          enddate = id[[x]]$enddate,
-          check.size = check.size,
-          nCores = nCores,
-          token = token,
-          forceParallel = forceParallel)
+          # site = id[[x]]$site,
+          # startdate = id[[x]]$startdate,
+          # enddate = id[[x]]$enddate,
+          # check.size = check.size,
+          # nCores = nCores,
+          # token = token,
+          # forceParallel = forceParallel
+          ...)
       }
     })
+  
+  
   
   names(d) <- names(id)
   
