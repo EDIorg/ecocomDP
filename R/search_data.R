@@ -432,5 +432,9 @@ format_search_results <- function(x) {
     x, id, title, abstract, description, years, sampling_interval, sites, url, 
     source, source_id, source_id_url)
   
+  # Replace "DP1" with "NEON"
+  
+  x$id <- stringr::str_replace(x$id, "DP1", "NEON")
+  
   return(x)
 }
