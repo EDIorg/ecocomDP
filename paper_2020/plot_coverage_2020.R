@@ -231,7 +231,8 @@ plot_taxonCov <- ggplot(data=combined_taxon_cov, aes(x=taxon_label, fill = Sourc
   # scale_y_continuous(expand=c(0,0)) + # removes space between the bar and the tick mark
   theme_minimal_hgrid() + 
   theme(text = element_text(size=12) )+ 
-  ylab("Number of Datasets") + 
+  ylab("Number of Datasets") +
+  # ylim(0,120) +
   xlab("Taxon Group")  +
   theme(axis.text.x = element_text(angle = 45, hjust = 1) ) +  # hjust sets postition of text
   guides(fill=FALSE)
@@ -247,5 +248,5 @@ top_row <- plot_grid(
   labels = c("A","B","C"), label_size = 12,
   nrow = 1)
 
-p <- plot_grid(top_row, bottom_row, nrow = 2)
+p <- plot_grid(top_row, bottom_row, nrow = 2, rel_heights = c(0.8,1))
 ggsave("fig_x.png", p)
