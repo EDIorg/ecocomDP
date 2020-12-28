@@ -1,15 +1,24 @@
 #' Event notification handler
 #'
-#' @description Runs on a chron. Checks for unprocessed items in SQlite and pops the longest waiting item into \code{update_L1()} or \code{update_L2_dwca()}. While in process
+#' @description Runs on a chron. Checks for unprocessed items in SQlite using webservices defined in ADD WEBSERVICE DEFINITIONS HERE and pops the longest waiting item into the appropriate workflow. Currently supported are \code{update_L1()} or \code{update_L2_dwca()}.
+#' 
+#' @param config (character) Full path to configuration file. The config file defines global variables for parameterizing workflows in this function. The config.R file sets these variables:
+#' \itemize{
+#' \item{"config.repository": Repository system. Must be one of the supported repositories.}
+#' \item{"config.environment": Repository environment. Some repositories have development and production environments.}
+#' \item{"config.path": Path to directory containing workflow files}
+#' \item{"config.www": Public URL for repository access to data and metadata files}
+#' \item{"config.user.id": User ID for upload to repository}
+#' \item{"config.user.pass": User password for upload to repository}
+#' }
 #'
 #' @export
 #'
-routine_handler <- function(package.id, environment, index) {
+routine_handler <- function(config) {
   
   # Parameterize --------------------------------------------------------------
   
-  # Read config.R for user name and password (inter alia)
-  source("C:\\Users\\Colin\\Documents\\EDI\\data_sets\\event_notification_workflow\\config.R")
+  source(file = config)
   
   # Pull from queue -----------------------------------------------------------
   
@@ -42,6 +51,7 @@ routine_handler <- function(package.id, environment, index) {
     #   user.id = config.user.id,
     #   user.pass = config.user.pass)
     
+    # TODO: Complete workflow and implement on server
     update_L1(
       package.id.L0 = "edi.95.5", # manual testing
       path = config.path, 
@@ -51,7 +61,7 @@ routine_handler <- function(package.id, environment, index) {
     
   } else if (r$id == "L1_w_dwca_package_descendant") {
     
-    # TODO: update this
+    # TODO: Complete workflow and implement on server
     update_L2_dwca(
       package.id.L1,
       repository = "EDI",
@@ -63,8 +73,6 @@ routine_handler <- function(package.id, environment, index) {
       user.pass)
     
   }
-  
-  # Publish -------------------------------------------------------------------
   
   # Compile log ---------------------------------------------------------------
   

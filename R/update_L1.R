@@ -80,6 +80,8 @@ update_L1 <- function(package.id.L0,
   r <- EDIutils::compare_eml(eml_L0_newest, eml_L0_previous)
   
   # TODO: Write to log
+  # - Issue warning if differences are found and list all differences. 
+  # Otherwise write "no differences found".
   
   # Read tables (L0) ----------------------------------------------------------
   
@@ -91,6 +93,8 @@ update_L1 <- function(package.id.L0,
   r <- EDIutils::compare_tables(tables_L0_newest, tables_L0_previous)
   
   # TODO: Write to log
+  # - Issue warning if differences are found and list all differences. 
+  # Otherwise write "no differences found".
   
   # Download and source conversion script -------------------------------------
   

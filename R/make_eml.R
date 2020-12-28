@@ -441,12 +441,7 @@ make_eml <- function(path,
   }
 
   eml_L0 <- EML::read_eml(url_parent)
-
-  xml_L0 <- suppressMessages(
-    ecocomDP::read_eml(
-      package.id = parent.package.id,
-      repository = repository, 
-      environment = environment))
+  xml_L0 <- suppressMessages(ecocomDP::read_eml(parent.package.id))
   
   # Create L1 EML -------------------------------------------------------------
   

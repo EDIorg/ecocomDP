@@ -32,7 +32,7 @@ run_conversion_script <- function(path,
   # Run script ----------------------------------------------------------------
   
   if (repository == "EDI") {
-    
+    browser()
     r <- create_ecocomDP(
       path = path,
       package.id.L0 = package.id.L0, 
