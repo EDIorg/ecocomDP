@@ -159,6 +159,9 @@ make_eml_dwca <- function(path,
   if (!is.null(url)) {
     data.table.url <- paste0(url, "/", data.table)
     other.entity.url <- paste0(url, "/", other.entity)
+  } else {
+    data.table.url <- NULL
+    other.entity.url <- NULL
   }
   
   # Read L1 EML ---------------------------------------------------------------
@@ -181,7 +184,7 @@ make_eml_dwca <- function(path,
   
   eml_L1 <- EML::read_eml(url_parent)
   xml_L1 <- suppressMessages(
-    ecocomDP::read_eml(parent.package.id, repository, environment))
+    ecocomDP::read_eml(parent.package.id))
   
   # Read L0 EML ---------------------------------------------------------------
   
@@ -203,10 +206,7 @@ make_eml_dwca <- function(path,
   message("Reading EML of L0 data package ", grandparent.package.id)
   
   xml_L0 <- suppressMessages(
-    ecocomDP::read_eml(
-      package.id = grandparent.package.id,
-      repository = repository, 
-      environment = environment))
+    ecocomDP::read_eml(grandparent.package.id))
   
   
   eml_L0 <- suppressMessages(
@@ -401,7 +401,16 @@ make_eml_dwca <- function(path,
   # object because emld parsing is irregular
   methods_L2 <- eml_L2$dataset$methods$methodStep[[1]]
   eml_L2$dataset$methods$methodStep[[1]] <- NULL
-  provenance_L1 <- eml_L2$dataset$methods$methodStep
+  
+  provenance_L1 <- suppressMessages(
+    EDIutils::api_get_provenance_metadata(
+      package.id = parent.package.id,
+      environment = environment))
+  provenance_L1 <- EML::read_eml(provenance_L1)
+  provenance_L1 <- list(
+    dataSource = provenance_L1$dataSource,
+    description = provenance_L1$description)
+  
   L0_para <- xml2::xml_text(
     xml2::xml_find_all(xml_L0, ".//methods//para"))
   eml_L1$dataset$methods <- NULL

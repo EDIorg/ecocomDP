@@ -88,7 +88,7 @@ update_L1 <- function(package.id.L0,
   tables_L0_newest <- EDIutils::read_tables(eml_L0_newest)
   tables_L0_previous <- EDIutils::read_tables(eml_L0_previous)
   
-  # Compare tables (L0 newest to L0 previous) ---------------------------------
+  # Compare tables (L0) -------------------------------------------------------
     
   r <- EDIutils::compare_tables(tables_L0_newest, tables_L0_previous)
   
@@ -102,7 +102,7 @@ update_L1 <- function(package.id.L0,
   
   # TODO: Write to log
   
-  # Run conversion script -----------------------------------------------------
+  # Create L1 -----------------------------------------------------------------
   
   # Repository specific methods
   r <- run_conversion_script(

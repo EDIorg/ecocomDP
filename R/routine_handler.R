@@ -30,9 +30,13 @@ routine_handler <- function(config) {
   # TODO: First in line gets processed
   # - Set config.environment (global variable)
   
-  # TODO: Identify level
-  # - Is it L0? (A data package with a derivative possessing the "ecocomDP" keyword is an L0.)
-  # - Is it L1? If so does it have an L2-DwC-A derivative?
+  # Identify workflows to call ------------------------------------------------
+  # There can be more than one L1-to-L2 workflows
+  
+  # TODO: # Is it L0? (A data package with a derivative possessing the "ecocomDP" keyword is an L0.)
+  test <- has_child_L1("edi.96.3")
+  # TODO: Is it L1? If so does it have an L2-DwC-A derivative?
+  test <- has_child_dwcae("edi.96.3")
   
   # TODO: Break if empty
   
@@ -41,6 +45,9 @@ routine_handler <- function(config) {
   # TODO: Create lock file in dir of ecocom-listener
   
   # Call workflow -------------------------------------------------------------
+  
+  # TODO: When more than one L1-to-L2 workflow exists, the following processes 
+  # will have to be implemented with iteration.
   
   if (r$id == "L0") {
     
@@ -52,8 +59,9 @@ routine_handler <- function(config) {
     #   user.pass = config.user.pass)
     
     # TODO: Complete workflow and implement on server
+    # Manual testing:
     update_L1(
-      package.id.L0 = "edi.95.5", # manual testing
+      package.id.L0 = "edi.95.5",
       path = config.path, 
       url = config.www, 
       user.id = config.user.id,
@@ -62,15 +70,14 @@ routine_handler <- function(config) {
   } else if (r$id == "L1_w_dwca_package_descendant") {
     
     # TODO: Complete workflow and implement on server
+    # Manual testing:
     update_L2_dwca(
-      package.id.L1,
-      repository = "EDI",
-      environment = "production",
-      core.name,
-      path,
-      url,
-      user.id,
-      user.pass)
+      package.id.L1 = "edi.96.3", # from event notification
+      core.name = "event",
+      path = "C:\\Users\\Colin\\Documents\\EDI\\data_sets\\event_notification_workflow\\example_L2",
+      url = "/some/url",
+      user.id = config.user.id,
+      user.pass = config.user.pass)
     
   }
   
