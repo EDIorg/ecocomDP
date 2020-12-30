@@ -1,0 +1,143 @@
+#' Does a data package have a ecocomDP or DwC-A child?
+#'
+#' @param package.id (character) Data package identifier
+#' @param keyword (character) Specifies the child type. Can be: "ecocomDP" or "Darwin Core Archive (DwC-A) Event Core"
+#'
+#' @return (named logical) TRUE/FALSE named with the child's data package identifier
+#' 
+has_child <- function(package.id, keyword) {
+  
+  # Load Global Environment config --------------------------------------------
+  
+  if (exists("config.repository", envir = .GlobalEnv)) {
+    repository <- get("config.repository", envir = .GlobalEnv)
+  } else {
+    repository <- "EDI"
+  }
+  
+  if (exists("config.environment", envir = .GlobalEnv)) {
+    environment <- get("config.environment", envir = .GlobalEnv)
+  } else {
+    environment <- "production"
+  }
+  
+  # Repository specific methods -----------------------------------------------
+  
+  # EDI
+  
+  if (repository == "EDI") {
+    
+    children <- xml2::xml_text(
+      xml2::xml_find_all(
+        suppressMessages(
+          EDIutils::api_list_data_descendants(package.id, environment)),
+        ".//packageId"))
+    
+    if (length(children) != 0) {
+      
+      # It's possible for a package.id to have multiple versions of a child 
+      # resembling one of the target data types. Get child specific attributes 
+      # for analysis.
+      
+      r <- sapply(
+        children,
+        function(child) {
+          eml <- suppressMessages(
+            EDIutils::api_read_metadata(child, environment))
+          pubdate <- get_report_datetime(child, environment)
+          
+          if (keyword == "ecocomDP") {
+            
+            ischild <- "ecocomDP" %in% 
+              xml2::xml_text(xml2::xml_find_all(eml, ".//keyword"))
+            
+            script <- "create_ecocomdp.r" %in% 
+              tolower(
+                xml2::xml_text(
+                  xml2::xml_find_all(
+                    eml, ".//otherEntity/physical/objectName")))
+            
+            res <- list(
+              id = child, 
+              pubdate = pubdate, 
+              ischild = ischild, 
+              script = script)
+            
+            return(res)
+            
+          } else if (keyword == "Darwin Core Archive (DwC-A) Event Core") {
+            
+            ischild <- "Darwin Core Archive (DwC-A) Event Core" %in% 
+              xml2::xml_text(xml2::xml_find_all(eml, ".//keyword"))
+            
+            res <- list(id = child, pubdate = pubdate, ischild = ischild)
+            
+            return(res)
+            
+          }
+        }, 
+        simplify = FALSE)
+      
+      r <- data.table::rbindlist(r)
+      
+      # Analyze attributes to find an accurate match. I.e. the most recently
+      # published and (in the case of ecocomDP) having a conversion script of 
+      # the correct format.
+      
+      if (keyword == "ecocomDP") {
+        
+        has_script <- r$script
+        r <- r[has_script, ]
+        
+        newest <- lubridate::ymd_hms(r$pubdate) %in% 
+          max(lubridate::ymd_hms(r$pubdate))
+        r <- r[newest, ]
+        
+        res <- r$ischild
+        names(res) <- r$id
+        
+        return(res)
+        
+      } else if (keyword == "Darwin Core Archive (DwC-A) Event Core") {
+        
+        newest <- lubridate::ymd_hms(r$pubdate) %in% 
+          max(lubridate::ymd_hms(r$pubdate))
+        r <- r[newest, ]
+        
+        res <- r$ischild
+        names(res) <- r$id
+        
+        return(res)
+        
+      }
+      
+    } else {
+      
+      return(FALSE)
+      
+    }
+    
+  }
+  
+}
+
+
+
+
+
+
+
+
+#' Get datetime of data package quality report from the EDI Data Repository
+#'
+#' @param package.id (character) Data package identifier
+#' @param environment (character) Data repository environment
+#'
+#' @return (character) Datetime in the form YYYY-MM-DDThh:mm:ss
+#'
+get_report_datetime <- function(package.id, environment) {
+  report <- suppressMessages(
+    EDIutils::api_read_data_package_report(package.id, environment))
+  datetime <- xml2::xml_text(xml2::xml_find_all(report, ".//qr:creationDate"))
+  return(datetime)
+}

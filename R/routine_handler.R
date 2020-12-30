@@ -34,10 +34,9 @@ routine_handler <- function(config) {
   # There can be more than one L1-to-L2 workflows
   
   # TODO: # Is it L0? (A data package with a derivative possessing the "ecocomDP" keyword is an L0.)
-  test <- has_child_L1("edi.96.3")
+  test <- has_child("edi.95.5", "ecocomDP")
   # TODO: Is it L1? If so does it have an L2-DwC-A derivative?
-  test <- has_child_dwcae("edi.96.3")
-  
+  test <- has_child("edi.96.3", "Darwin Core Archive (DwC-A) Event Core")
   # TODO: Break if empty
   
   # Lock ----------------------------------------------------------------------

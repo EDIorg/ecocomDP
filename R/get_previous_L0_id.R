@@ -4,7 +4,7 @@
 #'
 #' @param package.id (character) Newest L0 data package identifier
 #' 
-#' @details For the most recent L0 data package, which may not have a corresponding L1, follow all provenance traces to data packages containing the "ecocomDP" keyword. If more than one, select the most recent L0 identifier, read the corresponding EML, look for a valid L0 to L1 conversion script (convert_ecocomDP.R), and break if found. Otherwise try this process again for the next oldest L0 data package and so on.
+#' @details For the most recent L0 data package, which may not have a corresponding L1, follow all provenance traces to data packages containing the "ecocomDP" keyword. If more than one, select the most recent, read the corresponding EML, look for a valid L0 to L1 conversion script (convert_ecocomDP.R), and break if found. Otherwise try this process again for the next oldest L0 data package and so on.
 #'
 #' @return (list) A list containing:
 #' \item{id.L0}{Identifier of previous L0 data package}
