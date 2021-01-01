@@ -4,12 +4,12 @@
 \alias{has_child}
 \title{Does a data package have a ecocomDP or DwC-A child?}
 \usage{
-has_child(package.id, keyword)
+has_child(keyword, package.id)
 }
 \arguments{
-\item{package.id}{(character) Data package identifier}
-
 \item{keyword}{(character) Specifies the child type. Can be: "ecocomDP" or "Darwin Core Archive (DwC-A) Event Core"}
+
+\item{package.id}{(character) Data package identifier}
 }
 \value{
 (named logical) TRUE/FALSE named with the child's data package identifier

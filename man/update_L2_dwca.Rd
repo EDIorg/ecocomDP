@@ -4,10 +4,18 @@
 \alias{update_L2_dwca}
 \title{Update L2 DwC-A from updated L1}
 \usage{
-update_L2_dwca(package.id.L1, core.name, path, url, user.id, user.pass)
+update_L2_dwca(
+  package.id.L1,
+  package.id.L2,
+  core.name,
+  path,
+  url,
+  user.id,
+  user.pass
+)
 }
 \arguments{
-\item{package.id.L1}{(character) Identifier of updated L1}
+\item{package.id.L1}{(character) Identifier of L1's DwC-A child}
 
 \item{core.name}{(character) The Darwin Core central table of the package. Can be: "event" (event core).}
 

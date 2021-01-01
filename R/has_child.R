@@ -1,11 +1,11 @@
 #' Does a data package have a ecocomDP or DwC-A child?
 #'
-#' @param package.id (character) Data package identifier
 #' @param keyword (character) Specifies the child type. Can be: "ecocomDP" or "Darwin Core Archive (DwC-A) Event Core"
+#' @param package.id (character) Data package identifier
 #'
 #' @return (named logical) TRUE/FALSE named with the child's data package identifier
 #' 
-has_child <- function(package.id, keyword) {
+has_child <- function(keyword, package.id) {
   
   # Load Global Environment config --------------------------------------------
   

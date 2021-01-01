@@ -1,0 +1,33 @@
+#' Increment data package version number
+#'
+#' @param package.id (character) Data package identifier
+#'
+#' @return (character) Package identifier with version number incremented by 1.
+#' 
+#' @details Supports repository specific methods.
+#'
+#' @examples
+#' increment_package_version("edi.100.1")
+#' 
+increment_package_version <- function(package.id) {
+  
+  # Load Global Environment config --------------------------------------------
+  
+  if (exists("config.repository", envir = .GlobalEnv)) {
+    repository <- get("config.repository", envir = .GlobalEnv)
+  } else {
+    repository <- "EDI"
+  }
+  
+  # Repository specific methods -----------------------------------------------
+  
+  if (repository == "EDI") {
+    
+    parts <- unlist(stringr::str_split(package.id, "\\."))
+    parts[3] <- as.character(as.numeric(parts[3]) + 1)
+    parts <- paste(parts, collapse = ".")
+    return(parts)
+    
+  }
+  
+}

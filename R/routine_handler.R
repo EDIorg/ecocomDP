@@ -22,22 +22,25 @@ routine_handler <- function(config) {
   
   # Pull from queue -----------------------------------------------------------
   
-  # Is anybody waiting?
-  prd <- httr::GET("https://regan.edirepository.org/ecocom-listener/package.lternet.edu")
-  stg <- httr::GET("https://regan.edirepository.org/ecocom-listener/package-s.lternet.edu")
-  dev <- httr::GET("https://regan.edirepository.org/ecocom-listener/package-d.lternet.edu")
+  next_in_line <- pull_from_queue(config.repository)
   
-  # TODO: First in line gets processed
-  # - Set config.environment (global variable)
+  # Continue if there is anything to process
+  
+  if (is.null(next_in_line)) {
+    return(NULL)
+  }
   
   # Identify workflows to call ------------------------------------------------
-  # There can be more than one L1-to-L2 workflows
   
-  # TODO: # Is it L0? (A data package with a derivative possessing the "ecocomDP" keyword is an L0.)
-  test <- has_child("edi.95.5", "ecocomDP")
-  # TODO: Is it L1? If so does it have an L2-DwC-A derivative?
-  test <- has_child("edi.96.3", "Darwin Core Archive (DwC-A) Event Core")
-  # TODO: Break if empty
+  # Knowing which workflow to call depends on whether the data package is a 
+  # parent of an L1 or a parent of one or more L2.
+  
+  parent_of_L1 <- has_child("ecocomDP", next_in_line$package.id)
+  
+  if (!parent_of_L1) {
+    parent_of_dwcae <- has_child(
+      "Darwin Core Archive (DwC-A) Event Core", next_in_line$package.id)
+  }
   
   # Lock ----------------------------------------------------------------------
   
@@ -45,10 +48,9 @@ routine_handler <- function(config) {
   
   # Call workflow -------------------------------------------------------------
   
-  # TODO: When more than one L1-to-L2 workflow exists, the following processes 
-  # will have to be implemented with iteration.
+  # TODO: Refactor for iteration when more than one L1-to-L2 workflow exists.
   
-  if (r$id == "L0") {
+  if (parent_of_L1) {
     
     # update_L1(
     #   package.id.L0 = package.id, # newest L0 id arriving via event notification
@@ -58,6 +60,7 @@ routine_handler <- function(config) {
     #   user.pass = config.user.pass)
     
     # TODO: Complete workflow and implement on server
+    
     # Manual testing:
     update_L1(
       package.id.L0 = "edi.95.5",
@@ -66,17 +69,20 @@ routine_handler <- function(config) {
       user.id = config.user.id,
       user.pass = config.user.pass)
     
-  } else if (r$id == "L1_w_dwca_package_descendant") {
+  } else if (parent_of_dwcae) {
     
-    # TODO: Complete workflow and implement on server
-    # Manual testing:
     update_L2_dwca(
-      package.id.L1 = "edi.96.3", # from event notification
+      package.id.L1 = package.id,
+      package.id.L2 = names(parent_of_dwcae),
       core.name = "event",
-      path = "C:\\Users\\Colin\\Documents\\EDI\\data_sets\\event_notification_workflow\\example_L2",
-      url = "/some/url",
+      path = config.path,
+      url = config.www,
       user.id = config.user.id,
       user.pass = config.user.pass)
+    
+  } else {
+    
+    "Input data is not one of the supported types, and will not be processed."
     
   }
   
@@ -92,9 +98,61 @@ routine_handler <- function(config) {
   
   # Remove from queue ---------------------------------------------------------
   
-  r <- httr::DELETE(
-    paste0("https://regan.edirepository.org/ecocom-listener/", event_id_index))
+  # qind
+  # r <- httr::DELETE(
+  #   paste0("https://regan.edirepository.org/ecocom-listener/", event_id_index))
   
   # Unlock --------------------------------------------------------------------
+  
+}
+
+
+
+
+
+
+
+
+#' Pull next item from the ecocom-listener's queue
+#'
+#' @param repository (character) Repository hosting the ecocom-listener. Facilitates repository specific methods. Currently supported is: EDI.
+#'
+#' @return
+#' \item{index}{(integer) Index of item in queue. Is later used for removing the item from the queue.}
+#' \item{package.id}{(character) Data package identifier}
+#' \item{config.environment}{(character) Location of the \code{package.id} within a repository system. This variable is written to the Global Environment for use in \code{routine_handler()}.}
+#'
+pull_from_queue <- function(repository) {
+  
+  # EDI -----------------------------------------------------------------------
+  
+  if (repository == "EDI") {
+    
+    # EDI has listeners in "production" and "staging" environments
+    prd <- httr::GET(
+      "https://regan.edirepository.org/ecocom-listener/package.lternet.edu")
+    stg <- httr::GET(
+      "https://regan.edirepository.org/ecocom-listener/package-s.lternet.edu")
+    
+    # Production has priority over staging
+    if (httr::status_code(prd) == 200) {
+      assign("config.environment", "production", envir = .GlobalEnv)
+      cntnt <- httr::content(prd, as = "text")
+    } else if (httr::status_code(stg) == 200) {
+      assign("config.environment", "staging", envir = .GlobalEnv)
+      cntnt <- httr::content(stg, as = "text")
+    }
+    
+    # Return parsed content
+    if (exists("cntnt")) {
+      res <- list(
+        index = as.integer(stringr::str_split(cntnt, ",", simplify = T)[1]),
+        package.id = stringr::str_split(cntnt, ",", simplify = T)[2])
+      return(res)
+    }
+
+  }
+  
+  # Other repository ----------------------------------------------------------
   
 }
