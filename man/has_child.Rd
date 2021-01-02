@@ -12,7 +12,11 @@ has_child(keyword, package.id)
 \item{package.id}{(character) Data package identifier}
 }
 \value{
-(named logical) TRUE/FALSE named with the child's data package identifier
+(named logical) Named after the NEWEST child data package identifier
+descending from \code{package.id}. It's possible to have multiple children
+REVISIONS originating from a \code{package.id}. This may occur when there 
+are issues with the first child of \code{package.id} that are fixed by a 
+follow on revision.
 }
 \description{
 Does a data package have a ecocomDP or DwC-A child?

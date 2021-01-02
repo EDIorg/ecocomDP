@@ -1,12 +1,12 @@
 #' Event notification handler
 #'
-#' @description Runs on a chron. Checks for unprocessed items in SQlite using webservices defined in ADD WEBSERVICE DEFINITIONS HERE and pops the longest waiting item into the appropriate workflow. Currently supported are \code{update_L1()} or \code{update_L2_dwca()}.
+#' @description Runs on a chron. Checks for unprocessed items in SQlite using webservices defined in ADD WEBSERVICE DEFINITIONS HERE and pops the longest waiting item into the appropriate routine. Currently supported are \code{update_L1()} or \code{update_L2_dwca()}.
 #' 
-#' @param config (character) Full path to configuration file. The config file defines global variables for parameterizing workflows in this function. The config.R file sets these variables:
+#' @param config (character) Full path to configuration file. The config file defines global variables for parameterizing routines in this function. The config.R file sets these variables:
 #' \itemize{
 #' \item{"config.repository": Repository system. Must be one of the supported repositories.}
 #' \item{"config.environment": Repository environment. Some repositories have development and production environments.}
-#' \item{"config.path": Path to directory containing workflow files}
+#' \item{"config.path": Path to directory containing routine files}
 #' \item{"config.www": Public URL for repository access to data and metadata files}
 #' \item{"config.user.id": User ID for upload to repository}
 #' \item{"config.user.pass": User password for upload to repository}
@@ -20,69 +20,100 @@ routine_handler <- function(config) {
   
   source(file = config)
   
-  # Pull from queue -----------------------------------------------------------
+  # Check lock ----------------------------------------------------------------
   
-  next_in_line <- pull_from_queue(config.repository)
+  # Trying to run a routine when one is already underway creates issues
   
-  # Continue if there is anything to process
-  
-  if (is.null(next_in_line)) {
+  if (file.exists(paste0(config.path, "/lock.txt"))) {
     return(NULL)
   }
   
-  # Identify workflows to call ------------------------------------------------
+  # Pull from queue -----------------------------------------------------------
   
-  # Knowing which workflow to call depends on whether the data package is a 
-  # parent of an L1 or a parent of one or more L2.
+  # Get next in line
   
-  parent_of_L1 <- has_child("ecocomDP", next_in_line$package.id)
+  nil <- pull_from_queue(config.repository)
   
-  if (!parent_of_L1) {
-    parent_of_dwcae <- has_child(
-      "Darwin Core Archive (DwC-A) Event Core", next_in_line$package.id)
+  if (is.null(nil)) {
+    return(NULL)
+  }
+  
+  # Identify routine(s) to call ----------------------------------------------
+  
+  # Knowing which routine to call depends on whether the "next data package
+  # in line" is a parent of an L1 or a parent of one or more L2.
+  
+  # Because it's possible (but rare) for the next in line to already have a 
+  # child created by one of the routines listed below, first check for such
+  # descendants before continuing. This check safely assumes a previous 
+  # version has valid parent attributes, which are tightly controlled by 
+  # validate_ecocomDP().
+  
+  nil$parent_of_L1 <- has_child("ecocomDP", nil$package.id)
+  if (nil$parent_of_L1) {
+    return(NULL)
+  }
+  
+  if (!nil$parent_of_L1) {
+    nil$parent_of_dwcae <- has_child(
+      "Darwin Core Archive (DwC-A) Event Core", nil$package.id) 
+    if (nil$parent_of_dwcae) {
+      return(NULL)
+    }
+  }
+  
+  # Was the previous version of the next in line a parent of a child created 
+  # by one of the routines listed below? If not, the next in line may have 
+  # wandered into the wrong queue.
+  
+  nil$parent_of_L1 <- has_child(
+    "ecocomDP", get_previous_version(nil$package.id))
+  
+  if (!nil$parent_of_L1) {
+    nil$parent_of_dwcae <- has_child(
+      "Darwin Core Archive (DwC-A) Event Core", 
+      get_previous_version(nil$package.id)) 
+  }
+  
+  if (!any(c(nil$parent_of_L1, nil$parent_of_dwcae))) {
+    message(paste0("No supported routine for ", nil$package.id))
+    return(NULL)
   }
   
   # Lock ----------------------------------------------------------------------
   
-  # TODO: Create lock file in dir of ecocom-listener
+  # Lock file prevents race conditions by indicating a routine in progress
   
-  # Call workflow -------------------------------------------------------------
+  file.create(paste0(config.path, "/lock.txt"))
   
-  # TODO: Refactor for iteration when more than one L1-to-L2 workflow exists.
+  if (!file.exists(paste0(config.path, "/lock.txt"))) {
+    message("Could not create lock.txt. Exiting routine_handler().")
+    return(NULL)
+  }
   
-  if (parent_of_L1) {
+  # Call routine -------------------------------------------------------------
+  
+  # TODO: Refactor for iteration when more than one L1-to-L2 routine exists
+  
+  if (nil$parent_of_L1) {
     
-    # update_L1(
-    #   package.id.L0 = package.id, # newest L0 id arriving via event notification
-    #   path = config.path, 
-    #   url = config.www,
-    #   user.id = config.user.id,
-    #   user.pass = config.user.pass)
-    
-    # TODO: Complete workflow and implement on server
-    
-    # Manual testing:
     update_L1(
-      package.id.L0 = "edi.95.5",
+      package.id.L0 = nil$package.id,
       path = config.path, 
       url = config.www, 
       user.id = config.user.id,
       user.pass = config.user.pass)
     
-  } else if (parent_of_dwcae) {
+  } else if (nil$parent_of_dwcae) {
     
     update_L2_dwca(
-      package.id.L1 = package.id,
-      package.id.L2 = names(parent_of_dwcae),
+      package.id.L1 = nil$package.id,
+      package.id.L2 = names(nil$parent_of_dwcae),
       core.name = "event",
       path = config.path,
       url = config.www,
       user.id = config.user.id,
       user.pass = config.user.pass)
-    
-  } else {
-    
-    "Input data is not one of the supported types, and will not be processed."
     
   }
   
@@ -103,6 +134,15 @@ routine_handler <- function(config) {
   #   paste0("https://regan.edirepository.org/ecocom-listener/", event_id_index))
   
   # Unlock --------------------------------------------------------------------
+  
+  # Remove lock file so the next routine can proceed
+  
+  file.remove(paste0(config.path, "/lock.txt"))
+  
+  if (file.exists(paste0(config.path, "/lock.txt"))) {
+    message("Could not remove lock.txt. Devine intervention is required.")
+    return(NULL)
+  }
   
 }
 

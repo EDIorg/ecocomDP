@@ -3,7 +3,11 @@
 #' @param keyword (character) Specifies the child type. Can be: "ecocomDP" or "Darwin Core Archive (DwC-A) Event Core"
 #' @param package.id (character) Data package identifier
 #'
-#' @return (named logical) TRUE/FALSE named with the child's data package identifier
+#' @return (named logical) Named after the NEWEST child data package identifier
+#' descending from \code{package.id}. It's possible to have multiple children
+#' REVISIONS originating from a \code{package.id}. This may occur when there 
+#' are issues with the first child of \code{package.id} that are fixed by a 
+#' follow on revision.
 #' 
 has_child <- function(keyword, package.id) {
   
@@ -42,6 +46,7 @@ has_child <- function(keyword, package.id) {
       r <- sapply(
         children,
         function(child) {
+          
           eml <- suppressMessages(
             EDIutils::api_read_metadata(child, environment))
           pubdate <- get_report_datetime(child, environment)
@@ -70,7 +75,10 @@ has_child <- function(keyword, package.id) {
             ischild <- "Darwin Core Archive (DwC-A) Event Core" %in% 
               xml2::xml_text(xml2::xml_find_all(eml, ".//keyword"))
             
-            res <- list(id = child, pubdate = pubdate, ischild = ischild)
+            res <- list(
+              id = child, 
+              pubdate = pubdate, 
+              ischild = ischild)
             
             return(res)
             
@@ -84,7 +92,7 @@ has_child <- function(keyword, package.id) {
       # published and (in the case of ecocomDP) having a conversion script of 
       # the correct format.
       
-      if (keyword == "ecocomDP") {
+      if (keyword == "ecocomDP" & r$ischild) {
         
         has_script <- r$script
         r <- r[has_script, ]
@@ -98,7 +106,8 @@ has_child <- function(keyword, package.id) {
         
         return(res)
         
-      } else if (keyword == "Darwin Core Archive (DwC-A) Event Core") {
+      } else if (keyword == "Darwin Core Archive (DwC-A) Event Core" & 
+                 r$ischild) {
         
         newest <- lubridate::ymd_hms(r$pubdate) %in% 
           max(lubridate::ymd_hms(r$pubdate))
@@ -108,6 +117,10 @@ has_child <- function(keyword, package.id) {
         names(res) <- r$id
         
         return(res)
+        
+      } else {
+        
+        return(FALSE)
         
       }
       

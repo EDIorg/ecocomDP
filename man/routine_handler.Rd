@@ -7,16 +7,16 @@
 routine_handler(config)
 }
 \arguments{
-\item{config}{(character) Full path to configuration file. The config file defines global variables for parameterizing workflows in this function. The config.R file sets these variables:
+\item{config}{(character) Full path to configuration file. The config file defines global variables for parameterizing routines in this function. The config.R file sets these variables:
 \itemize{
 \item{"config.repository": Repository system. Must be one of the supported repositories.}
 \item{"config.environment": Repository environment. Some repositories have development and production environments.}
-\item{"config.path": Path to directory containing workflow files}
+\item{"config.path": Path to directory containing routine files}
 \item{"config.www": Public URL for repository access to data and metadata files}
 \item{"config.user.id": User ID for upload to repository}
 \item{"config.user.pass": User password for upload to repository}
 }}
 }
 \description{
-Runs on a chron. Checks for unprocessed items in SQlite using webservices defined in ADD WEBSERVICE DEFINITIONS HERE and pops the longest waiting item into the appropriate workflow. Currently supported are \code{update_L1()} or \code{update_L2_dwca()}.
+Runs on a chron. Checks for unprocessed items in SQlite using webservices defined in ADD WEBSERVICE DEFINITIONS HERE and pops the longest waiting item into the appropriate routine. Currently supported are \code{update_L1()} or \code{update_L2_dwca()}.
 }
