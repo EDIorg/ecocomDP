@@ -7,7 +7,7 @@
 upload_to_repository(path, package.id, user.id, user.pass)
 }
 \arguments{
-\item{path}{(character) Directory in which L1 tables, scripts, and metadata exist.}
+\item{path}{(character) Publicly accessible server directory from which L1 tables, scripts, and metadata can be downloaded}
 
 \item{package.id}{(character) Identifier of data package to be uploaded}
 

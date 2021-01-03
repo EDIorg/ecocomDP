@@ -3,7 +3,7 @@
 #' @description Updates an L2 DwC-A data package when it’s L1 parent data package has been updated. This function is a wrapper to several subroutines.
 #'
 #' @param package.id.L1 (character) Identifier of updated L1
-#' @param package.id.L1 (character) Identifier of L1's DwC-A child
+#' @param package.id.L2 (character) Identifier of L1's new DwC-A child to be created by this function
 #' @param core.name (character) The Darwin Core central table of the package. Can be: "event" (event core).
 #' @param path (character) Directory to which L2 tables, meta.xml, and metadata will be written.
 #' @param url (character) Publicly accessible URL to \code{path} for download by a data repository.
@@ -46,20 +46,18 @@ update_L2_dwca <- function(package.id.L1,
     path = config.path, 
     core.name = core.name, 
     parent.package.id = package.id.L1, 
-    child.package.id = increment_package_version(package.id.L2), 
+    child.package.id = package.id.L2, 
     data.table.url = config.www, 
     user.id = config.user.id,
     user.domain = config.repository)
   
   # Upload to repository ------------------------------------------------------
   
-  # TODO: Authenticate and use token instead of password
-  
-  # r <- ecocomDP::upload_to_repository(
-  #   path = path,
-  #   package.id = L1_new,
-  #   user.id = user.id, 
-  #   user.pass = user.pass)
+  r <- upload_to_repository(
+    path = config.www,
+    package.id = package.id.L2,
+    user.id = config.user.id,
+    user.pass = config.user.pass)
   
   # TODO: Write to log
   

@@ -2,7 +2,7 @@
 #'
 #' @description A wrapper function to repository specific upload methods.
 #'
-#' @param path (character) Directory in which L1 tables, scripts, and metadata exist.
+#' @param path (character) Publicly accessible server directory from which L1 tables, scripts, and metadata can be downloaded
 #' @param package.id (character) Identifier of data package to be uploaded
 #' @param user.id (character) User identifier within a specified \code{repository}. This controls editing access in some \code{repository}.
 #' @param user.pass (character) Password associated with \code{user.id} for repository upload.
@@ -35,7 +35,8 @@ upload_to_repository <- function(path,
   
   if (repository == "EDI") {
     
-    eml <- EDIutils::api_update_data_package(
+    # TODO: Wrap in tryCatch()
+    r <- EDIutils::api_update_data_package(
       path = path, 
       package.id = package.id, 
       environment = environment, 

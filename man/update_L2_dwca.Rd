@@ -15,7 +15,9 @@ update_L2_dwca(
 )
 }
 \arguments{
-\item{package.id.L1}{(character) Identifier of L1's DwC-A child}
+\item{package.id.L1}{(character) Identifier of updated L1}
+
+\item{package.id.L2}{(character) Identifier of L1's new DwC-A child to be created by this function}
 
 \item{core.name}{(character) The Darwin Core central table of the package. Can be: "event" (event core).}
 

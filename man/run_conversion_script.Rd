@@ -11,7 +11,7 @@ run_conversion_script(path, package.id.L0, package.id.L1, url)
 
 \item{package.id.L0}{(character) Identifier of newest L0 data package.}
 
-\item{package.id.L1}{(character) Identifier of new L1}
+\item{package.id.L1}{(character) Identifier of new L1 being created by this script}
 
 \item{url}{(character) Publicly accessible URL to \code{path} for download by a data repository.}
 }

@@ -10,7 +10,7 @@
 #'
 install_missing_libraries <- function(conversion.script) {
   
-  lines <-  readLines(conversion.script)
+  lines <- readLines(conversion.script)
   
   libraries <- unlist(
     stringr::str_extract_all(lines, "(?<=library\\().*(?=\\))"))
@@ -19,6 +19,9 @@ install_missing_libraries <- function(conversion.script) {
   
   if (!(all(libraries %in% installed_libraries))) {
     missing_libraries <- libraries[which(!(libraries %in% installed_libraries))]
+    message(
+      "Installing missing libraries: ", 
+      paste(missing_libraries, collapse = ", "))
     install.packages(missing_libraries)
   }
 

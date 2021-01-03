@@ -3,6 +3,7 @@
 #' @description Updates an L1 data package when it’s L0 parent data package has been updated. This function is a wrapper to several subroutines.
 #'
 #' @param package.id.L0 (character) Identifier of newest L0 data package.
+#' @param package.id.L1 (character) Identifier of L0's newest L1 child. The L0-to-L1 conversion script of \code{package.id.L1} will be used to create the child of \code{package.id.L0}.
 #' @param path (character) Directory to which L1 tables, scripts, and metadata will be written.
 #' @param url (character) Publicly accessible URL to \code{path} for download by a data repository.
 #' @param user.id (character) User identifier within a specified \code{repository}. This controls editing access in some \code{repository}.
@@ -17,6 +18,7 @@
 #' @export
 #'
 update_L1 <- function(package.id.L0, 
+                      package.id.L1,
                       path, 
                       url, 
                       user.id, 
@@ -36,46 +38,10 @@ update_L1 <- function(package.id.L0,
     environment <- "production"
   }
   
-  # Read EML (L0) -------------------------------------------------------------
-  
-  # Newest
+  # Compare EML (L0) ----------------------------------------------------------
   
   eml_L0_newest <- ecocomDP::read_eml(package.id.L0)
-  
-  # TODO: Write to log
-  
-  # Find the previous containing a valid L0 to L1 conversion script
-  
-  r <- ecocomDP::get_previous_L0_id_and_L1_conversion_script(package.id.L0)
-  
-  # TODO: Write to log
-  
-  if (is.null(r)) {
-    # TODO: Write "no script found" to log
-    stop("No L0 to L1 conversion script found", call. = FALSE)
-  } else {
-    L0_previous <- r$id.L0
-    L0_previous_script_url <- r$url
-    L1_new <- stringr::str_split(r$id.L1, "\\.")[[1]]
-    L1_new[3] <- as.character(as.numeric(L1_new[3]) + 1)
-    L1_new <- paste(L1_new, collapse = ".")
-  }
-  
-  # TODO: Write to log
-  
-  if (L0_previous == package.id.L0) {
-    stop(
-      "The L0 data package ", package.id.L0, " has an L1 descendant.", 
-      call. = FALSE)
-  }
-  
-  # TODO: Write to log
-  
-  eml_L0_previous <- ecocomDP::read_eml(L0_previous)
-  
-  # TODO: Write to log
-  
-  # Compare EML (L0) ----------------------------------------------------------
+  eml_L0_previous <- ecocomDP::read_eml(get_previous_version(package.id.L0))
   
   r <- EDIutils::compare_eml(eml_L0_newest, eml_L0_previous)
   
@@ -83,12 +49,10 @@ update_L1 <- function(package.id.L0,
   # - Issue warning if differences are found and list all differences. 
   # Otherwise write "no differences found".
   
-  # Read tables (L0) ----------------------------------------------------------
+  # Compare tables (L0) -------------------------------------------------------
   
   tables_L0_newest <- EDIutils::read_tables(eml_L0_newest)
   tables_L0_previous <- EDIutils::read_tables(eml_L0_previous)
-  
-  # Compare tables (L0) -------------------------------------------------------
     
   r <- EDIutils::compare_tables(tables_L0_newest, tables_L0_previous)
   
@@ -98,30 +62,28 @@ update_L1 <- function(package.id.L0,
   
   # Download and source conversion script -------------------------------------
   
-  ecocomDP::download_and_source_conversion_script(L0_previous_script_url, path)
+  eml_L1_newest <- ecocomDP::read_eml(package.id.L1)
+  download_and_source_conversion_script(eml_L1_newest, path)
   
   # TODO: Write to log
   
   # Create L1 -----------------------------------------------------------------
   
-  # Repository specific methods
   r <- run_conversion_script(
     path = path,
     package.id.L0 = package.id.L0, 
-    package.id.L1 = L1_new,
+    package.id.L1 = increment_package_version(package.id.L1),
     url = url)
   
   # TODO: Write to log
   
   # Upload to repository ------------------------------------------------------
   
-  # TODO: Authenticate and use token instead of password
-
-  r <- ecocomDP::upload_to_repository(
-    path = path,
-    package.id = L1_new,
-    user.id = user.id, 
-    user.pass = user.pass)
+  r <- upload_to_repository(
+    path = config.www,
+    package.id = increment_package_version(package.id.L1),
+    user.id = config.user.id,
+    user.pass = config.user.pass)
   
   # TODO: Write to log
   

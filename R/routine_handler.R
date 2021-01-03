@@ -51,6 +51,9 @@ routine_handler <- function(config) {
   
   nil$parent_of_L1 <- has_child("ecocomDP", nil$package.id)
   if (nil$parent_of_L1) {
+    # TODO: Remove from queue
+    # r <- httr::DELETE(
+    #   paste0("https://regan.edirepository.org/ecocom-listener/", event_id_index))
     return(NULL)
   }
   
@@ -58,13 +61,16 @@ routine_handler <- function(config) {
     nil$parent_of_dwcae <- has_child(
       "Darwin Core Archive (DwC-A) Event Core", nil$package.id) 
     if (nil$parent_of_dwcae) {
+      # TODO: Remove from queue
+      # r <- httr::DELETE(
+      #   paste0("https://regan.edirepository.org/ecocom-listener/", event_id_index))
       return(NULL)
     }
   }
   
   # Was the previous version of the next in line a parent of a child created 
   # by one of the routines listed below? If not, the next in line may have 
-  # wandered into the wrong queue.
+  # wandered into the wrong queue and should be removed.
   
   nil$parent_of_L1 <- has_child(
     "ecocomDP", get_previous_version(nil$package.id))
@@ -76,7 +82,11 @@ routine_handler <- function(config) {
   }
   
   if (!any(c(nil$parent_of_L1, nil$parent_of_dwcae))) {
-    message(paste0("No supported routine for ", nil$package.id))
+    message(paste0("No supported routine for ", nil$package.id), ". Removing ",
+            "from queue.")
+    # TODO: Remove from queue
+    # r <- httr::DELETE(
+    #   paste0("https://regan.edirepository.org/ecocom-listener/", event_id_index))
     return(NULL)
   }
   
@@ -99,6 +109,7 @@ routine_handler <- function(config) {
     
     update_L1(
       package.id.L0 = nil$package.id,
+      package.id.L1 = names(nil$parent_of_L1),
       path = config.path, 
       url = config.www, 
       user.id = config.user.id,
@@ -108,7 +119,7 @@ routine_handler <- function(config) {
     
     update_L2_dwca(
       package.id.L1 = nil$package.id,
-      package.id.L2 = names(nil$parent_of_dwcae),
+      package.id.L2 = increment_package_version(names(nil$parent_of_dwcae)),
       core.name = "event",
       path = config.path,
       url = config.www,
@@ -119,9 +130,14 @@ routine_handler <- function(config) {
   
   # Compile log ---------------------------------------------------------------
   
+  # log_master.txt - A permanent log of all ecocomDP processes
+  # dependencies_update_L1.txt - A list of all dependencies used in update_L1().
+  # Consider helper to create these two files
+  
   # Message maintainers -------------------------------------------------------
   
-  message_maintainers()
+  # TODO: Send email to maintainers with a log file specific to the data object conversion (not the entire log_master.txt). This should be combined with the email notification currently sent by event_notification_handler() when an event notification is received.
+  # message_maintainers()
   
   # Clear workspace -----------------------------------------------------------
   
@@ -164,8 +180,6 @@ routine_handler <- function(config) {
 #'
 pull_from_queue <- function(repository) {
   
-  # EDI -----------------------------------------------------------------------
-  
   if (repository == "EDI") {
     
     # EDI has listeners in "production" and "staging" environments
@@ -192,7 +206,5 @@ pull_from_queue <- function(repository) {
     }
 
   }
-  
-  # Other repository ----------------------------------------------------------
   
 }

@@ -132,7 +132,7 @@ L1_to_L2_DwCA <- function(path,
 
   # Write EML to file ---------------------------------------------------------
   
-  make_eml_dwca(
+  eml <- make_eml_dwca(
     path = path,
     core.name = core.name,
     parent.package.id = parent.package.id, 

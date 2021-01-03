@@ -4,10 +4,10 @@
 \alias{download_and_source_conversion_script}
 \title{Download and source L0 to L1 conversion script}
 \usage{
-download_and_source_conversion_script(script, path)
+download_and_source_conversion_script(eml, path)
 }
 \arguments{
-\item{script}{(character) URL to download the L0 to L1 conversion script.}
+\item{eml}{(xml_document xml_node) EML of newest L1 child. The L0-to-L1 conversion script listed in \code{eml} will be used to create the child of the newest L0.}
 
 \item{path}{(character) Directory to which create_ecocomDP.R will be written. Should be the same directory tables and metadata will be written to.}
 }

@@ -4,10 +4,12 @@
 \alias{update_L1}
 \title{Update L1 from updated L0}
 \usage{
-update_L1(package.id.L0, path, url, user.id, user.pass)
+update_L1(package.id.L0, package.id.L1, path, url, user.id, user.pass)
 }
 \arguments{
 \item{package.id.L0}{(character) Identifier of newest L0 data package.}
+
+\item{package.id.L1}{(character) Identifier of L0's newest L1 child. The L0-to-L1 conversion script of \code{package.id.L1} will be used to create the child of \code{package.id.L0}.}
 
 \item{path}{(character) Directory to which L1 tables, scripts, and metadata will be written.}
 
