@@ -39,48 +39,48 @@ update_L1 <- function(package.id.L0,
   }
   
   # Compare EML (L0) ----------------------------------------------------------
-  
+
   eml_L0_newest <- ecocomDP::read_eml(package.id.L0)
   eml_L0_previous <- ecocomDP::read_eml(get_previous_version(package.id.L0))
-  
+
   r <- EDIutils::compare_eml(eml_L0_newest, eml_L0_previous)
-  
+
   # TODO: Write to log
-  # - Issue warning if differences are found and list all differences. 
+  # - Issue warning if differences are found and list all differences.
   # Otherwise write "no differences found".
-  
+
   # Compare tables (L0) -------------------------------------------------------
-  
+
   tables_L0_newest <- EDIutils::read_tables(eml_L0_newest)
   tables_L0_previous <- EDIutils::read_tables(eml_L0_previous)
-    
+
   r <- EDIutils::compare_tables(tables_L0_newest, tables_L0_previous)
-  
+
   # TODO: Write to log
-  # - Issue warning if differences are found and list all differences. 
+  # - Issue warning if differences are found and list all differences.
   # Otherwise write "no differences found".
-  
+
   # Download and source conversion script -------------------------------------
-  
+
   eml_L1_newest <- ecocomDP::read_eml(package.id.L1)
   download_and_source_conversion_script(eml_L1_newest, path)
-  
+
   # TODO: Write to log
-  
+
   # Create L1 -----------------------------------------------------------------
-  
+
   r <- run_conversion_script(
     path = path,
-    package.id.L0 = package.id.L0, 
+    package.id.L0 = package.id.L0,
     package.id.L1 = increment_package_version(package.id.L1),
     url = url)
-  
+
   # TODO: Write to log
-  
+
   # Upload to repository ------------------------------------------------------
   
   r <- upload_to_repository(
-    path = config.www,
+    path = config.path,
     package.id = increment_package_version(package.id.L1),
     user.id = config.user.id,
     user.pass = config.user.pass)

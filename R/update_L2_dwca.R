@@ -54,7 +54,7 @@ update_L2_dwca <- function(package.id.L1,
   # Upload to repository ------------------------------------------------------
   
   r <- upload_to_repository(
-    path = config.www,
+    path = config.path,
     package.id = package.id.L2,
     user.id = config.user.id,
     user.pass = config.user.pass)
