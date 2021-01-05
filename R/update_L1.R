@@ -2,8 +2,8 @@
 #'
 #' @description Updates an L1 data package when it’s L0 parent data package has been updated. This function is a wrapper to several subroutines.
 #'
-#' @param package.id.L0 (character) Identifier of newest L0 data package.
-#' @param package.id.L1 (character) Identifier of L0's newest L1 child. The L0-to-L1 conversion script of \code{package.id.L1} will be used to create the child of \code{package.id.L0}.
+#' @param id.L0.newest (character) Identifier of newest L0 data package.
+#' @param id.L1.newest (character) Identifier of L0's newest L1 child to be created by this function. The L0-to-L1 conversion script of \code{id.L1.newest} will be used to create the child of \code{id.L0.newest}.
 #' @param path (character) Directory to which L1 tables, scripts, and metadata will be written.
 #' @param url (character) Publicly accessible URL to \code{path} for download by a data repository.
 #' @param user.id (character) User identifier within a specified \code{repository}. This controls editing access in some \code{repository}.
@@ -17,8 +17,8 @@
 #' 
 #' @export
 #'
-update_L1 <- function(package.id.L0, 
-                      package.id.L1,
+update_L1 <- function(id.L0.newest, 
+                      id.L1.newest,
                       path, 
                       url, 
                       user.id, 
@@ -40,8 +40,8 @@ update_L1 <- function(package.id.L0,
   
   # Compare EML (L0) ----------------------------------------------------------
 
-  eml_L0_newest <- ecocomDP::read_eml(package.id.L0)
-  eml_L0_previous <- ecocomDP::read_eml(get_previous_version(package.id.L0))
+  eml_L0_newest <- ecocomDP::read_eml(id.L0.newest)
+  eml_L0_previous <- ecocomDP::read_eml(get_previous_version(id.L0.newest))
 
   r <- EDIutils::compare_eml(eml_L0_newest, eml_L0_previous)
 
@@ -62,7 +62,7 @@ update_L1 <- function(package.id.L0,
 
   # Download and source conversion script -------------------------------------
 
-  eml_L1_newest <- ecocomDP::read_eml(package.id.L1)
+  eml_L1_newest <- ecocomDP::read_eml(id.L1.newest)
   download_and_source_conversion_script(eml_L1_newest, path)
 
   # TODO: Write to log
@@ -71,8 +71,8 @@ update_L1 <- function(package.id.L0,
 
   r <- run_conversion_script(
     path = path,
-    package.id.L0 = package.id.L0,
-    package.id.L1 = increment_package_version(package.id.L1),
+    id.L0.newest = id.L0.newest,
+    id.L1.next = increment_package_version(id.L1.newest),
     url = url)
 
   # TODO: Write to log
@@ -81,7 +81,7 @@ update_L1 <- function(package.id.L0,
   
   r <- upload_to_repository(
     path = config.path,
-    package.id = increment_package_version(package.id.L1),
+    package.id = increment_package_version(id.L1.newest),
     user.id = config.user.id,
     user.pass = config.user.pass)
   

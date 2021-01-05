@@ -4,14 +4,14 @@
 \alias{run_conversion_script}
 \title{Run L0 to L1 conversion script}
 \usage{
-run_conversion_script(path, package.id.L0, package.id.L1, url)
+run_conversion_script(path, id.L0.newest, id.L1.next, url)
 }
 \arguments{
 \item{path}{(character) Directory to which L1 tables, scripts, and metadata will be written.}
 
-\item{package.id.L0}{(character) Identifier of newest L0 data package.}
+\item{id.L0.newest}{(character) Identifier of newest L0 data package.}
 
-\item{package.id.L1}{(character) Identifier of new L1 being created by this script}
+\item{id.L1.next}{(character) Identifier of new L1 being created by this script}
 
 \item{url}{(character) Publicly accessible URL to \code{path} for download by a data repository.}
 }

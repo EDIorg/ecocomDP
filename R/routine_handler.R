@@ -1,4 +1,4 @@
-#' Event notification handler
+#' Event notification workflow handler
 #'
 #' @description Runs on a chron. Checks for unprocessed items in SQlite using webservices defined in ADD WEBSERVICE DEFINITIONS HERE and pops the longest waiting item into the appropriate routine. Currently supported are \code{update_L1()} or \code{update_L2_dwca()}.
 #' 
@@ -32,7 +32,7 @@ routine_handler <- function(config) {
   
   # Get next in line
   
-  nil <- pull_from_queue(config.repository)
+  nil <- get_from_queue()
   
   if (is.null(nil)) {
     return(NULL)
@@ -108,8 +108,8 @@ routine_handler <- function(config) {
   if (nil$parent_of_L1) {
     
     update_L1(
-      package.id.L0 = nil$package.id,
-      package.id.L1 = names(nil$parent_of_L1),
+      id.L0.newest = nil$package.id,
+      id.L1.newest = names(nil$parent_of_L1),
       path = config.path, 
       url = config.www, 
       user.id = config.user.id,
@@ -118,8 +118,8 @@ routine_handler <- function(config) {
   } else if (nil$parent_of_dwcae) {
     
     update_L2_dwca(
-      package.id.L1 = nil$package.id,
-      package.id.L2 = increment_package_version(names(nil$parent_of_dwcae)),
+      id.L1.newest = nil$package.id,
+      id.L2.next = increment_package_version(names(nil$parent_of_dwcae)),
       core.name = "event",
       path = config.path,
       url = config.www,
@@ -145,9 +145,7 @@ routine_handler <- function(config) {
   
   # Remove from queue ---------------------------------------------------------
   
-  # qind
-  # r <- httr::DELETE(
-  #   paste0("https://regan.edirepository.org/ecocom-listener/", event_id_index))
+  r <- delete_from_queue(nil$index)
   
   # Unlock --------------------------------------------------------------------
   
@@ -169,16 +167,24 @@ routine_handler <- function(config) {
 
 
 
-#' Pull next item from the ecocom-listener's queue
-#'
-#' @param repository (character) Repository hosting the ecocom-listener. Facilitates repository specific methods. Currently supported is: EDI.
+#' Get next item in the ecocom-listener's queue
 #'
 #' @return
 #' \item{index}{(integer) Index of item in queue. Is later used for removing the item from the queue.}
 #' \item{package.id}{(character) Data package identifier}
 #' \item{config.environment}{(character) Location of the \code{package.id} within a repository system. This variable is written to the Global Environment for use in \code{routine_handler()}.}
 #'
-pull_from_queue <- function(repository) {
+get_from_queue <- function() {
+  
+  # Load Global Environment config --------------------------------------------
+  
+  if (exists("config.repository", envir = .GlobalEnv)) {
+    repository <- get("config.repository", envir = .GlobalEnv)
+  } else {
+    repository <- "EDI"
+  }
+  
+  # Repository specific methods -----------------------------------------------
   
   if (repository == "EDI") {
     
@@ -205,6 +211,71 @@ pull_from_queue <- function(repository) {
       return(res)
     }
 
+  }
+  
+}
+
+
+
+
+
+
+
+
+#' Delete item from the ecocom-listener's queue
+#'
+#' @param index (integer) Index of item in queue to remove
+#'
+#' @return (logical) Index of item in queue. Is later used for removing the item from the queue.}
+#'
+delete_from_queue <- function(index) {
+  
+  # Load Global Environment config --------------------------------------------
+  
+  if (exists("config.repository", envir = .GlobalEnv)) {
+    repository <- get("config.repository", envir = .GlobalEnv)
+  } else {
+    repository <- "EDI"
+  }
+  
+  if (exists("config.environment", envir = .GlobalEnv)) {
+    environment <- get("config.environment", envir = .GlobalEnv)
+  } else {
+    environment <- "production"
+  }
+  
+  # Repository specific methods -----------------------------------------------
+  
+  if (repository == "EDI") {
+    
+    browser()
+    
+    # r <- httr::DELETE(
+    #   paste0("https://regan.edirepository.org/ecocom-listener/", event_id_index))
+    
+    # EDI has listeners in "production" and "staging" environments
+    prd <- httr::GET(
+      "https://regan.edirepository.org/ecocom-listener/package.lternet.edu")
+    stg <- httr::GET(
+      "https://regan.edirepository.org/ecocom-listener/package-s.lternet.edu")
+    
+    # Production has priority over staging
+    if (httr::status_code(prd) == 200) {
+      assign("config.environment", "production", envir = .GlobalEnv)
+      cntnt <- httr::content(prd, as = "text")
+    } else if (httr::status_code(stg) == 200) {
+      assign("config.environment", "staging", envir = .GlobalEnv)
+      cntnt <- httr::content(stg, as = "text")
+    }
+    
+    # Return parsed content
+    if (exists("cntnt")) {
+      res <- list(
+        index = as.integer(stringr::str_split(cntnt, ",", simplify = T)[1]),
+        package.id = stringr::str_split(cntnt, ",", simplify = T)[2])
+      return(res)
+    }
+    
   }
   
 }

@@ -5,8 +5,8 @@
 \title{Update L2 DwC-A from updated L1}
 \usage{
 update_L2_dwca(
-  package.id.L1,
-  package.id.L2,
+  id.L1.newest,
+  id.L2.next,
   core.name,
   path,
   url,
@@ -15,9 +15,9 @@ update_L2_dwca(
 )
 }
 \arguments{
-\item{package.id.L1}{(character) Identifier of updated L1}
+\item{id.L1.newest}{(character) Identifier of newest L1 data package}
 
-\item{package.id.L2}{(character) Identifier of L1's new DwC-A child to be created by this function}
+\item{id.L2.next}{(character) Identifier of L1's new DwC-A child to be created by this function}
 
 \item{core.name}{(character) The Darwin Core central table of the package. Can be: "event" (event core).}
 

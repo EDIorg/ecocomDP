@@ -92,7 +92,7 @@ has_child <- function(keyword, package.id) {
       # published and (in the case of ecocomDP) having a conversion script of 
       # the correct format.
       
-      if (keyword == "ecocomDP" & r$ischild) {
+      if (keyword == "ecocomDP" & any(r$ischild)) {
         
         has_script <- r$script
         r <- r[has_script, ]

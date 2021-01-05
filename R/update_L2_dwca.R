@@ -2,8 +2,8 @@
 #' 
 #' @description Updates an L2 DwC-A data package when it’s L1 parent data package has been updated. This function is a wrapper to several subroutines.
 #'
-#' @param package.id.L1 (character) Identifier of updated L1
-#' @param package.id.L2 (character) Identifier of L1's new DwC-A child to be created by this function
+#' @param id.L1.newest (character) Identifier of newest L1 data package
+#' @param id.L2.next (character) Identifier of L1's new DwC-A child to be created by this function
 #' @param core.name (character) The Darwin Core central table of the package. Can be: "event" (event core).
 #' @param path (character) Directory to which L2 tables, meta.xml, and metadata will be written.
 #' @param url (character) Publicly accessible URL to \code{path} for download by a data repository.
@@ -18,8 +18,8 @@
 #'
 #' @examples
 #' 
-update_L2_dwca <- function(package.id.L1,
-                           package.id.L2,
+update_L2_dwca <- function(id.L1.newest,
+                           id.L2.next,
                            core.name,
                            path,
                            url,
@@ -45,8 +45,8 @@ update_L2_dwca <- function(package.id.L1,
   L1_to_L2_DwCA(
     path = config.path, 
     core.name = core.name, 
-    parent.package.id = package.id.L1, 
-    child.package.id = package.id.L2, 
+    parent.package.id = id.L1.newest, 
+    child.package.id = id.L2.next, 
     data.table.url = config.www, 
     user.id = config.user.id,
     user.domain = config.repository)
@@ -55,7 +55,7 @@ update_L2_dwca <- function(package.id.L1,
   
   r <- upload_to_repository(
     path = config.path,
-    package.id = package.id.L2,
+    package.id = id.L2.next,
     user.id = config.user.id,
     user.pass = config.user.pass)
   

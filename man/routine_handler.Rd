@@ -2,7 +2,7 @@
 % Please edit documentation in R/routine_handler.R
 \name{routine_handler}
 \alias{routine_handler}
-\title{Event notification handler}
+\title{Event notification workflow handler}
 \usage{
 routine_handler(config)
 }
