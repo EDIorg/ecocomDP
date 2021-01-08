@@ -53,12 +53,10 @@ update_L2_dwca <- function(id.L1.newest,
   
   # Upload to repository ------------------------------------------------------
   
-  r <- upload_to_repository(
-    path = config.path,
-    package.id = id.L2.next,
-    user.id = config.user.id,
-    user.pass = config.user.pass)
-  
-  # TODO: Write to log
+  # r <- upload_to_repository(
+  #   path = config.path,
+  #   package.id = id.L2.next,
+  #   user.id = config.user.id,
+  #   user.pass = config.user.pass)
   
 }

@@ -4,13 +4,15 @@
 \alias{delete_from_queue}
 \title{Delete item from the ecocom-listener's queue}
 \usage{
-delete_from_queue(index)
+delete_from_queue(index, id)
 }
 \arguments{
-\item{index}{(integer) Index of item in queue to remove}
+\item{index}{(integer) Index of item to remove}
+
+\item{id}{(character) Data package identifier, corresponding with \code{index}, to remove}
 }
 \value{
-
+(logical) Was the item successfully removed from the queue?
 }
 \description{
 Delete item from the ecocom-listener's queue

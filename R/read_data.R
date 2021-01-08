@@ -92,7 +92,7 @@ read_data <- function(
   enddate = NA, check.size = FALSE, nCores = 1, forceParallel = FALSE,
   token = NA,
   globally.unique.keys = FALSE) {
-
+  
   # Validate input arguments --------------------------------------------------
   
   fun.args <- validate_arguments("read_data", as.list(environment()))

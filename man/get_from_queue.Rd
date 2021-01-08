@@ -8,8 +8,8 @@ get_from_queue()
 }
 \value{
 \item{index}{(integer) Index of item in queue. Is later used for removing the item from the queue.}
-\item{package.id}{(character) Data package identifier}
-\item{config.environment}{(character) Location of the \code{package.id} within a repository system. This variable is written to the Global Environment for use in \code{routine_handler()}.}
+\item{id}{(character) Data package identifier}
+\item{config.environment}{(character) Location of the \code{id} within a repository system. This variable is written to the Global Environment for use in \code{routine_handler()}.}
 }
 \description{
 Get next item in the ecocom-listener's queue

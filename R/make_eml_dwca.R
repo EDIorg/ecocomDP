@@ -65,9 +65,8 @@ make_eml_dwca <- function(path,
                           user.domain,
                           url = NULL) {
   
-  message(
-    "Creating Darwin Core ", stringr::str_to_title(core.name), " Core EML ",
-    "for L1 data package ", parent.package.id)
+  message("CreatingDarwin Core ", stringr::str_to_title(core.name), 
+          " Core EML")
   
   # Load Global Environment config --------------------------------------------
   

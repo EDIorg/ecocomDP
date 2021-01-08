@@ -21,7 +21,7 @@ routine_handler <- function(config) {
   source(file = config)
   
   # Check lock ----------------------------------------------------------------
-  
+
   # Trying to run a routine when one is already underway creates issues
   
   if (file.exists(paste0(config.path, "/lock.txt"))) {
@@ -30,63 +30,72 @@ routine_handler <- function(config) {
   
   # Pull from queue -----------------------------------------------------------
   
-  # Get next in line
+  # Get next in queue
   
-  nil <- get_from_queue()
+  niq <- get_from_queue()
   
-  if (is.null(nil)) {
+  if (is.null(niq)) {
     return(NULL)
   }
+  
+  # Start logging -------------------------------------------------------------
+  
+  dflt_warn <- getOption("warn")
+  on.exit(options(warn = dflt_warn), add = TRUE)
+  options(warn = 1)
+  
+  log <- file(paste0(config.path, "/log.txt"), open = "wt")
+  sink(log, type = "message")
+  message("Starting routine_handler()\n", Sys.time())
+  message("Next in queue is ", niq$id)
+  
+  niq$id <- "edi.96.4" # TESTING 
   
   # Identify routine(s) to call ----------------------------------------------
   
   # Knowing which routine to call depends on whether the "next data package
-  # in line" is a parent of an L1 or a parent of one or more L2.
+  # in queue" is a parent of an L1 or a parent of one or more L2.
   
-  # Because it's possible (but rare) for the next in line to already have a 
+  # Because it's possible (but rare) for the next in queue to already have a 
   # child created by one of the routines listed below, first check for such
   # descendants before continuing. This check safely assumes a previous 
   # version has valid parent attributes, which are tightly controlled by 
   # validate_ecocomDP().
   
-  nil$parent_of_L1 <- has_child("ecocomDP", nil$package.id)
-  if (nil$parent_of_L1) {
-    # TODO: Remove from queue
-    # r <- httr::DELETE(
-    #   paste0("https://regan.edirepository.org/ecocom-listener/", event_id_index))
+  niq$parent_of_L1 <- has_child("ecocomDP", niq$id)
+  if (niq$parent_of_L1) {
+    message(niq$id, " already has the L1 child ", names(niq$parent_of_L1))
+    r <- delete_from_queue(niq$index, niq$id)
     return(NULL)
   }
   
-  if (!nil$parent_of_L1) {
-    nil$parent_of_dwcae <- has_child(
-      "Darwin Core Archive (DwC-A) Event Core", nil$package.id) 
-    if (nil$parent_of_dwcae) {
-      # TODO: Remove from queue
-      # r <- httr::DELETE(
-      #   paste0("https://regan.edirepository.org/ecocom-listener/", event_id_index))
+  if (!niq$parent_of_L1) {
+    niq$parent_of_dwcae <- has_child(
+      "Darwin Core Archive (DwC-A) Event Core", niq$id)
+    if (niq$parent_of_dwcae) {
+      message(niq$id, " already has the L2 DwC-A child ", 
+              names(niq$parent_of_dwcae))
+      r <- delete_from_queue(niq$index, niq$id)
       return(NULL)
     }
   }
   
-  # Was the previous version of the next in line a parent of a child created 
-  # by one of the routines listed below? If not, the next in line may have 
+  # Was the previous version of the next in queue a parent of a child created 
+  # by one of the routines listed below? If not, the next in queue may have 
   # wandered into the wrong queue and should be removed.
   
-  nil$parent_of_L1 <- has_child(
-    "ecocomDP", get_previous_version(nil$package.id))
+  niq$parent_of_L1 <- has_child(
+    "ecocomDP", get_previous_version(niq$id))
   
-  if (!nil$parent_of_L1) {
-    nil$parent_of_dwcae <- has_child(
+  if (!niq$parent_of_L1) {
+    niq$parent_of_dwcae <- has_child(
       "Darwin Core Archive (DwC-A) Event Core", 
-      get_previous_version(nil$package.id)) 
+      get_previous_version(niq$id)) 
   }
   
-  if (!any(c(nil$parent_of_L1, nil$parent_of_dwcae))) {
-    message(paste0("No supported routine for ", nil$package.id), ". Removing ",
-            "from queue.")
-    # TODO: Remove from queue
-    # r <- httr::DELETE(
-    #   paste0("https://regan.edirepository.org/ecocom-listener/", event_id_index))
+  if (!any(c(niq$parent_of_L1, niq$parent_of_dwcae))) {
+    message("No supported routine for ", niq$id)
+    r <- delete_from_queue(niq$index, niq$id)
     return(NULL)
   }
   
@@ -94,10 +103,10 @@ routine_handler <- function(config) {
   
   # Lock file prevents race conditions by indicating a routine in progress
   
-  file.create(paste0(config.path, "/lock.txt"))
+  r <- file.create(paste0(config.path, "/lock.txt"))
   
   if (!file.exists(paste0(config.path, "/lock.txt"))) {
-    message("Could not create lock.txt. Exiting routine_handler().")
+    message("Could not create lock.txt")
     return(NULL)
   }
   
@@ -105,21 +114,23 @@ routine_handler <- function(config) {
   
   # TODO: Refactor for iteration when more than one L1-to-L2 routine exists
   
-  if (nil$parent_of_L1) {
+  if (niq$parent_of_L1) {
+    
+    # !!!!!!!!!!!!!! RESUME (message refactor) HERE !!!!!!!!!!!!!!!!!!!!!!!!
     
     update_L1(
-      id.L0.newest = nil$package.id,
-      id.L1.newest = names(nil$parent_of_L1),
+      id.L0.newest = niq$id,
+      id.L1.newest = names(niq$parent_of_L1),
       path = config.path, 
       url = config.www, 
       user.id = config.user.id,
       user.pass = config.user.pass)
     
-  } else if (nil$parent_of_dwcae) {
+  } else if (niq$parent_of_dwcae) {
     
     update_L2_dwca(
-      id.L1.newest = nil$package.id,
-      id.L2.next = increment_package_version(names(nil$parent_of_dwcae)),
+      id.L1.newest = niq$id,
+      id.L2.next = increment_package_version(names(niq$parent_of_dwcae)),
       core.name = "event",
       path = config.path,
       url = config.www,
@@ -141,22 +152,24 @@ routine_handler <- function(config) {
   
   # Clear workspace -----------------------------------------------------------
   
-  r <- clear_workspace(path = path)
+  r <- clear_workspace(path)
   
   # Remove from queue ---------------------------------------------------------
   
-  r <- delete_from_queue(nil$index)
+  # r <- delete_from_queue(niq$index, niq$id)
   
   # Unlock --------------------------------------------------------------------
   
   # Remove lock file so the next routine can proceed
+  on.exit(file.remove(paste0(config.path, "/lock.txt")), add = TRUE)
   
-  file.remove(paste0(config.path, "/lock.txt"))
+  # Stop logging --------------------------------------------------------------
   
-  if (file.exists(paste0(config.path, "/lock.txt"))) {
-    message("Could not remove lock.txt. Devine intervention is required.")
-    return(NULL)
-  }
+  on.exit(message("Exiting routine_handler()\n", Sys.time()), add = TRUE)
+  on.exit(sink(type = "message"), add = TRUE)
+  on.exit(close(log), add = TRUE)
+  
+  return(NULL)
   
 }
 
@@ -171,8 +184,8 @@ routine_handler <- function(config) {
 #'
 #' @return
 #' \item{index}{(integer) Index of item in queue. Is later used for removing the item from the queue.}
-#' \item{package.id}{(character) Data package identifier}
-#' \item{config.environment}{(character) Location of the \code{package.id} within a repository system. This variable is written to the Global Environment for use in \code{routine_handler()}.}
+#' \item{id}{(character) Data package identifier}
+#' \item{config.environment}{(character) Location of the \code{id} within a repository system. This variable is written to the Global Environment for use in \code{routine_handler()}.}
 #'
 get_from_queue <- function() {
   
@@ -207,7 +220,7 @@ get_from_queue <- function() {
     if (exists("cntnt")) {
       res <- list(
         index = as.integer(stringr::str_split(cntnt, ",", simplify = T)[1]),
-        package.id = stringr::str_split(cntnt, ",", simplify = T)[2])
+        id = stringr::str_split(cntnt, ",", simplify = T)[2])
       return(res)
     }
 
@@ -224,11 +237,12 @@ get_from_queue <- function() {
 
 #' Delete item from the ecocom-listener's queue
 #'
-#' @param index (integer) Index of item in queue to remove
+#' @param index (integer) Index of item to remove
+#' @param id (character) Data package identifier, corresponding with \code{index}, to remove
 #'
-#' @return (logical) Index of item in queue. Is later used for removing the item from the queue.}
+#' @return (logical) Was the item successfully removed from the queue?
 #'
-delete_from_queue <- function(index) {
+delete_from_queue <- function(index, id) {
   
   # Load Global Environment config --------------------------------------------
   
@@ -248,32 +262,18 @@ delete_from_queue <- function(index) {
   
   if (repository == "EDI") {
     
-    browser()
+    # Only the index number is needed to delete an item from the "production" 
+    # and "staging" queues (it's the same queue).
+    r <- httr::DELETE(
+      paste0("https://regan.edirepository.org/ecocom-listener/", index))
     
-    # r <- httr::DELETE(
-    #   paste0("https://regan.edirepository.org/ecocom-listener/", event_id_index))
-    
-    # EDI has listeners in "production" and "staging" environments
-    prd <- httr::GET(
-      "https://regan.edirepository.org/ecocom-listener/package.lternet.edu")
-    stg <- httr::GET(
-      "https://regan.edirepository.org/ecocom-listener/package-s.lternet.edu")
-    
-    # Production has priority over staging
-    if (httr::status_code(prd) == 200) {
-      assign("config.environment", "production", envir = .GlobalEnv)
-      cntnt <- httr::content(prd, as = "text")
-    } else if (httr::status_code(stg) == 200) {
-      assign("config.environment", "staging", envir = .GlobalEnv)
-      cntnt <- httr::content(stg, as = "text")
-    }
-    
-    # Return parsed content
-    if (exists("cntnt")) {
-      res <- list(
-        index = as.integer(stringr::str_split(cntnt, ",", simplify = T)[1]),
-        package.id = stringr::str_split(cntnt, ",", simplify = T)[2])
-      return(res)
+    if (httr::status_code(r) == 200) {
+      message(id, " has been deleted from the queue")
+      return(TRUE)
+    } else {
+      message(id, " could not be deleted from the queue. Devine intervention ",
+              "is required.")
+      return(FALSE)
     }
     
   }

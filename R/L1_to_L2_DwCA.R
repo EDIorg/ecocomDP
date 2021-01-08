@@ -47,6 +47,9 @@ L1_to_L2_DwCA <- function(path,
                           user.id,
                           user.domain) {
   
+  message("Converting L1 ", parent.package.id, " to L2 DwC-A ", 
+          stringr::str_to_title(core.name), " Core ", child.package.id)
+  
   # Load Global Environment config --------------------------------------------
   
   if (exists("environment", envir = .GlobalEnv)) {
@@ -57,20 +60,25 @@ L1_to_L2_DwCA <- function(path,
   
   # Parameterize --------------------------------------------------------------
   
+  # readr progress bar and messaging is not useful in this function
+  
+  dflt_prog <- getOption("readr.show_progress")
+  options(readr.show_progress = FALSE)
+  on.exit(options(readr.show_progress = dflt_prog))
+  
   # Eventually will support 2 DwC types: choose occurence-core or event-core. 
   # occurence is simpler (sightings), event is a better fit for most of our data
   # TODO: Support event-core
   
-  dwca_config_file <- readr::read_csv(
-    system.file("/dwca_occurrence_core/dwca_occurrence_core_config.csv", package = "ecocomDP"))
-  dwca_mappings_file <- readr::read_csv(
-    system.file("/dwca_occurrence_core/dwca_occurrence_core_mappings.csv", package = "ecocomDP"))
-
-  # msg the user
-  message(
-    'Using config files at: ', 
-    dirname(system.file("dwca_occurrence_core_config.csv", package = "ecocomDP")))
-  message('Making ', core.name)
+  dwca_config_file <- suppressMessages(
+    readr::read_csv(
+      system.file(
+        "/dwca_occurrence_core/dwca_occurrence_core_config.csv", 
+        package = "ecocomDP")))
+  dwca_mappings_file <- suppressMessages(
+    readr::read_csv(
+      system.file("/dwca_occurrence_core/dwca_occurrence_core_mappings.csv", 
+                  package = "ecocomDP")))
   
   # Load data -----------------------------------------------------------------
   
@@ -173,8 +181,6 @@ create_table_dwca_occurrence_core <- function(
   dt_tax,
   dt_loc_ancil = NULL,
   parent.package.id) {
-  
-  message('calling function to create DwC-A, occurrence core')
   
   # Load Global Environment config --------------------------------------------
   
@@ -321,7 +327,7 @@ create_tables_dwca_event_core <- function(
   parent.package.id,
   child.package.id) {
   
-  message('calling function to create DwC-A, event core')
+  message('Creating DwC-A Event Core tables')
   
   # Load Global Environment config --------------------------------------------
   
