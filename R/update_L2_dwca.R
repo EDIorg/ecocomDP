@@ -42,6 +42,9 @@ update_L2_dwca <- function(id.L1.newest,
   
   # Create L2 -----------------------------------------------------------------
   
+  message("----- Converting L1 (", id.L1.newest, ") to L2 DwC-A ",
+          stringr::str_to_title(core.name), " Core (", id.L2.next, ")")
+  
   L1_to_L2_DwCA(
     path = config.path, 
     core.name = core.name, 
@@ -53,10 +56,12 @@ update_L2_dwca <- function(id.L1.newest,
   
   # Upload to repository ------------------------------------------------------
   
-  # r <- upload_to_repository(
-  #   path = config.path,
-  #   package.id = id.L2.next,
-  #   user.id = config.user.id,
-  #   user.pass = config.user.pass)
+  message("----- Uploading L2 (", id.L2.next, ") to ", repository)
+  
+  r <- upload_to_repository(
+    path = config.path,
+    package.id = id.L2.next,
+    user.id = config.user.id,
+    user.pass = config.user.pass)
   
 }

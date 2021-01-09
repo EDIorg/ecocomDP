@@ -107,7 +107,7 @@ has_child <- function(keyword, package.id) {
         return(res)
         
       } else if (keyword == "Darwin Core Archive (DwC-A) Event Core" & 
-                 r$ischild) {
+                 any(r$ischild)) {
         
         newest <- lubridate::ymd_hms(r$pubdate) %in% 
           max(lubridate::ymd_hms(r$pubdate))

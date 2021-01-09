@@ -47,9 +47,6 @@ L1_to_L2_DwCA <- function(path,
                           user.id,
                           user.domain) {
   
-  message("Converting L1 ", parent.package.id, " to L2 DwC-A ", 
-          stringr::str_to_title(core.name), " Core ", child.package.id)
-  
   # Load Global Environment config --------------------------------------------
   
   if (exists("environment", envir = .GlobalEnv)) {

@@ -24,6 +24,9 @@ update_L1 <- function(id.L0.newest,
                       user.id, 
                       user.pass) {
   
+  message("----- Converting L0 (", id.L0.newest, ") to L1 (", 
+          increment_package_version(id.L1.newest), ")")
+  
   # Load Global Environment config --------------------------------------------
   
   if (exists("config.repository", envir = .GlobalEnv)) {
@@ -40,52 +43,57 @@ update_L1 <- function(id.L0.newest,
   
   # Compare EML (L0) ----------------------------------------------------------
 
+  message("----- Comparing EML (Looking for meaningful changes between ",
+          "newest and previous versions)")
+  
   eml_L0_newest <- ecocomDP::read_eml(id.L0.newest)
   eml_L0_previous <- ecocomDP::read_eml(get_previous_version(id.L0.newest))
 
-  r <- EDIutils::compare_eml(eml_L0_newest, eml_L0_previous)
-
-  # TODO: Write to log
-  # - Issue warning if differences are found and list all differences.
-  # Otherwise write "no differences found".
+  EDIutils::compare_eml(eml_L0_newest, eml_L0_previous)
+  
+  # TODO: Look for meaningful differences. Issue warning if differences are 
+  # found and list all differences. Otherwise write "no differences found".
 
   # Compare tables (L0) -------------------------------------------------------
 
+  message("----- Comparing data tables (Looking for meaningful changes ",
+          "between newest and previous versions)")
+  
   tables_L0_newest <- EDIutils::read_tables(eml_L0_newest)
   tables_L0_previous <- EDIutils::read_tables(eml_L0_previous)
 
-  r <- EDIutils::compare_tables(tables_L0_newest, tables_L0_previous)
+  EDIutils::compare_tables(tables_L0_newest, tables_L0_previous)
 
-  # TODO: Write to log
-  # - Issue warning if differences are found and list all differences.
-  # Otherwise write "no differences found".
+  # TODO: Look for meaningful differences. Issue warning if differences are 
+  # found and list all differences. Otherwise write "no differences found".
 
   # Download and source conversion script -------------------------------------
 
+  message("----- Downloading and sourcing L0-to-L1 conversion script")
+  
   eml_L1_newest <- ecocomDP::read_eml(id.L1.newest)
   download_and_source_conversion_script(eml_L1_newest, path)
 
-  # TODO: Write to log
-
   # Create L1 -----------------------------------------------------------------
 
+  message("----- Running L0-to-L1 conversion script")
+  
   r <- run_conversion_script(
     path = path,
     id.L0.newest = id.L0.newest,
     id.L1.next = increment_package_version(id.L1.newest),
     url = url)
 
-  # TODO: Write to log
-
   # Upload to repository ------------------------------------------------------
+  
+  message("----- Uploading L1 (", increment_package_version(id.L1.newest), 
+          ") to ", repository)
   
   r <- upload_to_repository(
     path = config.path,
     package.id = increment_package_version(id.L1.newest),
     user.id = config.user.id,
     user.pass = config.user.pass)
-  
-  # TODO: Write to log
   
 }
 

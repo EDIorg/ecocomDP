@@ -33,23 +33,33 @@ routine_handler <- function(config) {
   # Get next in queue
   
   niq <- get_from_queue()
-  
   if (is.null(niq)) {
     return(NULL)
   }
   
-  # Start logging -------------------------------------------------------------
+  # Logging -------------------------------------------------------------------
   
   dflt_warn <- getOption("warn")
   on.exit(options(warn = dflt_warn), add = TRUE)
   options(warn = 1)
   
-  log <- file(paste0(config.path, "/log.txt"), open = "wt")
+  flog <- paste0("log_", format(Sys.time(), "%Y%m%d%H%M%S"), ".txt")
+  log <- file(paste0(config.path, "/", flog), open = "wt")
   sink(log, type = "message")
-  message("Starting routine_handler()\n", Sys.time())
-  message("Next in queue is ", niq$id)
   
-  niq$id <- "edi.96.4" # TESTING 
+  on.exit(message("----- Exiting routine_handler() at ", Sys.time()), add = TRUE)
+  on.exit(message("----- Copying log"))
+  on.exit(
+    file.copy(
+      from = paste0(config.path, "/", flog),
+      to = paste0(dirname(config.path), "/logs/", flog)))
+  on.exit(message("----- Emailing log"))
+  # on.exit(message_maintainers())
+  on.exit(sink(type = "message"), add = TRUE)
+  on.exit(close(log), add = TRUE)
+  
+  message("----- Starting routine_handler() at ", Sys.time())
+  message("----- Next in queue is ", niq$id)
   
   # Identify routine(s) to call ----------------------------------------------
   
@@ -64,7 +74,8 @@ routine_handler <- function(config) {
   
   niq$parent_of_L1 <- has_child("ecocomDP", niq$id)
   if (niq$parent_of_L1) {
-    message(niq$id, " already has the L1 child ", names(niq$parent_of_L1))
+    message("----- ", niq$id, " already has the L1 child ", 
+            names(niq$parent_of_L1))
     r <- delete_from_queue(niq$index, niq$id)
     return(NULL)
   }
@@ -73,7 +84,7 @@ routine_handler <- function(config) {
     niq$parent_of_dwcae <- has_child(
       "Darwin Core Archive (DwC-A) Event Core", niq$id)
     if (niq$parent_of_dwcae) {
-      message(niq$id, " already has the L2 DwC-A child ", 
+      message("----- ", niq$id, " already has the L2 DwC-A child ", 
               names(niq$parent_of_dwcae))
       r <- delete_from_queue(niq$index, niq$id)
       return(NULL)
@@ -94,7 +105,7 @@ routine_handler <- function(config) {
   }
   
   if (!any(c(niq$parent_of_L1, niq$parent_of_dwcae))) {
-    message("No supported routine for ", niq$id)
+    message("----- No supported routine for ", niq$id)
     r <- delete_from_queue(niq$index, niq$id)
     return(NULL)
   }
@@ -104,9 +115,10 @@ routine_handler <- function(config) {
   # Lock file prevents race conditions by indicating a routine in progress
   
   r <- file.create(paste0(config.path, "/lock.txt"))
+  on.exit(file.remove(paste0(config.path, "/lock.txt")), add = TRUE)
   
   if (!file.exists(paste0(config.path, "/lock.txt"))) {
-    message("Could not create lock.txt")
+    message("----- Could not create lock.txt")
     return(NULL)
   }
   
@@ -116,7 +128,7 @@ routine_handler <- function(config) {
   
   if (niq$parent_of_L1) {
     
-    # !!!!!!!!!!!!!! RESUME (message refactor) HERE !!!!!!!!!!!!!!!!!!!!!!!!
+    message("----- ", niq$id, " is an L0")
     
     update_L1(
       id.L0.newest = niq$id,
@@ -127,6 +139,8 @@ routine_handler <- function(config) {
       user.pass = config.user.pass)
     
   } else if (niq$parent_of_dwcae) {
+    
+    message("----- ", niq$id, " is an L1")
     
     update_L2_dwca(
       id.L1.newest = niq$id,
@@ -139,35 +153,15 @@ routine_handler <- function(config) {
     
   }
   
-  # Compile log ---------------------------------------------------------------
-  
-  # log_master.txt - A permanent log of all ecocomDP processes
-  # dependencies_update_L1.txt - A list of all dependencies used in update_L1().
-  # Consider helper to create these two files
-  
-  # Message maintainers -------------------------------------------------------
-  
-  # TODO: Send email to maintainers with a log file specific to the data object conversion (not the entire log_master.txt). This should be combined with the email notification currently sent by event_notification_handler() when an event notification is received.
-  # message_maintainers()
-  
   # Clear workspace -----------------------------------------------------------
+  
+  message("----- Cleaning ", config.path)
   
   r <- clear_workspace(path)
   
   # Remove from queue ---------------------------------------------------------
   
   # r <- delete_from_queue(niq$index, niq$id)
-  
-  # Unlock --------------------------------------------------------------------
-  
-  # Remove lock file so the next routine can proceed
-  on.exit(file.remove(paste0(config.path, "/lock.txt")), add = TRUE)
-  
-  # Stop logging --------------------------------------------------------------
-  
-  on.exit(message("Exiting routine_handler()\n", Sys.time()), add = TRUE)
-  on.exit(sink(type = "message"), add = TRUE)
-  on.exit(close(log), add = TRUE)
   
   return(NULL)
   
