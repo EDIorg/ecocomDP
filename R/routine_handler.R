@@ -10,6 +10,8 @@
 #' \item{"config.www": Public URL for repository access to data and metadata files}
 #' \item{"config.user.id": User ID for upload to repository}
 #' \item{"config.user.pass": User password for upload to repository}
+#' \item{"config.email.address": Gmail address. Only Gmail is currently supported}
+#' \item{"config.email.pass": Password for email address}
 #' }
 #'
 #' @export
@@ -39,25 +41,37 @@ routine_handler <- function(config) {
   
   # Logging -------------------------------------------------------------------
   
+  # Return warnings where they occur for troubleshooting
   dflt_warn <- getOption("warn")
   on.exit(options(warn = dflt_warn), add = TRUE)
   options(warn = 1)
   
+  # Create file
   flog <- paste0("log_", format(Sys.time(), "%Y%m%d%H%M%S"), ".txt")
   log <- file(paste0(config.path, "/", flog), open = "wt")
   sink(log, type = "message")
-  
   on.exit(message("----- Exiting routine_handler() at ", Sys.time()), add = TRUE)
   on.exit(message("----- Copying log"))
   on.exit(
     file.copy(
       from = paste0(config.path, "/", flog),
       to = paste0(dirname(config.path), "/logs/", flog)))
-  on.exit(message("----- Emailing log"))
-  # on.exit(message_maintainers())
   on.exit(sink(type = "message"), add = TRUE)
   on.exit(close(log), add = TRUE)
   
+  # Email
+  on.exit(
+    send_email(
+      from = config.email, 
+      to = config.email, 
+      attachment = paste0(config.path, "/", flog), 
+      smtp.relay = "smtp.gmail.com",
+      relay.user = config.email.address, 
+      relay.user.pass = config.email.pass,
+      subject = flog, 
+      msg = "Log file from ecocomDP routine_handler() is attached"))
+  
+  # Header
   message("----- Starting routine_handler() at ", Sys.time())
   message("----- Next in queue is ", niq$id)
   
@@ -157,7 +171,7 @@ routine_handler <- function(config) {
   
   message("----- Cleaning ", config.path)
   
-  r <- clear_workspace(path)
+  r <- file.remove(list.files(config.path, full.names = T))
   
   # Remove from queue ---------------------------------------------------------
   

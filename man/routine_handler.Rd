@@ -15,6 +15,8 @@ routine_handler(config)
 \item{"config.www": Public URL for repository access to data and metadata files}
 \item{"config.user.id": User ID for upload to repository}
 \item{"config.user.pass": User password for upload to repository}
+\item{"config.email.address": Gmail address. Only Gmail is currently supported}
+\item{"config.email.pass": Password for email address}
 }}
 }
 \description{
