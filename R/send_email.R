@@ -11,6 +11,8 @@
 #'
 #' @details Works for Linux. May not work for other OS.
 #' 
+#' @export
+#' 
 send_email <- function(from, to, attachment, smtp.relay, relay.user, 
                       relay.user.pass, subject, msg) {
   
