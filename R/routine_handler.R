@@ -170,16 +170,19 @@ routine_handler <- function(config) {
   
   # TESTING ---------------------------------------
   
-  send_email(
-    from = config.email.address, 
-    to = config.email.address, 
-    attachment = paste0(config.path, "/", flog), 
-    smtp.relay = "smtp.gmail.com",
-    relay.user = config.email.address, 
-    relay.user.pass = config.email.pass,
-    subject = flog, 
-    msg = "Log file from ecocomDP routine_handler() is attached")
-  
+  message(
+    capture.output(
+      send_email(
+        from = config.email.address, 
+        to = config.email.address, 
+        attachment = paste0(config.path, "/", flog), 
+        smtp.relay = "smtp.gmail.com",
+        relay.user = config.email.address, 
+        relay.user.pass = config.email.pass,
+        subject = flog, 
+        msg = "Log file from ecocomDP routine_handler() is attached")
+    )
+  )
   
   # Clear workspace -----------------------------------------------------------
   
