@@ -60,17 +60,17 @@ routine_handler <- function(config) {
   on.exit(close(log), add = TRUE)
   
   # Email
-  # on.exit(
-  #   send_email(
-  #     from = config.email.address, 
-  #     to = config.email.address, 
-  #     attachment = paste0(config.path, "/", flog), 
-  #     smtp.relay = "smtp.gmail.com",
-  #     relay.user = config.email.address, 
-  #     relay.user.pass = config.email.pass,
-  #     subject = flog, 
-  #     msg = "Log file from ecocomDP routine_handler() is attached"),
-  #   add = TRUE)
+  on.exit(
+    send_email(
+      from = config.email.address,
+      to = config.email.address,
+      attachment = paste0(config.path, "/", flog),
+      smtp.relay = "smtp.gmail.com",
+      relay.user = config.email.address,
+      relay.user.pass = config.email.pass,
+      subject = flog,
+      msg = "Log file from ecocomDP routine_handler() is attached"),
+    add = TRUE)
   
   # Header
   message("----- Starting routine_handler() at ", Sys.time())
@@ -168,22 +168,6 @@ routine_handler <- function(config) {
     
   }
   
-  # TESTING ---------------------------------------
-  
-  message(
-    capture.output(
-      send_email(
-        from = config.email.address, 
-        to = config.email.address, 
-        attachment = paste0(config.path, "/", flog), 
-        smtp.relay = "smtp.gmail.com",
-        relay.user = config.email.address, 
-        relay.user.pass = config.email.pass,
-        subject = flog, 
-        msg = "Log file from ecocomDP routine_handler() is attached")
-    )
-  )
-  
   # Clear workspace -----------------------------------------------------------
   
   message("----- Cleaning ", config.path)
@@ -211,7 +195,7 @@ routine_handler <- function(config) {
 #' \item{index}{(integer) Index of item in queue. Is later used for removing the item from the queue.}
 #' \item{id}{(character) Data package identifier}
 #' \item{config.environment}{(character) Location of the \code{id} within a repository system. This variable is written to the Global Environment for use in \code{routine_handler()}.}
-#'
+#' 
 get_from_queue <- function() {
   
   # Load Global Environment config --------------------------------------------
@@ -266,7 +250,7 @@ get_from_queue <- function() {
 #' @param id (character) Data package identifier, corresponding with \code{index}, to remove
 #'
 #' @return (logical) Was the item successfully removed from the queue?
-#'
+#' 
 delete_from_queue <- function(index, id) {
   
   # Load Global Environment config --------------------------------------------
