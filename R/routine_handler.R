@@ -60,17 +60,17 @@ routine_handler <- function(config) {
   on.exit(close(log), add = TRUE)
   
   # Email
-  on.exit(
-    send_email(
-      from = config.email.address, 
-      to = config.email.address, 
-      attachment = paste0(config.path, "/", flog), 
-      smtp.relay = "smtp.gmail.com",
-      relay.user = config.email.address, 
-      relay.user.pass = config.email.pass,
-      subject = flog, 
-      msg = "Log file from ecocomDP routine_handler() is attached"),
-    add = TRUE)
+  # on.exit(
+  #   send_email(
+  #     from = config.email.address, 
+  #     to = config.email.address, 
+  #     attachment = paste0(config.path, "/", flog), 
+  #     smtp.relay = "smtp.gmail.com",
+  #     relay.user = config.email.address, 
+  #     relay.user.pass = config.email.pass,
+  #     subject = flog, 
+  #     msg = "Log file from ecocomDP routine_handler() is attached"),
+  #   add = TRUE)
   
   # Header
   message("----- Starting routine_handler() at ", Sys.time())
@@ -167,6 +167,19 @@ routine_handler <- function(config) {
       user.pass = config.user.pass)
     
   }
+  
+  # TESTING ---------------------------------------
+  
+  send_email(
+    from = config.email.address, 
+    to = config.email.address, 
+    attachment = paste0(config.path, "/", flog), 
+    smtp.relay = "smtp.gmail.com",
+    relay.user = config.email.address, 
+    relay.user.pass = config.email.pass,
+    subject = flog, 
+    msg = "Log file from ecocomDP routine_handler() is attached")
+  
   
   # Clear workspace -----------------------------------------------------------
   
