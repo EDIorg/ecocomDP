@@ -172,7 +172,7 @@ routine_handler <- function(config) {
   
   message("----- Cleaning ", config.path)
   
-  r <- file.remove(list.files(config.path, full.names = T))
+  on.exit(file.remove(list.files(config.path, full.names = T)), add = TRUE)
   
   # Remove from queue ---------------------------------------------------------
   
