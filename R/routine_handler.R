@@ -71,6 +71,7 @@ routine_handler <- function(config) {
   #     subject = flog,
   #     msg = "Log file from ecocomDP routine_handler() is attached"),
   #   add = TRUE)
+  on.exit(message("Sending email"))
   on.exit(
     send_email(
       from = config.email.address,
@@ -182,7 +183,7 @@ routine_handler <- function(config) {
   # Clear workspace -----------------------------------------------------------
   
   message("----- Cleaning ", config.path)
-  
+  on.exit(message("Clearing config.path"))
   on.exit(file.remove(list.files(config.path, full.names = T)), add = TRUE)
   
   # Remove from queue ---------------------------------------------------------
