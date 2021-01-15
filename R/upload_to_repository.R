@@ -35,14 +35,13 @@ upload_to_repository <- function(path,
   
   if (repository == "EDI") {
     
-    try(
-      EDIutils::api_update_data_package(
-        path = path, 
-        package.id = package.id, 
-        environment = environment, 
-        user.id = user.id, 
-        user.pass = user.pass,
-        affiliation = repository))
+    EDIutils::api_update_data_package(
+      path = path, 
+      package.id = package.id, 
+      environment = environment, 
+      user.id = user.id, 
+      user.pass = user.pass,
+      affiliation = repository)
     
   }
   

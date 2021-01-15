@@ -169,13 +169,14 @@ routine_handler <- function(config) {
     
   }
   
+  # Delete from queue ---------------------------------------------------------
+  
+  message("----- Deleting from queue")
+  r <- delete_from_queue(niq$index, niq$id)
+  
   # Clear workspace -----------------------------------------------------------
   
   on.exit(file.remove(list.files(config.path, full.names = T)), add = TRUE)
-  
-  # Remove from queue ---------------------------------------------------------
-  
-  # r <- delete_from_queue(niq$index, niq$id)
   
   return(NULL)
   
