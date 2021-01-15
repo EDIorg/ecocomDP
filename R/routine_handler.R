@@ -47,16 +47,16 @@ routine_handler <- function(config) {
   options(warn = 1)
   
   # Create file
-  flog <- paste0("log_", format(Sys.time(), "%Y%m%d%H%M%S"), ".txt")
+  flog <- paste0("log_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".txt")
   log <- file(paste0(config.path, "/", flog), open = "wt")
   sink(log, type = "message")
-  on.exit(message("----- Exiting routine_handler() at ", Sys.time()), add = TRUE)
-  on.exit(message("----- Copying log"), add = TRUE)
+  on.exit(message("----- Copying ", flog, " to ./logs"), add = TRUE)
   on.exit(
     file.copy(
       from = paste0(config.path, "/", flog),
       to = paste0(dirname(config.path), "/logs/", flog)),
     add = TRUE)
+  on.exit(message("----- Exiting routine_handler() at ", Sys.time()), add = TRUE)
   on.exit(sink(type = "message"), add = TRUE)
   on.exit(close(log), add = TRUE)
   
@@ -171,8 +171,6 @@ routine_handler <- function(config) {
   
   # Clear workspace -----------------------------------------------------------
   
-  message("----- Cleaning ", config.path)
-  on.exit(message("Clearing config.path"), add = TRUE)
   on.exit(file.remove(list.files(config.path, full.names = T)), add = TRUE)
   
   # Remove from queue ---------------------------------------------------------
