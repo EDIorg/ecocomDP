@@ -111,6 +111,9 @@ routine_handler <- function(config) {
   # by one of the routines listed below? If not, the next in queue may have 
   # wandered into the wrong queue and should be removed.
   
+  # TODO: It's possible that > 1 version ago has an L1 child due to gaps in 
+  # processing. This should continue searching previous versions until 
+  # exhausted
   niq$parent_of_L1 <- has_child(
     "ecocomDP", get_previous_version(niq$id))
   

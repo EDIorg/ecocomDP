@@ -16,7 +16,7 @@
 send_email <- function(from, to, attachment, smtp.relay, relay.user, 
                       relay.user.pass, subject, msg) {
   
-  cmd <- paste("sendemail -f", from, "-t", to, "-a", attachment, "-s", 
+  cmd <- paste("/usr/bin/sendemail -f", from, "-t", to, "-a", attachment, "-s", 
                smtp.relay, "-xu", relay.user, "-xp", relay.user.pass, "-u", 
                subject, "-m", msg)
   
