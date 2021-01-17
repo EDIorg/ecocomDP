@@ -238,7 +238,9 @@ validate_arguments <- function(fun.name, fun.args) {
           # id - Exists in the search_data() default output. If a newer revision 
           # exists, a warning is returned.
           
-          validate_id(id)
+          # Wrapping in try() accomodates non-indexed ids of development 
+          # environments, which is an important use case to support
+          try(validate_id(id), silent = TRUE)
           
           # For a NEON id, validate associated argument values
           
