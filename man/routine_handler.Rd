@@ -7,17 +7,7 @@
 routine_handler(config)
 }
 \arguments{
-\item{config}{(character) Full path to configuration file. The config file defines global variables for parameterizing routines in this function. The config.R file sets these variables:
-\itemize{
-\item{"config.repository": Repository system. Must be one of the supported repositories.}
-\item{"config.environment": Repository environment. Some repositories have development and production environments.}
-\item{"config.path": Path to directory containing routine files}
-\item{"config.www": Public URL for repository access to data and metadata files}
-\item{"config.user.id": User ID for upload to repository}
-\item{"config.user.pass": User password for upload to repository}
-\item{"config.email.address": Gmail address. Only Gmail is currently supported}
-\item{"config.email.pass": Password for email address}
-}}
+\item{config}{(character) Full path to config.R which contains global variables for parameterizing this function. Create config.R with \code{create_config()}}
 }
 \description{
 Runs on a chron. Checks for unprocessed items in SQlite using webservices defined in ADD WEBSERVICE DEFINITIONS HERE and pops the longest waiting item into the appropriate routine. Currently supported are \code{update_L1()} or \code{update_L2_dwca()}.

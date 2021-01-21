@@ -2,7 +2,7 @@
 % Please edit documentation in R/routine_handler.R
 \name{delete_from_queue}
 \alias{delete_from_queue}
-\title{Delete item from the ecocom-listener's queue}
+\title{Delete item from ecocomDP-listener queue}
 \usage{
 delete_from_queue(index, id)
 }
@@ -12,8 +12,8 @@ delete_from_queue(index, id)
 \item{id}{(character) Data package identifier, corresponding with \code{index}, to remove}
 }
 \value{
-(logical) Was the item successfully removed from the queue?
+(logical) Indicates whether the item was successfully removed
 }
 \description{
-Delete item from the ecocom-listener's queue
+Delete item from ecocomDP-listener queue
 }

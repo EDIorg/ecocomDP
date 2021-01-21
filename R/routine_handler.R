@@ -2,17 +2,7 @@
 #'
 #' @description Runs on a chron. Checks for unprocessed items in SQlite using webservices defined in ADD WEBSERVICE DEFINITIONS HERE and pops the longest waiting item into the appropriate routine. Currently supported are \code{update_L1()} or \code{update_L2_dwca()}.
 #' 
-#' @param config (character) Full path to configuration file. The config file defines global variables for parameterizing routines in this function. The config.R file sets these variables:
-#' \itemize{
-#' \item{"config.repository": Repository system. Must be one of the supported repositories.}
-#' \item{"config.environment": Repository environment. Some repositories have development and production environments.}
-#' \item{"config.path": Path to directory containing routine files}
-#' \item{"config.www": Public URL for repository access to data and metadata files}
-#' \item{"config.user.id": User ID for upload to repository}
-#' \item{"config.user.pass": User password for upload to repository}
-#' \item{"config.email.address": Gmail address. Only Gmail is currently supported}
-#' \item{"config.email.pass": Password for email address}
-#' }
+#' @param config (character) Full path to config.R which contains global variables for parameterizing this function. Create config.R with \code{create_config()}
 #'
 #' @export
 #'
@@ -23,16 +13,13 @@ routine_handler <- function(config) {
   source(file = config)
   
   # Check lock ----------------------------------------------------------------
-
-  # Trying to run a routine when one is already underway creates issues
+  # Running a routine when one is underway creates issues, so don't even try
   
   if (file.exists(paste0(config.path, "/lock.txt"))) {
     return(NULL)
   }
   
-  # Pull from queue -----------------------------------------------------------
-  
-  # Get next in queue
+  # Get next in queue ---------------------------------------------------------
   
   niq <- get_from_queue()
   if (is.null(niq)) {
@@ -40,6 +27,7 @@ routine_handler <- function(config) {
   }
   
   # Logging -------------------------------------------------------------------
+  # Effective logging changes system args and handles exceptions
   
   # Return warnings where they occur for troubleshooting
   dflt_warn <- getOption("warn")
@@ -78,15 +66,12 @@ routine_handler <- function(config) {
   message("----- Next in queue is ", niq$id)
   
   # Identify routine(s) to call ----------------------------------------------
-  
   # Knowing which routine to call depends on whether the "next data package
   # in queue" is a parent of an L1 or a parent of one or more L2.
   
   # Because it's possible (but rare) for the next in queue to already have a 
   # child created by one of the routines listed below, first check for such
-  # descendants before continuing. This check safely assumes a previous 
-  # version has valid parent attributes, which are tightly controlled by 
-  # validate_ecocomDP().
+  # descendants before continuing.
   
   niq$parent_of_L1 <- has_child("ecocomDP", niq$id)
   if (niq$parent_of_L1) {
@@ -107,13 +92,19 @@ routine_handler <- function(config) {
     }
   }
   
-  # Was the previous version of the next in queue a parent of a child created 
-  # by one of the routines listed below? If not, the next in queue may have 
-  # wandered into the wrong queue and should be removed.
-  
-  # TODO: It's possible that > 1 version ago has an L1 child due to gaps in 
+  # FIXME: It's possible that > 1 version ago has an L1 child due to gaps in 
   # processing. This should continue searching previous versions until 
-  # exhausted
+  # exhausted. SOLUTION: This can be fixed by looking for unprocessed "earlier" 
+  # versions of niq in the queue, and if found stops and requests for devine
+  # intervention. Manual intervention is required because routine_handler()
+  # operates on an event notification, not a chron.
+  
+  # has_unprocessed_revs() TRUE/FALSE
+  
+  # Does the previous version of the next in queue have a child created by one 
+  # of the routines listed below? If not, the next in queue may have wandered 
+  # into the wrong queue and should be removed.
+  
   niq$parent_of_L1 <- has_child(
     "ecocomDP", get_previous_version(niq$id))
   
@@ -130,8 +121,7 @@ routine_handler <- function(config) {
   }
   
   # Lock ----------------------------------------------------------------------
-  
-  # Lock file prevents race conditions by indicating a routine in progress
+  # Prevents race conditions by indicating a routine in progress
   
   r <- file.create(paste0(config.path, "/lock.txt"))
   on.exit(file.remove(paste0(config.path, "/lock.txt")), add = TRUE)
@@ -192,12 +182,13 @@ routine_handler <- function(config) {
 
 
 
-#' Get next item in the ecocom-listener's queue
+#' Get next item in ecocomDP-listener queue
+#' 
+#' @details The queue is /webapp/ecocomDP.sqlite in \href{https://github.com/EDIorg/ecocomDP-listener}{ecocomDP-listener} and is accessible via HTTP GET.
 #'
 #' @return
 #' \item{index}{(integer) Index of item in queue. Is later used for removing the item from the queue.}
 #' \item{id}{(character) Data package identifier}
-#' \item{config.environment}{(character) Location of the \code{id} within a repository system. This variable is written to the Global Environment for use in \code{routine_handler()}.}
 #' 
 get_from_queue <- function() {
   
@@ -247,12 +238,12 @@ get_from_queue <- function() {
 
 
 
-#' Delete item from the ecocom-listener's queue
+#' Delete item from ecocomDP-listener queue
 #'
 #' @param index (integer) Index of item to remove
 #' @param id (character) Data package identifier, corresponding with \code{index}, to remove
 #'
-#' @return (logical) Was the item successfully removed from the queue?
+#' @return (logical) Indicates whether the item was successfully removed
 #' 
 delete_from_queue <- function(index, id) {
   
@@ -264,18 +255,13 @@ delete_from_queue <- function(index, id) {
     repository <- "EDI"
   }
   
-  if (exists("config.environment", envir = .GlobalEnv)) {
-    environment <- get("config.environment", envir = .GlobalEnv)
-  } else {
-    environment <- "production"
-  }
-  
   # Repository specific methods -----------------------------------------------
   
   if (repository == "EDI") {
     
     # Only the index number is needed to delete an item from the "production" 
     # and "staging" queues (it's the same queue).
+    
     r <- httr::DELETE(
       paste0("https://regan.edirepository.org/ecocom-listener/", index))
     
@@ -290,4 +276,25 @@ delete_from_queue <- function(index, id) {
     
   }
   
+}
+
+
+
+
+
+
+
+
+#' Create config.R
+#'
+#' @param path (character) Path to which config.R will be created
+#'
+#' @return (logical) TRUE if written to \code{path} otherwise FALSE
+#' 
+#' @export
+#'
+create_config <- function(path) {
+  file.copy(
+    from = system.file("config.R", package = "ecocomDP"),
+    to = path)
 }
