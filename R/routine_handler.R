@@ -184,13 +184,15 @@ routine_handler <- function(config) {
 
 #' Get next item in ecocomDP-listener queue
 #' 
+#' @param filter (character) If "unprocessed" a full list of unprocessed items are returned.
+#' 
 #' @details The queue is /webapp/ecocomDP.sqlite in \href{https://github.com/EDIorg/ecocomDP-listener}{ecocomDP-listener} and is accessible via HTTP GET.
 #'
 #' @return
 #' \item{index}{(integer) Index of item in queue. Is later used for removing the item from the queue.}
 #' \item{id}{(character) Data package identifier}
 #' 
-get_from_queue <- function() {
+get_from_queue <- function(filter = NULL) {
   
   # Load Global Environment config --------------------------------------------
   
@@ -205,10 +207,20 @@ get_from_queue <- function() {
   if (repository == "EDI") {
     
     # EDI has listeners in "production" and "staging" environments
-    prd <- httr::GET(
-      "https://regan.edirepository.org/ecocom-listener/package.lternet.edu")
-    stg <- httr::GET(
-      "https://regan.edirepository.org/ecocom-listener/package-s.lternet.edu")
+    url_prd <- 
+      "https://regan.edirepository.org/ecocom-listener/package.lternet.edu"
+    url_stg <- 
+      "https://regan.edirepository.org/ecocom-listener/package-s.lternet.edu"
+    
+    # Add filters
+    if (!is.null(filter)) {
+      url_prd <- paste0(url_prd, "?filter=", filter)
+      url_stg <- paste0(url_stg, "?filter=", filter)
+    }
+    
+    # Call
+    prd <- httr::GET(url_prd)
+    stg <- httr::GET(url_stg)
     
     # Production has priority over staging
     if (httr::status_code(prd) == 200) {

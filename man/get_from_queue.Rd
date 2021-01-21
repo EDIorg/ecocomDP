@@ -4,7 +4,10 @@
 \alias{get_from_queue}
 \title{Get next item in ecocomDP-listener queue}
 \usage{
-get_from_queue()
+get_from_queue(filter = NULL)
+}
+\arguments{
+\item{filter}{(character) If "unprocessed" a full list of unprocessed items are returned.}
 }
 \value{
 \item{index}{(integer) Index of item in queue. Is later used for removing the item from the queue.}
