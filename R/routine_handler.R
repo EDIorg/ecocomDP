@@ -26,7 +26,7 @@ routine_handler <- function(config) {
     return(NULL)
   }
   
-  # Logging -------------------------------------------------------------------
+  # Log -----------------------------------------------------------------------
   # Effective logging changes system args and handles exceptions
   
   # Return warnings where they occur for troubleshooting
@@ -65,6 +65,13 @@ routine_handler <- function(config) {
   message("----- Starting routine_handler() at ", Sys.time())
   message("----- Next in queue is ", niq$id)
   
+  # Check series integrity ----------------------------------------------------
+  
+  message("----- Checking series integrity")
+  if (has_unprocessed_versions(niq$id)) {
+    return(NULL)
+  }
+
   # Identify routine(s) to call ----------------------------------------------
   # Knowing which routine to call depends on whether the "next data package
   # in queue" is a parent of an L1 or a parent of one or more L2.
@@ -91,16 +98,7 @@ routine_handler <- function(config) {
       return(NULL)
     }
   }
-  
-  # FIXME: It's possible that > 1 version ago has an L1 child due to gaps in 
-  # processing. This should continue searching previous versions until 
-  # exhausted. SOLUTION: This can be fixed by looking for unprocessed "earlier" 
-  # versions of niq in the queue, and if found stops and requests for devine
-  # intervention. Manual intervention is required because routine_handler()
-  # operates on an event notification, not a chron.
-  
-  # has_unprocessed_revs() TRUE/FALSE
-  
+
   # Does the previous version of the next in queue have a child created by one 
   # of the routines listed below? If not, the next in queue may have wandered 
   # into the wrong queue and should be removed.
@@ -225,17 +223,17 @@ get_from_queue <- function(filter = NULL) {
     # Production has priority over staging
     if (httr::status_code(prd) == 200) {
       assign("config.environment", "production", envir = .GlobalEnv)
-      cntnt <- httr::content(prd, as = "text")
+      content <- data.table::fread(httr::content(prd, as = "text"))
     } else if (httr::status_code(stg) == 200) {
       assign("config.environment", "staging", envir = .GlobalEnv)
-      cntnt <- httr::content(stg, as = "text")
+      content <- data.table::fread(httr::content(stg, as = "text"))
     }
-    
+
     # Return parsed content
-    if (exists("cntnt")) {
+    if (exists("content")) {
       res <- list(
-        index = as.integer(stringr::str_split(cntnt, ",", simplify = T)[1]),
-        id = stringr::str_split(cntnt, ",", simplify = T)[2])
+        index = content[[1]],
+        id = content[[2]])
       return(res)
     }
 

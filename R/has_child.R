@@ -140,6 +140,63 @@ has_child <- function(keyword, package.id) {
 
 
 
+#' Check if earlier unprocessed versions of a data package are in the ecocomDP-listener queue
+#'
+#' The presence of such items may indicate the integrity of a data package series is compromised and processing should be halted until the issue is fixed.
+#'
+#' @param package.id 
+#'
+#' @return (logical) TRUE if earlier versions of a data package are found
+#' @export
+#'
+#' @examples
+has_unprocessed_versions <- function(package.id) {
+  
+  # Load Global Environment config --------------------------------------------
+  
+  if (exists("config.repository", envir = .GlobalEnv)) {
+    repository <- get("config.repository", envir = .GlobalEnv)
+  } else {
+    repository <- "EDI"
+  }
+  
+  # Repository specific methods -----------------------------------------------
+  
+  if (repository == "EDI") {
+
+    # Identifier and revision of package.id
+    id <- stringr::str_remove(package.id, "\\.[:digit:]*$")
+    rev <- stringr::str_extract(package.id, "(?<=\\.)[:digit:]*$")
+    
+    # Identifiers and revisions of all queued items
+    queue <- get_from_queue(filter = "unprocessed")$id
+    if (is.null(queue)) {
+      return(FALSE)
+    }
+    ids <- stringr::str_remove(queue, "\\.[:digit:]*$")
+    revs <- stringr::str_extract(queue, "(?<=\\.)[:digit:]*$")
+    
+    # Any earlier versions that are unprocessed?
+    if (any(rev > revs[ids %in% id])) {
+      message("Unprocessed earlier versions of ", id, " found in the queue. ",
+              "These earlier versions (", queue[ids %in% id], ") may need to ",
+              "be processed before ", package.id)
+      return(TRUE)
+    } else {
+      return(FALSE)
+    }
+    
+  }
+
+}
+
+
+
+
+
+
+
+
 
 #' Get datetime of data package quality report from the EDI Data Repository
 #'
