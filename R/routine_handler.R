@@ -21,6 +21,9 @@ routine_handler <- function(config) {
   
   # Get next in queue ---------------------------------------------------------
   
+  # FIXME: Should identify repository and environment to enable repository 
+  # specific methods
+  
   niq <- get_from_queue()
   if (is.null(niq)) {
     return(NULL)
@@ -72,7 +75,7 @@ routine_handler <- function(config) {
     return(NULL)
   }
 
-  # Identify routine(s) to call ----------------------------------------------
+  # Identify routine(s) to call -----------------------------------------------
   # Knowing which routine to call depends on whether the "next data package
   # in queue" is a parent of an L1 or a parent of one or more L2.
   
@@ -118,6 +121,11 @@ routine_handler <- function(config) {
     return(NULL)
   }
   
+  # Compare EML (L0) ----------------------------------------------------------
+  # Most accurate if previous L1 is accurately identified first and the comparison is made against it's parent L0, rather than assuming one revision prior to the current L0 is the one of interest.
+  
+  # Compare tables (L0) -------------------------------------------------------
+  
   # Lock ----------------------------------------------------------------------
   # Prevents race conditions by indicating a routine in progress
   
@@ -129,9 +137,12 @@ routine_handler <- function(config) {
     return(NULL)
   }
   
-  # Call routine -------------------------------------------------------------
+  # Call routine --------------------------------------------------------------
   
   # TODO: Refactor for iteration when more than one L1-to-L2 routine exists
+  
+  # TODO: Add publish/don't-publish option, the latter leaving the derived
+  # data in config.path for access by project personnel
   
   if (niq$parent_of_L1) {
     
