@@ -7,34 +7,18 @@
 #   Eric R Sokol (2020-04-17)
 #     original creation
 ##############################################################################################
-map_neon_data_to_ecocomDP.NEON.20166.001.L2.01 <- function(
+map_neon.ecocomdp.20166.001.001 <- function(
   neon.data.product.id = "DP1.20166.001",
   ...
 ){
   
   #NEON target taxon group is ALGAE
-  neon_method_id <- "NEON.20166.001.L2.01"
+  neon_method_id <- "neon.ecocomdp.20166.001.001"
   
   # get all tables
   all_tabs_in <- neonUtilities::loadByProduct(
-    # hard coded arguments
     dpID = neon.data.product.id, 
-    
-    # dots
-    ...
-
-    # # required input from users
-    # site = site,
-    # startdate = dots$startdate,
-    # enddate = dots$enddate,
-    
-    # # optional input from users
-    # avg = "all",
-    # check.size = dots$check.size,
-    # nCores = dots$nCores,
-    # forceParallel = dots$forceParallel,
-    # token = dots$token
-  )
+    ...)
   
   
   

@@ -152,8 +152,6 @@ L1_to_L2_DwCA <- function(path,
 #'
 #' @return
 #' @export
-#'
-#' @examples
 create_table_dwca_occurrence_core <- function(
   dwca_occurrence_core_config,
   dwca_occurrence_core_mapping,

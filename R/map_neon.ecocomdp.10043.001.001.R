@@ -2,7 +2,7 @@
 ##############################################################################################
 #' @examples 
 #' \dontrun{
-#' my_result <- map_neon_data_to_ecocomDP.MOSQUITO(site = c("NIWO","DSNY"), 
+#' my_result <- map_neon.ecocomdp.10043.001.001(site = c("NIWO","DSNY"), 
 #'                                                   startdate = "2016-01", 
 #'                                                   enddate = "2018-11")
 #' }
@@ -11,7 +11,8 @@
 #' @export
 
 ##############################################################################################
-map_neon_data_to_ecocomDP.MOSQUITO <- function(
+# mapping function for MOSQUITO
+map_neon.ecocomdp.10043.001.001 <- function(
   neon.data.product.id = "DP1.10043.001",
   ...){
   

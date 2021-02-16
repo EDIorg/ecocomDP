@@ -129,29 +129,22 @@ read_data <- function(
   # Read ----------------------------------------------------------------------
   
   
-  
   d <- lapply(
     names(id),
     function(x) {
+      
       if (stringr::str_detect(
         x, 
         "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)") && 
-        !grepl("^NEON\\.", x)) {
+        !grepl("^neon\\.", x)) {
         read_data_edi(x)
-      } else if (stringr::str_detect(x, "^NEON\\.[:digit:]+\\.[:digit:]+")) {
-        map_neon_data_to_ecocomDP(
-          neon.data.product.id = x,
-          # site = id[[x]]$site,
-          # startdate = id[[x]]$startdate,
-          # enddate = id[[x]]$enddate,
-          # check.size = check.size,
-          # nCores = nCores,
-          # token = token,
-          # forceParallel = forceParallel
+        
+      } else if (grepl("^neon\\.", x)) {
+        ecocomDP::map_neon_data_to_ecocomDP(
+          data.product.id = x,
           ...)
       }
     })
-  
   
   
   names(d) <- names(id)
