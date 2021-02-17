@@ -65,24 +65,24 @@ map_neon_data_to_ecocomDP <- function(
 ){
   
   # get metadata
-  metadata_all <- neonUtilities::getProductInfo(neon.data.product.id)
+  metadata_all <- neonUtilities::getProductInfo(data.product.id)
   
   # call custom mapping function if available for given NEON data.product.id
   if(data.product.id == "neon.ecocomdp.20166.001.001"){
     #ALGAE method v01
-    ecocomDP_tables <- map_neon.ecocomdp.20166.001.001(...)
+    ecocomDP_tables <- ecocomDP::map_neon.ecocomdp.20166.001.001(...)
     
   }else if(data.product.id == "neon.ecocomdp.20120.001.001"){
     #MACROINVERTEBRATE v01
-    ecocomDP_tables <- map_neon.ecocomdp.20120.001.001(...)
+    ecocomDP_tables <- ecocomDP::map_neon.ecocomdp.20120.001.001(...)
     
   }else if(data.product.id == "neon.ecocomdp.10043.001.001"){
     #MOSQUITO v01
-    ecocomDP_tables <- map_neon.ecocomdp.10043.001.001(...)
+    ecocomDP_tables <- ecocomDP::map_neon.ecocomdp.10043.001.001(...)
   
   }else if(data.product.id == "neon.ecocomdp.10022.001.001"){
     #BEETLE v01
-    ecocomDP_tables <- map_neon.ecocomdp.10022.001.001(...)
+    ecocomDP_tables <- ecocomDP::map_neon.ecocomdp.10022.001.001(...)
     
   }else{
     message(paste0("WARNING: ecocomDP mapping not currently available for ",data.product.id))

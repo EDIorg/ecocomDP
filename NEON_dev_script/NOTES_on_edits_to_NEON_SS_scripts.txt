@@ -1,11 +1,28 @@
-BEETLES
-	map_neon.ecocomdp.10022.001.001
-		- added -- uid from bet_sorting as the observation_id 
-		- added -- filter bet_fielddata to only include sampleCollected == "Y"
+Note for Colin -- composite key check in validation function doesn't seem to work correctly? 
+
+BEETLES -- map_neon.ecocomdp.10022.001.001
+	updates to neonDivData code
+	- 1. added -- uid from bet_sorting as the observation_id 
+	- 2. added -- filter bet_fielddata to only include sampleCollected == "Y"
+	- 3. added -- filter out records where subsampleID == NA
+	- 4. added -- concatenate different references for same taxonID so taxon_id is unique for each record in taxon table
 		
 	problems 
 		taxon table
-			- taxon_id's with multiple records in taxon table, different "authority_system" entries -- e.g., OMUDEJ
-			- NAs in taxon_id
+			- taxon_id's with multiple records in taxon table, different "authority_system" entries -- e.g., OMUDEJ -- fixed in update #4 above
+			- NAs in taxon_id -- fixed by update #3 above. 
+		observation table
+			- duplicate uid -- 
+				536b7f1b-13a3-4c42-946b-09a0628fdaac -- event_id = ABBY_028.E.20190625, taxon = PTELAM, different counts -- 1 and 3. Should they be added? assumed to be reps? 
+				- subsampleIDs
+					- ABBY_028.E.20190625.IB.01 - A00000106176
+					- ABBY_028.E.20190625.PTELAM.01 - A00000106844
+						- activity in bet_sorting_in - 58e20535-4280-4149-9f89-aa09ad477497 -- individual count = 13 in sorting table. How did it get separated?
+						- remarks -- 10 individuals from this sample pooled together. 3 pinned. -- suggesting we should add counts when multiple observations exist in the observation table. 
+						DIAGNOSIS -- family not returned for the "pooled" sample record. Removing family since it can be recovered from NEON taxon tables anyway. 
+					- ABBY_028.E.20190625.OMUDEJ.01 - 
+
+
+
 		
 		

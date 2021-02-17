@@ -15,162 +15,162 @@
 map_neon.ecocomdp.10022.001.001 <- function(
   neon.data.product.id = "DP1.10022.001",
   ...){
-
-  # getting data ----
-  #download data
-  beetles_raw <- neonUtilities::loadByProduct(dpID = neon.data.product.id, 
+  
+  # author: Kari Norman
+  
+  # download data
+  beetles_raw <- neonUtilities::loadByProduct(dpID = neon.data.product.id,
                                               ...)
   
-
-  # helper function to calculate mode  
+  
+  # helper function to calculate mode of a column/vector
   Mode <- function(x) {
     ux <- unique(x)
     ux[which.max(tabulate(match(x, ux)))]
   }
   
-
-  # start data table with fielddata
-  data <- beetles_raw$bet_fielddata %>%
+  ### Clean Up Sample Data ###
+  
+  # start with the fielddata table, which describes all sampling events
+  data_beetles <- tibble::as_tibble(beetles_raw$bet_fielddata) %>%
     dplyr::filter(sampleCollected == "Y") %>% #there's an entry for every trap, whether or not they got samples, only want ones with samples
-    dplyr::select(sampleID, domainID, siteID, 
-                  # plotID, 
-                  namedLocation, 
+    dplyr::select(sampleID, domainID, siteID, namedLocation,
                   trapID, setDate, collectDate, eventID, trappingDays) %>%
-    #eventID's are inconsistently separated by periods, so remove
+    # eventID's are inconsistently separated by periods, so we remove them
     dplyr::mutate(eventID = stringr::str_remove_all(eventID, "[.]")) %>%
-    dplyr::mutate(trappingDays = lubridate::interval(lubridate::ymd(setDate), lubridate::ymd(collectDate)) %/% lubridate::days(1))
+    #calculate a new trapdays column
+    dplyr::mutate(trappingDays = lubridate::interval(lubridate::ymd(setDate),
+                                                     lubridate::ymd(collectDate)) %/%
+                    lubridate::days(1))
   
+  #Find the traps that have multiple collectDates/bouts for the same setDate
+  #need to calculate their trap days from the previous collectDate, not the setDate
   
+  data_adjTrappingDays <- data.frame()
   
+  try({
+    data_adjTrappingDays <- data_beetles %>%
+      dplyr::select(namedLocation, trapID, setDate, collectDate, trappingDays, eventID) %>%
+      dplyr::group_by_at(
+        dplyr::vars(-collectDate, -trappingDays, -eventID)) %>%
+      dplyr::filter(
+        dplyr::n_distinct(collectDate) > 1) %>%
+      dplyr::group_by(namedLocation, trapID, setDate) %>%
+      dplyr::mutate(diffTrappingDays = trappingDays - min(trappingDays)) %>%
+      dplyr::mutate(adjTrappingDays = dplyr::case_when(
+        diffTrappingDays == 0 ~ trappingDays,
+        TRUE ~ diffTrappingDays)) %>%
+      dplyr::select(-c(trappingDays, diffTrappingDays))
+  }, silent = TRUE)
   
-  # join fielddata with bet_worting
-  data <- data %>%
-    #for some eventID's (bouts) collection happened over two days,
-    #change collectDate to the date that majority of traps were collected on
+  if(nrow(data_adjTrappingDays)>0){
+    data_beetles <- data_beetles %>%
+      #update with adjusted trapping days where needed
+      dplyr::left_join(data_adjTrappingDays)
+  }else{
+    data_beetles$adjTrappingDays <- NA_real_
+  }
+  
+  data_beetles <- data_beetles %>%
+    #update with adjusted trapping days where needed
+    # dplyr::left_join(adjTrappingDays) %>%
+    dplyr::mutate(
+      trappingDays = dplyr::case_when(
+        !is.na(adjTrappingDays) ~ adjTrappingDays,
+        TRUE ~ trappingDays
+    )) %>%
+    dplyr::select(-adjTrappingDays, -setDate) %>%
+    # for some eventID's (bouts) collection happened over two days,
+    # change collectDate to the date that majority of traps were collected on
     dplyr::group_by(eventID) %>%
     dplyr::mutate(collectDate = Mode(collectDate)) %>%
     dplyr::ungroup() %>%
-    #there are also some sites for which all traps were set and collect on the same date, but have multiple eventID's
-    #we want to consider that as all one bout so we'll just create a new ID based on the site and collectDate
+    # there are also some sites for which all traps were set and collect on the same date, but have multiple eventID's
+    # we want to consider that as all one bout so we create a new ID based on the site and collectDate
     tidyr::unite(boutID, siteID, collectDate, remove = FALSE) %>%
     dplyr::select(-eventID) %>%
-    #and join to sample data
+    # join with bet_sorting, which describes the beetles in each sample
     dplyr::left_join(beetles_raw$bet_sorting %>%
-                       dplyr::filter(sampleType %in% c("carabid", "other carabid")) %>% #only want carabid samples, not bycatch
-                       dplyr::select(uid, 
-                                     sampleID, subsampleID, sampleType, 
-                                     taxonID, scientificName, taxonRank, 
-                                     individualCount, identificationQualifier, identificationReferences),
+                       # only want carabid samples, not bycatch
+                       dplyr::filter(sampleType %in% c("carabid", "other carabid")) %>%
+                       dplyr::select(uid,
+                                     sampleID, subsampleID, sampleType, taxonID,
+                                     scientificName, taxonRank, identificationReferences,
+                                     individualCount),
                      by = "sampleID") %>%
     dplyr::filter(!is.na(subsampleID)) #even though they were marked a sampled, some collection times don't acutally have any samples
   
+  ### Clean up Taxonomy of Samples ###
   
-  
-
-  # join data with bet_parataxonomistID
-  # Join taxonomic data from pinning with the sorting data
-  # Replace sorting taxon info with pinning taxon info (people that pin specimens are more experienced with taxonomy), where available
-  data_pin <- data %>%
-    dplyr::left_join(beetles_raw$bet_parataxonomistID %>% 
-                       dplyr::select(subsampleID, individualID, taxonID, scientificName, 
-                              taxonRank,identificationQualifier,
-                              identificationReferences), by = "subsampleID") %>%
+  #Some samples were pinned and reidentified by more expert taxonomists, replace taxonomy with their ID's (in bet_parataxonomist) where available
+  data_pin <- data_beetles %>%
+    dplyr::left_join(beetles_raw$bet_parataxonomistID %>%
+                       dplyr::select(subsampleID, individualID, taxonID, scientificName,
+                                     taxonRank) %>%
+                       dplyr::left_join(dplyr::distinct(dplyr::select(beetles_raw$bet_expertTaxonomistIDProcessed, taxonID, family))),
+                     by = "subsampleID") %>%
     dplyr::mutate_if(is.factor, as.character) %>%
     dplyr::mutate(taxonID = ifelse(is.na(taxonID.y), taxonID.x, taxonID.y)) %>%
     dplyr::mutate(taxonRank = ifelse(is.na(taxonRank.y), taxonRank.x, taxonRank.y)) %>%
     dplyr::mutate(scientificName = ifelse(is.na(scientificName.y), scientificName.x, scientificName.y)) %>%
     dplyr::mutate(identificationSource = ifelse(is.na(scientificName.y), "sort", "pin")) %>%
-    dplyr::mutate(identificationReferences = ifelse(is.na(identificationReferences.y), 
-                                                    identificationReferences.x, identificationReferences.y)) %>%
-    dplyr::mutate (identificationQualifier = ifelse(is.na(taxonID.y), identificationQualifier.x, identificationQualifier.y)) %>%
     dplyr::select(-ends_with(".x"), -ends_with(".y"))
   
-  
-  
-  #some subsamples weren't fully ID'd by the pinners, so we have to recover the unpinned-individuals
-  lost_indv <- data_pin %>% 
+  # some subsamples weren't fully ID'd by the pinners, so we have to recover the unpinned-individuals
+  lost_indv <- data_pin %>%
     dplyr::filter(!is.na(individualID)) %>%
     dplyr::group_by(subsampleID, individualCount) %>%
-    dplyr::summarise(n_ided = dplyr::n_distinct(individualID)) %>% 
+    dplyr::summarise(n_ided = dplyr::n_distinct(individualID)) %>%
     dplyr::filter(n_ided < individualCount) %>%
     dplyr::mutate(unidentifiedCount = individualCount - n_ided) %>%
     dplyr::select(subsampleID, individualCount = unidentifiedCount) %>%
-    dplyr::left_join(data %>% 
-                       dplyr::select(-individualCount), by = "subsampleID") %>%
+    dplyr::left_join(dplyr::select(data_beetles, -individualCount), by = "subsampleID") %>%
     dplyr::mutate(identificationSource = "sort")
   
-  
-  
-  #add unpinned-individuals back to the pinned id's, adjust the individual counts so pinned individuals have a count of 1
+  # add unpinned-individuals back to the pinned id's, adjust the individual counts so pinned individuals have a count of 1
   data_pin <- data_pin %>%
     dplyr::mutate(individualCount = ifelse(identificationSource == "sort", individualCount, 1)) %>%
     dplyr::bind_rows(lost_indv)
   
-
   
-  #Join expert data to existing pinning and sorting data
-  #There are ~10 individualID's for which experts ID'd more than one species (not all experts agreed), we want to exclude those expert ID's as per Katie Levan's suggestion
-
-  ex_expert_id <- beetles_raw$bet_parataxonomistID %>% 
-    dplyr::group_by(individualID) %>% 
-    dplyr::filter(dplyr::n_distinct(taxonID) > 1) %>% 
-    dplyr::pull(individualID)
-  
-  # Add expert taxonomy info, where available
-  data_expert <- dplyr::left_join(data_pin, 
-                                  dplyr::select(beetles_raw$bet_parataxonomistID,
+  #Join expert ID's to beetle dataframe
+  data_expert <- dplyr::left_join(data_pin,
+                                  dplyr::select(beetles_raw$bet_expertTaxonomistIDProcessed,
                                                 individualID,taxonID,scientificName,
-                                                taxonRank,identificationQualifier,
-                                                identificationReferences) %>%
-                                    dplyr::filter(!individualID %in% ex_expert_id), #exclude ID's that have unresolved expert taxonomy
-                                  by = 'individualID', na_matches = "never") %>% 
+                                                taxonRank),
+                                  by = 'individualID', na_matches = "never") %>%
     dplyr::distinct()
   
-  
-  
- 
-  # Replacement old taxon info with expert info, where available
-  # NOTE - This is repetitive with the code snippet above, and if you want to do it this way you can just combine the calls into one chunk. BUT, you may
-  #     want to do more than this, as it is *just* a replacement of IDs for individual beetles that an expert identified. If the expert identified
-  #           a sample as COLSP6 instead of CARSP14, though, then all CARSP14 from that trap on that date should probably be updated to COLSP6…
+  #Update with expert taxonomy where available
   data_expert <- data_expert %>%
     dplyr::mutate_if(is.factor, as.character) %>%
     dplyr::mutate(taxonID = ifelse(is.na(taxonID.y), taxonID.x, taxonID.y)) %>%
     dplyr::mutate(taxonRank = ifelse(is.na(taxonRank.y), taxonRank.x, taxonRank.y)) %>%
     dplyr::mutate(scientificName = ifelse(is.na(scientificName.y), scientificName.x, scientificName.y)) %>%
     dplyr::mutate(identificationSource = ifelse(is.na(scientificName.y), identificationSource, "expert")) %>%
-    dplyr::mutate(identificationReferences = ifelse(is.na(identificationReferences.y), 
-                                                    identificationReferences.x, identificationReferences.y)) %>%
-    dplyr::mutate (identificationQualifier = ifelse(is.na(taxonID.y), identificationQualifier.x, identificationQualifier.y)) %>%
     dplyr::select(-ends_with(".x"), -ends_with(".y"))
   
   
- 
   
   #Get raw counts table
   beetles_counts <- data_expert %>%
-    dplyr::select(-c(subsampleID, sampleType, individualID, 
-                     identificationSource, identificationQualifier)) %>%
+    dplyr::select(-c(subsampleID, sampleType, identificationSource, individualID, family)) %>%
     dplyr::group_by_at(dplyr::vars(-individualCount)) %>%
     dplyr::summarise(count = sum(individualCount)) %>%
     dplyr::ungroup() %>%
-    dplyr::distinct() %>%
-    as.data.frame()
+    dplyr::distinct()
 
-  
   
   
   
   # making tables ----
   # Observation Tables
   # All individuals of the same species collected at the same time/same location are considered the same observation, regardless of how they were ID'd
-
+  
   table_observation_raw <- beetles_counts %>%
     # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation,
                   abundance = count)
-  
-  
   
   
   
@@ -200,9 +200,9 @@ map_neon.ecocomdp.10022.001.001 <- function(
                   variable_name,
                   value,
                   unit)
-  # table_observation <- table_observation[stats::complete.cases(table_observation[,8]),]
   
-
+  
+  
   # no units, all text
   table_observation_ancillary_wide <- beetles_raw$bet_fielddata %>% 
     dplyr::select(eventID, sampleID,
@@ -231,7 +231,7 @@ map_neon.ecocomdp.10022.001.001 <- function(
       )
     )
   
-
+  
   
   
   
@@ -331,34 +331,12 @@ map_neon.ecocomdp.10022.001.001 <- function(
     dplyr::distinct() %>%
     dplyr::bind_rows(., table_location_ancillary)
   
- 
-  # # load neon taxon list
-  # neon_taxon_list <- neonUtilities::getTaxonTable(taxonType = "BEETLE",
-  #                              token = my_neon_token)
-  # 
-  # browser()
-  
-  # # Taxon Tables 
-  # table_taxon <- dplyr::bind_rows(beetles_raw$bet_sorting %>%
-  #                            dplyr::select(taxonID, taxonRank, scientificName), 
-  #                          beetles_raw$bet_parataxonomistID %>%
-  #                            dplyr::select(taxonID, taxonRank, scientificName), 
-  #                          beetles_raw$bet_parataxonomistID %>%
-  #                            dplyr::select(taxonID, taxonRank, scientificName)) %>% 
-  #   dplyr::distinct() %>%
-  #   dplyr::filter(scientificName != "Carabidae spp.", taxonID != "") %>% #remove typo (entry with the apropriate sciName is already in df)
-  #   dplyr::select(taxon_id = taxonID, taxon_rank = taxonRank, taxon_name = scientificName) %>%
-  #   dplyr::mutate(authority_system = "itis", 
-  #                 #create column on cleaned scientific names to get id's from 
-  #                 taxon_name_clean = taxadb::clean_names(stringr::str_replace(taxon_name, " \\(.*\\)", ""), lowercase = FALSE),
-  #                 authority_taxon_id = taxadb::get_ids(taxon_name_clean, "itis", "bare")) %>%
-  #   dplyr::select(-taxon_name_clean)
-  
-  
   
   
   # create a taxon table, which describes each taxonID that appears in the data set
   # start with inv_taxonomyProcessed
+  
+
   table_taxon <- beetles_counts %>%
     
     # keep only the coluns listed below
@@ -371,12 +349,15 @@ map_neon.ecocomdp.10022.001.001 <- function(
     dplyr::rename(taxon_id = taxonID,
                   taxon_rank = taxonRank,
                   taxon_name = scientificName,
-                  authority_system = identificationReferences)
+                  authority_system = identificationReferences) %>%
+    # concatenate different references for same taxonID
+    dplyr::group_by(taxon_id, taxon_rank, taxon_name) %>%
+    dplyr::summarise(
+      authority_system = paste(unique(c(authority_system)), collapse = "; "))
   
   
   
-  
-  
+
   # make dataset_summary -- required table
   years_in_data <- table_observation$observation_datetime %>% lubridate::year()
   years_in_data %>% ordered()
@@ -390,8 +371,6 @@ map_neon.ecocomdp.10022.001.001 <- function(
       unique() %>% sort() %>% diff() %>% stats::sd(),
     max_num_taxa = table_taxon$taxon_id %>% unique() %>% length()
   )
-  
-  
   
   
   
