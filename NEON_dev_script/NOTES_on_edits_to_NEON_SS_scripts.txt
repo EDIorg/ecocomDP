@@ -1,0 +1,11 @@
+BEETLES
+	map_neon.ecocomdp.10022.001.001
+		- added -- uid from bet_sorting as the observation_id 
+		- added -- filter bet_fielddata to only include sampleCollected == "Y"
+		
+	problems 
+		taxon table
+			- taxon_id's with multiple records in taxon table, different "authority_system" entries -- e.g., OMUDEJ
+			- NAs in taxon_id
+		
+		
