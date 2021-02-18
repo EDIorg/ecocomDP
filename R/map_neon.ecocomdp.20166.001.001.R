@@ -48,7 +48,13 @@ map_neon.ecocomdp.20166.001.001 <- function(
   
   
   if("alg_biomass" %in% names(all_tabs_in)){
-    biomass_in <- all_tabs_in$alg_biomass
+    
+    # biomass_in <- all_tabs_in$alg_biomass
+    
+    alg_biomass <- tibble::as_tibble(all_tabs_in$alg_biomass) %>%
+      dplyr::mutate(estPerBottleSampleVolume = preservativeVolume + labSampleVolume) %>%
+      dplyr::filter(analysisType == 'taxonomy')
+    
   }else{
     # if no data, return an empty list
     warning(paste0(
@@ -72,11 +78,22 @@ map_neon.ecocomdp.20166.001.001 <- function(
   # algal counts returned by the lab. Thus we"re joining tables here by sampleID, 
   # but only keeping sampleID, parentSampleID, and fieldSampleVolume from the biomass table.
   
-  alg_tax_biomass <- biomass_in %>%
-    dplyr::select(parentSampleID, sampleID, fieldSampleVolume) %>%
+  alg_tax_biomass <- alg_biomass %>%
+    dplyr::select(parentSampleID, sampleID, fieldSampleVolume, estPerBottleSampleVolume) %>%
     dplyr::distinct() %>%
     dplyr::left_join(tax_long_in, by = "sampleID") %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(perBottleSampleVolume =
+                    dplyr::case_when(
+                      is.na(perBottleSampleVolume) ~ estPerBottleSampleVolume,
+                      perBottleSampleVolume == 0 ~ estPerBottleSampleVolume,
+                      perBottleSampleVolume > 0 ~ perBottleSampleVolume)) %>%
     dplyr::distinct()
+  # alg_tax_biomass <- biomass_in %>%
+  #   dplyr::select(parentSampleID, sampleID, fieldSampleVolume) %>%
+  #   dplyr::distinct() %>%
+  #   dplyr::left_join(tax_long_in, by = "sampleID") %>%
+  #   dplyr::distinct()
 
   
   
@@ -102,7 +119,8 @@ map_neon.ecocomdp.20166.001.001 <- function(
         TRUE ~ (algalParameterValue / perBottleSampleVolume) * (fieldSampleVolume / (benthicArea * 10000))),
       cell_density_standardized_unit = dplyr::case_when(
         algalSampleType %in% c("phytoplankton","seston") ~ "cells/mL",
-        TRUE ~ "cells/cm2"))
+        TRUE ~ "cells/cm2")) %>%
+    dplyr::filter(sampleCondition == "Condition OK")
 
   
   
@@ -194,125 +212,27 @@ map_neon.ecocomdp.20166.001.001 <- function(
   
   
   
-  # ecocomDP location table
+  # location ----
+  # get relevant location info from the data, use neon helper functions 
+  # to make location and ancillary location tables
   
-  # get relevant location info from the data
   table_location_raw <- table_observation_raw %>%
     dplyr::select(domainID, siteID, namedLocation, decimalLatitude, decimalLongitude, elevation) %>%
     dplyr::distinct() 
   
-  # make ecocomDP format location table, identifying hierarchical spatial structure
-  table_location <- suppressMessages(
-    ecocomDP::make_location(
-      table_observation_raw,
-      cols = c("domainID", "siteID", "namedLocation")))
-
-  # code to handle updated make_location (updated 18 Sep 2020 in make_location branch)
-  if(class(table_location) == "list" &&
-     "location" %in% names(table_location)){
-    
-    table_location <- table_location$location %>%
-      dplyr::rowwise() %>%
-      dplyr::mutate(
-        location_name = location_name %>% 
-          strsplit("=") %>%
-          unlist() %>%
-          dplyr::last()) 
-  }
+  table_location <- ecocomDP::make_neon_location_table(
+    loc_info = table_location_raw,
+    loc_col_names = c("domainID", "siteID", "namedLocation"))
   
-  # populate latitude
-  table_location$latitude <- table_location_raw$decimalLatitude[match(table_location$location_name, table_location_raw$namedLocation)] 
-  
-  #populate longitude
-  table_location$longitude <- table_location_raw$decimalLongitude[match(table_location$location_name, table_location_raw$namedLocation)] 
-  
-  # populate elevation
-  table_location$elevation <- table_location_raw$elevation[match(table_location$location_name, table_location_raw$namedLocation)] 
+  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+    loc_info = table_location_raw,
+    loc_col_names = c("domainID", "siteID", "namedLocation"))
   
   
-  
-  # replace parent_id with parent_name
-  table_location$parent_location_id <- table_location$location_name[
-    match(table_location$parent_location_id, table_location$location_id)]
-  
-  # replace loc_id with meaningful names
-  table_location$location_id <- table_location$location_name
-  
-  # get neon location info lookup tables
-  neon_domain_list <- neon_site_list %>%
-    dplyr::select(`Domain Number`, `Domain Name`) %>%
-    dplyr::distinct()
-  
-  neon_site_info_list <- neon_site_list %>%
-    dplyr::select(-c(`Domain Number`,`Domain Name`)) %>%
-    dplyr::distinct()
-  
-  
-  
-  # update location_names and lat longs where possible
-  for(location_id in table_location$location_id){
-    if(location_id %in% neon_domain_list$`Domain Number`){
-      table_location$location_name[table_location$location_id == location_id] <- 
-        neon_domain_list$`Domain Name`[neon_domain_list$`Domain Number`==location_id]
-    }else if(location_id %in% neon_site_info_list$`Site ID`){
-      table_location$location_name[table_location$location_id == location_id] <- 
-        neon_site_info_list$`Site Name`[neon_site_info_list$`Site ID`==location_id]
-      
-      table_location$latitude[table_location$location_id == location_id] <- 
-        neon_site_info_list$Latitude[neon_site_info_list$`Site ID`==location_id]
-      
-      table_location$longitude[table_location$location_id == location_id] <- 
-        neon_site_info_list$Longitude[neon_site_info_list$`Site ID`==location_id]
-      
-    }
-  }
-  
-  
-
-  
-  
-  # make ancillary table that indicates the location type 
-  table_location_ancillary <- table_location_raw %>% 
-    dplyr::select(domainID, siteID, namedLocation) %>%
-    tidyr::pivot_longer(
-      cols = everything(),
-      names_to = "value",
-      values_to = "location_id") %>%
-    dplyr::mutate(
-      variable_name = "NEON location type",
-      location_ancillary_id = paste0("NEON_location_type_",location_id)) %>%
-    dplyr::distinct()
   
   
   # # Taxon table using available data
-  # 
-  # # NOTE: we could use the NEON taxon tables API as an alternative to populate
-  # # the taxon table. We could make it more standardized, but it might be 
-  # # more resource intensive
-  # table_taxon_raw <- tax_long_in %>%
-  #   dplyr::select(acceptedTaxonID, taxonRank, scientificName, identificationReferences) %>%
-  #   dplyr::distinct() 
-  
-  # # make ecocomDP format taxon table using ecocomDP function
-  # table_taxon <- ecocomDP::make_taxon(
-  #     taxa = table_taxon_raw$scientificName,
-  #     taxon.id = table_taxon_raw$acceptedTaxonID,
-  #     name.type = "scientific",
-  #     data.sources = 3)
-  
-  # # alternative for making ecocomDP format taxon table 
-  # table_taxon <- table_taxon_raw %>%
-  #   dplyr::rename(
-  #     taxon_id = acceptedTaxonID,
-  #     taxon_rank = taxonRank,
-  #     taxon_name = scientificName,
-  #     authority_taxon_id = identificationReferences
-  #   ) %>%
-  #   dplyr::mutate(
-  #     authority_system = "NEON_external_lab",
-  #   )
-  
-  
+ 
   table_taxon <- tax_long_in %>%
     
     # keep only the coluns listed below
@@ -334,11 +254,10 @@ map_neon.ecocomdp.20166.001.001 <- function(
                   taxon_name = scientificName,
                   authority_system = identificationReferences) %>%
     dplyr::select(taxon_id, taxon_rank, taxon_name, authority_system) %>%
-    
+    # concatenate different references for same taxonID
     dplyr::group_by(taxon_id, taxon_rank, taxon_name) %>%
     dplyr::summarize(
-      authority_system = paste(authority_system, collapse = " | ")
-    )
+      authority_system = paste(authority_system, collapse = "; "))
   
   
   # make dataset_summary -- required table
