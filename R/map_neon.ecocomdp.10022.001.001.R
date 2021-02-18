@@ -16,7 +16,12 @@ map_neon.ecocomdp.10022.001.001 <- function(
   neon.data.product.id = "DP1.10022.001",
   ...){
   
-  # author: Kari Norman
+  # author: Kari Norman 
+  # updated by: Eric Sokol
+  
+  #NEON target taxon group is ALGAE
+  neon_method_id <- "neon.ecocomdp.10022.001.001"
+  
   
   # download data
   beetles_raw <- neonUtilities::loadByProduct(dpID = neon.data.product.id,
@@ -180,7 +185,7 @@ map_neon.ecocomdp.10022.001.001 <- function(
     #create observation_id column
     # dplyr::group_by(sampleID) %>%
     # dplyr::mutate(observation_id = paste(sampleID, row_number(), sep = ".")) %>%
-    dplyr::mutate(package_id = paste0(neon.data.product.id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+    dplyr::mutate(package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
     # tidyr::spread(variable_name,value) %>% 
     dplyr:: select(observation_id = uid, 
                    event_id = sampleID, 

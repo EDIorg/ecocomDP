@@ -41,6 +41,8 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
+my_result_read_data[[1]]$tables$dataset_summary
+
 View(my_result_read_data[[1]]$tables$observation)
 
 # check for repeated observations -- Colin's validation seems to be getting false positives here
@@ -91,6 +93,8 @@ tab_flat <- my_result_read_data[[1]]$tables %>%
   as.data.frame()
 
 View(tab_flat)
+
+my_result_read_data[[1]]$tables$dataset_summary
 
 # prob_rec <- observation_ancillary_long %>% dplyr::filter(event_id == "SUGG.20170710.PHYTOPLANKTON.2")
 
