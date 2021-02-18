@@ -88,13 +88,28 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
+my_result_read_data[[1]]$tables$dataset_summary
+
+View(my_result_read_data[[1]]$tables$observation)
+
+# check for repeated observations -- Colin's validation seems to be getting false positives here
+obs_tab <- my_result_read_data[[1]]$tables$observation
+obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))) %>% 
+  summarize(
+    n_values = length(value),
+    values = paste(value, collapse = "|"),
+    observation_ids = paste(observation_id, collapse = "|")) %>%
+  dplyr::filter(n_values > 1)
+
+
 tab_flat <- my_result_read_data[[1]]$tables %>% 
   ecocomDP::flatten_ecocomDP() %>% 
   as.data.frame()
 
 View(tab_flat)
 
-my_result_read_data[[1]]$tables$dataset_summary
+my_result_read_data[[1]]$validation_issues
+
 
 # prob_rec <- observation_ancillary_long %>% dplyr::filter(event_id == "SUGG.20170710.PHYTOPLANKTON.2")
 
