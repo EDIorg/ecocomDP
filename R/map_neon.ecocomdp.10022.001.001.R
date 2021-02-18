@@ -236,103 +236,28 @@ map_neon.ecocomdp.10022.001.001 <- function(
   
   
   # location ----
-  # get relevant location info from the data
+  # get relevant location info from the data, use neon helper functions 
+  # to make location and ancillary location tables
+  
   table_location_raw <- beetles_raw$bet_fielddata %>%
-    dplyr::select(domainID, siteID, namedLocation, decimalLatitude, decimalLongitude, elevation,
+    dplyr::select(domainID, siteID, namedLocation, 
+                  decimalLatitude, decimalLongitude, elevation,
                   plotType, nlcdClass, geodeticDatum) %>%
     dplyr::distinct() 
   
-  table_location <- suppressMessages(
-    beetles_raw$bet_fielddata %>% 
-      ecocomDP::make_location(cols = c("domainID", "siteID", "namedLocation")))
+  table_location <- ecocomDP::make_neon_location_table(
+    loc_info = table_location_raw,
+    loc_col_names = c("domainID", "siteID", "namedLocation"))
   
-  
-  # code to handle updated make_location (updated 18 Sep 2020 in make_location branch)
-  if(class(table_location) == "list" &&
-     "location" %in% names(table_location)){
-    
-    table_location <- table_location$location %>%
-      dplyr::rowwise() %>%
-      dplyr::mutate(
-        location_name = location_name %>% 
-          strsplit("=") %>%
-          unlist() %>%
-          dplyr::last()) 
-  }
-  
-  
-  # populate latitude
-  table_location$latitude <- table_location_raw$decimalLatitude[match(table_location$location_name, table_location_raw$namedLocation)] 
-  
-  #populate longitude
-  table_location$longitude <- table_location_raw$decimalLongitude[match(table_location$location_name, table_location_raw$namedLocation)] 
-  
-  # populate elevation
-  table_location$elevation <- table_location_raw$elevation[match(table_location$location_name, table_location_raw$namedLocation)] 
-  
-  # replace parent_id with parent_name
-  table_location$parent_location_id <- table_location$location_name[
-    match(table_location$parent_location_id, table_location$location_id)]
-  
-  # replace loc_id with meaningful names
-  table_location$location_id <- table_location$location_name
-  
-  # get neon location info lookup tables
-  neon_domain_list <- neon_site_list %>%
-    dplyr::select(`Domain Number`, `Domain Name`) %>%
-    dplyr::distinct()
-  
-  neon_site_info_list <- neon_site_list %>%
-    dplyr::select(-c(`Domain Number`,`Domain Name`)) %>%
-    dplyr::distinct()
-  
-  
-  # update location_names and lat longs where possible
-  for(location_id in table_location$location_id){
-    if(location_id %in% neon_domain_list$`Domain Number`){
-      table_location$location_name[table_location$location_id == location_id] <- 
-        neon_domain_list$`Domain Name`[neon_domain_list$`Domain Number`==location_id]
-    }else if(location_id %in% neon_site_info_list$`Site ID`){
-      table_location$location_name[table_location$location_id == location_id] <- 
-        neon_site_info_list$`Site Name`[neon_site_info_list$`Site ID`==location_id]
-      
-      table_location$latitude[table_location$location_id == location_id] <- 
-        neon_site_info_list$Latitude[neon_site_info_list$`Site ID`==location_id]
-      
-      table_location$longitude[table_location$location_id == location_id] <- 
-        neon_site_info_list$Longitude[neon_site_info_list$`Site ID`==location_id]
-      
-    }
-  }
-  
-  
-  # make ancillary table that indicates the location type 
-  table_location_ancillary <- table_location_raw %>% 
-    dplyr::select(domainID, siteID, namedLocation) %>%
-    tidyr::pivot_longer(
-      cols = everything(),
-      names_to = "value",
-      values_to = "location_id") %>%
-    dplyr::mutate(
-      variable_name = "NEON location type",
-      location_ancillary_id = paste0("NEON_location_type_",location_id)) %>%
-    dplyr::distinct()
-  
-  table_location_ancillary <- table_location_raw %>% 
-    dplyr::select(namedLocation,
-                  plotType, nlcdClass, geodeticDatum) %>%
-    tidyr::pivot_longer(
-      cols = -namedLocation,
-      names_to = "variable_name",
-      values_to = "value") %>%
-    dplyr::rename(location_id = namedLocation) %>%
-    dplyr::mutate(
-      location_ancillary_id = paste0(variable_name, "_", location_id)) %>%
-    dplyr::distinct() %>%
-    dplyr::bind_rows(., table_location_ancillary)
+  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+    loc_info = table_location_raw,
+    loc_col_names = c("domainID", "siteID", "namedLocation"),
+    ancillary_var_names <- c("namedLocation",
+                             "plotType", "nlcdClass", "geodeticDatum"))
   
   
   
+  # taxonomy ----
   # create a taxon table, which describes each taxonID that appears in the data set
   # start with inv_taxonomyProcessed
   
@@ -357,8 +282,10 @@ map_neon.ecocomdp.10022.001.001 <- function(
   
   
   
-
+  
+  # data summary ----
   # make dataset_summary -- required table
+  
   years_in_data <- table_observation$observation_datetime %>% lubridate::year()
   years_in_data %>% ordered()
   

@@ -4,6 +4,13 @@
 # my_search_result$title[1]
 # my_search_result$source_id[1]
 
+library(tidyverse)
+
+
+
+my_search_result <- ecocomDP::search_data("NEON")
+View(my_search_result)
+
 
 
 ###############################################
@@ -55,9 +62,6 @@ View(tab_flat)
 my_result_read_data[[1]]$validation_issues
 
 
-
-my_search_result <- ecocomDP::search_data("NEON")
-View(my_search_result)
 
 ###############################################
 ###############################################
