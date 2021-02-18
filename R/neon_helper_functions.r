@@ -112,3 +112,78 @@ make_neon_ancillary_location_table <- function(loc_info, loc_col_names, ancillar
   
   return(table_location_ancillary)
 }
+
+
+#####################################################################################
+# helper function to make neon ancillary observation tables
+#########################################
+
+# 
+# ancillary_var_names <- c("neon_sample_id",
+#      "neon_event_id",
+#      "parentSampleID",
+#      "sampleCondition",
+#      "laboratoryName",
+#      "perBottleSampleVolume",
+#      "aquaticSiteType",
+#      "habitatType",
+#      "algalSampleType",
+#      "samplerType",
+#      "benthicArea",
+#      "samplingProtocolVersion",
+#      "phytoDepth1","phytoDepth2","phytoDepth3",
+#      "substratumSizeClass")
+# 
+# obs_wide <- table_observation_ecocomDP
+
+
+make_neon_ancillary_observation_table <- function(
+  obs_wide, #must have "event_id" field
+  ancillary_var_names = NULL){
+  
+  # convert cols that are not char or numeric to char
+  obs_wide <- as.data.frame(obs_wide)
+  cols_2_change <- which(
+    !lapply(X=as.list(obs_wide), FUN=class) %in% c("character", "numeric"))
+  if(length(cols_2_change)>0){
+    for(i in cols_2_change){
+      obs_wide[,i] <- as.character(obs_wide[,i])
+    }
+  }
+  
+  col_names_to_keep <- c(
+    "event_id", ancillary_var_names)
+   
+  
+  table_observation_ancillary <- obs_wide[
+    ,names(obs_wide) %in% col_names_to_keep
+  ] %>%
+    dplyr::distinct() 
+  
+  table_observation_ancillary <- table_observation_ancillary %>% 
+    dplyr::mutate_all(as.character) %>%
+    tidyr::pivot_longer(
+      cols = -event_id,
+      names_to = "variable_name", 
+      values_to = "value") %>% 
+    dplyr::mutate(
+      observation_ancillary_id = paste0(variable_name, "_for_", event_id)) %>%
+    dplyr::filter(!is.na(value))
+  
+  # table_observation_ancillary$observation_ancillary_id <- 
+  #   paste0("obsan_", seq(nrow(table_observation_ancillary)))
+  
+  table_observation_ancillary$unit <- NA_character_
+  table_observation_ancillary <- dplyr::select(
+    table_observation_ancillary,
+    observation_ancillary_id,
+    event_id,
+    variable_name,
+    value,
+    unit) %>% 
+    dplyr::distinct()
+  
+  return(table_observation_ancillary)
+}
+
+

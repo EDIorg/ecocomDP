@@ -159,58 +159,28 @@ map_neon.ecocomdp.20166.001.001 <- function(
     dplyr::distinct()
   
   
-  
+
   # make observation ancillary table. First convert POSIXct POSIXt classed
   # variables to character, otherwise gathering will produce a warning.
-  table_observation_ecocomDP$identifiedDate <- as.character(
-    table_observation_ecocomDP$identifiedDate)
   
-  col_names_to_keep <- c(
-    "event_id",
-    "neon_sample_id",
-    "neon_event_id",
-    "parentSampleID",
-    "sampleCondition",
-    "laboratoryName",
-    "perBottleSampleVolume",
-    "aquaticSiteType",
-    "habitatType",
-    "algalSampleType",
-    "samplerType",
-    "benthicArea",
-    "samplingProtocolVersion",
-    "phytoDepth1","phytoDepth2","phytoDepth3",
-    "substratumSizeClass")
+  table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
+    obs_wide = table_observation_ecocomDP,
+    ancillary_var_names <- c("neon_sample_id",
+                             "neon_event_id",
+                             "parentSampleID",
+                             "sampleCondition",
+                             "laboratoryName",
+                             "perBottleSampleVolume",
+                             "aquaticSiteType",
+                             "habitatType",
+                             "algalSampleType",
+                             "samplerType",
+                             "benthicArea",
+                             "samplingProtocolVersion",
+                             "phytoDepth1","phytoDepth2","phytoDepth3",
+                             "substratumSizeClass"))
   
-  table_observation_ancillary <- table_observation_ecocomDP[
-    ,names(table_observation_ecocomDP) %in% col_names_to_keep
-  ] %>%
-    dplyr::distinct() 
-  
-  table_observation_ancillary <- table_observation_ancillary %>% 
-    dplyr::mutate_all(as.character) %>%
-    tidyr::pivot_longer(
-      cols = -event_id,
-      names_to = "variable_name", 
-      values_to = "value") %>% 
-    dplyr::mutate(
-      observation_ancillary_id = paste0(variable_name, "_for_", event_id)) %>%
-    dplyr::filter(!is.na(value))
-  
-  # table_observation_ancillary$observation_ancillary_id <- 
-  #   paste0("obsan_", seq(nrow(table_observation_ancillary)))
-  
-  table_observation_ancillary$unit <- NA_character_
-  table_observation_ancillary <- dplyr::select(
-    table_observation_ancillary,
-    observation_ancillary_id,
-    event_id,
-    variable_name,
-    value,
-    unit) %>% 
-    dplyr::distinct()
-  
-  
+
   
   # location ----
   # get relevant location info from the data, use neon helper functions 

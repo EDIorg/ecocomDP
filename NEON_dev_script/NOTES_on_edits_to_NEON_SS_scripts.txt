@@ -1,5 +1,6 @@
 Note for Colin -- composite key check in validation function doesn't seem to work correctly? 
 
+##################################################################
 BEETLES -- map_neon.ecocomdp.10022.001.001
 	updates to neonDivData code
 	- 1. added -- uid from bet_sorting as the observation_id 
@@ -22,7 +23,12 @@ BEETLES -- map_neon.ecocomdp.10022.001.001
 						DIAGNOSIS -- family not returned for the "pooled" sample record. Removing family since it can be recovered from NEON taxon tables anyway. 
 					- ABBY_028.E.20190625.OMUDEJ.01 - 
 
+##################################################################
+ALGAE -- map_neon.ecocomdp.20166.001.001
+	updates to what was in neonDivData
+	
+	problems
 
 
 		
-		
+##################################################################
