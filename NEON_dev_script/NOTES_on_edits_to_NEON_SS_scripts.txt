@@ -2,12 +2,6 @@ Note for Colin -- composite key check in validation function doesn't seem to wor
 
 ##################################################################
 BEETLES -- map_neon.ecocomdp.10022.001.001
-	updates to neonDivData code
-	- 1. added -- uid from bet_sorting as the observation_id 
-	- 2. added -- filter bet_fielddata to only include sampleCollected == "Y"
-	- 3. added -- filter out records where subsampleID == NA
-	- 4. added -- concatenate different references for same taxonID so taxon_id is unique for each record in taxon table
-		
 	problems 
 		taxon table
 			- taxon_id's with multiple records in taxon table, different "authority_system" entries -- e.g., OMUDEJ -- fixed in update #4 above
@@ -23,12 +17,26 @@ BEETLES -- map_neon.ecocomdp.10022.001.001
 						DIAGNOSIS -- family not returned for the "pooled" sample record. Removing family since it can be recovered from NEON taxon tables anyway. 
 					- ABBY_028.E.20190625.OMUDEJ.01 - 
 
+	updates to neonDivData code
+		- 1. added -- uid from bet_sorting as the observation_id 
+		- 2. added -- filter bet_fielddata to only include sampleCollected == "Y"
+		- 3. added -- filter out records where subsampleID == NA
+		- 4. added -- concatenate different references for same taxonID so taxon_id is unique for each record in taxon table
+		
+
 ##################################################################
 ALGAE -- map_neon.ecocomdp.20166.001.001
-	updates to what was in neonDivData
-	
-	problems
+	problems -- no problems identified.
 
-
+	updates to what was in neonDivData -- just updates to reformat data for ecocomDP
+		
 		
 ##################################################################
+MACROINVERTEBRATE -- map_neon.ecocomdp.20120.001.001
+	problems
+		- counts not standardized to area (or unit effort), see fix #1
+		- duplicate records in fielddata table, see fix #2
+		
+	updates
+		- 1. standardized counts to density per area sampled. 
+		- 2. added code to select first uid when multiple uids are associated with a given sampleID in the fielddata table. 

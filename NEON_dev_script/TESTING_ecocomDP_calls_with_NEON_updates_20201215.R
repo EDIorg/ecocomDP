@@ -89,6 +89,11 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$tables$dataset_summary
+my_result_read_data[[1]]$tables$location %>% as.data.frame()
+my_result_read_data[[1]]$tables$location_ancillary %>% as.data.frame() %>% head()
+my_result_read_data[[1]]$tables$taxon %>% as.data.frame() %>% head()
+my_result_read_data[[1]]$tables$observation %>% as.data.frame() %>% head()
+my_result_read_data[[1]]$tables$observation_ancillary %>% as.data.frame() %>% head()
 
 View(my_result_read_data[[1]]$tables$observation)
 
@@ -136,12 +141,35 @@ my_result$dataset_summary
 
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.20120.001.001",
-  site = c('COMO','SUGG'), 
+  site= c('COMO','LECO','SUGG'), 
   startdate = "2017-06",
   enddate = "2019-09",
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
+my_result_read_data[[1]]$validation_issues
+
+names(my_result_read_data[[1]]$tables)
+
+my_result_read_data[[1]]$tables$dataset_summary
+my_result_read_data[[1]]$tables$location %>% as.data.frame()
+my_result_read_data[[1]]$tables$location_ancillary %>% as.data.frame() %>% head()
+my_result_read_data[[1]]$tables$taxon %>% as.data.frame() %>% head()
+my_result_read_data[[1]]$tables$observation %>% as.data.frame() %>% head()
+my_result_read_data[[1]]$tables$observation_ancillary %>% as.data.frame() %>% head()
+
+View(my_result_read_data[[1]]$tables$observation)
+
+# check for repeated observations -- Colin's validation seems to be getting false positives here
+obs_tab <- my_result_read_data[[1]]$tables$observation
+obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))) %>% 
+  summarize(
+    n_values = length(value),
+    values = paste(value, collapse = "|"),
+    observation_ids = paste(observation_id, collapse = "|")) %>%
+  dplyr::filter(n_values > 1)
+
+
 tab_flat <- my_result_read_data[[1]]$tables %>% 
   ecocomDP::flatten_ecocomDP() %>% 
   as.data.frame()
@@ -151,39 +179,7 @@ View(tab_flat)
 obs_anci <- my_result_read_data[[1]]$tables$observation_ancillary
 obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
 
-###############################################
-###############################################
 
-# BEETLE
-
-rm(list=ls())
-
-my_result <- map_neon.ecocomdp.10022.001.001(
-  site= c("ABBY","BARR"), 
-  startdate = "2019-06",
-  enddate = "2019-09",
-  token = Sys.getenv("NEON_TOKEN"),
-  check.size = FALSE)
-
-my_result$dataset_summary
-
-
-my_result_read_data <- read_data(
-  id = "neon.ecocomdp.10022.001.001",
-  site = c("ABBY","BARR"), 
-  startdate = "2019-06",
-  enddate = "2019-09",
-  token = Sys.getenv("NEON_TOKEN"),
-  check.size = FALSE)
-
-tab_flat <- my_result_read_data[[1]]$tables %>% 
-  ecocomDP::flatten_ecocomDP() %>% 
-  as.data.frame()
-
-View(tab_flat)
-
-obs_anci <- my_result_read_data[[1]]$tables$observation_ancillary
-obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
 
 ###############################################
 ###############################################
