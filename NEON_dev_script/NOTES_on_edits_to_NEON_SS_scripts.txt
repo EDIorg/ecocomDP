@@ -1,5 +1,9 @@
 Note for Colin -- composite key check in validation function doesn't seem to work correctly? 
 
+General notes
+	- Should I pull taxon tables for each taxon group instead of using ID refs in data? Did this for birds, but other groups might be too cumbersom
+	- make sure "release" is in obs ancillary table for each mapping function. 
+
 ##################################################################
 BEETLES -- map_neon.ecocomdp.10022.001.001
 	problems 
@@ -52,3 +56,14 @@ MOSQUITO -- map_neon.ecocomdp.10043.001.001
 	updates
 		- 1. value = (individualCount/subsampleWeight) * totalWeight / trapHours
              unit = "count per trap hour")
+			 
+##################################################################
+BIRD -- map_neon.ecocomdp.10003.001.001
+	problems
+		- just reporting raw "clusterSize" as "count". Is this correct? Should we aggregate in anyway? Currently, in ecocomDP format, I've set event_id = observation_id so that all the ancillary obs information can map appropriately. We could aggregate/add counts for each taxonID, and then concatenate the ancillary information. Not sure if this would be appropriate or useful. 
+		- could use a taxon ancillary table, but not implemented yet. 
+	updates
+		- 1. pull taxon table from neonUtilities -- the table isn't that big, so just pull it and get nameAccordintTo for each taxonID. 
+		- 2. 
+
+

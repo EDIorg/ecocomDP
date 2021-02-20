@@ -240,3 +240,55 @@ View(tab_flat)
 
 obs_anci <- my_result_read_data[[1]]$tables$observation_ancillary
 obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
+
+
+###############################################
+###############################################
+
+# BIRD
+
+rm(list=ls())
+
+# currently fails on "remarks" column
+my_result <- map_neon.ecocomdp.10003.001.001(
+  site= c("NIWO","DSNY"), 
+  startdate = "2016-01",
+  enddate = "2017-11",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+my_result$dataset_summary
+
+
+my_result_read_data <- read_data(
+  id = "neon.ecocomdp.10003.001.001",
+  site= c("NIWO","DSNY"), 
+  startdate = "2016-01",
+  enddate = "2017-11",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+my_result_read_data[[1]]$validation_issues
+
+names(my_result_read_data[[1]]$tables)
+
+# check for repeated observations -- Colin's validation seems to be getting false positives here
+obs_tab <- my_result_read_data[[1]]$tables$observation
+
+
+obs_summary_tab <- obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))) %>% 
+  summarize(
+    n_values = length(value),
+    values = paste(value, collapse = "|"),
+    observation_ids = paste(observation_id, collapse = "|")) %>%
+  dplyr::filter(n_values > 1)
+
+
+tab_flat <- my_result_read_data[[1]]$tables %>% 
+  ecocomDP::flatten_ecocomDP() %>% 
+  as.data.frame()
+
+View(tab_flat)
+
+obs_anci <- my_result_read_data[[1]]$tables$observation_ancillary
+obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
