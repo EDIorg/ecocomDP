@@ -55,19 +55,15 @@ map_neon.ecocomdp.10043.001.001 <- function(
     dplyr::distinct()
   
   
-  ### problem here
   mos_sorting <- mos_allTabs$mos_sorting %>% 
     dplyr::mutate (
-      
       setDate = as.character(setDate),
       collectDate = as.character(collectDate), 
       sortDate = as.character(sortDate)) %>% 
-    
     dplyr::mutate_all(list(~dplyr::na_if(.,""))) %>% 
     tidyr::drop_na(dplyr::all_of(cols_oi_sort)) %>%
     dplyr::mutate_if(is.factor, as.character) %>% 
     dplyr::distinct()
-  
   
   
   mos_archivepooling <- mos_allTabs$mos_archivepooling %>% 
@@ -121,7 +117,8 @@ map_neon.ecocomdp.10043.001.001 <- function(
   # Add trapping info to sorting table 
   # Note - 59 trapping records have no associated sorting record and don't come through the left_join (even though targetTaxaPresent was set to Y or U)
   mos_dat <- mos_sorting %>%
-    dplyr::select(-c(uid,collectDate, domainID, namedLocation, plotID, setDate, siteID)) %>%
+    dplyr::select(-c(uid,collectDate, domainID, namedLocation, plotID, 
+                     setDate, siteID)) %>%
     dplyr::left_join(dplyr::select(mos_trapping,-uid),by = 'sampleID') 
   
   if(!"remarks" %in% names(mos_dat)) mos_dat[,"remarks"] <- NA_character_

@@ -40,3 +40,15 @@ MACROINVERTEBRATE -- map_neon.ecocomdp.20120.001.001
 	updates
 		- 1. standardized counts to density per area sampled. 
 		- 2. added code to select first uid when multiple uids are associated with a given sampleID in the fielddata table. 
+		
+		
+##################################################################
+MOSQUITO -- map_neon.ecocomdp.10043.001.001
+	problems
+		- estimated_totIndividuals not standardized to traphours, currently using:
+		round(individualCount * (totalWeight/subsampleWeight)
+		see fix #1
+		
+	updates
+		- 1. value = (individualCount/subsampleWeight) * totalWeight / trapHours
+             unit = "count per trap hour")
