@@ -64,6 +64,8 @@ BIRD -- map_neon.ecocomdp.10003.001.001
 		- could use a taxon ancillary table, but not implemented yet. 
 	updates
 		- 1. pull taxon table from neonUtilities -- the table isn't that big, so just pull it and get nameAccordintTo for each taxonID. 
-		- 2. 
 
+##################################################################
+FISH -- map_neon.ecocomdp.20107.001.001
+	problems
 

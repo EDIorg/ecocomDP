@@ -292,3 +292,30 @@ View(tab_flat)
 
 obs_anci <- my_result_read_data[[1]]$tables$observation_ancillary
 obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
+
+###############################################
+###############################################
+
+# FISH
+
+rm(list=ls())
+
+my_result <- map_neon.ecocomdp.20107.001.001(
+  site = c(c('COMO','LECO')),
+  startdate = "2016-01",
+  enddate = "2018-11",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+my_result$dataset_summary
+
+
+my_result_read_data <- read_data(
+  id = "neon.ecocomdp.20107.001.001",
+  site = c(c('COMO','LECO')),
+  startdate = "2016-01",
+  enddate = "2018-11",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+my_result_read_data[[1]]$validation_issues

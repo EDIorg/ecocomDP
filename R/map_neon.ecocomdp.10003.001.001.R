@@ -17,7 +17,7 @@ map_neon.ecocomdp.10003.001.001 <- function(
   ...){
   # Authors: Daijiang Li, Eric Sokol
   
-  #NEON target taxon group is MOSQUITO
+  #NEON target taxon group is BIRD
   neon_method_id <- "neon.ecocomdp.10003.001.001"
   
   
@@ -139,6 +139,7 @@ map_neon.ecocomdp.10003.001.001 <- function(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
       "event_id",
+      "neon_event_id",
       "pointCountMinute",
       "targetTaxaPresent",
       "observerDistance",
@@ -158,7 +159,7 @@ map_neon.ecocomdp.10003.001.001 <- function(
   # make dataset_summary -- required table
   
   years_in_data <- table_observation$observation_datetime %>% lubridate::year()
-  years_in_data %>% ordered()
+  # years_in_data %>% ordered()
   
   table_dataset_summary <- data.frame(
     package_id = table_observation$package_id[1],
