@@ -96,6 +96,10 @@ map_neon_data_to_ecocomDP <- function(
     #FISH v01
     ecocomDP_tables <- ecocomDP::map_neon.ecocomdp.20107.001.001(...)
     
+  }else if(data.product.id == "neon.ecocomdp.10058.001.001"){
+    #PLANT v01
+    ecocomDP_tables <- ecocomDP::map_neon.ecocomdp.10058.001.001(...)
+    
   }else{
     message(paste0("WARNING: ecocomDP mapping not currently available for ",data.product.id))
     ecocomDP_tables <- list(

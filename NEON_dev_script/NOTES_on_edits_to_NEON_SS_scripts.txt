@@ -4,6 +4,7 @@ General notes
 	- Should I pull taxon tables for each taxon group instead of using ID refs in data? Did this for birds, but other groups might be too cumbersom
 	- make sure "release" is in obs ancillary table for each mapping function.
 	- using neonUtilities to get taxon tables only returns nameAccordingToID, not nameAccordintTo. Will need ot update that in the future and/or make a lookup function by taxon -- so we don't need to download the entire table. 
+	- when making the ancillary observation table, I keep finding that it is most useful to map observation_id to event_id to make ancillary observations map correctly. 
 
 --------------------------------------------------------
  taxon	 			var name 		units
@@ -14,6 +15,7 @@ General notes
  MOSQUITO			abundance		count per trap hour
  BIRD				cluster size	count of individuals
  FISH				abundance		catch per unit effort
+ HERPTILES			abundance		count per trap day
  
  
  
@@ -84,5 +86,13 @@ FISH -- map_neon.ecocomdp.20107.001.001
 	
 ##################################################################
 HERPETOLOGY (bycatch in BEETLES) -- neon.ecocomdp.10022.001.002
+	problems
+		- bycatch not standardized to trap days?, see #1
+		
+	updates
+		- 1. standardize counts by trapdays
+		- 2. download HERPETOLOGY taxon table to populate taxon table for ecocomDP
 
+##################################################################
+PLANT -- map_neon.ecocomdp.10058.001.001
 
