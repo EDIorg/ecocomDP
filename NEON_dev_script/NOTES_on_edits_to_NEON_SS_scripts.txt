@@ -2,8 +2,21 @@ Note for Colin -- composite key check in validation function doesn't seem to wor
 
 General notes
 	- Should I pull taxon tables for each taxon group instead of using ID refs in data? Did this for birds, but other groups might be too cumbersom
-	- make sure "release" is in obs ancillary table for each mapping function. 
+	- make sure "release" is in obs ancillary table for each mapping function.
+	- using neonUtilities to get taxon tables only returns nameAccordingToID, not nameAccordintTo. Will need ot update that in the future and/or make a lookup function by taxon -- so we don't need to download the entire table. 
 
+--------------------------------------------------------
+ taxon	 			var name 		units
+-------------------------------------------------------
+ BEETLES			abundance		count per trap day
+ ALGAE				cell density	cells/cm2 OR cells/mL
+ MACROINVERTEBRATE	density			count per square meter
+ MOSQUITO			abundance		count per trap hour
+ BIRD				cluster size	count of individuals
+ FISH				abundance		catch per unit effort
+ 
+ 
+ 
 ##################################################################
 BEETLES -- map_neon.ecocomdp.10022.001.001
 	problems 
@@ -68,4 +81,8 @@ BIRD -- map_neon.ecocomdp.10003.001.001
 ##################################################################
 FISH -- map_neon.ecocomdp.20107.001.001
 	problems
+	
+##################################################################
+HERPETOLOGY (bycatch in BEETLES) -- neon.ecocomdp.10022.001.002
+
 

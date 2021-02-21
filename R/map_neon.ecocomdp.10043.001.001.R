@@ -266,7 +266,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
                   individualCount,
                   subsampleWeight) %>% 
     
-    dplyr::mutate(variable_name = "individuals",
+    dplyr::mutate(variable_name = "abundance",
                   value = (individualCount/subsampleWeight) * totalWeight / trapHours,
                   unit = "count per trap hour") %>% 
     

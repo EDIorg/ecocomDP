@@ -312,7 +312,7 @@ map_neon.ecocomdp.20107.001.001 <- function(
     dplyr::mutate(
       observation_id = paste0("obs_",1:nrow(.)), 
       event_id = eventID,
-      variable_name = "catch_per_effort",
+      variable_name = "abundance",
       unit = "catch per unit effort") 
   
   

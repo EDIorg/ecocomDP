@@ -10,4 +10,3 @@
 "DP1.10003.001"	"Breeding landbird point counts"	"BIRD"	"brd_countdata"
 "DP1.10093.001"	"Ticks sampled using drag cloths"	"TICK"	"tck_taxonomyProcessed"
 "DP1.20219.001"	"Zooplankton collection"	"MACROINVERTEBRATE"	"zoo_taxonomyProcessed"
-"DP1.10092.001"	"Tick-borne pathogen status"	"NA"	"tck_pathogen"

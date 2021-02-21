@@ -116,7 +116,7 @@ map_neon.ecocomdp.10003.001.001 <- function(
       value = clusterSize) %>%
     dplyr::mutate(
       event_id = observation_id,
-      variable_name = "clusterSize",
+      variable_name = "cluster size",
       unit = "count of individuals") 
   
   table_observation <- table_observation_wide_all %>%

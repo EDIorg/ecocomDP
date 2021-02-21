@@ -84,6 +84,10 @@ map_neon_data_to_ecocomDP <- function(
     #BEETLE v01
     ecocomDP_tables <- ecocomDP::map_neon.ecocomdp.10022.001.001(...)
     
+  }else if(data.product.id == "neon.ecocomdp.10022.001.002"){
+    #HERPETOLOGY v01
+    ecocomDP_tables <- ecocomDP::map_neon.ecocomdp.10022.001.002(...)
+    
   }else if(data.product.id == "neon.ecocomdp.10003.001.001"){
     #BIRD v01
     ecocomDP_tables <- ecocomDP::map_neon.ecocomdp.10003.001.001(...)
