@@ -98,4 +98,13 @@ PLANT -- map_neon.ecocomdp.10058.001.001
 	updates
 		- 1. hard coded USDA NRCS plants database as taxon authority_system
 
+##################################################################
+SMALL_MAMMAL -- map_neon.ecocomdp.10072.001.001
+	problems 
+		- data were reported at individual level. ecocomDP is meant to aggretate individual observations. See update #2
+	updates
+		- 1. remove records where no animals were caught. 
+		- 2. aggregated counts by nightuid/event_id and report as "count per trapping grid per night"
+
+
 
