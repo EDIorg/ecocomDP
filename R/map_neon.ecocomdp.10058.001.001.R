@@ -14,6 +14,9 @@
 #' @export
 
 ##############################################################################################
+
+# Authors: Daijiang Li; Michael Just; Eric Sokol
+
 # mapping function for PLANT taxa
 map_neon.ecocomdp.10058.001.001 <- function(
   neon.data.product.id = "DP1.10058.001",

@@ -95,4 +95,7 @@ HERPETOLOGY (bycatch in BEETLES) -- neon.ecocomdp.10022.001.002
 
 ##################################################################
 PLANT -- map_neon.ecocomdp.10058.001.001
+	updates
+		- 1. hard coded USDA NRCS plants database as taxon authority_system
+
 

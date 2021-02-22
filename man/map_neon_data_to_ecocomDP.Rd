@@ -2,14 +2,16 @@
 % Please edit documentation in R/map_neon.ecocomdp.10003.001.001.R,
 %   R/map_neon.ecocomdp.10022.001.001.R, R/map_neon.ecocomdp.10022.001.002.R,
 %   R/map_neon.ecocomdp.10043.001.001.R, R/map_neon.ecocomdp.10058.001.001.R,
-%   R/map_neon.ecocomdp.20107.001.001.R, R/map_neon.ecocomdp.20120.001.001.R,
-%   R/map_neon.ecocomdp.20166.001.001.R, R/map_neon_data_to_ecocomDP.r
+%   R/map_neon.ecocomdp.10072.001.001.R, R/map_neon.ecocomdp.20107.001.001.R,
+%   R/map_neon.ecocomdp.20120.001.001.R, R/map_neon.ecocomdp.20166.001.001.R,
+%   R/map_neon_data_to_ecocomDP.r
 \name{map_neon.ecocomdp.10003.001.001}
 \alias{map_neon.ecocomdp.10003.001.001}
 \alias{map_neon.ecocomdp.10022.001.001}
 \alias{map_neon.ecocomdp.10022.001.002}
 \alias{map_neon.ecocomdp.10043.001.001}
 \alias{map_neon.ecocomdp.10058.001.001}
+\alias{map_neon.ecocomdp.10072.001.001}
 \alias{map_neon.ecocomdp.20107.001.001}
 \alias{map_neon.ecocomdp.20120.001.001}
 \alias{map_neon.ecocomdp.20166.001.001}
@@ -25,6 +27,8 @@ map_neon.ecocomdp.10022.001.002(neon.data.product.id = "DP1.10022.001", ...)
 map_neon.ecocomdp.10043.001.001(neon.data.product.id = "DP1.10043.001", ...)
 
 map_neon.ecocomdp.10058.001.001(neon.data.product.id = "DP1.10058.001", ...)
+
+map_neon.ecocomdp.10072.001.001(neon.data.product.id = "DP1.10072.001", ...)
 
 map_neon.ecocomdp.20107.001.001(neon.data.product.id = "DP1.20107.001", ...)
 
@@ -80,6 +84,8 @@ Dates are specified only to the month because NEON data are provided in monthly 
 
 \item \code{map_neon.ecocomdp.10058.001.001}: This method will retrieve percent cover data for PLANT taxa from neon.data.product.id DP1.10058.001 from the NEON data portal and map to the ecocomDP format
 
+\item \code{map_neon.ecocomdp.10072.001.001}: This method will retrieve count data for SMALL_MAMMAL taxa from neon.data.product.id DP1.10072.001 from the NEON data portal and map to the ecocomDP format
+
 \item \code{map_neon.ecocomdp.20107.001.001}: This method will retrieve count data for FISH taxa from neon.data.product.id DP1.20107.001 from the NEON data portal and map to the ecocomDP format
 
 \item \code{map_neon.ecocomdp.20120.001.001}: This method will retrieve density data for MACROINVERTEBRATE from neon.data.product.id DP1.20120.001 from the NEON data portal and map to the ecocomDP format
@@ -114,6 +120,14 @@ my_result <- map_neon.ecocomdp.10043.001.001(site = c("NIWO","DSNY"),
 \dontrun{
 my_result <- map_neon.ecocomdp.10058.001.001(
 site= c("NIWO","DSNY"), 
+startdate = "2016-01",
+enddate = "2017-11",
+token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+}
+\dontrun{
+my_result <- map_neon.ecocomdp.10072.001.001(
+site = c("NIWO","DSNY"), 
 startdate = "2016-01",
 enddate = "2017-11",
 token = Sys.getenv("NEON_TOKEN"),
