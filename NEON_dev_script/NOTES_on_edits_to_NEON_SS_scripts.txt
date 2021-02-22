@@ -16,7 +16,8 @@ General notes
  BIRD				cluster size	count of individuals
  FISH				abundance		catch per unit effort
  HERPTILES			abundance		count per trap day
- 
+ PLANT				percent cover	percent of plot area covered by taxon
+ SMALL_MAMMAL		count			count per trapping grid per night
  
  
 ##################################################################
@@ -104,7 +105,17 @@ SMALL_MAMMAL -- map_neon.ecocomdp.10072.001.001
 		- data were reported at individual level. ecocomDP is meant to aggretate individual observations. See update #2
 	updates
 		- 1. remove records where no animals were caught. 
-		- 2. aggregated counts by nightuid/event_id and report as "count per trapping grid per night"
+		- 2. aggregated counts should be standardized to trapnight (per Kate T's recommendation), need to count the number of traps in a grid to get trapnights in a nightuid/event_id and report as "count per 100 trapnights" for each bout in a grid/plot
 
-
+##################################################################
+TICK -- map_neon.ecocomdp.10093.001.001
+	problems 
+		- should individualCounts that are NA be changed to 0? 
+		- looks like we're including sampling events where no taxa were observed. Should we keep these? I'm assuming it's intentional, but just want to make sure.
+		- count not standardized to area sampled
+		- multiple life stages included in counts, should we aggregate? If not, this is not ideal for the ecocomDP data model. 
+	updates	
+		- 1. standardized counts to total area sampled
+		- 2. event_id = observation_id so table_observation_ancillary has the correct granularity
+		
 
