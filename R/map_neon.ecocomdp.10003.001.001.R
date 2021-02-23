@@ -101,6 +101,8 @@ map_neon.ecocomdp.10003.001.001 <- function(
                   authority_system) 
 
   
+  
+
 
   # observation ----
   table_observation_wide_all <- data_bird %>%
@@ -140,6 +142,9 @@ map_neon.ecocomdp.10003.001.001 <- function(
     ancillary_var_names = c(
       "event_id",
       "neon_event_id",
+      "plotID",
+      "plotType",
+      "pointID",
       "pointCountMinute",
       "targetTaxaPresent",
       "observerDistance",

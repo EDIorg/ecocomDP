@@ -41,7 +41,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
   
   
   
-  dat.mam = dplyr::mutate(d$mam_pertrapnight,
+  dat.mam <- dplyr::mutate(d$mam_pertrapnight,
                           collectDate = lubridate::ymd(collectDate),
                           year = lubridate::year(collectDate),
                           month = lubridate::month(collectDate),
@@ -49,8 +49,15 @@ map_neon.ecocomdp.10072.001.001 <- function(
                           # Since data collection usually takes place on several consecutive
                           # days within a given month, we consider each month to be a separate bout
                           bout = paste(year, month, sep = "_")) %>%
-    tibble::as_tibble()
-  table(dat.mam$plotType) # all distributed
+    tibble::as_tibble() %>%
+    dplyr::group_by(nightuid) %>%
+    dplyr::mutate(n_trap_nights_per_night_uid = length(unique(trapCoordinate))) %>%
+    # dplyr::ungroup() %>%
+    # dplyr::group_by(bout) %>%
+    # dplyr::mutate(n_trap_nights_per_bout = sum(unique(trapCoordinate))) %>%
+    dplyr::ungroup()
+  
+  # table(dat.mam$plotType) # all distributed
   
   ### Here we provide the code that summarizes raw abundances per day, month (bout), and year
   ### We keep scientificName of NA or blank (no captures) at this point
@@ -62,23 +69,33 @@ map_neon.ecocomdp.10072.001.001 <- function(
   ### 'dead' = dead, 'escaped' = escaped while handling, 'nontarget' = released, non-target species,
   ### should 'released' (= target or opportunistic species released without full processing) be also removed?
   ## D Li: probably not, released have 64,400 records and processed only have 7,365
-  table(dat.mam$fate)
+  
+  # table(dat.mam$fate)
   dat.mam <- dplyr::filter(dat.mam, !fate %in% c("dead", "escaped", "nontarget"))
   #dat.mam <- filter(dat.mam, fate != "released")
   
   # unique(dat.mam$scientificName)
-  group_by(dat.mam, taxonRank) %>% tally() # mostly are sp and genus level
+  # group_by(dat.mam, taxonRank) %>% tally() # mostly are sp and genus level
+  
   dat.mam <- dplyr::filter(dat.mam, taxonRank %in% c("genus", "species", "subspecies", NA))
   
   ### Remove recaptures -- Y and U (unknown); only retain N
   # table(dat.mam$recapture)
   # sum(is.na(dat.mam$recapture))
-  dat.mam <- dplyr::filter(dat.mam, recapture == "N" | is.na(recapture))
+  
+  # dat.mam <- dplyr::filter(dat.mam, recapture == "N" | is.na(recapture))
+  
+  # filter out recaptures within a bout, but not all recaptures
+  dat.mam <- dat.mam %>%
+    dplyr::group_by(bout) %>%
+    dplyr::filter(!duplicated(tagID)) %>%
+    dplyr::ungroup()
   
   ### Get raw abundances per day
   data_small_mammal <- dat.mam %>%
-    dplyr::select(uid, nightuid,
-                  domainID, siteID, plotID, namedLocation, 
+    dplyr::select(uid, nightuid, bout,
+                  n_trap_nights_per_night_uid,
+                  domainID, siteID, plotID, namedLocation, plotType,
                   collectDate,
                   nlcdClass, decimalLatitude,
                   decimalLongitude, geodeticDatum, coordinateUncertainty,
@@ -142,35 +159,62 @@ map_neon.ecocomdp.10072.001.001 <- function(
     dplyr::rename(location_id = namedLocation) %>%
     dplyr::mutate(
       package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+    dplyr::rowwise() %>%
     dplyr:: rename(
       observation_datetime = collectDate, 
-      taxon_id = taxonID,
-      event_id = nightuid) %>%
+      taxon_id = taxonID) %>%
+    mutate(
+      event_id = paste(year, month, location_id, sep = "_")) %>%
+    dplyr::ungroup() %>%
     dplyr::mutate(
       occurrence = 1)
   
-  table_observation_aggregated <- table_observation_all %>%
+  table_event <- table_observation_all %>%
+    dplyr::select(package_id, 
+                  plotID, 
+                  location_id,
+                  event_id, 
+                  nightuid, n_trap_nights_per_night_uid,
+                  observation_datetime, 
+                  year, month) %>%
+    dplyr::distinct() %>%
+    dplyr::group_by(package_id, event_id, location_id, plotID, year, month) %>%
+    dplyr::summarize(
+      observation_datetime = first(observation_datetime),
+      n_trap_nights_per_bout_per_plot = sum(n_trap_nights_per_night_uid),
+      n_nights_per_bout = length(unique(nightuid))) %>%
+    dplyr::ungroup()
+  
+  #DSNY_004 2016 has 6 nights?
+  
+  table_event %>% dplyr::filter(plotID == "DSNY_004", year == 2016, month == 11) %>%
+    as.data.frame()
+  
+  
+    
+  
+  table_raw_counts <- table_observation_all %>%
     dplyr::select(
       event_id,
-      package_id,
-      location_id,
-      observation_datetime,
-      taxon_id, 
+      taxon_id,
       occurrence) %>%
-    dplyr::group_by_at(dplyr::vars(-occurrence)) %>%
-    dplyr::summarise(
-      value = sum(occurrence)) %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate(
-      observation_id = paste0("obs_",1:length(value)),
+    dplyr::group_by_at(dplyr::vars(event_id, taxon_id)) %>%
+    dplyr::summarize(
+      raw_count = sum(occurrence)) 
+  
+  table_event_counts <- table_event %>%
+    dplyr::left_join(table_raw_counts, by = "event_id") %>%
+    mutate(
+      observation_id = paste0("obs_",1:nrow(.)),
+      value = 100 * raw_count / n_trap_nights_per_bout_per_plot,
       variable_name = "count",
-      unit = "count per trapping grid per night"
-    )
-    
-  table_observation <- table_observation_aggregated %>%
+      unit = "unique individuals per 100 trap nights per plot per month")
+  
+  table_observation <- table_event_counts %>%
     dplyr::select(
       observation_id,
       event_id,
+      location_id,
       package_id,
       location_id,
       observation_datetime,
@@ -178,15 +222,17 @@ map_neon.ecocomdp.10072.001.001 <- function(
       variable_name,
       value,
       unit) %>%
+    dplyr::distinct() %>%
     dplyr::filter(!is.na(taxon_id))
   
   table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
-    obs_wide = table_observation_all,
+    obs_wide = table_event_counts,
     ancillary_var_names = c(
       "event_id",
       "plotID",
-      "boutNumber",
-      "year","month")) %>% 
+      "year","month",
+      "n_trap_nights_per_bout_per_plot",
+      "n_nights_per_bout")) %>% 
     dplyr::distinct()
   
   # data summary ----
