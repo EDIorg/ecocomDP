@@ -1,35 +1,24 @@
 ##############################################################################################
-#' @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for ALGAE from neon.data.product.id DP1.20166.001 (Periphyton, seston, and phytoplankton collection) from the NEON data portal and map to the ecocomDP 
+#' @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for ALGAE from neon.data.product.id DP1.20166.001 (Periphyton, seston, and phytoplankton collection) from the NEON data portal and map to the ecocomDP format
+#' 
 #' @export
 
 # changelog and author contributions / copyrights
 #   Eric R Sokol (2020-04-17)
 #     original creation
 ##############################################################################################
-map_neon_data_to_ecocomDP.ALGAE <- function(
+map_neon.ecocomdp.20166.001.002 <- function(
   neon.data.product.id = "DP1.20166.001",
   ...
 ){
   
+  #NEON target taxon group is ALGAE
+  neon_method_id <- "neon.ecocomdp.20166.001.001"
+  
   # get all tables
   all_tabs_in <- neonUtilities::loadByProduct(
-    # hard coded arguments
     dpID = neon.data.product.id, 
-
-    # dots for passing user input
-    ...
-    
-    # # required input from users
-    # site = c("MAYF", "PRIN"), 
-    # startdate = "2016-1", 
-    # enddate = "2018-11",
-    
-    # # optional input from users
-    # avg = "all",
-    # check.size = FALSE,
-    # nCores = 1,
-    # forceParallel = FALSE,
-  )
+    ...)
   
   
   
@@ -121,7 +110,7 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
   # rename fields for ecocomDP
   table_observation_ecocomDP <- table_observation_raw %>%
     dplyr::mutate(
-      package_id = paste0(neon.data.product.id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+      package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
     dplyr::rename(
       observation_id = uid, 
       neon_sample_id = sampleID,
@@ -357,6 +346,7 @@ map_neon_data_to_ecocomDP.ALGAE <- function(
   # years_in_data %>% ordered()
   
  
+  
   table_dataset_summary <- data.frame(
     package_id = table_observation$package_id[1],
     original_package_id = neon.data.product.id,

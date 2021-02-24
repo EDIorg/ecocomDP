@@ -1,0 +1,188 @@
+Note for Colin -- composite key check in validation function doesn't seem to work correctly? 
+
+General notes
+	- Should I pull taxon tables for each taxon group instead of using ID refs in data? Did this for birds, but other groups might be too cumbersom
+	- make sure "release" is in obs ancillary table for each mapping function.
+	- using neonUtilities to get taxon tables only returns nameAccordingToID, not nameAccordintTo. Will need ot update that in the future and/or make a lookup function by taxon -- so we don't need to download the entire table. 
+	- when making the ancillary observation table, I keep finding that it is most useful to map observation_id to event_id to make ancillary observations map correctly. 
+	
+
+TODO --
+	- update author lists for mapping functions
+	- finalize workflow for taxa where modifications were made (below)
+		beetles
+		macroinvertebrates
+		mosquitoes
+		herps
+		mammals
+		ticks
+	- shiny app
+		update documentation
+		add "aggregation" choice (mean vs sum) for within group for a given value x. 
+		
+
+--------------------------------------------------------
+ taxon	 			var name 		units
+-------------------------------------------------------
+ BEETLES			abundance		count per trap day
+ ALGAE				cell density	cells/cm2 OR cells/mL
+ MACROINVERTEBRATE	density			count per square meter
+ MOSQUITO			abundance		count per trap hour
+ BIRD				cluster size	count of individuals
+ FISH				abundance		catch per unit effort
+ HERPTILES			abundance		count per trap day
+ PLANT				percent cover	percent of plot area covered by taxon
+ SMALL_MAMMAL		count			unique individuals per trap night per plot per month
+ ZOOPLANKTON		density			count per liter
+ 
+##################################################################
+BEETLES -- map_neon.ecocomdp.10022.001.001
+	problems 
+		taxon table
+			- taxon_id's with multiple records in taxon table, different "authority_system" entries -- e.g., OMUDEJ -- fixed in update #4 
+			- NAs in taxon_id -- fixed by update #3. 
+		observation table
+			- duplicate uid -- 
+				536b7f1b-13a3-4c42-946b-09a0628fdaac -- event_id = ABBY_028.E.20190625, taxon = PTELAM, different counts -- 1 and 3. Should they be added? assumed to be reps? 
+				- subsampleIDs
+					- ABBY_028.E.20190625.IB.01 - A00000106176
+					- ABBY_028.E.20190625.PTELAM.01 - A00000106844
+						- activity in bet_sorting_in - 58e20535-4280-4149-9f89-aa09ad477497 -- individual count = 13 in sorting table. How did it get separated?
+						- remarks -- 10 individuals from this sample pooled together. 3 pinned. -- suggesting we should add counts when multiple observations exist in the observation table. 
+						DIAGNOSIS -- family not returned for the "pooled" sample record. Removing family since it can be recovered from NEON taxon tables anyway. 
+					- ABBY_028.E.20190625.OMUDEJ.01 - 
+
+	updates to neonDivData code
+		- 1. added -- uid from bet_sorting as the observation_id 
+		- 2. added -- filter bet_fielddata to only include sampleCollected == "Y"
+		- 3. added -- filter out records where subsampleID == NA
+		- 4. added -- concatenate different references for same taxonID so taxon_id is unique for each record in taxon table
+		
+	observation_id = uid
+	event_id = sampleID
+	neon_sample_id = sampleID
+	neon_event_id = eventID
+
+##################################################################
+ALGAE -- map_neon.ecocomdp.20166.001.001
+	problems -- no problems identified.
+
+	updates to what was in neonDivData -- just updates to reformat data for ecocomDP
+		
+	observation_id = uid
+	event_id = neon_sample_id
+	neon_sample_id = sampleID
+	neon_event_id = eventID
+		
+##################################################################
+MACROINVERTEBRATE -- map_neon.ecocomdp.20120.001.001
+	problems
+		- counts not standardized to area (or unit effort), see fix #1
+		- duplicate records in fielddata table, see fix #2
+		
+	updates
+		- 1. standardized counts to density per area sampled. 
+		- 2. added code to select first uid when multiple uids are associated with a given sampleID in the fielddata table. 
+		
+	observation_id = uid
+	event_id = sampleID
+	neon_event_id = eventID
+		
+##################################################################
+MOSQUITO -- map_neon.ecocomdp.10043.001.001
+	problems
+		- estimated_totIndividuals not standardized to traphours, currently using:
+		round(individualCount * (totalWeight/subsampleWeight)
+		see fix #1
+		
+	updates
+		- 1. value = (individualCount/subsampleWeight) * totalWeight / trapHours
+             unit = "count per trap hour")
+			 
+	observation_id = uid
+	event_id = sampleID
+			 
+##################################################################
+BIRD -- map_neon.ecocomdp.10003.001.001
+	problems
+		- just reporting raw "clusterSize" as "count". Is this correct? Should we aggregate in anyway? Currently, in ecocomDP format, I've set event_id = observation_id so that all the ancillary obs information can map appropriately. We could aggregate/add counts for each taxonID, and then concatenate the ancillary information. Not sure if this would be appropriate or useful. 
+		- could use a taxon ancillary table, but not implemented yet. 
+		
+	updates
+		- 1. pull taxon table from neonUtilities -- the table isn't that big, so just pull it and get nameAccordintTo for each taxonID. 
+	
+	observation_id = uid (should be from brd_countdata)
+	event_id = observation_id so table_observation_ancillary has the correct granularity
+	neon_event_id = eventID
+
+
+##################################################################
+FISH -- map_neon.ecocomdp.20107.001.001
+	problems
+	
+	event_id = eventID
+	observation_id = paste0("obs_",1:nrow(.))
+	
+##################################################################
+HERPETOLOGY (bycatch in BEETLES) -- neon.ecocomdp.10022.001.002
+	problems
+		- bycatch not standardized to trap days?, see #1
+		
+	updates
+		- 1. standardize counts by trapdays
+		- 2. download HERPETOLOGY taxon table to populate taxon table for ecocomDP
+		
+	observation_id = uid
+	event_id = observation_id so table_observation_ancillary has the correct granularity
+	neon_trap_id
+	neon_event_id
+
+##################################################################
+PLANT -- map_neon.ecocomdp.10058.001.001
+	updates
+		- 1. hard coded USDA NRCS plants database as taxon authority_system
+		
+	observation_id = uid
+	event_id = observation_id so table_observation_ancillary has the correct granularity
+
+##################################################################
+SMALL_MAMMAL -- map_neon.ecocomdp.10072.001.001
+	problems 
+		- data were reported at individual level. ecocomDP is meant to aggretate individual observations. See update #2
+		- recaptures are currently removed. If we're reporting per trapnight per plot, are we sure we want to do this? 
+		
+	updates
+		- 1. remove records where no animals were caught. 
+		- 2. aggregated counts should be standardized to trapnight (per Kate T's recommendation), need to count the number of traps in a grid to get trapnights in a nightuid/event_id and report as "unique individuals per 100 trap nights per plot per month" for each bout in a grid/plot
+			- take first day in bout as datetime
+			- unique individuals per 100 trapnights per plot per bout
+			- the year-month bout doesn't quite align with actual bouts... 
+				e.g., DSNY_004, 2016-11 captures dates 11/2,3, 7, 8, 9, and 30. 
+		
+	observation_id = paste0("obs_",1:nrow(.))
+	event_id = unique year-month-location_id
+
+##################################################################
+TICK -- map_neon.ecocomdp.10093.001.001
+	problems 
+		- should individualCounts that are NA be changed to 0? 
+		- looks like we're including sampling events where no taxa were observed. Should we keep these? I'm assuming it's intentional, but just want to make sure.
+		- count not standardized to area sampled
+		- multiple life stages included in counts, should we aggregate? If not, this is not ideal for the ecocomDP data model. 
+		
+	updates	
+		- 1. standardized counts to total area sampled
+		
+	observation_id = paste0("obs_",1:nrow(.))
+	event_id = observation_id so table_observation_ancillary has the correct granularity
+	neon_event_id = eventID
+	neon_sample_id = sampleID
+
+##################################################################
+ZOOPS (MACROINVERTEBRATE) -- map_neon.ecocomdp.20219.001.001
+	problems -- none
+	
+	observation_id = uid from zoo_taxonomyProcessed
+	event_id = neon_sample_id
+    neon_event_id = eventID
+    neon_sample_id = sampleID

@@ -58,7 +58,7 @@ explore_data_app <- function(
         shiny::br(),
         
         shiny::textInput("search_value", shiny::h5("Search ecocomDP data packages"), 
-                         value = "enter search term(s) here"),
+                         value = "NEON"),
         shiny::helpText("Find data packages by searching dataset titles, descriptions, and abstracts. See 'Help' tab for more information."),
         
         shinyWidgets::actionBttn(
@@ -446,7 +446,7 @@ explore_data_app <- function(
       input$go,{
         shiny::withProgress(message = 'Loading data',
                             detail= "This may take a while...",{
-                              if(if_dp1()){
+                              if(if_neon()){
                                 # get user inputs
                                 shiny::req(only_id())
                                 shiny::req(input$sites)
@@ -459,14 +459,16 @@ explore_data_app <- function(
                                   site = input$sites,
                                   startdate = input$start,
                                   enddate = input$end,
-                                  token = my_NEON_TOKEN)
+                                  token = my_NEON_TOKEN,
+                                  check.size = FALSE)
                                 
                                 
                               }else{
                                 
                                 
                                 list_of_tables <- ecocomDP::read_data(
-                                  id = only_id()
+                                  id = only_id(),
+                                  check.size = FALSE
                                 )
                                 
                                 
@@ -495,17 +497,17 @@ explore_data_app <- function(
                          choices = full_name())
     })
     
-    if_dp1 <- shiny::reactive({
+    if_neon <- shiny::reactive({
       req(input$id_choices)
-      if(grepl("DP1",input$id_choices)){
+      if(grepl("(?)neon\\.ecocomdp",input$id_choices)){
         return(TRUE)
       }
       else
         return(FALSE)
-    }) # if_dp1
+    }) # if_neon
     
     output$start <- shiny::renderUI({
-      if(if_dp1()){
+      if(if_neon()){
         shiny::textInput("start", shiny::h5("Start Date (YYYY-MM)"), 
                          value = "2017-01")
       }
@@ -513,22 +515,30 @@ explore_data_app <- function(
     })
     
     output$end <- shiny::renderUI({
-      if(if_dp1()){
+      if(if_neon()){
         shiny::textInput("end", shiny::h5("End Date (YYYY-MM)"), 
                          value = "2020-01")
       }
     })
     
+    
     get_list_of_sites <- shiny::reactive({
+      
+      # convert id to NEON dpid
+      neon_dpid <- only_id() %>%
+        gsub("neon\\.ecocomdp","DP1",.) %>% 
+        gsub("\\.[0-9]{3}$","",.)
+        
+      # get NEON dp info
       info <- neonUtilities::getProductInfo(
-        dpID = only_id(),
+        dpID = neon_dpid,
         token = my_NEON_TOKEN)
       sites <- info$siteCodes$siteCode
       return(sites)
     })
     
     output$sites <- shiny::renderUI({
-      if(if_dp1()){
+      if(if_neon()){
         shinyWidgets::pickerInput(
           inputId = "sites", 
           label = shiny::h5("Selected Sites (you can select multiple)"), 
@@ -547,7 +557,7 @@ explore_data_app <- function(
     # Go button ----
     
     output$go_button <- shiny::renderUI({
-      if(!if_dp1())
+      if(!if_neon())
         shinyWidgets::actionBttn(
           inputId = "go",
           label = "Load Data",

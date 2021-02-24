@@ -2,7 +2,7 @@
 ##############################################################################################
 #' @examples 
 #' \dontrun{
-#' my_result <- map_neon_data_to_ecocomDP.MOSQUITO(site = c("NIWO","DSNY"), 
+#' my_result <- map_neon.ecocomdp.10043.001.001(site = c("NIWO","DSNY"), 
 #'                                                   startdate = "2016-01", 
 #'                                                   enddate = "2018-11")
 #' }
@@ -11,15 +11,26 @@
 #' @export
 
 ##############################################################################################
-map_neon_data_to_ecocomDP.MOSQUITO <- function(
+# mapping function for MOSQUITO
+map_neon.ecocomdp.10043.001.001 <- function(
   neon.data.product.id = "DP1.10043.001",
   ...){
   
-  mos_allTabs <- neonUtilities::loadByProduct(
-    dpID = neon.data.product.id, 
-    package = "expanded",
-    ...)
+  #NEON target taxon group is MOSQUITO
+  neon_method_id <- "neon.ecocomdp.10043.001.001"
   
+
+  # check arguments passed via dots for neonUtilities
+  dots_updated <- list(..., dpID = neon.data.product.id)
+  
+  #Error handling if user provides a value for "package" other than "expanded"
+  if("package" %in% names(dots_updated) && dots_updated$package != "expanded") message("WARNING: expanded package for DP1.10043.001 is required to execute this request. Downloading the expanded package")
+  
+  dots_updated[["package"]] <- "expanded"
+  
+  mos_allTabs <- rlang::exec( 
+    neonUtilities::loadByProduct,
+    !!!dots_updated)
   
   
 
@@ -44,19 +55,15 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
     dplyr::distinct()
   
   
-  ### problem here
   mos_sorting <- mos_allTabs$mos_sorting %>% 
     dplyr::mutate (
-      
       setDate = as.character(setDate),
       collectDate = as.character(collectDate), 
       sortDate = as.character(sortDate)) %>% 
-    
     dplyr::mutate_all(list(~dplyr::na_if(.,""))) %>% 
     tidyr::drop_na(dplyr::all_of(cols_oi_sort)) %>%
     dplyr::mutate_if(is.factor, as.character) %>% 
     dplyr::distinct()
-  
   
   
   mos_archivepooling <- mos_allTabs$mos_archivepooling %>% 
@@ -81,6 +88,10 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
   
   
   
+  
+  
+
+  
   # # Look for duplicate sampleIDs #
   # length(which(duplicated(mos_trapping$sampleID)))  # 0
   # length(which(duplicated(mos_sorting$subsampleID))) # 0
@@ -91,10 +102,13 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
   # # Make sure no "upstream" records are missing primary "downstream" reference
   # length(which(!mos_sorting$sampleID %in% mos_trapping$sampleID))  # 0
   # length(which(!mos_expertTaxonomistIDProcessed$subsampleID %in% mos_sorting$subsampleID))  # 0
+
   
   
   # Clear expertTaxonomist:individualCount if it is 0 and there is no taxonID. These aren't ID'ed samples
-  mos_expertTaxonomistIDProcessed$individualCount[mos_expertTaxonomistIDProcessed$individualCount == 0 & is.na(mos_expertTaxonomistIDProcessed$taxonID)] <- NA
+  mos_expertTaxonomistIDProcessed$individualCount[
+    mos_expertTaxonomistIDProcessed$individualCount == 0 & 
+      is.na(mos_expertTaxonomistIDProcessed$taxonID)] <- NA
   
   
   ####
@@ -103,54 +117,95 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
   # Add trapping info to sorting table 
   # Note - 59 trapping records have no associated sorting record and don't come through the left_join (even though targetTaxaPresent was set to Y or U)
   mos_dat <- mos_sorting %>%
-    dplyr::select(-c(uid,collectDate, domainID, namedLocation, plotID, setDate, siteID)) %>%
-    dplyr::left_join(dplyr::select(mos_trapping,-uid),by = 'sampleID') %>%
+    dplyr::select(-c(uid,collectDate, domainID, namedLocation, plotID, 
+                     setDate, siteID)) %>%
+    dplyr::left_join(dplyr::select(mos_trapping,-uid),by = 'sampleID') 
+  
+  if(!"remarks" %in% names(mos_dat)) mos_dat[,"remarks"] <- NA_character_
+  if(!"dataQF" %in% names(mos_dat)) mos_dat[,"dataQF"] <- NA_character_
+  
+  mos_dat <- mos_dat %>%
     dplyr::rename(sampCondition_sorting = sampleCondition.x,
                   sampCondition_trapping = sampleCondition.y,
                   remarks_sorting = remarks,
                   dataQF_trapping = dataQF)
   
+  
+
+  
   # # Verify sample barcode consistency before removing one column
   # which(mos_dat$sampleCode.x != mos_dat$sampleCode.y)
+  # # Consistency is fine with barcodes
   
-  # Consistency is fine with barcodes
+  
+
+  
+  
+  
   mos_dat <- dplyr::rename(mos_dat,sampleCode = sampleCode.x) %>% 
     dplyr::select(-sampleCode.y)
   
   
   # Join expert ID data --
   mos_dat <- mos_dat %>%
-    dplyr::left_join(dplyr::select(mos_expertTaxonomistIDProcessed,
-                            -c(collectDate,domainID,namedLocation,plotID,setDate,siteID,targetTaxaPresent)),
+    dplyr::left_join(dplyr::select(
+      mos_expertTaxonomistIDProcessed,
+      -c(collectDate,domainID,namedLocation,plotID,setDate,siteID,targetTaxaPresent)),
                      by='subsampleID') %>%
     dplyr::rename(remarks_expertID = remarks)
   
   
-  # Verify sample barcode and labName consistency before removing one column
-  which(mos_dat$subsampleCode.x != mos_dat$subsampleCode.y)
-  which(mos_dat$laboratoryName.x != mos_dat$laboratoryName.y)
+  
+  
+  
+
+  # # Verify sample barcode and labName consistency before removing one column
+  # which(mos_dat$subsampleCode.x != mos_dat$subsampleCode.y)
+  # which(mos_dat$laboratoryName.x != mos_dat$laboratoryName.y)
+  
+  
+
+  
+  
   
   # Rename columns and add estimated total individuals for each subsample/species/sex with identification, where applicable
   #  Estimated total individuals = # individuals iD'ed * (total subsample weight/ subsample weight)
-  mos_dat <- dplyr::rename(mos_dat,subsampleCode = subsampleCode.x, laboratoryName = laboratoryName.x) %>% 
+  mos_dat <- dplyr::rename(mos_dat,subsampleCode = subsampleCode.x, 
+                           laboratoryName = laboratoryName.x) %>% 
     dplyr::select(-c(subsampleCode.y, laboratoryName.y)) %>%
-    dplyr::mutate(estimated_totIndividuals = ifelse(!is.na(individualCount),round(individualCount * (totalWeight/subsampleWeight)), NA))
+    dplyr::mutate(estimated_totIndividuals = ifelse(!is.na(individualCount),
+                                                    round(individualCount * (totalWeight/subsampleWeight)), NA))
   
   
   # Add archive data --
   mos_dat <- mos_dat %>%
     dplyr::left_join(dplyr::select(mos_archivepooling,-c(domainID,uid,namedLocation,siteID)),by = 'archiveID')
   
-  # Verify sample barcode consistency before removing one column
-  which(mos_dat$archiveIDCode.x != mos_dat$archiveIDCode.y)
+  
+  
+  
+  
+
+  # # Verify sample barcode consistency before removing one column
+  # which(mos_dat$archiveIDCode.x != mos_dat$archiveIDCode.y)
   
   # Consistency is fine with barcodes
+  
+  
+  
+  
+  
+
   mos_dat <- dplyr::rename(mos_dat,archiveIDCode = archiveIDCode.x) %>% 
     dplyr::select(-archiveIDCode.y)
   
   # exclude records with taxonID is NA and remove dups
   mos_dat <- mos_dat %>%
-    dplyr::filter(!is.na(taxonID)) %>%
+    dplyr::filter(
+      !is.na(taxonID),
+      targetTaxaPresent == "Y", # very few N or U
+      sampleCondition == "No known compromise",
+      taxonRank != "family") %>%
     dplyr::distinct()
   
   
@@ -161,84 +216,15 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
     dplyr::select(domainID, siteID, namedLocation, decimalLatitude, decimalLongitude, elevation) %>%
     dplyr::distinct() 
   
-  table_location <- suppressMessages(
-    mos_dat %>%
-      ecocomDP::make_location(cols = c("domainID", "siteID", "namedLocation")))
+  table_location <- ecocomDP::make_neon_location_table(
+    loc_info = table_location_raw,
+    loc_col_names = c("domainID", "siteID", "namedLocation"))
   
-  # code to handle updated make_location (updated 18 Sep 2020 in make_location branch)
-  if(class(table_location) == "list" &&
-     "location" %in% names(table_location)){
-    
-    table_location <- table_location$location %>%
-      dplyr::rowwise() %>%
-      dplyr::mutate(
-        location_name = location_name %>% 
-          strsplit("=") %>%
-          unlist() %>%
-          dplyr::last()) 
-  }
-  
- 
-  
-  # populate latitude
-  table_location$latitude <- table_location_raw$decimalLatitude[match(table_location$location_name, table_location_raw$namedLocation)] 
-  
-  #populate longitude
-  table_location$longitude <- table_location_raw$decimalLongitude[match(table_location$location_name, table_location_raw$namedLocation)] 
-  
-  # populate elevation
-  table_location$elevation <- table_location_raw$elevation[match(table_location$location_name, table_location_raw$namedLocation)] 
+  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+    loc_info = table_location_raw,
+    loc_col_names = c("domainID", "siteID", "namedLocation"))
   
   
-  
-  # replace parent_id with parent_name
-  table_location$parent_location_id <- table_location$location_name[
-    match(table_location$parent_location_id, table_location$location_id)]
-  
-  # replace loc_id with meaningful names
-  table_location$location_id <- table_location$location_name
-  
-  # get neon location info lookup tables
-  neon_domain_list <- neon_site_list %>%
-    dplyr::select(`Domain Number`, `Domain Name`) %>%
-    dplyr::distinct()
-  
-  neon_site_info_list <- neon_site_list %>%
-    dplyr::select(-c(`Domain Number`,`Domain Name`)) %>%
-    dplyr::distinct()
-  
-  
-  
-  # update location_names and lat longs where possible
-  for(location_id in table_location$location_id){
-    if(location_id %in% neon_domain_list$`Domain Number`){
-      table_location$location_name[table_location$location_id == location_id] <- 
-        neon_domain_list$`Domain Name`[neon_domain_list$`Domain Number`==location_id]
-    }else if(location_id %in% neon_site_info_list$`Site ID`){
-      table_location$location_name[table_location$location_id == location_id] <- 
-        neon_site_info_list$`Site Name`[neon_site_info_list$`Site ID`==location_id]
-      
-      table_location$latitude[table_location$location_id == location_id] <- 
-        neon_site_info_list$Latitude[neon_site_info_list$`Site ID`==location_id]
-      
-      table_location$longitude[table_location$location_id == location_id] <- 
-        neon_site_info_list$Longitude[neon_site_info_list$`Site ID`==location_id]
-      
-    }
-  }
-  
-  
-  # make ancillary table that indicates the location type 
-  table_location_ancillary <- table_location_raw %>% 
-    dplyr::select(domainID, siteID, namedLocation) %>%
-    tidyr::pivot_longer(
-      cols = everything(),
-      names_to = "value",
-      values_to = "location_id") %>%
-    dplyr::mutate(
-      variable_name = "NEON location type",
-      location_ancillary_id = paste0("NEON_location_type_",location_id)) %>%
-    dplyr::distinct()
   
 
   # taxon ----
@@ -260,8 +246,11 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
                   taxon_name,
                   authority_system) %>%
     
-    dplyr::filter(!is.na(taxon_id))
-  
+    dplyr::filter(!is.na(taxon_id)) %>%
+    # concatenate different references for same taxonID
+    dplyr::group_by(taxon_id, taxon_rank, taxon_name) %>%
+    dplyr::summarize(
+      authority_system = paste(authority_system, collapse = "; "))
   
 
   # observation ----
@@ -277,7 +266,7 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
                   individualCount,
                   subsampleWeight) %>% 
     
-    dplyr::mutate(variable_name = "individuals",
+    dplyr::mutate(variable_name = "abundance",
                   value = (individualCount/subsampleWeight) * totalWeight / trapHours,
                   unit = "count per trap hour") %>% 
     
@@ -287,7 +276,7 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
                   observation_datetime = collectDate,
                   taxon_id = taxonID) %>%
     
-    dplyr::mutate(package_id = paste0(neon.data.product.id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+    dplyr::mutate(package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
     
     dplyr::select(observation_id,
                   event_id,
@@ -308,15 +297,10 @@ map_neon_data_to_ecocomDP.MOSQUITO <- function(
     dplyr::mutate(event_id = neon_sample_id) %>%
     dplyr::distinct()
   
-  table_observation_ancillary <- table_observation_ancillary_wide %>%
-    tidyr::pivot_longer(
-      cols = -event_id,
-      names_to = "variable_name",
-      values_to = "value") %>% 
-    dplyr::mutate(
-      observation_ancillary_id = paste0(variable_name, "_for_", event_id)) %>%
-    dplyr::distinct()
-  
+  table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
+    obs_wide = table_observation_ancillary_wide,
+    ancillary_var_names = names(table_observation_ancillary_wide))
+      
   
   
   # make data summary table ----

@@ -96,11 +96,28 @@ summarize_data_neon <- function() {
             names(taxa),
             function(k) {
               message(paste0("    summarizing ", k, " data"))
+              
+              # get NEON token if stored as Sys env var
+              my_neon_token <- NA_character_
+              try({my_neon_token <- Sys.getenv("NEON_TOKEN")})
+              
               # Download data
-              d <- neonUtilities::getDatatable(
-                dpid = supported_data$id[x],
-                sample_location_list = k,
-                data_table_name = supported_data$data_table[x])
+              
+              d <- data.frame()
+              
+              try({
+                d_list <- list()
+                d_list <- neonUtilities::loadByProduct(
+                  dpID = supported_data$id[x],
+                  site = k,
+                  tabl = supported_data$data_table[x],
+                  token = my_neon_token,
+                  check.size = FALSE)
+                d <- d_list[[supported_data$data_table[x]]]
+                
+              })
+
+
               if (nrow(d) != 0) {
                 # taxa & num.taxa - Get number of unique taxa and their 
                 # corresponding rank values collapsed into a comma delimited 
