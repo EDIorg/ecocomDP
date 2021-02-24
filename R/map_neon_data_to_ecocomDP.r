@@ -108,6 +108,10 @@ map_neon_data_to_ecocomDP <- function(
     #TICK v01
     ecocomDP_tables <- ecocomDP::map_neon.ecocomdp.10093.001.001(...)
     
+  }else if(data.product.id == "neon.ecocomdp.20219.001.001"){
+    # ZOOPLANKTON (uses MACROINVERTEBRATE NEON taxon table) v01
+    ecocomDP_tables <- ecocomDP::map_neon.ecocomdp.20219.001.001(...)
+    
   }else{
     message(paste0("WARNING: ecocomDP mapping not currently available for ",data.product.id))
     ecocomDP_tables <- list(

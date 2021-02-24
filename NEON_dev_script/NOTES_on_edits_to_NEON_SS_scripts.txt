@@ -5,6 +5,21 @@ General notes
 	- make sure "release" is in obs ancillary table for each mapping function.
 	- using neonUtilities to get taxon tables only returns nameAccordingToID, not nameAccordintTo. Will need ot update that in the future and/or make a lookup function by taxon -- so we don't need to download the entire table. 
 	- when making the ancillary observation table, I keep finding that it is most useful to map observation_id to event_id to make ancillary observations map correctly. 
+	
+
+TODO --
+	- update author lists for mapping functions
+	- finalize workflow for taxa where modifications were made (below)
+		beetles
+		macroinvertebrates
+		mosquitoes
+		herps
+		mammals
+		ticks
+	- shiny app
+		update documentation
+		add "aggregation" choice (mean vs sum) for within group for a given value x. 
+		
 
 --------------------------------------------------------
  taxon	 			var name 		units
@@ -18,14 +33,14 @@ General notes
  HERPTILES			abundance		count per trap day
  PLANT				percent cover	percent of plot area covered by taxon
  SMALL_MAMMAL		count			unique individuals per trap night per plot per month
- 
+ ZOOPLANKTON		density			count per liter
  
 ##################################################################
 BEETLES -- map_neon.ecocomdp.10022.001.001
 	problems 
 		taxon table
-			- taxon_id's with multiple records in taxon table, different "authority_system" entries -- e.g., OMUDEJ -- fixed in update #4 above
-			- NAs in taxon_id -- fixed by update #3 above. 
+			- taxon_id's with multiple records in taxon table, different "authority_system" entries -- e.g., OMUDEJ -- fixed in update #4 
+			- NAs in taxon_id -- fixed by update #3. 
 		observation table
 			- duplicate uid -- 
 				536b7f1b-13a3-4c42-946b-09a0628fdaac -- event_id = ABBY_028.E.20190625, taxon = PTELAM, different counts -- 1 and 3. Should they be added? assumed to be reps? 
@@ -163,3 +178,11 @@ TICK -- map_neon.ecocomdp.10093.001.001
 	neon_event_id = eventID
 	neon_sample_id = sampleID
 
+##################################################################
+ZOOPS (MACROINVERTEBRATE) -- map_neon.ecocomdp.20219.001.001
+	problems -- none
+	
+	observation_id = uid from zoo_taxonomyProcessed
+	event_id = neon_sample_id
+    neon_event_id = eventID
+    neon_sample_id = sampleID

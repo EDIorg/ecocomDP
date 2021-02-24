@@ -4,7 +4,8 @@
 %   R/map_neon.ecocomdp.10043.001.001.R, R/map_neon.ecocomdp.10058.001.001.R,
 %   R/map_neon.ecocomdp.10072.001.001.R, R/map_neon.ecocomdp.10093.001.001.R,
 %   R/map_neon.ecocomdp.20107.001.001.R, R/map_neon.ecocomdp.20120.001.001.R,
-%   R/map_neon.ecocomdp.20166.001.001.R, R/map_neon_data_to_ecocomDP.r
+%   R/map_neon.ecocomdp.20166.001.001.R, R/map_neon.ecocomdp.20219.001.001.R,
+%   R/map_neon_data_to_ecocomDP.r
 \name{map_neon.ecocomdp.10003.001.001}
 \alias{map_neon.ecocomdp.10003.001.001}
 \alias{map_neon.ecocomdp.10022.001.001}
@@ -16,6 +17,7 @@
 \alias{map_neon.ecocomdp.20107.001.001}
 \alias{map_neon.ecocomdp.20120.001.001}
 \alias{map_neon.ecocomdp.20166.001.001}
+\alias{map_neon.ecocomdp.20219.001.001}
 \alias{map_neon_data_to_ecocomDP}
 \title{Map NEON data products to ecocomDP}
 \usage{
@@ -38,6 +40,8 @@ map_neon.ecocomdp.20107.001.001(neon.data.product.id = "DP1.20107.001", ...)
 map_neon.ecocomdp.20120.001.001(neon.data.product.id = "DP1.20120.001", ...)
 
 map_neon.ecocomdp.20166.001.001(neon.data.product.id = "DP1.20166.001", ...)
+
+map_neon.ecocomdp.20219.001.001(neon.data.product.id = "DP1.20219.001", ...)
 
 map_neon_data_to_ecocomDP(data.product.id, ...)
 }
@@ -96,6 +100,8 @@ Dates are specified only to the month because NEON data are provided in monthly 
 \item \code{map_neon.ecocomdp.20120.001.001}: This method will retrieve density data for MACROINVERTEBRATE from neon.data.product.id DP1.20120.001 from the NEON data portal and map to the ecocomDP format
 
 \item \code{map_neon.ecocomdp.20166.001.001}: This method will retrieve density data for ALGAE from neon.data.product.id DP1.20166.001 (Periphyton, seston, and phytoplankton collection) from the NEON data portal and map to the ecocomDP format
+
+\item \code{map_neon.ecocomdp.20219.001.001}: This method will retrieve count data for ZOOPLANKTON taxa from neon.data.product.id DP1.20219.001 from the NEON data portal and map to the ecocomDP format
 }}
 
 \examples{
@@ -158,6 +164,14 @@ my_result <- map_neon.ecocomdp.20107.001.001(
 my_result <- map_neon.ecocomDP.20120.001.001(site= c('COMO','LECO'),
                                                          startdate = "2019-06", 
                                                          enddate = "2019-09")
+}
+\dontrun{
+my_result <- map_neon.ecocomdp.20219.001.001(
+site = c("BARC","SUGG"), 
+startdate = "2016-01",
+enddate = "2017-11",
+token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
 }
 \dontrun{
 # Retrieve and map NEON ALGAE data to ecocomDP format
