@@ -153,9 +153,9 @@ map_neon.ecocomdp.10022.001.001 <- function(
     dplyr::mutate(scientificName = ifelse(is.na(scientificName.y), scientificName.x, scientificName.y)) %>%
     dplyr::mutate(identificationSource = ifelse(is.na(scientificName.y), identificationSource, "expert")) %>%
     dplyr::select(-ends_with(".x"), -ends_with(".y")) %>%
-    group_by(individualID) %>%
-    filter(n() == 1 | is.na(individualID)) %>% #remove individuals with more than one ID, retain NA individualID's
-    ungroup()
+    dplyr::group_by(individualID) %>%
+    dplyr::filter(n() == 1 | is.na(individualID)) %>% #remove individuals with more than one ID, retain NA individualID's
+    dplyr::ungroup()
 
 
 
