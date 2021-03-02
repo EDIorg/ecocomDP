@@ -18,7 +18,7 @@ TODO --
 		ticks
 	- shiny app
 		update documentation
-		add "aggregation" choice (mean vs sum) for within group for a given value x. 
+		add "aggregation" choice (none vs mean vs sum) for within group for a given value x. 
 		
 
 --------------------------------------------------------
@@ -186,3 +186,7 @@ ZOOPS (MACROINVERTEBRATE) -- map_neon.ecocomdp.20219.001.001
 	event_id = neon_sample_id
     neon_event_id = eventID
     neon_sample_id = sampleID
+
+##################################################################
+TICK_PATHOGEN -- map_neon.ecocomdp.10092.001.001
+	problems 
