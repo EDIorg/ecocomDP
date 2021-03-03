@@ -96,7 +96,7 @@ Dates are specified only to the month because NEON data are provided in monthly 
 
 \item \code{map_neon.ecocomdp.10072.001.001}: This method will retrieve count data for SMALL_MAMMAL taxa from neon.data.product.id DP1.10072.001 from the NEON data portal and map to the ecocomDP format
 
-\item \code{map_neon.ecocomdp.10092.001.001}: This method will retrieve count data for TICK_PATHOGEN taxa from neon.data.product.id DP1.10092.001 from the NEON data portal and map to the ecocomDP format
+\item \code{map_neon.ecocomdp.10092.001.001}: This method will retrieve positivity data for TICK_PATHOGEN taxa from neon.data.product.id DP1.10092.001 from the NEON data portal and map to the ecocomDP format
 
 \item \code{map_neon.ecocomdp.10093.001.001}: This method will retrieve count data for TICK taxa from neon.data.product.id DP1.10093.001 from the NEON data portal and map to the ecocomDP format
 
