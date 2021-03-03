@@ -16,6 +16,7 @@ TODO --
 		herps
 		mammals
 		ticks
+		tick pathogens
 	- shiny app
 		update documentation
 		add "aggregation" choice (none vs mean vs sum) for within group for a given value x. 
@@ -32,8 +33,9 @@ TODO --
  FISH				abundance		catch per unit effort
  HERPTILES			abundance		count per trap day
  PLANT				percent cover	percent of plot area covered by taxon
- SMALL_MAMMAL		count			unique individuals per trap night per plot per month
+ SMALL_MAMMAL		count			unique individuals per 100 trap nights per plot per month
  ZOOPLANKTON		density			count per liter
+ TICK_PATHOGENS		positivity rate	positive tests per pathogen per sampling event
  
 ##################################################################
 BEETLES -- map_neon.ecocomdp.10022.001.001
@@ -150,6 +152,7 @@ SMALL_MAMMAL -- map_neon.ecocomdp.10072.001.001
 	problems 
 		- data were reported at individual level. ecocomDP is meant to aggretate individual observations. See update #2
 		- recaptures are currently removed. If we're reporting per trapnight per plot, are we sure we want to do this? 
+		- do not use fate to filter out "nontarget" taxa (per conversation with Sara on 3/2/2021) because it is unreliable -- i.e., field techs have filled it in wrong. Instead, filtered by trapStatus (see #3). Sara has indicated that non-target captures are given trapStatus = 2
 		
 	updates
 		- 1. remove records where no animals were caught. 
@@ -157,7 +160,8 @@ SMALL_MAMMAL -- map_neon.ecocomdp.10072.001.001
 			- take first day in bout as datetime
 			- unique individuals per 100 trapnights per plot per bout
 			- the year-month bout doesn't quite align with actual bouts... 
-				e.g., DSNY_004, 2016-11 captures dates 11/2,3, 7, 8, 9, and 30. 
+				e.g., DSNY_004, 2016-11 captures dates 11/2,3, 7, 8, 9, and 30.
+		- 3. added dplyr::filter(dat.mam, trapStatus %in% c("5 - capture","4 - more than 1 capture in one trap"))
 		
 	observation_id = paste0("obs_",1:nrow(.))
 	event_id = unique year-month-location_id
@@ -190,3 +194,6 @@ ZOOPS (MACROINVERTEBRATE) -- map_neon.ecocomdp.20219.001.001
 ##################################################################
 TICK_PATHOGEN -- map_neon.ecocomdp.10092.001.001
 	problems 
+		- replaced "hostSpecies" with "vectorSpecies" per Sara's suggestion
+		- standardized test positivity rate per no tests per collectDate per tick plot ID
+		
