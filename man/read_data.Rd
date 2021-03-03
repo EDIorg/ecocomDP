@@ -8,13 +8,7 @@ read_data(
   id = NULL,
   path = NULL,
   file.type = ".rda",
-  site = "all",
-  startdate = NA,
-  enddate = NA,
-  check.size = FALSE,
-  nCores = 1,
-  forceParallel = FALSE,
-  token = NA,
+  ...,
   globally.unique.keys = FALSE
 )
 }
@@ -29,6 +23,11 @@ only; see below for arguments and examples).}
 
 \item{file.type}{(character) Type of file to save the data to. Options are: ".rda", 
 ".csv".}
+
+\item{globally.unique.keys}{(logical) Whether to create globally unique primary keys (and associated
+foreign keys). Reading multiple datasets raises the issue of referential 
+integrity across datasets. If TRUE, \code{id} is appended to each 
+table's primary key and associated foreign key. Defaults to FALSE.}
 
 \item{site}{(character; NEON data only) A character vector of site codes to filter 
 data on. Sites are listed in the "sites" column of the 
@@ -52,11 +51,6 @@ to FALSE.}
 
 \item{token}{(character; NEON data only) User specific API token (generated within 
 neon.datascience user accounts)}
-
-\item{globally.unique.keys}{(logical) Whether to create globally unique primary keys (and associated
-foreign keys). Reading multiple datasets raises the issue of referential 
-integrity across datasets. If TRUE, \code{id} is appended to each 
-table's primary key and associated foreign key. Defaults to FALSE.}
 }
 \value{
 (list) A named list of \code{id}, each including: 

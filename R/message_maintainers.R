@@ -4,7 +4,6 @@
 #'
 #' @export
 #'
-#' @examples
 message_maintainers <- function() {
   
   # TODO: This should be combined with the email notification currently sent by event_notification_handler() when an event notification is received.
