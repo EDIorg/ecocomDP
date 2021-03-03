@@ -71,8 +71,9 @@ map_neon.ecocomdp.10072.001.001 <- function(
   ## D Li: probably not, released have 64,400 records and processed only have 7,365
   
   # table(dat.mam$fate)
-  dat.mam <- dplyr::filter(dat.mam, !fate %in% c("dead", "escaped", "nontarget"))
-  #dat.mam <- filter(dat.mam, fate != "released")
+  # dat.mam <- dplyr::filter(dat.mam, !fate %in% c("dead", "escaped", "nontarget"))
+  # dat.mam <- dplyr::filter(dat.mam, fate != "released")
+  dat.mam <- dplyr::filter(dat.mam, trapStatus %in% c("5 - capture","4 - more than 1 capture in one trap"))
   
   # unique(dat.mam$scientificName)
   # group_by(dat.mam, taxonRank) %>% tally() # mostly are sp and genus level
@@ -154,6 +155,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
                   authority_system) 
   
   
+
   # observation ----
   table_observation_all <- data_small_mammal %>%
     dplyr::rename(location_id = namedLocation) %>%
@@ -163,7 +165,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
     dplyr:: rename(
       observation_datetime = collectDate, 
       taxon_id = taxonID) %>%
-    mutate(
+    dplyr::mutate(
       event_id = paste(year, month, location_id, sep = "_")) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(
@@ -180,7 +182,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
     dplyr::distinct() %>%
     dplyr::group_by(package_id, event_id, location_id, plotID, year, month) %>%
     dplyr::summarize(
-      observation_datetime = first(observation_datetime),
+      observation_datetime = dplyr::first(observation_datetime),
       n_trap_nights_per_bout_per_plot = sum(n_trap_nights_per_night_uid),
       n_nights_per_bout = length(unique(nightuid))) %>%
     dplyr::ungroup()
@@ -204,7 +206,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
   
   table_event_counts <- table_event %>%
     dplyr::left_join(table_raw_counts, by = "event_id") %>%
-    mutate(
+    dplyr::mutate(
       observation_id = paste0("obs_",1:nrow(.)),
       value = 100 * raw_count / n_trap_nights_per_bout_per_plot,
       variable_name = "count",

@@ -81,30 +81,30 @@ map_neon.ecocomdp.10022.001.002 <- function(
   # the previous collectDate, not the recorded setDate. To do this:
   
   adjTrappingDays <- tidy_fielddata %>%
-    select(namedLocation, trapID, setDate, collectDate, trappingDays, eventID) %>%
-    group_by(namedLocation, trapID, setDate) %>%
-    filter(n_distinct(collectDate) > 1) %>% # filter those with more than one collectDate
-    mutate(totalSerialBouts = n_distinct(collectDate))
+    dplyr::select(namedLocation, trapID, setDate, collectDate, trappingDays, eventID) %>%
+    dplyr::group_by(namedLocation, trapID, setDate) %>%
+    dplyr::filter(dplyr::n_distinct(collectDate) > 1) %>% # filter those with more than one collectDate
+    dplyr::mutate(totalSerialBouts = dplyr::n_distinct(collectDate))
   
   
   
   if(nrow(adjTrappingDays) > 0){
     #1. take the difference and use this as the new trapping days
     adjTrappingDays <- adjTrappingDays %>%
-      mutate(diffTrappingDays = # as long as there are only 2 bouts this works
+      dplyr::mutate(diffTrappingDays = # as long as there are only 2 bouts this works
                trappingDays - min(trappingDays)) %>%
-      mutate(adjTrappingDays = # if the difference is 0 then trappingDays
-               case_when(diffTrappingDays == 0 ~ trappingDays,
+      dplyr::mutate(adjTrappingDays = # if the difference is 0 then trappingDays
+                      dplyr::case_when(diffTrappingDays == 0 ~ trappingDays,
                          TRUE ~ diffTrappingDays)) # otherwise use the difference
     
     
     
     # 1. Drop some columns from adjTrappingDays
     adjTrappingDays <- adjTrappingDays %>% # drop some columns
-      select(-c(trappingDays, diffTrappingDays, totalSerialBouts))
+      dplyr::select(-c(trappingDays, diffTrappingDays, totalSerialBouts))
     
     # 1. Join trapping days to adjTrappingDays
-    tidy_fielddata <- left_join(tidy_fielddata, adjTrappingDays)
+    tidy_fielddata <- dplyr::left_join(tidy_fielddata, adjTrappingDays)
   }else{
     tidy_fielddata$adjTrappingDays <- NA_real_
   }
@@ -114,10 +114,10 @@ map_neon.ecocomdp.10022.001.002 <- function(
   
   #1. Adjust the trapping days
   tidy_fielddata <- tidy_fielddata %>%
-    mutate(trappingDays =
-             case_when(!is.na(adjTrappingDays) ~ adjTrappingDays, # use adjTrappingDays
+    dplyr::mutate(trappingDays =
+             dplyr::case_when(!is.na(adjTrappingDays) ~ adjTrappingDays, # use adjTrappingDays
                        TRUE ~ trappingDays # otherwise just use trappingDays
-             )) %>% select(-adjTrappingDays) # clean up the variables
+             )) %>% dplyr::select(-adjTrappingDays) # clean up the variables
   
   
   
@@ -163,7 +163,7 @@ map_neon.ecocomdp.10022.001.002 <- function(
   
   data_herp_bycatch <- tidy_fielddata %>%
     dplyr::full_join(tidy_sorting) %>%
-    filter(!is.na(sampleID)) # remove all of the sampleIDs that are NAs
+    dplyr::filter(!is.na(sampleID)) # remove all of the sampleIDs that are NAs
   
   
   # 1. Clean up the data_herp_bycatch so that it is focused on vert bycatch herp
@@ -171,62 +171,64 @@ map_neon.ecocomdp.10022.001.002 <- function(
   # sampleType provides the categories
   
   data_herp_bycatch <- data_herp_bycatch %>%
-    mutate(sampleType =
-             case_when(is.na(sampleType) ~ "no data collected", # add a level for the missing sorting data
-                       TRUE ~ sampleType)) %>%
-    mutate(sampleCondition =
-             case_when(sampleType!="vert bycatch herp" ~ NA_character_,
-                       TRUE ~ sampleCondition)) %>%
-    mutate(samplingImpractical =
-             case_when(sampleType!="vert bycatch herp" ~ NA_character_,
-                       TRUE ~ samplingImpractical)) %>%
-    mutate(remarksFielddata =
-             case_when(sampleType!="vert bycatch herp" ~ NA_character_,
-                       TRUE ~ remarksFielddata)) %>%
-    mutate(subsampleID =
-             case_when(sampleType!="vert bycatch herp" ~ NA_character_,
-                       TRUE ~ subsampleID)) %>%
-    mutate(taxonID =
-             case_when(sampleType!="vert bycatch herp" ~ NA_character_,
-                       TRUE ~ taxonID)) %>%
-    mutate(taxonRank =
-             case_when(sampleType!="vert bycatch herp" ~ NA_character_,
-                       TRUE ~ taxonRank)) %>%
-    mutate(scientificName =
-             case_when(sampleType!="vert bycatch herp" ~ NA_character_,
-                       TRUE ~ scientificName)) %>%
+    dplyr::mutate(sampleType =
+                    dplyr::case_when(is.na(sampleType) ~ "no data collected", # add a level for the missing sorting data
+                                     TRUE ~ sampleType)) %>%
+    dplyr::mutate(sampleCondition =
+                    dplyr::case_when(sampleType!="vert bycatch herp" ~ NA_character_,
+                                     TRUE ~ sampleCondition)) %>%
+    dplyr::mutate(samplingImpractical =
+                    dplyr::case_when(sampleType!="vert bycatch herp" ~ NA_character_,
+                                     TRUE ~ samplingImpractical)) %>%
+    dplyr::mutate(remarksFielddata =
+                    dplyr::case_when(sampleType!="vert bycatch herp" ~ NA_character_,
+                                     TRUE ~ remarksFielddata)) %>%
+    dplyr::mutate(subsampleID =
+                    dplyr::case_when(sampleType!="vert bycatch herp" ~ NA_character_,
+                                     TRUE ~ subsampleID)) %>%
+    dplyr::mutate(taxonID =
+                    dplyr::case_when(sampleType!="vert bycatch herp" ~ NA_character_,
+                                     TRUE ~ taxonID)) %>%
+    dplyr::mutate(taxonRank =
+                    dplyr::case_when(sampleType!="vert bycatch herp" ~ NA_character_,
+                                     TRUE ~ taxonRank)) %>%
+    dplyr::mutate(scientificName =
+                    dplyr::case_when(sampleType!="vert bycatch herp" ~ NA_character_,
+                                     TRUE ~ scientificName)) %>%
     # mutate(identificationQualifier =
     #          case_when(sampleType!="vert bycatch herp" ~ NA_character_,
     #                    TRUE ~ identificationQualifier)) %>%
     # mutate(morphospeciesID =
     #          case_when(sampleType!="vert bycatch herp" ~ NA_character_,
     #                    TRUE ~ morphospeciesID)) %>%
-    mutate(identificationReferences =
-             case_when(sampleType!="vert bycatch herp" ~ NA_character_,
-                       TRUE ~ identificationReferences)) %>%
-    mutate(nativeStatusCode =
-             case_when(sampleType!="vert bycatch herp" ~ NA_character_,
-                       TRUE ~ nativeStatusCode)) %>%
-    mutate(remarksSorting =
-             case_when(sampleType!="vert bycatch herp" ~ NA_character_,
-                       TRUE ~ remarksSorting))
+    dplyr::mutate(identificationReferences =
+                    dplyr::case_when(sampleType!="vert bycatch herp" ~ NA_character_,
+                                     TRUE ~ identificationReferences)) %>%
+    dplyr::mutate(nativeStatusCode =
+                    dplyr::case_when(sampleType!="vert bycatch herp" ~ NA_character_,
+                                     TRUE ~ nativeStatusCode)) %>%
+    dplyr::mutate(remarksSorting =
+                    dplyr::case_when(sampleType!="vert bycatch herp" ~ NA_character_,
+                                     TRUE ~ remarksSorting))
   
   # 1. Decide if you don't care about any of the other sampleTypes
   
   
 
+  # browser()
+  
   
   # if(group_nonherps) { # group all nonherps
   data_herp_bycatch <-  data_herp_bycatch  %>%
-    mutate(sampleType =
-             case_when(sampleType != "vert bycatch herp" ~ "not herp", # add a level for the missing sorting data
+    dplyr::mutate(sampleType =
+                    dplyr::case_when(sampleType != "vert bycatch herp" ~ "not herp", # add a level for the missing sorting data
                        TRUE ~ sampleType)) %>%
-    group_by(sampleID, sampleType, scientificName) %>%
-    mutate(individualCount_sum = sum(individualCount, na.rm = TRUE)) %>% # sum up all of the not herps
-    mutate(individualCount_sum = na_if(individualCount_sum, 0)) %>% # put NA back in the fielddata with missing sorting data
-    mutate(individualCount = individualCount_sum) %>% # replace with the new cout
+    dplyr::group_by(sampleID, sampleType, scientificName) %>%
+    dplyr::mutate(individualCount_sum = sum(individualCount, na.rm = TRUE)) %>% # sum up all of the not herps
+    dplyr::mutate(individualCount_sum = dplyr::na_if(individualCount_sum, 0)) %>% # put NA back in the fielddata with missing sorting data
+    dplyr::mutate(individualCount = individualCount_sum) %>% # replace with the new cout
     dplyr::select(-individualCount_sum) %>% # clean up
-    ungroup() # clean up
+    dplyr::ungroup() # clean up
   # }
   
   # 1. Remove the redundant rows
@@ -235,9 +237,9 @@ map_neon.ecocomdp.10022.001.002 <- function(
   
   
   # #1. Only want samples with herps
-  data_herp_bycatch <- filter(data_herp_bycatch, sampleType == "vert bycatch herp",
+  data_herp_bycatch <- dplyr::filter(data_herp_bycatch, sampleType == "vert bycatch herp",
                               (is.na(sampleCondition) | sampleCondition == "OK")) %>%
-    select(-boutID, # just siteID and colectDate
+    dplyr::select(-boutID, # just siteID and colectDate
            -sampleCollected, # all Y
            -sampleID,  -sampleCondition, -samplingImpractical,
            -eventID_raw, -subsampleID,

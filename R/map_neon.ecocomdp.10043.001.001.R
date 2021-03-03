@@ -24,7 +24,10 @@ map_neon.ecocomdp.10043.001.001 <- function(
   dots_updated <- list(..., dpID = neon.data.product.id)
   
   #Error handling if user provides a value for "package" other than "expanded"
-  if("package" %in% names(dots_updated) && dots_updated$package != "expanded") message("WARNING: expanded package for DP1.10043.001 is required to execute this request. Downloading the expanded package")
+  if("package" %in% names(dots_updated) && dots_updated$package != "expanded") message(
+    paste0("WARNING: expanded package for ", neon.data.product.id, 
+           " is required to execute this request. Downloading the expanded package"))
+  
   
   dots_updated[["package"]] <- "expanded"
   

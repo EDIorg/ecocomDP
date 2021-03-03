@@ -55,7 +55,9 @@ map_neon.ecocomdp.20107.001.001 <- function(
   
   
   #Error handling if user provides a value for "package" other than "expanded"
-  if("package" %in% names(dots_updated) && dots_updated$package != "expanded") message("WARNING: expanded package for DP1.20107.001 is required to execute this request. Downloading the expanded package")
+  if("package" %in% names(dots_updated) && dots_updated$package != "expanded") message(
+    paste0("WARNING: expanded package for ", neon.data.product.id, 
+           " is required to execute this request. Downloading the expanded package"))
   
   dots_updated[["package"]] <- "expanded"
   
@@ -167,8 +169,8 @@ map_neon.ecocomdp.20107.001.001 <- function(
   # aggregate densities for each species group, pull out year and month from StartDate
   
   fsh_dat_aggregate <- fsh_dat_fine %>%
-    dplyr::select(!!c(all_of(my_grouping_vars), 'count')) %>%
-    dplyr::group_by_at(dplyr::vars(all_of(my_grouping_vars))) %>%
+    dplyr::select(!!c(dplyr::all_of(my_grouping_vars), 'count')) %>%
+    dplyr::group_by_at(dplyr::vars(dplyr::all_of(my_grouping_vars))) %>%
     dplyr::summarize(
       number_of_fish = sum(count),
       n_obs = dplyr::n()) %>%
@@ -182,7 +184,7 @@ map_neon.ecocomdp.20107.001.001 <- function(
   # grepl is for wildcarding
   fsh_dat_aggregate$aquaticSiteType <- dplyr::if_else(
     is.na(fsh_dat_aggregate$aquaticSiteType),
-    if_else(
+    dplyr::if_else(
       grepl("fish.point", fsh_dat_aggregate$namedLocation), 'stream','lake'),
     fsh_dat_aggregate$aquaticSiteType)
   
@@ -304,7 +306,7 @@ map_neon.ecocomdp.20107.001.001 <- function(
     dplyr::rename(location_id = namedLocation) %>%
     # package id
     dplyr::mutate(package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
-    dplyr:: rename(
+    dplyr::rename(
       # neon_event_id = eventID,
       observation_datetime = startDate, 
       taxon_id = taxonID,

@@ -32,7 +32,9 @@ map_neon.ecocomdp.10093.001.001 <- function(
   dots_updated <- list(..., dpID = neon.data.product.id)
   
   #Error handling if user provides a value for "package" other than "expanded"
-  if("package" %in% names(dots_updated) && dots_updated$package != "expanded") message("WARNING: expanded package for DP1.10003.001 is required to execute this request. Downloading the expanded package")
+  if("package" %in% names(dots_updated) && dots_updated$package != "expanded") message(
+    paste0("WARNING: expanded package for ", neon.data.product.id, 
+           " is required to execute this request. Downloading the expanded package"))
   
   dots_updated[["package"]] <- "expanded"
   
@@ -197,8 +199,8 @@ map_neon.ecocomdp.10093.001.001 <- function(
   # useful for correcting counts later
   tax.issues = Tick_all$tck_taxonomyProcessed %>%
     dplyr::filter(
-      str_detect(remarks, "insect|mite|not a tick|NOT A TICK|arachnid|spider")) %>%
-    pull(sampleID) %>% unique()
+      stringr::str_detect(remarks, "insect|mite|not a tick|NOT A TICK|arachnid|spider")) %>%
+    dplyr::pull(sampleID) %>% unique()
   
   # add a flag for these samples in the field dataset
   tck_fielddata_filtered$IDflag[which(tck_fielddata_filtered$sampleID %in% tax.issues)] <- "ID WRONG"
@@ -258,7 +260,7 @@ map_neon.ecocomdp.10093.001.001 <- function(
   
   # create a lifestage column so tax counts can be compared to field data
   tck_tax_filtered <- tck_tax_filtered %>%
-    mutate(lifeStage = case_when(sexOrAge == "Male" | sexOrAge == "Female" |
+    dplyr::mutate(lifeStage = dplyr::case_when(sexOrAge == "Male" | sexOrAge == "Female" |
                                    sexOrAge == "Adult" ~ "Adult",
                                  sexOrAge == "Larva" ~ "Larva",
                                  sexOrAge == "Nymph" ~ "Nymph"))
@@ -369,9 +371,9 @@ map_neon.ecocomdp.10093.001.001 <- function(
   #### FIX COUNT 1.1 FLAG DISCREPANCIES ###
   
   # first get list of columns for easy summing
-  adult_cols <- tck_merged %>% select(contains("_Adult")) %>% colnames() 
-  nymph_cols <- tck_merged %>% select(contains("_Nymph")) %>% colnames()
-  larva_cols <- tck_merged %>% select(contains("_Larva")) %>% colnames()
+  adult_cols <- tck_merged %>% dplyr::select(dplyr::contains("_Adult")) %>% colnames() 
+  nymph_cols <- tck_merged %>% dplyr::select(dplyr::contains("_Nymph")) %>% colnames()
+  larva_cols <- tck_merged %>% dplyr::select(dplyr::contains("_Larva")) %>% colnames()
   
   # sum up lab and field totals
   tck_merged <- tck_merged %>% 
@@ -598,7 +600,7 @@ map_neon.ecocomdp.10093.001.001 <- function(
   # cases with larger discrepancies that aren't obvious are removed from final dataset
   # make sure this is less than 1% of total cases
   # more work could be done here if there are many cases in this category
-  if((tck_merged %>% filter(CountFlag!=0) %>% nrow())/nrow(tck_merged)< 0.01){
+  if((tck_merged %>% dplyr::filter(CountFlag!=0) %>% nrow())/nrow(tck_merged)< 0.01){
     tck_merged <- tck_merged %>% dplyr::filter(CountFlag==0)
   }
   
