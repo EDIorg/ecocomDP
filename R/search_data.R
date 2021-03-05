@@ -382,7 +382,7 @@ format_search_results <- function(x) {
   x <- dplyr::left_join(
     x, 
     data.table::fread(
-      system.file("/inst/L1_versions.txt", package = "ecocomDP")),
+      system.file("/L1_versions.txt", package = "ecocomDP")),
     by = "id")
   
   # Shift IDs
