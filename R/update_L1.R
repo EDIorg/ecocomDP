@@ -48,7 +48,11 @@ update_L1 <- function(id.L0.newest,
   
   eml_L0_newest <- ecocomDP::read_eml(id.L0.newest)
   eml_L0_previous <- ecocomDP::read_eml(get_previous_version(id.L0.newest))
-
+  
+  browser()
+  r <- EDIutils::compare_eml(eml_L0_newest, eml_L0_previous)
+  stringr::str_subset(r, "is different")
+  
   message(
     capture.output(
       EDIutils::compare_eml(eml_L0_newest, eml_L0_previous)))
