@@ -1,27 +1,29 @@
 ##############################################################################################
 ##############################################################################################
+#' @author Lara Janson
+#' 
 #' @examples 
 #' \dontrun{
+#'
 #' my_result <- map_neon.ecocomdp.20219.001.001(
-#' site = c("BARC","SUGG"), 
-#' startdate = "2016-01",
-#' enddate = "2017-11",
-#' token = Sys.getenv("NEON_TOKEN"),
+#'   site = c("BARC","SUGG"),
+#'   startdate = "2016-01",
+#'   enddate = "2017-11",
+#'   token = Sys.getenv("NEON_TOKEN"),
 #'   check.size = FALSE)
 #' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for ZOOPLANKTON taxa from neon.data.product.id DP1.20219.001 from the NEON data portal and map to the ecocomDP format
-#' @export
 
 ##############################################################################################
-# mapping function for SMALL_MAMMAL taxa
+# mapping function for ZOOPLANKTON taxa
 map_neon.ecocomdp.20219.001.001 <- function(
   neon.data.product.id = "DP1.20219.001",
   ...){
   
   # authors: Lara Janson, Stephanie Parker, Eric Sokol
   
-  #NEON target taxon group is SMALL_MAMMALS
+  #NEON target taxon group is ZOOPLANKTON
   neon_method_id <- "neon.ecocomdp.20219.001.001"
   
   # check arguments passed via dots for neonUtilities
@@ -97,11 +99,11 @@ map_neon.ecocomdp.20219.001.001 <- function(
                   namedLocation, aquaticSiteType, geodeticDatum) %>%
     dplyr::distinct() 
   
-  table_location <- ecocomDP::make_neon_location_table(
+  table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"))
   
-  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+  table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"),
     ancillary_var_names = c("namedLocation", "aquaticSiteType", "geodeticDatum"))
@@ -142,7 +144,7 @@ map_neon.ecocomdp.20219.001.001 <- function(
       unit) %>%
     dplyr::filter(!is.na(taxon_id))
   
-  table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
+  table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
       "event_id",

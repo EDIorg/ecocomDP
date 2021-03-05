@@ -111,9 +111,11 @@ Dates are specified only to the month because NEON data are provided in monthly 
 
 \examples{
 \dontrun{
-my_result <- map_neon.ecocomdp.10003.001.001(site = c("NIWO","DSNY"), 
-                                                  startdate = "2016-01", 
-                                                  enddate = "2018-11")
+
+my_result <- map_neon.ecocomdp.10003.001.001(
+  site = c("NIWO","DSNY"),
+  startdate = "2016-01",
+  enddate = "2018-11")
 }
 \dontrun{
 my_result <- map_neon.ecocomdp.10022.001.001(site = c('ABBY','BARR'),
@@ -188,7 +190,7 @@ token = Sys.getenv("NEON_TOKEN"),
 }
 \dontrun{
 # Retrieve and map NEON ALGAE data to ecocomDP format
-my_result <- ecocomDP::map_neon_data_to_ecocomDP(
+my_result <- ecocomDP:::map_neon_data_to_ecocomDP(
   neon.data.product.id = "DP1.20166.001",
   site = c("MAYF", "PRIN"),
   startdate = "2016-1",
@@ -207,6 +209,10 @@ my_result <- map_neon_data_to_ecocomDP( neon.data.product.id = "DP1.20120.001",
 License: GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007
 }
 \author{
+Eric R Sokol \email{esokol@battelleecology.org}
+
+Daijiang Li
+
 Eric R Sokol \email{esokol@battelleecology.org}
 
 Ruvi Jaimes \email{jaimesr@battelleecology.org}

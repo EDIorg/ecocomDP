@@ -1,13 +1,16 @@
 ##############################################################################################
+#' @author Stephanie Parker \email{sparker@battelleecology.org}
+#' 
 #' @examples 
 #' \dontrun{
-#' my_result <- map_neon.ecocomDP.20120.001.001(site= c('COMO','LECO'),
-#'                                                          startdate = "2019-06", 
-#'                                                          enddate = "2019-09")
+#' 
+#' my_result <- map_neon.ecocomDP.20120.001.001(
+#'   site= c('COMO','LECO'),
+#'   startdate = "2019-06",
+#'   enddate = "2019-09")
 #' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for MACROINVERTEBRATE from neon.data.product.id DP1.20120.001 from the NEON data portal and map to the ecocomDP format
-#' @export
 
 # changelog and author contributions / copyrights
 #   Eric R Sokol & Ruvi Jaimes (2020-06-08)
@@ -78,11 +81,11 @@ map_neon.ecocomdp.20120.001.001 <- function(
   # start with the inv_fielddata table and pull out latitude, longitude, and elevation for each NEON site that occurs in the data
   
 
-  table_location <- ecocomDP::make_neon_location_table(
+  table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"))
   
-  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+  table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"))
   
@@ -134,7 +137,7 @@ map_neon.ecocomdp.20120.001.001 <- function(
                   siteID) %>%
     dplyr::distinct() %>% 
     
-    # suppressMessages(ecocomDP::make_location(cols = c("domainID", "siteID", "namedLocation"))) %>% 
+    # suppressMessages(ecocomDP:::make_location(cols = c("domainID", "siteID", "namedLocation"))) %>% 
     
     # Join the columns selected above with two columns from inv_fielddata (the two columns are sampleID and benthicArea)
     dplyr::left_join(inv_fielddata %>% dplyr::select(sampleID, benthicArea)) %>%
@@ -180,7 +183,7 @@ map_neon.ecocomdp.20120.001.001 <- function(
     dplyr::distinct()
   
 
-  table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
+  table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_ancillary_wide,
     ancillary_var_names = names(table_observation_ancillary_wide))
   

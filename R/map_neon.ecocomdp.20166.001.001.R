@@ -1,7 +1,6 @@
 ##############################################################################################
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for ALGAE from neon.data.product.id DP1.20166.001 (Periphyton, seston, and phytoplankton collection) from the NEON data portal and map to the ecocomDP format
 #' 
-#' @export
 
 # changelog and author contributions / copyrights
 #   Eric R Sokol (2020-04-17)
@@ -163,7 +162,7 @@ map_neon.ecocomdp.20166.001.001 <- function(
   # make observation ancillary table. First convert POSIXct POSIXt classed
   # variables to character, otherwise gathering will produce a warning.
   
-  table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
+  table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_ecocomDP,
     ancillary_var_names = c("neon_sample_id",
                             "neon_event_id",
@@ -190,11 +189,11 @@ map_neon.ecocomdp.20166.001.001 <- function(
     dplyr::select(domainID, siteID, namedLocation, decimalLatitude, decimalLongitude, elevation) %>%
     dplyr::distinct() 
   
-  table_location <- ecocomDP::make_neon_location_table(
+  table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"))
   
-  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+  table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"))
   

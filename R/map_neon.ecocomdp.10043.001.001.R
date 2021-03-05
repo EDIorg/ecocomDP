@@ -1,14 +1,18 @@
 ##############################################################################################
 ##############################################################################################
+#' @author Natalie Robinson \email{nrobinson@battelleecology.org}
+#' 
 #' @examples 
 #' \dontrun{
-#' my_result <- map_neon.ecocomdp.10043.001.001(site = c("NIWO","DSNY"), 
-#'                                                   startdate = "2016-01", 
-#'                                                   enddate = "2018-11")
+#'
+#' my_result <- map_neon.ecocomdp.10043.001.001(
+#'   site = c("NIWO","DSNY"),
+#'   startdate = "2016-01",
+#'   enddate = "2018-11")
+#' 
 #' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for MOSQUITO from neon.data.product.id DP1.10043.001 from the NEON data portal and map to the ecocomDP 
-#' @export
 
 ##############################################################################################
 # mapping function for MOSQUITO
@@ -219,11 +223,11 @@ map_neon.ecocomdp.10043.001.001 <- function(
     dplyr::select(domainID, siteID, namedLocation, decimalLatitude, decimalLongitude, elevation) %>%
     dplyr::distinct() 
   
-  table_location <- ecocomDP::make_neon_location_table(
+  table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"))
   
-  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+  table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"))
   
@@ -300,7 +304,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
     dplyr::mutate(event_id = neon_sample_id) %>%
     dplyr::distinct()
   
-  table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
+  table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_ancillary_wide,
     ancillary_var_names = names(table_observation_ancillary_wide))
       

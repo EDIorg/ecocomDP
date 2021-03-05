@@ -1,13 +1,17 @@
 ##############################################################################################
+#' @author Kari Norman \email{kari.norman@berkeley.edu}
+#' 
 #' @examples 
 #' \dontrun{
-#' my_result <- map_neon.ecocomdp.10022.001.001(site = c('ABBY','BARR'),
-#'                                               startdate = "2019-06", 
-#'                                               enddate = "2019-09")
+#' 
+#' my_result <- map_neon.ecocomdp.10022.001.001(
+#'   site = c('ABBY','BARR'),
+#'   startdate = "2019-06",
+#'   enddate = "2019-09")
+#'                                          
 #' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for BEETLE from neon.data.product.id DP1.10022.001 from the NEON data portal and map to the ecocomDP 
-#' @export
 #' 
 ##############################################################################################
 
@@ -16,8 +20,6 @@ map_neon.ecocomdp.10022.001.001 <- function(
   neon.data.product.id = "DP1.10022.001",
   ...){
   
-  # author: Kari Norman 
-  # updated by: Eric Sokol
   
   #NEON target taxon group is ALGAE
   neon_method_id <- "neon.ecocomdp.10022.001.001"
@@ -250,11 +252,11 @@ map_neon.ecocomdp.10022.001.001 <- function(
                   plotType, nlcdClass, geodeticDatum) %>%
     dplyr::distinct() 
   
-  table_location <- ecocomDP::make_neon_location_table(
+  table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"))
   
-  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+  table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"),
     ancillary_var_names <- c("namedLocation",

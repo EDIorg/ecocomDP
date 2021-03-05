@@ -1,17 +1,20 @@
 ##############################################################################################
 ##############################################################################################
+#' @author Michael Just
+#' 
 #' @examples 
 #' \dontrun{
+#' 
 #' my_result <- map_neon.ecocomdp.10058.001.001(
-#' site= c("NIWO","DSNY"), 
-#' startdate = "2016-01",
-#' enddate = "2017-11",
-#' token = Sys.getenv("NEON_TOKEN"),
+#'   site= c("NIWO","DSNY"),
+#'   startdate = "2016-01",
+#'   enddate = "2017-11",
+#'   token = Sys.getenv("NEON_TOKEN"),
 #'   check.size = FALSE)
+#'   
 #' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve percent cover data for PLANT taxa from neon.data.product.id DP1.10058.001 from the NEON data portal and map to the ecocomDP format
-#' @export
 
 ##############################################################################################
 
@@ -109,11 +112,11 @@ map_neon.ecocomdp.10058.001.001 <- function(
                   nlcdClass, geodeticDatum) %>%
     dplyr::distinct() 
   
-  table_location <- ecocomDP::make_neon_location_table(
+  table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"))
   
-  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+  table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"),
     ancillary_var_names = c("namedLocation", "nlcdClass", "geodeticDatum"))
@@ -165,7 +168,7 @@ map_neon.ecocomdp.10058.001.001 <- function(
       unit) %>%
     dplyr::filter(!is.na(taxon_id))
   
-  table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
+  table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
       "event_id",

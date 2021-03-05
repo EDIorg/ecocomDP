@@ -1,10 +1,14 @@
 ##############################################################################################
 ##############################################################################################
+#' @author Daijiang Li
+#' 
 #' @examples 
 #' \dontrun{
-#' my_result <- map_neon.ecocomdp.10003.001.001(site = c("NIWO","DSNY"), 
-#'                                                   startdate = "2016-01", 
-#'                                                   enddate = "2018-11")
+#'
+#' my_result <- map_neon.ecocomdp.10003.001.001(
+#'   site = c("NIWO","DSNY"),
+#'   startdate = "2016-01",
+#'   enddate = "2018-11")
 #' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for BIRD taxa from neon.data.product.id DP1.10003.001 from the NEON data portal and map to the ecocomDP format
