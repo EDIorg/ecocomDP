@@ -21,6 +21,9 @@
 #' @param enddate 
 #'     (character; NEON data only) End date to filter on in the form YYYY-MM. 
 #'     Defaults to NA, meaning all available dates.
+#' @param package
+#'     (character; NEON data only) Either 'basic' or 'expanded', indicating 
+#'     which data package to download. Defaults to basic.
 #' @param check.size 
 #'     (logical; NEON data only) Should the user approve the total file size 
 #'     before downloading? Defaults to FALSE.
@@ -63,23 +66,23 @@
 #' @examples
 #' # Read a dataset
 #' d <- read_data("edi.193.3")
-#' d <- read_data("DP1.20166.001")
+#' d <- read_data("neon.ecocomdp.20166.001.001")
 #' 
 #' # Read a NEON dataset with filters
 #' d <- read_data(
-#'   id = "DP1.20166.001", 
+#'   id = "neon.ecocomdp.20166.001.001", 
 #'   site = c("MAYF", "PRIN"), 
 #'   startdate = "2016-01", 
 #'   enddate = "2018-11")
 #' 
 #' # Read multiple datasets from different sources
-#' d <- read_data(c("edi.193.3", "DP1.20166.001"))
+#' d <- read_data(c("edi.193.3", "neon.ecocomdp.20166.001.001"))
 #' 
 #' # Read multiple datasets from EDI and NEON with NEON filters
 #' d <- read_data(
 #'   id = list(
 #'     edi.193.3 = NULL,
-#'     DP1.20166.001 = list(
+#'     neon.ecocomdp.20166.001.001 = list(
 #'       site = c("MAYF", "PRIN"),
 #'       startdate = "2016-01",
 #'       enddate = "2018-11")),

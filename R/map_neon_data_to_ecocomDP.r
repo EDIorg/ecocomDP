@@ -53,7 +53,6 @@
 #' @references
 #' License: GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007
 
-#' @export
 
 # changelog and author contributions / copyrights
 #   Eric R Sokol (2020-04-17)
