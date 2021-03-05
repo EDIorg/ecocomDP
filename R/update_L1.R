@@ -55,10 +55,7 @@ update_L1 <- function(id.L0.newest,
   
   message(
     capture.output(
-      EDIutils::compare_eml(eml_L0_newest, eml_L0_previous)))
-  
-  # TODO: Look for meaningful differences. Issue warning if differences are 
-  # found and list all differences. Otherwise write "no differences found".
+      EDIutils::compare_eml(eml_L0_newest, eml_L0_previous, return.all = F)))
 
   # Compare tables (L0) -------------------------------------------------------
 
@@ -71,9 +68,6 @@ update_L1 <- function(id.L0.newest,
   message(
     capture.output(
       EDIutils::compare_tables(tables_L0_newest, tables_L0_previous)))
-
-  # TODO: Look for meaningful differences. Issue warning if differences are 
-  # found and list all differences. Otherwise write "no differences found".
 
   # Download and source conversion script -------------------------------------
 
