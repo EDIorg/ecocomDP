@@ -52,3 +52,5 @@ BugReports: http://github.com/EDIorg/ecocomDP/issues
 RoxygenNote: 7.1.1
 SystemRequirements: 
 VignetteBuilder: knitr
+Depends: 
+    R (>= 2.10)

@@ -5,8 +5,9 @@
 # geo coverage - square km
 # taxon coverage - # taxa by group
 
-# you could try stacking the bars, e.g., for each taxon group, NEON= color 1, EDI=color 2
-
+# hsitogram and bar charts are stacked bars, e.g., for each taxon group, NEON= color 1, EDI=color 2
+# to use multi labels and bars side-by-side, you would have to pre-bin and use a bar chart instead of a histogram.
+# ggplot does not have an option to break the Y axis.
 
 # set up
 setwd('/Users/mob/Desktop/EDI_files_at_msi/EDI/thematic_standardization/ecocomDP_pop_com/git_checkouts/ecocomDP/paper_2020')
@@ -31,6 +32,7 @@ EDI_dataset_coverage <- data.table::fread("EDI_dataset_coverage.csv")
 # calc temporal cov for NEON
 # NEON_dataset_coverage$num_years <- (NEON_dataset_coverage$max_year - NEON_dataset_coverage$min_year) +1
 
+# PREPARE SPATIAL, TEMPORAL data -------------------------------
 # combine eric, colin files
 # grab, rename a subset of incoming files for temporal, geo coverage.
 NEON_1 <- data.frame(NEON_dataset_coverage$dpid, NEON_dataset_coverage$site_id, NEON_dataset_coverage$n_years, NEON_dataset_coverage$std_dev_interval_betw_years, NEON_dataset_coverage$areaKm2 )
@@ -50,7 +52,7 @@ combined_geo_temporal_cov$Source <- ifelse(grepl("DP1.", combined_geo_temporal_c
                                "Other")))
 
 # 
-# taxon data --------------------------------------------
+# PREPARE TAXON data --------------------------------------------
 # Get EDI taxonomic info into long form
 df <- dplyr::select(EDI_dataset_coverage, L1_id, class)
 
@@ -75,7 +77,8 @@ res <- res[res$class != "NA", ]
 # add a column for labels
 res$taxon_label <- NA
 
-# Write to a file and manually add missing taxa classes or add code here .....
+# Label taxa with larger group names
+# use same labels for NEON and EDI data.
 res$taxon_label <- 
   ifelse(grepl("Actinopterygii", res$class, ignore.case = T), "Fish", 
          ifelse(grepl("Amphibia", res$class, ignore.case = T), "Amphibian",
@@ -86,7 +89,7 @@ res$taxon_label <-
                 ifelse(grepl("Bivalvia|Cephalopoda", res$class, ignore.case = T), "Mollusc",
                 ifelse(grepl("Branchiopoda", res$class, ignore.case = T), "Arthropod", # crustacean
                 ifelse(grepl("Chilopoda", res$class, ignore.case = T), "Other terrestrial invertebrate",
-                ifelse(grepl("Bryopsida", res$class, ignore.case = T), "Plant",
+                ifelse(grepl("Bryopsida", res$class, ignore.case = T), "Plant", # don't know breakdown for neon data, so all plants together.
                 ifelse(grepl("Calcarea", res$class, ignore.case = T), "Sponge",
                 ifelse(grepl("Chondrichthyes|Chondrostei|Elasmobranchii", res$class, ignore.case = T), "Fish",
                 ifelse(grepl("Chondrostei", res$class, ignore.case = T), "Fish",
@@ -195,6 +198,7 @@ plot_geoCov <- ggplot(combined_geo_temporal_cov, aes(x=log10(area_km2), fill=Sou
   theme_minimal_hgrid()  +
   theme(text = element_text(size=12) )+ 
   ylab("") + 
+  ylim(0,150) +
   xlab("Log 10 (Area, km^2)") + 
   guides(fill=FALSE)
 
@@ -206,6 +210,7 @@ plot_temCov <-   ggplot(combined_geo_temporal_cov, aes(x=n_years, fill=Source)) 
   theme_minimal_hgrid()  +
   theme(text = element_text(size=12) )+ 
   ylab("Number of Datasets") + 
+  ylim(0,250) +
   xlab("Duration, years")  + 
   guides(fill=FALSE) # removes legend
                         
@@ -218,6 +223,7 @@ plot_temEvenness <- ggplot(combined_geo_temporal_cov, aes(x=sd_year_interval, fi
   theme_minimal_hgrid()  +
   theme(text = element_text(size=12) )+ 
   ylab("") + 
+  ylim(0,400) +
   xlab("S.D. sampling interval") + 
   guides(fill=FALSE)
   
@@ -231,7 +237,8 @@ plot_taxonCov <- ggplot(data=combined_taxon_cov, aes(x=taxon_label, fill = Sourc
   # scale_y_continuous(expand=c(0,0)) + # removes space between the bar and the tick mark
   theme_minimal_hgrid() + 
   theme(text = element_text(size=12) )+ 
-  ylab("Number of Datasets") + 
+  ylab("Number of Datasets") +
+  # ylim(0,120) +
   xlab("Taxon Group")  +
   theme(axis.text.x = element_text(angle = 45, hjust = 1) ) +  # hjust sets postition of text
   guides(fill=FALSE)
@@ -247,5 +254,5 @@ top_row <- plot_grid(
   labels = c("A","B","C"), label_size = 12,
   nrow = 1)
 
-p <- plot_grid(top_row, bottom_row, nrow = 2)
+p <- plot_grid(top_row, bottom_row, nrow = 2, rel_heights = c(0.8,1))
 ggsave("fig_x.png", p)
