@@ -143,7 +143,7 @@ read_data <- function(
         read_data_edi(x)
         
       } else if (grepl("^neon\\.", x)) {
-        ecocomDP::map_neon_data_to_ecocomDP(
+        ecocomDP:::map_neon_data_to_ecocomDP(
           data.product.id = x,
           ...)
       }
