@@ -3,9 +3,7 @@
 #' @title Map NEON data products to ecocomDP
 
 #' @author Eric R Sokol \email{esokol@battelleecology.org}
-#' @author Ruvi Jaimes \email{jaimesr@battelleecology.org}
-#' @author Kari Norman \email{kari.norman@berkeley.edu}
-#' @author Natalie Robinson \email{nrobinson@battelleecology.org}
+#' @author Ruvi Jaimes
 #' 
 #' @description
 #' Pull files from the NEON API by data product, merge data for each table, and convert to ecocomDP format. Please see neonUtilities::loadByProduct for more information. 

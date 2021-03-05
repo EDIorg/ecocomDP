@@ -118,54 +118,70 @@ my_result <- map_neon.ecocomdp.10003.001.001(
   enddate = "2018-11")
 }
 \dontrun{
-my_result <- map_neon.ecocomdp.10022.001.001(site = c('ABBY','BARR'),
-                                              startdate = "2019-06", 
-                                              enddate = "2019-09")
+
+my_result <- map_neon.ecocomdp.10022.001.001(
+  site = c('ABBY','BARR'),
+  startdate = "2019-06",
+  enddate = "2019-09")
+                                         
 }
 \dontrun{
+
 my_result <- map_neon.ecocomdp.10022.001.002(
-site= c("NIWO","DSNY"), 
-startdate = "2016-01",
-enddate = "2017-11",
-token = Sys.getenv("NEON_TOKEN"),
+  site= c("NIWO","DSNY"),
+  startdate = "2016-01",
+  enddate = "2017-11",
+  token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
+  
 }
 \dontrun{
-my_result <- map_neon.ecocomdp.10043.001.001(site = c("NIWO","DSNY"), 
-                                                  startdate = "2016-01", 
-                                                  enddate = "2018-11")
+
+my_result <- map_neon.ecocomdp.10043.001.001(
+  site = c("NIWO","DSNY"),
+  startdate = "2016-01",
+  enddate = "2018-11")
+
 }
 \dontrun{
+
 my_result <- map_neon.ecocomdp.10058.001.001(
-site= c("NIWO","DSNY"), 
-startdate = "2016-01",
-enddate = "2017-11",
-token = Sys.getenv("NEON_TOKEN"),
+  site= c("NIWO","DSNY"),
+  startdate = "2016-01",
+  enddate = "2017-11",
+  token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
+  
 }
 \dontrun{
+
 my_result <- map_neon.ecocomdp.10072.001.001(
-site = c("NIWO","DSNY"), 
-startdate = "2016-01",
-enddate = "2017-11",
-token = Sys.getenv("NEON_TOKEN"),
+  site = c("NIWO","DSNY"),
+  startdate = "2016-01",
+  enddate = "2017-11",
+  token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
+
 }
 \dontrun{
+
 my_result <- map_neon.ecocomdp.10092.001.001(
-site = c("ORNL","OSBS"), 
-startdate = "2016-01",
-enddate = "2017-11",
-token = Sys.getenv("NEON_TOKEN"),
+  site = c("ORNL","OSBS"),
+  startdate = "2016-01",
+  enddate = "2017-11",
+  token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
+
 }
 \dontrun{
+
 my_result <- map_neon.ecocomdp.10093.001.001(
-site = c("BART","DSNY"), 
-startdate = "2016-01",
-enddate = "2017-11",
-token = Sys.getenv("NEON_TOKEN"),
+  site = c("BART","DSNY"),
+  startdate = "2016-01",
+  enddate = "2017-11",
+  token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
+
 }
 \dontrun{
 my_result <- map_neon.ecocomdp.20107.001.001(
@@ -176,16 +192,19 @@ my_result <- map_neon.ecocomdp.20107.001.001(
   check.size = FALSE)
 }
 \dontrun{
-my_result <- map_neon.ecocomDP.20120.001.001(site= c('COMO','LECO'),
-                                                         startdate = "2019-06", 
-                                                         enddate = "2019-09")
+
+my_result <- map_neon.ecocomDP.20120.001.001(
+  site= c('COMO','LECO'),
+  startdate = "2019-06",
+  enddate = "2019-09")
 }
 \dontrun{
+
 my_result <- map_neon.ecocomdp.20219.001.001(
-site = c("BARC","SUGG"), 
-startdate = "2016-01",
-enddate = "2017-11",
-token = Sys.getenv("NEON_TOKEN"),
+  site = c("BARC","SUGG"),
+  startdate = "2016-01",
+  enddate = "2017-11",
+  token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 }
 \dontrun{
@@ -209,15 +228,33 @@ my_result <- map_neon_data_to_ecocomDP( neon.data.product.id = "DP1.20120.001",
 License: GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007
 }
 \author{
-Eric R Sokol \email{esokol@battelleecology.org}
-
 Daijiang Li
-
-Eric R Sokol \email{esokol@battelleecology.org}
-
-Ruvi Jaimes \email{jaimesr@battelleecology.org}
 
 Kari Norman \email{kari.norman@berkeley.edu}
 
+Matt Helmus \email{mrhelmus@temple.edu}
+
 Natalie Robinson \email{nrobinson@battelleecology.org}
+
+Michael Just
+
+Marta Jarzyna
+
+Melissa Chen
+
+Matt Bitters
+
+Wynne Moss
+
+Brendan Hobart
+
+Thilina Surasinghe \email{tsurasinghe@bridgew.edu}
+
+Stephanie Parker \email{sparker@battelleecology.org}
+
+Lara Janson
+
+Eric R Sokol \email{esokol@battelleecology.org}
+
+Ruvi Jaimes
 }
