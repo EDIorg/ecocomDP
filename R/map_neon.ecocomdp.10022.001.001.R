@@ -19,7 +19,7 @@
 map_neon.ecocomdp.10022.001.001 <- function(
   neon.data.product.id = "DP1.10022.001",
   ...){
-  
+
   
   #NEON target taxon group is ALGAE
   neon_method_id <- "neon.ecocomdp.10022.001.001"
@@ -38,9 +38,9 @@ map_neon.ecocomdp.10022.001.001 <- function(
     ux <- unique(x)
     ux[which.max(tabulate(match(x, ux)))]
   }
-  
+
   ### Clean Up Sample Data ###
-  
+
   # start with the fielddata table, which describes all sampling events
   data_beetles <- tibble::as_tibble(beetles_raw$bet_fielddata) %>%
     dplyr::filter(sampleCollected == "Y") %>% #there's an entry for every trap, whether or not they got samples, only want ones with samples
@@ -52,12 +52,12 @@ map_neon.ecocomdp.10022.001.001 <- function(
     dplyr::mutate(trappingDays = lubridate::interval(lubridate::ymd(setDate),
                                                      lubridate::ymd(collectDate)) %/%
                     lubridate::days(1))
-  
+
   #Find the traps that have multiple collectDates/bouts for the same setDate
   #need to calculate their trap days from the previous collectDate, not the setDate
-  
+
   data_adjTrappingDays <- data.frame()
-  
+
   try({
     data_adjTrappingDays <- data_beetles %>%
       dplyr::select(namedLocation, trapID, setDate, collectDate, trappingDays, eventID) %>%
@@ -72,7 +72,7 @@ map_neon.ecocomdp.10022.001.001 <- function(
         TRUE ~ diffTrappingDays)) %>%
       dplyr::select(-c(trappingDays, diffTrappingDays))
   }, silent = TRUE)
-  
+
   if(nrow(data_adjTrappingDays)>0){
     data_beetles <- data_beetles %>%
       #update with adjusted trapping days where needed
@@ -80,7 +80,7 @@ map_neon.ecocomdp.10022.001.001 <- function(
   }else{
     data_beetles$adjTrappingDays <- NA_real_
   }
-  
+
   data_beetles <- data_beetles %>%
     #update with adjusted trapping days where needed
     # dplyr::left_join(adjTrappingDays) %>%
@@ -109,15 +109,14 @@ map_neon.ecocomdp.10022.001.001 <- function(
                                      individualCount),
                      by = "sampleID") %>%
     dplyr::filter(!is.na(subsampleID)) #even though they were marked a sampled, some collection times don't acutally have any samples
-  
+
   ### Clean up Taxonomy of Samples ###
-  
+
   #Some samples were pinned and reidentified by more expert taxonomists, replace taxonomy with their ID's (in bet_parataxonomist) where available
   data_pin <- data_beetles %>%
     dplyr::left_join(beetles_raw$bet_parataxonomistID %>%
                        dplyr::select(subsampleID, individualID, taxonID, scientificName,
-                                     taxonRank) %>%
-                       dplyr::left_join(dplyr::distinct(dplyr::select(beetles_raw$bet_expertTaxonomistIDProcessed, taxonID, family))),
+                                     taxonRank),
                      by = "subsampleID") %>%
     dplyr::mutate_if(is.factor, as.character) %>%
     dplyr::mutate(taxonID = ifelse(is.na(taxonID.y), taxonID.x, taxonID.y)) %>%
@@ -125,7 +124,7 @@ map_neon.ecocomdp.10022.001.001 <- function(
     dplyr::mutate(scientificName = ifelse(is.na(scientificName.y), scientificName.x, scientificName.y)) %>%
     dplyr::mutate(identificationSource = ifelse(is.na(scientificName.y), "sort", "pin")) %>%
     dplyr::select(-ends_with(".x"), -ends_with(".y"))
-  
+
   # some subsamples weren't fully ID'd by the pinners, so we have to recover the unpinned-individuals
   lost_indv <- data_pin %>%
     dplyr::filter(!is.na(individualID)) %>%
@@ -136,13 +135,13 @@ map_neon.ecocomdp.10022.001.001 <- function(
     dplyr::select(subsampleID, individualCount = unidentifiedCount) %>%
     dplyr::left_join(dplyr::select(data_beetles, -individualCount), by = "subsampleID") %>%
     dplyr::mutate(identificationSource = "sort")
-  
+
   # add unpinned-individuals back to the pinned id's, adjust the individual counts so pinned individuals have a count of 1
   data_pin <- data_pin %>%
     dplyr::mutate(individualCount = ifelse(identificationSource == "sort", individualCount, 1)) %>%
     dplyr::bind_rows(lost_indv)
-  
-  
+
+
   #Join expert ID's to beetle dataframe
   data_expert <- dplyr::left_join(data_pin,
                                   dplyr::select(beetles_raw$bet_expertTaxonomistIDProcessed,
@@ -150,7 +149,7 @@ map_neon.ecocomdp.10022.001.001 <- function(
                                                 taxonRank),
                                   by = 'individualID', na_matches = "never") %>%
     dplyr::distinct()
-  
+
   #Update with expert taxonomy where available
   data_expert <- data_expert %>%
     dplyr::mutate_if(is.factor, as.character) %>%
@@ -158,32 +157,35 @@ map_neon.ecocomdp.10022.001.001 <- function(
     dplyr::mutate(taxonRank = ifelse(is.na(taxonRank.y), taxonRank.x, taxonRank.y)) %>%
     dplyr::mutate(scientificName = ifelse(is.na(scientificName.y), scientificName.x, scientificName.y)) %>%
     dplyr::mutate(identificationSource = ifelse(is.na(scientificName.y), identificationSource, "expert")) %>%
-    dplyr::select(-ends_with(".x"), -ends_with(".y"))
-  
-  
-  
+    dplyr::select(-ends_with(".x"), -ends_with(".y")) %>%
+    dplyr::group_by(individualID) %>%
+    dplyr::filter(n() == 1 | is.na(individualID)) %>% #remove individuals with more than one ID, retain NA individualID's
+    dplyr::ungroup()
+
+
+
   #Get raw counts table
   beetles_counts <- data_expert %>%
-    dplyr::select(-c(subsampleID, sampleType, identificationSource, individualID, family)) %>%
+    dplyr::select(-c(subsampleID, sampleType, identificationSource, individualID)) %>%
     dplyr::group_by_at(dplyr::vars(-individualCount)) %>%
     dplyr::summarise(count = sum(individualCount)) %>%
     dplyr::ungroup() %>%
     dplyr::distinct()
 
-  
-  
-  
+
+
+
   # making tables ----
   # Observation Tables
   # All individuals of the same species collected at the same time/same location are considered the same observation, regardless of how they were ID'd
-  
+
   table_observation_raw <- beetles_counts %>%
     # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation,
                   abundance = count)
-  
-  
-  
+
+
+
   table_observation <- table_observation_raw %>%
     # tidyr::pivot_longer(c(abundance, trappingDays), names_to = "variable_name", values_to = "value") %>%
     # dplyr::mutate(unit = "count") %>%
@@ -191,16 +193,16 @@ map_neon.ecocomdp.10022.001.001 <- function(
     # dplyr::group_by(sampleID) %>%
     # dplyr::mutate(observation_id = paste(sampleID, row_number(), sep = ".")) %>%
     dplyr::mutate(package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
-    # tidyr::spread(variable_name,value) %>% 
-    dplyr:: select(observation_id = uid, 
-                   event_id = sampleID, 
+    # tidyr::spread(variable_name,value) %>%
+    dplyr:: select(observation_id = uid,
+                   event_id = sampleID,
                    package_id,
-                   location_id, 
-                   observation_datetime = collectDate, 
+                   location_id,
+                   observation_datetime = collectDate,
                    taxon_id = taxonID,
-                   value = abundance/trappingDays) %>% 
+                   value = abundance/trappingDays) %>%
     dplyr::mutate(variable_name = "abundance",
-                  unit = "count per trap day") %>% 
+                  unit = "count per trap day") %>%
     dplyr::select(observation_id,
                   event_id,
                   package_id,
@@ -210,29 +212,29 @@ map_neon.ecocomdp.10022.001.001 <- function(
                   variable_name,
                   value,
                   unit)
-  
-  
-  
+
+
+
   # no units, all text
-  table_observation_ancillary_wide <- beetles_raw$bet_fielddata %>% 
+  table_observation_ancillary_wide <- beetles_raw$bet_fielddata %>%
     dplyr::select(eventID, sampleID,
                   trappingDays,
-                  samplingProtocolVersion, remarks) %>% 
+                  samplingProtocolVersion, remarks) %>%
     dplyr::mutate_all(as.character) %>%
     dplyr::filter(!is.na(sampleID)) %>%
     dplyr::rename(neon_sample_id = sampleID,
-                  neon_event_id = eventID) %>% 
+                  neon_event_id = eventID) %>%
     dplyr::mutate(event_id = neon_sample_id) %>%
     dplyr::distinct()
-  
+
   table_observation_ancillary <- table_observation_ancillary_wide %>%
     tidyr::pivot_longer(
       cols = -event_id,
       names_to = "variable_name",
-      values_to = "value") %>% 
+      values_to = "value") %>%
     dplyr::mutate(
       observation_ancillary_id = paste0(variable_name, "_for_", event_id)) %>%
-    
+
     # add units where appropriate
     dplyr::mutate(
       unit = dplyr::case_when(
@@ -240,17 +242,17 @@ map_neon.ecocomdp.10022.001.001 <- function(
         TRUE ~ NA_character_
       )
     )
-  
-  
-  
-  
-  
+
+
+
+
+
   # location ----
-  # get relevant location info from the data, use neon helper functions 
+  # get relevant location info from the data, use neon helper functions
   # to make location and ancillary location tables
-  
+
   table_location_raw <- beetles_raw$bet_fielddata %>%
-    dplyr::select(domainID, siteID, namedLocation, 
+    dplyr::select(domainID, siteID, namedLocation,
                   decimalLatitude, decimalLongitude, elevation,
                   plotType, nlcdClass, geodeticDatum) %>%
     dplyr::distinct() 
@@ -266,20 +268,20 @@ map_neon.ecocomdp.10022.001.001 <- function(
                              "plotType", "nlcdClass", "geodeticDatum"))
   
   
-  
+
   # taxonomy ----
   # create a taxon table, which describes each taxonID that appears in the data set
   # start with inv_taxonomyProcessed
-  
+
 
   table_taxon <- beetles_counts %>%
-    
+
     # keep only the coluns listed below
     dplyr::select(taxonID, taxonRank, scientificName, identificationReferences) %>%
-    
+
     # remove rows with duplicate information
     dplyr::distinct() %>%
-    
+
     # rename some columns
     dplyr::rename(taxon_id = taxonID,
                   taxon_rank = taxonRank,
@@ -289,30 +291,30 @@ map_neon.ecocomdp.10022.001.001 <- function(
     dplyr::group_by(taxon_id, taxon_rank, taxon_name) %>%
     dplyr::summarise(
       authority_system = paste(unique(c(authority_system)), collapse = "; "))
-  
-  
-  
-  
+
+
+
+
   # data summary ----
   # make dataset_summary -- required table
-  
+
   years_in_data <- table_observation$observation_datetime %>% lubridate::year()
   years_in_data %>% ordered()
-  
+
   table_dataset_summary <- data.frame(
     package_id = table_observation$package_id[1],
     original_package_id = neon.data.product.id,
     length_of_survey_years = max(years_in_data) - min(years_in_data) + 1,
     number_of_years_sampled	= years_in_data %>% unique() %>% length(),
-    std_dev_interval_betw_years = years_in_data %>% 
+    std_dev_interval_betw_years = years_in_data %>%
       unique() %>% sort() %>% diff() %>% stats::sd(),
     max_num_taxa = table_taxon$taxon_id %>% unique() %>% length()
   )
-  
-  
-  
+
+
+
   # return tables ----
-  
+
   out_list <- list(
     location = table_location,
     location_ancillary = table_location_ancillary,
@@ -320,13 +322,6 @@ map_neon.ecocomdp.10022.001.001 <- function(
     observation = table_observation,
     observation_ancillary = table_observation_ancillary,
     dataset_summary = table_dataset_summary)
-  
+
   return(out_list)
 } # end of function
-
-# my_result <- map_neon.ecocomDP.10022.001.001(site = c('ABBY','BARR'),
-#                                               startdate = "2016-01", enddate = "2018-09",
-#                                               check.size = FALSE,
-#                                               token = Sys.getenv("NEON_TOKEN"))
-
-  
