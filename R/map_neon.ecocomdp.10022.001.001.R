@@ -24,10 +24,13 @@ map_neon.ecocomdp.10022.001.001 <- function(
   #NEON target taxon group is ALGAE
   neon_method_id <- "neon.ecocomdp.10022.001.001"
   
+  # check arguments passed via dots for neonUtilities
+  dots_updated <- list(..., dpID = neon.data.product.id)
   
   # download data
-  beetles_raw <- neonUtilities::loadByProduct(dpID = neon.data.product.id,
-                                              ...)
+  beetles_raw <- rlang::exec( 
+    neonUtilities::loadByProduct,
+    !!!dots_updated)
   
   
   # helper function to calculate mode of a column/vector

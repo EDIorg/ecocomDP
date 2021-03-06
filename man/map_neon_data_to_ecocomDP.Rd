@@ -46,12 +46,14 @@ map_neon.ecocomdp.20166.001.001(neon.data.product.id = "DP1.20166.001", ...)
 
 map_neon.ecocomdp.20219.001.001(neon.data.product.id = "DP1.20219.001", ...)
 
-map_neon_data_to_ecocomDP(data.product.id, ...)
+map_neon_data_to_ecocomDP(id, ...)
 }
 \arguments{
+\item{neon.data.product.id}{(character) The identifier of the NEON data product to pull from the NEON API and map to the ecocomDP format. This argument is specified in each internal mapping function and is NOT provided by the end user.}
+
 \item{...}{Additional arguments passed to neonUtilities::loadByProduct().}
 
-\item{data.product.id}{The identifier of the NEON data product as it is listed in the "id" field in the table returned by the ecocomDP::search_data() function, e.g., neon.ecocomdp.20166.001.001 is the data product id for "ALGAE Periphyton, seston, and phytoplankton collection" converted to the ecocomDP format from the NEON source data product DP1.20166.001.}
+\item{id}{(character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search_data()} output. e.g., \code{neon.ecocomdp.20166.001.001} is the data product id for "ALGAE Periphyton, seston, and phytoplankton collection" converted to the ecocomDP format from the NEON source data product DP1.20166.001.}
 
 \item{site}{Either the string 'all', meaning all available sites, or a character vector of 4-letter NEON site codes, e.g. c('ONAQ','RMNP'). Defaults to all.}
 
@@ -210,7 +212,7 @@ my_result <- map_neon.ecocomdp.20219.001.001(
 \dontrun{
 # Retrieve and map NEON ALGAE data to ecocomDP format
 my_result <- ecocomDP:::map_neon_data_to_ecocomDP(
-  neon.data.product.id = "DP1.20166.001",
+  id = "neon.ecocomdp.20166.001.001",
   site = c("MAYF", "PRIN"),
   startdate = "2016-1",
   enddate = "2018-11",
@@ -218,10 +220,6 @@ my_result <- ecocomDP:::map_neon_data_to_ecocomDP(
 }
 
 \dontrun{
-my_result <- map_neon_data_to_ecocomDP( neon.data.product.id = "DP1.20120.001", 
-                                        site= c('COMO','LECO'),
-                                        startdate = "2019-06", 
-                                        enddate = "2019-09")
 }
 }
 \references{

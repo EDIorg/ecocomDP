@@ -37,7 +37,7 @@ map_neon.ecocomdp.10003.001.001 <- function(
   allTabs_bird <- rlang::exec( 
     neonUtilities::loadByProduct,
     !!!dots_updated)
-  
+
   
   # allTabs_bird = neonUtilities::loadByProduct(dpID = neon.data.product.id, package = "expanded", ...)
   # saveRDS(allTabs_bird, file = "~/Documents/allTabs_bird.rds")
