@@ -74,8 +74,8 @@ map_neon.ecocomdp.10058.001.001 <- function(
   # species in 100m2 only (remove species already in 1m2 or 10m2)
   div_10_100_m2_4 <- dplyr::filter(div_10_100_m2_2, key2 == key3,
                                    !key3 %in% unique(c(div_1m2_pla$key3, div_10_100_m2_3$key3)))
-  div_10_100_m2_5 = dplyr::bind_rows(dplyr::mutate(div_10_100_m2_3, sample_area_m2 = 100),
-                                     dplyr::mutate(div_10_100_m2_4, sample_area_m2 = 10000))
+  div_10_100_m2_5 = dplyr::bind_rows(dplyr::mutate(div_10_100_m2_3, sample_area_m2 = 10),
+                                     dplyr::mutate(div_10_100_m2_4, sample_area_m2 = 100))
   
   # stack data
   data_plant = dplyr::bind_rows(
