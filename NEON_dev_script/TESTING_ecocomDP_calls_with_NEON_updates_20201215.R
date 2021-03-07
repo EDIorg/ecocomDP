@@ -39,9 +39,15 @@ my_result_read_data <- read_data(
   id = "neon.ecocomdp.10022.001.001",
   site = c('ABBY','BARR'),
   startdate = "2019-06",
-  enddate = "2019-09",
+  # enddate = "2019-09",
+  enddate = "2021-02",
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
+
+#dupes for obs_id below -- dups have different taxon_ids 
+# "9ec05998-a868-4eb8-8691-3c28a025f358"
+# "9a93953e-9260-4b43-95e9-b05a55338f08"
+
 
 my_result_read_data[[1]]$tables$dataset_summary
 

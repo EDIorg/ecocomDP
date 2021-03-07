@@ -150,6 +150,8 @@ map_neon.ecocomdp.10022.001.001 <- function(
                                   by = 'individualID', na_matches = "never") %>%
     dplyr::distinct()
 
+  
+
   #Update with expert taxonomy where available
   data_expert <- data_expert %>%
     dplyr::mutate_if(is.factor, as.character) %>%
@@ -161,7 +163,6 @@ map_neon.ecocomdp.10022.001.001 <- function(
     dplyr::group_by(individualID) %>%
     dplyr::filter(n() == 1 | is.na(individualID)) %>% #remove individuals with more than one ID, retain NA individualID's
     dplyr::ungroup()
-
 
 
   #Get raw counts table
@@ -194,14 +195,14 @@ map_neon.ecocomdp.10022.001.001 <- function(
     # dplyr::mutate(observation_id = paste(sampleID, row_number(), sep = ".")) %>%
     dplyr::mutate(package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
     # tidyr::spread(variable_name,value) %>%
-    dplyr:: select(observation_id = uid,
-                   event_id = sampleID,
+    dplyr:: select(event_id = sampleID,
                    package_id,
                    location_id,
                    observation_datetime = collectDate,
                    taxon_id = taxonID,
                    value = abundance/trappingDays) %>%
-    dplyr::mutate(variable_name = "abundance",
+    dplyr::mutate(observation_id = paste0("obs_",1:nrow(.)),
+                  variable_name = "abundance",
                   unit = "count per trap day") %>%
     dplyr::select(observation_id,
                   event_id,
