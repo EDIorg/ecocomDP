@@ -59,9 +59,7 @@ map_neon_data_to_ecocomDP <- function(
   ... #arguments set to neonUtilities::loadByProduct
 ){
   
-  # get metadata
-  metadata_all <- neonUtilities::getProductInfo(id)
-  
+
   # call custom mapping function if available for given NEON id
   if(id == "neon.ecocomdp.20166.001.001"){
     #ALGAE method v01
@@ -120,7 +118,7 @@ map_neon_data_to_ecocomDP <- function(
   }
   
   # get NEON DPID
-  neon.data.product.id <- "neon.ecocomdp.10022.001.002" %>% 
+  neon.data.product.id <- id %>% 
     gsub("neon\\.ecocomdp", "DP1",.) %>% 
     gsub("\\.[0-9]{3}$","",.)
   

@@ -104,6 +104,8 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
+my_result_read_data[[1]]$metadata$data_package_info
+
 my_result_read_data[[1]]$tables$dataset_summary
 my_result_read_data[[1]]$tables$location %>% as.data.frame()
 my_result_read_data[[1]]$tables$location_ancillary %>% as.data.frame() %>% head()
@@ -288,6 +290,7 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$validation_issues
+my_result_read_data[[1]]$metadata$data_package_info
 
 names(my_result_read_data[[1]]$tables)
 names(my_result_read_data[[1]]$metadata)
