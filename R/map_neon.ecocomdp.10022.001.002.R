@@ -66,7 +66,8 @@ map_neon.ecocomdp.10022.001.002 <- function(
                   elevation, elevationUncertainty,
                   setDate, collectDate, eventID, trappingDays,
                   sampleCollected, sampleID, sampleCondition,
-                  samplingImpractical, remarksFielddata = remarks) %>%
+                  samplingImpractical, remarksFielddata = remarks,
+                  release, publicationDate) %>%
     dplyr::mutate(eventID_raw = eventID,
                   eventID = stringr::str_remove_all(eventID, "[.]")) %>% # remove periods from eventID's (cleans an inconsistency)
     dplyr::mutate(trappingDays = # add sampling effort in days (trappingdays)
@@ -335,6 +336,8 @@ map_neon.ecocomdp.10022.001.002 <- function(
       unit) %>%
     dplyr::filter(!is.na(taxon_id))
   
+  
+  
   table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
@@ -345,7 +348,8 @@ map_neon.ecocomdp.10022.001.002 <- function(
       "identificationReferences",
       "nativeStatusCode",
       "remarksFielddata",
-      "remarksSorting"))
+      "remarksSorting",
+      "release", "publicationDate"))
   
   
   # data summary ----
