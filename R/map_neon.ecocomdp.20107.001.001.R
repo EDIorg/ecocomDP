@@ -302,15 +302,21 @@ map_neon.ecocomdp.20107.001.001 <- function(
     loc_col_names = c("domainID", "siteID", "namedLocation"),
     ancillary_var_names = c("namedLocation", "aquaticSiteType", "geodeticDatum"))
   
+  
+  
   # observation ----
+  
+  my_package_id <- paste0(
+    neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
+  
   table_observation_wide_all <- data_fish %>%
     dplyr::left_join(all_fish$fsh_perPass) %>%
     # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation) %>%
     # package id
     dplyr::mutate(
-      package_id = paste0(
-        neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+      package_id = my_package_id) %>%
     dplyr::rename(
       # neon_event_id = eventID,
       observation_datetime = startDate, 

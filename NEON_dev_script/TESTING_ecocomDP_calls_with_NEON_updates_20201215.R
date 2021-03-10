@@ -47,6 +47,8 @@ my_result_read_data <- read_data(
 #dupes for obs_id below -- dups have different taxon_ids 
 # "9ec05998-a868-4eb8-8691-3c28a025f358"
 # "9a93953e-9260-4b43-95e9-b05a55338f08"
+my_result_read_data[[1]]$validation_issues
+my_result_read_data[[1]]$metadata$data_package_info
 
 
 my_result_read_data[[1]]$tables$dataset_summary
@@ -54,7 +56,6 @@ my_result_read_data[[1]]$tables$dataset_summary
 names(my_result_read_data[[1]]$tables)
 names(my_result_read_data[[1]]$metadata)
 names(my_result_read_data[[1]]$metadata$orig_NEON_data_product_info)
-my_result_read_data[[1]]$metadata$data_package_info
 
 
 View(my_result_read_data[[1]]$tables$observation)
@@ -104,6 +105,7 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
+my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
 my_result_read_data[[1]]$tables$dataset_summary
@@ -226,7 +228,7 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$validation_issues
-
+my_result_read_data[[1]]$metadata$data_package_info
 
 names(my_result_read_data[[1]]$tables)
 
@@ -345,6 +347,8 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$validation_issues
+my_result_read_data[[1]]$metadata$data_package_info
+
 
 names(my_result_read_data[[1]]$tables)
 
@@ -399,6 +403,8 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$validation_issues
+my_result_read_data[[1]]$metadata$data_package_info
+
 
 names(my_result_read_data[[1]]$tables)
 
@@ -450,7 +456,9 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$validation_issues
-
+my_result_read_data[[1]]$metadata$data_package_info
+  
+  
 names(my_result_read_data[[1]]$tables)
 
 obs_tab <- my_result_read_data[[1]]$tables$observation
@@ -501,6 +509,7 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$validation_issues
+my_result_read_data[[1]]$metadata$data_package_info
 
 names(my_result_read_data[[1]]$tables)
 
@@ -552,6 +561,8 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$validation_issues
+my_result_read_data[[1]]$metadata$data_package_info
+
 
 names(my_result_read_data[[1]]$tables)
 
@@ -604,6 +615,8 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$validation_issues
+my_result_read_data[[1]]$metadata$data_package_info
+
 
 names(my_result_read_data[[1]]$tables)
 

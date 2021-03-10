@@ -222,11 +222,11 @@ map_neon.ecocomdp.10043.001.001 <- function(
   
   
 
-  
-  
+
   #location ----
   table_location_raw <- mos_dat %>%
     dplyr::select(domainID, siteID, namedLocation, 
+                  plotType, nlcdClass,
                   decimalLatitude, decimalLongitude, elevation) %>%
     dplyr::distinct() 
   
@@ -236,7 +236,8 @@ map_neon.ecocomdp.10043.001.001 <- function(
   
   table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"))
+    loc_col_names = c("domainID", "siteID", "namedLocation"),
+    ancillary_var_names = c("namedLocation", "nlcdClass", "plotType"))
   
   
   
@@ -266,6 +267,11 @@ map_neon.ecocomdp.10043.001.001 <- function(
   
   
   # observation ----
+  
+  my_package_id <- paste0(
+    neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
+  
   table_observation_raw <- mos_dat %>% 
   dplyr::mutate(variable_name = "abundance",
                 value = (individualCount/subsampleWeight) * totalWeight / trapHours,
@@ -280,8 +286,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
       release = release.x,
       publicationDate = publicationDate.x) %>%
     dplyr::mutate(
-      package_id = paste0(
-        neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S")),
+      package_id = my_package_id,
       event_id = observation_id) %>%
     dplyr::filter(!is.na(taxon_id))
   
@@ -321,7 +326,6 @@ map_neon.ecocomdp.10043.001.001 <- function(
       "subsampleWeight", #grams
       "weightBelowDetection",
       "laboratoryName",
-      "plotType",
       "trapHours", #hours
       "samplingProtocolVersion",
       "remarks_sorting",

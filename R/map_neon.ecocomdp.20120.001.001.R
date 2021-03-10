@@ -75,7 +75,9 @@ map_neon.ecocomdp.20120.001.001 <- function(
   # location ----
   # get relevant location info from the data
   table_location_raw <- inv_fielddata %>%
-    dplyr::select(domainID, siteID, namedLocation, decimalLatitude, decimalLongitude, elevation) %>%
+    dplyr::select(domainID, siteID, namedLocation, decimalLatitude,
+                  aquaticSiteType,
+                  decimalLongitude, elevation) %>%
     dplyr::distinct() 
   # create a location table, which has the lat long for each NEON site included in the data set
   # start with the inv_fielddata table and pull out latitude, longitude, and elevation for each NEON site that occurs in the data
@@ -87,7 +89,8 @@ map_neon.ecocomdp.20120.001.001 <- function(
   
   table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"))
+    loc_col_names = c("domainID", "siteID", "namedLocation"),
+    ancillary_var_names = c("namedLocation","aquaticSiteType"))
   
 
   
@@ -120,6 +123,11 @@ map_neon.ecocomdp.20120.001.001 <- function(
 
   
   # observation ----
+  
+  my_package_id <- paste0(
+    neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
+  
   # Make the observation table.
   # start with inv_taxonomyProcessed
   # NOTE: the observation_id = uuid for record in NEON's inv_taxonomyProcessed table 
@@ -154,8 +162,7 @@ map_neon.ecocomdp.20120.001.001 <- function(
       taxon_id = acceptedTaxonID) %>%
     
     # make a new column called package_id, assign it NA for all rows
-    dplyr::mutate(package_id = paste0(
-      neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>% 
+    dplyr::mutate(package_id = my_package_id) %>% 
     dplyr::left_join(table_location, by = c("namedLocation" = "location_name"))
   
   

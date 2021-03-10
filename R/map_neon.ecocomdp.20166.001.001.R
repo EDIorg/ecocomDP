@@ -123,11 +123,12 @@ map_neon.ecocomdp.20166.001.001 <- function(
 
   
   
+  my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
   
   # rename fields for ecocomDP
   table_observation_ecocomDP <- table_observation_raw %>%
     dplyr::mutate(
-      package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+      package_id = my_package_id) %>%
     dplyr::rename(
       observation_id = uid, 
       neon_sample_id = sampleID,
@@ -173,10 +174,9 @@ map_neon.ecocomdp.20166.001.001 <- function(
                             "sampleCondition",
                             "laboratoryName",
                             "perBottleSampleVolume",
-                            "aquaticSiteType",
-                            "habitatType",
                             "algalSampleType",
                             "samplerType",
+                            "habitatType",
                             "benthicArea",
                             "samplingProtocolVersion",
                             "phytoDepth1","phytoDepth2","phytoDepth3",
@@ -191,7 +191,9 @@ map_neon.ecocomdp.20166.001.001 <- function(
   # to make location and ancillary location tables
   
   table_location_raw <- table_observation_raw %>%
-    dplyr::select(domainID, siteID, namedLocation, decimalLatitude, decimalLongitude, elevation) %>%
+    dplyr::select(domainID, siteID, namedLocation, 
+                  aquaticSiteType, 
+                  decimalLatitude, decimalLongitude, elevation) %>%
     dplyr::distinct() 
   
   table_location <- ecocomDP:::make_neon_location_table(
@@ -200,7 +202,10 @@ map_neon.ecocomdp.20166.001.001 <- function(
   
   table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"))
+    loc_col_names = c(
+      "domainID", "siteID", "namedLocation"),
+    ancillary_var_names = c(
+      "namedLocation","aquaticSiteType"))
   
   
   

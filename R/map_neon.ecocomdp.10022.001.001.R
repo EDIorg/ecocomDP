@@ -191,6 +191,7 @@ map_neon.ecocomdp.10022.001.001 <- function(
   # making tables ----
   # Observation Tables
   # All individuals of the same species collected at the same time/same location are considered the same observation, regardless of how they were ID'd
+  my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
   
   table_observation_raw <- beetles_counts %>%
     dplyr::rename(
@@ -199,8 +200,7 @@ map_neon.ecocomdp.10022.001.001 <- function(
       observation_datetime = collectDate,
       taxon_id = taxonID) %>%
     dplyr::mutate(
-      package_id = paste0(
-        neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S")), 
+      package_id = my_package_id, 
       observation_id = paste0("obs_",1:nrow(.)),
       event_id = observation_id,
       variable_name = "abundance",
