@@ -44,7 +44,7 @@ map_neon.ecocomdp.20219.001.001 <- function(
   zoo_taxonomyProcessed <- tibble::as_tibble(allTabs_zoop$zoo_taxonomyProcessed)
   
   # Location table
-  table_location <- zoo_fielddata %>%
+  zoo_location <- zoo_fielddata %>%
     dplyr::select(domainID:sampleID, samplerType, towsTrapsVolume) %>%
     dplyr::select(-additionalCoordUncertainty) %>%
     dplyr::distinct()
@@ -61,8 +61,10 @@ map_neon.ecocomdp.20219.001.001 <- function(
       # zooSubsampleVolume,
       # individualCount,
       adjCountPerBottle,
-      zooMinimumLength, zooMaximumLength, zooMeanLength) %>%
-    dplyr::left_join(table_location, by = "sampleID") %>%
+      zooMinimumLength, zooMaximumLength, zooMeanLength,
+      laboratoryName,
+      release, publicationDate) %>%
+    dplyr::left_join(zoo_location, by = "sampleID") %>%
     dplyr::mutate(density = adjCountPerBottle / towsTrapsVolume,
                   density_unit = "count per liter") %>%
     dplyr::distinct()
@@ -91,11 +93,13 @@ map_neon.ecocomdp.20219.001.001 <- function(
       authority_system = paste(authority_system, collapse = "; "))
   
   
+
   
   # location ----
   # get relevant location info from the data
   table_location_raw <- data_zooplankton %>%
-    dplyr::select(domainID, siteID, namedLocation, decimalLatitude, decimalLongitude, elevation,
+    dplyr::select(domainID, siteID, namedLocation, 
+                  decimalLatitude, decimalLongitude, elevation,
                   namedLocation, aquaticSiteType, geodeticDatum) %>%
     dplyr::distinct() 
   
@@ -151,7 +155,10 @@ map_neon.ecocomdp.20219.001.001 <- function(
       "neon_event_id",
       "neon_sample_id",
       "samplerType",
-      "towsTrapsVolume"))
+      "towsTrapsVolume",
+      "laboratoryName",
+      "release",
+      "publicationDate"))
   
   
   # data summary ----
