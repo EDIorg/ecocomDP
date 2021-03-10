@@ -158,7 +158,10 @@ map_neon.ecocomdp.20166.001.001 <- function(
     dplyr::distinct()
   
   
+  
 
+  
+  
   # make observation ancillary table. First convert POSIXct POSIXt classed
   # variables to character, otherwise gathering will produce a warning.
   
@@ -177,7 +180,9 @@ map_neon.ecocomdp.20166.001.001 <- function(
                             "benthicArea",
                             "samplingProtocolVersion",
                             "phytoDepth1","phytoDepth2","phytoDepth3",
-                            "substratumSizeClass"))
+                            "substratumSizeClass",
+                            "release",
+                            "publicationDate"))
   
 
   

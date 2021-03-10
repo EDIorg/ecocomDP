@@ -45,7 +45,9 @@ map_neon.ecocomdp.10022.001.001 <- function(
   data_beetles <- tibble::as_tibble(beetles_raw$bet_fielddata) %>%
     dplyr::filter(sampleCollected == "Y") %>% #there's an entry for every trap, whether or not they got samples, only want ones with samples
     dplyr::select(sampleID, domainID, siteID, namedLocation,
-                  trapID, setDate, collectDate, eventID, trappingDays) %>%
+                  trapID, setDate, collectDate, eventID, trappingDays,
+                  release, publicationDate, 
+                  plotType, samplingProtocolVersion, remarks) %>%
     # eventID's are inconsistently separated by periods, so we remove them
     dplyr::mutate(eventID = stringr::str_remove_all(eventID, "[.]")) %>%
     #calculate a new trapdays column
@@ -60,7 +62,9 @@ map_neon.ecocomdp.10022.001.001 <- function(
 
   try({
     data_adjTrappingDays <- data_beetles %>%
-      dplyr::select(namedLocation, trapID, setDate, collectDate, trappingDays, eventID) %>%
+      dplyr::select(namedLocation, trapID, setDate, collectDate, trappingDays, eventID,
+                    release, publicationDate, 
+                    plotType, samplingProtocolVersion, remarks) %>%
       dplyr::group_by_at(
         dplyr::vars(-collectDate, -trappingDays, -eventID)) %>%
       dplyr::filter(
@@ -218,6 +222,7 @@ map_neon.ecocomdp.10022.001.001 <- function(
   
 
 
+
   table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_raw,
     ancillary_var_names = c(
@@ -226,6 +231,9 @@ map_neon.ecocomdp.10022.001.001 <- function(
       "boutID",
       "trapID",
       "trappingDays",
+      "release", "publicationDate",
+      "samplingProtocolVersion", 
+      "remarks",
       "nativeStatusCode")) %>%
     # add units where appropriate
     dplyr::mutate(
