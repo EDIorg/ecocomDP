@@ -117,46 +117,50 @@ map_neon.ecocomdp.20120.001.001 <- function(
   
 
   
+
   
   # observation ----
   # Make the observation table.
   # start with inv_taxonomyProcessed
   # NOTE: the observation_id = uuid for record in NEON's inv_taxonomyProcessed table 
-  table_observation <- inv_taxonomyProcessed %>% 
+  table_observation_raw <- inv_taxonomyProcessed %>% 
     dplyr::filter(targetTaxaPresent == "Y") %>%
-    # select a subset of columns from inv_taxonomyProcessed
-    dplyr::select(uid,
-                  sampleID,
-                  namedLocation, 
-                  collectDate,
-                  subsamplePercent,
-                  individualCount,
-                  estimatedTotalCount,
-                  acceptedTaxonID, 
-                  domainID, 
-                  siteID) %>%
     dplyr::distinct() %>% 
     
-    # suppressMessages(ecocomDP:::make_location(cols = c("domainID", "siteID", "namedLocation"))) %>% 
-    
     # Join the columns selected above with two columns from inv_fielddata (the two columns are sampleID and benthicArea)
-    dplyr::left_join(inv_fielddata %>% dplyr::select(sampleID, benthicArea)) %>%
+    dplyr::left_join(
+      inv_fielddata %>% 
+        dplyr::select(
+          sampleID, benthicArea,
+          eventID, habitatType,
+          samplerType, substratumSizeClass,
+          ponarDepth, snagLength, snagDiameter,
+          remarks)) %>%
     
     # some new columns called 'variable_name', 'value', and 'unit', and assign values for all rows in the table.
     # variable_name and unit are both assigned the same text strint for all rows. 
-    dplyr::mutate(variable_name = 'density',
-                  value = estimatedTotalCount / benthicArea,
-                  unit = 'count per square meter') %>% 
+    dplyr::mutate(                  
+      neon_sample_id = sampleID,
+      variable_name = 'density',
+      value = estimatedTotalCount / benthicArea,
+      unit = 'count per square meter') %>% 
     
     # rename some columns
-    dplyr::rename(observation_id = uid,
-                  event_id = sampleID,
-                  observation_datetime = collectDate,
-                  taxon_id = acceptedTaxonID) %>%
+    dplyr::rename(
+      observation_id = uid,
+      event_id = sampleID,
+      neon_event_id = eventID,
+      observation_datetime = collectDate,
+      taxon_id = acceptedTaxonID) %>%
     
     # make a new column called package_id, assign it NA for all rows
-    dplyr::mutate(package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>% 
-    dplyr::left_join(table_location, by = c("namedLocation" = "location_name")) %>% 
+    dplyr::mutate(package_id = paste0(
+      neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>% 
+    dplyr::left_join(table_location, by = c("namedLocation" = "location_name"))
+  
+  
+    
+  table_observation <- table_observation_raw %>%
     dplyr::select(observation_id, 
                   event_id, 
                   package_id, 
@@ -165,7 +169,8 @@ map_neon.ecocomdp.20120.001.001 <- function(
                   taxon_id, 
                   variable_name, 
                   value,
-                  unit)
+                  unit) %>%
+    dplyr::distinct()
   
   
   
@@ -173,28 +178,22 @@ map_neon.ecocomdp.20120.001.001 <- function(
 
   # ancillary observation table ----
   
-
-  table_observation_ancillary_wide <- inv_fielddata %>% 
-    dplyr::select(eventID, sampleID) %>% 
-    dplyr::filter(!is.na(sampleID)) %>%
-    dplyr::rename(neon_sample_id = sampleID,
-           neon_event_id = eventID) %>% 
-    dplyr::mutate(event_id = neon_sample_id) %>%
-    dplyr::distinct()
-  
-
   table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
-    obs_wide = table_observation_ancillary_wide,
-    ancillary_var_names = names(table_observation_ancillary_wide))
+    obs_wide = table_observation_raw,
+    ancillary_var_names = c(
+      "event_id",
+      "neon_sample_id",
+      "neon_event_id",
+      "subsamplePercent",
+      "laboratoryName",
+      "benthicArea",
+      "habitatType",
+      "samplerType", "substratumSizeClass",
+      "ponarDepth", "snagLength", "snagDiameter",
+      "remarks",
+      "release",
+      "publicationDate"))
   
-  # table_observation_ancillary <- table_observation_ancillary_wide %>%
-  #   tidyr::pivot_longer(
-  #     cols = -event_id,
-  #     names_to = "variable_name",
-  #     values_to = "value") %>% 
-  #   dplyr::mutate(
-  #     observation_ancillary_id = paste0(variable_name, "_for_", event_id))
-  #   
   
 
 
