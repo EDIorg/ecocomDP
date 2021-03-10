@@ -25,7 +25,7 @@ map_neon.ecocomdp.10058.001.001 <- function(
   neon.data.product.id = "DP1.10058.001",
   ...){
   
-  #NEON target taxon group is HERPS
+  #NEON target taxon group is PLANT
   neon_method_id <- "neon.ecocomdp.10058.001.001"
   
   # check arguments passed via dots for neonUtilities

@@ -106,6 +106,7 @@ map_neon.ecocomdp.10022.001.001 <- function(
                        dplyr::select(uid,
                                      sampleID, subsampleID, sampleType, taxonID,
                                      scientificName, taxonRank, identificationReferences,
+                                     nativeStatusCode,
                                      individualCount),
                      by = "sampleID") %>%
     dplyr::filter(!is.na(subsampleID)) #even though they were marked a sampled, some collection times don't acutally have any samples
@@ -116,11 +117,14 @@ map_neon.ecocomdp.10022.001.001 <- function(
   data_pin <- data_beetles %>%
     dplyr::left_join(beetles_raw$bet_parataxonomistID %>%
                        dplyr::select(subsampleID, individualID, taxonID, scientificName,
-                                     taxonRank),
+                                     taxonRank,
+                                     nativeStatusCode),
                      by = "subsampleID") %>%
     dplyr::mutate_if(is.factor, as.character) %>%
     dplyr::mutate(taxonID = ifelse(is.na(taxonID.y), taxonID.x, taxonID.y)) %>%
     dplyr::mutate(taxonRank = ifelse(is.na(taxonRank.y), taxonRank.x, taxonRank.y)) %>%
+    dplyr::mutate(nativeStatusCode = ifelse(is.na(nativeStatusCode.y), 
+      nativeStatusCode.x, nativeStatusCode.y)) %>%
     dplyr::mutate(scientificName = ifelse(is.na(scientificName.y), scientificName.x, scientificName.y)) %>%
     dplyr::mutate(identificationSource = ifelse(is.na(scientificName.y), "sort", "pin")) %>%
     dplyr::select(-ends_with(".x"), -ends_with(".y"))
@@ -146,7 +150,8 @@ map_neon.ecocomdp.10022.001.001 <- function(
   data_expert <- dplyr::left_join(data_pin,
                                   dplyr::select(beetles_raw$bet_expertTaxonomistIDProcessed,
                                                 individualID,taxonID,scientificName,
-                                                taxonRank),
+                                                taxonRank,
+                                                nativeStatusCode),
                                   by = 'individualID', na_matches = "never") %>%
     dplyr::distinct()
 
@@ -157,6 +162,8 @@ map_neon.ecocomdp.10022.001.001 <- function(
     dplyr::mutate_if(is.factor, as.character) %>%
     dplyr::mutate(taxonID = ifelse(is.na(taxonID.y), taxonID.x, taxonID.y)) %>%
     dplyr::mutate(taxonRank = ifelse(is.na(taxonRank.y), taxonRank.x, taxonRank.y)) %>%
+    dplyr::mutate(nativeStatusCode = ifelse(is.na(nativeStatusCode.y), 
+                                     nativeStatusCode.x, nativeStatusCode.y)) %>%
     dplyr::mutate(scientificName = ifelse(is.na(scientificName.y), scientificName.x, scientificName.y)) %>%
     dplyr::mutate(identificationSource = ifelse(is.na(scientificName.y), identificationSource, "expert")) %>%
     dplyr::select(-ends_with(".x"), -ends_with(".y")) %>%
@@ -176,34 +183,28 @@ map_neon.ecocomdp.10022.001.001 <- function(
 
 
 
+
   # making tables ----
   # Observation Tables
   # All individuals of the same species collected at the same time/same location are considered the same observation, regardless of how they were ID'd
-
+  
   table_observation_raw <- beetles_counts %>%
-    # dplyr::rename(location_id, plotID, trapID) %>%
-    dplyr::rename(location_id = namedLocation,
-                  abundance = count)
-
-
-
-  table_observation <- table_observation_raw %>%
-    # tidyr::pivot_longer(c(abundance, trappingDays), names_to = "variable_name", values_to = "value") %>%
-    # dplyr::mutate(unit = "count") %>%
-    #create observation_id column
-    # dplyr::group_by(sampleID) %>%
-    # dplyr::mutate(observation_id = paste(sampleID, row_number(), sep = ".")) %>%
-    dplyr::mutate(package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
-    # tidyr::spread(variable_name,value) %>%
-    dplyr:: select(event_id = sampleID,
-                   package_id,
-                   location_id,
-                   observation_datetime = collectDate,
-                   taxon_id = taxonID,
-                   value = abundance/trappingDays) %>%
-    dplyr::mutate(observation_id = paste0("obs_",1:nrow(.)),
-                  variable_name = "abundance",
-                  unit = "count per trap day") %>%
+    dplyr::rename(
+      location_id = namedLocation,
+      abundance = count,
+      observation_datetime = collectDate,
+      taxon_id = taxonID) %>%
+    dplyr::mutate(
+      package_id = paste0(
+        neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S")), 
+      observation_id = paste0("obs_",1:nrow(.)),
+      event_id = observation_id,
+      variable_name = "abundance",
+      value = abundance/trappingDays,
+      unit = "count per trap day") %>%
+    distinct()
+  
+  table_observation <- table_observation_raw %>% 
     dplyr::select(observation_id,
                   event_id,
                   package_id,
@@ -212,30 +213,20 @@ map_neon.ecocomdp.10022.001.001 <- function(
                   taxon_id,
                   variable_name,
                   value,
-                  unit)
-
-
-
-  # no units, all text
-  table_observation_ancillary_wide <- beetles_raw$bet_fielddata %>%
-    dplyr::select(eventID, sampleID,
-                  trappingDays,
-                  samplingProtocolVersion, remarks) %>%
-    dplyr::mutate_all(as.character) %>%
-    dplyr::filter(!is.na(sampleID)) %>%
-    dplyr::rename(neon_sample_id = sampleID,
-                  neon_event_id = eventID) %>%
-    dplyr::mutate(event_id = neon_sample_id) %>%
+                  unit) %>%
     dplyr::distinct()
+  
 
-  table_observation_ancillary <- table_observation_ancillary_wide %>%
-    tidyr::pivot_longer(
-      cols = -event_id,
-      names_to = "variable_name",
-      values_to = "value") %>%
-    dplyr::mutate(
-      observation_ancillary_id = paste0(variable_name, "_for_", event_id)) %>%
 
+  table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
+    obs_wide = table_observation_raw,
+    ancillary_var_names = c(
+      "event_id",
+      "sampleID",
+      "boutID",
+      "trapID",
+      "trappingDays",
+      "nativeStatusCode")) %>%
     # add units where appropriate
     dplyr::mutate(
       unit = dplyr::case_when(
