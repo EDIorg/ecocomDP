@@ -246,20 +246,14 @@ map_neon.ecocomdp.10043.001.001 <- function(
     dplyr::select(taxonID, taxonRank, scientificName,identificationReferences) %>%
     
     dplyr::distinct() %>% 
-    
-    
     dplyr::rename(taxon_id = taxonID,
                   taxon_rank = taxonRank,
                   taxon_name = scientificName,
                   authority_system = identificationReferences) %>%
-    
-    # dplyr::mutate(authority_system = "NEON_external_lab") %>% 
-    
     dplyr::select(taxon_id,
                   taxon_rank,
                   taxon_name,
                   authority_system) %>%
-    
     dplyr::filter(!is.na(taxon_id)) %>%
     # concatenate different references for same taxonID
     dplyr::group_by(taxon_id, taxon_rank, taxon_name) %>%
@@ -273,16 +267,6 @@ map_neon.ecocomdp.10043.001.001 <- function(
   
   # observation ----
   table_observation_raw <- mos_dat %>% 
-    # dplyr::select(uid, 
-    #               sampleID, 
-    #               namedLocation, 
-    #               # startCollectDate,
-    #               collectDate,
-    #               taxonID,
-    #               totalWeight,
-    #               trapHours,
-    #               individualCount,
-    #               subsampleWeight) %>% 
   dplyr::mutate(variable_name = "abundance",
                 value = (individualCount/subsampleWeight) * totalWeight / trapHours,
                 unit = "count per trap hour") %>% 
@@ -342,6 +326,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
       "samplingProtocolVersion",
       "remarks_sorting",
       "sex",
+      "nativeStatusCode",
       "release",
       "publicationDate")) %>%
     # add units where appropriate
