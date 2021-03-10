@@ -128,16 +128,17 @@ map_neon_data_to_ecocomDP <- function(
   out_list <- list(
     metadata = list(
       data_package_info = list(
-        orig_NEON_DPID = neon.data.product.id,
+        data_package_id = ecocomDP_tables$dataset_summary$package_id,
+        orig_NEON_data_product_id = neon.data.product.id,
         NEON_to_ecocomDP_mapping_method = id,
-        data_access_method = paste0("original NEON data accessed using neonUtilities v", packageVersion("neonUtilities")),
+        data_access_method = paste0(
+          "original NEON data accessed using neonUtilities v", 
+          packageVersion("neonUtilities")),
         data_access_date_time = Sys.time()),
       orig_NEON_data_product_info = neonUtilities::getProductInfo(
         dpID = neon.data.product.id,
         token = ifelse("token" %in% names(my_dots), my_dots$token, NA_character_))),
     tables = ecocomDP_tables)
-  
-  # browser()
   
   # return
   return(out_list)
