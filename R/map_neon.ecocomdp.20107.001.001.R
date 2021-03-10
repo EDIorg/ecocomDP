@@ -288,7 +288,8 @@ map_neon.ecocomdp.20107.001.001 <- function(
 
   #location ----
   table_location_raw <- data_fish %>%
-    dplyr::select(domainID, siteID, namedLocation, decimalLatitude, decimalLongitude, elevation, 
+    dplyr::select(domainID, siteID, namedLocation, 
+                  decimalLatitude, decimalLongitude, elevation, 
                   geodeticDatum, aquaticSiteType) %>%
     dplyr::distinct() 
   
@@ -303,10 +304,13 @@ map_neon.ecocomdp.20107.001.001 <- function(
   
   # observation ----
   table_observation_wide_all <- data_fish %>%
+    dplyr::left_join(all_fish$fsh_perPass) %>%
     # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation) %>%
     # package id
-    dplyr::mutate(package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+    dplyr::mutate(
+      package_id = paste0(
+        neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
     dplyr::rename(
       # neon_event_id = eventID,
       observation_datetime = startDate, 
@@ -315,9 +319,14 @@ map_neon.ecocomdp.20107.001.001 <- function(
     dplyr::mutate(
       observation_id = paste0("obs_",1:nrow(.)), 
       event_id = eventID,
+      # event_id = observation_id,
+      # neon_event_id = eventID,
       variable_name = "abundance",
       unit = "catch per unit effort") 
   
+  
+  
+
   
   table_observation <- table_observation_wide_all %>%
     dplyr::select(
@@ -338,6 +347,11 @@ map_neon.ecocomdp.20107.001.001 <- function(
     ancillary_var_names = c(
       "event_id",
       "samplerType",
+      "habitatType",
+      "subdominantHabitatType",
+      "waterTemp",
+      "dissolvedOxygen",
+      "specificConductance",
       "netSetTime",        
       "netEndTime",
       "netDeploymentTime",
@@ -349,7 +363,10 @@ map_neon.ecocomdp.20107.001.001 <- function(
       "efTime2",
       "passStartTime",
       "passEndTime", 
-      "mean_efishtime"))
+      "mean_efishtime",
+      "remarks",
+      "release",
+      "publicationDate"))
   
   
   # taxon ----
