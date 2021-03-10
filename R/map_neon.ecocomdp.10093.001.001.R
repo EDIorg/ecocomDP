@@ -633,7 +633,7 @@ map_neon.ecocomdp.10093.001.001 <- function(
       -CountFlag, -IDflag, -totalAdult_tax, -totalNymph_tax, 
       -totalLarva_tax, -totalCount_tax, -totalCount_field,
       -nymphCount, -larvaCount, -adultCount,
-      -samplingImpractical, -measuredBy, -dataQF_field, -publicationDate_field)
+      -samplingImpractical, -measuredBy, -dataQF_field)
   
   
   # long form data
@@ -684,12 +684,8 @@ map_neon.ecocomdp.10093.001.001 <- function(
                                            collapse = "; "), .groups = "drop") %>%
         dplyr::distinct(),
       by = "acceptedTaxonID") %>%
-    dplyr::distinct()
-  
-  # table(data_tick$plotType) # all distributed
-  # table(str_sub(data_tick$namedLocation, 10)) # all tickPlot.tck
-  data_tick <- dplyr::select(data_tick, -plotType) %>% dplyr::distinct()
-  data_tick <- dplyr::rename(data_tick, taxonID = acceptedTaxonID)
+    dplyr::rename(taxonID = acceptedTaxonID,
+                  publicationDate = publicationDate_field)
   # NOTES FOR END USERS  #
   # be aware of higher order taxa ID -- they are individuals ASSIGNED at a higher taxonomic class, rather than the sum of lower tax. class
   # higher order taxonomic assignments could be semi-identified by looking at most likely ID (e.g. if 200 of 700 larvae are IXOSPAC, very likely that the Unidentified larvae are IXOSPAC)
@@ -703,7 +699,9 @@ map_neon.ecocomdp.10093.001.001 <- function(
   table_location_raw <- data_tick %>%
     dplyr::select(domainID, siteID, namedLocation, 
                   decimalLatitude, decimalLongitude, elevation, 
-                  nlcdClass, geodeticDatum) %>%
+                  nlcdClass, plotType,
+                  geodeticDatum) %>%
+    apply(2, as.character) %>% as.data.frame() %>%
     dplyr::distinct() 
   
   table_location <- ecocomDP:::make_neon_location_table(
@@ -713,7 +711,8 @@ map_neon.ecocomdp.10093.001.001 <- function(
   table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"),
-    ancillary_var_names = c("namedLocation", "nlcdClass", "geodeticDatum"))
+    ancillary_var_names = c("namedLocation", "nlcdClass", "plotType",
+                            "geodeticDatum"))
   
   
   
@@ -756,7 +755,9 @@ map_neon.ecocomdp.10093.001.001 <- function(
     # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation) %>%
     # package id
-    dplyr::mutate(package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+    dplyr::mutate(
+      package_id = paste0(
+        neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
     dplyr:: rename(
       neon_event_id = eventID,
       observation_datetime = collectDate, 
@@ -784,6 +785,9 @@ map_neon.ecocomdp.10093.001.001 <- function(
   
   
   
+
+  
+  
   table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_all,
     ancillary_var_names = c(
@@ -795,8 +799,10 @@ map_neon.ecocomdp.10093.001.001 <- function(
       "totalSampledArea",
       "targetTaxaPresent",
       "remarks_field",
+      "identificationReferences",
       "release",
-      "identificationReferences"))
+      "publicationDate"
+      ))
   
   # data summary ----
   # make dataset_summary -- required table
