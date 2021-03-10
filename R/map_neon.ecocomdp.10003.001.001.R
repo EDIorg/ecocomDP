@@ -46,17 +46,17 @@ map_neon.ecocomdp.10003.001.001 <- function(
   allTabs_bird$brd_perpoint <- tibble::as_tibble(allTabs_bird$brd_perpoint)
   data_bird <- dplyr::left_join(allTabs_bird$brd_countdata,
                                dplyr::select(allTabs_bird$brd_perpoint, -uid,
-                                             -startDate, -publicationDate))
+                                             -startDate))
   
   # table(data_bird$samplingImpractical) # all NA
   # table(data_bird$samplingImpracticalRemarks)
   
   data_bird <- dplyr::select(data_bird, 
                              # -uid, 
-                             -identifiedBy, -publicationDate,
-                            # -eventID, # it is just plotID, pointID, startDate
-                            -laboratoryName, -measuredBy,
-                            -samplingImpractical, -samplingImpracticalRemarks)
+                             -identifiedBy, 
+                             # -eventID, # it is just plotID, pointID, startDate
+                             -measuredBy,
+                             -samplingImpractical, -samplingImpracticalRemarks)
   
   
 
@@ -64,7 +64,8 @@ map_neon.ecocomdp.10003.001.001 <- function(
   
   #location ----
   table_location_raw <- data_bird %>%
-    dplyr::select(domainID, siteID, namedLocation, decimalLatitude, decimalLongitude, elevation, 
+    dplyr::select(domainID, siteID, namedLocation, 
+                  decimalLatitude, decimalLongitude, elevation, 
                   nlcdClass, geodeticDatum) %>%
     dplyr::distinct() 
   
@@ -141,6 +142,7 @@ map_neon.ecocomdp.10003.001.001 <- function(
   
   
 
+
   
   table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
@@ -157,13 +159,16 @@ map_neon.ecocomdp.10003.001.001 <- function(
       "visualConfirmation",
       "sexOrAge",
       "clusterCode",
-      "release",
+      "nativeStatusCode",
       "endCloudCoverPercentage",
       "observedHabitat",
       "observedAirTemp",
       "kmPerHourObservedWindSpeed",
+      "laboratoryName",
       "samplingProtocolVersion",
-      "remarks"))
+      "remarks",
+      "release",
+      "publicationDate"))
 
   # data summary ----
   # make dataset_summary -- required table
