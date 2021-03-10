@@ -79,15 +79,28 @@ map_neon.ecocomdp.10058.001.001 <- function(
   
   # stack data
   data_plant = dplyr::bind_rows(
-    dplyr::select(div_1m2_pla, uid, domainID, namedLocation, siteID, decimalLatitude, decimalLongitude,
-                  geodeticDatum, coordinateUncertainty, elevation, elevationUncertainty, nlcdClass,
-                  plotID, subplotID, boutNumber, endDate, taxonID, scientificName, taxonRank, identificationReferences,
-                  family, nativeStatusCode, percentCover, heightPlantOver300cm, heightPlantSpecies) %>%
+    dplyr::select(
+      div_1m2_pla, 
+      uid, domainID, namedLocation, siteID, 
+      decimalLatitude, decimalLongitude,
+      geodeticDatum, coordinateUncertainty, 
+      elevation, elevationUncertainty, nlcdClass,
+      plotID, subplotID, boutNumber, endDate, 
+      taxonID, scientificName, taxonRank, identificationReferences,
+      family, nativeStatusCode, percentCover, 
+      heightPlantOver300cm, heightPlantSpecies,
+      release, publicationDate) %>%
       dplyr::mutate(sample_area_m2 = 1), # 1m2
-    dplyr::select(div_10_100_m2_5, uid, domainID, namedLocation, siteID, decimalLatitude, decimalLongitude,
-                  geodeticDatum, coordinateUncertainty, elevation, elevationUncertainty, nlcdClass,
-                  plotID, subplotID, boutNumber, endDate, taxonID, scientificName, taxonRank,  identificationReferences,
-                  family, nativeStatusCode, sample_area_m2)
+    dplyr::select(
+      div_10_100_m2_5, 
+      uid, domainID, namedLocation, 
+      siteID, decimalLatitude, decimalLongitude,
+      geodeticDatum, coordinateUncertainty, 
+      elevation, elevationUncertainty, nlcdClass,
+      plotID, subplotID, boutNumber, endDate, 
+      taxonID, scientificName, taxonRank,  identificationReferences,
+      family, nativeStatusCode, sample_area_m2,
+      release, publicationDate)
   ) %>%
     dplyr::mutate(subplot_id = substr(subplotID, 1, 2),
                   subsubplot_id = substr(subplotID, 4, 4),
@@ -99,7 +112,9 @@ map_neon.ecocomdp.10058.001.001 <- function(
   data_plant = dplyr::distinct(data_plant)
   
   # family or order level data are pretty much not useful.
-  data_plant = dplyr::filter(data_plant, taxonRank %in% c("variety", "subspecies", "species", "speciesGroup", "genus"))
+  data_plant = dplyr::filter(
+    data_plant, 
+    taxonRank %in% c("variety", "subspecies", "species", "speciesGroup", "genus"))
   # NOTE: we have not cleaned species names; users need to do it
   
   
@@ -168,6 +183,10 @@ map_neon.ecocomdp.10058.001.001 <- function(
       unit) %>%
     dplyr::filter(!is.na(taxon_id))
   
+  
+  
+
+  
   table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
@@ -180,7 +199,9 @@ map_neon.ecocomdp.10058.001.001 <- function(
       "nativeStatusCode",
       "heightPlantOver300cm",
       "heightPlantSpecies",
-      "sample_area_m2"))
+      "sample_area_m2",
+      "release",
+      "publicationDate"))
   
   
   # data summary ----
