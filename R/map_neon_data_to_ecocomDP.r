@@ -124,11 +124,20 @@ map_neon_data_to_ecocomDP <- function(
   
   my_dots <- list(...)
   
+  
+  # get taxon group
+  neon_dp_table <- ecocomDP::search_data("NEON")
+  taxon_group <- neon_dp_table$title[neon_dp_table$id == id] %>%
+    stringr::str_split(" ") %>%
+    unlist() %>%
+    dplyr::first()
+  
   # combine neon metadata and ecocomDP tables
   out_list <- list(
     metadata = list(
       data_package_info = list(
         data_package_id = ecocomDP_tables$dataset_summary$package_id,
+        taxonomic_group = taxon_group,
         orig_NEON_data_product_id = neon.data.product.id,
         NEON_to_ecocomDP_mapping_method = id,
         data_access_method = paste0(
