@@ -289,13 +289,13 @@ map_neon.ecocomdp.10092.001.001 <- function(
       "vectorSpecies ",
       "lifeStage",
       "batchID",
-      "plotType",
       "plotID",
       "subsampleID",
       "testProtocolVersion",
       "remarks",
       "laboratoryName",
-      "release")) %>% 
+      "release",
+      "publicationDate")) %>% 
     dplyr::distinct()
   
 
@@ -328,6 +328,7 @@ map_neon.ecocomdp.10092.001.001 <- function(
   table_location_raw <- data_tick_pathogen %>%
     dplyr::select(domainID, siteID, namedLocation, 
                   decimalLatitude, decimalLongitude, elevation, 
+                  plotType,
                   nlcdClass, geodeticDatum) %>%
     dplyr::distinct() 
   
@@ -338,7 +339,8 @@ map_neon.ecocomdp.10092.001.001 <- function(
   table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"),
-    ancillary_var_names = c("namedLocation", "nlcdClass", "geodeticDatum"))
+    ancillary_var_names = c("namedLocation", "nlcdClass",
+                            "plotType","geodeticDatum"))
   
   
   # data summary ----
