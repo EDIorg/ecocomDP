@@ -466,11 +466,6 @@ validate_column_classes <- function(data.list) {
                   issues <- list(
                     column = k, expected = expected, detected = detected)
                 }
-              } else if (expected == "Date") {
-                if (detected != "character") {
-                  issues <- list(
-                    column = k, expected = expected, detected = detected)
-                }
               } else if (expected == "character") {
                 if (detected != "character") {
                   issues <- list(

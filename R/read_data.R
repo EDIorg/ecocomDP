@@ -63,23 +63,23 @@
 #' @examples
 #' # Read a dataset
 #' d <- read_data("edi.193.3")
-#' d <- read_data("DP1.20166.001")
+#' d <- read_data("neon.ecocomdp.20166.001.001")
 #' 
 #' # Read a NEON dataset with filters
 #' d <- read_data(
-#'   id = "DP1.20166.001", 
+#'   id = "neon.ecocomdp.20166.001.001", 
 #'   site = c("MAYF", "PRIN"), 
 #'   startdate = "2016-01", 
 #'   enddate = "2018-11")
 #' 
 #' # Read multiple datasets from different sources
-#' d <- read_data(c("edi.193.3", "DP1.20166.001"))
+#' d <- read_data(c("edi.193.3", "neon.ecocomdp.20166.001.001"))
 #' 
 #' # Read multiple datasets from EDI and NEON with NEON filters
 #' d <- read_data(
 #'   id = list(
 #'     edi.193.3 = NULL,
-#'     DP1.20166.001 = list(
+#'     neon.ecocomdp.20166.001.001 = list(
 #'       site = c("MAYF", "PRIN"),
 #'       startdate = "2016-01",
 #'       enddate = "2018-11")),
@@ -146,7 +146,6 @@ read_data <- function(
       }
     })
   
-  
   names(d) <- names(id)
   
   
@@ -199,22 +198,18 @@ read_data <- function(
                 detected <- class(d[[x]]$tables[[y]][[z]])
                 expected <- attr_tbl$class[(attr_tbl$table == y) & (attr_tbl$column == z)]
                 if (any(detected %in% c("POSIXct", "POSIXt", "Date", "IDate"))) {
-                  detected <- "Date"
-                  d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
+                  detected <- "Date" # so downstream logic doesn't throw length() > 1 warnings
                 }
                 if (detected != expected) {
                   if (expected == 'character'){
                     d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
                   } else if (expected == 'numeric'){
                     d[[x]]$tables[[y]][[z]] <<- as.numeric(d[[x]]$tables[[y]][[z]])
-                  } else if (expected == 'Date'){
-                    d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
                   }
                 }
               })
           })
       }))
-
   
   # Append package_id to primary keys to ensure referential integrity (except
   # package_id, appending package_id to package_id changes the field definition
@@ -282,6 +277,23 @@ read_data <- function(
 
 # Helper functions ------------------------------------------------------------
 
+
+
+parse_datetime <- function(v, tbl) {
+  list(
+    lubridate::parse_date_time(v, "ymdHMS"),
+    lubridate::parse_date_time(v, "ymdHM"),
+    lubridate::parse_date_time(v, "ymdH"),
+    lubridate::parse_date_time(v, "ymd"))
+}
+
+
+
+
+
+
+
+
 #' Read an ecocomDP dataset from EDI
 #'
 #' @param id
@@ -335,19 +347,33 @@ read_data_edi <- function(id) {
       }))
   
   # Read tables
-  
   output <- lapply(
     names(tbl_attrs),
     function(x) {
       data.table::fread(
-        tbl_attrs[[x]]$url, 
-        sep = tbl_attrs[[x]]$delimiter)
+        tbl_attrs[[x]]$url)
     })
   names(output) <- names(tbl_attrs)
-  list(
-    metadata = NULL,
-    tables = output)
   
+  # Parse datetime
+  for (tbl in names(output)) {
+    if (tbl %in% c("observation", "location_ancillary", "taxon_ancillary")) {
+      if (tbl == "observation") {
+        nodeset <- xml2::xml_parent(xml2::xml_find_all(eml, ".//attributeName[text()='observation_datetime']"))
+        output[[tbl]]$observation_datetime <- parse_datetime(
+          vals = output[[tbl]]$observation_datetime, 
+          frmt = xml_val(nodeset, ".//dateTime/formatString"))
+      } else {
+        nodeset <- xml2::xml_parent(xml2::xml_find_all(eml, ".//attributeName[text()='datetime']"))
+        output[[tbl]]$datetime <- parse_datetime(
+          vals = output[[tbl]]$datetime, 
+          frmt = xml_val(nodeset, ".//dateTime/formatString"))
+      }
+    }
+  }
+  
+  res <- list(metadata = NULL, tables = output)
+  return(res)
 }
 
 
