@@ -60,7 +60,7 @@ map_neon.ecocomdp.10022.001.002 <- function(
   
   tidy_fielddata <- tidy_fielddata %>%
     dplyr::select(namedLocation,  # select needed variables
-                  domainID,  siteID, plotID, trapID, nlcdClass,
+                  domainID,  siteID, plotID, plotType, trapID, nlcdClass,
                   decimalLatitude, decimalLongitude,
                   geodeticDatum, coordinateUncertainty,
                   elevation, elevationUncertainty,
@@ -257,18 +257,19 @@ map_neon.ecocomdp.10022.001.002 <- function(
   #location ----
   table_location_raw <- data_herp_bycatch %>%
     dplyr::select(domainID, siteID, namedLocation, 
+                  plotID, plotType,
                   decimalLatitude, decimalLongitude, elevation, 
                   nlcdClass, geodeticDatum) %>%
     dplyr::distinct() 
   
   table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"))
   
   table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"),
-    ancillary_var_names = c("namedLocation", "nlcdClass", "geodeticDatum"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"),
+    ancillary_var_names = c("namedLocation", "plotType", "nlcdClass", "geodeticDatum"))
   
   
   
@@ -305,12 +306,16 @@ map_neon.ecocomdp.10022.001.002 <- function(
   
   
   # observation ----
+  
+  my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
+  
   table_observation_wide_all <- data_herp_bycatch %>%
     # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation) %>%
     # package id
     dplyr::mutate(
-      package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S")),
+      package_id = my_package_id,
       neon_trap_id = trapID) %>%
     dplyr:: rename(
       observation_id = uid, 

@@ -81,7 +81,7 @@ map_neon.ecocomdp.10058.001.001 <- function(
   data_plant = dplyr::bind_rows(
     dplyr::select(
       div_1m2_pla, 
-      uid, domainID, namedLocation, siteID, 
+      uid, domainID, namedLocation, siteID, plotType,
       decimalLatitude, decimalLongitude,
       geodeticDatum, coordinateUncertainty, 
       elevation, elevationUncertainty, nlcdClass,
@@ -94,7 +94,7 @@ map_neon.ecocomdp.10058.001.001 <- function(
     dplyr::select(
       div_10_100_m2_5, 
       uid, domainID, namedLocation, 
-      siteID, decimalLatitude, decimalLongitude,
+      siteID, plotType, decimalLatitude, decimalLongitude,
       geodeticDatum, coordinateUncertainty, 
       elevation, elevationUncertainty, nlcdClass,
       plotID, subplotID, boutNumber, endDate, 
@@ -122,19 +122,20 @@ map_neon.ecocomdp.10058.001.001 <- function(
 
   #location ----
   table_location_raw <- data_plant %>%
-    dplyr::select(domainID, siteID, namedLocation, 
-                  decimalLatitude, decimalLongitude, elevation, 
+    dplyr::select(domainID, siteID, plotID, namedLocation, 
+                  decimalLatitude, decimalLongitude, elevation,
+                  plotType, 
                   nlcdClass, geodeticDatum) %>%
     dplyr::distinct() 
   
   table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"))
   
   table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"),
-    ancillary_var_names = c("namedLocation", "nlcdClass", "geodeticDatum"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"),
+    ancillary_var_names = c("namedLocation", "plotType", "nlcdClass", "geodeticDatum"))
   
   
   # taxon ----
@@ -154,12 +155,15 @@ map_neon.ecocomdp.10058.001.001 <- function(
    
   
   # observation ----
+  
+  my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
   table_observation_wide_all <- data_plant %>%
     # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation) %>%
     # package id
     dplyr::mutate(
-      package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+      package_id = my_package_id) %>%
     dplyr:: rename(
       observation_id = uid, 
       observation_datetime = endDate, 
@@ -193,7 +197,6 @@ map_neon.ecocomdp.10058.001.001 <- function(
       "event_id",
       "boutNumber",
       "subplotID",
-      "plotID",
       "nativeStatusCode",
       "identificationReferences",
       "nativeStatusCode",

@@ -117,12 +117,15 @@ map_neon.ecocomdp.20219.001.001 <- function(
 
   
   # observation ----
+  
+  my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
   table_observation_wide_all <- data_zooplankton %>%
     # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation) %>%
     # package id
     dplyr::mutate(
-      package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+      package_id = my_package_id) %>%
     dplyr:: rename(
       observation_id = uid, 
       neon_event_id = eventID,

@@ -206,10 +206,13 @@ map_neon.ecocomdp.10092.001.001 <- function(
   
   
   # observation ----
+  
+  my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
   table_observation_all <- data_tick_pathogen %>%
     dplyr::select(-uid) %>%
     dplyr::mutate(
-      package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S")),
+      package_id = my_package_id,
       event_id = paste0(namedLocation,"_",collectDate),
       pos_result_count = dplyr::case_when(
         testResult == "Positive" ~ 1,
@@ -289,7 +292,6 @@ map_neon.ecocomdp.10092.001.001 <- function(
       "vectorSpecies ",
       "lifeStage",
       "batchID",
-      "plotID",
       "subsampleID",
       "testProtocolVersion",
       "remarks",
@@ -326,7 +328,7 @@ map_neon.ecocomdp.10092.001.001 <- function(
 
   #location ----
   table_location_raw <- data_tick_pathogen %>%
-    dplyr::select(domainID, siteID, namedLocation, 
+    dplyr::select(domainID, siteID, plotID, namedLocation, 
                   decimalLatitude, decimalLongitude, elevation, 
                   plotType,
                   nlcdClass, geodeticDatum) %>%
@@ -334,11 +336,11 @@ map_neon.ecocomdp.10092.001.001 <- function(
   
   table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"))
   
   table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"),
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"),
     ancillary_var_names = c("namedLocation", "nlcdClass",
                             "plotType","geodeticDatum"))
   

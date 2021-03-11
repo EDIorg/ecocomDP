@@ -697,7 +697,7 @@ map_neon.ecocomdp.10093.001.001 <- function(
   
   #location ----
   table_location_raw <- data_tick %>%
-    dplyr::select(domainID, siteID, namedLocation, 
+    dplyr::select(domainID, siteID, plotID, namedLocation, 
                   decimalLatitude, decimalLongitude, elevation, 
                   nlcdClass, plotType,
                   geodeticDatum) %>%
@@ -706,11 +706,11 @@ map_neon.ecocomdp.10093.001.001 <- function(
   
   table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"))
   
   table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"),
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"),
     ancillary_var_names = c("namedLocation", "nlcdClass", "plotType",
                             "geodeticDatum"))
   
@@ -749,6 +749,9 @@ map_neon.ecocomdp.10093.001.001 <- function(
   # replace NA counts with zeroes
   data_tick$IndividualCount[is.na(data_tick$IndividualCount)] <- 0
   
+  my_package_id <- paste0(
+    neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
   table_observation_all <- data_tick %>%
     dplyr::filter(!is.na(totalSampledArea) && totalSampledArea > 0) %>%
     dplyr::distinct() %>%
@@ -756,8 +759,7 @@ map_neon.ecocomdp.10093.001.001 <- function(
     dplyr::rename(location_id = namedLocation) %>%
     # package id
     dplyr::mutate(
-      package_id = paste0(
-        neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+      package_id = my_package_id) %>%
     dplyr:: rename(
       neon_event_id = eventID,
       observation_datetime = collectDate, 
