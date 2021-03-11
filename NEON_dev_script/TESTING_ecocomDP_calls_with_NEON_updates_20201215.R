@@ -668,7 +668,7 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata
+my_result_read_data[[1]]$metadata$data_package_info
 
 
 names(my_result_read_data[[1]]$tables)

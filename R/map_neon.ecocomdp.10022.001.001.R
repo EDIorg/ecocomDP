@@ -44,7 +44,7 @@ map_neon.ecocomdp.10022.001.001 <- function(
   # start with the fielddata table, which describes all sampling events
   data_beetles <- tibble::as_tibble(beetles_raw$bet_fielddata) %>%
     dplyr::filter(sampleCollected == "Y") %>% #there's an entry for every trap, whether or not they got samples, only want ones with samples
-    dplyr::select(sampleID, domainID, siteID, namedLocation,
+    dplyr::select(sampleID, domainID, siteID, plotID, namedLocation,
                   trapID, setDate, collectDate, eventID, trappingDays,
                   release, publicationDate, 
                   plotType, samplingProtocolVersion, remarks) %>%
@@ -252,18 +252,18 @@ map_neon.ecocomdp.10022.001.001 <- function(
   # to make location and ancillary location tables
 
   table_location_raw <- beetles_raw$bet_fielddata %>%
-    dplyr::select(domainID, siteID, namedLocation,
+    dplyr::select(domainID, siteID, plotID, namedLocation,
                   decimalLatitude, decimalLongitude, elevation,
                   plotType, nlcdClass, geodeticDatum) %>%
     dplyr::distinct() 
   
   table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"))
   
   table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"),
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"),
     ancillary_var_names <- c("namedLocation",
                              "plotType", "nlcdClass", "geodeticDatum"))
   

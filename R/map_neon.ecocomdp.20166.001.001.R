@@ -189,7 +189,7 @@ map_neon.ecocomdp.20166.001.001 <- function(
   # location ----
   # get relevant location info from the data, use neon helper functions 
   # to make location and ancillary location tables
-  
+
   table_location_raw <- table_observation_raw %>%
     dplyr::select(domainID, siteID, namedLocation, 
                   aquaticSiteType, 
@@ -202,10 +202,8 @@ map_neon.ecocomdp.20166.001.001 <- function(
   
   table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c(
-      "domainID", "siteID", "namedLocation"),
-    ancillary_var_names = c(
-      "namedLocation","aquaticSiteType"))
+    loc_col_names = c("domainID", "siteID", "namedLocation"),
+    ancillary_var_names = c("namedLocation","aquaticSiteType"))
   
   
   
