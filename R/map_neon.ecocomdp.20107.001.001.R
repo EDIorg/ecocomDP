@@ -1,5 +1,7 @@
 ##############################################################################################
 ##############################################################################################
+#' @author Thilina Surasinghe \email{tsurasinghe@bridgew.edu}
+#' 
 #' @examples 
 #' \dontrun{
 #' my_result <- map_neon.ecocomdp.20107.001.001(
@@ -11,7 +13,6 @@
 #' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for FISH taxa from neon.data.product.id DP1.20107.001 from the NEON data portal and map to the ecocomDP format
-#' @export
 
 ##############################################################################################
 # mapping function for FISH
@@ -287,25 +288,35 @@ map_neon.ecocomdp.20107.001.001 <- function(
 
   #location ----
   table_location_raw <- data_fish %>%
-    dplyr::select(domainID, siteID, namedLocation, decimalLatitude, decimalLongitude, elevation, 
+    dplyr::select(domainID, siteID, namedLocation, 
+                  decimalLatitude, decimalLongitude, elevation, 
                   geodeticDatum, aquaticSiteType) %>%
     dplyr::distinct() 
   
-  table_location <- ecocomDP::make_neon_location_table(
+  table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"))
   
-  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+  table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"),
     ancillary_var_names = c("namedLocation", "aquaticSiteType", "geodeticDatum"))
   
+  
+  
   # observation ----
+  
+  my_package_id <- paste0(
+    neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
+  
   table_observation_wide_all <- data_fish %>%
+    dplyr::left_join(all_fish$fsh_perPass) %>%
     # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation) %>%
     # package id
-    dplyr::mutate(package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+    dplyr::mutate(
+      package_id = my_package_id) %>%
     dplyr::rename(
       # neon_event_id = eventID,
       observation_datetime = startDate, 
@@ -314,9 +325,14 @@ map_neon.ecocomdp.20107.001.001 <- function(
     dplyr::mutate(
       observation_id = paste0("obs_",1:nrow(.)), 
       event_id = eventID,
+      # event_id = observation_id,
+      # neon_event_id = eventID,
       variable_name = "abundance",
       unit = "catch per unit effort") 
   
+  
+  
+
   
   table_observation <- table_observation_wide_all %>%
     dplyr::select(
@@ -332,11 +348,16 @@ map_neon.ecocomdp.20107.001.001 <- function(
     dplyr::filter(!is.na(taxon_id))
   
   
-  table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
+  table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
       "event_id",
       "samplerType",
+      "habitatType",
+      "subdominantHabitatType",
+      "waterTemp",
+      "dissolvedOxygen",
+      "specificConductance",
       "netSetTime",        
       "netEndTime",
       "netDeploymentTime",
@@ -348,7 +369,10 @@ map_neon.ecocomdp.20107.001.001 <- function(
       "efTime2",
       "passStartTime",
       "passEndTime", 
-      "mean_efishtime"))
+      "mean_efishtime",
+      "remarks",
+      "release",
+      "publicationDate"))
   
   
   # taxon ----

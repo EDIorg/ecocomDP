@@ -1,7 +1,6 @@
 ##############################################################################################
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for ALGAE from neon.data.product.id DP1.20166.001 (Periphyton, seston, and phytoplankton collection) from the NEON data portal and map to the ecocomDP format
 #' 
-#' @export
 
 # changelog and author contributions / copyrights
 #   Eric R Sokol (2020-04-17)
@@ -124,11 +123,12 @@ map_neon.ecocomdp.20166.001.001 <- function(
 
   
   
+  my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
   
   # rename fields for ecocomDP
   table_observation_ecocomDP <- table_observation_raw %>%
     dplyr::mutate(
-      package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+      package_id = my_package_id) %>%
     dplyr::rename(
       observation_id = uid, 
       neon_sample_id = sampleID,
@@ -159,11 +159,14 @@ map_neon.ecocomdp.20166.001.001 <- function(
     dplyr::distinct()
   
   
+  
 
+  
+  
   # make observation ancillary table. First convert POSIXct POSIXt classed
   # variables to character, otherwise gathering will produce a warning.
   
-  table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
+  table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_ecocomDP,
     ancillary_var_names = c("neon_sample_id",
                             "neon_event_id",
@@ -171,32 +174,36 @@ map_neon.ecocomdp.20166.001.001 <- function(
                             "sampleCondition",
                             "laboratoryName",
                             "perBottleSampleVolume",
-                            "aquaticSiteType",
-                            "habitatType",
                             "algalSampleType",
                             "samplerType",
+                            "habitatType",
                             "benthicArea",
                             "samplingProtocolVersion",
                             "phytoDepth1","phytoDepth2","phytoDepth3",
-                            "substratumSizeClass"))
+                            "substratumSizeClass",
+                            "release",
+                            "publicationDate"))
   
 
   
   # location ----
   # get relevant location info from the data, use neon helper functions 
   # to make location and ancillary location tables
-  
+
   table_location_raw <- table_observation_raw %>%
-    dplyr::select(domainID, siteID, namedLocation, decimalLatitude, decimalLongitude, elevation) %>%
+    dplyr::select(domainID, siteID, namedLocation, 
+                  aquaticSiteType, 
+                  decimalLatitude, decimalLongitude, elevation) %>%
     dplyr::distinct() 
   
-  table_location <- ecocomDP::make_neon_location_table(
+  table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"))
   
-  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+  table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"))
+    loc_col_names = c("domainID", "siteID", "namedLocation"),
+    ancillary_var_names = c("namedLocation","aquaticSiteType"))
   
   
   

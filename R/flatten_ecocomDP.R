@@ -156,6 +156,26 @@ flatten_ecocomDP <- function(data.list){
   }
   
 
+  # merge additional location_ancillary data
+  # only for bottom level when locations are nested
+  if("location_ancillary" %in% names(data.list)){
+    location_ancillary <- data.list$location_ancillary %>%
+      dplyr::filter(variable_name!="NEON location type",
+                    location_id %in% all_merged$location_id)
+    
+    if(nrow(location_ancillary) > 0){
+      location_ancillary_wide <- location_ancillary %>%
+        dplyr::select(location_id, variable_name, value) %>%
+        tidyr::pivot_wider(names_from = variable_name, values_from = value)
+      all_merged <- all_merged %>%
+        dplyr::left_join(
+          location_ancillary_wide %>% 
+            dplyr::select_if(not_all_NAs),
+          by = "location_id",
+          suffix = c("", "_location_ancillary"))
+    }
+  }
+  
   
   
   # merge taxon_ancillary

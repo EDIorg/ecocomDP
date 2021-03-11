@@ -1,17 +1,20 @@
 ##############################################################################################
 ##############################################################################################
+#' @author Marta Jarzyna
+#' 
 #' @examples 
 #' \dontrun{
+#' 
 #' my_result <- map_neon.ecocomdp.10072.001.001(
-#' site = c("NIWO","DSNY"), 
-#' startdate = "2016-01",
-#' enddate = "2017-11",
-#' token = Sys.getenv("NEON_TOKEN"),
+#'   site = c("NIWO","DSNY"),
+#'   startdate = "2016-01",
+#'   enddate = "2017-11",
+#'   token = Sys.getenv("NEON_TOKEN"),
 #'   check.size = FALSE)
+#' 
 #' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for SMALL_MAMMAL taxa from neon.data.product.id DP1.10072.001 from the NEON data portal and map to the ecocomDP format
-#' @export
 
 ##############################################################################################
 # mapping function for SMALL_MAMMAL taxa
@@ -105,7 +108,8 @@ map_neon.ecocomdp.10072.001.001 <- function(
                   year, month,
                   day, taxonID, scientificName, taxonRank, identificationReferences,
                   nativeStatusCode, sex, lifeStage,
-                  pregnancyStatus, tailLength, totalLength, weight) %>%
+                  pregnancyStatus, tailLength, totalLength, weight,
+                  release, publicationDate) %>%
     dplyr::filter(!is.na(taxonID)) %>%
     dplyr::distinct()
   
@@ -113,19 +117,19 @@ map_neon.ecocomdp.10072.001.001 <- function(
 
   #location ----
   table_location_raw <- data_small_mammal %>%
-    dplyr::select(domainID, siteID, namedLocation, 
+    dplyr::select(domainID, siteID, plotID, plotType, namedLocation, 
                   decimalLatitude, decimalLongitude, elevation, 
                   nlcdClass, geodeticDatum) %>%
     dplyr::distinct() 
   
-  table_location <- ecocomDP::make_neon_location_table(
+  table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"))
   
-  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+  table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"),
-    ancillary_var_names = c("namedLocation", "nlcdClass", "geodeticDatum"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"),
+    ancillary_var_names = c("namedLocation", "plotType", "nlcdClass", "geodeticDatum"))
   
   
   # taxon ----
@@ -157,16 +161,19 @@ map_neon.ecocomdp.10072.001.001 <- function(
   
 
   # observation ----
+  
+  my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
   table_observation_all <- data_small_mammal %>%
     dplyr::rename(location_id = namedLocation) %>%
     dplyr::mutate(
-      package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+      package_id = my_package_id) %>%
     dplyr::rowwise() %>%
     dplyr:: rename(
       observation_datetime = collectDate, 
       taxon_id = taxonID) %>%
     dplyr::mutate(
-      event_id = paste(year, month, location_id, sep = "_")) %>%
+      neon_event_id = paste(year, month, location_id, sep = "_")) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(
       occurrence = 1)
@@ -174,13 +181,15 @@ map_neon.ecocomdp.10072.001.001 <- function(
   table_event <- table_observation_all %>%
     dplyr::select(package_id, 
                   plotID, 
+                  plotType,
                   location_id,
-                  event_id, 
+                  neon_event_id, 
                   nightuid, n_trap_nights_per_night_uid,
                   observation_datetime, 
                   year, month) %>%
     dplyr::distinct() %>%
-    dplyr::group_by(package_id, event_id, location_id, plotID, year, month) %>%
+    dplyr::group_by(
+      package_id, neon_event_id, location_id, plotID, year, month) %>%
     dplyr::summarize(
       observation_datetime = dplyr::first(observation_datetime),
       n_trap_nights_per_bout_per_plot = sum(n_trap_nights_per_night_uid),
@@ -188,26 +197,33 @@ map_neon.ecocomdp.10072.001.001 <- function(
     dplyr::ungroup()
   
   #DSNY_004 2016 has 6 nights?
-  
-  table_event %>% dplyr::filter(plotID == "DSNY_004", year == 2016, month == 11) %>%
-    as.data.frame()
+  # table_event %>% dplyr::filter(plotID == "DSNY_004", year == 2016, month == 11) %>%
+  #   as.data.frame()
   
   
     
   
+  
   table_raw_counts <- table_observation_all %>%
     dplyr::select(
-      event_id,
+      neon_event_id,
       taxon_id,
+      nativeStatusCode, 
+      release, publicationDate,
       occurrence) %>%
-    dplyr::group_by_at(dplyr::vars(event_id, taxon_id)) %>%
+    dplyr::group_by_at(dplyr::vars(
+      neon_event_id, taxon_id)) %>%
     dplyr::summarize(
-      raw_count = sum(occurrence)) 
+      raw_count = sum(occurrence),
+      nativeStatusCode = paste(unique(nativeStatusCode), collapse = "|"),
+      release = paste(unique(release), collapse = "|"), 
+      publicationDate= paste(unique(publicationDate), collapse = "|")) 
   
   table_event_counts <- table_event %>%
-    dplyr::left_join(table_raw_counts, by = "event_id") %>%
+    dplyr::left_join(table_raw_counts, by = "neon_event_id") %>%
     dplyr::mutate(
       observation_id = paste0("obs_",1:nrow(.)),
+      event_id = observation_id,
       value = 100 * raw_count / n_trap_nights_per_bout_per_plot,
       variable_name = "count",
       unit = "unique individuals per 100 trap nights per plot per month")
@@ -227,14 +243,19 @@ map_neon.ecocomdp.10072.001.001 <- function(
     dplyr::distinct() %>%
     dplyr::filter(!is.na(taxon_id))
   
-  table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
+
+
+  
+  table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_event_counts,
     ancillary_var_names = c(
       "event_id",
-      "plotID",
+      "neon_event_id",
       "year","month",
       "n_trap_nights_per_bout_per_plot",
-      "n_nights_per_bout")) %>% 
+      "n_nights_per_bout",
+      "nativeStatusCode",
+      "release", "publicationDate")) %>% 
     dplyr::distinct()
   
   # data summary ----

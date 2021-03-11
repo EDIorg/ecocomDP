@@ -1,20 +1,24 @@
 ##############################################################################################
 ##############################################################################################
+#' @author Melissa Chen
+#' @author Matt Bitters
+#' 
 #' @examples 
 #' \dontrun{
+#' 
 #' my_result <- map_neon.ecocomdp.10092.001.001(
-#' site = c("ORNL","OSBS"), 
-#' startdate = "2016-01",
-#' enddate = "2017-11",
-#' token = Sys.getenv("NEON_TOKEN"),
+#'   site = c("ORNL","OSBS"),
+#'   startdate = "2016-01",
+#'   enddate = "2017-11",
+#'   token = Sys.getenv("NEON_TOKEN"),
 #'   check.size = FALSE)
+#' 
 #' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve positivity data for TICK_PATHOGEN taxa from neon.data.product.id DP1.10092.001 from the NEON data portal and map to the ecocomDP format
-#' @export
 
 ##############################################################################################
-# mapping function for SMALL_MAMMAL taxa
+# mapping function for TICK_PATHOGEN taxa
 map_neon.ecocomdp.10092.001.001 <- function(
   neon.data.product.id = "DP1.10092.001",
   ...){
@@ -202,10 +206,13 @@ map_neon.ecocomdp.10092.001.001 <- function(
   
   
   # observation ----
+  
+  my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
   table_observation_all <- data_tick_pathogen %>%
     dplyr::select(-uid) %>%
     dplyr::mutate(
-      package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S")),
+      package_id = my_package_id,
       event_id = paste0(namedLocation,"_",collectDate),
       pos_result_count = dplyr::case_when(
         testResult == "Positive" ~ 1,
@@ -276,7 +283,7 @@ map_neon.ecocomdp.10092.001.001 <- function(
 
 
   
-  table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
+  table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = event_data,
     ancillary_var_names = c(
       "event_id",
@@ -285,13 +292,12 @@ map_neon.ecocomdp.10092.001.001 <- function(
       "vectorSpecies ",
       "lifeStage",
       "batchID",
-      "plotType",
-      "plotID",
       "subsampleID",
       "testProtocolVersion",
       "remarks",
       "laboratoryName",
-      "release")) %>% 
+      "release",
+      "publicationDate")) %>% 
     dplyr::distinct()
   
 
@@ -322,19 +328,21 @@ map_neon.ecocomdp.10092.001.001 <- function(
 
   #location ----
   table_location_raw <- data_tick_pathogen %>%
-    dplyr::select(domainID, siteID, namedLocation, 
+    dplyr::select(domainID, siteID, plotID, namedLocation, 
                   decimalLatitude, decimalLongitude, elevation, 
+                  plotType,
                   nlcdClass, geodeticDatum) %>%
     dplyr::distinct() 
   
-  table_location <- ecocomDP::make_neon_location_table(
+  table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"))
   
-  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+  table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"),
-    ancillary_var_names = c("namedLocation", "nlcdClass", "geodeticDatum"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"),
+    ancillary_var_names = c("namedLocation", "nlcdClass",
+                            "plotType","geodeticDatum"))
   
   
   # data summary ----

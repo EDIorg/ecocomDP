@@ -1,20 +1,24 @@
 ##############################################################################################
 ##############################################################################################
+#' @author Wynne Moss
+#' @author Brendan Hobart
+#' 
 #' @examples 
 #' \dontrun{
+#' 
 #' my_result <- map_neon.ecocomdp.10093.001.001(
-#' site = c("BART","DSNY"), 
-#' startdate = "2016-01",
-#' enddate = "2017-11",
-#' token = Sys.getenv("NEON_TOKEN"),
+#'   site = c("BART","DSNY"),
+#'   startdate = "2016-01",
+#'   enddate = "2017-11",
+#'   token = Sys.getenv("NEON_TOKEN"),
 #'   check.size = FALSE)
+#' 
 #' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for TICK taxa from neon.data.product.id DP1.10093.001 from the NEON data portal and map to the ecocomDP format
-#' @export
 
 ##############################################################################################
-# mapping function for SMALL_MAMMAL taxa
+# mapping function for TICK taxa
 map_neon.ecocomdp.10093.001.001 <- function(
   neon.data.product.id = "DP1.10093.001",
   ...){
@@ -629,7 +633,7 @@ map_neon.ecocomdp.10093.001.001 <- function(
       -CountFlag, -IDflag, -totalAdult_tax, -totalNymph_tax, 
       -totalLarva_tax, -totalCount_tax, -totalCount_field,
       -nymphCount, -larvaCount, -adultCount,
-      -samplingImpractical, -measuredBy, -dataQF_field, -publicationDate_field)
+      -samplingImpractical, -measuredBy, -dataQF_field)
   
   
   # long form data
@@ -680,12 +684,8 @@ map_neon.ecocomdp.10093.001.001 <- function(
                                            collapse = "; "), .groups = "drop") %>%
         dplyr::distinct(),
       by = "acceptedTaxonID") %>%
-    dplyr::distinct()
-  
-  # table(data_tick$plotType) # all distributed
-  # table(str_sub(data_tick$namedLocation, 10)) # all tickPlot.tck
-  data_tick <- dplyr::select(data_tick, -plotType) %>% dplyr::distinct()
-  data_tick <- dplyr::rename(data_tick, taxonID = acceptedTaxonID)
+    dplyr::rename(taxonID = acceptedTaxonID,
+                  publicationDate = publicationDate_field)
   # NOTES FOR END USERS  #
   # be aware of higher order taxa ID -- they are individuals ASSIGNED at a higher taxonomic class, rather than the sum of lower tax. class
   # higher order taxonomic assignments could be semi-identified by looking at most likely ID (e.g. if 200 of 700 larvae are IXOSPAC, very likely that the Unidentified larvae are IXOSPAC)
@@ -697,19 +697,22 @@ map_neon.ecocomdp.10093.001.001 <- function(
   
   #location ----
   table_location_raw <- data_tick %>%
-    dplyr::select(domainID, siteID, namedLocation, 
+    dplyr::select(domainID, siteID, plotID, namedLocation, 
                   decimalLatitude, decimalLongitude, elevation, 
-                  nlcdClass, geodeticDatum) %>%
+                  nlcdClass, plotType,
+                  geodeticDatum) %>%
+    apply(2, as.character) %>% as.data.frame() %>%
     dplyr::distinct() 
   
-  table_location <- ecocomDP::make_neon_location_table(
+  table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"))
   
-  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+  table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"),
-    ancillary_var_names = c("namedLocation", "nlcdClass", "geodeticDatum"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"),
+    ancillary_var_names = c("namedLocation", "nlcdClass", "plotType",
+                            "geodeticDatum"))
   
   
   
@@ -746,13 +749,17 @@ map_neon.ecocomdp.10093.001.001 <- function(
   # replace NA counts with zeroes
   data_tick$IndividualCount[is.na(data_tick$IndividualCount)] <- 0
   
+  my_package_id <- paste0(
+    neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
   table_observation_all <- data_tick %>%
     dplyr::filter(!is.na(totalSampledArea) && totalSampledArea > 0) %>%
     dplyr::distinct() %>%
     # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation) %>%
     # package id
-    dplyr::mutate(package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+    dplyr::mutate(
+      package_id = my_package_id) %>%
     dplyr:: rename(
       neon_event_id = eventID,
       observation_datetime = collectDate, 
@@ -780,7 +787,10 @@ map_neon.ecocomdp.10093.001.001 <- function(
   
   
   
-  table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
+
+  
+  
+  table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_all,
     ancillary_var_names = c(
       "event_id",
@@ -791,8 +801,10 @@ map_neon.ecocomdp.10093.001.001 <- function(
       "totalSampledArea",
       "targetTaxaPresent",
       "remarks_field",
+      "identificationReferences",
       "release",
-      "identificationReferences"))
+      "publicationDate"
+      ))
   
   # data summary ----
   # make dataset_summary -- required table
