@@ -246,46 +246,19 @@ map_neon.ecocomdp.20107.001.001 <- function(
       names_sep = "_") %>%
     dplyr::select(-n_obs, -catch_per_effort) # these two cols are misleading in this wide format
   
-  # # make wide for catch per unit efforts
-  # fsh_dat_wide_CPUE <- data_fish %>%
-  #   dplyr::group_by(
-  #     year, month, siteID, namedLocation, reachID, fixedRandomReach, 
-  #     aquaticSiteType, samplerType, targetTaxaPresent) %>%
-  #   tidyr::pivot_wider(
-  #     names_from = scientificName, 
-  #     values_from = catch_per_effort, 
-  #     names_repair = "unique",  
-  #     values_fill = 0, 
-  #     names_sep = "_") %>%
-  #   dplyr::select(-n_obs, -number_of_fish)  # these two cols are misleading in this wide format
-  # 
-  # setdiff(unique(data_fish$namedLocation), all_fish$fsh_fieldData$namedLocation)
-   
+  
   data_fish = dplyr::left_join(
     data_fish, 
-    unique(dplyr::select(all_fish$fsh_fieldData, namedLocation, decimalLatitude,
-                         decimalLongitude, coordinateUncertainty, geodeticDatum,
-                         elevation, elevationUncertainty)),
+    unique(dplyr::select(
+      all_fish$fsh_fieldData, namedLocation, decimalLatitude,
+      decimalLongitude, coordinateUncertainty, geodeticDatum,
+      elevation, elevationUncertainty)),
     by = "namedLocation")
   
   data_fish = dplyr::filter(data_fish, !is.na(taxonID)) %>%
     dplyr::distinct()
   
-  # setdiff(data_fish$taxonID, fsh_dat$taxonID)
-  
-  # fsh_taxa = dplyr::select(fsh_dat, taxonID, scientificName, taxonRank, identificationReferences) %>%
-  #   dplyr::distinct() %>%
-  #   dplyr::group_by(taxonID, scientificName) %>%
-  #   dplyr::summarise(taxonRank = unique(taxonRank)[1],
-  #                    identificationReferences = paste(unique(identificationReferences),
-  #                                                     collapse = "; "), .groups = "drop")
-  # filter(fsh_taxa, taxonID == "CAMANO")
-  # any(duplicated(fsh_taxa$taxonID))
-  
-  # data_fish = dplyr::left_join(data_fish, fsh_taxa, by = c("taxonID", "scientificName", "taxonRank"))
-  # data_fish = dplyr::distinct(data_fish)
  
-
   #location ----
   table_location_raw <- data_fish %>%
     dplyr::select(domainID, siteID, namedLocation, 
@@ -311,7 +284,14 @@ map_neon.ecocomdp.20107.001.001 <- function(
   
   
   table_observation_wide_all <- data_fish %>%
-    dplyr::left_join(all_fish$fsh_perPass) %>%
+    dplyr::left_join(
+      all_fish$fsh_perPass %>% 
+        dplyr::select(
+          eventID, 
+          publicationDate, release) %>% 
+        dplyr::distinct(),
+      by = "eventID"
+    ) %>%
     # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation) %>%
     # package id
@@ -324,15 +304,15 @@ map_neon.ecocomdp.20107.001.001 <- function(
       value = catch_per_effort) %>%
     dplyr::mutate(
       observation_id = paste0("obs_",1:nrow(.)), 
-      event_id = eventID,
-      # event_id = observation_id,
-      # neon_event_id = eventID,
+      # event_id = eventID,
+      event_id = observation_id,
+      neon_event_id = eventID,
       variable_name = "abundance",
       unit = "catch per unit effort") 
   
   
-  
 
+  
   
   table_observation <- table_observation_wide_all %>%
     dplyr::select(
@@ -348,10 +328,14 @@ map_neon.ecocomdp.20107.001.001 <- function(
     dplyr::filter(!is.na(taxon_id))
   
   
+
+  
   table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
       "event_id",
+      "neon_event_id",
+      "reachID",
       "samplerType",
       "habitatType",
       "subdominantHabitatType",
@@ -373,6 +357,9 @@ map_neon.ecocomdp.20107.001.001 <- function(
       "remarks",
       "release",
       "publicationDate"))
+  
+  
+  
   
   
   # taxon ----
