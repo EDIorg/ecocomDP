@@ -206,7 +206,7 @@ map_neon.ecocomdp.10022.001.001 <- function(
       variable_name = "abundance",
       value = abundance/trappingDays,
       unit = "count per trap day") %>%
-    distinct()
+    dplyr::distinct()
   
   table_observation <- table_observation_raw %>% 
     dplyr::select(observation_id,
