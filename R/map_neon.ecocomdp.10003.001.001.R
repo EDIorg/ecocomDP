@@ -137,7 +137,6 @@ map_neon.ecocomdp.10003.001.001 <- function(
   
 
 
-  
   table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
@@ -155,6 +154,10 @@ map_neon.ecocomdp.10003.001.001 <- function(
       "endCloudCoverPercentage",
       "observedHabitat",
       "observedAirTemp",
+      "startCloudCoverPercentage",
+      "endCloudCoverPercentage",
+      "startRH",
+      "endRH",
       "kmPerHourObservedWindSpeed",
       "laboratoryName",
       "samplingProtocolVersion",
