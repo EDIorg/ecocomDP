@@ -1,18 +1,6 @@
 ##############################################################################################
 ##############################################################################################
 #' @author Michael Just
-#' 
-#' @examples 
-#' \dontrun{
-#' 
-#' my_result <- map_neon.ecocomdp.10058.001.001(
-#'   site= c("NIWO","DSNY"),
-#'   startdate = "2016-01",
-#'   enddate = "2017-11",
-#'   token = Sys.getenv("NEON_TOKEN"),
-#'   check.size = FALSE)
-#'   
-#' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve percent cover data for PLANT taxa from neon.data.product.id DP1.10058.001 from the NEON data portal and map to the ecocomDP format
 
@@ -22,22 +10,28 @@
 
 # mapping function for PLANT taxa
 map_neon.ecocomdp.10058.001.001 <- function(
+  neon.data.list,
   neon.data.product.id = "DP1.10058.001",
   ...){
   
   #NEON target taxon group is PLANT
   neon_method_id <- "neon.ecocomdp.10058.001.001"
   
-  # check arguments passed via dots for neonUtilities
-  dots_updated <- list(..., dpID = neon.data.product.id)
   
+  
+  # make sure neon.data.list matches the method
+  if(!any(grepl(
+    neon.data.product.id %>% gsub("^DP1\\.","",.) %>% gsub("\\.001$","",.), 
+    names(neon.data.list)))) stop(
+      "This dataset does not appeaer to be sourced from NEON ", 
+      neon.data.product.id,
+      " and cannot be mapped using method ", 
+      neon_method_id)
   
   
   
   ### Get the Data
-  allTabs_plant <- rlang::exec( 
-    neonUtilities::loadByProduct,
-    !!!dots_updated)
+  allTabs_plant <- neon.data.list
   
   
   

@@ -1,29 +1,14 @@
 ##############################################################################################
 ##############################################################################################
 #' @author Matt Helmus \email{mrhelmus@temple.edu}
-#' 
-#' @examples 
-#' \dontrun{
-#' 
-#' my_result <- map_neon.ecocomdp.10022.001.002(
-#'   site= c("NIWO","DSNY"),
-#'   startdate = "2016-01",
-#'   enddate = "2017-11",
-#'   token = Sys.getenv("NEON_TOKEN"),
-#'   check.size = FALSE)
-#'   
-#' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for HERPTILE taxa from neon.data.product.id DP1.10022.001 from the NEON data portal and map to the ecocomDP format
 
 ##############################################################################################
 # mapping function for HERPS
 map_neon.ecocomdp.10022.001.002 <- function(
+  neon.data.list,
   neon.data.product.id = "DP1.10022.001",
-  # chkdata = FALSE, # run the code that checks the data
-  # group_nonherps = TRUE, # run the code that aggregates the non-herps into sampleType:not herp
-  # herps_only = TRUE, # run the code that only gives you the samples with herps
-  # print_summary = FALSE, # print a summary table of the data
   ...){
   
   # authors: Matt Helmus (mrhelmus@temple.edu) repurposed Kari Norman's beetle code
@@ -33,18 +18,19 @@ map_neon.ecocomdp.10022.001.002 <- function(
   #NEON target taxon group is HERPS
   neon_method_id <- "neon.ecocomdp.10022.001.002"
   
-  # check arguments passed via dots for neonUtilities
-  dots_updated <- list(..., dpID = neon.data.product.id)
   
-  
+  # make sure neon.data.list matches the method
+  if(!any(grepl(
+    neon.data.product.id %>% gsub("^DP1\\.","",.) %>% gsub("\\.001$","",.), 
+    names(neon.data.list)))) stop(
+      "This dataset does not appeaer to be sourced from NEON ", 
+      neon.data.product.id,
+      " and cannot be mapped using method ", 
+      neon_method_id)
   
   
   ### Get the Data
-  bycatch_raw <- rlang::exec( 
-    neonUtilities::loadByProduct,
-    !!!dots_updated)
-  
-  
+  bycatch_raw <- neon.data.list
   
   
   ### Wrangle Field Data
@@ -277,9 +263,10 @@ map_neon.ecocomdp.10022.001.002 <- function(
   
   
   # taxon ----
+  my_dots <- list(...)
   
-  if("token" %in% names(dots_updated)){
-    my_token <- dots_updated$token
+  if("token" %in% names(my_dots)){
+    my_token <- my_dots$token
   }else{
     my_token <- NA
   }

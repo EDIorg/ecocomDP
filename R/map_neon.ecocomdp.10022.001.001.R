@@ -1,15 +1,5 @@
 ##############################################################################################
 #' @author Kari Norman \email{kari.norman@berkeley.edu}
-#' 
-#' @examples 
-#' \dontrun{
-#' 
-#' my_result <- map_neon.ecocomdp.10022.001.001(
-#'   site = c('ABBY','BARR'),
-#'   startdate = "2019-06",
-#'   enddate = "2019-09")
-#'                                          
-#' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for BEETLE from neon.data.product.id DP1.10022.001 from the NEON data portal and map to the ecocomDP 
 #' 
@@ -17,20 +7,26 @@
 
 
 map_neon.ecocomdp.10022.001.001 <- function(
+  neon.data.list,
   neon.data.product.id = "DP1.10022.001",
   ...){
 
-  
-  #NEON target taxon group is ALGAE
+  #NEON target taxon group is BEETLES
   neon_method_id <- "neon.ecocomdp.10022.001.001"
   
-  # check arguments passed via dots for neonUtilities
-  dots_updated <- list(..., dpID = neon.data.product.id)
   
-  # download data
-  beetles_raw <- rlang::exec( 
-    neonUtilities::loadByProduct,
-    !!!dots_updated)
+  # make sure neon.data.list matches the method
+  if(!any(grepl(
+    neon.data.product.id %>% gsub("^DP1\\.","",.) %>% gsub("\\.001$","",.), 
+    names(neon.data.list)))) stop(
+      "This dataset does not appeaer to be sourced from NEON ", 
+      neon.data.product.id,
+      " and cannot be mapped using method ", 
+      neon_method_id)
+  
+  
+   # get data
+  beetles_raw <- neon.data.list
   
   
   # helper function to calculate mode of a column/vector

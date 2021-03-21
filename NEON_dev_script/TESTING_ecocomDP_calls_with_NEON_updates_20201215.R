@@ -18,6 +18,34 @@ View(my_search_result)
 
 #BEETLE update
 
+my_result <- neonUtilities::loadByProduct(
+  dpID = "DP1.10022.001",
+  site = c('ABBY','BARR'),
+  startdate = "2019-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  package = "basic",
+  check.size = FALSE)
+
+my_neon_dir <- "my_result"
+if(!my_neon_dir %in% list.files()) dir.create(my_neon_dir)
+
+
+
+
+my_result <- neonUtilities::zipsByProduct(
+  dpID = "DP1.10022.001",
+  site = c('ABBY','BARR'),
+  startdate = "2019-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  package = "basic",
+  check.size = FALSE,
+  savepath = "my_result")
+
+
+
+
 my_result <- ecocomDP:::map_neon.ecocomdp.10022.001.001(
   site = c('ABBY','BARR'),
   startdate = "2019-06",
@@ -35,6 +63,7 @@ my_result_mapped <- ecocomDP:::map_neon_data_to_ecocomDP(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
+
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.10022.001.001",
   site = c('ABBY','BARR'),
@@ -43,7 +72,20 @@ my_result_read_data <- read_data(
   enddate = "2021-02",
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
+  
+my_result_read_data <- read_data(
+  id = "neon.ecocomdp.10022.001.001",
+  site = c('ABBY','BARR'),
+  startdate = "2019-06",
+  # enddate = "2019-09",
+  enddate = "2021-02",
+  neon.data.save.path = "my_result",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
 
+
+
+my_result_back_in <- read_from_files(data.path = "C:/Users/esokol/Documents/Git/FORKS/ecocomDP/my_result/neon.ecocomdp.10022.001.001")
 #dupes for obs_id below -- dups have different taxon_ids 
 # "9ec05998-a868-4eb8-8691-3c28a025f358"
 # "9a93953e-9260-4b43-95e9-b05a55338f08"

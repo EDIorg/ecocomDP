@@ -2,24 +2,13 @@
 ##############################################################################################
 #' @author Wynne Moss
 #' @author Brendan Hobart
-#' 
-#' @examples 
-#' \dontrun{
-#' 
-#' my_result <- map_neon.ecocomdp.10093.001.001(
-#'   site = c("BART","DSNY"),
-#'   startdate = "2016-01",
-#'   enddate = "2017-11",
-#'   token = Sys.getenv("NEON_TOKEN"),
-#'   check.size = FALSE)
-#' 
-#' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for TICK taxa from neon.data.product.id DP1.10093.001 from the NEON data portal and map to the ecocomDP format
 
 ##############################################################################################
 # mapping function for TICK taxa
 map_neon.ecocomdp.10093.001.001 <- function(
+  neon.data.list,
   neon.data.product.id = "DP1.10093.001",
   ...){
   
@@ -32,24 +21,22 @@ map_neon.ecocomdp.10093.001.001 <- function(
   #NEON target taxon group is SMALL_MAMMALS
   neon_method_id <- "neon.ecocomdp.10093.001.001"
   
-  # check arguments passed via dots for neonUtilities
-  dots_updated <- list(..., dpID = neon.data.product.id)
   
-  #Error handling if user provides a value for "package" other than "expanded"
-  if("package" %in% names(dots_updated) && dots_updated$package != "expanded") message(
-    paste0("WARNING: expanded package for ", neon.data.product.id, 
-           " is required to execute this request. Downloading the expanded package"))
   
-  dots_updated[["package"]] <- "expanded"
+  # make sure neon.data.list matches the method
+  if(!any(grepl(
+    neon.data.product.id %>% gsub("^DP1\\.","",.) %>% gsub("\\.001$","",.), 
+    names(neon.data.list)))) stop(
+      "This dataset does not appeaer to be sourced from NEON ", 
+      neon.data.product.id,
+      " and cannot be mapped using method ", 
+      neon_method_id)
   
+  
+ 
   ### Get the Data
-  Tick_all <- rlang::exec( 
-    neonUtilities::loadByProduct,
-    !!!dots_updated)
+  Tick_all <- neon.data.list
   
-  
-  
-
   
   
   # NOTES ON GENERAL DATA ISSUES #
@@ -718,9 +705,10 @@ map_neon.ecocomdp.10093.001.001 <- function(
   
   
   # taxon ----
+  my_dots <- list(...)
   
-  if("token" %in% names(dots_updated)){
-    my_token <- dots_updated$token
+  if("token" %in% names(my_dots)){
+    my_token <- my_dots$token
   }else{
     my_token <- NA
   }

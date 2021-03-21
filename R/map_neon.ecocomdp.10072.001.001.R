@@ -1,24 +1,13 @@
 ##############################################################################################
 ##############################################################################################
 #' @author Marta Jarzyna
-#' 
-#' @examples 
-#' \dontrun{
-#' 
-#' my_result <- map_neon.ecocomdp.10072.001.001(
-#'   site = c("NIWO","DSNY"),
-#'   startdate = "2016-01",
-#'   enddate = "2017-11",
-#'   token = Sys.getenv("NEON_TOKEN"),
-#'   check.size = FALSE)
-#' 
-#' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for SMALL_MAMMAL taxa from neon.data.product.id DP1.10072.001 from the NEON data portal and map to the ecocomDP format
 
 ##############################################################################################
 # mapping function for SMALL_MAMMAL taxa
 map_neon.ecocomdp.10072.001.001 <- function(
+  neon.data.list,
   neon.data.product.id = "DP1.10072.001",
   ...){
   
@@ -32,16 +21,19 @@ map_neon.ecocomdp.10072.001.001 <- function(
   #NEON target taxon group is SMALL_MAMMALS
   neon_method_id <- "neon.ecocomdp.10072.001.001"
   
-  # check arguments passed via dots for neonUtilities
-  dots_updated <- list(..., dpID = neon.data.product.id)
+  
+  # make sure neon.data.list matches the method
+  if(!any(grepl(
+    neon.data.product.id %>% gsub("^DP1\\.","",.) %>% gsub("\\.001$","",.), 
+    names(neon.data.list)))) stop(
+      "This dataset does not appeaer to be sourced from NEON ", 
+      neon.data.product.id,
+      " and cannot be mapped using method ", 
+      neon_method_id)
   
   
   ### Get the Data
-  d <- rlang::exec( 
-    neonUtilities::loadByProduct,
-    !!!dots_updated)
-  
-  
+  d <- neon.data.list
   
   
   dat.mam <- dplyr::mutate(d$mam_pertrapnight,
@@ -133,9 +125,10 @@ map_neon.ecocomdp.10072.001.001 <- function(
   
   
   # taxon ----
+  my_dots <- list(...)
   
-  if("token" %in% names(dots_updated)){
-    my_token <- dots_updated$token
+  if("token" %in% names(my_dots)){
+    my_token <- my_dots$token
   }else{
     my_token <- NA
   }

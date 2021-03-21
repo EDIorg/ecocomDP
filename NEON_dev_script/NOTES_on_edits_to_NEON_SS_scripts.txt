@@ -35,6 +35,7 @@ TODO --
  PLANT				percent cover	percent of plot area covered by taxon
  SMALL_MAMMAL		count			unique individuals per 100 trap nights per plot per month
  ZOOPLANKTON		density			count per liter
+ TICK				abundance		count per square meter 
  TICK_PATHOGENS		positivity rate	positive tests per pathogen per sampling event
  
 ##################################################################
