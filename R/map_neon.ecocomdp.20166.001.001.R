@@ -7,6 +7,7 @@
 #     original creation
 ##############################################################################################
 map_neon.ecocomdp.20166.001.001 <- function(
+  neon.data.list,
   neon.data.product.id = "DP1.20166.001",
   ...
 ){
@@ -14,10 +15,21 @@ map_neon.ecocomdp.20166.001.001 <- function(
   #NEON target taxon group is ALGAE
   neon_method_id <- "neon.ecocomdp.20166.001.001"
   
+  
+  
+  # make sure neon.data.list matches the method
+  if(!any(grepl(
+    neon.data.product.id %>% gsub("^DP1\\.","",.) %>% gsub("\\.001$","",.), 
+    names(neon.data.list)))) stop(
+      "This dataset does not appeaer to be sourced from NEON ", 
+      neon.data.product.id,
+      " and cannot be mapped using method ", 
+      neon_method_id)
+  
+  
+  
   # get all tables
-  all_tabs_in <- neonUtilities::loadByProduct(
-    dpID = neon.data.product.id, 
-    ...)
+  all_tabs_in <- neon.data.list
   
   
   

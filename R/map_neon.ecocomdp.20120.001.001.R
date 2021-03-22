@@ -1,14 +1,5 @@
 ##############################################################################################
 #' @author Stephanie Parker \email{sparker@battelleecology.org}
-#' 
-#' @examples 
-#' \dontrun{
-#' 
-#' my_result <- map_neon.ecocomDP.20120.001.001(
-#'   site= c('COMO','LECO'),
-#'   startdate = "2019-06",
-#'   enddate = "2019-09")
-#' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for MACROINVERTEBRATE from neon.data.product.id DP1.20120.001 from the NEON data portal and map to the ecocomDP format
 
@@ -20,16 +11,28 @@
 ##### my version ----
 # updated by Eric on 6/9/2020 ~5:10pm
 map_neon.ecocomdp.20120.001.001 <- function(
+  neon.data.list,
   neon.data.product.id ="DP1.20120.001",
   ...){
   
   #NEON target taxon group is MACROINVERTEBRATE
   neon_method_id <- "neon.ecocomdp.20120.001.001"
  
+  
+  
+  # make sure neon.data.list matches the method
+  if(!any(grepl(
+    neon.data.product.id %>% gsub("^DP1\\.","",.) %>% gsub("\\.001$","",.), 
+    names(neon.data.list)))) stop(
+      "This dataset does not appeaer to be sourced from NEON ", 
+      neon.data.product.id,
+      " and cannot be mapped using method ", 
+      neon_method_id)
+  
+  
+  
   # get all tables for this data product for the specified sites in my_site_list, store them in a list called all_tabs
-  all_tabs <- neonUtilities::loadByProduct(
-    dpID = neon.data.product.id,
-    ...)
+  all_tabs <- neon.data.list
    
   
   # extract the table with the field data from the all_tabs list of tables
@@ -234,10 +237,3 @@ map_neon.ecocomdp.20120.001.001 <- function(
   return(out_list)
   
 } #END of function
-
-# my_result <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(site= c('COMO','LECO'), startdate = "2019-06",enddate = "2019-09")
-# my_result <- map_neon_data_to_ecocomDP.MACROINVERTEBRATE(site= c('COMO','LECO'),check.size = FALSE)
-# my_result <- map_neon_data_to_ecocomDP(neon.data.product.id = "DP1.20120.001", site= c('COMO','LECO'), check.size = FALSE, token = Sys.getenv("NEON_TOKEN"))
-# my_result <- read_data(id = "DP1.20120.001", site= c('COMO','LECO'), check.size = FALSE, token = Sys.getenv("NEON_TOKEN"))
-
-

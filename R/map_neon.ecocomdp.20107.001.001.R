@@ -1,22 +1,13 @@
 ##############################################################################################
 ##############################################################################################
 #' @author Thilina Surasinghe \email{tsurasinghe@bridgew.edu}
-#' 
-#' @examples 
-#' \dontrun{
-#' my_result <- map_neon.ecocomdp.20107.001.001(
-#'   site = c(c('COMO','LECO')),
-#'   startdate = "2016-01",
-#'   enddate = "2018-11",
-#'   token = Sys.getenv("NEON_TOKEN"),
-#'   check.size = FALSE)
-#' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for FISH taxa from neon.data.product.id DP1.20107.001 from the NEON data portal and map to the ecocomDP format
 
 ##############################################################################################
 # mapping function for FISH
 map_neon.ecocomdp.20107.001.001 <- function(
+  neon.data.list,
   neon.data.product.id = "DP1.20107.001",
   ...){
   # Authors: Stephanie Parker, Thilina Surasinghe (sparker@battelleecology.org, tsurasinghe@bridgew.edu), Eric Sokol (esokol@battelleecology.org)
@@ -27,12 +18,23 @@ map_neon.ecocomdp.20107.001.001 <- function(
   #NEON target taxon group is FISH
   neon_method_id <- "neon.ecocomdp.20107.001.001"
   
-  # check arguments passed via dots for neonUtilities
-  dots_updated <- list(..., dpID = neon.data.product.id)
+  
+  
+  # make sure neon.data.list matches the method
+  if(!any(grepl(
+    neon.data.product.id %>% gsub("^DP1\\.","",.) %>% gsub("\\.001$","",.), 
+    names(neon.data.list)))) stop(
+      "This dataset does not appeaer to be sourced from NEON ", 
+      neon.data.product.id,
+      " and cannot be mapped using method ", 
+      neon_method_id)
+  
   
   # get token from dots if available
-  if("token" %in% names(dots_updated)){
-    my_token <- dots_updated$token
+  my_dots <- list(...)
+  
+  if("token" %in% names(my_dots)){
+    my_token <- my_dots$token
   }else{
     my_token <- NA
   }
@@ -55,17 +57,9 @@ map_neon.ecocomdp.20107.001.001 <- function(
   
   
   
-  #Error handling if user provides a value for "package" other than "expanded"
-  if("package" %in% names(dots_updated) && dots_updated$package != "expanded") message(
-    paste0("WARNING: expanded package for ", neon.data.product.id, 
-           " is required to execute this request. Downloading the expanded package"))
-  
-  dots_updated[["package"]] <- "expanded"
-  
-  # get data FISH via api -- will take a while --  package = "basic" is also possible
-  all_fish <- rlang::exec( 
-    neonUtilities::loadByProduct,
-    !!!dots_updated)
+
+  # get data FISH data from NEON api
+  all_fish <- neon.data.list
   
   # The object returned by loadByProduct() is a named list of data frames.
   # To work with each of them, select them from the list using the $ operator.

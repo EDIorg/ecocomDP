@@ -1,23 +1,13 @@
 ##############################################################################################
 ##############################################################################################
 #' @author Lara Janson
-#' 
-#' @examples 
-#' \dontrun{
-#'
-#' my_result <- map_neon.ecocomdp.20219.001.001(
-#'   site = c("BARC","SUGG"),
-#'   startdate = "2016-01",
-#'   enddate = "2017-11",
-#'   token = Sys.getenv("NEON_TOKEN"),
-#'   check.size = FALSE)
-#' }
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for ZOOPLANKTON taxa from neon.data.product.id DP1.20219.001 from the NEON data portal and map to the ecocomDP format
 
 ##############################################################################################
 # mapping function for ZOOPLANKTON taxa
 map_neon.ecocomdp.20219.001.001 <- function(
+  neon.data.list,
   neon.data.product.id = "DP1.20219.001",
   ...){
   
@@ -26,14 +16,19 @@ map_neon.ecocomdp.20219.001.001 <- function(
   #NEON target taxon group is ZOOPLANKTON
   neon_method_id <- "neon.ecocomdp.20219.001.001"
   
-  # check arguments passed via dots for neonUtilities
-  dots_updated <- list(..., dpID = neon.data.product.id)
+  
+  # make sure neon.data.list matches the method
+  if(!any(grepl(
+    neon.data.product.id %>% gsub("^DP1\\.","",.) %>% gsub("\\.001$","",.), 
+    names(neon.data.list)))) stop(
+      "This dataset does not appeaer to be sourced from NEON ", 
+      neon.data.product.id,
+      " and cannot be mapped using method ", 
+      neon_method_id)
   
   
   ### Get the Data
-  allTabs_zoop <- rlang::exec( 
-    neonUtilities::loadByProduct,
-    !!!dots_updated)
+  allTabs_zoop <- neon.data.list
   
   
 
