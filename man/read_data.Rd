@@ -54,6 +54,15 @@ to FALSE.}
 
 \item{token}{(character; NEON data only) User specific API token (generated within 
 neon.datascience user accounts)}
+
+\item{neon.data.save.dir}{(character) Directory to save NEON source data that has been downloaded 
+via \code{neonUtilities::loadByProduct()}}
+
+\item{neon.data.read.path}{(character) Path to read in an RDS file of 'stacked NEON data' from 
+\code{neonUtilities::loadByProduct()}}
+
+\item{neon.data.list}{(list) A list of stacked NEON data tables to be mapped to ecocomDP. 
+Must match the chosen mapping method in 'id'}
 }
 \value{
 (list) A named list of \code{id}, each including: 

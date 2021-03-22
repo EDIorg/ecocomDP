@@ -584,16 +584,6 @@ obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
 
 rm(list=ls())
 
-my_result <- map_neon.ecocomdp.10093.001.001(
-  site = c("BART","DSNY"),
-  startdate = "2016-01",
-  enddate = "2017-11",
-  token = Sys.getenv("NEON_TOKEN"),
-  package = "basic",
-  check.size = FALSE)
-
-my_result$dataset_summary
-
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.10093.001.001",
   site= c("NIWO","DSNY", "BART"), 
@@ -601,6 +591,12 @@ my_result_read_data <- read_data(
   enddate = "2017-11",
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
+
+list.files("my_result")
+
+my_result_read_data <- read_data(
+  id = "neon.ecocomdp.10093.001.001",
+  neon.data.read.path = "my_result/DP1.10093.001_20210320222321.RDS")
 
 my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info

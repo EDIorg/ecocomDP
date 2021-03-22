@@ -37,6 +37,15 @@
 #' @param token 
 #'     (character; NEON data only) User specific API token (generated within 
 #'     neon.datascience user accounts)
+#' @param neon.data.save.dir 
+#'     (character) Directory to save NEON source data that has been downloaded 
+#'     via \code{neonUtilities::loadByProduct()}
+#' @param neon.data.read.path 
+#'     (character) Path to read in an RDS file of 'stacked NEON data' from 
+#'     \code{neonUtilities::loadByProduct()}
+#' @param neon.data.list 
+#'     (list) A list of stacked NEON data tables to be mapped to ecocomDP. 
+#'     Must match the chosen mapping method in 'id'
 #' @param globally.unique.keys
 #'     (logical) Whether to create globally unique primary keys (and associated
 #'     foreign keys). Reading multiple datasets raises the issue of referential 
