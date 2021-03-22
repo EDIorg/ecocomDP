@@ -103,17 +103,16 @@ map_neon.ecocomdp.10058.001.001 <- function(
     tibble::as_tibble()
   
   
-  data_plant = dplyr::distinct(data_plant)
+  data_plant <- dplyr::distinct(data_plant)
   
   # family or order level data are pretty much not useful.
-  data_plant = dplyr::filter(
+  data_plant <- dplyr::filter(
     data_plant, 
     taxonRank %in% c("variety", "subspecies", "species", "speciesGroup", "genus"))
   # NOTE: we have not cleaned species names; users need to do it
   
+ 
   
-  
-
   #location ----
   table_location_raw <- data_plant %>%
     dplyr::select(domainID, siteID, plotID, namedLocation, 
@@ -163,10 +162,17 @@ map_neon.ecocomdp.10058.001.001 <- function(
       observation_datetime = endDate, 
       taxon_id = taxonID,
       value = percentCover) %>%
+    dplyr::rowwise() %>%
     dplyr::mutate(
       event_id = observation_id,
+      neon_event_id = paste0(location_id,"_",subplot_id,"_",year,"-",boutNumber),
       variable_name = "percent cover",
-      unit = "percent of plot area covered by taxon") 
+      unit = "percent of plot area covered by taxon",
+      presence_absence = 1) %>%
+    dplyr::ungroup()
+  
+  
+  
   
   table_observation <- table_observation_wide_all %>%
     dplyr::select(
@@ -189,8 +195,11 @@ map_neon.ecocomdp.10058.001.001 <- function(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
       "event_id",
+      "neon_event_id",
+      "subplotID", 
       "boutNumber",
-      "subplotID",
+      # "subplot_id",
+      # "subsubplot_id",
       "nativeStatusCode",
       "identificationReferences",
       "nativeStatusCode",
