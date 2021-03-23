@@ -260,10 +260,9 @@ map_neon.ecocomdp.10043.001.001 <- function(
   
   
   table_observation_raw <- mos_dat %>% 
-  dplyr::mutate(variable_name = "abundance",
-                value = (individualCount/subsampleWeight) * totalWeight / trapHours,
-                unit = "count per trap hour") %>% 
-    
+    dplyr::mutate(variable_name = "abundance",
+                  value = (individualCount/subsampleWeight) * totalWeight / trapHours,
+                  unit = "count per trap hour") %>% 
     dplyr::rename(
       observation_id = uid,
       neon_event_id = eventID,
@@ -297,6 +296,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
     obs_wide = table_observation_raw,
     ancillary_var_names = c(
       "event_id",
+      "neon_event_id",
       "sortDate",
       "sampleID",
       "subsampleID",

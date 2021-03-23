@@ -193,7 +193,7 @@ map_neon.ecocomdp.20120.001.001 <- function(
     ancillary_var_names = c(
       "event_id",
       "neon_sample_id",
-      "neon_event_id",
+      # "neon_event_id",
       "subsamplePercent",
       "laboratoryName",
       "benthicArea",

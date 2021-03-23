@@ -202,6 +202,7 @@ map_neon.ecocomdp.10092.001.001 <- function(
     dplyr::mutate(
       package_id = my_package_id,
       event_id = paste0(namedLocation,"_",collectDate),
+      neon_event_id = event_id,
       pos_result_count = dplyr::case_when(
         testResult == "Positive" ~ 1,
         TRUE ~ 0),
@@ -275,6 +276,7 @@ map_neon.ecocomdp.10092.001.001 <- function(
     obs_wide = event_data,
     ancillary_var_names = c(
       "event_id",
+      # "neon_event_id",
       "n_tests",
       "n_positive_tests",
       "vectorSpecies ",

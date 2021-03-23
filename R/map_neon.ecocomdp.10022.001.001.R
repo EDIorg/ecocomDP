@@ -189,6 +189,7 @@ map_neon.ecocomdp.10022.001.001 <- function(
   # All individuals of the same species collected at the same time/same location are considered the same observation, regardless of how they were ID'd
   my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
   
+
   table_observation_raw <- beetles_counts %>%
     dplyr::rename(
       location_id = namedLocation,
@@ -202,8 +203,13 @@ map_neon.ecocomdp.10022.001.001 <- function(
       variable_name = "abundance",
       value = abundance/trappingDays,
       unit = "count per trap day") %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(
+      neon_event_id = paste0(location_id, "_", trapID, "_", gsub("^(?i)[a-z]{4}_","",boutID))) %>%
+    dplyr::ungroup() %>%
     dplyr::distinct()
   
+
   table_observation <- table_observation_raw %>% 
     dplyr::select(observation_id,
                   event_id,
@@ -223,6 +229,7 @@ map_neon.ecocomdp.10022.001.001 <- function(
     obs_wide = table_observation_raw,
     ancillary_var_names = c(
       "event_id",
+      "neon_event_id",
       "sampleID",
       "boutID",
       "trapID",

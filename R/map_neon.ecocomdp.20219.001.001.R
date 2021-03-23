@@ -150,7 +150,7 @@ map_neon.ecocomdp.20219.001.001 <- function(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
       "event_id",
-      "neon_event_id",
+      # "neon_event_id",
       "neon_sample_id",
       "samplerType",
       "towsTrapsVolume",

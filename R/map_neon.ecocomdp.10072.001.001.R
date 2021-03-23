@@ -166,7 +166,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
       observation_datetime = collectDate, 
       taxon_id = taxonID) %>%
     dplyr::mutate(
-      neon_event_id = paste(year, month, location_id, sep = "_")) %>%
+      neon_event_id = paste(location_id, year, month, sep = "_")) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(
       occurrence = 1)

@@ -180,21 +180,23 @@ map_neon.ecocomdp.20166.001.001 <- function(
   
   table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_ecocomDP,
-    ancillary_var_names = c("neon_sample_id",
-                            "neon_event_id",
-                            "parentSampleID",
-                            "sampleCondition",
-                            "laboratoryName",
-                            "perBottleSampleVolume",
-                            "algalSampleType",
-                            "samplerType",
-                            "habitatType",
-                            "benthicArea",
-                            "samplingProtocolVersion",
-                            "phytoDepth1","phytoDepth2","phytoDepth3",
-                            "substratumSizeClass",
-                            "release",
-                            "publicationDate"))
+    ancillary_var_names = c(
+      "event_id",
+      "neon_sample_id",
+      # "neon_event_id",
+      "parentSampleID",
+      "sampleCondition",
+      "laboratoryName",
+      "perBottleSampleVolume",
+      "algalSampleType",
+      "samplerType",
+      "habitatType",
+      "benthicArea",
+      "samplingProtocolVersion",
+      "phytoDepth1","phytoDepth2","phytoDepth3",
+      "substratumSizeClass",
+      "release",
+      "publicationDate"))
   
 
   
