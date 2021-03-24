@@ -229,12 +229,13 @@ map_neon.ecocomdp.10022.001.002 <- function(
   
   # #1. Only want samples with herps
   data_herp_bycatch <- dplyr::filter(data_herp_bycatch, sampleType == "vert bycatch herp",
-                              (is.na(sampleCondition) | sampleCondition == "OK")) %>%
-    dplyr::select(-boutID, # just siteID and colectDate
-           -sampleCollected, # all Y
-           -sampleID,  -sampleCondition, -samplingImpractical,
-           -eventID_raw, -subsampleID,
-           -sampleType # all "vert bycatch herp"
+                                     (is.na(sampleCondition) | sampleCondition == "OK")) %>%
+    dplyr::select(
+      # -boutID, # just siteID and colectDate
+      -sampleCollected, # all Y
+      -sampleID,  -sampleCondition, -samplingImpractical,
+      -eventID_raw, -subsampleID,
+      -sampleType # all "vert bycatch herp"
     )
   
   
@@ -306,14 +307,17 @@ map_neon.ecocomdp.10022.001.002 <- function(
       neon_trap_id = trapID) %>%
     dplyr:: rename(
       observation_id = uid, 
-      neon_event_id = eventID,
       observation_datetime = setDate, 
       taxon_id = taxonID,
       value = individualCount/trappingDays) %>%
     dplyr::mutate(
       event_id = observation_id,
       variable_name = "abundance",
-      unit = "count per trap day") 
+      unit = "count per trap day") %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(
+      neon_event_id = paste0(location_id, "_", neon_trap_id, "_", gsub("^(?i)[a-z]{4}_","",boutID))) %>%
+    dplyr::ungroup()
   
   table_observation <- table_observation_wide_all %>%
     dplyr::select(
