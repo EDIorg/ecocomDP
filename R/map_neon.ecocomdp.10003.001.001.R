@@ -1,18 +1,13 @@
 ##############################################################################################
 ##############################################################################################
-#' @examples 
-#' \dontrun{
-#' my_result <- map_neon.ecocomdp.10003.001.001(site = c("NIWO","DSNY"), 
-#'                                                   startdate = "2016-01", 
-#'                                                   enddate = "2018-11")
-#' }
+#' @author Daijiang Li
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for BIRD taxa from neon.data.product.id DP1.10003.001 from the NEON data portal and map to the ecocomDP format
-#' @export
 
 ##############################################################################################
 # mapping function for BIRD
 map_neon.ecocomdp.10003.001.001 <- function(
+  neon.data.list,
   neon.data.product.id = "DP1.10003.001",
   ...){
   # Authors: Daijiang Li, Eric Sokol
@@ -21,20 +16,18 @@ map_neon.ecocomdp.10003.001.001 <- function(
   neon_method_id <- "neon.ecocomdp.10003.001.001"
   
   
-  # check arguments passed via dots for neonUtilities
-  dots_updated <- list(..., dpID = neon.data.product.id)
+  # make sure neon.data.list matches the method
+  if(!any(grepl(
+    neon.data.product.id %>% gsub("^DP1\\.","",.) %>% gsub("\\.001$","",.), 
+    names(neon.data.list)))) stop(
+      "This dataset does not appeaer to be sourced from NEON ", 
+      neon.data.product.id,
+      " and cannot be mapped using method ", 
+      neon_method_id)
   
-  #Error handling if user provides a value for "package" other than "expanded"
-  if("package" %in% names(dots_updated) && dots_updated$package != "expanded") message(
-    paste0("WARNING: expanded package for ", neon.data.product.id, 
-           " is required to execute this request. Downloading the expanded package"))
   
-  dots_updated[["package"]] <- "expanded"
-  
-  allTabs_bird <- rlang::exec( 
-    neonUtilities::loadByProduct,
-    !!!dots_updated)
-  
+  allTabs_bird <- neon.data.list
+
   
   # allTabs_bird = neonUtilities::loadByProduct(dpID = neon.data.product.id, package = "expanded", ...)
   # saveRDS(allTabs_bird, file = "~/Documents/allTabs_bird.rds")
@@ -43,17 +36,17 @@ map_neon.ecocomdp.10003.001.001 <- function(
   allTabs_bird$brd_perpoint <- tibble::as_tibble(allTabs_bird$brd_perpoint)
   data_bird <- dplyr::left_join(allTabs_bird$brd_countdata,
                                dplyr::select(allTabs_bird$brd_perpoint, -uid,
-                                             -startDate, -publicationDate))
+                                             -startDate))
   
   # table(data_bird$samplingImpractical) # all NA
   # table(data_bird$samplingImpracticalRemarks)
   
   data_bird <- dplyr::select(data_bird, 
                              # -uid, 
-                             -identifiedBy, -publicationDate,
-                            # -eventID, # it is just plotID, pointID, startDate
-                            -laboratoryName, -measuredBy,
-                            -samplingImpractical, -samplingImpracticalRemarks)
+                             -identifiedBy, 
+                             # -eventID, # it is just plotID, pointID, startDate
+                             -measuredBy,
+                             -samplingImpractical, -samplingImpracticalRemarks)
   
   
 
@@ -61,26 +54,29 @@ map_neon.ecocomdp.10003.001.001 <- function(
   
   #location ----
   table_location_raw <- data_bird %>%
-    dplyr::select(domainID, siteID, namedLocation, decimalLatitude, decimalLongitude, elevation, 
-                  nlcdClass, geodeticDatum) %>%
+    dplyr::select(domainID, siteID, plotID, namedLocation, 
+                  decimalLatitude, decimalLongitude, elevation, 
+                  nlcdClass, plotType, geodeticDatum) %>%
     dplyr::distinct() 
   
-  table_location <- ecocomDP::make_neon_location_table(
+  table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"))
   
-  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+  table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"),
-    ancillary_var_names = c("namedLocation", "nlcdClass", "geodeticDatum"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"),
+    ancillary_var_names = c("namedLocation", "nlcdClass", 
+                            "plotType","geodeticDatum"))
   
   
   
   
   # taxon ----
+  my_dots <- list(...)
   
-  if("token" %in% names(dots_updated)){
-    my_token <- dots_updated$token
+  if("token" %in% names(my_dots)){
+    my_token <- my_dots$token
   }else{
     my_token <- NA
   }
@@ -107,11 +103,13 @@ map_neon.ecocomdp.10003.001.001 <- function(
 
 
   # observation ----
+  my_package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
   table_observation_wide_all <- data_bird %>%
     # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation) %>%
     # package id
-    dplyr::mutate(package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+    dplyr::mutate(package_id = my_package_id) %>%
     dplyr:: rename(
       observation_id = uid, 
       neon_event_id = eventID,
@@ -138,14 +136,12 @@ map_neon.ecocomdp.10003.001.001 <- function(
   
   
 
-  
-  table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
+
+  table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
       "event_id",
       "neon_event_id",
-      "plotID",
-      "plotType",
       "pointID",
       "pointCountMinute",
       "targetTaxaPresent",
@@ -154,13 +150,20 @@ map_neon.ecocomdp.10003.001.001 <- function(
       "visualConfirmation",
       "sexOrAge",
       "clusterCode",
-      "release",
+      "nativeStatusCode",
       "endCloudCoverPercentage",
       "observedHabitat",
       "observedAirTemp",
+      "startCloudCoverPercentage",
+      "endCloudCoverPercentage",
+      "startRH",
+      "endRH",
       "kmPerHourObservedWindSpeed",
+      "laboratoryName",
       "samplingProtocolVersion",
-      "remarks"))
+      "remarks",
+      "release",
+      "publicationDate"))
 
   # data summary ----
   # make dataset_summary -- required table

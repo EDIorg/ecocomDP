@@ -1,27 +1,16 @@
 ##############################################################################################
 ##############################################################################################
-#' @examples 
-#' \dontrun{
-#' my_result <- map_neon.ecocomdp.10022.001.002(
-#' site= c("NIWO","DSNY"), 
-#' startdate = "2016-01",
-#' enddate = "2017-11",
-#' token = Sys.getenv("NEON_TOKEN"),
-#'   check.size = FALSE)
-#' }
+#' @author Matt Helmus \email{mrhelmus@temple.edu}
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for HERPTILE taxa from neon.data.product.id DP1.10022.001 from the NEON data portal and map to the ecocomDP format
-#' @export
 
 ##############################################################################################
 # mapping function for HERPS
 map_neon.ecocomdp.10022.001.002 <- function(
+  neon.data.list,
   neon.data.product.id = "DP1.10022.001",
-  # chkdata = FALSE, # run the code that checks the data
-  # group_nonherps = TRUE, # run the code that aggregates the non-herps into sampleType:not herp
-  # herps_only = TRUE, # run the code that only gives you the samples with herps
-  # print_summary = FALSE, # print a summary table of the data
   ...){
+  
   # authors: Matt Helmus (mrhelmus@temple.edu) repurposed Kari Norman's beetle code
   # updated by Eric Sokol (esokol@battelleecology.org) to comform to ecocomDP
   
@@ -29,18 +18,19 @@ map_neon.ecocomdp.10022.001.002 <- function(
   #NEON target taxon group is HERPS
   neon_method_id <- "neon.ecocomdp.10022.001.002"
   
-  # check arguments passed via dots for neonUtilities
-  dots_updated <- list(..., dpID = neon.data.product.id)
   
-  
+  # make sure neon.data.list matches the method
+  if(!any(grepl(
+    neon.data.product.id %>% gsub("^DP1\\.","",.) %>% gsub("\\.001$","",.), 
+    names(neon.data.list)))) stop(
+      "This dataset does not appeaer to be sourced from NEON ", 
+      neon.data.product.id,
+      " and cannot be mapped using method ", 
+      neon_method_id)
   
   
   ### Get the Data
-  bycatch_raw <- rlang::exec( 
-    neonUtilities::loadByProduct,
-    !!!dots_updated)
-  
-  
+  bycatch_raw <- neon.data.list
   
   
   ### Wrangle Field Data
@@ -56,13 +46,14 @@ map_neon.ecocomdp.10022.001.002 <- function(
   
   tidy_fielddata <- tidy_fielddata %>%
     dplyr::select(namedLocation,  # select needed variables
-                  domainID,  siteID, plotID, trapID, nlcdClass,
+                  domainID,  siteID, plotID, plotType, trapID, nlcdClass,
                   decimalLatitude, decimalLongitude,
                   geodeticDatum, coordinateUncertainty,
                   elevation, elevationUncertainty,
                   setDate, collectDate, eventID, trappingDays,
                   sampleCollected, sampleID, sampleCondition,
-                  samplingImpractical, remarksFielddata = remarks) %>%
+                  samplingImpractical, remarksFielddata = remarks,
+                  release, publicationDate) %>%
     dplyr::mutate(eventID_raw = eventID,
                   eventID = stringr::str_remove_all(eventID, "[.]")) %>% # remove periods from eventID's (cleans an inconsistency)
     dplyr::mutate(trappingDays = # add sampling effort in days (trappingdays)
@@ -238,12 +229,13 @@ map_neon.ecocomdp.10022.001.002 <- function(
   
   # #1. Only want samples with herps
   data_herp_bycatch <- dplyr::filter(data_herp_bycatch, sampleType == "vert bycatch herp",
-                              (is.na(sampleCondition) | sampleCondition == "OK")) %>%
-    dplyr::select(-boutID, # just siteID and colectDate
-           -sampleCollected, # all Y
-           -sampleID,  -sampleCondition, -samplingImpractical,
-           -eventID_raw, -subsampleID,
-           -sampleType # all "vert bycatch herp"
+                                     (is.na(sampleCondition) | sampleCondition == "OK")) %>%
+    dplyr::select(
+      # -boutID, # just siteID and colectDate
+      -sampleCollected, # all Y
+      -sampleID,  -sampleCondition, -samplingImpractical,
+      -eventID_raw, -subsampleID,
+      -sampleType # all "vert bycatch herp"
     )
   
   
@@ -252,18 +244,19 @@ map_neon.ecocomdp.10022.001.002 <- function(
   #location ----
   table_location_raw <- data_herp_bycatch %>%
     dplyr::select(domainID, siteID, namedLocation, 
+                  plotID, plotType,
                   decimalLatitude, decimalLongitude, elevation, 
                   nlcdClass, geodeticDatum) %>%
     dplyr::distinct() 
   
-  table_location <- ecocomDP::make_neon_location_table(
+  table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"))
   
-  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+  table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"),
-    ancillary_var_names = c("namedLocation", "nlcdClass", "geodeticDatum"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"),
+    ancillary_var_names = c("namedLocation", "plotType", "nlcdClass", "geodeticDatum"))
   
   
   
@@ -271,9 +264,10 @@ map_neon.ecocomdp.10022.001.002 <- function(
   
   
   # taxon ----
+  my_dots <- list(...)
   
-  if("token" %in% names(dots_updated)){
-    my_token <- dots_updated$token
+  if("token" %in% names(my_dots)){
+    my_token <- my_dots$token
   }else{
     my_token <- NA
   }
@@ -300,23 +294,30 @@ map_neon.ecocomdp.10022.001.002 <- function(
   
   
   # observation ----
+  
+  my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
+  
   table_observation_wide_all <- data_herp_bycatch %>%
     # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation) %>%
     # package id
     dplyr::mutate(
-      package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S")),
+      package_id = my_package_id,
       neon_trap_id = trapID) %>%
     dplyr:: rename(
       observation_id = uid, 
-      neon_event_id = eventID,
       observation_datetime = setDate, 
       taxon_id = taxonID,
       value = individualCount/trappingDays) %>%
     dplyr::mutate(
       event_id = observation_id,
       variable_name = "abundance",
-      unit = "count per trap day") 
+      unit = "count per trap day") %>%
+    dplyr::rowwise() %>%
+    dplyr::mutate(
+      neon_event_id = paste0(location_id, "_", neon_trap_id, "_", gsub("^(?i)[a-z]{4}_","",boutID))) %>%
+    dplyr::ungroup()
   
   table_observation <- table_observation_wide_all %>%
     dplyr::select(
@@ -331,7 +332,9 @@ map_neon.ecocomdp.10022.001.002 <- function(
       unit) %>%
     dplyr::filter(!is.na(taxon_id))
   
-  table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
+  
+  
+  table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
       "event_id",
@@ -341,7 +344,8 @@ map_neon.ecocomdp.10022.001.002 <- function(
       "identificationReferences",
       "nativeStatusCode",
       "remarksFielddata",
-      "remarksSorting"))
+      "remarksSorting",
+      "release", "publicationDate"))
   
   
   # data summary ----

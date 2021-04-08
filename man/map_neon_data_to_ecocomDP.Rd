@@ -22,36 +22,96 @@
 \alias{map_neon_data_to_ecocomDP}
 \title{Map NEON data products to ecocomDP}
 \usage{
-map_neon.ecocomdp.10003.001.001(neon.data.product.id = "DP1.10003.001", ...)
+map_neon.ecocomdp.10003.001.001(
+  neon.data.list,
+  neon.data.product.id = "DP1.10003.001",
+  ...
+)
 
-map_neon.ecocomdp.10022.001.001(neon.data.product.id = "DP1.10022.001", ...)
+map_neon.ecocomdp.10022.001.001(
+  neon.data.list,
+  neon.data.product.id = "DP1.10022.001",
+  ...
+)
 
-map_neon.ecocomdp.10022.001.002(neon.data.product.id = "DP1.10022.001", ...)
+map_neon.ecocomdp.10022.001.002(
+  neon.data.list,
+  neon.data.product.id = "DP1.10022.001",
+  ...
+)
 
-map_neon.ecocomdp.10043.001.001(neon.data.product.id = "DP1.10043.001", ...)
+map_neon.ecocomdp.10043.001.001(
+  neon.data.list,
+  neon.data.product.id = "DP1.10043.001",
+  ...
+)
 
-map_neon.ecocomdp.10058.001.001(neon.data.product.id = "DP1.10058.001", ...)
+map_neon.ecocomdp.10058.001.001(
+  neon.data.list,
+  neon.data.product.id = "DP1.10058.001",
+  ...
+)
 
-map_neon.ecocomdp.10072.001.001(neon.data.product.id = "DP1.10072.001", ...)
+map_neon.ecocomdp.10072.001.001(
+  neon.data.list,
+  neon.data.product.id = "DP1.10072.001",
+  ...
+)
 
-map_neon.ecocomdp.10092.001.001(neon.data.product.id = "DP1.10092.001", ...)
+map_neon.ecocomdp.10092.001.001(
+  neon.data.list,
+  neon.data.product.id = "DP1.10092.001",
+  ...
+)
 
-map_neon.ecocomdp.10093.001.001(neon.data.product.id = "DP1.10093.001", ...)
+map_neon.ecocomdp.10093.001.001(
+  neon.data.list,
+  neon.data.product.id = "DP1.10093.001",
+  ...
+)
 
-map_neon.ecocomdp.20107.001.001(neon.data.product.id = "DP1.20107.001", ...)
+map_neon.ecocomdp.20107.001.001(
+  neon.data.list,
+  neon.data.product.id = "DP1.20107.001",
+  ...
+)
 
-map_neon.ecocomdp.20120.001.001(neon.data.product.id = "DP1.20120.001", ...)
+map_neon.ecocomdp.20120.001.001(
+  neon.data.list,
+  neon.data.product.id = "DP1.20120.001",
+  ...
+)
 
-map_neon.ecocomdp.20166.001.001(neon.data.product.id = "DP1.20166.001", ...)
+map_neon.ecocomdp.20166.001.001(
+  neon.data.list,
+  neon.data.product.id = "DP1.20166.001",
+  ...
+)
 
-map_neon.ecocomdp.20219.001.001(neon.data.product.id = "DP1.20219.001", ...)
+map_neon.ecocomdp.20219.001.001(
+  neon.data.list,
+  neon.data.product.id = "DP1.20219.001",
+  ...
+)
 
-map_neon_data_to_ecocomDP(data.product.id, ...)
+map_neon_data_to_ecocomDP(
+  id,
+  neon.data.save.dir = NULL,
+  neon.data.read.path = NULL,
+  neon.data.list = NULL,
+  ...
+)
 }
 \arguments{
+\item{neon.data.list}{(list) A list of stacked NEON data tables to be mapped to ecocomDP. Must match the chosen mapping method in 'id'}
+
 \item{...}{Additional arguments passed to neonUtilities::loadByProduct().}
 
-\item{data.product.id}{The identifier of the NEON data product as it is listed in the "id" field in the table returned by the ecocomDP::search_data() function, e.g., neon.ecocomdp.20166.001.001 is the data product id for "ALGAE Periphyton, seston, and phytoplankton collection" converted to the ecocomDP format from the NEON source data product DP1.20166.001.}
+\item{id}{(character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search_data()} output. e.g., \code{neon.ecocomdp.20166.001.001} is the \code{id} for "ALGAE Periphyton, seston, and phytoplankton collection" converted to the ecocomDP format from the NEON source data product DP1.20166.001.}
+
+\item{neon.data.save.dir}{(character) Directory to save NEON source data that has been downloaded via \code{neonUtilities::loadByProduct()}}
+
+\item{neon.data.read.path}{(character) Path to read in an RDS file of 'stacked NEON data' from \code{neonUtilities::loadByProduct()}}
 
 \item{site}{Either the string 'all', meaning all available sites, or a character vector of 4-letter NEON site codes, e.g. c('ONAQ','RMNP'). Defaults to all.}
 
@@ -71,9 +131,9 @@ map_neon_data_to_ecocomDP(data.product.id, ...)
 Returns a named list, including: 
 \item{metadata}{A list of information about the NEON data product returned by neonUtilities::getProductInfo.}
 \item{tables}{A list of data.frames following the ecocomDP format.}
-    \item{location}{A table, which has the lat long for each NEON site included in the data set}
-    \item{taxon}{A table, which describes each taxonID that appears in the data set}
-    \item{observation}{A table, which describes each taxonID that appears in the data set}
+    \item{tables$location}{A table, which has the lat long for each NEON site (\code{location_id}) included in the data set}
+    \item{tables$taxon}{A table, which describes each \code{taxon_id} that appears in the data set}
+    \item{tables$observation}{A table, with a record for each \code{observation_id} that appears in the data set}
 }
 \description{
 Pull files from the NEON API by data product, merge data for each table, and convert to ecocomDP format. Please see neonUtilities::loadByProduct for more information.
@@ -111,85 +171,9 @@ Dates are specified only to the month because NEON data are provided in monthly 
 
 \examples{
 \dontrun{
-my_result <- map_neon.ecocomdp.10003.001.001(site = c("NIWO","DSNY"), 
-                                                  startdate = "2016-01", 
-                                                  enddate = "2018-11")
-}
-\dontrun{
-my_result <- map_neon.ecocomdp.10022.001.001(site = c('ABBY','BARR'),
-                                              startdate = "2019-06", 
-                                              enddate = "2019-09")
-}
-\dontrun{
-my_result <- map_neon.ecocomdp.10022.001.002(
-site= c("NIWO","DSNY"), 
-startdate = "2016-01",
-enddate = "2017-11",
-token = Sys.getenv("NEON_TOKEN"),
-  check.size = FALSE)
-}
-\dontrun{
-my_result <- map_neon.ecocomdp.10043.001.001(site = c("NIWO","DSNY"), 
-                                                  startdate = "2016-01", 
-                                                  enddate = "2018-11")
-}
-\dontrun{
-my_result <- map_neon.ecocomdp.10058.001.001(
-site= c("NIWO","DSNY"), 
-startdate = "2016-01",
-enddate = "2017-11",
-token = Sys.getenv("NEON_TOKEN"),
-  check.size = FALSE)
-}
-\dontrun{
-my_result <- map_neon.ecocomdp.10072.001.001(
-site = c("NIWO","DSNY"), 
-startdate = "2016-01",
-enddate = "2017-11",
-token = Sys.getenv("NEON_TOKEN"),
-  check.size = FALSE)
-}
-\dontrun{
-my_result <- map_neon.ecocomdp.10092.001.001(
-site = c("ORNL","OSBS"), 
-startdate = "2016-01",
-enddate = "2017-11",
-token = Sys.getenv("NEON_TOKEN"),
-  check.size = FALSE)
-}
-\dontrun{
-my_result <- map_neon.ecocomdp.10093.001.001(
-site = c("BART","DSNY"), 
-startdate = "2016-01",
-enddate = "2017-11",
-token = Sys.getenv("NEON_TOKEN"),
-  check.size = FALSE)
-}
-\dontrun{
-my_result <- map_neon.ecocomdp.20107.001.001(
-  site = c(c('COMO','LECO')),
-  startdate = "2016-01",
-  enddate = "2018-11",
-  token = Sys.getenv("NEON_TOKEN"),
-  check.size = FALSE)
-}
-\dontrun{
-my_result <- map_neon.ecocomDP.20120.001.001(site= c('COMO','LECO'),
-                                                         startdate = "2019-06", 
-                                                         enddate = "2019-09")
-}
-\dontrun{
-my_result <- map_neon.ecocomdp.20219.001.001(
-site = c("BARC","SUGG"), 
-startdate = "2016-01",
-enddate = "2017-11",
-token = Sys.getenv("NEON_TOKEN"),
-  check.size = FALSE)
-}
-\dontrun{
 # Retrieve and map NEON ALGAE data to ecocomDP format
-my_result <- ecocomDP::map_neon_data_to_ecocomDP(
-  neon.data.product.id = "DP1.20166.001",
+my_result <- ecocomDP:::map_neon_data_to_ecocomDP(
+  id = "neon.ecocomdp.20166.001.001",
   site = c("MAYF", "PRIN"),
   startdate = "2016-1",
   enddate = "2018-11",
@@ -197,21 +181,39 @@ my_result <- ecocomDP::map_neon_data_to_ecocomDP(
 }
 
 \dontrun{
-my_result <- map_neon_data_to_ecocomDP( neon.data.product.id = "DP1.20120.001", 
-                                        site= c('COMO','LECO'),
-                                        startdate = "2019-06", 
-                                        enddate = "2019-09")
 }
 }
 \references{
 License: GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007
 }
 \author{
-Eric R Sokol \email{esokol@battelleecology.org}
-
-Ruvi Jaimes \email{jaimesr@battelleecology.org}
+Daijiang Li
 
 Kari Norman \email{kari.norman@berkeley.edu}
 
+Matt Helmus \email{mrhelmus@temple.edu}
+
 Natalie Robinson \email{nrobinson@battelleecology.org}
+
+Michael Just
+
+Marta Jarzyna
+
+Melissa Chen
+
+Matt Bitters
+
+Wynne Moss
+
+Brendan Hobart
+
+Thilina Surasinghe \email{tsurasinghe@bridgew.edu}
+
+Stephanie Parker \email{sparker@battelleecology.org}
+
+Lara Janson
+
+Eric R Sokol \email{esokol@battelleecology.org}
+
+Ruvi Jaimes
 }

@@ -1,17 +1,8 @@
 ##############################################################################################
 ##############################################################################################
-#' @examples 
-#' \dontrun{
-#' my_result <- map_neon.ecocomdp.10058.001.001(
-#' site= c("NIWO","DSNY"), 
-#' startdate = "2016-01",
-#' enddate = "2017-11",
-#' token = Sys.getenv("NEON_TOKEN"),
-#'   check.size = FALSE)
-#' }
+#' @author Michael Just
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve percent cover data for PLANT taxa from neon.data.product.id DP1.10058.001 from the NEON data portal and map to the ecocomDP format
-#' @export
 
 ##############################################################################################
 
@@ -19,22 +10,28 @@
 
 # mapping function for PLANT taxa
 map_neon.ecocomdp.10058.001.001 <- function(
+  neon.data.list,
   neon.data.product.id = "DP1.10058.001",
   ...){
   
-  #NEON target taxon group is HERPS
+  #NEON target taxon group is PLANT
   neon_method_id <- "neon.ecocomdp.10058.001.001"
   
-  # check arguments passed via dots for neonUtilities
-  dots_updated <- list(..., dpID = neon.data.product.id)
   
+  
+  # make sure neon.data.list matches the method
+  if(!any(grepl(
+    neon.data.product.id %>% gsub("^DP1\\.","",.) %>% gsub("\\.001$","",.), 
+    names(neon.data.list)))) stop(
+      "This dataset does not appeaer to be sourced from NEON ", 
+      neon.data.product.id,
+      " and cannot be mapped using method ", 
+      neon_method_id)
   
   
   
   ### Get the Data
-  allTabs_plant <- rlang::exec( 
-    neonUtilities::loadByProduct,
-    !!!dots_updated)
+  allTabs_plant <- neon.data.list
   
   
   
@@ -71,20 +68,33 @@ map_neon.ecocomdp.10058.001.001 <- function(
   # species in 100m2 only (remove species already in 1m2 or 10m2)
   div_10_100_m2_4 <- dplyr::filter(div_10_100_m2_2, key2 == key3,
                                    !key3 %in% unique(c(div_1m2_pla$key3, div_10_100_m2_3$key3)))
-  div_10_100_m2_5 = dplyr::bind_rows(dplyr::mutate(div_10_100_m2_3, sample_area_m2 = 100),
-                                     dplyr::mutate(div_10_100_m2_4, sample_area_m2 = 10000))
+  div_10_100_m2_5 = dplyr::bind_rows(dplyr::mutate(div_10_100_m2_3, sample_area_m2 = 10),
+                                     dplyr::mutate(div_10_100_m2_4, sample_area_m2 = 100))
   
   # stack data
   data_plant = dplyr::bind_rows(
-    dplyr::select(div_1m2_pla, uid, domainID, namedLocation, siteID, decimalLatitude, decimalLongitude,
-                  geodeticDatum, coordinateUncertainty, elevation, elevationUncertainty, nlcdClass,
-                  plotID, subplotID, boutNumber, endDate, taxonID, scientificName, taxonRank, identificationReferences,
-                  family, nativeStatusCode, percentCover, heightPlantOver300cm, heightPlantSpecies) %>%
+    dplyr::select(
+      div_1m2_pla, 
+      uid, domainID, namedLocation, siteID, plotType,
+      decimalLatitude, decimalLongitude,
+      geodeticDatum, coordinateUncertainty, 
+      elevation, elevationUncertainty, nlcdClass,
+      plotID, subplotID, boutNumber, endDate, 
+      taxonID, scientificName, taxonRank, identificationReferences,
+      family, nativeStatusCode, percentCover, 
+      heightPlantOver300cm, heightPlantSpecies,
+      release, publicationDate) %>%
       dplyr::mutate(sample_area_m2 = 1), # 1m2
-    dplyr::select(div_10_100_m2_5, uid, domainID, namedLocation, siteID, decimalLatitude, decimalLongitude,
-                  geodeticDatum, coordinateUncertainty, elevation, elevationUncertainty, nlcdClass,
-                  plotID, subplotID, boutNumber, endDate, taxonID, scientificName, taxonRank,  identificationReferences,
-                  family, nativeStatusCode, sample_area_m2)
+    dplyr::select(
+      div_10_100_m2_5, 
+      uid, domainID, namedLocation, 
+      siteID, plotType, decimalLatitude, decimalLongitude,
+      geodeticDatum, coordinateUncertainty, 
+      elevation, elevationUncertainty, nlcdClass,
+      plotID, subplotID, boutNumber, endDate, 
+      taxonID, scientificName, taxonRank,  identificationReferences,
+      family, nativeStatusCode, sample_area_m2,
+      release, publicationDate)
   ) %>%
     dplyr::mutate(subplot_id = substr(subplotID, 1, 2),
                   subsubplot_id = substr(subplotID, 4, 4),
@@ -93,30 +103,32 @@ map_neon.ecocomdp.10058.001.001 <- function(
     tibble::as_tibble()
   
   
-  data_plant = dplyr::distinct(data_plant)
+  data_plant <- dplyr::distinct(data_plant)
   
   # family or order level data are pretty much not useful.
-  data_plant = dplyr::filter(data_plant, taxonRank %in% c("variety", "subspecies", "species", "speciesGroup", "genus"))
+  data_plant <- dplyr::filter(
+    data_plant, 
+    taxonRank %in% c("variety", "subspecies", "species", "speciesGroup", "genus"))
   # NOTE: we have not cleaned species names; users need to do it
   
+ 
   
-  
-
   #location ----
   table_location_raw <- data_plant %>%
-    dplyr::select(domainID, siteID, namedLocation, 
-                  decimalLatitude, decimalLongitude, elevation, 
+    dplyr::select(domainID, siteID, plotID, namedLocation, 
+                  decimalLatitude, decimalLongitude, elevation,
+                  plotType, 
                   nlcdClass, geodeticDatum) %>%
     dplyr::distinct() 
   
-  table_location <- ecocomDP::make_neon_location_table(
+  table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"))
   
-  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+  table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"),
-    ancillary_var_names = c("namedLocation", "nlcdClass", "geodeticDatum"))
+    loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"),
+    ancillary_var_names = c("namedLocation", "plotType", "nlcdClass", "geodeticDatum"))
   
   
   # taxon ----
@@ -136,21 +148,31 @@ map_neon.ecocomdp.10058.001.001 <- function(
    
   
   # observation ----
+  
+  my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
   table_observation_wide_all <- data_plant %>%
     # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation) %>%
     # package id
     dplyr::mutate(
-      package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+      package_id = my_package_id) %>%
     dplyr:: rename(
       observation_id = uid, 
       observation_datetime = endDate, 
       taxon_id = taxonID,
       value = percentCover) %>%
+    dplyr::rowwise() %>%
     dplyr::mutate(
       event_id = observation_id,
+      neon_event_id = paste0(location_id,"_",subplot_id,"_",year,"-",boutNumber),
       variable_name = "percent cover",
-      unit = "percent of plot area covered by taxon") 
+      unit = "percent of plot area covered by taxon",
+      presence_absence = 1) %>%
+    dplyr::ungroup()
+  
+  
+  
   
   table_observation <- table_observation_wide_all %>%
     dplyr::select(
@@ -165,19 +187,27 @@ map_neon.ecocomdp.10058.001.001 <- function(
       unit) %>%
     dplyr::filter(!is.na(taxon_id))
   
-  table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
+  
+  
+
+  
+  table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
       "event_id",
+      "neon_event_id",
+      "subplotID", 
       "boutNumber",
-      "subplotID",
-      "plotID",
+      # "subplot_id",
+      # "subsubplot_id",
       "nativeStatusCode",
       "identificationReferences",
       "nativeStatusCode",
       "heightPlantOver300cm",
       "heightPlantSpecies",
-      "sample_area_m2"))
+      "sample_area_m2",
+      "release",
+      "publicationDate"))
   
   
   # data summary ----

@@ -22,20 +22,21 @@ TODO --
 		add "aggregation" choice (none vs mean vs sum) for within group for a given value x. 
 		
 
---------------------------------------------------------
- taxon	 			var name 		units
--------------------------------------------------------
- BEETLES			abundance		count per trap day
- ALGAE				cell density	cells/cm2 OR cells/mL
- MACROINVERTEBRATE	density			count per square meter
- MOSQUITO			abundance		count per trap hour
- BIRD				cluster size	count of individuals
- FISH				abundance		catch per unit effort
- HERPTILES			abundance		count per trap day
- PLANT				percent cover	percent of plot area covered by taxon
- SMALL_MAMMAL		count			unique individuals per 100 trap nights per plot per month
- ZOOPLANKTON		density			count per liter
- TICK_PATHOGENS		positivity rate	positive tests per pathogen per sampling event
+-----------------------------------------------------------------------------------------------------------------
+ taxon	 			grouping var													var name 		units		
+-----------------------------------------------------------------------------------------------------------------
+ BEETLES			neon_event_id (namedLocation(plotID),trapID,boutIDdate)			abundance		count per trap day
+ ALGAE				event_id (which is sampleID)									cell density	cells/cm2 OR cells/mL
+ MACROINVERTEBRATE	event_id (which is sampleID)									density			count per square meter
+ MOSQUITO			neon_event_id(siteID, year, bout)								abundance		count per trap hour
+ BIRD				neon_event_id(plot,point,date,time)								cluster size	count of individuals
+ FISH				neon_event_id(site,date,reach,rep,sampler)						abundance		catch per unit effort
+ HERPTILES			neon_event_id(namedLocation(plotID),trapID,boutIDdate)			abundance		count per trap day
+ PLANT				neon_event_id(namedLocation(plotID),100m2plotID,year,bout#)		percent cover	percent of plot area covered by taxon
+ SMALL_MAMMAL		neon_event_id(location_id,year,month)							count			unique individuals per 100 trap nights per plot per month
+ ZOOPLANKTON		event_id (which is sampleID)									density			count per liter
+ TICK				neon_event_id(plotID,collectDate)								abundance		count per square meter 
+ TICK_PATHOGENS		event_id(plotID,collectDate)									positivity rate	positive tests per pathogen per sampling event
  
 ##################################################################
 BEETLES -- map_neon.ecocomdp.10022.001.001
@@ -43,6 +44,10 @@ BEETLES -- map_neon.ecocomdp.10022.001.001
 		taxon table
 			- taxon_id's with multiple records in taxon table, different "authority_system" entries -- e.g., OMUDEJ -- fixed in update #4 
 			- NAs in taxon_id -- fixed by update #3. 
+			- #dupes for obs_id below -- dups have different taxon_ids 
+			# "9ec05998-a868-4eb8-8691-3c28a025f358"
+			# "9a93953e-9260-4b43-95e9-b05a55338f08"
+
 		observation table
 			- duplicate uid -- 
 				536b7f1b-13a3-4c42-946b-09a0628fdaac -- event_id = ABBY_028.E.20190625, taxon = PTELAM, different counts -- 1 and 3. Should they be added? assumed to be reps? 
@@ -64,6 +69,8 @@ BEETLES -- map_neon.ecocomdp.10022.001.001
 	event_id = sampleID
 	neon_sample_id = sampleID
 	neon_event_id = eventID
+
+
 
 ##################################################################
 ALGAE -- map_neon.ecocomdp.20166.001.001

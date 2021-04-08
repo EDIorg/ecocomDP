@@ -1,43 +1,34 @@
 ##############################################################################################
 ##############################################################################################
-#' @examples 
-#' \dontrun{
-#' my_result <- map_neon.ecocomdp.10043.001.001(site = c("NIWO","DSNY"), 
-#'                                                   startdate = "2016-01", 
-#'                                                   enddate = "2018-11")
-#' }
+#' @author Natalie Robinson \email{nrobinson@battelleecology.org}
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for MOSQUITO from neon.data.product.id DP1.10043.001 from the NEON data portal and map to the ecocomDP 
-#' @export
 
 ##############################################################################################
 # mapping function for MOSQUITO
 map_neon.ecocomdp.10043.001.001 <- function(
+  neon.data.list,
   neon.data.product.id = "DP1.10043.001",
   ...){
   
   #NEON target taxon group is MOSQUITO
   neon_method_id <- "neon.ecocomdp.10043.001.001"
   
-
-  # check arguments passed via dots for neonUtilities
-  dots_updated <- list(..., dpID = neon.data.product.id)
   
-  #Error handling if user provides a value for "package" other than "expanded"
-  if("package" %in% names(dots_updated) && dots_updated$package != "expanded") message(
-    paste0("WARNING: expanded package for ", neon.data.product.id, 
-           " is required to execute this request. Downloading the expanded package"))
-  
-  
-  dots_updated[["package"]] <- "expanded"
-  
-  mos_allTabs <- rlang::exec( 
-    neonUtilities::loadByProduct,
-    !!!dots_updated)
+  # make sure neon.data.list matches the method
+  if(!any(grepl(
+    neon.data.product.id %>% gsub("^DP1\\.","",.) %>% gsub("\\.001$","",.), 
+    names(neon.data.list)))) stop(
+      "This dataset does not appeaer to be sourced from NEON ", 
+      neon.data.product.id,
+      " and cannot be mapped using method ", 
+      neon_method_id)
   
   
-
   # getting data ----  
+  mos_allTabs <- neon.data.list
+  
+  
   # Define important data colums
   cols_oi_trap <- c('collectDate','eventID','namedLocation','sampleID')
   cols_oi_sort <- c('collectDate','sampleID','namedLocation','subsampleID')
@@ -176,13 +167,17 @@ map_neon.ecocomdp.10043.001.001 <- function(
   mos_dat <- dplyr::rename(mos_dat,subsampleCode = subsampleCode.x, 
                            laboratoryName = laboratoryName.x) %>% 
     dplyr::select(-c(subsampleCode.y, laboratoryName.y)) %>%
-    dplyr::mutate(estimated_totIndividuals = ifelse(!is.na(individualCount),
-                                                    round(individualCount * (totalWeight/subsampleWeight)), NA))
+    dplyr::mutate(
+      estimated_totIndividuals = ifelse(
+        !is.na(individualCount),
+        round(individualCount * (totalWeight/subsampleWeight)), NA))
   
   
   # Add archive data --
   mos_dat <- mos_dat %>%
-    dplyr::left_join(dplyr::select(mos_archivepooling,-c(domainID,uid,namedLocation,siteID)),by = 'archiveID')
+    dplyr::left_join(
+      dplyr::select(mos_archivepooling,-c(domainID,uid,namedLocation,siteID)),
+      by = 'archiveID')
   
   
   
@@ -213,19 +208,23 @@ map_neon.ecocomdp.10043.001.001 <- function(
   
   
   
-  
+
+
   #location ----
   table_location_raw <- mos_dat %>%
-    dplyr::select(domainID, siteID, namedLocation, decimalLatitude, decimalLongitude, elevation) %>%
+    dplyr::select(domainID, siteID, namedLocation, 
+                  plotType, nlcdClass,
+                  decimalLatitude, decimalLongitude, elevation) %>%
     dplyr::distinct() 
   
-  table_location <- ecocomDP::make_neon_location_table(
+  table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"))
   
-  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+  table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"))
+    loc_col_names = c("domainID", "siteID", "namedLocation"),
+    ancillary_var_names = c("namedLocation", "nlcdClass", "plotType"))
   
   
   
@@ -235,20 +234,14 @@ map_neon.ecocomdp.10043.001.001 <- function(
     dplyr::select(taxonID, taxonRank, scientificName,identificationReferences) %>%
     
     dplyr::distinct() %>% 
-    
-    
     dplyr::rename(taxon_id = taxonID,
                   taxon_rank = taxonRank,
                   taxon_name = scientificName,
                   authority_system = identificationReferences) %>%
-    
-    # dplyr::mutate(authority_system = "NEON_external_lab") %>% 
-    
     dplyr::select(taxon_id,
                   taxon_rank,
                   taxon_name,
                   authority_system) %>%
-    
     dplyr::filter(!is.na(taxon_id)) %>%
     # concatenate different references for same taxonID
     dplyr::group_by(taxon_id, taxon_rank, taxon_name) %>%
@@ -256,31 +249,36 @@ map_neon.ecocomdp.10043.001.001 <- function(
       authority_system = paste(authority_system, collapse = "; "))
   
 
+  
+
+  
+  
   # observation ----
-  table_observation <- mos_dat %>% 
-    dplyr::select(uid, 
-                  sampleID, 
-                  namedLocation, 
-                  # startCollectDate,
-                  collectDate,
-                  taxonID,
-                  totalWeight,
-                  trapHours,
-                  individualCount,
-                  subsampleWeight) %>% 
-    
+  
+  my_package_id <- paste0(
+    neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
+  
+  table_observation_raw <- mos_dat %>% 
     dplyr::mutate(variable_name = "abundance",
                   value = (individualCount/subsampleWeight) * totalWeight / trapHours,
                   unit = "count per trap hour") %>% 
-    
-    dplyr::rename(observation_id = uid,
-                  event_id = sampleID,
-                  location_id = namedLocation,
-                  observation_datetime = collectDate,
-                  taxon_id = taxonID) %>%
-    
-    dplyr::mutate(package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
-    
+    dplyr::rename(
+      observation_id = uid,
+      neon_event_id = eventID,
+      location_id = namedLocation,
+      observation_datetime = collectDate,
+      taxon_id = taxonID,
+      release = release.x,
+      publicationDate = publicationDate.x) %>%
+    dplyr::mutate(
+      package_id = my_package_id,
+      event_id = observation_id) %>%
+    dplyr::filter(!is.na(taxon_id))
+  
+  
+  
+  table_observation <- table_observation_raw %>%
     dplyr::select(observation_id,
                   event_id,
                   package_id,
@@ -289,20 +287,40 @@ map_neon.ecocomdp.10043.001.001 <- function(
                   taxon_id,
                   variable_name,
                   value,
-                  unit) %>%
-    dplyr::filter(!is.na(taxon_id))
+                  unit) 
   
-  table_observation_ancillary_wide <- mos_dat %>% 
-    dplyr::select(eventID, sampleID) %>% 
-    dplyr::filter(!is.na(sampleID)) %>%
-    dplyr::rename(neon_sample_id = sampleID,
-           neon_event_id = eventID) %>% 
-    dplyr::mutate(event_id = neon_sample_id) %>%
+  
+  
+  
+  table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
+    obs_wide = table_observation_raw,
+    ancillary_var_names = c(
+      "event_id",
+      "neon_event_id",
+      "sortDate",
+      "sampleID",
+      "subsampleID",
+      "totalWeight", #grams
+      "subsampleWeight", #grams
+      "weightBelowDetection",
+      "laboratoryName",
+      "trapHours", #hours
+      "samplingProtocolVersion",
+      "remarks_sorting",
+      "sex",
+      "nativeStatusCode",
+      "release",
+      "publicationDate")) %>%
+    # add units where appropriate
+    dplyr::mutate(
+      unit = dplyr::case_when(
+        variable_name == "totalWeight" ~ "grams",
+        variable_name == "subsampleWeight" ~ "grams",
+        variable_name == "trapHours" ~ "hours",
+        TRUE ~ NA_character_
+      )
+    ) %>%
     dplyr::distinct()
-  
-  table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
-    obs_wide = table_observation_ancillary_wide,
-    ancillary_var_names = names(table_observation_ancillary_wide))
       
   
   

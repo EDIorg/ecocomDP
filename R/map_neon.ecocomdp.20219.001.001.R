@@ -1,37 +1,34 @@
 ##############################################################################################
 ##############################################################################################
-#' @examples 
-#' \dontrun{
-#' my_result <- map_neon.ecocomdp.20219.001.001(
-#' site = c("BARC","SUGG"), 
-#' startdate = "2016-01",
-#' enddate = "2017-11",
-#' token = Sys.getenv("NEON_TOKEN"),
-#'   check.size = FALSE)
-#' }
+#' @author Lara Janson
 
 #' @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for ZOOPLANKTON taxa from neon.data.product.id DP1.20219.001 from the NEON data portal and map to the ecocomDP format
-#' @export
 
 ##############################################################################################
-# mapping function for SMALL_MAMMAL taxa
+# mapping function for ZOOPLANKTON taxa
 map_neon.ecocomdp.20219.001.001 <- function(
+  neon.data.list,
   neon.data.product.id = "DP1.20219.001",
   ...){
   
   # authors: Lara Janson, Stephanie Parker, Eric Sokol
   
-  #NEON target taxon group is SMALL_MAMMALS
+  #NEON target taxon group is ZOOPLANKTON
   neon_method_id <- "neon.ecocomdp.20219.001.001"
   
-  # check arguments passed via dots for neonUtilities
-  dots_updated <- list(..., dpID = neon.data.product.id)
+  
+  # make sure neon.data.list matches the method
+  if(!any(grepl(
+    neon.data.product.id %>% gsub("^DP1\\.","",.) %>% gsub("\\.001$","",.), 
+    names(neon.data.list)))) stop(
+      "This dataset does not appeaer to be sourced from NEON ", 
+      neon.data.product.id,
+      " and cannot be mapped using method ", 
+      neon_method_id)
   
   
   ### Get the Data
-  allTabs_zoop <- rlang::exec( 
-    neonUtilities::loadByProduct,
-    !!!dots_updated)
+  allTabs_zoop <- neon.data.list
   
   
 
@@ -42,7 +39,7 @@ map_neon.ecocomdp.20219.001.001 <- function(
   zoo_taxonomyProcessed <- tibble::as_tibble(allTabs_zoop$zoo_taxonomyProcessed)
   
   # Location table
-  table_location <- zoo_fielddata %>%
+  zoo_location <- zoo_fielddata %>%
     dplyr::select(domainID:sampleID, samplerType, towsTrapsVolume) %>%
     dplyr::select(-additionalCoordUncertainty) %>%
     dplyr::distinct()
@@ -59,8 +56,10 @@ map_neon.ecocomdp.20219.001.001 <- function(
       # zooSubsampleVolume,
       # individualCount,
       adjCountPerBottle,
-      zooMinimumLength, zooMaximumLength, zooMeanLength) %>%
-    dplyr::left_join(table_location, by = "sampleID") %>%
+      zooMinimumLength, zooMaximumLength, zooMeanLength,
+      laboratoryName,
+      release, publicationDate) %>%
+    dplyr::left_join(zoo_location, by = "sampleID") %>%
     dplyr::mutate(density = adjCountPerBottle / towsTrapsVolume,
                   density_unit = "count per liter") %>%
     dplyr::distinct()
@@ -89,19 +88,21 @@ map_neon.ecocomdp.20219.001.001 <- function(
       authority_system = paste(authority_system, collapse = "; "))
   
   
+
   
   # location ----
   # get relevant location info from the data
   table_location_raw <- data_zooplankton %>%
-    dplyr::select(domainID, siteID, namedLocation, decimalLatitude, decimalLongitude, elevation,
+    dplyr::select(domainID, siteID, namedLocation, 
+                  decimalLatitude, decimalLongitude, elevation,
                   namedLocation, aquaticSiteType, geodeticDatum) %>%
     dplyr::distinct() 
   
-  table_location <- ecocomDP::make_neon_location_table(
+  table_location <- ecocomDP:::make_neon_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"))
   
-  table_location_ancillary <- ecocomDP::make_neon_ancillary_location_table(
+  table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"),
     ancillary_var_names = c("namedLocation", "aquaticSiteType", "geodeticDatum"))
@@ -111,12 +112,15 @@ map_neon.ecocomdp.20219.001.001 <- function(
 
   
   # observation ----
+  
+  my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
   table_observation_wide_all <- data_zooplankton %>%
     # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation) %>%
     # package id
     dplyr::mutate(
-      package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))) %>%
+      package_id = my_package_id) %>%
     dplyr:: rename(
       observation_id = uid, 
       neon_event_id = eventID,
@@ -142,14 +146,17 @@ map_neon.ecocomdp.20219.001.001 <- function(
       unit) %>%
     dplyr::filter(!is.na(taxon_id))
   
-  table_observation_ancillary <- ecocomDP::make_neon_ancillary_observation_table(
+  table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
       "event_id",
-      "neon_event_id",
+      # "neon_event_id",
       "neon_sample_id",
       "samplerType",
-      "towsTrapsVolume"))
+      "towsTrapsVolume",
+      "laboratoryName",
+      "release",
+      "publicationDate"))
   
   
   # data summary ----

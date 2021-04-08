@@ -18,7 +18,8 @@ View(my_search_result)
 
 #BEETLE update
 
-my_result <- map_neon.ecocomdp.10022.001.001(
+my_result <- neonUtilities::loadByProduct(
+  dpID = "DP1.10022.001",
   site = c('ABBY','BARR'),
   startdate = "2019-06",
   enddate = "2019-09",
@@ -26,7 +27,35 @@ my_result <- map_neon.ecocomdp.10022.001.001(
   package = "basic",
   check.size = FALSE)
 
-my_result_mapped <- map_neon_data_to_ecocomDP(
+my_neon_dir <- "my_result"
+if(!my_neon_dir %in% list.files()) dir.create(my_neon_dir)
+
+
+
+
+my_result <- neonUtilities::zipsByProduct(
+  dpID = "DP1.10022.001",
+  site = c('ABBY','BARR'),
+  startdate = "2019-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  package = "basic",
+  check.size = FALSE,
+  savepath = "my_result")
+
+
+
+
+my_result <- ecocomDP:::map_neon.ecocomdp.10022.001.001(
+  site = c('ABBY','BARR'),
+  startdate = "2019-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  package = "basic",
+  check.size = FALSE)
+
+
+my_result_mapped <- ecocomDP:::map_neon_data_to_ecocomDP(
   data.product.id = "neon.ecocomdp.10022.001.001",
   site = c('ABBY','BARR'),
   startdate = "2019-06",
@@ -34,15 +63,42 @@ my_result_mapped <- map_neon_data_to_ecocomDP(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
+
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.10022.001.001",
   site = c('ABBY','BARR'),
   startdate = "2019-06",
-  enddate = "2019-09",
+  # enddate = "2019-09",
+  enddate = "2021-02",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+  
+my_result_read_data <- read_data(
+  id = "neon.ecocomdp.10022.001.001",
+  site = c('ABBY','BARR'),
+  startdate = "2019-06",
+  # enddate = "2019-09",
+  enddate = "2021-02",
+  neon.data.save.path = "my_result",
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
+
+
+my_result_back_in <- read_from_files(data.path = "C:/Users/esokol/Documents/Git/FORKS/ecocomDP/my_result/neon.ecocomdp.10022.001.001")
+#dupes for obs_id below -- dups have different taxon_ids 
+# "9ec05998-a868-4eb8-8691-3c28a025f358"
+# "9a93953e-9260-4b43-95e9-b05a55338f08"
+my_result_read_data[[1]]$validation_issues
+my_result_read_data[[1]]$metadata$data_package_info
+
+
 my_result_read_data[[1]]$tables$dataset_summary
+
+names(my_result_read_data[[1]]$tables)
+names(my_result_read_data[[1]]$metadata)
+names(my_result_read_data[[1]]$metadata$orig_NEON_data_product_info)
+
 
 View(my_result_read_data[[1]]$tables$observation)
 
@@ -72,7 +128,7 @@ my_result_read_data[[1]]$validation_issues
 #ALGAE 
 rm(list=ls())
 
-my_result <- map_neon.ecocomdp.20166.001.001(
+my_result <- ecocomDP:::map_neon.ecocomdp.20166.001.001(
   site= c('COMO','LECO','SUGG'), 
   startdate = "2017-06",
   enddate = "2019-09",
@@ -90,6 +146,9 @@ my_result_read_data <- read_data(
   enddate = "2019-09",
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
+
+my_result_read_data[[1]]$validation_issues
+my_result_read_data[[1]]$metadata$data_package_info
 
 my_result_read_data[[1]]$tables$dataset_summary
 my_result_read_data[[1]]$tables$location %>% as.data.frame()
@@ -211,7 +270,7 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$validation_issues
-
+my_result_read_data[[1]]$metadata$data_package_info
 
 names(my_result_read_data[[1]]$tables)
 
@@ -262,7 +321,8 @@ my_result <- map_neon.ecocomdp.10003.001.001(
   package = "basic",
   check.size = FALSE)
 
-my_result$dataset_summary
+my_result %>% names()
+
 
 
 my_result_read_data <- read_data(
@@ -274,8 +334,12 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$validation_issues
+my_result_read_data[[1]]$metadata$data_package_info
 
 names(my_result_read_data[[1]]$tables)
+names(my_result_read_data[[1]]$metadata)
+names(my_result_read_data[[1]]$metadata$orig_NEON_data_product_info)
+my_result_read_data[[1]]$metadata$data_package_info
 
 # check for repeated observations -- Colin's validation seems to be getting false positives here
 obs_tab <- my_result_read_data[[1]]$tables$observation
@@ -325,6 +389,8 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$validation_issues
+my_result_read_data[[1]]$metadata$data_package_info
+
 
 names(my_result_read_data[[1]]$tables)
 
@@ -365,7 +431,9 @@ my_result <- map_neon.ecocomdp.10022.001.002(
   package = "basic",
   check.size = FALSE)
 
-my_result$dataset_summary
+my_result %>% names()
+my_result$tables %>% names()
+my_result$metadata %>% names()
 
 
 my_result_read_data <- read_data(
@@ -377,6 +445,8 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$validation_issues
+my_result_read_data[[1]]$metadata$data_package_info
+
 
 names(my_result_read_data[[1]]$tables)
 
@@ -428,7 +498,9 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$validation_issues
-
+my_result_read_data[[1]]$metadata$data_package_info
+  
+  
 names(my_result_read_data[[1]]$tables)
 
 obs_tab <- my_result_read_data[[1]]$tables$observation
@@ -479,6 +551,7 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$validation_issues
+my_result_read_data[[1]]$metadata$data_package_info
 
 names(my_result_read_data[[1]]$tables)
 
@@ -511,16 +584,6 @@ obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
 
 rm(list=ls())
 
-my_result <- map_neon.ecocomdp.10093.001.001(
-  site = c("BART","DSNY"),
-  startdate = "2016-01",
-  enddate = "2017-11",
-  token = Sys.getenv("NEON_TOKEN"),
-  package = "basic",
-  check.size = FALSE)
-
-my_result$dataset_summary
-
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.10093.001.001",
   site= c("NIWO","DSNY", "BART"), 
@@ -529,7 +592,15 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
+list.files("my_result")
+
+my_result_read_data <- read_data(
+  id = "neon.ecocomdp.10093.001.001",
+  neon.data.read.path = "my_result/DP1.10093.001_20210320222321.RDS")
+
 my_result_read_data[[1]]$validation_issues
+my_result_read_data[[1]]$metadata$data_package_info
+
 
 names(my_result_read_data[[1]]$tables)
 
@@ -582,6 +653,8 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$validation_issues
+my_result_read_data[[1]]$metadata$data_package_info
+
 
 names(my_result_read_data[[1]]$tables)
 
@@ -633,6 +706,8 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 my_result_read_data[[1]]$validation_issues
+my_result_read_data[[1]]$metadata$data_package_info
+
 
 names(my_result_read_data[[1]]$tables)
 
