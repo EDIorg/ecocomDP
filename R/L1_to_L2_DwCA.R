@@ -47,24 +47,39 @@ L1_to_L2_DwCA <- function(path,
                           user.id,
                           user.domain) {
   
+  # Load Global Environment config --------------------------------------------
+  
+  if (exists("environment", envir = .GlobalEnv)) {
+    environment <- get("environment", envir = .GlobalEnv)
+  } else {
+    environment <- "production"
+  }
+  
   # Parameterize --------------------------------------------------------------
+  
+  # readr progress bar and messaging is not useful in this function
+  
+  dflt_prog <- getOption("readr.show_progress")
+  options(readr.show_progress = FALSE)
+  on.exit(options(readr.show_progress = dflt_prog))
+  
   # Eventually will support 2 DwC types: choose occurence-core or event-core. 
   # occurence is simpler (sightings), event is a better fit for most of our data
   # TODO: Support event-core
   
-  dwca_config_file <- readr::read_csv(
-    system.file("/dwca_occurrence_core/dwca_occurrence_core_config.csv", package = "ecocomDP"))
-  dwca_mappings_file <- readr::read_csv(
-    system.file("/dwca_occurrence_core/dwca_occurrence_core_mappings.csv", package = "ecocomDP"))
-
-  # msg the user
-  message(
-    'Using config files at: ', 
-    dirname(system.file("dwca_occurrence_core_config.csv", package = "ecocomDP")))
-  message('Making ', core.name)
+  dwca_config_file <- suppressMessages(
+    readr::read_csv(
+      system.file(
+        "/dwca_occurrence_core/dwca_occurrence_core_config.csv", 
+        package = "ecocomDP")))
+  dwca_mappings_file <- suppressMessages(
+    readr::read_csv(
+      system.file("/dwca_occurrence_core/dwca_occurrence_core_mappings.csv", 
+                  package = "ecocomDP")))
   
   # Load data -----------------------------------------------------------------
   
+  # FIXME: Add environment argument to ecocomDP::read_data()
   d <- ecocomDP::read_data(parent.package.id)
   d <- d[[1]]$tables
   
@@ -122,13 +137,14 @@ L1_to_L2_DwCA <- function(path,
 
   # Write EML to file ---------------------------------------------------------
   
-  make_eml_dwca(
+  eml <- make_eml_dwca(
     path = path,
     core.name = core.name,
     parent.package.id = parent.package.id, 
     child.package.id = child.package.id, 
     user.id = user.id, 
-    user.domain = user.domain)
+    user.domain = user.domain,
+    url = data.table.url)
   
 }
 
@@ -161,7 +177,13 @@ create_table_dwca_occurrence_core <- function(
   dt_loc_ancil = NULL,
   parent.package.id) {
   
-  message('calling function to create DwC-A, occurrence core')
+  # Load Global Environment config --------------------------------------------
+  
+  if (exists("config.environment", envir = .GlobalEnv)) {
+    environment <- get("config.environment", envir = .GlobalEnv)
+  } else {
+    environment <- "production"
+  }
   
   # Validate function inputs --------------------------------------------------
   # Do you have what you need to get these vars? confirm fields used by mapping 
@@ -215,7 +237,7 @@ create_table_dwca_occurrence_core <- function(
   obs_loc_tax$dc_samplingprotocol <- paste0(
     "See methods in ",
     suppressMessages(
-      EDIutils::api_read_data_package_doi(parent.package.id)))
+      EDIutils::api_read_data_package_doi(parent.package.id, environment)))
   
   # TODO: Determine if observation was made by an instrument or human. This 
   # info is stored in the L1 EML keywordSet
@@ -223,7 +245,7 @@ create_table_dwca_occurrence_core <- function(
   keywords <- xml2::xml_text(
       xml2::xml_find_all(
         suppressMessages(
-          EDIutils::api_read_metadata(parent.package.id)), ".//keyword"))
+          EDIutils::api_read_metadata(parent.package.id, environment)), ".//keyword"))
   
   basis_of_record <- trimws(
     stringr::str_remove(
@@ -300,7 +322,15 @@ create_tables_dwca_event_core <- function(
   parent.package.id,
   child.package.id) {
   
-  message('calling function to create DwC-A, event core')
+  message('Creating DwC-A Event Core tables')
+  
+  # Load Global Environment config --------------------------------------------
+  
+  if (exists("config.environment", envir = .GlobalEnv)) {
+    environment <- get("config.environment", envir = .GlobalEnv)
+  } else {
+    environment <- "production"
+  }
   
   # Validate function inputs --------------------------------------------------
   # Do you have what you need to get these vars? confirm fields used by mapping 
@@ -344,7 +374,7 @@ create_tables_dwca_event_core <- function(
   obs_loc_tax$dc_samplingprotocol <- paste0(
     "See methods in ",
     suppressMessages(
-      EDIutils::api_read_data_package_doi(parent.package.id)))
+      EDIutils::api_read_data_package_doi(parent.package.id, environment)))
   
   # TODO: Determine if observation was made by an instrument or human. This 
   # info is stored in the L1 EML keywordSet
@@ -352,7 +382,7 @@ create_tables_dwca_event_core <- function(
   keywords <- xml2::xml_text(
     xml2::xml_find_all(
       suppressMessages(
-        EDIutils::api_read_metadata(parent.package.id)), ".//keyword"))
+        EDIutils::api_read_metadata(parent.package.id, environment)), ".//keyword"))
   
   basis_of_record <- trimws(
     stringr::str_remove(

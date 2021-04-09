@@ -17,15 +17,16 @@
 #' @param north
 #'     (numeric) North bounding coordinate of the study area in decimal 
 #'     degrees with values north of the equator being positive.
-#' @param south
-#'     (numeric) South bounding coordinate of the study area in decimal 
-#'     degrees with values south of the equator being negative.
 #' @param east
 #'     (numeric) East bounding coordinate of the study area in decimal 
 #'     degrees with values west of the prime meridian being negative.
+#' @param south
+#'     (numeric) South bounding coordinate of the study area in decimal 
+#'     degrees with values south of the equator being negative.
 #' @param west
 #'     (numeric) West bounding coordinate of the study area in decimal 
 #'     degrees with values west of the equator being negative.
+#' @param evironment (character) EDI Data Repository environment in which the L0 exists, and which will be used to get the geographic bounding area from the EML metadata. Default is "production".
 #'
 #' @return 
 #'     (data frame) A data frame of the dataset_summary table
@@ -35,7 +36,12 @@
 make_dataset_summary <- function(parent.package.id, 
                                  child.package.id, 
                                  sample.dates, 
-                                 taxon.table){
+                                 taxon.table,
+                                 north,
+                                 east,
+                                 south,
+                                 west,
+                                 environment = "production"){
   
   message('Creating dataset_summary')
     
@@ -93,7 +99,7 @@ make_dataset_summary <- function(parent.package.id,
     parent.package.id, 
     "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)")) {
     # Source is EDI
-    eml <- suppressMessages(EDIutils::api_read_metadata(parent.package.id))
+    eml <- suppressMessages(EDIutils::api_read_metadata(parent.package.id, environment = environment))
     west <- min(
       as.numeric(
         xml2::xml_text(

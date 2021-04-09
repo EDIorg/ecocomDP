@@ -8,6 +8,7 @@
 #' @param parent.pkg.id
 #'     (character) Parent data package ID from the EDI Data Repository (e.g. 
 #'     knb-lter-cap.627.3).
+#' @param evironment (character) Repository environment in which \code{package.id} exists. Some repositories have development, staging, and production environments which are distinct from one another. This argument allows reading of EML from different environments. Default is "production".
 #'
 #' @return 
 #'     (data frame) A data frame with columns:
@@ -22,7 +23,7 @@
 #' @export
 #'
 
-define_variables <- function(data.path, parent.pkg.id) {
+define_variables <- function(data.path, parent.pkg.id, environment = "production") {
   message('Retrieving variable definitions and units')
   
   # Define what a variable is
@@ -55,7 +56,8 @@ define_variables <- function(data.path, parent.pkg.id) {
   var_metadata <- mapply(
     EDIutils::get_eml_attribute, 
     attr.name = cat_vars$code, 
-    MoreArgs = list(package.id = parent.pkg.id))
+    MoreArgs = list(package.id = parent.pkg.id,
+                    environment = environment))
   var_metadata <- as.data.frame(t(var_metadata), row.names = F)
   
   # Combine into cat_vars object

@@ -157,6 +157,20 @@ make_eml <- function(path,
   
   message("Creating EML for derived data package (" , child.package.id, ")")
   
+  # Load Global Environment config --------------------------------------------
+  
+  if (exists("config.repository", envir = .GlobalEnv)) {
+    repository <- get("config.repository", envir = .GlobalEnv)
+  } else {
+    repository <- "EDI"
+  }
+  
+  if (exists("config.environment", envir = .GlobalEnv)) {
+    environment <- get("config.environment", envir = .GlobalEnv)
+  } else {
+    environment <- "production"
+  }
+  
   # Validate inputs -----------------------------------------------------------
   
   if (missing(path)) {
@@ -415,14 +429,19 @@ make_eml <- function(path,
   # Create two objects of the same metadata, eml_L0 (emld list object) for
   # editing, and xml_L0 (xml_document) for easy parsing
     
-  url_parent <- paste0(
-    "https://pasta.lternet.edu/package/metadata/eml/",
-    stringr::str_replace_all(parent.package.id, "\\.", "/"))
+  # FIXME: Extend support to environments in other repository systems
+  if (environment == "production") {
+    url_parent <- paste0(
+      "https://pasta.lternet.edu/package/metadata/eml/",
+      stringr::str_replace_all(parent.package.id, "\\.", "/"))
+  } else if (environment == "staging") {
+    url_parent <- paste0(
+      "https://pasta-s.lternet.edu/package/metadata/eml/",
+      stringr::str_replace_all(parent.package.id, "\\.", "/"))
+  }
 
   eml_L0 <- EML::read_eml(url_parent)
-
-  xml_L0 <- suppressMessages(
-    EDIutils::api_read_metadata(parent.package.id))
+  xml_L0 <- suppressMessages(ecocomDP::read_eml(parent.package.id))
   
   # Create L1 EML -------------------------------------------------------------
   
@@ -450,7 +469,6 @@ make_eml <- function(path,
   eal_inputs$other.entity <- other.entity
   eal_inputs$other.entity.description <- other.entity.description
   eal_inputs$other.entity.url <- other.entity.url
-  eal_inputs$provenance <- parent.package.id
   eal_inputs$package.id <- child.package.id
   eal_inputs$user.id <- user.id
   eal_inputs$user.domain <- user.domain
@@ -796,9 +814,18 @@ make_eml <- function(path,
   
   # Parse components to be reordered and combined for the L1
   methods_L1 <- eml_L1$dataset$methods$methodStep[[1]]
-  eml_L1$dataset$methods$methodStep[[1]] <- NULL
-  provenance_L1 <- eml_L1$dataset$methods$methodStep
   
+  # Get provenance metadata
+  # TODO: Support other repository systems
+  r <- suppressMessages(
+    EDIutils::api_get_provenance_metadata(
+      package.id = parent.package.id,
+      environment = environment))
+  r <- EML::read_eml(r)
+  provenance_L1 <- list(
+    dataSource = r$dataSource,
+    description = r$description)
+
   # Combine L1 methods, L0 methods, and L0 provenance
   eml_L0$dataset$methods$methodStep <- c(
     list(methods_L1),

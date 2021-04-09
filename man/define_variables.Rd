@@ -4,13 +4,15 @@
 \alias{define_variables}
 \title{Define categorical variables of ecocomDP tables}
 \usage{
-define_variables(data.path, parent.pkg.id)
+define_variables(data.path, parent.pkg.id, environment = "production")
 }
 \arguments{
 \item{data.path}{(character) Path to ecocomDP tables.}
 
 \item{parent.pkg.id}{(character) Parent data package ID from the EDI Data Repository (e.g. 
 knb-lter-cap.627.3).}
+
+\item{evironment}{(character) Repository environment in which \code{package.id} exists. Some repositories have development, staging, and production environments which are distinct from one another. This argument allows reading of EML from different environments. Default is "production".}
 }
 \value{
 (data frame) A data frame with columns:

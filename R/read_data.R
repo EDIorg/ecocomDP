@@ -107,7 +107,7 @@ read_data <- function(
   # site = "all", startdate = NA, 
   # enddate = NA, check.size = FALSE, nCores = 1, forceParallel = FALSE, token = NA,
   globally.unique.keys = FALSE) {
-
+  
   # Validate input arguments --------------------------------------------------
   
   
@@ -318,6 +318,14 @@ read_data_edi <- function(id) {
   
   message("Reading ", id)
   
+  # Parameterize
+  
+  if (exists("environment", envir = .GlobalEnv)) {
+    environment <- get("config.environment", envir = .GlobalEnv)
+  } else {
+    environment <- "production"
+  }
+  
   # Get ecocomDP attributes for validation and coercion
   
   attr_tbl <- data.table::fread(
@@ -338,7 +346,9 @@ read_data_edi <- function(id) {
     delimiter = './/dataset/dataTable/physical/dataFormat/textFormat/simpleDelimited/fieldDelimiter',
     nrecord = './/dataset/dataTable/numberOfRecords')
   
-  eml <- suppressMessages(EDIutils::api_read_metadata(id))
+  eml <- suppressMessages(
+    EDIutils::api_read_metadata(id, environment))
+  
   invisible(
     lapply(
       names(tbl_attrs),

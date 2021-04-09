@@ -8,6 +8,7 @@
 #'     (character) ID of an ecocomDP data package. Only EDI Data Repository package IDs are currently supported.
 #' @param child.package.id
 #'     (character) ID of DWcA occurrence data package being created.
+#' @param repository (character) Data repository in which \code{package.id} resides and associated with \code{environment}. Currently supported repositories are: "EDI" (Environmental Data Initiative). Requests for support of other repositories can be made via \href{https://github.com/EDIorg/ecocomDP}{ecocomDP GitHub} issues. Default is "EDI".
 #' @param user.id
 #'     (character; optional) Repository user identifier. If more than one, then enter as a vector of character strings (e.g. \code{c("user_id_1", "user_id_2")}). \code{user.id} sets the /eml/access/principal element for all \code{user.domain} except "KNB", "ADC", and if \code{user.domain = NULL}.
 #' @param user.domain
@@ -64,9 +65,22 @@ make_eml_dwca <- function(path,
                           user.domain,
                           url = NULL) {
   
-  message(
-    "Creating Darwin Core ", stringr::str_to_title(core.name), " Core EML ",
-    "for L1 data package ", parent.package.id)
+  message("Creating DwC-A ", stringr::str_to_title(core.name), 
+          " Core EML")
+  
+  # Load Global Environment config --------------------------------------------
+  
+  if (exists("config.repository", envir = .GlobalEnv)) {
+    repository <- get("config.repository", envir = .GlobalEnv)
+  } else {
+    repository <- "EDI"
+  }
+  
+  if (exists("config.environment", envir = .GlobalEnv)) {
+    environment <- get("config.environment", envir = .GlobalEnv)
+  } else {
+    environment <- "production"
+  }
   
   # Validate inputs -----------------------------------------------------------
   
@@ -74,7 +88,7 @@ make_eml_dwca <- function(path,
   missing_parent_data_package <- suppressWarnings(
     stringr::str_detect(
       suppressMessages(
-        EDIutils::api_read_metadata(parent.package.id)), 
+        EDIutils::api_read_metadata(parent.package.id, environment)), 
       "Unable to access metadata for packageId:"))
   if (missing_parent_data_package) {
     stop(
@@ -87,7 +101,7 @@ make_eml_dwca <- function(path,
   child_data_package_exists <- suppressWarnings(
     !stringr::str_detect(
       suppressMessages(
-        EDIutils::api_read_metadata(child.package.id)), 
+        EDIutils::api_read_metadata(child.package.id, environment)), 
       "Unable to access metadata for packageId:"))
   if (child_data_package_exists) {
     warning(
@@ -144,6 +158,9 @@ make_eml_dwca <- function(path,
   if (!is.null(url)) {
     data.table.url <- paste0(url, "/", data.table)
     other.entity.url <- paste0(url, "/", other.entity)
+  } else {
+    data.table.url <- NULL
+    other.entity.url <- NULL
   }
   
   # Read L1 EML ---------------------------------------------------------------
@@ -152,12 +169,21 @@ make_eml_dwca <- function(path,
   
   # Create two objects of the same metadata, eml_L1 (emld list object) for
   # editing, and xml_L1 (xml_document) for easy parsing
-  url_parent <- paste0(
-    "https://pasta.lternet.edu/package/metadata/eml/", 
-    stringr::str_replace_all(parent.package.id, "\\.", "/"))
+  
+  # FIXME: Extend support to environments in other repository systems
+  if (environment == "production") {
+    url_parent <- paste0(
+      "https://pasta.lternet.edu/package/metadata/eml/",
+      stringr::str_replace_all(parent.package.id, "\\.", "/"))
+  } else if (environment == "staging") {
+    url_parent <- paste0(
+      "https://pasta-s.lternet.edu/package/metadata/eml/",
+      stringr::str_replace_all(parent.package.id, "\\.", "/"))
+  }
+  
   eml_L1 <- EML::read_eml(url_parent)
   xml_L1 <- suppressMessages(
-    EDIutils::api_read_metadata(parent.package.id))
+    ecocomDP::read_eml(parent.package.id))
   
   # Read L0 EML ---------------------------------------------------------------
   
@@ -177,8 +203,11 @@ make_eml_dwca <- function(path,
   # Create two objects of the same metadata, eml_L0 (emld list object) for
   # editing, and xml_L0 (xml_document) for easy parsing
   message("Reading EML of L0 data package ", grandparent.package.id)
+  
   xml_L0 <- suppressMessages(
-    EDIutils::api_read_metadata(grandparent.package.id))
+    ecocomDP::read_eml(grandparent.package.id))
+  
+  
   eml_L0 <- suppressMessages(
     EML::read_eml(url_grandparent))
 
@@ -371,7 +400,16 @@ make_eml_dwca <- function(path,
   # object because emld parsing is irregular
   methods_L2 <- eml_L2$dataset$methods$methodStep[[1]]
   eml_L2$dataset$methods$methodStep[[1]] <- NULL
-  provenance_L1 <- eml_L2$dataset$methods$methodStep
+  
+  provenance_L1 <- suppressMessages(
+    EDIutils::api_get_provenance_metadata(
+      package.id = parent.package.id,
+      environment = environment))
+  provenance_L1 <- EML::read_eml(provenance_L1)
+  provenance_L1 <- list(
+    dataSource = provenance_L1$dataSource,
+    description = provenance_L1$description)
+  
   L0_para <- xml2::xml_text(
     xml2::xml_find_all(xml_L0, ".//methods//para"))
   eml_L1$dataset$methods <- NULL
