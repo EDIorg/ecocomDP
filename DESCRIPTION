@@ -1,10 +1,27 @@
 Package: ecocomDP
-Title: The Ecological Community Data Pattern
-Version: 0.0.0.9000
-Authors@R: person("Colin", "Smith", email = "colin.smith@wisc.edu", role = c("aut", "cre"))
+Type: Package
+Title: Create and Use the Ecological Community Data Pattern
 Description: A collection of functions to translate your data to the Ecological 
     Community Data Pattern (ecocomDP), make EML for the ecocomDP, and 
     synthesize data in the ecocomDP format.
+Version: 0.0.0.9000
+Authors@R: 
+    c(person(given = "Colin",
+             family = "Smith", 
+             role = c("aut", "cre", "cph"),
+             email = "colin.smith@wisc.edu", 
+             comment = c(ORCID = "0000-0003-2261-9931")),
+      person(given = "Eric",
+             family = "Sokol", 
+             role = c("aut"), 
+             email = "esokol@battelleecology.org", 
+             comment = c(ORCID = "0000-0001-5923-0917")))
+License: MIT + file LICENSE
+URL: http://github.com/EDIorg/ecocomDP
+BugReports: http://github.com/EDIorg/ecocomDP/issues
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 2.10)
 Imports:
     data.table (>= 1.13.0),
     dataCleanr (>= 1.0.0),
@@ -45,13 +62,6 @@ Suggests:
     knitr,
     rmarkdown,
     testthat
-License: MIT + file LICENSE
-Encoding: UTF-8
-LazyData: true
-URL: http://github.com/EDIorg/ecocomDP
-BugReports: http://github.com/EDIorg/ecocomDP/issues
-RoxygenNote: 7.1.1
-SystemRequirements: 
 VignetteBuilder: knitr
-Depends: 
-    R (>= 2.10)
+RoxygenNote: 7.1.1
+Language: en-US

@@ -1,9 +1,0 @@
-event
-taxon
-dataset_summary
-location
-location_ancillary
-observation_ancillary
-taxon_ancillary
-observation
-variable_mapping
