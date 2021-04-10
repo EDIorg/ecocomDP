@@ -3,3 +3,4 @@
 ^NEON_dev_script$
 ^codemeta\.json$
 ^cran-comments\.md$
+^README\.Rmd$
