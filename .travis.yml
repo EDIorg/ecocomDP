@@ -1,5 +1,19 @@
 language: r
 cache: packages
+
+matrix:
+  include:
+    - os: linux
+      r: devel
+    - os: linux
+      r: release
+    - os: osx
+      osx_image: xcode11.4
+    - os: osx
+      osx_image: xcode10.2
+    - os: osx
+      osx_image: xcode9.4
+
 r_packages:
   - data.table
   - downloader
@@ -22,13 +36,17 @@ r_packages:
   - usethis
   - xml2
   - XML
+  
 r_github_packages:
   - EDIorg/EDIutils
   - EDIorg/taxonomyCleanr
   - EDIorg/dataCleanr
+  
 warnings_are_errors: false
+
 after_success:
   - Rscript -e 'library(covr); codecov()'
+  
 addons:
   apt:
     packages:
