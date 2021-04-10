@@ -181,19 +181,30 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
     }
     
     # Search taxa
-
     if (!missing(taxa)) {
       taxa_i <- rep(F, length(d[[i]]$taxa))
       for (k in 1:length(d[[i]]$taxa)) {
         if (boolean.operator == "AND") {
-          taxa_i[k] <- all(
+          # FIXME: Tick-borne pathogen status has no taxa resulting in error
+          taxa_i[k] <- try(
+            all(
+              stringr::str_detect(
+                tolower(d[[i]]$taxa[[k]]$taxa),
+                tolower(taxa))), 
+            silent = TRUE)
+          if (class(taxa_i[k]) == "try-error") {
+            taxa_i[k] <- FALSE
+          }
+        } else if (boolean.operator == "OR") {
+          # FIXME: Tick-borne pathogen status has no taxa resulting in error
+          taxa_i[k] <- try(
             stringr::str_detect(
               tolower(d[[i]]$taxa[[k]]$taxa),
-              tolower(taxa)))
-        } else if (boolean.operator == "OR") {
-          taxa_i[k] <- stringr::str_detect(
-            tolower(d[[i]]$taxa[[k]]$taxa),
-            tolower(paste(taxa, collapse = "|")))
+              tolower(paste(taxa, collapse = "|"))),
+            silent = TRUE)
+          if (class(taxa_i[k]) == "try-error") {
+            taxa_i[k] <- FALSE
+          }
         }
       }
       if (any(taxa_i, na.rm = T)) {
@@ -292,7 +303,6 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
     }
     
     # Indicate whether all search parameters were met
-    
     use_i[i] <- unlist(
       lapply(
         use_i[i],

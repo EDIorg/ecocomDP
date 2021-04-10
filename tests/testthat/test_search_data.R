@@ -28,7 +28,7 @@ testthat::test_that("search_data() with NULL input", {
   expect_true(
     all(colnames(r) %in% 
           c("source", "id", "title", "description", "abstract", "years",
-            "sampling_interval", "sites", "url")))
+            "sampling_interval", "sites", "url", "source_id", "source_id_url")))
   
   # nrows - There are many ecocomDP datasets
   
@@ -45,7 +45,7 @@ testthat::test_that("search_data() with NULL input", {
     all(
       stringr::str_detect(
         r$id,
-        "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^DP.\\.[:digit:]+\\.[:digit:]+)")))
+        "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^neon.ecocomdp\\.[:digit:]+\\.[:digit:]+\\.[:digit:]+)")))
   
   # title - All datasets have a title
   
@@ -100,11 +100,18 @@ testthat::test_that("search_data() with NULL input", {
     all(
       stringr::str_detect(r_neon$sites, "(.+,)+")))
   
-  # url - Present for all datasets
+  # url - Present for EDI datasets
+  
+  use_i <- stringr::str_detect(r$id, "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)")
+  expect_true(
+    all(
+      stringr::str_detect(r$url[use_i], "https:.+")))
+  
+  # source_id_url - Present for all datasets
   
   expect_true(
     all(
-      stringr::str_detect(r$url, "https:.+")))
+      stringr::str_detect(r$source_id_url, "https:.+")))
 
 })
 
