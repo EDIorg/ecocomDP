@@ -12,7 +12,7 @@
 #' @param user.id
 #'     (character; optional) Repository user identifier. If more than one, then enter as a vector of character strings (e.g. \code{c("user_id_1", "user_id_2")}). \code{user.id} sets the /eml/access/principal element for all \code{user.domain} except "KNB", "ADC", and if \code{user.domain = NULL}.
 #' @param user.domain
-#'     (character; optional) Repository domain associated with \code{user.id}. Currently supported values are "EDI" (Environmental Data Initiative), "LTER" (Long-Term Ecological Research Network), "KNB" (The Knowledge Network for Biocomplexity), "ADC" (The Arctic Data Center). If you'd like your system supported please contact maintainers of the EMLassemblyline R package. If using more than one \code{user.domain}, then enter as a vector of character strings (e.g. \code{c("user_domain_1", "user_domain_2")}) in the same order as corresponding \code{user.id}. If \code{user.domain} is missing then a default value "unknown" is assigned. \code{user.domain} sets the EML header "system" attribute and for all \code{user.domain}, except "KNB" and "ADC", sets the /eml/access/principal element attributes and values.
+#'     (character; optional) Repository domain associated with \code{user.id}. Currently supported values are "EDI" (Environmental Data Initiative), "LTER" (Long-Term Ecological Research Network), "KNB" (The Knowledge Network for Biocomplexity), "ADC" (The Arctic Data Center). If you'd like your system supported please contact maintainers of the ecocomDP R package. If using more than one \code{user.domain}, then enter as a vector of character strings (e.g. \code{c("user_domain_1", "user_domain_2")}) in the same order as corresponding \code{user.id}. If \code{user.domain} is missing then a default value "unknown" is assigned. \code{user.domain} sets the EML header "system" attribute and for all \code{user.domain}, except "KNB" and "ADC", sets the /eml/access/principal element attributes and values.
 #' @param url
 #'     (character) URL to the publicly accessible directory containing DwC-A tables and meta.xml. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and upload of ecocomDP data packages and derived products.
 #'
@@ -88,7 +88,7 @@ make_eml_dwca <- function(path,
   missing_parent_data_package <- suppressWarnings(
     stringr::str_detect(
       suppressMessages(
-        EDIutils::api_read_metadata(parent.package.id, environment)), 
+        api_read_metadata(parent.package.id, environment)), 
       "Unable to access metadata for packageId:"))
   if (missing_parent_data_package) {
     stop(
@@ -101,7 +101,7 @@ make_eml_dwca <- function(path,
   child_data_package_exists <- suppressWarnings(
     !stringr::str_detect(
       suppressMessages(
-        EDIutils::api_read_metadata(child.package.id, environment)), 
+        api_read_metadata(child.package.id, environment)), 
       "Unable to access metadata for packageId:"))
   if (child_data_package_exists) {
     warning(
@@ -153,7 +153,7 @@ make_eml_dwca <- function(path,
   }
   
   # Expand url for each data object of this L1 for use in 
-  # EMLassemblyline: make_eml()
+  # EAL_make_eml()
   
   if (!is.null(url)) {
     data.table.url <- paste0(url, "/", data.table)
@@ -217,8 +217,8 @@ make_eml_dwca <- function(path,
   
   message("Creating EML of L2 data package ", child.package.id)
   
-  # Create list of inputs to EMLassemblyline::make_eml()
-  eal_inputs <- EMLassemblyline::template_arguments(
+  # Create list of inputs to EAL_make_eml()
+  eal_inputs <- EAL_template_arguments(
     path = system.file("/dwca_event_core", package = "ecocomDP"), 
     data.path = path, 
     data.table = data.table,
@@ -263,7 +263,7 @@ make_eml_dwca <- function(path,
     use_i] <- format_string
   
   # All annotations in the annotations template used by 
-  # EMLassemblyline::template_arguments() are used here since the DwC-A format
+  # EAL_template_arguments() are used here since the DwC-A format
   # is constant (i.e. the table attributes don't change). Some annotations
   # in this template may not yet have definition, so incomplete cases will be
   # dropped.
@@ -279,9 +279,9 @@ make_eml_dwca <- function(path,
   eml_L2 <- suppressWarnings(
     suppressMessages(
       do.call(
-        EMLassemblyline::make_eml, 
+        EAL_make_eml, 
         eal_inputs[
-          names(eal_inputs) %in% names(formals(EMLassemblyline::make_eml))])))
+          names(eal_inputs) %in% names(formals(EAL_make_eml))])))
 
   # Update <eml> --------------------------------------------------------------
   
@@ -402,7 +402,7 @@ make_eml_dwca <- function(path,
   eml_L2$dataset$methods$methodStep[[1]] <- NULL
   
   provenance_L1 <- suppressMessages(
-    EDIutils::api_get_provenance_metadata(
+    api_get_provenance_metadata(
       package.id = parent.package.id,
       environment = environment))
   provenance_L1 <- EML::read_eml(provenance_L1)

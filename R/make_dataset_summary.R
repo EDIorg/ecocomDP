@@ -42,7 +42,7 @@ make_dataset_summary <- function(parent.package.id,
                                  south,
                                  west,
                                  environment = "production"){
-  
+  # FIXME: Inputs should be emls not package.ids
   message('Creating dataset_summary')
     
   # Validate inputs
@@ -66,7 +66,7 @@ make_dataset_summary <- function(parent.package.id,
   dataset_summary$original_package_id <- parent.package.id
   
   # Add temporal metrics
-  dates <- dataCleanr::iso8601_read(sample.dates)
+  dates <- dataCleanr::iso8601_read(sample.dates) # FIXME: Use lubridate instead
   if (is.integer(dates)) {
     dataset_summary$length_of_survey_years <- max(dates) - min(dates)
     dataset_summary$number_of_years_sampled <- length(unique(dates))
@@ -99,7 +99,7 @@ make_dataset_summary <- function(parent.package.id,
     parent.package.id, 
     "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)")) {
     # Source is EDI
-    eml <- suppressMessages(EDIutils::api_read_metadata(parent.package.id, environment = environment))
+    eml <- suppressMessages(api_read_metadata(parent.package.id, environment = environment))
     west <- min(
       as.numeric(
         xml2::xml_text(

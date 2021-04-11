@@ -13,9 +13,7 @@ L0_codes_to_definitions(x, col.name, x.object.name, eml)
 
 \item{x.object.name}{(character) Object name in EML of the table to convert (i.e. file name).}
 
-\item{eml}{(xml_document, xml_node) EML metadata. Use 
-`EDIutils::api_read_metadata()` or `xml2::read_xml()` to read in the 
-EML.}
+\item{eml}{(xml_document, xml_node) EML metadata.}
 }
 \value{
 (character) Vector of definitions corresponding to codes.

@@ -24,44 +24,26 @@ LazyData: true
 Depends: R (>= 2.10)
 Imports:
     data.table (>= 1.13.0),
-    dataCleanr (>= 1.0.0),
-    downloader (>= 0.4),
     dplyr (>= 0.5.0),
-    EDIutils (>= 1.0.2),
-    EML (>= 2.0.0),
-    EMLassemblyline (>= 3.2.0),
-    gdata (>= 2.18.0),
+    EML (>= 2.0.5),
+    emld (>= 0.5.1),
     geosphere (>= 1.5),
     httr (>= 1.3.1),
     jsonlite (>= 1.5),
     lubridate (>= 1.7.4),
     magrittr,
     neonUtilities (>= 1.3.3),
-    purrr,
-    reader (>= 1.0.6),
-    readr (>= 1.1.1),
-    RMySQL (>= 0.10.15),
-    stringi (>= 1.1.5),
+    rmarkdown,
     stringr (>= 1.2.0),
-    taxonomyCleanr (>= 1.3.0),
     tidyr (>= 0.6.1),
-    tidyverse (>= 1.1.1),
-    usethis (>= 1.5.1),
-    xml2 (>= 1.3.0),
-    XML (>= 3.98-1.6),
-    shiny,
-    plotly,
-    shinyWidgets,
-    shinythemes
-Remotes: 
-    EDIorg/EDIutils,
-    EDIorg/taxonomyCleanr,
-    EDIorg/dataCleanr,
-    EDIorg/EMLassemblyline
+    xml2 (>= 1.3.0)
 Suggests:
     knitr,
-    rmarkdown,
-    testthat
+    reader (>= 1.0.6),
+    ritis (>= 1.0.0),
+    taxize (>= 0.9.99),
+    testthat,
+    worrms (>= 0.4.2)
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1
 Language: en-US

@@ -16,7 +16,7 @@
 #' @param data.sources
 #'     (integer) An ordered numeric vector of ID's corresponding to taxonomic 
 #'     authorities to resolve taxa to (in the order of decreasing preference). 
-#'     Run \code{taxonomyCleanr::view_taxa_authorities()} to see supported 
+#'     Run \code{view_taxa_authorities()} to see supported 
 #'     authorities.
 #'
 #' @return 
@@ -30,6 +30,16 @@
 make_taxon <- function(
   x = NULL, cols = NULL, taxa = NULL, name.type = "scientific", 
   data.sources = NULL) {
+  
+  # TODO: Add to metadata if ritis, taxize, and worrms are installed then attempts can be made at resolution
+  suggs <- c("ritis", "taxize", "worrms") # suggested packages
+  suggsmissing <- !unlist(lapply(suggs, requireNamespace, quietly = TRUE))
+  if (any(suggsmissing)) {
+    warning("Packages ", paste(suggs, collapse = ", "), " are required for ",
+            "automatically resolving taxa to authorities. Packages ", 
+            paste(suggs[suggsmissing], collapse = ", "), " are not installed.",
+            " No attempt will be made.", call. = FALSE)
+  }
   
   message('Creating taxon')
   
@@ -46,20 +56,22 @@ make_taxon <- function(
     }
   }
 
-  if (!is.null(name.type)){
-    name.type <- tolower(name.type)
-    if ((!stringr::str_detect(name.type, 'scientific')) & 
-        (!stringr::str_detect(name.type, 'common')) &
-        (!stringr::str_detect(name.type, 'both'))){
-      stop('Input argument "name.type" must be "scientific", "common", or ',
-           '"both"', call. = FALSE)
+  if (!any(suggsmissing)) {
+    if (!is.null(name.type)){
+      name.type <- tolower(name.type)
+      if ((!stringr::str_detect(name.type, 'scientific')) & 
+          (!stringr::str_detect(name.type, 'common')) &
+          (!stringr::str_detect(name.type, 'both'))){
+        stop('Input argument "name.type" must be "scientific", "common", or ',
+             '"both"', call. = FALSE)
+      }
+    } else {
+      stop('Input argument "name.type" is missing', call. = FALSE)
     }
-  } else {
-    stop('Input argument "name.type" is missing', call. = FALSE)
-  }
-  
-  if (is.null(data.sources)){
-    stop('Input argument "data.sources" is missing', call. = FALSE)
+    
+    if (is.null(data.sources)){
+      stop('Input argument "data.sources" is missing', call. = FALSE)
+    }
   }
   
   # Create "taxa" if using "x" and "cols"
@@ -69,10 +81,11 @@ make_taxon <- function(
   }
   
   # Resolve to authorities ----------------------------------------------------
+  # TODO: Make into func and call if !suggmissing else unique(taxa)
   
   if (name.type == 'scientific') {
     
-    taxa_resolved <- taxonomyCleanr::resolve_sci_taxa(
+    taxa_resolved <- resolve_sci_taxa(
       data.sources = data.sources,
       x = taxa)
     
@@ -86,7 +99,7 @@ make_taxon <- function(
 
   } else if (name.type == 'common'){
     
-    taxa_resolved <- taxonomyCleanr::resolve_comm_taxa(
+    taxa_resolved <- resolve_comm_taxa(
       data.sources = data.sources,
       x = taxa)
     
@@ -100,12 +113,12 @@ make_taxon <- function(
     
   } else if (name.type == 'both'){
     
-    authorities <- taxonomyCleanr::view_taxa_authorities()
+    authorities <- view_taxa_authorities()
     
     # Scientific
     use_i <- data.sources %in% authorities$id[
       authorities$resolve_sci_taxa == 'supported']
-    taxa_resolved <- taxonomyCleanr::resolve_sci_taxa(
+    taxa_resolved <- resolve_sci_taxa(
       data.sources = data.sources[use_i],
       x = taxa)
     
@@ -113,7 +126,7 @@ make_taxon <- function(
     index <- is.na(taxa_resolved$taxa_clean)
     use_i <- data.sources %in% authorities$id[
       authorities$resolve_comm_taxa == 'supported']
-    taxa_comm_resolved <- taxonomyCleanr::resolve_comm_taxa(
+    taxa_comm_resolved <- resolve_comm_taxa(
       data.sources = data.sources[use_i],
       x = taxa_resolved$taxa[index])
     

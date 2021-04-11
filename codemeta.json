@@ -1,5 +1,8 @@
 {
-  "@context": ["https://doi.org/10.5063/schema/codemeta-2.0", "http://schema.org"],
+  "@context": [
+    "https://doi.org/10.5063/schema/codemeta-2.0",
+    "http://schema.org"
+  ],
   "@type": "SoftwareSourceCode",
   "identifier": "ecocomDP",
   "description": "A collection of functions to translate your data to the Ecological \n    Community Data Pattern (ecocomDP), make EML for the ecocomDP, and \n    synthesize data in the ecocomDP format.",
@@ -66,15 +69,42 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "rmarkdown",
-      "name": "rmarkdown",
+      "identifier": "reader",
+      "name": "reader",
+      "version": ">= 1.0.6",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
+      "sameAs": "https://CRAN.R-project.org/package=reader"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "ritis",
+      "name": "ritis",
+      "version": ">= 1.0.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ritis"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "taxize",
+      "name": "taxize",
+      "version": ">= 0.9.99",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=taxize"
     },
     {
       "@type": "SoftwareApplication",
@@ -87,6 +117,19 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=testthat"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "worrms",
+      "name": "worrms",
+      "version": ">= 0.4.2",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=worrms"
     }
   ],
   "softwareRequirements": [
@@ -111,26 +154,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "dataCleanr",
-      "name": "dataCleanr",
-      "version": ">= 1.0.0",
-      "sameAs": "https://github.com/EDIorg/dataCleanr"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "downloader",
-      "name": "downloader",
-      "version": ">= 0.4",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=downloader"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "dplyr",
       "name": "dplyr",
       "version": ">= 0.5.0",
@@ -144,16 +167,9 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "EDIutils",
-      "name": "EDIutils",
-      "version": ">= 1.0.2",
-      "sameAs": "https://github.com/EDIorg/EDIutils"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "EML",
       "name": "EML",
-      "version": ">= 2.0.0",
+      "version": ">= 2.0.5",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -164,23 +180,16 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "EMLassemblyline",
-      "name": "EMLassemblyline",
-      "version": ">= 3.2.0",
-      "sameAs": "https://github.com/EDIorg/EMLassemblyline"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "gdata",
-      "name": "gdata",
-      "version": ">= 2.18.0",
+      "identifier": "emld",
+      "name": "emld",
+      "version": ">= 0.5.1",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=gdata"
+      "sameAs": "https://CRAN.R-project.org/package=emld"
     },
     {
       "@type": "SoftwareApplication",
@@ -261,67 +270,15 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "purrr",
-      "name": "purrr",
+      "identifier": "rmarkdown",
+      "name": "rmarkdown",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=purrr"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "reader",
-      "name": "reader",
-      "version": ">= 1.0.6",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=reader"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "readr",
-      "name": "readr",
-      "version": ">= 1.1.1",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=readr"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "RMySQL",
-      "name": "RMySQL",
-      "version": ">= 0.10.15",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=RMySQL"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "stringi",
-      "name": "stringi",
-      "version": ">= 1.1.5",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=stringi"
+      "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
     },
     {
       "@type": "SoftwareApplication",
@@ -338,13 +295,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "taxonomyCleanr",
-      "name": "taxonomyCleanr",
-      "version": ">= 1.3.0",
-      "sameAs": "https://github.com/EDIorg/taxonomyCleanr"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "tidyr",
       "name": "tidyr",
       "version": ">= 0.6.1",
@@ -358,32 +308,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "tidyverse",
-      "name": "tidyverse",
-      "version": ">= 1.1.1",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=tidyverse"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "usethis",
-      "name": "usethis",
-      "version": ">= 1.5.1",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=usethis"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "xml2",
       "name": "xml2",
       "version": ">= 1.3.0",
@@ -394,71 +318,13 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=xml2"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "XML",
-      "name": "XML",
-      "version": ">= 3.98-1.6",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=XML"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "shiny",
-      "name": "shiny",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=shiny"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "plotly",
-      "name": "plotly",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=plotly"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "shinyWidgets",
-      "name": "shinyWidgets",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=shinyWidgets"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "shinythemes",
-      "name": "shinythemes",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=shinythemes"
     }
   ],
   "releaseNotes": "https://github.com/EDIorg/ecocomDP/blob/master/NEWS.md",
   "readme": "https://github.com/EDIorg/ecocomDP/blob/master/README.md",
-  "fileSize": "862.951KB",
-  "contIntegration": ["https://travis-ci.org/EDIorg/ecocomDP", "https://codecov.io/github/EDIorg/ecocomDP?branch=master"]
+  "fileSize": "922.87KB",
+  "contIntegration": [
+    "https://travis-ci.org/EDIorg/ecocomDP",
+    "https://codecov.io/github/EDIorg/ecocomDP?branch=master"
+  ]
 }

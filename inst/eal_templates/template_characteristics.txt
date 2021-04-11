@@ -1,0 +1,16 @@
+template_name	regexpr	delimiter	required_template	class	type
+abstract	abstract.(docx|md|txt)	NA	TRUE	list	text
+additional_info	additional_info.(docx|md|txt)	NA	FALSE	list	text
+annotations	annotations.txt	\t	FALSE	data.frame	table
+attributes	attributes_.*.txt	\t	FALSE	data.frame	table
+catvars	catvars_.*.txt	\t	FALSE	data.frame	table
+custom_units	custom_units.txt	\t	FALSE	data.frame	table
+bounding_boxes	bounding_boxes.txt	\t	FALSE	data.frame	table
+geographic_coverage	geographic_coverage.txt	\t	FALSE	data.frame	table
+intellectual_rights	intellectual_rights.txt	NA	TRUE	list	text
+keywords	keywords.txt	\t	TRUE	data.frame	table
+methods	methods.(docx|md|txt)	NA	TRUE	list	text
+personnel	personnel.txt	\t	TRUE	data.frame	table
+provenance	provenance.txt	\t	FALSE	data.frame	table
+taxonomicCoverage	taxonomicCoverage.xml	NA	FALSE	taxonomicCoverage	xml
+taxonomic_coverage	taxonomic_coverage.txt	\t	FALSE	data.frame	table

@@ -23,7 +23,7 @@
 #'     (Environmental Data Initiative), "LTER" (Long-Term Ecological Research 
 #'     Network), "KNB" (The Knowledge Network for Biocomplexity), "ADC" (The 
 #'     Arctic Data Center). If you'd like your system supported please contact
-#'     maintainers of the EMLassemblyline R package. If using more than one 
+#'     maintainers of the ecocomDP R package. If using more than one 
 #'     \code{user.domain}, then enter as a vector of character strings (e.g. 
 #'     \code{c("user_domain_1", "user_domain_2")}) in the same order as 
 #'     corresponding \code{user.id}. If \code{user.domain} is missing then a 
@@ -57,23 +57,17 @@ L1_to_L2_DwCA <- function(path,
   
   # Parameterize --------------------------------------------------------------
   
-  # readr progress bar and messaging is not useful in this function
-  
-  dflt_prog <- getOption("readr.show_progress")
-  options(readr.show_progress = FALSE)
-  on.exit(options(readr.show_progress = dflt_prog))
-  
   # Eventually will support 2 DwC types: choose occurence-core or event-core. 
   # occurence is simpler (sightings), event is a better fit for most of our data
   # TODO: Support event-core
   
   dwca_config_file <- suppressMessages(
-    readr::read_csv(
+    data.table::fread(
       system.file(
         "/dwca_occurrence_core/dwca_occurrence_core_config.csv", 
         package = "ecocomDP")))
   dwca_mappings_file <- suppressMessages(
-    readr::read_csv(
+    data.table::fread(
       system.file("/dwca_occurrence_core/dwca_occurrence_core_mappings.csv", 
                   package = "ecocomDP")))
   
@@ -115,11 +109,11 @@ L1_to_L2_DwCA <- function(path,
   
   # Set physical attributes here so they will match what is listed in meta.xml
   for (i in names(r)) {
-    readr::write_delim(
+    data.table::fwrite(
       x = r[[i]],
       file = paste0(path, "/", i, ".csv"),
-      delim = ",",
-      quote_escape = "double",
+      sep = ",",
+      quote = TRUE,
       eol = "\r\n")
   }
   
@@ -176,6 +170,7 @@ create_table_dwca_occurrence_core <- function(
   dt_tax,
   dt_loc_ancil = NULL,
   parent.package.id) {
+  # FIXME: Input should be EML not package.id
   
   # Load Global Environment config --------------------------------------------
   
@@ -237,7 +232,7 @@ create_table_dwca_occurrence_core <- function(
   obs_loc_tax$dc_samplingprotocol <- paste0(
     "See methods in ",
     suppressMessages(
-      EDIutils::api_read_data_package_doi(parent.package.id, environment)))
+      api_read_data_package_doi(parent.package.id, environment)))
   
   # TODO: Determine if observation was made by an instrument or human. This 
   # info is stored in the L1 EML keywordSet
@@ -245,7 +240,7 @@ create_table_dwca_occurrence_core <- function(
   keywords <- xml2::xml_text(
       xml2::xml_find_all(
         suppressMessages(
-          EDIutils::api_read_metadata(parent.package.id, environment)), ".//keyword"))
+          api_read_metadata(parent.package.id, environment)), ".//keyword"))
   
   basis_of_record <- trimws(
     stringr::str_remove(
@@ -321,7 +316,7 @@ create_tables_dwca_event_core <- function(
   dt_tax,
   parent.package.id,
   child.package.id) {
-  
+  # FIXME: Should be parent.eml and child.eml not *.package.id
   message('Creating DwC-A Event Core tables')
   
   # Load Global Environment config --------------------------------------------
@@ -373,8 +368,8 @@ create_tables_dwca_event_core <- function(
   # Use the DOI of the L1 and construct as: "See methods in DOI"
   obs_loc_tax$dc_samplingprotocol <- paste0(
     "See methods in ",
-    suppressMessages(
-      EDIutils::api_read_data_package_doi(parent.package.id, environment)))
+    suppressMessages( # FIXME: Requires repository specific methods. In the mean time use api_read_data_package_doi() behind the scenes, while opening methods to other repos, or use url or some other identifier here
+      api_read_data_package_doi(parent.package.id, environment)))
   
   # TODO: Determine if observation was made by an instrument or human. This 
   # info is stored in the L1 EML keywordSet
@@ -382,7 +377,7 @@ create_tables_dwca_event_core <- function(
   keywords <- xml2::xml_text(
     xml2::xml_find_all(
       suppressMessages(
-        EDIutils::api_read_metadata(parent.package.id, environment)), ".//keyword"))
+        api_read_metadata(parent.package.id, environment)), ".//keyword"))
   
   basis_of_record <- trimws(
     stringr::str_remove(

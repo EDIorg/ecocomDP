@@ -54,7 +54,7 @@ define_variables <- function(data.path, parent.pkg.id, environment = "production
   
   # Get definitions and reshape output
   var_metadata <- mapply(
-    EDIutils::get_eml_attribute, 
+    get_eml_attribute, 
     attr.name = cat_vars$code, 
     MoreArgs = list(package.id = parent.pkg.id,
                     environment = environment))

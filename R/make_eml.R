@@ -228,7 +228,7 @@ make_eml <- function(path,
     )
   }
   
-  script <- EDIutils::validate_file_names(path, script)
+  script <- validate_file_names(path, script)
   
   if (length(script) != length(script.description)) {
     stop(
@@ -369,7 +369,7 @@ make_eml <- function(path,
     system.file('validation_criteria.txt', package = 'ecocomDP'))
   attr_tbl <- attr_tbl[!is.na(attr_tbl$column), ]
   
-  # Get table names for this L1 dataset for use in EMLassemblyline::make_eml()
+  # Get table names for this L1 dataset for use in EAL_make_eml()
   
   data.table <- unlist(
     lapply(
@@ -384,7 +384,7 @@ make_eml <- function(path,
       }))
   
   # Match table names of this L1 to their boiler plate descriptions for use in 
-  # EMLassemblyline::make_eml()
+  # EAL_make_eml()
   
   descriptions <- data.table::fread(
     system.file("table_descriptions.txt", package = "ecocomDP"))
@@ -396,7 +396,7 @@ make_eml <- function(path,
         "(\\.[:alnum:]*$)"), 
       descriptions$table_name)]
   
-  # Map scripts and their descriptions to their EMLassemblyline::make_eml() 
+  # Map scripts and their descriptions to their EAL_make_eml() 
   # equivalents
   
   if (!is.null(script)) {
@@ -408,7 +408,7 @@ make_eml <- function(path,
   }
   
   # Expand url for each data object of this L1 for use in 
-  # EMLassemblyline: make_eml()
+  # EAL_make_eml()
   
   if (!is.null(url)) {
     if (!is.null(data.table)) {
@@ -450,9 +450,9 @@ make_eml <- function(path,
   # This will not be a full EML record, it will only contain sections of the L1 
   # EML to combined with the L0 EML.
   
-  # Create list of inputs to EMLassemblyline::make_eml()
+  # Create list of inputs to EAL_make_eml()
   
-  eal_inputs <- EMLassemblyline::template_arguments(
+  eal_inputs <- EAL_template_arguments(
     path = system.file("/ecocomDP", package = "ecocomDP"), 
     data.path = path, 
     data.table = data.table,
@@ -476,9 +476,9 @@ make_eml <- function(path,
   
   
   # Remove unused data table attributes templates. All boiler plate attributes*
-  # files are read in with EMLassemblyline::template_arguments() above, but 
+  # files are read in with EAL_template_arguments() above, but 
   # only the ones being used should be kept and used in 
-  # EMLassemblyline::make_eml().
+  # EAL_make_eml().
   
   all_attribute_templates <- names(eal_inputs$x$template)[
     stringr::str_detect(
@@ -498,7 +498,7 @@ make_eml <- function(path,
   
   # Detect date and time format string directly from each table and add to the
   # corresponding data table attributes template as required by 
-  # EMLassemblyline::make_eml().
+  # EAL_make_eml().
   
   for (i in expected_attribute_templates) {
     
@@ -539,7 +539,7 @@ make_eml <- function(path,
   }
   
   # Create categorical variables templates from input "cat.vars" and add to
-  # the list of inputs to EMLassemblyline::make_eml()
+  # the list of inputs to EAL_make_eml()
   
   r <- lapply(
     unique(cat.vars$tableName),
@@ -553,7 +553,7 @@ make_eml <- function(path,
   names(r) <- paste0("catvars_", unique(cat.vars$tableName), ".txt")
   eal_inputs$x$template <- c(eal_inputs$x$template, r)
 
-  # Create the taxonomic_coverage template used by EMLassemblyline::make_eml()
+  # Create the taxonomic_coverage template used by EAL_make_eml()
   # from the taxon table of ecocomDP.
 
   f <- stringr::str_subset(
@@ -571,7 +571,7 @@ make_eml <- function(path,
   
   eal_inputs$x$template$taxonomic_coverage.txt$content <- taxonomic_coverage
 
-  # The annotations template read in with EMLassemblyline::template_arguments()
+  # The annotations template read in with EAL_template_arguments()
   # serves as a map from tables of this L1 to the boilerplate annotations 
   # which are compiled here.
   
@@ -669,14 +669,14 @@ make_eml <- function(path,
   
   eal_inputs$x$template$annotations.txt$content <- annotations
   
-  # Call EMLassemblyline::make_eml()
+  # Call EAL_make_eml()
   
   eml_L1 <- suppressWarnings(
     suppressMessages(
       do.call(
-        EMLassemblyline::make_eml,
+        EAL_make_eml,
         eal_inputs[
-          names(eal_inputs) %in% names(formals(EMLassemblyline::make_eml))])))
+          names(eal_inputs) %in% names(formals(EAL_make_eml))])))
   
   # Update <eml> --------------------------------------------------------------
   
@@ -817,8 +817,9 @@ make_eml <- function(path,
   
   # Get provenance metadata
   # TODO: Support other repository systems
+  # TODO: Dev create_eml_provenance() function
   r <- suppressMessages(
-    EDIutils::api_get_provenance_metadata(
+    api_get_provenance_metadata(
       package.id = parent.package.id,
       environment = environment))
   r <- EML::read_eml(r)

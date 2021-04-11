@@ -291,7 +291,7 @@ make_location <- function(
   # Add coordinates from metadata ---------------------------------------------
   
   if (!is.null(parent.package.id)) {
-    metadata <- EDIutils::api_read_metadata(parent.package.id)
+    metadata <- api_read_metadata(parent.package.id)
     
     # Get all geographicCoverage nodes
     nodeset <- xml2::xml_find_all(

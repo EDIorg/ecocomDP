@@ -347,7 +347,7 @@ read_data_edi <- function(id) {
     nrecord = './/dataset/dataTable/numberOfRecords')
   
   eml <- suppressMessages(
-    EDIutils::api_read_metadata(id, environment))
+    api_read_metadata(id, environment))
   
   invisible(
     lapply(

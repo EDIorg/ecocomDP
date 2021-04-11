@@ -41,7 +41,7 @@ summarize_data_edi <- function() {
       # Get package metadata
       
       message(paste0("Fetching ", id[x]))
-      r <- EDIutils::api_read_metadata(id[x])
+      r <- api_read_metadata(id[x])
       
       if (all(class(r) %in% c("xml_node", "xml_document"))) {
         
@@ -162,7 +162,8 @@ summarize_data_edi <- function() {
   
   # Write to file -------------------------------------------------------------
   
-  usethis::use_data(summary_data_edi, overwrite = T)
+  stop("Use save() instead of use_data()")
+  # usethis::use_data(summary_data_edi, overwrite = T)
   
 }
 
@@ -186,7 +187,7 @@ read_table_dataset_summary <- function(package.id){
   
   message("Reading dataset_summary table for ", package.id)
   
-  eml <- suppressMessages(EDIutils::api_read_metadata(package.id))
+  eml <- suppressMessages(api_read_metadata(package.id))
   entity_name <- xml2::xml_text(
     xml2::xml_find_all(eml, './/dataset/dataTable/physical/objectName'))
   if (any(stringr::str_detect(entity_name, 'dataset_summary'))) {
@@ -201,27 +202,9 @@ read_table_dataset_summary <- function(package.id){
         './/dataset/dataTable/physical/distribution/online/url'))[
           stringr::str_detect(entity_name, 'dataset_summary')]
     if (entity_delimiter == ',') {
-      output <-readr::read_csv(
-        entity_url, 
-        col_types = c(
-          package_id = readr::col_character(),
-          original_package_id = readr::col_character(),
-          length_of_survey_years = readr::col_double(),
-          number_of_years_sampled = readr::col_double(),
-          std_dev_interval_betw_years = readr::col_double(),
-          max_num_taxa = readr::col_integer(),
-          geo_extent_bounding_box_m2 = readr::col_double()))
+      output <-data.table::fread(file = entity_url)
     } else if (entity_delimiter == '\\t') {
-      output <-readr::read_tsv(
-        entity_url, 
-        col_types = c(
-          package_id = readr::col_character(),
-          original_package_id = readr::col_character(),
-          length_of_survey_years = readr::col_double(),
-          number_of_years_sampled = readr::col_double(),
-          std_dev_interval_betw_years = readr::col_double(),
-          max_num_taxa = readr::col_integer(),
-          geo_extent_bounding_box_m2 = readr::col_double()))
+      output <-data.table::fread(file = entity_url)
     }
   } else {
     output <- NULL

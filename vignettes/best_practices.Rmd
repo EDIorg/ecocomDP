@@ -1,10 +1,8 @@
 ---
-title: "Recommendations for creating ecocomDP"
-author: "Margaret O'Brien and Colin Smith"
-date: "`r Sys.Date()`"
+title: "Best practices"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Best practices}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

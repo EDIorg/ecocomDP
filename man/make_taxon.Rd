@@ -28,7 +28,7 @@ unique taxa can be input using this argument.}
 
 \item{data.sources}{(integer) An ordered numeric vector of ID's corresponding to taxonomic 
 authorities to resolve taxa to (in the order of decreasing preference). 
-Run \code{taxonomyCleanr::view_taxa_authorities()} to see supported 
+Run \code{view_taxa_authorities()} to see supported 
 authorities.}
 }
 \value{

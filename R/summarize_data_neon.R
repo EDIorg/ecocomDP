@@ -22,7 +22,7 @@ summarize_data_neon <- function() {
   # List supported NEON data products
   
   supported_data <- suppressMessages(
-    readr::read_tsv(
+    data.table::fread(
       system.file("neon_data_products_for_ecocomDP.txt", package = "ecocomDP")))
   
   # Create summary ------------------------------------------------------------
@@ -218,6 +218,7 @@ summarize_data_neon <- function() {
   
   # Write to file -------------------------------------------------------------
   
-  usethis::use_data(summary_data_neon, overwrite = T)
+  stop("Use save() instead of use_data()")
+  # usethis::use_data(summary_data_neon, overwrite = T)
   
 }

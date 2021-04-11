@@ -1,0 +1,7 @@
+element	predicate_label	predicate_uri	object_label	object_uri
+/dataset	is about	http://purl.obolibrary.org/obo/IAO_0000136	NA	NA
+/dataTable	is about	http://purl.obolibrary.org/obo/IAO_0000136	NA	NA
+/otherEntity	is about	http://purl.obolibrary.org/obo/IAO_0000136	NA	NA
+/dataTable/attribute	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType	NA	NA
+/ResponsibleParty	is a	http://www.w3.org/1999/02/22-rdf-syntax-ns#type	Person	https://schema.org/Person
+/ResponsibleParty	member of	https://schema.org/memberOf	NA	NA

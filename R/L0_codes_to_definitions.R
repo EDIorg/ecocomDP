@@ -12,17 +12,13 @@
 #' @param x.object.name
 #'     (character) Object name in EML of the table to convert (i.e. file name).
 #' @param eml
-#'     (xml_document, xml_node) EML metadata. Use 
-#'     `EDIutils::api_read_metadata()` or `xml2::read_xml()` to read in the 
-#'     EML.
+#'     (xml_document, xml_node) EML metadata.
 #'
 #' @return 
 #'     (character) Vector of definitions corresponding to codes.
 #'     
 #' @export
 #'
-
-
 L0_codes_to_definitions <- function(x, col.name, x.object.name, eml){
   
   # Get data to convert
@@ -31,13 +27,13 @@ L0_codes_to_definitions <- function(x, col.name, x.object.name, eml){
   
   # Get attribute codes and definitions
   
-  col_codes <- EDIutils::col_code(
+  col_codes <- col_code( # FIXME: This func doesn't exist here or in EDIutils
     col.name = col.name, 
     object.name = x.object.name,
     eml = eml
   )
   
-  col_definitions <- EDIutils::col_code_definition(
+  col_definitions <- col_code_definition( # FIXME: This func doesn't exist here or in EDIutils
     col.name = col.name,
     object.name = x.object.name,
     eml = eml

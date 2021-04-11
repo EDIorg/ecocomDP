@@ -158,7 +158,7 @@ validate_table_names <- function(data.path = NULL) {
   
   # Validate inputs
   
-  EDIutils::validate_path(data.path)
+  validate_path(data.path)
   
   # Parameterize
   

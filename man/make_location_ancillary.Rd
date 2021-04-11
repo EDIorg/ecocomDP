@@ -21,7 +21,7 @@ joined in the master data frame) and location_antillary, then there is
 ambiguous meaning and this function will not work.}
 
 \item{eml}{(xml_document xml_node) EML metadata listing units for variables listed 
-in \code{cols}. Use \code{EDIutils::api_read_metadata()} or 
+in \code{cols}. Use \code{api_read_metadata()} or 
 \code{xml2::read_xml()} to read the EML file.}
 }
 \value{

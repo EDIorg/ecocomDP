@@ -47,6 +47,11 @@ devtools::install_github("EDIorg/ecocomDP", ref = "development")
 ```
 ## Example
 
+```{r example}
+library(ecocomDP)
+## basic example code
+```
+
 #### Use
 
 * Find:
@@ -62,12 +67,6 @@ devtools::install_github("EDIorg/ecocomDP", ref = "development")
 * [Instructions for creating, validating, and archiving ecocomDP tables](https://github.com/EDIorg/ecocomDP/tree/master/documentation/instructions)
 * [List of datasets to be converted to ecocomDP](https://github.com/EDIorg/ecocomDP/tree/master/documentation/processing_queue)
 
-
-```{r example}
-library(ecocomDP)
-## basic example code
-```
-
 ## Getting help
 
 Use [GitHub Issues](https://github.com/EDIorg/ecocomDP/issues) for bug reporting, feature requests, and general questions/discussions. When filing bug reports, please include a minimal reproducible example.
@@ -75,6 +74,8 @@ Use [GitHub Issues](https://github.com/EDIorg/ecocomDP/issues) for bug reporting
 ## Contributing
 
 Community contributions are welcome! Please reference our [contributing guidelines](https://github.com/EDIorg/ecocomDP/blob/master/CONTRIBUTING.md) for details.
+
+Repository specific methods can be added by contacting the project maintainer.
 
 -----
 

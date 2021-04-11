@@ -28,7 +28,7 @@ read_eml <- function(package.id) {
   # Get EML -------------------------------------------------------------------
   
   if (repository == "EDI") {
-    eml <- EDIutils::api_read_metadata(package.id, environment)
+    eml <- api_read_metadata(package.id, environment)
   }
   
   return(eml)
