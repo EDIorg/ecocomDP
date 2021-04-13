@@ -713,8 +713,33 @@ get_eol <- function(path, file.name, os){
 }
 
 
-# Parse delimiter from string
 
+
+
+
+
+
+#' Is provenance node?
+#'
+#' @param nodeset (xml_nodeset) methods nodeset at \code{/eml:eml/dataset/methods/methodStep}
+#' 
+#' @details Looks for provenance in \code{./dataSource}
+#' 
+#' @return (logical) TRUE if nodeset has provenance
+#' 
+is_prov <- function(nodeset) {  
+  dasource <- xml2::xml_find_all(nodeset, "./dataSource")
+  res <- !is_empty_nodeset(dasource)
+  return(res)
+}
+
+
+
+
+
+
+
+# Parse delimiter from string
 parse_delim <- function(x){
   
   use_i <- stringr::str_detect(

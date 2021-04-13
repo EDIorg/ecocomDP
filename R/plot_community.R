@@ -29,6 +29,7 @@
 #' }
 #' 
 plot_community <- function(dataset, path, alpha) {
+  # FIXME: Suggests ggplot2(), stop if not installed
   ds <- lapply(dataset, format_for_comm_plots, id = names(dataset))     # intermediate format for plotting
   for (id in names(ds)) {
     dslong <- subset(ds[[id]], OBSERVATION_TYPE == "TAXON_COUNT") %>% # long form

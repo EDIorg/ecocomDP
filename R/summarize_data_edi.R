@@ -21,7 +21,6 @@ summarize_data_edi <- function(path) {
   # List EDI data packages containing the keyword "ecocomDP" - Only ecocomDP 
   # data packages should have this keyword.
   
-  # TODO: Make sure this doesn't return the archived search index data package
   supported_data <- httr::GET(
     "https://pasta.lternet.edu/package/search/eml?q=keyword:ecocomDP&fl=packageid,title&rows=1000")
   if (httr::status_code(supported_data) != 200) {
@@ -84,7 +83,6 @@ summarize_data_edi <- function(path) {
         if (length(geocov) != 0) {
           coordinates <- vector('list', 1)
           names(coordinates) <- "geographic_bounds"
-          # FIXME: Support southern and eastern hemispheres
           coordinates[[1]] <- list(
             N = max(
               as.numeric(
@@ -134,12 +132,25 @@ summarize_data_edi <- function(path) {
             unique_taxa = NA,
             taxa = NA_character_)
         }
-        message("Done")
         
         # Get URL to data package metadata
-        
+        message("  url")
         url <- paste0(
           "https://portal.edirepository.org/nis/mapbrowse?packageid=", id[x])
+        
+        # source_id and source_id_url
+        mthdstps <- xml2::xml_find_all(r, ".//methodStep")
+        iprov <- unlist(lapply(mthdstps, is_prov))
+        prov <- mthdstps[iprov]
+        src_pkg_url <- xml2::xml_text(xml2::xml_find_all(prov, ".//url"))
+        message("  source_id")
+        prts <- unlist(stringr::str_split(src_pkg_url, "/"))
+        source_id <- paste(prts[(length(prts)-2):length(prts)], collapse = ".")
+        message("  source_id_url")
+        source_id_url <- paste0(
+          "https://portal.edirepository.org/nis/mapbrowse?packageid=", source_id)
+        
+        message("Done")
         
         # Compile components and return
         
@@ -152,8 +163,10 @@ summarize_data_edi <- function(path) {
           std_dev_interval_betw_years = std_dev_interval_betw_years,
           coordinates = coordinates,
           taxa = taxa,
-          url = url)
-        output
+          url = url,
+          source_id = source_id,
+          source_id_url = source_id_url)
+        return(output)
 
       }
       
@@ -182,12 +195,9 @@ summarize_data_edi <- function(path) {
 #' @return 
 #'     (tibble) The dataset_summary table
 #'         
-#' @export
-#'
 read_table_dataset_summary <- function(package.id){
   
   message("Reading dataset_summary table for ", package.id)
-  
   eml <- suppressMessages(api_read_metadata(package.id))
   entity_name <- xml2::xml_text(
     xml2::xml_find_all(eml, './/dataset/dataTable/physical/objectName'))
@@ -203,9 +213,9 @@ read_table_dataset_summary <- function(package.id){
         './/dataset/dataTable/physical/distribution/online/url'))[
           stringr::str_detect(entity_name, 'dataset_summary')]
     if (entity_delimiter == ',') {
-      output <-data.table::fread(file = entity_url)
+      output <- data.table::fread(entity_url)
     } else if (entity_delimiter == '\\t') {
-      output <-data.table::fread(file = entity_url)
+      output <- data.table::fread(entity_url)
     }
   } else {
     output <- NULL

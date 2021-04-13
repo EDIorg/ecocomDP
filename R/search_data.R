@@ -95,6 +95,7 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
   # TODO: Add argument to search within a NEON site. Currently searches return
   # data products if any of the search parameters are true for any of the 
   # sites.
+  # TODO: Note NEON taxa rank is lowest level identifyiable not higher ranks (i.e. entire tree)
   
   message("Searching data ...")
   
@@ -108,6 +109,7 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
   # Combine summaries of EDI and NEON data. These are created by 
   # summarize_data_edi() and summarize_data_neon() respectively.
   
+  # TODO: Download this object once and save in tempdir() for future session usage
   newrev <- suppressMessages(api_list_data_package_revisions("edi", "759", filter = "newest"))
   objurls <- suppressMessages(api_read_data_package(paste0("edi.759.", newrev)))
   objurls <- stringr::str_subset(objurls, "/data/")
