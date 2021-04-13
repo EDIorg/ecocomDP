@@ -4,17 +4,22 @@
 \alias{summarize_data_edi}
 \title{Summarize supported EDI data packages}
 \usage{
-summarize_data_edi()
+summarize_data_edi(path)
 }
-\description{
+\arguments{
+\item{path}{(character) Path the file will be saved to
+
 This is a helper function for project maintainers. It summarizes supported
 EDI data packages and saves it as an .rda data object to the /data 
 directory of the ecocomDP R package, which is called upon by 
-\code{search_data()} to quickly identify datasets of potential interest.
+\code{search_data()} to quickly identify datasets of potential interest.}
+}
+\description{
+Summarize supported EDI data packages
 }
 \examples{
 \dontrun{
-summarize_data_edi()
+summarize_data_edi(path)
 }
         
 }

@@ -1,5 +1,7 @@
 #' Summarize supported EDI data packages
 #' 
+#' @param path (character) Path the file will be saved to
+#' 
 #' This is a helper function for project maintainers. It summarizes supported
 #' EDI data packages and saves it as an .rda data object to the /data 
 #' directory of the ecocomDP R package, which is called upon by 
@@ -7,12 +9,10 @@
 #'     
 #' @examples
 #' \dontrun{
-#' summarize_data_edi()
+#' summarize_data_edi(path)
 #' }
 #'         
-#' @export
-#'
-summarize_data_edi <- function() {
+summarize_data_edi <- function(path) {
   
   message("Creating data_summary_edi.rda")
   
@@ -21,6 +21,7 @@ summarize_data_edi <- function() {
   # List EDI data packages containing the keyword "ecocomDP" - Only ecocomDP 
   # data packages should have this keyword.
   
+  # TODO: Make sure this doesn't return the archived search index data package
   supported_data <- httr::GET(
     "https://pasta.lternet.edu/package/search/eml?q=keyword:ecocomDP&fl=packageid,title&rows=1000")
   if (httr::status_code(supported_data) != 200) {
@@ -162,8 +163,8 @@ summarize_data_edi <- function() {
   
   # Write to file -------------------------------------------------------------
   
-  stop("Use save() instead of use_data()")
-  # usethis::use_data(summary_data_edi, overwrite = T)
+  save(summary_data_edi, file = paste0(path, "/summary_data_edi.rda"), 
+       version = 3)
   
 }
 

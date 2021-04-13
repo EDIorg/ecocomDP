@@ -108,8 +108,14 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
   # Combine summaries of EDI and NEON data. These are created by 
   # summarize_data_edi() and summarize_data_neon() respectively.
   
+  newrev <- suppressMessages(api_list_data_package_revisions("edi", "759", filter = "newest"))
+  objurls <- suppressMessages(api_read_data_package(paste0("edi.759.", newrev)))
+  objurls <- stringr::str_subset(objurls, "/data/")
+  for (objurl in objurls) {
+    load(url(objurl))
+  }
   d <- c(summary_data_edi, summary_data_neon)
-  
+
   # Initialize an index of available datasets (use_i) for recording successful 
   # search hits, and an index of available sites within each dataset (sites_i) 
   # corresponding with taxa, num.taxa, and geographic.area search arguments. 

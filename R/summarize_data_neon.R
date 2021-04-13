@@ -1,5 +1,7 @@
 #' Summarize supported NEON data products
 #' 
+#' @param path (character) Path the file will be saved to
+#' 
 #' This is a helper function for project maintainers. It summarizes supported NEON data products for \code{search_data()}. This object essentially serves as an index of searchable terms.
 #' 
 #' @return 
@@ -9,12 +11,10 @@
 #'     
 #' @examples
 #' \dontrun{
-#' summarize_data_neon()
+#' summarize_data_neon(path)
 #' }
 #'         
-#' @export
-#'
-summarize_data_neon <- function() {
+summarize_data_neon <- function(path) {
   
   message("Creating data_summary_neon.rda")
   
@@ -218,7 +218,7 @@ summarize_data_neon <- function() {
   
   # Write to file -------------------------------------------------------------
   
-  stop("Use save() instead of use_data()")
-  # usethis::use_data(summary_data_neon, overwrite = T)
+  save(summary_data_neon, file = paste0(path, "/summary_data_neon.rda"), 
+       version = 3)
   
 }
