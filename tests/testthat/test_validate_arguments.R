@@ -22,17 +22,17 @@ testthat::test_that("read_data()", {
   # format - NEON id has default values of optional filter arguments listed 
   # under id. EDI id has NULL listed.
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$id <- c("edi.193.3", "DP1.20166.001")
   r <- validate_arguments("read_data", input)
   expect_null(r$id[[1]])
   expect_true(
-    all(unlist(r$id[[2]]) %in% unlist(formals(ecocomDP::read_data))))
+    all(unlist(r$id[[2]]) %in% unlist(formals(read_data))))
   
   # format - Single NEON id and custom filter and download arguments are listed 
   # in the correct locations
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$id <- list(
     edi.193.3 = NULL,
     DP1.20166.001 = list(
@@ -55,7 +55,7 @@ testthat::test_that("read_data()", {
   # format - Two NEON id and custom filter and download arguments input as 
   # recommended
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$id <- "DP1.20166.001"
   input$site <- "ARIK"
   input$startdate <- "2020-07"
@@ -78,25 +78,25 @@ testthat::test_that("read_data()", {
   
   # id - If not valid, then error
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$id <- "invalid_identifier_1"
   expect_error(
     validate_arguments("read_data", input),
     regexp = "Invalid identifier \'.+\' cannot be read.")
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$id <- "edi.359.1"
   expect_silent(
     suppressWarnings(validate_arguments("read_data", input)))
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$id <- "DP1.20120.001"
   expect_silent(
     validate_arguments("read_data", input))
   
   # id - If a newer revision exists, then id and a warning is returned.
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$id <- "edi.275.3"
   expect_warning(
     validate_arguments("read_data", input),
@@ -104,7 +104,7 @@ testthat::test_that("read_data()", {
   
   # path - Is valid
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$path <- "/some/invalid/path"
   input$id <- "edi.359.1"
   expect_error(
@@ -113,7 +113,7 @@ testthat::test_that("read_data()", {
   
   # file.type - Is a supported type
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$file.type <- ".txt"
   input$id <- "edi.359.1"
   expect_error(
@@ -123,7 +123,7 @@ testthat::test_that("read_data()", {
   # site - Exists for the data package/product identifier in the search_data() 
   # default output
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$id <- list(
     DP1.20120.001 = list(
       site = c("ARIK", "not a site")))
@@ -133,7 +133,7 @@ testthat::test_that("read_data()", {
   
   # startdate - Character of YYYY-MM format, and MM is 1-12
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$id <- list(
     DP1.20120.001 = list(
       startdate = "2020-08-12"))
@@ -141,7 +141,7 @@ testthat::test_that("read_data()", {
     suppressWarnings(validate_arguments("read_data", input)),
     regexp = "Unsupported \'startdate\'. Expected format is YYYY-MM.")
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$id <- list(
     DP1.20120.001 = list(
       startdate = "2020-13"))
@@ -151,7 +151,7 @@ testthat::test_that("read_data()", {
   
   # enddate - Character of YYYY-MM format
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$id <- list(
     DP1.20120.001 = list(
       enddate = "2020-08-12"))
@@ -159,7 +159,7 @@ testthat::test_that("read_data()", {
     suppressWarnings(validate_arguments("read_data", input)),
     regexp = "Unsupported \'enddate\'. Expected format is YYYY-MM.")
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$id <- list(
     DP1.20120.001 = list(
       enddate = "2020-13"))
@@ -169,7 +169,7 @@ testthat::test_that("read_data()", {
   
   # check.size - Is logical
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$check.size <- 2
   input$id <- "edi.359.1"
   expect_error(
@@ -178,7 +178,7 @@ testthat::test_that("read_data()", {
   
   # nCores - Is iteger
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$nCores <- 2.5
   input$id <- "edi.359.1"
   expect_error(
@@ -187,7 +187,7 @@ testthat::test_that("read_data()", {
   
   # forceParallel - Is logical
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$forceParallel <- "yes"
   input$id <- "edi.359.1"
   expect_error(
@@ -196,7 +196,7 @@ testthat::test_that("read_data()", {
   
   # globally.unique.keys - Is logical
   
-  input <- formals(ecocomDP::read_data)
+  input <- formals(read_data)
   input$id <- "edi.359.1"
   input$globally.unique.keys <- "not_a_logical_value"
   expect_error(

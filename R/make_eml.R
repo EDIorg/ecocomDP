@@ -1,7 +1,7 @@
 #' Make EML metadata for ecocomDP tables
 #' 
 #' Run this function AFTER you have validated your ecocomDP tables with 
-#' \code{ecocomDP::validate_ecocomDP()}.
+#' \code{validate_ecocomDP()}.
 #'
 #' @param path 
 #'     (character) Path to the directory containing ecocomDP data tables, conversion scripts, and where EML metadata will be written.
@@ -21,7 +21,7 @@
 #' @param cat.vars
 #'     (data frame) Categorical variables with associated definitions and 
 #'     units. Create a cat.vars data frame with the 
-#'     \code{ecocomDP::define_variables()} function. Variables that can't be 
+#'     \code{define_variables()} function. Variables that can't be 
 #'     defined by the parent package EML should be manually supplied to the 
 #'     cat.vars data frame in one of the scripts specified in the 
 #'     \code{script} argument.
@@ -105,11 +105,11 @@
 #' path <- "/Users/csmith/Desktop/ecocomDP"
 #' 
 #' # Validate ecocomDP tables
-#' ecocomDP::validate_ecocomDP(path)
+#' validate_ecocomDP(path)
 #' 
 #' # Use parent EML to define variables of the ecocomDP and manually add variable 
 #' # names and definitions created in the ecocomDP re-formatting process.
-#' catvars <- ecocomDP::define_variables(path, "knb-lter-sev.29.12")
+#' catvars <- define_variables(path, "knb-lter-sev.29.12")
 #' catvars$unit[catvars$code == "Count"] <- "number"
 #' catvars$definition[catvars$code == "Comments"] <- "A special statement related to an observation"
 #' 
@@ -123,7 +123,7 @@
 #' )
 #' 
 #' # Create EML
-#' ecocomDP::make_eml(
+#' make_eml(
 #'   path = path,
 #'   parent.package.id = "knb-lter-sev.29.12",
 #'   child.package.id = "edi.101.5",
@@ -256,7 +256,7 @@ make_eml <- function(path,
       call. = FALSE,
       paste(
         "Input argument 'cat.vars' is missing. Create this input using the",
-        "function 'ecocomDP::define_variables()'."
+        "function 'define_variables()'."
       )
     )
   }
@@ -441,7 +441,7 @@ make_eml <- function(path,
   }
 
   eml_L0 <- EML::read_eml(url_parent)
-  xml_L0 <- suppressMessages(ecocomDP::read_eml(parent.package.id))
+  xml_L0 <- suppressMessages(read_eml(parent.package.id))
   
   # Create L1 EML -------------------------------------------------------------
   

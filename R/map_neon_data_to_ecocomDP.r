@@ -35,7 +35,7 @@
 #' @examples
 #' \dontrun{
 #' # Retrieve and map NEON ALGAE data to ecocomDP format
-#' my_result <- ecocomDP:::map_neon_data_to_ecocomDP(
+#' my_result <- map_neon_data_to_ecocomDP(
 #'   id = "neon.ecocomdp.20166.001.001",
 #'   site = c("MAYF", "PRIN"),
 #'   startdate = "2016-1",
@@ -123,51 +123,51 @@ map_neon_data_to_ecocomDP <- function(
   # call custom mapping function if available for given NEON id
   if(id == "neon.ecocomdp.20166.001.001"){
     #ALGAE method v01
-    ecocomDP_tables <- ecocomDP:::map_neon.ecocomdp.20166.001.001(neon.data.list, ...)
+    ecocomDP_tables <- map_neon.ecocomdp.20166.001.001(neon.data.list, ...)
     
   }else if(id == "neon.ecocomdp.20120.001.001"){
     #MACROINVERTEBRATE v01
-    ecocomDP_tables <- ecocomDP:::map_neon.ecocomdp.20120.001.001(neon.data.list, ...)
+    ecocomDP_tables <- map_neon.ecocomdp.20120.001.001(neon.data.list, ...)
     
   }else if(id == "neon.ecocomdp.10043.001.001"){
     #MOSQUITO v01
-    ecocomDP_tables <- ecocomDP:::map_neon.ecocomdp.10043.001.001(neon.data.list, ...)
+    ecocomDP_tables <- map_neon.ecocomdp.10043.001.001(neon.data.list, ...)
   
   }else if(id == "neon.ecocomdp.10022.001.001"){
     #BEETLE v01
-    ecocomDP_tables <- ecocomDP:::map_neon.ecocomdp.10022.001.001(neon.data.list, ...)
+    ecocomDP_tables <- map_neon.ecocomdp.10022.001.001(neon.data.list, ...)
     
   }else if(id == "neon.ecocomdp.10022.001.002"){
     #HERPETOLOGY v01
-    ecocomDP_tables <- ecocomDP:::map_neon.ecocomdp.10022.001.002(neon.data.list, ...)
+    ecocomDP_tables <- map_neon.ecocomdp.10022.001.002(neon.data.list, ...)
     
   }else if(id == "neon.ecocomdp.10003.001.001"){
     #BIRD v01
-    ecocomDP_tables <- ecocomDP:::map_neon.ecocomdp.10003.001.001(neon.data.list, ...)
+    ecocomDP_tables <- map_neon.ecocomdp.10003.001.001(neon.data.list, ...)
     
   }else if(id == "neon.ecocomdp.20107.001.001"){
     #FISH v01
-    ecocomDP_tables <- ecocomDP:::map_neon.ecocomdp.20107.001.001(neon.data.list, ...)
+    ecocomDP_tables <- map_neon.ecocomdp.20107.001.001(neon.data.list, ...)
     
   }else if(id == "neon.ecocomdp.10058.001.001"){
     #PLANT v01
-    ecocomDP_tables <- ecocomDP:::map_neon.ecocomdp.10058.001.001(neon.data.list, ...)
+    ecocomDP_tables <- map_neon.ecocomdp.10058.001.001(neon.data.list, ...)
     
   }else if(id == "neon.ecocomdp.10072.001.001"){
     #SMALL_MAMMAL v01
-    ecocomDP_tables <- ecocomDP:::map_neon.ecocomdp.10072.001.001(neon.data.list, ...)
+    ecocomDP_tables <- map_neon.ecocomdp.10072.001.001(neon.data.list, ...)
     
   }else if(id == "neon.ecocomdp.10093.001.001"){
     #TICK v01
-    ecocomDP_tables <- ecocomDP:::map_neon.ecocomdp.10093.001.001(neon.data.list, ...)
+    ecocomDP_tables <- map_neon.ecocomdp.10093.001.001(neon.data.list, ...)
     
   }else if(id == "neon.ecocomdp.20219.001.001"){
     # ZOOPLANKTON (uses MACROINVERTEBRATE NEON taxon table) v01
-    ecocomDP_tables <- ecocomDP:::map_neon.ecocomdp.20219.001.001(neon.data.list, ...)
+    ecocomDP_tables <- map_neon.ecocomdp.20219.001.001(neon.data.list, ...)
     
   }else if(id == "neon.ecocomdp.10092.001.001"){
     # TICK_PATHOGENS (no NEON taxon table) v01
-    ecocomDP_tables <- ecocomDP:::map_neon.ecocomdp.10092.001.001(neon.data.list, ...)
+    ecocomDP_tables <- map_neon.ecocomdp.10092.001.001(neon.data.list, ...)
     
   }else{
     message(paste0("WARNING: ecocomDP mapping not currently available for ",id))

@@ -37,7 +37,7 @@ data into the ecocomDP.}
 
 \item{cat.vars}{(data frame) Categorical variables with associated definitions and 
 units. Create a cat.vars data frame with the 
-\code{ecocomDP::define_variables()} function. Variables that can't be 
+\code{define_variables()} function. Variables that can't be 
 defined by the parent package EML should be manually supplied to the 
 cat.vars data frame in one of the scripts specified in the 
 \code{script} argument.}
@@ -74,7 +74,7 @@ An EML metadata record for the ecocomDP dataset defined by the arguments
 }
 \description{
 Run this function AFTER you have validated your ecocomDP tables with 
-\code{ecocomDP::validate_ecocomDP()}.
+\code{validate_ecocomDP()}.
 }
 \details{
 This function creates an EML record for an Ecological Community Data 
@@ -123,11 +123,11 @@ This function creates an EML record for an Ecological Community Data
 path <- "/Users/csmith/Desktop/ecocomDP"
 
 # Validate ecocomDP tables
-ecocomDP::validate_ecocomDP(path)
+validate_ecocomDP(path)
 
 # Use parent EML to define variables of the ecocomDP and manually add variable 
 # names and definitions created in the ecocomDP re-formatting process.
-catvars <- ecocomDP::define_variables(path, "knb-lter-sev.29.12")
+catvars <- define_variables(path, "knb-lter-sev.29.12")
 catvars$unit[catvars$code == "Count"] <- "number"
 catvars$definition[catvars$code == "Comments"] <- "A special statement related to an observation"
 
@@ -141,7 +141,7 @@ additional_contact <- data.frame(
 )
 
 # Create EML
-ecocomDP::make_eml(
+make_eml(
   path = path,
   parent.package.id = "knb-lter-sev.29.12",
   child.package.id = "edi.101.5",

@@ -183,7 +183,7 @@ make_eml_dwca <- function(path,
   
   eml_L1 <- EML::read_eml(url_parent)
   xml_L1 <- suppressMessages(
-    ecocomDP::read_eml(parent.package.id))
+    read_eml(parent.package.id))
   
   # Read L0 EML ---------------------------------------------------------------
   
@@ -205,7 +205,7 @@ make_eml_dwca <- function(path,
   message("Reading EML of L0 data package ", grandparent.package.id)
   
   xml_L0 <- suppressMessages(
-    ecocomDP::read_eml(grandparent.package.id))
+    read_eml(grandparent.package.id))
   
   
   eml_L0 <- suppressMessages(

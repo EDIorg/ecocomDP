@@ -172,7 +172,7 @@ Dates are specified only to the month because NEON data are provided in monthly 
 \examples{
 \dontrun{
 # Retrieve and map NEON ALGAE data to ecocomDP format
-my_result <- ecocomDP:::map_neon_data_to_ecocomDP(
+my_result <- map_neon_data_to_ecocomDP(
   id = "neon.ecocomdp.20166.001.001",
   site = c("MAYF", "PRIN"),
   startdate = "2016-1",

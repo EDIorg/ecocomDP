@@ -11,7 +11,7 @@ make_neon_location_table <- function(loc_info, loc_col_names){
   
   table_location <- suppressMessages(
     loc_info %>% 
-      ecocomDP::make_location(cols = loc_col_names))
+      make_location(cols = loc_col_names))
   
   # code to handle updated make_location (updated 18 Sep 2020 in make_location branch)
   if(class(table_location) == "list" &&
@@ -47,11 +47,11 @@ make_neon_location_table <- function(loc_info, loc_col_names){
   table_location$location_id <- table_location$location_name
   
   # get neon location info lookup tables
-  neon_domain_list <- ecocomDP:::neon_site_list %>%
+  neon_domain_list <- neon_site_list %>%
     dplyr::select(`Domain Number`, `Domain Name`) %>%
     dplyr::distinct()
   
-  neon_site_info_list <- ecocomDP:::neon_site_list %>%
+  neon_site_info_list <- neon_site_list %>%
     dplyr::select(-c(`Domain Number`,`Domain Name`)) %>%
     dplyr::distinct()
   

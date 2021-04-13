@@ -73,8 +73,8 @@ L1_to_L2_DwCA <- function(path,
   
   # Load data -----------------------------------------------------------------
   
-  # FIXME: Add environment argument to ecocomDP::read_data()
-  d <- ecocomDP::read_data(parent.package.id)
+  # FIXME: Add environment argument to read_data()
+  d <- read_data(parent.package.id)
   d <- d[[1]]$tables
   
   # Convert tables ------------------------------------------------------------

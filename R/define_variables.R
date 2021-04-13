@@ -32,7 +32,7 @@ define_variables <- function(data.path, parent.pkg.id, environment = "production
   L1_table_names <- criteria$table[is.na(criteria$column)]
   
   # Read ecocomDP tables
-  data.list <- ecocomDP::read_from_files(data.path)
+  data.list <- read_from_files(data.path)
   
   # Get values listed in variable_name columns of ecocomDP tables and retrieve
   # definitions for them from the L0 EML metadata.

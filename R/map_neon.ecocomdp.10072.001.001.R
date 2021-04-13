@@ -114,11 +114,11 @@ map_neon.ecocomdp.10072.001.001 <- function(
                   nlcdClass, geodeticDatum) %>%
     dplyr::distinct() 
   
-  table_location <- ecocomDP:::make_neon_location_table(
+  table_location <- make_neon_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"))
   
-  table_location_ancillary <- ecocomDP:::make_neon_ancillary_location_table(
+  table_location_ancillary <- make_neon_ancillary_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"),
     ancillary_var_names = c("namedLocation", "plotType", "nlcdClass", "geodeticDatum"))
@@ -239,7 +239,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
 
 
   
-  table_observation_ancillary <- ecocomDP:::make_neon_ancillary_observation_table(
+  table_observation_ancillary <- make_neon_ancillary_observation_table(
     obs_wide = table_event_counts,
     ancillary_var_names = c(
       "event_id",
