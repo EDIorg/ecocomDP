@@ -109,14 +109,23 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
   # Combine summaries of EDI and NEON data. These are created by 
   # summarize_data_edi() and summarize_data_neon() respectively.
   
-  # TODO: Download this object once and save in tempdir() for future session usage
-  newrev <- suppressMessages(api_list_data_package_revisions("edi", "759", filter = "newest"))
-  objurls <- suppressMessages(api_read_data_package(paste0("edi.759.", newrev)))
-  objurls <- stringr::str_subset(objurls, "/data/")
-  for (objurl in objurls) {
-    load(url(objurl))
+  # Download this object once per session and save to tempdir() for future calls
+  if ("ecocomDP_search_index.rda" %in% dir(tempdir())) {
+    load(paste0(tempdir(), "/ecocomDP_search_index.rda"))
+    d <- ecocomDP_search_index
+  } else {
+    newrev <- suppressMessages(api_list_data_package_revisions("edi", "759", filter = "newest"))
+    objurls <- suppressMessages(api_read_data_package(paste0("edi.759.", newrev)))
+    objurls <- stringr::str_subset(objurls, "/data/")
+    for (objurl in objurls) {
+      load(url(objurl))
+    }
+    ecocomDP_search_index <- c(summary_data_edi, summary_data_neon)
+    save(ecocomDP_search_index, 
+         file = paste0(tempdir(), "/ecocomDP_search_index.rda"), 
+         version = 3)
+    d <- ecocomDP_search_index
   }
-  d <- c(summary_data_edi, summary_data_neon)
 
   # Initialize an index of available datasets (use_i) for recording successful 
   # search hits, and an index of available sites within each dataset (sites_i) 
