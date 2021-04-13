@@ -9,6 +9,10 @@
 #########################################
 make_neon_location_table <- function(loc_info, loc_col_names){
   
+  
+  neon_site_list <- data.table::fread(
+    system.file("/data/neon-field-sites.csv", package = "ecocomDP"))
+  
   table_location <- suppressMessages(
     loc_info %>% 
       make_location(cols = loc_col_names))
