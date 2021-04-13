@@ -5,7 +5,7 @@
 %   R/map_neon.ecocomdp.10072.001.001.R, R/map_neon.ecocomdp.10092.001.001.R,
 %   R/map_neon.ecocomdp.10093.001.001.R, R/map_neon.ecocomdp.20107.001.001.R,
 %   R/map_neon.ecocomdp.20120.001.001.R, R/map_neon.ecocomdp.20166.001.001.R,
-%   R/map_neon.ecocomdp.20219.001.001.R, R/map_neon_data_to_ecocomDP.r
+%   R/map_neon.ecocomdp.20219.001.001.R, R/map_neon_data_to_ecocomDP.R
 \name{map_neon.ecocomdp.10003.001.001}
 \alias{map_neon.ecocomdp.10003.001.001}
 \alias{map_neon.ecocomdp.10022.001.001}

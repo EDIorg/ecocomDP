@@ -157,11 +157,11 @@ make_neon_ancillary_observation_table <- function(
   
   col_names_to_keep <- c(
     "event_id", ancillary_var_names)
-   
+  
   
   table_observation_ancillary <- obs_wide[
     ,names(obs_wide) %in% col_names_to_keep
-  ] %>%
+    ] %>%
     dplyr::distinct() 
   
   table_observation_ancillary <- table_observation_ancillary %>% 

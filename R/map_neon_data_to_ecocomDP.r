@@ -106,9 +106,9 @@ map_neon_data_to_ecocomDP <- function(
     data_access_method_described <- paste0(
       "original NEON data accessed from R object")
   }
-
   
-
+  
+  
   # save NEON download if given a filepath
   if(!is.null(neon.data.save.dir)){
     neon.data.save.dir <- gsub("/$","",neon.data.save.dir)
@@ -118,7 +118,7 @@ map_neon_data_to_ecocomDP <- function(
                                  ".RDS")
     saveRDS(neon.data.list, file = neon_data_filename)
   }
-
+  
   
   # call custom mapping function if available for given NEON id
   if(id == "neon.ecocomdp.20166.001.001"){
@@ -132,7 +132,7 @@ map_neon_data_to_ecocomDP <- function(
   }else if(id == "neon.ecocomdp.10043.001.001"){
     #MOSQUITO v01
     ecocomDP_tables <- map_neon.ecocomdp.10043.001.001(neon.data.list, ...)
-  
+    
   }else if(id == "neon.ecocomdp.10022.001.001"){
     #BEETLE v01
     ecocomDP_tables <- map_neon.ecocomdp.10022.001.001(neon.data.list, ...)
@@ -177,7 +177,7 @@ map_neon_data_to_ecocomDP <- function(
       observation = data.frame())
   }
   
- 
+  
   # get taxon group
   neon_dp_table <- ecocomDP::search_data("NEON")
   taxon_group <- neon_dp_table$title[neon_dp_table$id == id] %>%
