@@ -127,8 +127,7 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
     d <- ecocomDP_search_index
   }
   
-  # Reformat search index
-  # d <- format_search_results(d)
+  d <- update_neon_summary_info(d) # Adds some metadata and facilitates multiple L1 versions from a single L0
   
   # Initialize an index of available datasets (use_i) for recording successful 
   # search hits, and an index of available sites within each dataset (sites_i) 
@@ -408,57 +407,33 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
 
 
 
-#' Reformat search results
+#' Update NEON summary info
 #' 
 #' This temporarily accomodates NEON's plan for multiple L1 versions and will have to be refactored to support other data sources adopting this use case. A permanent solution is to refactor the \code{summarize_data_neon()} and \code{summarize_data_edi()} functions to return the exact objects of interest.
 #'
 #'
-#' @param x (data.frame) Current output of \code{search_data()}
+#' @param d (list) EDI and NEON dataset summary object
 #'
-#' @return (data.frame) New output of \code{search_data()} reformatted to support L1 versioning
+#' @return (list) \code{d} with added info
 #' 
-#' @details Joins /inst/L1_versions.txt (a file holding version info) with \code{x} and does a little reformatting.
+#' @details Joins /inst/L1_versions.txt (a file holding version info) with \code{d} and does a little reformatting.
 #'
-format_search_results <- function(d) {
-  # TODO: Rename this function reformat_search_index()
-  # TODO: Update metadata
-  
+update_neon_summary_info <- function(d) {
   x <- data.table::fread(
     system.file("/L1_versions.txt", package = "ecocomDP"))
-  browser()
   for (ind in seq_along(names(d))) {
     id <- names(d)[ind]
     if (stringr::str_detect(id, "^DP1")) {
-      if (id == "DP1.10022.001") { # datasets sharing same id require extra attention
-        browser()
-        if (stringr::str_detect(d[[ind]]$title, "beetles")) {
-          browser()
-          i <- stringr::str_detect(x$title_qualifier, "BEETLES")
-        } else {
-          browser()
-          i <- stringr::str_detect(x$title_qualifier, "HERPTILES")
-        }
-        d[[id]]$source <- "NEON" # Shift IDs
-        d[[id]]$source_id <- id
-        d[[id]]$source_id_url <- d[[id]]$url # Shift URLs
-        d[[id]]$url <- NA_character_
-        d[[id]]$title <- paste(x$title_qualifier[i], d[[id]]$title) # Add qualifiers to title, description, abstract
-        d[[id]]$description <- paste(x$description_qualifier[i], d[[id]]$description) 
-        d[[id]]$abstract <- paste(x$abstract_qualifier[i], d[[id]]$abstract)
-      } else {
-        i <- x$id %in% id
-        d[[id]]$source <- "NEON" # Shift IDs
-        d[[id]]$source_id <- id
-        d[[id]]$source_id_url <- d[[id]]$url # Shift URLs
-        d[[id]]$url <- NA_character_
-        d[[id]]$title <- paste(x$title_qualifier[i], d[[id]]$title) # Add qualifiers to title, description, abstract
-        d[[id]]$description <- paste(x$description_qualifier[i], d[[id]]$description) 
-        d[[id]]$abstract <- paste(x$abstract_qualifier[i], d[[id]]$abstract)
-      }
+      i <- x$id %in% id
+      d[[id]]$source <- "NEON" # Shift IDs
+      d[[id]]$source_id <- id
+      d[[id]]$source_id_url <- d[[id]]$url # Shift URLs
+      d[[id]]$url <- NA_character_
+      d[[id]]$title <- paste(x$title_qualifier[i], d[[id]]$title) # Add qualifiers to title, description, abstract
+      d[[id]]$description <- paste(x$description_qualifier[i], d[[id]]$description) 
+      d[[id]]$abstract <- paste(x$abstract_qualifier[i], d[[id]]$abstract)
     }
   }
-  browser()
-  # unique(x$id)
-  # names(d)[names(d) %in% id] <- x$derived_id[i] # Rename list object with new derived ID
+  names(d)[match(x$id, names(d))] <- x$derived_id
   return(d)
 }
