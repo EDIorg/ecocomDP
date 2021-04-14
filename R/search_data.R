@@ -126,7 +126,10 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
          version = 3)
     d <- ecocomDP_search_index
   }
-
+  
+  # Reformat search index
+  # d <- format_search_results(d)
+  
   # Initialize an index of available datasets (use_i) for recording successful 
   # search hits, and an index of available sites within each dataset (sites_i) 
   # corresponding with taxa, num.taxa, and geographic.area search arguments. 
@@ -360,6 +363,18 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
             "min = ", min(unlist(d[[x]]$std_dev_interval_betw_years)), ", ",
             "max = ", max(unlist(d[[x]]$std_dev_interval_betw_years)))
         }
+        # source_id
+        if (!is.null(d[[x]]$source_id)) {
+          source_id <- d[[x]]$source_id
+        } else {
+          source_id <- NA_character_
+        }
+        # source_id_url
+        if (!is.null(d[[x]]$source_id_url)) {
+          source_id_url <- d[[x]]$source_id_url
+        } else {
+          source_id_url <- NA_character_
+        }
         # Return
          list(
           source = d[[x]]$source,
@@ -370,14 +385,16 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
           years = years,
           sampling_interval = sampling_interval,
           sites = sites,
-          url = d[[x]]$url)
+          url = d[[x]]$url,
+          source_id = source_id,
+          source_id_url = source_id_url)
       }))
   
   if (nrow(output) == 0) {
     return("No results found.")
   } else {
-    
-    output <- dplyr::distinct(format_search_results(output))
+    # output <- dplyr::distinct(format_search_results(output))
+    output <- dplyr::distinct(output)
     
     return(output)
   }
@@ -402,68 +419,46 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
 #' 
 #' @details Joins /inst/L1_versions.txt (a file holding version info) with \code{x} and does a little reformatting.
 #'
-format_search_results <- function(x) {
+format_search_results <- function(d) {
+  # TODO: Rename this function reformat_search_index()
+  # TODO: Update metadata
   
-  # Join
-  
-  x <- dplyr::left_join(
-    x, 
-    data.table::fread(
-      system.file("/L1_versions.txt", package = "ecocomDP")),
-    by = "id")
-  
-  # Shift IDs
-  
-  x <- dplyr::mutate(
-    x,
-    source_id = ifelse(x$source == "NEON", x$id, NA_character_))
-  
-  x <- dplyr::mutate(
-    x, 
-    id = ifelse(x$source == "NEON", x$derived_id, x$id))
-  
-  # Shift URLs
-  
-  x <- dplyr::mutate(
-    x, 
-    source_id_url = ifelse(x$source == "NEON", x$url, NA_character_))
-  
-  x <- dplyr::mutate(
-    x, 
-    url = ifelse(x$source != "NEON", x$url, NA_character_))
-  
-  # Add qualifiers to title, description, abstract
-  
-  x <- dplyr::mutate(
-    x, 
-    title = ifelse(
-      !is.na(x$title_qualifier),
-      paste(x$title_qualifier, x$title), 
-      x$title))
-  
-  x <- dplyr::mutate(
-    x, 
-    description = ifelse(
-      !is.na(x$description_qualifier), 
-      paste(x$description_qualifier, x$description), 
-      x$description))
-  
-  x <- dplyr::mutate(
-    x, 
-    abstract = ifelse(
-      !is.na(x$abstract_qualifier),
-      paste(x$abstract_qualifier, x$abstract), 
-      x$abstract))
-  
-  # Select cols to keep
-  
-  x <- dplyr::select(
-    x, id, title, abstract, description, years, sampling_interval, sites, url, 
-    source, source_id, source_id_url)
-  
-  # Replace "DP1" with "NEON"
-  
-  x$id <- stringr::str_replace(x$id, "DP1", "NEON")
-  
-  return(x)
+  x <- data.table::fread(
+    system.file("/L1_versions.txt", package = "ecocomDP"))
+  browser()
+  for (ind in seq_along(names(d))) {
+    id <- names(d)[ind]
+    if (stringr::str_detect(id, "^DP1")) {
+      if (id == "DP1.10022.001") { # datasets sharing same id require extra attention
+        browser()
+        if (stringr::str_detect(d[[ind]]$title, "beetles")) {
+          browser()
+          i <- stringr::str_detect(x$title_qualifier, "BEETLES")
+        } else {
+          browser()
+          i <- stringr::str_detect(x$title_qualifier, "HERPTILES")
+        }
+        d[[id]]$source <- "NEON" # Shift IDs
+        d[[id]]$source_id <- id
+        d[[id]]$source_id_url <- d[[id]]$url # Shift URLs
+        d[[id]]$url <- NA_character_
+        d[[id]]$title <- paste(x$title_qualifier[i], d[[id]]$title) # Add qualifiers to title, description, abstract
+        d[[id]]$description <- paste(x$description_qualifier[i], d[[id]]$description) 
+        d[[id]]$abstract <- paste(x$abstract_qualifier[i], d[[id]]$abstract)
+      } else {
+        i <- x$id %in% id
+        d[[id]]$source <- "NEON" # Shift IDs
+        d[[id]]$source_id <- id
+        d[[id]]$source_id_url <- d[[id]]$url # Shift URLs
+        d[[id]]$url <- NA_character_
+        d[[id]]$title <- paste(x$title_qualifier[i], d[[id]]$title) # Add qualifiers to title, description, abstract
+        d[[id]]$description <- paste(x$description_qualifier[i], d[[id]]$description) 
+        d[[id]]$abstract <- paste(x$abstract_qualifier[i], d[[id]]$abstract)
+      }
+    }
+  }
+  browser()
+  # unique(x$id)
+  # names(d)[names(d) %in% id] <- x$derived_id[i] # Rename list object with new derived ID
+  return(d)
 }

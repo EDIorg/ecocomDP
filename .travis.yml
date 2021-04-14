@@ -16,31 +16,18 @@ matrix:
 
 r_packages:
   - data.table
-  - downloader
   - dplyr
   - EML
-  - gdata
+  - emld
+  - geosphere
   - httr
-  - jsonlite
   - lubridate
   - magrittr
   - neonUtilities
-  - purrr
-  - reader
-  - readr
-  - RMySQL
-  - stringi
+  - rmarkdown
   - stringr
   - tidyr
-  - tidyverse
-  - usethis
   - xml2
-  - XML
-  
-r_github_packages:
-  - EDIorg/EDIutils
-  - EDIorg/taxonomyCleanr
-  - EDIorg/dataCleanr
   
 warnings_are_errors: false
 

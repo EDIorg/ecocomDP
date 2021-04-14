@@ -4,7 +4,7 @@
 \alias{format_search_results}
 \title{Reformat search results}
 \usage{
-format_search_results(x)
+format_search_results(d)
 }
 \arguments{
 \item{x}{(data.frame) Current output of \code{search_data()}}

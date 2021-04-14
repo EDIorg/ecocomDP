@@ -313,6 +313,27 @@ api_read_metadata <- function(package.id, environment = 'production'){
 
 
 
+#' Parse character string to POSIXct POSIXt
+#'
+#' @param datetimes (character) Date or datetime
+#'
+#' @return (POSIXct POSIXt) \code{datetimes} parsed by relevant \code{lubridate} function
+#' 
+char2datetime <- function(datetimes) {
+  datetimes <- stringr::str_remove(datetimes, "T.*$")
+  datetimes <- datetimes[!is.na(datetimes)]
+  res <- lubridate::parse_date_time(datetimes, orders = c("ymd", "ymd H", "ymd HM", "ymd HMS"))
+  return(res)
+}
+
+
+
+
+
+
+
+
+
 #' Convert \code{character(0)} to \code{""}
 #'
 #' @param txt (character) Character string
@@ -918,6 +939,56 @@ parse_datetime <- function(vals, frmt) {
   res <- eval(parse(text = paste0("lubridate::", res, "(vals)")))
   return(res)
 }
+
+
+
+
+
+
+
+
+#' Read the ecocomDP dataset_summary table (from EDI)
+#'
+#' @description  
+#'     Use this function to read the dataset_summary table of an ecocomDP data 
+#'     package from the EDI Data Repository.
+#' 
+#' @param package.id
+#'     (character) Data package identifier of an ecocomDP dataset in the EDI
+#'     data repository.
+#'     
+#' @return 
+#'     (tibble) The dataset_summary table
+#'         
+read_table_dataset_summary <- function(package.id){
+  
+  message("Reading dataset_summary table for ", package.id)
+  eml <- suppressMessages(api_read_metadata(package.id))
+  entity_name <- xml2::xml_text(
+    xml2::xml_find_all(eml, './/dataset/dataTable/physical/objectName'))
+  if (any(stringr::str_detect(entity_name, 'dataset_summary'))) {
+    entity_delimiter <- xml2::xml_text(
+      xml2::xml_find_all(
+        eml,
+        './/dataset/dataTable/physical/dataFormat/textFormat/simpleDelimited/fieldDelimiter'))[
+          stringr::str_detect(entity_name, 'dataset_summary')]
+    entity_url <- xml2::xml_text(
+      xml2::xml_find_all(
+        eml,
+        './/dataset/dataTable/physical/distribution/online/url'))[
+          stringr::str_detect(entity_name, 'dataset_summary')]
+    if (entity_delimiter == ',') {
+      output <- data.table::fread(entity_url)
+    } else if (entity_delimiter == '\\t') {
+      output <- data.table::fread(entity_url)
+    }
+  } else {
+    output <- NULL
+  }
+  output
+  
+}
+
 
 
 
