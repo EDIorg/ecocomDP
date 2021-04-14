@@ -435,5 +435,6 @@ update_neon_summary_info <- function(d) {
     }
   }
   names(d)[match(x$id, names(d))] <- x$derived_id
+  d$neon.ecocomdp.10022.001.002$source_id <- stringr::str_remove(d$neon.ecocomdp.10022.001.002$source_id, "_herps")
   return(d)
 }
