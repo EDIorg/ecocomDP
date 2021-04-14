@@ -29,6 +29,8 @@
 #'     Searches across input arguments are combined with the "AND" boolean 
 #'     operator.
 #'     
+#'     NEON taxa rank is lowest level identifiable. Higher ranks are not searchable.
+#'     
 #' @return 
 #'     (data.frame) Search results with these feilds:
 #'     \itemize{
@@ -95,7 +97,6 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
   # TODO: Add argument to search within a NEON site. Currently searches return
   # data products if any of the search parameters are true for any of the 
   # sites.
-  # TODO: Note NEON taxa rank is lowest level identifyiable not higher ranks (i.e. entire tree)
   
   message("Searching data ...")
   
@@ -204,7 +205,6 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
       taxa_i <- rep(F, length(d[[i]]$taxa))
       for (k in 1:length(d[[i]]$taxa)) {
         if (boolean.operator == "AND") {
-          # FIXME: Tick-borne pathogen status has no taxa resulting in error
           taxa_i[k] <- try(
             all(
               stringr::str_detect(
@@ -215,7 +215,6 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
             taxa_i[k] <- FALSE
           }
         } else if (boolean.operator == "OR") {
-          # FIXME: Tick-borne pathogen status has no taxa resulting in error
           taxa_i[k] <- try(
             stringr::str_detect(
               tolower(d[[i]]$taxa[[k]]$taxa),

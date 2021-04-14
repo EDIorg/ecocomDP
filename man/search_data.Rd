@@ -63,6 +63,8 @@ Currently, to accomodate multiple L1 versions of NEON data products, search resu
 \note{
 Searches across input arguments are combined with the "AND" boolean 
     operator.
+    
+    NEON taxa rank is lowest level identifiable. Higher ranks are not searchable.
 }
 \examples{
 # Empty search returns all available data
