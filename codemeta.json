@@ -322,7 +322,7 @@
   ],
   "releaseNotes": "https://github.com/EDIorg/ecocomDP/blob/master/NEWS.md",
   "readme": "https://github.com/EDIorg/ecocomDP/blob/master/README.md",
-  "fileSize": "564.399KB",
+  "fileSize": "564.454KB",
   "contIntegration": [
     "https://travis-ci.org/EDIorg/ecocomDP",
     "https://codecov.io/github/EDIorg/ecocomDP?branch=master"

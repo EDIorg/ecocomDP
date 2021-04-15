@@ -18,7 +18,7 @@ read_data(
 "id" column of the \code{search_data()} output.  If reading multiple 
 datasets, then \code{id} should be a character vector of identifiers or 
 a named list containing additional arguments to filter on (for NEON data 
-only; see below for arguments and examples).}
+only; see below for arguments and examples). Older versions of ids listed in the "id" column of the \code{search_data()} output are supported, but a warning is issued.}
 
 \item{path}{(character) Path to the directory in which the data will be written.}
 
