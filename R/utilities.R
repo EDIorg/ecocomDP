@@ -915,14 +915,20 @@ is_empty_nodeset <- function(nodeset) {
 
 #' Parse datetime
 #'
+#' @param tbl (character) Table name \code{vals} come from. This is used in warning messages.
 #' @param vals (character) Vector of datetimes
 #' @param frmt (character) Datetime format string
 #' 
 #' @details A wrapper to to \code{lubridate::ymd()}, \code{lubridate::ymd_h()}, \code{lubridate::ymd_hm()}, and \code{lubridate::ymd_hms()}.
 #' 
+#' @note No attempt at using the time zone component is made
+#' 
 #' @return (POSIXct POSIXt) Datetimes parsed
 #' 
-parse_datetime <- function(vals, frmt) {
+parse_datetime <- function(tbl, vals, frmt) {
+  vals <- as.character(vals)
+  na_i <- sum(is.na(vals))
+  vals <- stringr::str_remove_all(vals, "(Z|z).+$")
   res <- "ymd"
   t <- unlist(stringr::str_split(frmt, "T|[:blank:]"))[2] # time format
   if (!is.na(t)) {                                        # build time component of lubridate func call
@@ -936,8 +942,13 @@ parse_datetime <- function(vals, frmt) {
       res <- paste0(res, "s")
     }
   }
-  res <- eval(parse(text = paste0("lubridate::", res, "(vals)")))
-  return(res)
+  parsed <- suppressWarnings(
+    eval(parse(text = paste0("lubridate::", res, "(vals)"))))
+  na_f <- sum(is.na(parsed))
+  if (na_f > na_i) {
+    warning((na_f - na_i), " ", tbl, " datetime strings failed to parse. Use parse.datetime = 'FALSE' to get datetimes as character strings for manual processing.", call. = FALSE)
+  }
+  return(parsed)
 }
 
 

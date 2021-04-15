@@ -11,6 +11,8 @@
 #' @param file.type
 #'     (character) Type of file to save the data to. Options are: ".rda", 
 #'     ".csv".
+#' @param parse.datetime
+#'     (logical) Attempt to parse datetime character strings through an algorithm. For EDI, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the algorithm iterates through permutations of \code{ymd HMS} orders. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing).
 #' @param site 
 #'     (character; NEON data only) A character vector of site codes to filter 
 #'     data on. Sites are listed in the "sites" column of the 
@@ -100,7 +102,7 @@
 #'   forceParallel = FALSE)
 #'   
 read_data <- function(
-  id = NULL, path = NULL, file.type = ".rda", 
+  id = NULL, path = NULL, file.type = ".rda", parse.datetime = TRUE,
   
   # dots passed to neonUtilities::loadByProduct
   ...,
@@ -149,7 +151,7 @@ read_data <- function(
         x, 
         "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)") && 
         !grepl("^neon\\.", x)) {
-        read_data_edi(x)
+        read_data_edi(x, parse.datetime)
         
       } else if (grepl("^neon\\.", x)) {
         map_neon_data_to_ecocomDP(
@@ -159,7 +161,6 @@ read_data <- function(
     })
   
   names(d) <- names(id)
-  
   
   # Modify --------------------------------------------------------------------
   
@@ -210,6 +211,7 @@ read_data <- function(
                 detected <- class(d[[x]]$tables[[y]][[z]])
                 expected <- attr_tbl$class[(attr_tbl$table == y) & (attr_tbl$column == z)]
                 if (any(detected %in% c("POSIXct", "POSIXt", "Date", "IDate"))) {
+                  # FIXME: OK to be characterstring if user specifies parse.datetime = FALSE
                   detected <- "Date" # so downstream logic doesn't throw length() > 1 warnings
                 }
                 if (detected != expected) {
@@ -258,16 +260,28 @@ read_data <- function(
         }))
     
   }
-
+  
+  # Return datetimes as character - Only applies to NEON here. EDI is handled in read_data_edi()
+  if (!isTRUE(parse.datetime)) {
+    for (id in names(d)) {
+      if (stringr::str_detect(id, "^neon\\.")) {
+        for (tbl in names(d[[id]]$tables)) {
+          dtcols <- stringr::str_detect(colnames(d[[id]]$tables[[tbl]]), "datetime")
+          if (any(dtcols)) {
+            colname <- colnames(d[[id]]$tables[[tbl]])[dtcols]
+            vals <- as.character(d[[id]]$tables[[tbl]][[colname]])
+            d[[id]]$tables[[tbl]][[colname]] <- vals
+          }
+        }
+      }
+    }
+  }
  
   # Validate ------------------------------------------------------------------
-  
 
   for (i in 1:length(d)) {
     d[[i]]$validation_issues <- validate_ecocomDP(data.list = d[[i]]$tables)
   }
-  
- 
   
   # Return --------------------------------------------------------------------
   
@@ -287,43 +301,25 @@ read_data <- function(
 
 
 
-# Helper functions ------------------------------------------------------------
-
-
-
-parse_datetime <- function(v, tbl) {
-  list(
-    lubridate::parse_date_time(v, "ymdHMS"),
-    lubridate::parse_date_time(v, "ymdHM"),
-    lubridate::parse_date_time(v, "ymdH"),
-    lubridate::parse_date_time(v, "ymd"))
-}
-
-
-
-
-
-
-
-
 #' Read an ecocomDP dataset from EDI
 #'
 #' @param id
 #'     (character) Data package identifier with revision number
+#' @param parse.datetime
+#'     (logical) Attempt to parse datetime character strings through an algorithm that looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. Failed attempts will return a warning.
 #'
 #' @return
 #'     (list) Named list of data tables
 #'     
-read_data_edi <- function(id) {
+read_data_edi <- function(id, parse.datetime = TRUE) {
   
   message("Reading ", id)
   
   # Parameterize
-  
-  if (exists("environment", envir = .GlobalEnv)) {
-    environment <- get("config.environment", envir = .GlobalEnv)
+  if (exists("config.environment", envir = .GlobalEnv)) {
+    config.environment <- get("config.environment", envir = .GlobalEnv)
   } else {
-    environment <- "production"
+    config.environment <- "production"
   }
   
   # Get ecocomDP attributes for validation and coercion
@@ -341,27 +337,31 @@ read_data_edi <- function(id) {
   names(tbl_attrs) <- unique(attr_tbl$table)
   
   xpath <- c(
-    name = './/dataset/dataTable/physical/objectName',
-    url = './/dataset/dataTable/physical/distribution/online/url',
-    delimiter = './/dataset/dataTable/physical/dataFormat/textFormat/simpleDelimited/fieldDelimiter',
-    nrecord = './/dataset/dataTable/numberOfRecords')
+    name = './/physical/objectName',
+    url = './/physical/distribution/online/url',
+    delimiter = './/physical/dataFormat/textFormat/simpleDelimited/fieldDelimiter',
+    nrecord = './/numberOfRecords',
+    formatString = './/dateTime/formatString')
   
   eml <- suppressMessages(
-    api_read_metadata(id, environment))
+    api_read_metadata(id, environment = config.environment))
   
   invisible(
     lapply(
       names(tbl_attrs),
       function(x) {
-        use_i <- stringr::str_detect(
-          xml2::xml_text(xml2::xml_find_all(eml, xpath[['name']])), 
-          paste0(x, '\\.[:alnum:]*$'))
+        tblnames <- xml2::xml_text(xml2::xml_find_all(eml, './/dataset/dataTable/physical/objectName'))
+        use_i <- stringr::str_detect(tblnames, paste0(x, '\\.[:alnum:]*$'))
         if (any(use_i)) {
           lapply(
             names(xpath),
             function(k){
-              tbl_attrs[[x]][[k]] <<- xml2::xml_text(
-                xml2::xml_find_all(eml, xpath[[k]]))[use_i]
+              nodeset <- xml2::xml_find_all(eml, ".//dataset/dataTable")[use_i]
+              val <- xml2::xml_text(xml2::xml_find_all(nodeset, xpath[[k]]))
+              if (length(val) == 0) {
+                val <- NA
+              }
+              tbl_attrs[[x]][[k]] <<- val
             })
         } else {
           tbl_attrs[[x]] <<- NULL
@@ -379,22 +379,25 @@ read_data_edi <- function(id) {
   
   # Parse datetime
   for (tbl in names(output)) {
-    if (tbl %in% c("observation", "location_ancillary", "taxon_ancillary")) {
-      if (tbl == "observation") {
-        nodeset <- xml2::xml_parent(xml2::xml_find_all(eml, ".//attributeName[text()='observation_datetime']"))
-        output[[tbl]]$observation_datetime <- parse_datetime(
-          vals = output[[tbl]]$observation_datetime, 
-          frmt = xml_val(nodeset, ".//dateTime/formatString"))
+    frmtstr <- tbl_attrs[[tbl]]$formatString
+    if (!is.na(frmtstr)) {
+      dtcol <- stringr::str_subset(colnames(output[[tbl]]), "datetime")
+      if (isTRUE(parse.datetime)) {
+        parsed <- parse_datetime(tbl = tbl, vals = output[[tbl]][[dtcol]], frmt = frmtstr)
+        output[[tbl]][[dtcol]] <- parsed
       } else {
-        nodeset <- xml2::xml_parent(xml2::xml_find_all(eml, ".//attributeName[text()='datetime']"))
-        output[[tbl]]$datetime <- parse_datetime(
-          vals = output[[tbl]]$datetime, 
-          frmt = xml_val(nodeset, ".//dateTime/formatString"))
+        output[[tbl]][[dtcol]] <- as.character(output[[tbl]][[dtcol]])
       }
     }
   }
   
-  res <- list(metadata = NULL, tables = output)
+  # Parse metadata
+  search_index <- suppressMessages(search_data())
+  i <- search_index$id == id
+  meta = list(url = search_index$url[i])
+  
+  # Return
+  res <- list(metadata = meta, tables = output)
   return(res)
 }
 
@@ -405,7 +408,7 @@ read_data_edi <- function(id) {
 
 
 
-#' Read ecocomDP from files
+#' Read ecocomDP from files TO BE USED IN CREATION PROCESS PRIOR TO ARCHIVING
 #'
 #' @param data.path 
 #'     (character) The path to the directory containing ecocomDP tables. 

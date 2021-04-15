@@ -370,6 +370,7 @@ validate_datetime <- function(data.list) {
           (criteria$class == "Date") &
           !is.na(criteria$column)]
       if (length(datetime_column) > 0) {
+        # TODO: See process note in google doc
         v <- data.list[[x]][[datetime_column]]
         # Difference in NA count induced by coercion indicates a non-valid 
         # format
@@ -378,11 +379,12 @@ validate_datetime <- function(data.list) {
         na_count_raw <- sum(is.na(v))
         
         # check different date time formats to see if one matches the data
+        # TODO: Use char2datetime()?
         use_i <- suppressWarnings(
           list(
-            lubridate::parse_date_time(v, "ymdHMS"),
-            lubridate::parse_date_time(v, "ymdHM"),
-            lubridate::parse_date_time(v, "ymdH"),
+            lubridate::parse_date_time(v, "ymd HMS"),
+            lubridate::parse_date_time(v, "ymd HM"),
+            lubridate::parse_date_time(v, "ymd H"),
             lubridate::parse_date_time(v, "ymd")))
         
         # count NAs for each attempt to parse datetime

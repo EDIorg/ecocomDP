@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_data.R
 \name{read_from_files}
 \alias{read_from_files}
-\title{Read ecocomDP from files}
+\title{Read ecocomDP from files TO BE USED IN CREATION PROCESS PRIOR TO ARCHIVING}
 \usage{
 read_from_files(data.path)
 }
@@ -17,7 +17,7 @@ Duplicate file names are not allowed.}
     (\url{https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md})}
 }
 \description{
-Read ecocomDP from files
+Read ecocomDP from files TO BE USED IN CREATION PROCESS PRIOR TO ARCHIVING
 }
 \examples{
 d <- read_from_files(system.file("/data", package = "ecocomDP"))

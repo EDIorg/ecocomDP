@@ -4,9 +4,11 @@
 \alias{parse_datetime}
 \title{Parse datetime}
 \usage{
-parse_datetime(vals, frmt)
+parse_datetime(tbl, vals, frmt)
 }
 \arguments{
+\item{tbl}{(character) Table name \code{vals} come from. This is used in warning messages.}
+
 \item{vals}{(character) Vector of datetimes}
 
 \item{frmt}{(character) Datetime format string}
@@ -19,4 +21,7 @@ Parse datetime
 }
 \details{
 A wrapper to to \code{lubridate::ymd()}, \code{lubridate::ymd_h()}, \code{lubridate::ymd_hm()}, and \code{lubridate::ymd_hms()}.
+}
+\note{
+No attempt at using the time zone component is made
 }
