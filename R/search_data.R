@@ -118,6 +118,12 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
     newrev <- suppressMessages(api_list_data_package_revisions("edi", "759", filter = "newest"))
     objurls <- suppressMessages(api_read_data_package(paste0("edi.759.", newrev)))
     objurls <- stringr::str_subset(objurls, "/data/")
+    objids <- stringr::str_extract(objurls, "(?<=/)[:alnum:]+$")
+    objnames <- suppressMessages(
+      lapply(objids, api_read_data_entity_name, package.id = paste0("edi.759.", newrev)))
+    objnames <- unlist(objnames)
+    isdata <- !stringr::str_detect(objnames, "Function")
+    objurls <- objurls[isdata]
     for (objurl in objurls) {
       load(url(objurl))
     }
