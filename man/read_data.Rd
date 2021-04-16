@@ -7,23 +7,23 @@
 read_data(
   id = NULL,
   path = NULL,
-  file.type = ".rda",
   parse.datetime = TRUE,
-  ...,
-  globally.unique.keys = FALSE
+  globally.unique.keys = FALSE,
+  site = "all",
+  startdate = NA,
+  enddate = NA,
+  package = "basic",
+  check.size = FALSE,
+  nCores = 1,
+  forceParallel = FALSE,
+  token = NA,
+  ...
 )
 }
 \arguments{
-\item{id}{(character) Identifier of dataset to read. Identifiers are listed in the 
-"id" column of the \code{search_data()} output.  If reading multiple 
-datasets, then \code{id} should be a character vector of identifiers or 
-a named list containing additional arguments to filter on (for NEON data 
-only; see below for arguments and examples). Older versions of ids listed in the "id" column of the \code{search_data()} output are supported, but a warning is issued.}
+\item{id}{(character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search_data()} output. Older versions of ids listed in the "id" column of the \code{search_data()} output are supported, but a warning is issued.}
 
-\item{path}{(character) Path to the directory in which the data will be written.}
-
-\item{file.type}{(character) Type of file to save the data to. Options are: ".rda", 
-".csv".}
+\item{path}{(character) Path to the directory in which the data will be read.}
 
 \item{parse.datetime}{(logical) Attempt to parse datetime character strings through an algorithm. For EDI, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the algorithm iterates through permutations of \code{ymd HMS} orders. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing).}
 
@@ -57,15 +57,6 @@ to FALSE.}
 
 \item{token}{(character; NEON data only) User specific API token (generated within 
 neon.datascience user accounts)}
-
-\item{neon.data.save.dir}{(character) Directory to save NEON source data that has been downloaded 
-via \code{neonUtilities::loadByProduct()}}
-
-\item{neon.data.read.path}{(character) Path to read in an RDS file of 'stacked NEON data' from 
-\code{neonUtilities::loadByProduct()}}
-
-\item{neon.data.list}{(list) A list of stacked NEON data tables to be mapped to ecocomDP. 
-Must match the chosen mapping method in 'id'}
 }
 \value{
 (list) A named list of \code{id}, each including: 
@@ -89,8 +80,11 @@ Validation checks are applied to each dataset ensuring they comply with
     specification.
 }
 \examples{
+\dontrun{
 # Read a dataset
 d <- read_data("edi.193.3")
+
+# REad a NEON dataset without filters
 d <- read_data("neon.ecocomdp.20166.001.001")
 
 # Read a NEON dataset with filters
@@ -99,20 +93,6 @@ d <- read_data(
   site = c("MAYF", "PRIN"), 
   startdate = "2016-01", 
   enddate = "2018-11")
+}
 
-# Read multiple datasets from different sources
-d <- read_data(c("edi.193.3", "neon.ecocomdp.20166.001.001"))
-
-# Read multiple datasets from EDI and NEON with NEON filters
-d <- read_data(
-  id = list(
-    edi.193.3 = NULL,
-    neon.ecocomdp.20166.001.001 = list(
-      site = c("MAYF", "PRIN"),
-      startdate = "2016-01",
-      enddate = "2018-11")),
-  check.size = TRUE,
-  nCores = 2,
-  forceParallel = FALSE)
-  
 }

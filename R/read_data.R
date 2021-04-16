@@ -1,18 +1,16 @@
 #' Read ecocomDP data
 #'
 #' @param id
-#'     (character) Identifier of dataset to read. Identifiers are listed in the 
-#'     "id" column of the \code{search_data()} output.  If reading multiple 
-#'     datasets, then \code{id} should be a character vector of identifiers or 
-#'     a named list containing additional arguments to filter on (for NEON data 
-#'     only; see below for arguments and examples). Older versions of ids listed in the "id" column of the \code{search_data()} output are supported, but a warning is issued.
+#'     (character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search_data()} output. Older versions of ids listed in the "id" column of the \code{search_data()} output are supported, but a warning is issued.
 #' @param path
-#'     (character) Path to the directory in which the data will be written.
-#' @param file.type
-#'     (character) Type of file to save the data to. Options are: ".rda", 
-#'     ".csv".
+#'     (character) Path to the directory in which the data will be read.
 #' @param parse.datetime
 #'     (logical) Attempt to parse datetime character strings through an algorithm. For EDI, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the algorithm iterates through permutations of \code{ymd HMS} orders. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing).
+#' @param globally.unique.keys
+#'     (logical) Whether to create globally unique primary keys (and associated
+#'     foreign keys). Reading multiple datasets raises the issue of referential 
+#'     integrity across datasets. If TRUE, \code{id} is appended to each 
+#'     table's primary key and associated foreign key. Defaults to FALSE.
 #' @param site 
 #'     (character; NEON data only) A character vector of site codes to filter 
 #'     data on. Sites are listed in the "sites" column of the 
@@ -39,20 +37,6 @@
 #' @param token 
 #'     (character; NEON data only) User specific API token (generated within 
 #'     neon.datascience user accounts)
-#' @param neon.data.save.dir 
-#'     (character) Directory to save NEON source data that has been downloaded 
-#'     via \code{neonUtilities::loadByProduct()}
-#' @param neon.data.read.path 
-#'     (character) Path to read in an RDS file of 'stacked NEON data' from 
-#'     \code{neonUtilities::loadByProduct()}
-#' @param neon.data.list 
-#'     (list) A list of stacked NEON data tables to be mapped to ecocomDP. 
-#'     Must match the chosen mapping method in 'id'
-#' @param globally.unique.keys
-#'     (logical) Whether to create globally unique primary keys (and associated
-#'     foreign keys). Reading multiple datasets raises the issue of referential 
-#'     integrity across datasets. If TRUE, \code{id} is appended to each 
-#'     table's primary key and associated foreign key. Defaults to FALSE.
 #'     
 #' @return
 #'     (list) A named list of \code{id}, each including: 
@@ -75,8 +59,11 @@
 #' @export
 #' 
 #' @examples
+#' \dontrun{
 #' # Read a dataset
 #' d <- read_data("edi.193.3")
+#' 
+#' # REad a NEON dataset without filters
 #' d <- read_data("neon.ecocomdp.20166.001.001")
 #' 
 #' # Read a NEON dataset with filters
@@ -85,40 +72,20 @@
 #'   site = c("MAYF", "PRIN"), 
 #'   startdate = "2016-01", 
 #'   enddate = "2018-11")
+#' }
 #' 
-#' # Read multiple datasets from different sources
-#' d <- read_data(c("edi.193.3", "neon.ecocomdp.20166.001.001"))
-#' 
-#' # Read multiple datasets from EDI and NEON with NEON filters
-#' d <- read_data(
-#'   id = list(
-#'     edi.193.3 = NULL,
-#'     neon.ecocomdp.20166.001.001 = list(
-#'       site = c("MAYF", "PRIN"),
-#'       startdate = "2016-01",
-#'       enddate = "2018-11")),
-#'   check.size = TRUE,
-#'   nCores = 2,
-#'   forceParallel = FALSE)
-#'   
-read_data <- function(
-  id = NULL, path = NULL, file.type = ".rda", parse.datetime = TRUE,
-  
-  # dots passed to neonUtilities::loadByProduct
-  ...,
-  # site = "all", startdate = NA, 
-  # enddate = NA, check.size = FALSE, nCores = 1, forceParallel = FALSE, token = NA,
-  globally.unique.keys = FALSE) {
+read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE, 
+                      globally.unique.keys = FALSE, site = "all", 
+                      startdate = NA, enddate = NA, package = "basic", 
+                      check.size = FALSE, nCores = 1, forceParallel = FALSE, 
+                      token = NA, ...) {
   
   # Validate input arguments --------------------------------------------------
-  
-  
 
-  
-  fun.args <- validate_arguments("read_data", as.list(environment()))
-  id <- fun.args$id
-  path <- fun.args$path
-  file.type <- fun.args$file.type
+  # fun.args <- validate_arguments("read_data", as.list(environment()))
+  # id <- fun.args$id
+  # path <- fun.args$path
+  # file.type <- fun.args$file.type
   # site <- fun.args$site
   # startdate <- fun.args$startdate
   # enddate <- fun.args$enddate
@@ -127,11 +94,6 @@ read_data <- function(
   # token <- fun.args$token
   # forceParallel <- fun.args$forceParallel
 
-  
-  
-
-  
-  
   # Parameterize --------------------------------------------------------------
 
   # Get ecocomDP attributes for validation and coercion
@@ -142,32 +104,32 @@ read_data <- function(
 
   # Read ----------------------------------------------------------------------
   
+  if (stringr::str_detect(
+    id, 
+    "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)") && 
+    !grepl("^neon\\.", id)) {
+    d <- read_data_edi(id, parse.datetime)
+    
+  } else if (grepl("^neon\\.", id)) {
+    d <- map_neon_data_to_ecocomDP(
+      id = id, 
+      site = site, 
+      startdate = startdate,
+      enddate = enddate, 
+      check.size = check.size, 
+      nCores = nCores, 
+      forceParallel = forceParallel,
+      token = token, 
+      ...)
+  }
+  d <- list(d = d)
+  names(d) <- id
   
-  d <- lapply(
-    names(id),
-    function(x) {
-      
-      if (stringr::str_detect(
-        x, 
-        "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)") && 
-        !grepl("^neon\\.", x)) {
-        read_data_edi(x, parse.datetime)
-        
-      } else if (grepl("^neon\\.", x)) {
-        map_neon_data_to_ecocomDP(
-          id = x,
-          ...)
-      }
-    })
-  
-  names(d) <- names(id)
   
   # Modify --------------------------------------------------------------------
   
   # Add missing columns
-  
-  
-  
+
   invisible(
     lapply(
       names(d),
@@ -190,8 +152,6 @@ read_data <- function(
             }
           })
       }))
-
-  
 
   # Coerce column classes to ecocomDP specifications. NOTE: This same 
   # process is applied to read_from_files(). Any update here should be
@@ -284,15 +244,10 @@ read_data <- function(
   }
   
   # Return --------------------------------------------------------------------
+
+  return(d)
   
-  if (!is.null(path)) {
-    save_data(d, path, file.type)
-  }
-  
-  
-  d
-  
-} #END read_data()
+}
 
 
 
@@ -487,61 +442,5 @@ read_from_files <- function(data.path) {
   # Return
   
   d
-  
-}
-
-
-
-
-
-
-
-#' Save ecocomDP data
-#'
-#' @param data 
-#'     (list) Data as a list object created by \code{read_data()}.
-#' @param path
-#'     (character) Path to the directory in which the data will be written.
-#' @param file.type
-#'     (character) Type of file to save the data to. Options are: ".rda", 
-#'     ".csv"
-#'
-#' @return
-#'     \item{.rda}{If \code{file.type} = ".rda", then an .rda representation 
-#'     of \code{data} is returned.}
-#'     \item{.csv}{If \code{file.type} = ".csv", then an set of .csv files are
-#'     written to a sub-directory of \code{path} named after the data 
-#'     package/product ID.}
-#'     
-#' @export
-#'
-#' @examples
-#' d <- read_data("edi.193.3")
-#' #' save_data(d, tempdir(), ".rda")
-#' save_data(d, tempdir(), ".csv")
-#' 
-save_data <- function(data, path, file.type) {
-  message("Saving data")
-  tstamp <- Sys.time()
-  tstamp <- stringr::str_remove_all(tstamp, "-")
-  tstamp <- stringr::str_replace_all(tstamp, " ", "_")
-  tstamp <- stringr::str_remove_all(tstamp, ":")
-  if (file.type == ".rda") {
-    fname <- paste0("ecocomDP_data_", tstamp, ".rda")
-    message("Writing ", fname)
-    saveRDS(data, file = paste0(path, "/", fname))
-  } else if (file.type == ".csv") {
-    for (i in 1:length(data)) {
-      message("Writing ", names(data)[[i]])
-      dirname <- paste0(path, "/", names(data)[[i]])
-      dir.create(dirname)
-      for (j in 1:length(data[[i]]$tables)) {
-        fname <- paste0(names(data[[i]]$tables)[j], ".csv")
-        message("  ", fname)
-        data.table::fwrite(
-          data[[i]]$tables[[j]], file = paste0(dirname, "/", fname))
-      }
-    }
-  }
   
 }
