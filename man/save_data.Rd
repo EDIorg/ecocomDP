@@ -4,17 +4,16 @@
 \alias{save_data}
 \title{Save ecocomDP data}
 \usage{
-save_data(data, path, file.name, file.type)
+save_data(data, path, file.type = ".rds", file.name = NULL)
 }
 \arguments{
-\item{data}{(list) Data as a list object created by \code{read_data()}. Name of object will become file name.}
+\item{data}{(list) Data as a list object created by \code{read_data()}. Name of object will become file name if \code{file.name} is not used}
 
 \item{path}{(character) Path to the directory in which the data will be written.}
 
-\item{file.name}{(character) Name of file. Only for .rds. When file.type = .csv dir name for id and table names receive ecocomDP table names}
+\item{file.type}{(character) Type of file to save the data to. Default is ".rds" but can also be ".csv"}
 
-\item{file.type}{(character) Type of file to save the data to. Options are: ".rda", 
-".csv"}
+\item{file.name}{(character) Use this to set the file name if you'd like to be different than \code{data}.}
 }
 \value{
 \item{.rda}{If \code{file.type} = ".rda", then an .rda representation 

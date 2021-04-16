@@ -1,14 +1,13 @@
 #' Save ecocomDP data
 #'
 #' @param data 
-#'     (list) Data as a list object created by \code{read_data()}. Name of object will become file name.
+#'     (list) Data as a list object created by \code{read_data()}. Name of object will become file name if \code{file.name} is not used
 #' @param path
 #'     (character) Path to the directory in which the data will be written.
-#' @param file.name
-#'     (character) Name of file. Only for .rds. When file.type = .csv dir name for id and table names receive ecocomDP table names
 #' @param file.type
-#'     (character) Type of file to save the data to. Options are: ".rda", 
-#'     ".csv"
+#'     (character) Type of file to save the data to. Default is ".rds" but can also be ".csv"
+#' @param file.name
+#'     (character) Use this to set the file name if you'd like to be different than \code{data}.
 #'
 #' @return
 #'     \item{.rda}{If \code{file.type} = ".rda", then an .rda representation 
@@ -24,22 +23,23 @@
 #' #' save_data(d, tempdir(), ".rda")
 #' save_data(d, tempdir(), ".csv")
 #' 
-save_data <- function(data, path, file.name, file.type) {
-  message("Saving data")
+save_data <- function(data, path, file.type = ".rds", file.name = NULL) {
+  if (is.null(file.name)) {
+    file.name <- deparse(substitute(data))
+  }
   if (file.type == ".rds") {
     file.name <- paste0(file.name, ".rds")
-    message("Writing ", file.name)
+    message("Writing ", file.name, " to ", path)
     saveRDS(data, file = paste0(path, "/", file.name))
   } else if (file.type == ".csv") {
     for (i in 1:length(data)) {
-      message("Writing ", names(data)[[i]])
-      dirname <- paste0(path, "/", names(data)[[i]])
-      dir.create(dirname)
+      dir.name <- names(data)[[i]]
+      message("Writing ", dir.name, " as .csv to ", path)
+      dir.create(paste0(path, "/", dir.name))
       for (j in 1:length(data[[i]]$tables)) {
         file.name <- paste0(names(data[[i]]$tables)[j], ".csv")
-        message("  ", file.name)
         data.table::fwrite(
-          data[[i]]$tables[[j]], file = paste0(dirname, "/", file.name))
+          data[[i]]$tables[[j]], file = paste0(path, "/", dir.name, "/", file.name), sep = ",")
       }
     }
   }
