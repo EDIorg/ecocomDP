@@ -804,6 +804,45 @@ get_eol <- function(path, file.name, os){
 
 
 
+#' Does dataset ID belong to EDI?
+#'
+#' @param id (character) Dataset identifier 
+#'
+#' @return (logical) TRUE if is an EDI identifier, otherwise FALSE
+#'
+is_edi <- function(id) {
+  res <- stringr::str_detect(
+    string = id, 
+    pattern = paste0("(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|",
+                     "(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)"))
+  return(res)
+}
+
+
+
+
+
+
+
+
+#' Does dataset ID belong to NEON?
+#'
+#' @param id (character) Dataset identifier 
+#'
+#' @return (logical) TRUE if is a NEON identifier, otherwise FALSE
+#'
+is_neon <- function(id) {
+  res <- stringr::str_detect(string = id, pattern = "^neon\\.")
+  return(res)
+}
+
+
+
+
+
+
+
+
 #' Is provenance node?
 #'
 #' @param nodeset (xml_nodeset) methods nodeset at \code{/eml:eml/dataset/methods/methodStep}
@@ -816,6 +855,51 @@ is_prov <- function(nodeset) {
   dasource <- xml2::xml_find_all(nodeset, "./dataSource")
   res <- !is_empty_nodeset(dasource)
   return(res)
+}
+
+
+
+
+
+
+
+
+#' Parse datetime
+#'
+#' @param tbl (character) Table name \code{vals} come from. This is used in warning messages.
+#' @param vals (character) Vector of datetimes
+#' @param frmt (character) Datetime format string
+#' 
+#' @details A wrapper to to \code{lubridate::ymd()}, \code{lubridate::ymd_h()}, \code{lubridate::ymd_hm()}, and \code{lubridate::ymd_hms()}.
+#' 
+#' @note No attempt at using the time zone component is made
+#' 
+#' @return (POSIXct POSIXt) Datetimes parsed
+#' 
+parse_datetime <- function(tbl, vals, frmt) {
+  vals <- as.character(vals)
+  na_i <- sum(is.na(vals))
+  vals <- stringr::str_remove_all(vals, "(Z|z).+$")
+  res <- "ymd"
+  t <- unlist(stringr::str_split(frmt, "T|[:blank:]"))[2] # time format
+  if (!is.na(t)) {                                        # build time component of lubridate func call
+    if (stringr::str_detect(tolower(t), "hh")) {
+      res <- paste0(res, "_h")
+    }
+    if (stringr::str_detect(tolower(t), "mm")) {
+      res <- paste0(res, "m")
+    }
+    if (stringr::str_detect(tolower(t), "ss")) {
+      res <- paste0(res, "s")
+    }
+  }
+  parsed <- suppressWarnings(
+    eval(parse(text = paste0("lubridate::", res, "(vals)"))))
+  na_f <- sum(is.na(parsed))
+  if (na_f > na_i) {
+    warning((na_f - na_i), " ", tbl, " datetime strings failed to parse. Use parse.datetime = 'FALSE' to get datetimes as character strings for manual processing.", call. = FALSE)
+  }
+  return(parsed)
 }
 
 
@@ -968,51 +1052,6 @@ increment_package_version <- function(package.id) {
 is_empty_nodeset <- function(nodeset) {
   res <- length(nodeset) == 0
   return(res)
-}
-
-
-
-
-
-
-
-
-#' Parse datetime
-#'
-#' @param tbl (character) Table name \code{vals} come from. This is used in warning messages.
-#' @param vals (character) Vector of datetimes
-#' @param frmt (character) Datetime format string
-#' 
-#' @details A wrapper to to \code{lubridate::ymd()}, \code{lubridate::ymd_h()}, \code{lubridate::ymd_hm()}, and \code{lubridate::ymd_hms()}.
-#' 
-#' @note No attempt at using the time zone component is made
-#' 
-#' @return (POSIXct POSIXt) Datetimes parsed
-#' 
-parse_datetime <- function(tbl, vals, frmt) {
-  vals <- as.character(vals)
-  na_i <- sum(is.na(vals))
-  vals <- stringr::str_remove_all(vals, "(Z|z).+$")
-  res <- "ymd"
-  t <- unlist(stringr::str_split(frmt, "T|[:blank:]"))[2] # time format
-  if (!is.na(t)) {                                        # build time component of lubridate func call
-    if (stringr::str_detect(tolower(t), "hh")) {
-      res <- paste0(res, "_h")
-    }
-    if (stringr::str_detect(tolower(t), "mm")) {
-      res <- paste0(res, "m")
-    }
-    if (stringr::str_detect(tolower(t), "ss")) {
-      res <- paste0(res, "s")
-    }
-  }
-  parsed <- suppressWarnings(
-    eval(parse(text = paste0("lubridate::", res, "(vals)"))))
-  na_f <- sum(is.na(parsed))
-  if (na_f > na_i) {
-    warning((na_f - na_i), " ", tbl, " datetime strings failed to parse. Use parse.datetime = 'FALSE' to get datetimes as character strings for manual processing.", call. = FALSE)
-  }
-  return(parsed)
 }
 
 
