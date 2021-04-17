@@ -1061,6 +1061,23 @@ is_empty_nodeset <- function(nodeset) {
 
 
 
+#' Read ecocomDP criteria
+#'
+#' @return (data.frame) ecocomDP criteria
+#' 
+read_criteria <- function() {
+  res <- data.table::fread(
+    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  return(res)
+}
+
+
+
+
+
+
+
+
 #' Read the ecocomDP dataset_summary table (from EDI)
 #'
 #' @description  
