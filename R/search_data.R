@@ -6,13 +6,13 @@
 #' 
 #' @param text
 #'     (character) Text to search in dataset titles, descriptions, and 
-#'     abstracts.
+#'     abstracts. Return includes any word or phrase matches. Is not case sensitive. Works with \code{boolean.operator}
 #' @param taxa
 #'     (character) Taxanomic rank values to search for. The full taxonomic 
-#'     hierarchy of each taxa in the data is searchable. Scientific and 
-#'     common names are supported.
+#'     hierarchy of each taxa in the data is searchable for EDI but not NEON (currently). Scientific and 
+#'     common names are supported for EDI, but not NEON (currently.
 #' @param num.taxa
-#'     (numeric) Minimum and maximum number of taxa in the data.
+#'     (numeric) Minimum and maximum number of taxa in the data. Return will fall between these bounds.
 #' @param years
 #'     (numeric) Minimum and maximum number of years sampled.
 #' @param sd.between.surveys

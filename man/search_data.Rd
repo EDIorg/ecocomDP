@@ -16,13 +16,13 @@ search_data(
 }
 \arguments{
 \item{text}{(character) Text to search in dataset titles, descriptions, and 
-abstracts.}
+abstracts. Return includes any word or phrase matches. Is not case sensitive. Works with \code{boolean.operator}}
 
 \item{taxa}{(character) Taxanomic rank values to search for. The full taxonomic 
-hierarchy of each taxa in the data is searchable. Scientific and 
-common names are supported.}
+hierarchy of each taxa in the data is searchable for EDI but not NEON (currently). Scientific and 
+common names are supported for EDI, but not NEON (currently.}
 
-\item{num.taxa}{(numeric) Minimum and maximum number of taxa in the data.}
+\item{num.taxa}{(numeric) Minimum and maximum number of taxa in the data. Return will fall between these bounds.}
 
 \item{years}{(numeric) Minimum and maximum number of years sampled.}
 

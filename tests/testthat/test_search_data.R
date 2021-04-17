@@ -67,28 +67,19 @@ testthat::test_that("Some info is source specific", {
 # search arguments ------------------------------------------------------------
 
 testthat::test_that("Arguments control search patterns", {
-
-  # Parameterize
-
-  summary_data <- c(summary_data_edi, summary_data_neon)
-
-  # text - Search titles
-
-  r <- search_data(
-    text = "Small mammal box trapping")
+  load(paste0(tempdir(), "/ecocomDP_search_index.rda"))
+  summary_data <- ecocomDP_search_index
+  # text arg searches across titles, abstracts, descriptions
+  r <- search_data(text = "Small mammal box trapping")
   expect_equal(nrow(r), 1)
-
-  # text - Search abstract
-
-  r <- search_data(
-    text = "South Carolina")
-  expect_true(nrow(r) < nrow(search_data()))
-
-  # taxa
-
+  r <- search_data(text = "South Carolina")
+  expect_true(nrow(r) >= 4)
+  r <- search_data(text = "For a description of how NEON L1 data were mapped ")
+  expect_true(nrow(r) >= 12)
+  # taxa arg searches across taxa ranks
   taxa_search <- "Chordata"
-  r_method_1 <- search_data(taxa = taxa_search)
-  r_method_2 <- lapply(
+  r_method_1 <- search_data(taxa = taxa_search)  # Search method 1
+  r_method_2 <- lapply(                          # Search method 2
     names(summary_data),
     function(id) {
       x <- summary_data[[id]]
@@ -102,14 +93,13 @@ testthat::test_that("Arguments control search patterns", {
       taxa <- paste(taxa, collapse = ",")
       stringr::str_detect(taxa, taxa_search)
     })
-
-  expect_true(
-    all(
-      r_method_1$id %in%
-        unique(na.omit(names(summary_data)[unlist(r_method_2)]))))
-
-  # num.taxa
-
+  res <- stringr::str_remove_all(names(summary_data), "_herps") # Do methods 1 & 2 agree?
+  r_method_2 <- unlist(r_method_2)                              # Requires somes wrangling since summary_data and r_method_1 objects differ 
+  r_method_2[is.na(r_method_2)] <- FALSE
+  r_method_1 <- c(r_method_1$id[is_edi(r_method_1$id)],
+                  r_method_1$source_id[is_neon(r_method_1$id)])
+  expect_true(all(res[r_method_2] %in% r_method_1))
+  # Num taxa is a bounding search
   search_num_taxa <- c(0, 10)
   r_method_1 <- search_data(num.taxa = search_num_taxa)
   r_method_2 <- lapply(
@@ -125,14 +115,13 @@ testthat::test_that("Arguments control search patterns", {
             })))
       any((num_taxa >= search_num_taxa[1]) & (num_taxa <= search_num_taxa[2]))
     })
-
-  expect_true(
-    all(
-      unique(r_method_1$id) %in%
-        unique(na.omit(names(summary_data)[unlist(r_method_2)]))))
-
+  res <- stringr::str_remove_all(names(summary_data), "_herps")
+  r_method_2 <- unlist(r_method_2)
+  r_method_2[is.na(r_method_2)] <- FALSE
+  r_method_1 <- c(r_method_1$id[is_edi(r_method_1$id)],
+                  r_method_1$source_id[is_neon(r_method_1$id)])
+  expect_true(all(res[r_method_2] %in% r_method_1))
   # years
-
   search_years <- c(10, 20)
   r_method_1 <- search_data(years = search_years)
   r_method_2 <- lapply(
@@ -148,14 +137,13 @@ testthat::test_that("Arguments control search patterns", {
             })))
       any((years >= search_years[1]) & (years <= search_years[2]))
     })
-
-  expect_true(
-    all(
-      unique(r_method_1$id) %in%
-        unique(na.omit(names(summary_data)[unlist(r_method_2)]))))
-
+  res <- stringr::str_remove_all(names(summary_data), "_herps")
+  r_method_2 <- unlist(r_method_2)
+  r_method_2[is.na(r_method_2)] <- FALSE
+  r_method_1 <- c(r_method_1$id[is_edi(r_method_1$id)],
+                  r_method_1$source_id[is_neon(r_method_1$id)])
+  expect_true(all(res[r_method_2] %in% r_method_1))
   # sd.between.surveys
-
   search_sd_between_surveys <- c(.25, 1)
   r_method_1 <- search_data(sd.between.surveys = search_sd_between_surveys)
   r_method_2 <- lapply(
@@ -172,51 +160,34 @@ testthat::test_that("Arguments control search patterns", {
       any((sd_between_surveys >= search_sd_between_surveys[1]) &
             (sd_between_surveys <= search_sd_between_surveys[2]))
     })
-
-  expect_true(
-    all(
-      unique(r_method_1$id) %in%
-        unique(na.omit(names(summary_data)[unlist(r_method_2)]))))
-
+  res <- stringr::str_remove_all(names(summary_data), "_herps")
+  r_method_2 <- unlist(r_method_2)
+  r_method_2[is.na(r_method_2)] <- FALSE
+  r_method_1 <- c(r_method_1$id[is_edi(r_method_1$id)],
+                  r_method_1$source_id[is_neon(r_method_1$id)])
+  expect_true(all(res[r_method_2] %in% r_method_1))
+  
   # geographic.area
   # TODO: Implement test
-
+  
   # boolean.operator "OR" - All unique id of separate term searches should be
   # combined when using the OR operator
-
   r1 <- search_data(text = "Lake")
   r2 <- search_data(text = "River")
   r_or <- search_data(text = c("Lake", "River"), boolean.operator = "OR")
-
-  expect_true(
-    all(
-      unique(c(r1$id, r2$id)) %in% unique(r_or$id)))
-
+  expect_true(all(unique(c(r1$id, r2$id)) %in% unique(r_or$id)))
   r1 <- search_data(taxa = "Plantae")
   r2 <- search_data(taxa = "Animalia")
   r_or <- search_data(taxa = c("Plantae", "Animalia"), boolean.operator = "OR")
-
-  expect_true(
-    all(
-      unique(c(r1$id, r2$id)) %in% unique(r_or$id)))
-
+  expect_true(all(unique(c(r1$id, r2$id)) %in% unique(r_or$id)))
   # boolean.operator "AND" - All unique id of separate term searches should not
   # be expected when using the AND operator
-
   r1 <- search_data(text = "Lake")
   r2 <- search_data(text = "River")
   r_and <- search_data(text = c("Lake", "River"), boolean.operator = "AND")
-
-  expect_true(
-    all(
-      intersect(r1$id, r2$id) %in% r_and$id))
-
+  expect_true(all(intersect(r1$id, r2$id) %in% r_and$id))
   r1 <- search_data(taxa = "Plantae")
   r2 <- search_data(taxa = "Animalia")
   r_and <- search_data(taxa = c("Plantae", "Animalia"), boolean.operator = "AND")
-
-  expect_true(
-    all(
-      intersect(r1$id, r2$id) %in% r_and$id))
-
+  expect_true(all(intersect(r1$id, r2$id) %in% r_and$id))
 })
