@@ -11,7 +11,7 @@ save_data(data, path, file.type = ".rds", file.name = NULL)
 
 \item{path}{(character) Path to the directory in which the data will be written.}
 
-\item{file.type}{(character) Type of file to save the data to. Default is ".rds" but can also be ".csv"}
+\item{file.type}{(character) Type of file to save the data to. Default is ".rds" but can also be ".csv". Note: metadata and validation_issues are lost when ".csv".}
 
 \item{file.name}{(character) Use this to set the file name if you'd like to be different than \code{data}.}
 }
