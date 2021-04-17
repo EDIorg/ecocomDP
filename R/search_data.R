@@ -399,6 +399,7 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
   } else {
     # output <- dplyr::distinct(format_search_results(output))
     output <- dplyr::distinct(output)
+    output <- as.data.frame(output)
     
     return(output)
   }
