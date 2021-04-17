@@ -27,6 +27,7 @@ r_packages:
   - rmarkdown
   - stringr
   - tidyr
+  - tools
   - xml2
   
 warnings_are_errors: false

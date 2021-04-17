@@ -1,6 +1,7 @@
 #' Plot community metrics
 #'
 #' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
+#' @param type (character) Type of plots to create. Options: "community"
 #' @param path (character) Path to directory where plots will be written
 #' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100% opaque
 #'
@@ -28,19 +29,19 @@
 #' plot_community(dataset, path = "/user/me/ecocomDP/plots")
 #' }
 #' 
-plot_community <- function(dataset, path, alpha) {
-  if (!requireNamespace("ggplot2", quietly = TRUE)) { # ggplot2 is a suggested package
+plot_data <- function(dataset, type, path, alpha) {
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
     stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
   }
-  ds <- lapply(dataset, format_for_comm_plots, id = names(dataset))     # intermediate format for plotting
-  for (id in names(ds)) {
-    dslong <- subset(ds[[id]], OBSERVATION_TYPE == "TAXON_COUNT") %>% # long form
+  if (type == "community") {                                    # plot community
+    ds <- format_for_comm_plots(dataset, names(dataset))        # intermediate format for plotting
+    dslong <- subset(ds, OBSERVATION_TYPE == "TAXON_COUNT") %>% # long form
       dplyr::mutate_at(dplyr::vars(c(VALUE)), as.numeric) %>%
       dplyr::mutate_at(dplyr::vars(SITE_ID), as.character)
-    dswide <- dslong %>%                                              # wide form
+    dswide <- dslong %>%                                        # wide form
       dplyr::select(-VARIABLE_UNITS) %>%
       tidyr::pivot_wider(names_from = VARIABLE_NAME, values_from = VALUE)
-    vunit <- unique(dslong$VARIABLE_UNITS)                            # variable unit
+    vunit <- unique(dslong$VARIABLE_UNITS)                      # variable unit
     plot_alpha_diversity(dslong, id,  path, vunit, alpha)
     plot_sampling_effort(dslong, id, path, alpha)
     plot_sp_accumulation_over_space(dslong, id, path, vunit)
