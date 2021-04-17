@@ -77,7 +77,7 @@ validate_ecocomDP <- function(
   
   # Get package/product ID from the dataset_summary table since this function
   # doesn't require an ID input.
-  
+  # FIXME: Reference data structure "d" ... not the package_id of the summary table, which is issue for NEON datasets
   id <- d$dataset_summary$package_id
   if (is.null(id)) {
     id <- "unknown data ID"

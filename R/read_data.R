@@ -40,7 +40,7 @@
 #' @param ...
 #'     (NEON data only) Other arguments to \code{neonUtilities::loadByProduct()}
 #' @param from.file
-#'     (character) Full path to file to be read. Supported options are returned by \code{save_data()}
+#'     (character) Full path to file to be read if .rds, or path to directory if .csv. Supported options are returned by \code{save_data()}
 #'     
 #'     
 #' @return
@@ -392,13 +392,12 @@ read_data_edi <- function(id, parse.datetime = TRUE) {
 #' 
 read_from_files <- function(data.path, parse.datetime) {
   # TODO: validate_arguments("read_from_files", as.list(environment()))
-  attr_tbl <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  attr_tbl <- read_criteria()
   attr_tbl <- attr_tbl[!is.na(attr_tbl$column), ]
   fileext <- tools::file_ext(data.path)
-  if (fileext == "rds") {     # rds
+  if (fileext == "rds") {        # rds
     d <- readRDS(data.path)
-  } else if (fileext == "") { # dir
+  } else if (fileext != "rds") { # dir ... note NEON ids cause file_ext() to produce misleading results
     d <- lapply(
       unique(attr_tbl$table),
       function(x) {

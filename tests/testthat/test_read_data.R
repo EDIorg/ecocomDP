@@ -1,110 +1,103 @@
-context("Data readers")
+context("read_data()")
 
 library(ecocomDP)
 
-# Parameterize ----------------------------------------------------------------
-
-criteria <- data.table::fread(
-  system.file('validation_criteria.txt', package = 'ecocomDP'))
-
 # read_data() -----------------------------------------------------------------
 
-testthat::test_that("read_data()", {
-
-  # Read from EDI
-  d <- try(
-    read_data(id = "edi.193.3"), 
-    silent = TRUE)
-  if (class(d) != "try-error") {
-    # Check for expected structure
-    expect_true(is.list(d))
-    expect_true(
-      all(names(d[[1]]) %in% c("metadata", "tables", "validation_issues")))
-    expect_true(
-      all(names(d[[1]]$tables) %in% unique(criteria$table)))
-    # globally.unique.keys - Are created only if TRUE
-    expect_false(
-      all(
-        stringr::str_detect(
-          d[[1]]$tables$location$location_id, 
-          "edi.193.3")))
-    d <- try(
-      read_data(id = "edi.193.3", globally.unique.keys = TRUE), 
-      silent = TRUE)
-    if (class(d) != "try-error") {
-      expect_true(
-        all(
-          stringr::str_detect(
-            d[[1]]$tables$location$location_id, 
-            "edi.193.3")))
+testthat::test_that("Supports APIs, local files, and datetime parsing", {
+  criteria <- read_criteria()
+  # From API (EDI)
+  id <- "edi.193.3"
+  d <- try(suppressWarnings(read_data(id = id)), silent = TRUE)
+  if (class(d) != "try-error") {                                                      # Has expected structure
+    expect_true(is.list(d))                                                           # obj is a list
+    expect_true(names(d) == id)                                                       # 1st level name is id
+    expect_true(all(names(d[[1]]) %in% c("metadata", "tables", "validation_issues"))) # 2nd level has 3 values
+    for (i in names(d[[1]])) {                                                        # 2nd level objs are lists
+      expect_true(is.list(d[[1]][[i]]))
+    }
+    expect_true(all(names(d[[1]]$tables) %in% unique(criteria$table)))                # table names are valid
+    for (i in names(d[[1]]$tables)) {                                                 # tables are data.frames
+      expect_true(is.data.frame(d[[1]]$tables[[i]]))
     }
   }
-  
-  # Read from NEON
+  # From API (NEON)
+  id <- "neon.ecocomdp.20107.001.001"
   d <- try(
-    read_data(
-      id = "DP1.20166.001", 
-      site = c("MAYF", "PRIN"), 
-      startdate = "2016-01", 
-      enddate = "2018-11"), 
-    silent = TRUE)
-  if (class(d) != "try-error") {
-    # Check for expected structure
-    expect_true(is.list(d))
-    expect_true(
-      all(names(d[[1]]) %in% c("metadata", "tables", "validation_issues")))
-    expect_true(
-      all(names(d[[1]]$tables) %in% unique(criteria$table)))
-    # globally.unique.keys - Are created only if TRUE
-    expect_false(
-      all(
-        stringr::str_detect(
-          d[[1]]$tables$location$location_id, 
-          "DP1.20166.001")))
-    d <- try(
+    suppressWarnings(
       read_data(
-        id = "DP1.20166.001", 
-        site = c("MAYF", "PRIN"), 
+        id = id, 
+        site = c("MAYF", "CARI"), 
         startdate = "2016-01", 
-        enddate = "2018-11",
-        globally.unique.keys = TRUE), 
-      silent = TRUE)
-    if (class(d) != "try-error") {
-      expect_true(
-        all(
-          stringr::str_detect(
-            d[[1]]$tables$location$location_id, 
-            "DP1.20166.001")))
+        enddate = "2016-12", 
+        check.size = FALSE)), 
+    silent = TRUE)
+  if (class(d) != "try-error") {                                                      # Has expected structure
+    expect_true(is.list(d))                                                           # obj is a list
+    expect_true(names(d) == id)                                                       # 1st level name is id
+    expect_true(all(names(d[[1]]) %in% c("metadata", "tables", "validation_issues"))) # 2nd level has 3 values
+    for (i in names(d[[1]])) {                                                        # 2nd level objs are lists
+      expect_true(is.list(d[[1]][[i]]))
+    }
+    expect_true(all(names(d[[1]]$tables) %in% unique(criteria$table)))                # table names are valid
+    for (i in names(d[[1]]$tables)) {                                                 # tables are data.frames
+      expect_true(is.data.frame(d[[1]]$tables[[i]]))
     }
   }
-  
+  # From files
+  if (class(d) != "try-error") {
+    # .rds
+    save_data(d, tempdir())
+    dread <- suppressWarnings(read_data(from.file = paste0(tempdir(), "/d.rds")))         # Has expected structure
+    expect_true(is.list(dread))                                                           # obj is a list
+    expect_true(names(dread) == id)                                                       # 1st level name is id
+    expect_true(all(names(dread[[1]]) %in% c("metadata", "tables", "validation_issues"))) # 2nd level has 3 values
+    for (i in names(dread[[1]])) {                                                        # 2nd level objs are lists
+      expect_true(is.list(dread[[1]][[i]]))
+    }
+    expect_true(all(names(dread[[1]]$tables) %in% unique(criteria$table)))                # table names are valid
+    for (i in names(dread[[1]]$tables)) {                                                 # tables are data.frames
+      expect_true(is.data.frame(dread[[1]]$tables[[i]]))
+    }
+    unlink(paste0(tempdir(), "/d.rds"), recursive = TRUE, force = TRUE) 
+    # .csv
+    unlink(paste0(tempdir(),"/", id), recursive = TRUE, force = TRUE) 
+    save_data(d, tempdir(), file.type = ".csv")
+    dread <- suppressWarnings(read_data(from.file = paste0(tempdir(), "/", id)))          # Has expected structure
+    expect_true(is.list(dread))                                                           # obj is a list
+    expect_true(names(dread) == id)                                                       # 1st level name is id
+    expect_true(all(names(dread[[1]]) %in% c("metadata", "tables", "validation_issues"))) # 2nd level has 3 values
+    for (i in names(dread[[1]])) {                                                        # 2nd level objs are lists
+      if (i != "metadata") {                                                              # metadata is lost when written to .csv
+        expect_true(is.list(dread[[1]][[i]]))
+      }
+    }
+    expect_true(all(names(dread[[1]]$tables) %in% unique(criteria$table)))                # table names are valid
+    for (i in names(dread[[1]]$tables)) {                                                 # tables are data.frames
+      expect_true(is.data.frame(dread[[1]]$tables[[i]]))
+    }
+    unlink(paste0(tempdir(),"/", id), recursive = TRUE, force = TRUE) 
+  }
+  # Return datetimes as character if directed
+  if (class(d) != "try-error") {
+    save_data(d, tempdir())
+    dread <- suppressWarnings(
+      read_data(from.file = paste0(tempdir(), "/d.rds"), parse.datetime = TRUE))          # not character
+    for (tbl in names(dread[[1]]$tables)) {
+      for (colname in colnames(dread[[1]]$tables[[tbl]]))
+        if (stringr::str_detect(colname, "datetime")) {
+          expect_true(class(dread[[1]]$tables[[tbl]][[colname]]) != "character")
+        }
+    }
+    dread <- suppressWarnings(
+      read_data(from.file = paste0(tempdir(), "/d.rds"), parse.datetime = FALSE))         # character
+    for (tbl in names(dread[[1]]$tables)) {
+      for (colname in colnames(dread[[1]]$tables[[tbl]]))
+        if (stringr::str_detect(colname, "datetime")) {
+          expect_true(class(dread[[1]]$tables[[tbl]][[colname]]) == "character")
+        }
+    }
+    unlink(paste0(tempdir(), "/d.rds"), recursive = TRUE, force = TRUE)
+  }
 })
 
-# read_from_files() -----------------------------------------------------------
-
-testthat::test_that("read_from_files()", {
-  
-  file.copy(
-    system.file("/data", package = "ecocomDP"),
-    tempdir(),
-    recursive = TRUE)
-  
-  # Structure of returned object should be valid
-  
-  d <- read_from_files(
-    data.path = paste0(tempdir(), "/data"))
-  
-  expect_true(is.list(d))
-  expect_true(
-    all(names(d[[1]]) %in% c("metadata", "tables")))
-  expect_true(
-    all(names(d[[1]]$tables) %in% unique(criteria$table)))
-  
-  # Clean up
-  
-  unlink(
-    paste0(tempdir(), "/data"), 
-    recursive = TRUE, 
-    force = TRUE)
-  
-})
