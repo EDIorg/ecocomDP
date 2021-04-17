@@ -4,11 +4,13 @@
 \alias{read_from_files}
 \title{Read ecocomDP from files TO BE USED IN CREATION PROCESS PRIOR TO ARCHIVING}
 \usage{
-read_from_files(data.path)
+read_from_files(data.path, parse.datetime)
 }
 \arguments{
 \item{data.path}{(character) The path to the directory containing ecocomDP tables. 
 Duplicate file names are not allowed.}
+
+\item{parse.datetime}{(logical) Attempt to parse datetime character strings through an algorithm. For EDI, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the algorithm iterates through permutations of \code{ymd HMS} orders. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing).}
 }
 \value{
 (list) A named list of \code{id}, each including: 

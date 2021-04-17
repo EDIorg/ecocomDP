@@ -17,7 +17,8 @@ read_data(
   nCores = 1,
   forceParallel = FALSE,
   token = NA,
-  ...
+  ...,
+  from.file = NULL
 )
 }
 \arguments{
@@ -57,15 +58,23 @@ to FALSE.}
 
 \item{token}{(character; NEON data only) User specific API token (generated within 
 neon.datascience user accounts)}
+
+\item{...}{(NEON data only) Other arguments to \code{neonUtilities::loadByProduct()}}
+
+\item{from.file}{(character) Full path to file to be read. Supported options are returned by \code{save_data()}}
 }
 \value{
-(list) A named list of \code{id}, each including: 
-    \item{metadata}{A list of information about the data.}
-    \item{tables}{A list of data.frames following the ecocomDP format 
-    (\url{https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md})}
-    \item{validation_issues}{If the dataset fails any validation checks, 
+(list) with the structure: 
+    \itemize{
+      \item{id - Dataset id}
+        \itemize{
+          \item metadata - Info about the dataset. NOTE: This object is underdevelopment and content may change in future releases
+          \item tables - Dataset tables
+          \item validation_issues - If the dataset fails any validation checks, 
     then they are listed here as a vector of character strings describing 
-    each issue.}
+    each issue.
+      }
+    }
 }
 \description{
 Read ecocomDP data

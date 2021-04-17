@@ -37,15 +37,24 @@
 #' @param token 
 #'     (character; NEON data only) User specific API token (generated within 
 #'     neon.datascience user accounts)
+#' @param ...
+#'     (NEON data only) Other arguments to \code{neonUtilities::loadByProduct()}
+#' @param from.file
+#'     (character) Full path to file to be read. Supported options are returned by \code{save_data()}
+#'     
 #'     
 #' @return
-#'     (list) A named list of \code{id}, each including: 
-#'     \item{metadata}{A list of information about the data.}
-#'     \item{tables}{A list of data.frames following the ecocomDP format 
-#'     (\url{https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md})}
-#'     \item{validation_issues}{If the dataset fails any validation checks, 
+#'     (list) with the structure: 
+#'     \itemize{
+#'       \item{id - Dataset id}
+#'         \itemize{
+#'           \item metadata - Info about the dataset. NOTE: This object is underdevelopment and content may change in future releases
+#'           \item tables - Dataset tables
+#'           \item validation_issues - If the dataset fails any validation checks, 
 #'     then they are listed here as a vector of character strings describing 
-#'     each issue.}
+#'     each issue.
+#'       }
+#'     }
 #'     
 #' @details 
 #'     Validation checks are applied to each dataset ensuring they comply with 
@@ -78,7 +87,7 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
                       globally.unique.keys = FALSE, site = "all", 
                       startdate = NA, enddate = NA, package = "basic", 
                       check.size = FALSE, nCores = 1, forceParallel = FALSE, 
-                      token = NA, ...) {
+                      token = NA, ..., from.file = NULL) {
   
   # Validate input arguments --------------------------------------------------
 
@@ -104,27 +113,30 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
 
   # Read ----------------------------------------------------------------------
   
-  if (stringr::str_detect(
-    id, 
-    "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)") && 
-    !grepl("^neon\\.", id)) {
-    d <- read_data_edi(id, parse.datetime)
-    
-  } else if (grepl("^neon\\.", id)) {
-    d <- map_neon_data_to_ecocomDP(
-      id = id, 
-      site = site, 
-      startdate = startdate,
-      enddate = enddate, 
-      check.size = check.size, 
-      nCores = nCores, 
-      forceParallel = forceParallel,
-      token = token, 
-      ...)
+  if (is.null(from.file)) {      # From API
+    if (stringr::str_detect(
+      id, 
+      "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)") && 
+      !grepl("^neon\\.", id)) {
+      d <- read_data_edi(id, parse.datetime)
+      
+    } else if (grepl("^neon\\.", id)) {
+      d <- map_neon_data_to_ecocomDP(
+        id = id, 
+        site = site, 
+        startdate = startdate,
+        enddate = enddate, 
+        check.size = check.size, 
+        nCores = nCores, 
+        forceParallel = forceParallel,
+        token = token, 
+        ...)
+    }
+    d <- list(d = d)
+    names(d) <- id
+  } else {                       # From file
+    d <- read_from_files(from.file, parse.datetime)
   }
-  d <- list(d = d)
-  names(d) <- id
-  
   
   # Modify --------------------------------------------------------------------
   
@@ -170,8 +182,10 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
               function(z) {
                 detected <- class(d[[x]]$tables[[y]][[z]])
                 expected <- attr_tbl$class[(attr_tbl$table == y) & (attr_tbl$column == z)]
+                if (isTRUE(parse.datetime) & (expected == "Date") & is.character(detected)) { # NAs should be datetime for consistency
+                  d[[x]]$tables[[y]][[z]] <<- lubridate::as_date(d[[x]]$tables[[y]][[z]])
+                }
                 if (any(detected %in% c("POSIXct", "POSIXt", "Date", "IDate"))) {
-                  # FIXME: OK to be characterstring if user specifies parse.datetime = FALSE
                   detected <- "Date" # so downstream logic doesn't throw length() > 1 warnings
                 }
                 if (detected != expected) {
@@ -221,17 +235,15 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
     
   }
   
-  # Return datetimes as character - Only applies to NEON here. EDI is handled in read_data_edi()
+  # Return datetimes as character
   if (!isTRUE(parse.datetime)) {
     for (id in names(d)) {
-      if (stringr::str_detect(id, "^neon\\.")) {
-        for (tbl in names(d[[id]]$tables)) {
-          dtcols <- stringr::str_detect(colnames(d[[id]]$tables[[tbl]]), "datetime")
-          if (any(dtcols)) {
-            colname <- colnames(d[[id]]$tables[[tbl]])[dtcols]
-            vals <- as.character(d[[id]]$tables[[tbl]][[colname]])
-            d[[id]]$tables[[tbl]][[colname]] <- vals
-          }
+      for (tbl in names(d[[id]]$tables)) {
+        dtcols <- stringr::str_detect(colnames(d[[id]]$tables[[tbl]]), "datetime")
+        if (any(dtcols)) {
+          colname <- colnames(d[[id]]$tables[[tbl]])[dtcols]
+          vals <- as.character(d[[id]]$tables[[tbl]][[colname]])
+          d[[id]]$tables[[tbl]][[colname]] <- vals
         }
       }
     }
@@ -340,8 +352,6 @@ read_data_edi <- function(id, parse.datetime = TRUE) {
       if (isTRUE(parse.datetime)) {
         parsed <- parse_datetime(tbl = tbl, vals = output[[tbl]][[dtcol]], frmt = frmtstr)
         output[[tbl]][[dtcol]] <- parsed
-      } else {
-        output[[tbl]][[dtcol]] <- as.character(output[[tbl]][[dtcol]])
       }
     }
   }
@@ -368,6 +378,8 @@ read_data_edi <- function(id, parse.datetime = TRUE) {
 #' @param data.path 
 #'     (character) The path to the directory containing ecocomDP tables. 
 #'     Duplicate file names are not allowed.
+#' @param parse.datetime
+#'     (logical) Attempt to parse datetime character strings through an algorithm. For EDI, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the algorithm iterates through permutations of \code{ymd HMS} orders. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing).
 #'
 #' @return
 #'     (list) A named list of \code{id}, each including: 
@@ -378,69 +390,32 @@ read_data_edi <- function(id, parse.datetime = TRUE) {
 #' @examples
 #' d <- read_from_files(system.file("/data", package = "ecocomDP"))
 #' 
-read_from_files <- function(data.path) {
-  
-  validate_arguments("read_from_files", as.list(environment()))
-  
+read_from_files <- function(data.path, parse.datetime) {
+  # TODO: validate_arguments("read_from_files", as.list(environment()))
   attr_tbl <- data.table::fread(
     system.file('validation_criteria.txt', package = 'ecocomDP'))
   attr_tbl <- attr_tbl[!is.na(attr_tbl$column), ]
-  
-  d <- lapply(
-    unique(attr_tbl$table),
-    function(x) {
-      ecocomDP_table <- stringr::str_detect(
-        list.files(data.path), 
-        paste0("(?<=.{0,10000})", x, "(?=\\.[:alnum:]*$)"))
-      if (any(ecocomDP_table)) {
-        data.table::fread(
-          paste0(data.path, "/", list.files(data.path)[ecocomDP_table]))
-      }
-    })
-  names(d) <- unique(attr_tbl$table)
-  d[sapply(d, is.null)] <- NULL
-  
-  # TODO: Read metadata from EML if exists in data.path
-  d <- list(
-    list(metadata = NULL, tables = d))
-  names(d) <- d[[1]]$tables$dataset_summary$package_id
-  
-  # Coerce column classes to ecocomDP specifications. NOTE: This same 
-  # process is applied to read_data(). Any update here should be
-  # duplicated there. A function is not used in order to minimize data object
-  # copies.
-  
-  invisible(
-    lapply(
-      names(d),
-      function(x){
-        lapply(
-          names(d[[x]]$tables),
-          function(y) {
-            lapply(
-              names(d[[x]]$tables[[y]]),
-              function(z) {
-                detected <- class(d[[x]]$tables[[y]][[z]])
-                expected <- attr_tbl$class[(attr_tbl$table == y) & (attr_tbl$column == z)]
-                if (any(detected %in% c("POSIXct", "POSIXt", "Date", "IDate"))) {
-                  detected <- "Date"
-                  d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
-                }
-                if (detected != expected) {
-                  if (expected == 'character'){
-                    d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
-                  } else if (expected == 'numeric'){
-                    d[[x]]$tables[[y]][[z]] <<- as.numeric(d[[x]]$tables[[y]][[z]])
-                  } else if (expected == 'Date'){
-                    d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
-                  }
-                }
-              })
-          })
-      }))
-  
-  # Return
-  
-  d
-  
+  fileext <- tools::file_ext(data.path)
+  if (fileext == "rds") {     # rds
+    d <- readRDS(data.path)
+  } else if (fileext == "") { # dir
+    d <- lapply(
+      unique(attr_tbl$table),
+      function(x) {
+        ecocomDP_table <- stringr::str_detect(
+          list.files(data.path), 
+          paste0("(?<=.{0,10000})", x, "(?=\\.[:alnum:]*$)"))
+        if (any(ecocomDP_table)) {
+          res <- data.table::fread(
+            paste0(data.path, "/", list.files(data.path)[ecocomDP_table]))
+          return(res)
+        }
+      })
+    names(d) <- unique(attr_tbl$table)
+    d[sapply(d, is.null)] <- NULL
+    d <- list(
+      list(metadata = NULL, tables = d))
+    names(d) <- basename(data.path)
+  }
+  return(d)
 }
