@@ -1,7 +1,7 @@
 #' Save ecocomDP data
 #'
 #' @param data 
-#'     (list) Data as a list object created by \code{read_data()}. Name of object will become file name if \code{file.name} is not used
+#'     (list) Data as a list object created by \code{read_data()}. Name of object will become file name if \code{file.name} is not used. Can be a list of these objects, i.e. more than one.
 #' @param path
 #'     (character) Path to the directory in which the data will be written.
 #' @param file.type

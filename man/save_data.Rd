@@ -7,7 +7,7 @@
 save_data(data, path, file.type = ".rds", file.name = NULL)
 }
 \arguments{
-\item{data}{(list) Data as a list object created by \code{read_data()}. Name of object will become file name if \code{file.name} is not used}
+\item{data}{(list) Data as a list object created by \code{read_data()}. Name of object will become file name if \code{file.name} is not used. Can be a list of these objects, i.e. more than one.}
 
 \item{path}{(character) Path to the directory in which the data will be written.}
 
