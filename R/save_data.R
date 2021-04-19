@@ -7,7 +7,7 @@
 #' @param file.type
 #'     (character) Type of file to save the data to. Default is ".rds" but can also be ".csv". Note: metadata and validation_issues are lost when ".csv". 
 #' @param file.name
-#'     (character) Use this to set the file name if you'd like to be different than \code{data}.
+#'     (character) Use this to set the file name (for .rds), or dir name (for .csv) if you'd like to be different than \code{data}.
 #'
 #' @return
 #'     \item{.rda}{If \code{file.type} = ".rda", then an .rda representation 
@@ -33,7 +33,11 @@ save_data <- function(data, path, file.type = ".rds", file.name = NULL) {
     saveRDS(data, file = paste0(path, "/", file.name))
   } else if (file.type == ".csv") {
     for (i in 1:length(data)) {
-      dir.name <- names(data)[[i]]
+      if (is.null(file.name)) {
+        dir.name <- names(data)[[i]]
+      } else {
+        dir.name <- file.name
+      }
       message("Writing ", dir.name, " as .csv to ", path)
       dir.create(paste0(path, "/", dir.name))
       for (j in 1:length(data[[i]]$tables)) {
