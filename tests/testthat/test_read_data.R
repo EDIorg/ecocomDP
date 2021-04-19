@@ -2,8 +2,6 @@ context("read_data()")
 
 library(ecocomDP)
 
-# read_data() -----------------------------------------------------------------
-
 testthat::test_that("Supports APIs, local files, and datetime parsing", {
   criteria <- read_criteria()
   # From API (EDI)
