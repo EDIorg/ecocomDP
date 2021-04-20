@@ -2,36 +2,49 @@ context("save_data()")
 
 library(ecocomDP)
 
+
 testthat::test_that("Objects are saved to fomat and have expected structure", {
   criteria <- read_criteria()
-  id <- "edi.193.3"
-  d <- try(suppressWarnings(read_data(id = id)), silent = TRUE)
-  id <- names(d)
-  fname <- paste0(tempdir(),"/", id, ".rds")
-  dname <- paste0(tempdir(),"/", id)
-  unlink(fname, recursive = TRUE, force = TRUE)
-  unlink(dname, recursive = TRUE, force = TRUE)
-  # Format & structure
-  if (class(d) != "try-error") {
-    save_data(d, tempdir(), file.type = ".rds", file.name = id) # .rds
-    expect_true(file.exists(fname))                             # was created
-    unlink(fname, recursive = TRUE, force = TRUE)
-    save_data(d, tempdir(), file.type = ".csv", file.name = id) # .csv
-    expect_true(dir.exists(dname))                              # was created
-    fnames <- tools::file_path_sans_ext(list.files(dname))      # dir has tables
-    expect_true(all(fnames %in% unique(criteria$table)))
-    fext <- unique(tools::file_ext(list.files(dname)))          # has file extension
-    expect_equal(fext, "csv")
-    unlink(dname, recursive = TRUE, force = TRUE)
-  }
-  # Name control (default naming)
-  if (class(d) != "try-error") {
-    save_data(d, tempdir(), file.type = ".rds")
-    expect_true(file.exists(paste0(tempdir(), "/d.rds")))                # .rds
-    unlink(paste0(tempdir(), "/d.rds"), recursive = TRUE, force = TRUE)
-    save_data(d, tempdir(), file.type = ".csv")
-    expect_true(dir.exists(paste0(tempdir(), "/d")))                     # .csv
-    unlink(paste0(tempdir(), "/d"), recursive = TRUE, force = TRUE)
-  }
+  d <- read_example_dataset()                                # create example datasets
+  datasets <- c(d, d, d)
+  ids <- c("edi.193.3", "edi.262.1", "edi.359.1")
+  names(datasets) <- ids
+  # .rds
+  pathrds <- paste0(tempdir(),"/datasets.rds")
+  unlink(pathrds, recursive = TRUE, force = TRUE)
+  save_data(datasets, tempdir(), file.type = ".rds")         # .rds
+  expect_true(file.exists(pathrds))                          # was created
+  unlink(pathrds, recursive = TRUE, force = TRUE)
+  # .csv
+  pathcsv <- paste0(tempdir(),"/datasets")
+  unlink(pathcsv, recursive = TRUE, force = TRUE)
+  save_data(datasets, tempdir(), file.type = ".csv")         # .csv
+  expect_true(dir.exists(pathcsv))                           # was created
+  expect_true(all(ids %in% dir(pathcsv)))                    # dir has subdirs
+  r <- lapply(
+    dir(pathcsv),
+    function(dataset) {
+      dname <- paste0(pathcsv, "/", dataset)
+      fnames <- tools::file_path_sans_ext(list.files(dname)) # dir has tables
+      expect_true(all(fnames %in% unique(criteria$table)))
+      fext <- unique(tools::file_ext(list.files(dname)))     # has file extension
+      expect_equal(fext, "csv")
+    })
+  unlink(pathcsv, recursive = TRUE, force = TRUE)
+})
+
+
+testthat::test_that("control names with file.name", {
+  criteria <- read_criteria()
+  d <- read_example_dataset()                                               # create example datasets
+  datasets <- c(d, d, d)
+  ids <- c("edi.193.3", "edi.262.1", "edi.359.1")
+  names(datasets) <- ids
+  save_data(datasets, tempdir(), file.type = ".rds", file.name = "mydata")
+  expect_true(file.exists(paste0(tempdir(), "/mydata.rds")))                # .rds
+  unlink(paste0(tempdir(), "/mydata.rds"), recursive = TRUE, force = TRUE)
+  save_data(datasets, tempdir(), file.type = ".csv", file.name = "mydata")
+  expect_true(dir.exists(paste0(tempdir(), "/mydata")))                     # .csv
+  unlink(paste0(tempdir(), "/mydata"), recursive = TRUE, force = TRUE)
 })
 

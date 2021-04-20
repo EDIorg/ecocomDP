@@ -5,9 +5,11 @@
 #' @param path
 #'     (character) Path to the directory in which the data will be written.
 #' @param file.type
-#'     (character) Type of file to save the data to. Default is ".rds" but can also be ".csv". Note: metadata and validation_issues are lost when ".csv". 
+#'     (character) Type of file to save the data to. Default is ".rds" but can also be ".csv". Note: metadata and validation_issues are lost when ".csv". Recommended to use .rds is using R because, all objects in one place, don't have to handle directory naming
 #' @param file.name
 #'     (character) Use this to set the file name (for .rds), or dir name (for .csv) if you'd like to be different than \code{data}.
+#'     
+#' @note Subsequent calls won't overwrite dirs or files
 #'
 #' @return
 #'     \item{.rda}{If \code{file.type} = ".rda", then an .rda representation 
@@ -19,31 +21,49 @@
 #' @export
 #'
 #' @examples
-#' d <- read_data("edi.193.3")
-#' #' save_data(d, tempdir(), ".rda")
-#' save_data(d, tempdir(), ".csv")
+#' \dontrun{
+#' 
+#' }
 #' 
 save_data <- function(data, path, file.type = ".rds", file.name = NULL) {
   if (is.null(file.name)) {
     file.name <- deparse(substitute(data))
   }
-  if (file.type == ".rds") {
+  if (file.type == ".rds") {                                                        # as .rds
     file.name <- paste0(file.name, ".rds")
     message("Writing ", file.name, " to ", path)
-    saveRDS(data, file = paste0(path, "/", file.name))
-  } else if (file.type == ".csv") {
+    if (file.exists(paste0(path, "/", file.name))) {                                # don't overwrite .rds file
+      warning("'", paste0(path, "/", file.name), "'", " already exists", call. = FALSE)
+    } else {
+      saveRDS(data, file = paste0(path, "/", file.name))
+    }
+  } else if (file.type == ".csv") {                                                 # as .csv
+    if (is.null(file.name)) {
+      file.name <- deparse(substitute(data))
+    }
+    parentdir <- paste0(path, "/", file.name)
+    message("Writing ", paste(names(data), collapse = ", "), " as .csv to ", parentdir)
+    if (dir.exists(parentdir)) {                                                    # don't overwrite parent dir
+      warning("'", parentdir, "'", " already exists", call. = FALSE)
+    } else {
+      dir.create(parentdir)
+    }
     for (i in 1:length(data)) {
-      if (is.null(file.name)) {
-        dir.name <- names(data)[[i]]
+      id <- names(data)[[i]]
+      subdir <- paste0(parentdir, "/", id)
+      if (dir.exists(subdir)) {                                                     # don't overwrite subdir
+        warning("'", subdir, "'", " already exists", call. = FALSE)
       } else {
-        dir.name <- file.name
+        dir.create(subdir)
       }
-      message("Writing ", dir.name, " as .csv to ", path)
-      dir.create(paste0(path, "/", dir.name))
       for (j in 1:length(data[[i]]$tables)) {
-        file.name <- paste0(names(data[[i]]$tables)[j], ".csv")
-        data.table::fwrite(
-          data[[i]]$tables[[j]], file = paste0(path, "/", dir.name, "/", file.name), sep = ",")
+        tblname <- paste0(names(data[[i]]$tables)[j], ".csv")
+        if (file.exists(paste0(subdir, "/", tblname))) {
+          warning("'", subdir, "/", tblname, "'", " already exists", call. = FALSE) # don't overwrite table
+        } else {
+          data.table::fwrite(
+            data[[i]]$tables[[j]], file = paste0(subdir, "/", tblname), sep = ",")
+        }
       }
     }
   }
