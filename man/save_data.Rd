@@ -30,7 +30,17 @@ Subsequent calls won't overwrite dirs or files
 }
 \examples{
 \dontrun{
+# Read from source
+datasets <- c(
+  read_data("edi.193.3"),
+  read_data("edi.262.1"),
+  read_data("edi.359.1"))
 
+# Save as .rds
+save_data(datasets, "/Users/me/documents/data")
+
+# Save as .csv
+save_data(datasets, "/Users/me/documents/data", file.type = ".csv")
 }
 
 }
