@@ -185,6 +185,11 @@ map_neon_data_to_ecocomDP <- function(
     unlist() %>%
     dplyr::first()
   
+  # return tables as data frames
+  for (tbl in names(ecocomDP_tables)) {
+    ecocomDP_tables[[tbl]] <- as.data.frame(ecocomDP_tables[[tbl]])
+  }
+  
   # combine neon metadata and ecocomDP tables
   out_list <- list(
     metadata = list(
