@@ -87,21 +87,39 @@ Validation checks are applied to each dataset ensuring they comply with
     
     Column classes are coerced to those defined in the ecocomDP 
     specification.
+    
+    Validation happens each time files are read, from source APIs or local environments.
 }
 \examples{
 \dontrun{
-# Read a dataset
-d <- read_data("edi.193.3")
+# Read from EDI
+dataset <- read_data("edi.193.3")
 
-# REad a NEON dataset without filters
-d <- read_data("neon.ecocomdp.20166.001.001")
+# Read from NEON
+dataset <- read_data("neon.ecocomdp.20166.001.001")
 
-# Read a NEON dataset with filters
-d <- read_data(
+# Read from NEON with filters
+dataset <- read_data(
   id = "neon.ecocomdp.20166.001.001", 
-  site = c("MAYF", "PRIN"), 
+  site = c("MAYF", "PRIN"),
   startdate = "2016-01", 
-  enddate = "2018-11")
+  enddate = "2018-11",
+  check.size = FALSE)
+
+# Read from local .rds
+dataset <- read_data(from.file = "/Users/me/documents/data/dataset.rds")
+
+# Read from local .csv
+dataset <- read_data(from.file = "/Users/me/documents/data/dataset")
+
+# Return datetimes as character
+dataset <- read_data("edi.193.3", parse.datetime = FALSE)
+
+# Read multiple datasets into list
+datasets <- c(
+  read_data("edi.193.3"),
+  read_data("edi.262.1"),
+  read_data("neon.ecocomdp.20166.001.001"))
 }
 
 }

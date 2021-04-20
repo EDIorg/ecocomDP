@@ -65,22 +65,40 @@
 #'     Column classes are coerced to those defined in the ecocomDP 
 #'     specification.
 #'     
+#'     Validation happens each time files are read, from source APIs or local environments.
+#'     
 #' @export
 #' 
 #' @examples
 #' \dontrun{
-#' # Read a dataset
-#' d <- read_data("edi.193.3")
+#' # Read from EDI
+#' dataset <- read_data("edi.193.3")
 #' 
-#' # REad a NEON dataset without filters
-#' d <- read_data("neon.ecocomdp.20166.001.001")
+#' # Read from NEON
+#' dataset <- read_data("neon.ecocomdp.20166.001.001")
 #' 
-#' # Read a NEON dataset with filters
-#' d <- read_data(
+#' # Read from NEON with filters
+#' dataset <- read_data(
 #'   id = "neon.ecocomdp.20166.001.001", 
-#'   site = c("MAYF", "PRIN"), 
+#'   site = c("MAYF", "PRIN"),
 #'   startdate = "2016-01", 
-#'   enddate = "2018-11")
+#'   enddate = "2018-11",
+#'   check.size = FALSE)
+#' 
+#' # Read from local .rds
+#' dataset <- read_data(from.file = "/Users/me/documents/data/dataset.rds")
+#' 
+#' # Read from local .csv
+#' dataset <- read_data(from.file = "/Users/me/documents/data/dataset")
+#' 
+#' # Return datetimes as character
+#' dataset <- read_data("edi.193.3", parse.datetime = FALSE)
+#' 
+#' # Read multiple datasets into list
+#' datasets <- c(
+#'   read_data("edi.193.3"),
+#'   read_data("edi.262.1"),
+#'   read_data("neon.ecocomdp.20166.001.001"))
 #' }
 #' 
 read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE, 
@@ -135,7 +153,7 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
     d <- list(d = d)
     names(d) <- id
   } else {                       # From file
-    d <- read_from_files(from.file, parse.datetime)
+    d <- read_from_files(from.file)
   }
   
   # Modify --------------------------------------------------------------------
@@ -248,7 +266,7 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
       }
     }
   }
- 
+
   # Validate ------------------------------------------------------------------
 
   for (i in 1:length(d)) {
@@ -339,8 +357,10 @@ read_data_edi <- function(id, parse.datetime = TRUE) {
   output <- lapply(
     names(tbl_attrs),
     function(x) {
-      data.table::fread(
+      res <- data.table::fread(
         tbl_attrs[[x]]$url)
+      res <- as.data.frame(res)
+      return(res)
     })
   names(output) <- names(tbl_attrs)
   
@@ -378,19 +398,14 @@ read_data_edi <- function(id, parse.datetime = TRUE) {
 #' @param data.path 
 #'     (character) The path to the directory containing ecocomDP tables. 
 #'     Duplicate file names are not allowed.
-#' @param parse.datetime
-#'     (logical) Attempt to parse datetime character strings through an algorithm. For EDI, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the algorithm iterates through permutations of \code{ymd HMS} orders. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing).
 #'
 #' @return
 #'     (list) A named list of \code{id}, each including: 
 #'     \item{metadata}{A list of information about the data.}
 #'     \item{tables}{A list of data.frames following the ecocomDP format 
 #'     (\url{https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md})}
-#'
-#' @examples
-#' d <- read_from_files(system.file("/data", package = "ecocomDP"))
 #' 
-read_from_files <- function(data.path, parse.datetime) {
+read_from_files <- function(data.path) {
   # TODO: validate_arguments("read_from_files", as.list(environment()))
   attr_tbl <- read_criteria()
   attr_tbl <- attr_tbl[!is.na(attr_tbl$column), ]
@@ -399,22 +414,29 @@ read_from_files <- function(data.path, parse.datetime) {
     d <- readRDS(data.path)
   } else if (fileext != "rds") { # dir ... note NEON ids cause file_ext() to produce misleading results
     d <- lapply(
-      unique(attr_tbl$table),
-      function(x) {
-        ecocomDP_table <- stringr::str_detect(
-          list.files(data.path), 
-          paste0("(?<=.{0,10000})", x, "(?=\\.[:alnum:]*$)"))
-        if (any(ecocomDP_table)) {
-          res <- data.table::fread(
-            paste0(data.path, "/", list.files(data.path)[ecocomDP_table]))
-          return(res)
-        }
+      list.dirs(data.path)[-1],
+      function(path) {
+        res <- lapply(
+          unique(attr_tbl$table),
+          function(x) {
+            ecocomDP_table <- stringr::str_detect(
+              list.files(path), 
+              paste0("(?<=.{0,10000})", x, "(?=\\.[:alnum:]*$)"))
+            if (any(ecocomDP_table)) {
+              res <- data.table::fread(
+                paste0(path, "/", list.files(path)[ecocomDP_table]))
+              res <- as.data.frame(res)
+              return(res)
+            }
+          })
+        names(res) <- unique(attr_tbl$table)
+        res[sapply(res, is.null)] <- NULL
+        res <- list(
+          list(metadata = NULL, tables = res))
+        return(res)
       })
-    names(d) <- unique(attr_tbl$table)
-    d[sapply(d, is.null)] <- NULL
-    d <- list(
-      list(metadata = NULL, tables = d))
-    names(d) <- basename(data.path)
+    d <- unlist(d, recursive = FALSE)
+    names(d) <- basename(list.dirs(data.path)[-1])
   }
   return(d)
 }
