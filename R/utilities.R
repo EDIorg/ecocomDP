@@ -1084,7 +1084,7 @@ read_criteria <- function() {
 #'
 read_example_dataset <- function() {
   fname <- system.file("/data/example_dataset.rds", package = "ecocomDP")
-  res <- read_data(from.file = fname)
+  res <- suppressWarnings(read_data(from.file = fname))
   return(res)
 }
 
