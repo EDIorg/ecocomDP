@@ -1078,6 +1078,23 @@ read_criteria <- function() {
 
 
 
+#' Read example dataset from /data
+#'
+#' @return (list) Example dataset
+#'
+read_example_dataset <- function() {
+  fname <- system.file("/data/example_dataset.rds", package = "ecocomDP")
+  res <- read_data(from.file = fname)
+  return(res)
+}
+
+
+
+
+
+
+
+
 #' Read the ecocomDP dataset_summary table (from EDI)
 #'
 #' @description  
