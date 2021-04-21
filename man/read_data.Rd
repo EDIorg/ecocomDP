@@ -90,6 +90,9 @@ Validation checks are applied to each dataset ensuring they comply with
     
     Validation happens each time files are read, from source APIs or local environments.
 }
+\note{
+ADD MAINTENANCE TIMES OF EDI AND NEON SO USERS KNOW WHEN NOT TO EXPECT DATA ACCESS. ALSO ADD ERROR INCLUDING THIS INFO SO MADE AWARE WHEN ISSUE ARISES.
+}
 \examples{
 \dontrun{
 # Read from EDI
