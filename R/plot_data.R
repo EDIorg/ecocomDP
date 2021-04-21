@@ -16,17 +16,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Plot one dataset
-#' dataset <- read_data(
-#'   id = "neon.ecocomdp.20166.001.001", 
-#'   site = c("MAYF", "PRIN"), 
-#'   startdate = "2016-01", 
-#'   enddate = "2018-11")
-#' plot_community(dataset, path = "/user/me/ecocomDP/plots")
+#' # one dataset
+#' # - summarizing sometimes required 
+#' # many datasets
 #' 
-#' # Plot multiple datasets
-#' dataset <- read_data(c("edi.124.4", "edi.356.1"))
-#' plot_community(dataset, path = "/user/me/ecocomDP/plots")
+#' 
 #' }
 #' 
 plot_data <- function(dataset, type, path, alpha) {
@@ -35,9 +29,12 @@ plot_data <- function(dataset, type, path, alpha) {
   }
   if (type == "community") {                                    # plot community
     ds <- format_for_comm_plots(dataset, names(dataset))        # intermediate format for plotting
+    browser()
     dslong <- subset(ds, OBSERVATION_TYPE == "TAXON_COUNT") %>% # long form
       dplyr::mutate_at(dplyr::vars(c(VALUE)), as.numeric) %>%
       dplyr::mutate_at(dplyr::vars(SITE_ID), as.character)
+    browser()
+    # FIXME: Add auto-summarization with warning? ... or throw error?
     dswide <- dslong %>%                                        # wide form
       dplyr::select(-VARIABLE_UNITS) %>%
       tidyr::pivot_wider(names_from = VARIABLE_NAME, values_from = VALUE)
@@ -392,28 +389,54 @@ format_for_comm_plots <- function(d, id) {
   }
   
   # Constraints
-  varname <- unique(d$observation$variable_name) # Can only handle one variable
-  if (length(varname) > 1) {
+  browser()
+  varname <- unique(d$observation[c("variable_name", "unit")]) # Can only handle one variable
+  # varname <- unique(d$observation$variable_name) # Can only handle one variable
+  # unitname <- unique(d$observation$unit)
+  
+  if (nrow(varname) > 1) {
     warning(
-      "The observation table of ", id, " has more than one variable name (", 
-      paste(varname, collapse = ", "), "). ", "Plotting operations can only ",
-      "handle one. Consider splitting this dataset before passing to ",
-      "plot_community(). Defaulting to ", varname[1], ".", call. = FALSE)
-    d$observation <- dplyr::filter(d$observation, variable_name == varname[1])
+      "The observation table of ", id, " has more than one variable and unit ",
+      "combination but plot_data() can only handle one. Consider splitting ",
+      "this dataset. Unique combinations of variables and units found:\n", 
+      paste0("variable = ", varname$variable_name, ", unit = ", varname$unit, 
+             collapse = "\n"), "\nUsing the first pair and dropping others.",
+      call. = FALSE)
+    d$observation <- dplyr::filter(d$observation, 
+                                   variable_name == varname$variable_name[1] & 
+                                     unit == varname$unit[1])
+    
+    
+    
+    # warning(
+    #   "The observation table of ", id, " has more than one variable name & unit combination (", 
+    #   paste(varname$variable_name, varname$unit, collapse = ", "), "). ", "Plotting operations can only ",
+    #   "handle one. Consider splitting this dataset before passing to ",
+    #   "plot_community(). Defaulting to ", varname[1], ".", call. = FALSE)
+    # d$observation <- dplyr::filter(d$observation, variable_name == varname[1])
   }
+  browser()
   dups <- d$observation %>% dplyr::select(-observation_id, -value) %>% duplicated()
+  
+  
+  # browser()
+  # # TESTING
+  # dupsforward <- d$observation %>% dplyr::select(-observation_id, -value) %>% duplicated()
+  # dupsbackward <- d$observation %>% dplyr::select(-observation_id, -value) %>% duplicated(fromLast = TRUE)
+  # dups <- dupsbackward | dupsforward
+  # View(d$observation[i, ])
+  # # dups <- d$observation %>% dplyr::select(-observation_id) %>% duplicated()
+  
   if (any(dups)) {                               # Only unique observations allowed
     warning(
-      "The observation table of ", id, " has duplicate observations (",
-      paste(which(dups), collapse = ", "), "). Consider fixing with ",
-      "summarize_variable_name().", call. = FALSE)
-    d$observation <- d$observation %>%
-      dplyr::distinct(across(-c(observation_id, value)), .keep_all = TRUE)
+      "The observation table of ", id, " has duplicate observations at rows ",
+      paste(which(dups), collapse = ", "), ". Dropping duplicates and ",
+      "continuing. ", call. = FALSE)
+    d$observation <- d$observation[!dups, ]
   }
   
   obs <- d$observation
   loc <- d$location
-  obs$observation_datetime
   taxon_count <- data.frame(
     OBSERVATION_TYPE = "TAXON_COUNT",
     SITE_ID = obs$location_id,
@@ -422,6 +445,20 @@ format_for_comm_plots <- function(d, id) {
     VARIABLE_UNITS = obs$variable_name,
     VALUE = obs$value,
     stringsAsFactors = FALSE)
+  
+  # # browser()
+  # taxon_count <- data.frame( # TESTINGGGGGGGGGGGGGGGGGG .... looses uniqueness when event_id is dropped, meaning ... don't trust the data creator to use the event_id correctly &&&& it is correct for an observation to be a unique taxon at a unique location, on a unique datetime, for a unique varaiable/unit pairing
+  #   OBSERVATION_TYPE = "TAXON_COUNT",
+  #   SITE_ID = obs$location_id,
+  #   DATE = obs$observation_datetime,
+  #   VARIABLE_NAME = obs$taxon_id,
+  #   VARIABLE_UNITS = obs$variable_name,
+  #   VALUE = obs$value,
+  #   EVENT = obs$event_id,
+  #   stringsAsFactors = FALSE)
+  # # i <- duplicated(taxon_count) | duplicated(taxon_count, fromLast = TRUE) # TESTING
+  # # View(taxon_count[i, ])
+  
   spatial_coordinate <- data.frame(
     OBSERVATION_TYPE = "SPATIAL_COORDINATE",
     SITE_ID = c(loc$location_id, loc$location_id),

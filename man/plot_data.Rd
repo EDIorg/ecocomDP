@@ -27,17 +27,11 @@ Plot community metrics
 }
 \examples{
 \dontrun{
-# Plot one dataset
-dataset <- read_data(
-  id = "neon.ecocomdp.20166.001.001", 
-  site = c("MAYF", "PRIN"), 
-  startdate = "2016-01", 
-  enddate = "2018-11")
-plot_community(dataset, path = "/user/me/ecocomDP/plots")
+# one dataset
+# - summarizing sometimes required 
+# many datasets
 
-# Plot multiple datasets
-dataset <- read_data(c("edi.124.4", "edi.356.1"))
-plot_community(dataset, path = "/user/me/ecocomDP/plots")
+
 }
 
 }
