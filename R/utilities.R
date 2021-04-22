@@ -1079,12 +1079,17 @@ read_criteria <- function() {
 
 
 #' Read example dataset from /data
-#'
+#' 
+#' @param parse.datetime
+#'     (logical) Attempt to parse datetime character strings through an algorithm. For EDI, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the algorithm iterates through permutations of \code{ymd HMS} orders. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing).
+#'     
 #' @return (list) Example dataset
 #'
-read_example_dataset <- function() {
+read_example_dataset <- function(parse.datetime = TRUE) {
   fname <- system.file("/data/example_dataset.rds", package = "ecocomDP")
-  res <- suppressWarnings(read_data(from.file = fname))
+  res <- suppressWarnings(
+    read_data(from.file = fname,
+              parse.datetime = parse.datetime))
   return(res)
 }
 
