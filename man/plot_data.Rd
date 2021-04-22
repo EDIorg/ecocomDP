@@ -4,7 +4,7 @@
 \alias{plot_data}
 \title{Plot community metrics}
 \usage{
-plot_data(dataset, type, path, alpha)
+plot_data(dataset, type, path, alpha = 1)
 }
 \arguments{
 \item{dataset}{(list) Data object returned by \code{read_data()} (? list of named datapackage$tables)}
@@ -25,13 +25,17 @@ plot_data(dataset, type, path, alpha)
 \description{
 Plot community metrics
 }
+\details{
+LIST METHODS OF CALCULATION FOR EACH PLOT
+}
+\note{
+LIST DATA AGGREGATION REQUIREMENTS FOR THIS FUNC TO WORK.
+}
 \examples{
 \dontrun{
 # one dataset
-# - summarizing sometimes required 
-# many datasets
-
-
+# - summarizing sometimes required
+# more than one dataset
 }
 
 }

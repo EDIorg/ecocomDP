@@ -12,29 +12,29 @@
 #' \item{sp_accumulation_over_time.pdf}{Species accumulation curves over time (site-specific and total)}
 #' \item{sp_shared_among_sites.pdf}{Species shared among sites}
 #' 
+#' @details LIST METHODS OF CALCULATION FOR EACH PLOT
+#' 
+#' @note LIST DATA AGGREGATION REQUIREMENTS FOR THIS FUNC TO WORK.
+#' 
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' # one dataset
-#' # - summarizing sometimes required 
-#' # many datasets
-#' 
-#' 
+#' # - summarizing sometimes required
+#' # more than one dataset
 #' }
 #' 
-plot_data <- function(dataset, type, path, alpha) {
+plot_data <- function(dataset, type, path, alpha = 1) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
     stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
   }
   if (type == "community") {                                    # plot community
-    ds <- format_for_comm_plots(dataset, names(dataset))        # intermediate format for plotting
-    browser()
-    dslong <- subset(ds, OBSERVATION_TYPE == "TAXON_COUNT") %>% # long form
+    id <- names(dataset)                                        # dataset id
+    ds <- format_for_comm_plots(dataset, id)                    # intermediate format for plotting
+    dslong <- ds %>%                                            # long form
       dplyr::mutate_at(dplyr::vars(c(VALUE)), as.numeric) %>%
       dplyr::mutate_at(dplyr::vars(SITE_ID), as.character)
-    browser()
-    # FIXME: Add auto-summarization with warning? ... or throw error?
     dswide <- dslong %>%                                        # wide form
       dplyr::select(-VARIABLE_UNITS) %>%
       tidyr::pivot_wider(names_from = VARIABLE_NAME, values_from = VALUE)
@@ -90,17 +90,18 @@ plot_alpha_diversity <- function(dslong, id, path, vunit, alpha) {
   }
   ntaxa <- calc_ntaxa(dslong)
   # Plot
-  ggplot(data = ntaxa$ntaxa, aes(x = DATE, y = ntaxa)) +
-    geom_point(aes(color = SITE_ID), alpha = alpha) +
-    geom_line(aes(color = SITE_ID), alpha = alpha) +
-    geom_point(data = ntaxa$total_ntaxa, aes(x = DATE, y = ntaxa, fill = ""), color="black") +
-    geom_line(data = ntaxa$total_ntaxa, aes(x = DATE, y = ntaxa), color = "black") +
+  ggplot() +
+    geom_point(data = ntaxa$ntaxa, aes(x = DATE, y = ntaxa, group = SITE_ID, color = SITE_ID), alpha = alpha) + 
+    geom_line(data = ntaxa$ntaxa, aes(x = DATE, y = ntaxa, group = SITE_ID, color = SITE_ID), alpha = alpha) + 
+    geom_point(data = ntaxa$total_ntaxa, aes(x = DATE, y = ntaxa, fill = ""), color="black") + 
+    geom_line(data = ntaxa$total_ntaxa, aes(x = DATE, y = ntaxa, group = 1), color="black") + 
     labs(title = "Alpha diversity (species richness) over time and space", subtitle = id) +
     xlab("Year") +
     ylab(paste0("Taxa observed (", vunit, ")")) +
+    scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") + 
     guides(
       color = guide_legend(title = "Site", label.theme = element_text(size = 6)),
-      fill = guide_legend(title = "All sites")) + 
+      fill = guide_legend(title = "All sites")) +
     ylim(c(0, max(ntaxa$total_ntaxa$ntaxa))) +
     theme_bw()
   ggsave(
@@ -141,12 +142,13 @@ plot_sampling_effort <- function(dslong, id, path, alpha) {
     txty <- 4
   }
   # Plot
-  ggplot(data = dslong, aes(x = DATE, y = SITE_ID)) +
-    geom_point(alpha = alpha) +
+  ggplot() +
+    geom_point(data = dslong, aes(x = DATE, y = SITE_ID), alpha = alpha) +
     theme_bw() +
     labs(title = "Spatiotemporal sampling effort", subtitle = id) +
     xlab("Year") +
     ylab("Site") +
+    scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") +
     theme_bw() +
     theme(
       axis.text.y.left = element_text(size = txty),
@@ -188,8 +190,10 @@ plot_sp_accumulation_over_space <- function(dslong, id, path, vunit) {
     }
     cuml.taxa.space <- list()                                          # cumulative list of taxa over space
     cuml.taxa.space[[1]] <- taxa.s.list[[1]]
-    for(t in 2:length(unique(ex$SITE_ID))){                            # list cumulative taxa, with duplicates
-      cuml.taxa.space[[t]] <- c(cuml.taxa.space[[t - 1]], taxa.s.list[[t]])
+    if (length(unique(ex$SITE_ID)) > 1) {
+      for(t in 2:length(unique(ex$SITE_ID))){                            # list cumulative taxa, with duplicates
+        cuml.taxa.space[[t]] <- c(cuml.taxa.space[[t - 1]], taxa.s.list[[t]])
+      }
     }
     cuml.taxa.space <- lapply(cuml.taxa.space, function(x) {unique(x)})# rm duplicates
     cuml.no.taxa.space <- data.frame("site" = unique(ex$SITE_ID))      # total unique taxa over space
@@ -200,9 +204,9 @@ plot_sp_accumulation_over_space <- function(dslong, id, path, vunit) {
   no.taxa.space <- calc_cuml_taxa_space(comm.dat)
   no.taxa.space$no.site <- as.numeric(rownames(no.taxa.space))
   # Plot
-  ggplot(data = no.taxa.space) + 
-    geom_point(aes(x = no.site, y = no.taxa)) +
-    geom_line(aes(x = no.site, y = no.taxa)) +
+  ggplot(data = no.taxa.space, aes(x = no.site, y = no.taxa)) + 
+    geom_point() +
+    geom_line() +
     labs(title = "Species accumulation curve over space", subtitle = id) +
     xlab("Cumulative number of sites") +
     ylab(paste0("Cumulative taxa observed (", vunit, ")")) +
@@ -272,14 +276,15 @@ plot_sp_accumulation_over_time <- function(dslong, id, path, vunit, alpha) {
       separate(rnames, c("SITE_ID", "todrop"), sep = "\\.") %>%
       select(-todrop))
   # Plot
-  ggplot(data = cuml.taxa.by.site, aes(x = year, y = no.taxa)) +
-    geom_point(aes(color = SITE_ID), alpha = alpha) +
-    geom_line(aes(color = SITE_ID), alpha = alpha) +
+  ggplot() +
+    geom_point(data = cuml.taxa.by.site, aes(x = year, y = no.taxa, color = SITE_ID), alpha = alpha) +
+    geom_line(data = cuml.taxa.by.site, aes(x = year, y = no.taxa, color = SITE_ID), alpha = alpha) +
     geom_point(data = cuml.taxa.all.sites, aes(x = year, y = no.taxa, fill = "")) +
     geom_line(data = cuml.taxa.all.sites, aes(x = year, y = no.taxa)) +
     labs(title = "Species accumulation curves over time (site-specific and total)", subtitle = id) +
     xlab("Year") +
     ylab(paste0("Cumulative taxa observed (", vunit, ")")) +
+    scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") + 
     guides(color = guide_legend(title = "Site", label.theme = element_text(size = 6)),
            fill = guide_legend(title = "All sites")) +
     ylim(c(0, max(cuml.taxa.all.sites$no.taxa))) +
@@ -331,6 +336,7 @@ plot_sp_shared_among_sites <- function(dswide, id, path, vunit) {
     if(output == "matrix") return(share.mat)
     if(output == "dataframe") return(site.pairs)
   }
+  
   comm.cumul <- dswide %>%                  # aggregate years by cumulative abundances
     group_by(SITE_ID) %>% 
     select(-OBSERVATION_TYPE, -DATE) %>%
@@ -374,69 +380,49 @@ plot_sp_shared_among_sites <- function(dswide, id, path, vunit) {
 
 #' Format dataset for community plotting functions
 #'
-#' @param d (list) Data object returned by \code{read_data()} or passed through \code{lapply()}
+#' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
 #' @param id (character) Dataset id
 #' 
 #' @details Downsteam plotting functions are based on \href{https://github.com/sokole/ltermetacommunities/tree/master/Group2-explore-data}{LTER Metacommunities code} and use their intermediate data input format.
 #'
 #' @return (data.frame) Tabular data of \code{id} in a format compatible with plotting functions
 #' 
-format_for_comm_plots <- function(d, id) {
-  if (!is.null(d[[1]]$tables)) {
-    d <- d[[1]]$tables # Input is from read_data()
-  } else {
-    d <- d$tables      # Input is from lapply()
-  }
-  
+format_for_comm_plots <- function(dataset, id) {
+  observation <- dataset[[1]]$tables$observation
   # Constraints
-  browser()
-  varname <- unique(d$observation[c("variable_name", "unit")]) # Can only handle one variable
-  # varname <- unique(d$observation$variable_name) # Can only handle one variable
-  # unitname <- unique(d$observation$unit)
-  
+  varname <- unique(observation[c("variable_name", "unit")])                 # Can only handle one variable
   if (nrow(varname) > 1) {
-    warning(
-      "The observation table of ", id, " has more than one variable and unit ",
-      "combination but plot_data() can only handle one. Consider splitting ",
-      "this dataset. Unique combinations of variables and units found:\n", 
-      paste0("variable = ", varname$variable_name, ", unit = ", varname$unit, 
-             collapse = "\n"), "\nUsing the first pair and dropping others.",
-      call. = FALSE)
-    d$observation <- dplyr::filter(d$observation, 
+    warning("The observation table of ", id, " has more than one variable ",
+            "and unit combination:\n", paste0("  variable = ", 
+                                              varname$variable_name, 
+                                              ", unit = ", varname$unit, 
+                                              collapse = "\n"), 
+            "\n plot_data() can only handle one. Consider splitting this ",
+            "dataset. Using the first set and dropping the others.", 
+            call. = FALSE)
+    observation <- dplyr::filter(observation, 
                                    variable_name == varname$variable_name[1] & 
                                      unit == varname$unit[1])
-    
-    
-    
-    # warning(
-    #   "The observation table of ", id, " has more than one variable name & unit combination (", 
-    #   paste(varname$variable_name, varname$unit, collapse = ", "), "). ", "Plotting operations can only ",
-    #   "handle one. Consider splitting this dataset before passing to ",
-    #   "plot_community(). Defaulting to ", varname[1], ".", call. = FALSE)
-    # d$observation <- dplyr::filter(d$observation, variable_name == varname[1])
   }
-  browser()
-  dups <- d$observation %>% dplyr::select(-observation_id, -value) %>% duplicated()
-  
-  
-  # browser()
-  # # TESTING
-  # dupsforward <- d$observation %>% dplyr::select(-observation_id, -value) %>% duplicated()
-  # dupsbackward <- d$observation %>% dplyr::select(-observation_id, -value) %>% duplicated(fromLast = TRUE)
-  # dups <- dupsbackward | dupsforward
-  # View(d$observation[i, ])
-  # # dups <- d$observation %>% dplyr::select(-observation_id) %>% duplicated()
-  
-  if (any(dups)) {                               # Only unique observations allowed
-    warning(
-      "The observation table of ", id, " has duplicate observations at rows ",
-      paste(which(dups), collapse = ", "), ". Dropping duplicates and ",
-      "continuing. ", call. = FALSE)
-    d$observation <- d$observation[!dups, ]
+
+  # Duplicate observation handling
+  dups <- observation %>% dplyr::select(-observation_id, -value, -event_id) %>% duplicated()
+  if (any(dups)) {                                                          # Only unique observations allowed
+    warning("The observation table of ", id, " has ", sum(dups), " duplicate ",
+            "observations. Consider aggregating these observations by date ",
+            "and location before passing to plot_data(). Dropping duplicates ",
+            "and continuing. ", call. = FALSE)
+    observation <- observation[!dups, ]
   }
   
-  obs <- d$observation
-  loc <- d$location
+  # Use dates
+  if (is.character(observation$observation_datetime)) {
+    warning("Input datetimes are character strings. Accuracy may be improved",
+            " if inputs are parsed before calling plot_data().", call. = FALSE)
+  }
+  observation$observation_datetime <- lubridate::date(observation$observation_datetime)
+  
+  obs <- observation
   taxon_count <- data.frame(
     OBSERVATION_TYPE = "TAXON_COUNT",
     SITE_ID = obs$location_id,
@@ -445,30 +431,5 @@ format_for_comm_plots <- function(d, id) {
     VARIABLE_UNITS = obs$variable_name,
     VALUE = obs$value,
     stringsAsFactors = FALSE)
-  
-  # # browser()
-  # taxon_count <- data.frame( # TESTINGGGGGGGGGGGGGGGGGG .... looses uniqueness when event_id is dropped, meaning ... don't trust the data creator to use the event_id correctly &&&& it is correct for an observation to be a unique taxon at a unique location, on a unique datetime, for a unique varaiable/unit pairing
-  #   OBSERVATION_TYPE = "TAXON_COUNT",
-  #   SITE_ID = obs$location_id,
-  #   DATE = obs$observation_datetime,
-  #   VARIABLE_NAME = obs$taxon_id,
-  #   VARIABLE_UNITS = obs$variable_name,
-  #   VALUE = obs$value,
-  #   EVENT = obs$event_id,
-  #   stringsAsFactors = FALSE)
-  # # i <- duplicated(taxon_count) | duplicated(taxon_count, fromLast = TRUE) # TESTING
-  # # View(taxon_count[i, ])
-  
-  spatial_coordinate <- data.frame(
-    OBSERVATION_TYPE = "SPATIAL_COORDINATE",
-    SITE_ID = c(loc$location_id, loc$location_id),
-    DATE = NA,
-    VARIABLE_NAME = c(
-      rep("latitude", length(loc$latitude)), 
-      rep("longitude", length(loc$longitude))),
-    VARIABLE_UNITS = "dec.degrees",
-    VALUE = c(loc$latitude, loc$longitude),
-    stringsAsFactors = FALSE)
-  res <- rbind(taxon_count, spatial_coordinate)
-  return(res)
+  return(taxon_count)
 }

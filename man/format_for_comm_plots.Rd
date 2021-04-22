@@ -4,10 +4,10 @@
 \alias{format_for_comm_plots}
 \title{Format dataset for community plotting functions}
 \usage{
-format_for_comm_plots(d, id)
+format_for_comm_plots(dataset, id)
 }
 \arguments{
-\item{d}{(list) Data object returned by \code{read_data()} or passed through \code{lapply()}}
+\item{dataset}{(list) Data object returned by \code{read_data()} (? list of named datapackage$tables)}
 
 \item{id}{(character) Dataset id}
 }
