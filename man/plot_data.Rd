@@ -16,20 +16,21 @@ plot_data(dataset, type, path, alpha = 1)
 \item{alpha}{(numeric) Alpha-transparency scale between 0 and 1, where 1 is 100% opaque}
 }
 \value{
-\item{alpha_diversity.pdf}{Alpha diversity (species richness) over time and space}
-\item{sampling_effort.pdf}{Spatiotemporal sampling effort}
-\item{sp_accumulation_over_space.pdf}{Species accumulation curve over space}
-\item{sp_accumulation_over_time.pdf}{Species accumulation curves over time (site-specific and total)}
-\item{sp_shared_among_sites.pdf}{Species shared among sites}
+Returns a set of figures:
+\item{alpha_diversity.pdf}{Alpha diversity (species richness) over time and space. number of unique taxa at site through time with total for all sites}
+\item{sampling_effort.pdf}{Spatiotemporal sampling effort. Notes when sites were sampled.}
+\item{sp_accumulation_over_space.pdf}{Species accumulation curve over space. Cummulative number of unique taxa across all dates at sites, ordered by site id}
+\item{sp_accumulation_over_time.pdf}{Species accumulation curves over time (site-specific and total).}
+\item{sp_shared_among_sites.pdf}{Total number of species shared among sites across all dates.}
 }
 \description{
-Plot community metrics
+Some sort of a description
 }
 \details{
-LIST METHODS OF CALCULATION FOR EACH PLOT
+
 }
 \note{
-LIST DATA AGGREGATION REQUIREMENTS FOR THIS FUNC TO WORK.
+Not any \code{dataset} can be passed to this function. Some level of processing is almost always required. For this function to work well, replicate samples in a \code{dataset} observation should be summarized into a single value for a unique location_id, observation_datetime, taxon_id. Additionally, this function can only handle one variable_name and unit combination (sometimes a dataset will have multiple measurement types stacked in an observation table).
 }
 \examples{
 \dontrun{
