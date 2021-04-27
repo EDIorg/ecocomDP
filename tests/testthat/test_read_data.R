@@ -2,6 +2,8 @@ context("read_data()")
 
 library(ecocomDP)
 
+# Reads from source APIs ------------------------------------------------------
+
 testthat::test_that("Reads from source APIs", {
   criteria <- read_criteria()
   # From EDI
@@ -41,9 +43,17 @@ testthat::test_that("Reads from source APIs", {
     for (i in names(d[[1]]$tables)) {                                                 # tables are data.frames
       expect_true(class(d[[1]]$tables[[i]]) == "data.frame")
     }
+    expect_equal(                                                                     # datetimes are parsed
+      class(d[[1]]$tables$observation$observation_datetime),
+      "Date")
+    expect_equal(
+      class(d[[1]]$tables$location_ancillary$datetime),
+      "Date")
   }
 })
 
+
+# Reads from local files ------------------------------------------------------
 
 testthat::test_that("Reads from local files", {
   criteria <- read_criteria()
@@ -89,6 +99,8 @@ testthat::test_that("Reads from local files", {
   unlink(paste0(tempdir(),"/", id), recursive = TRUE, force = TRUE) 
 })
 
+
+# Has datetime parsing option -------------------------------------------------
 
 testthat::test_that("Has datetime parsing option", {
   criteria <- read_criteria()
