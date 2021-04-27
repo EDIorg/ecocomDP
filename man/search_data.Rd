@@ -30,10 +30,10 @@ common names are supported for EDI, but not NEON (currently.}
 years).}
 
 \item{geographic.area}{(numeric) Decimal degree North, East, South, and West coordinates within
-which the data should originate.}
+which the data should originate. Any overlapping areas or contained point locations will be returned.}
 
 \item{boolean.operator}{(character) Boolean operator to use when searching \code{text} and 
-\code{taxa}. Supported operators are "AND", "OR".}
+\code{taxa}. Supported operators are "AND", "OR". Default is "AND".}
 }
 \value{
 (data.frame) Search results with these feilds:
@@ -62,39 +62,37 @@ Currently, to accomodate multiple L1 versions of NEON data products, search resu
 }
 \note{
 This function may not work between 01:00 - 04:00 UTC due to regular maintenance of the EDI Data Repository. If you have reached this warning outside these hours then there may be an unexpected issue that will be resolved shortly. Please try again later.
-
-    Searches across input arguments are combined with the "AND" boolean 
-    operator.
     
     NEON taxa rank is lowest level identifiable. Higher ranks are not searchable.
 }
 \examples{
+dontrun{
 # Empty search returns all available data
-r <- search_data()
+View(search_data())
 
 # Text searches titles, descriptions, and abstracts
-r <- search_data(text = "Lake")
+View(search_data(text = "Lake"))
 
 # Taxa searches any taxonomic rank of an organism
-r <- search_data(taxa = "Plantae")
+View(search_data(taxa = "Plantae"))
 
 # Number of taxa searches the count of unique taxa in a dataset
-r <- search_data(num.taxa = c(0, 10))
+View(search_data(num.taxa = c(0, 10)))
 
 # Years searches the number of years the dataset covers
-r <- search_data(years = c(10, 20))
+View(search_data(years = c(10, 20)))
 
 # Standard deviation between surveys searches for a sampling frequency
-r <- search_data(sd.between.surveys = c(.25, 1))
+View(search_data(sd.between.surveys = c(.25, 1)))
 
 # Geographic area searches where data were collected
-r <- search_data(geographic.area = c(47.1, -86.7, 42.5, -92))
+View(search_data(geographic.area = c(47.1, -86.7, 42.5, -92)))
 
 # Boolean operators AND (default) & OR combine text and taxa search terms
-r <- search_data(text = c("Lake", "River"))
-r <- search_data(text = c("Lake", "River"), boolean.operator = "OR")
-r <- search_data(taxa = c("Plantae", "Animalia"))
-r <- search_data(taxa = c("Plantae", "Animalia"), boolean.operator = "OR")
+View(search_data(text = c("Lake", "River")))
+View(search_data(text = c("Lake", "River"), boolean.operator = "OR"))
+View(search_data(taxa = c("Plantae", "Animalia")))
+View(search_data(taxa = c("Plantae", "Animalia"), boolean.operator = "OR"))
 
 # Use any combination of search fields to find the data you're looking for
 r <- search_data(
@@ -105,5 +103,7 @@ r <- search_data(
   sd.between.surveys = c(.01, 100),
   geographic.area = c(47.1, -86.7, 42.5, -92),
   boolean.operator = "OR")
+View(r)
+}
         
 }
