@@ -56,7 +56,7 @@
 #'       }
 #'     }
 #' 
-#' @note ADD MAINTENANCE TIMES OF EDI AND NEON SO USERS KNOW WHEN NOT TO EXPECT DATA ACCESS. ALSO ADD ERROR INCLUDING THIS INFO SO MADE AWARE WHEN ISSUE ARISES.
+#' @note This function may not work between 01:00 - 04:00 UTC due to regular maintenance of the EDI Data Repository. If you have reached this warning outside these hours then there may be an unexpected issue that will be resolved shortly. Please try again later.
 #' 
 #' @details 
 #'     Validation checks are applied to each dataset ensuring they comply with 
@@ -133,14 +133,23 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
 
   # Read ----------------------------------------------------------------------
   
-  if (is.null(from.file)) {      # From API
-    if (stringr::str_detect(
+  if (is.null(from.file)) { # From API
+    
+    r <- httr::GET("https://portal.edirepository.org/") # Warn if EDI is down
+    if (httr::status_code(r) != 200) {
+      warning("This function may not work between 01:00 - 04:00 UTC due to ",
+              "regular maintenance of the EDI Data Repository. If you have ",
+              "reached this warning outside these hours then there may be an ",
+              "unexpected issue that will be resolved shortly. Please try ",
+              "again later.", call. = FALSE)
+    }
+
+    if (stringr::str_detect(            # EDI
       id, 
       "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)") && 
       !grepl("^neon\\.", id)) {
-      d <- read_data_edi(id, parse.datetime)
-      
-    } else if (grepl("^neon\\.", id)) {
+      d <- read_data_edi(id, parse.datetime)      
+    } else if (grepl("^neon\\.", id)) { # NEON
       d <- map_neon_data_to_ecocomDP(
         id = id, 
         site = site, 
@@ -154,7 +163,7 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
     }
     d <- list(d = d)
     names(d) <- id
-  } else {                       # From file
+  } else {                  # From file
     d <- read_from_files(from.file)
   }
   
