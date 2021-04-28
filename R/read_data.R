@@ -37,6 +37,8 @@
 #' @param token 
 #'     (character; NEON data only) User specific API token (generated within 
 #'     neon.datascience user accounts)
+#' @param neon.data.save.dir (character; NEON data only) Directory to save NEON source data that has been downloaded via \code{neonUtilities::loadByProduct()}
+#' @param neon.data.read.path (character; NEON data only) Path to read in an RDS file of 'stacked NEON data' from \code{neonUtilities::loadByProduct()}
 #' @param ...
 #'     (NEON data only) Other arguments to \code{neonUtilities::loadByProduct()}
 #' @param from.file
@@ -57,6 +59,8 @@
 #'     }
 #' 
 #' @note This function may not work between 01:00 - 03:00 UTC due to regular maintenance of the EDI Data Repository. If you have reached this warning outside these hours then there may be an unexpected issue that will be resolved shortly. Please try again later.
+#' 
+#' DESCRIBE WHAT PROVISIONAL NEON DATA IS, HOW TO IDENTIFIY IT IN THE RETURN FROM read_data().
 #' 
 #' @details 
 #'     Validation checks are applied to each dataset ensuring they comply with 
@@ -107,7 +111,8 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
                       globally.unique.keys = FALSE, site = "all", 
                       startdate = NA, enddate = NA, package = "basic", 
                       check.size = FALSE, nCores = 1, forceParallel = FALSE, 
-                      token = NA, ..., from.file = NULL) {
+                      token = NA, neon.data.save.dir = NULL, 
+                      neon.data.read.path = NULL, ..., from.file = NULL) {
   
   # Validate input arguments --------------------------------------------------
 
@@ -159,6 +164,8 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
         nCores = nCores, 
         forceParallel = forceParallel,
         token = token, 
+        neon.data.save.dir = neon.data.save.dir,
+        neon.data.read.path = neon.data.read.path,
         ...)
     }
     d <- list(d = d)

@@ -17,6 +17,8 @@ read_data(
   nCores = 1,
   forceParallel = FALSE,
   token = NA,
+  neon.data.save.dir = NULL,
+  neon.data.read.path = NULL,
   ...,
   from.file = NULL
 )
@@ -59,6 +61,10 @@ to FALSE.}
 \item{token}{(character; NEON data only) User specific API token (generated within 
 neon.datascience user accounts)}
 
+\item{neon.data.save.dir}{(character; NEON data only) Directory to save NEON source data that has been downloaded via \code{neonUtilities::loadByProduct()}}
+
+\item{neon.data.read.path}{(character; NEON data only) Path to read in an RDS file of 'stacked NEON data' from \code{neonUtilities::loadByProduct()}}
+
 \item{...}{(NEON data only) Other arguments to \code{neonUtilities::loadByProduct()}}
 
 \item{from.file}{(character) Full path to file to be read if .rds, or path to directory if .csv. Supported options are returned by \code{save_data()}}
@@ -92,6 +98,8 @@ Validation checks are applied to each dataset ensuring they comply with
 }
 \note{
 This function may not work between 01:00 - 03:00 UTC due to regular maintenance of the EDI Data Repository. If you have reached this warning outside these hours then there may be an unexpected issue that will be resolved shortly. Please try again later.
+
+DESCRIBE WHAT PROVISIONAL NEON DATA IS, HOW TO IDENTIFIY IT IN THE RETURN FROM read_data().
 }
 \examples{
 \dontrun{
