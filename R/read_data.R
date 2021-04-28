@@ -56,7 +56,7 @@
 #'       }
 #'     }
 #' 
-#' @note This function may not work between 01:00 - 04:00 UTC due to regular maintenance of the EDI Data Repository. If you have reached this warning outside these hours then there may be an unexpected issue that will be resolved shortly. Please try again later.
+#' @note This function may not work between 01:00 - 03:00 UTC due to regular maintenance of the EDI Data Repository. If you have reached this warning outside these hours then there may be an unexpected issue that will be resolved shortly. Please try again later.
 #' 
 #' @details 
 #'     Validation checks are applied to each dataset ensuring they comply with 
@@ -137,7 +137,7 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
     
     r <- httr::GET("https://portal.edirepository.org/") # Warn if EDI is down
     if (httr::status_code(r) != 200) {
-      warning("This function may not work between 01:00 - 04:00 UTC due to ",
+      warning("This function may not work between 01:00 - 03:00 UTC due to ",
               "regular maintenance of the EDI Data Repository. If you have ",
               "reached this warning outside these hours then there may be an ",
               "unexpected issue that will be resolved shortly. Please try ",

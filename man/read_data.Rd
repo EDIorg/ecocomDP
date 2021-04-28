@@ -91,7 +91,7 @@ Validation checks are applied to each dataset ensuring they comply with
     Validation happens each time files are read, from source APIs or local environments.
 }
 \note{
-This function may not work between 01:00 - 04:00 UTC due to regular maintenance of the EDI Data Repository. If you have reached this warning outside these hours then there may be an unexpected issue that will be resolved shortly. Please try again later.
+This function may not work between 01:00 - 03:00 UTC due to regular maintenance of the EDI Data Repository. If you have reached this warning outside these hours then there may be an unexpected issue that will be resolved shortly. Please try again later.
 }
 \examples{
 \dontrun{

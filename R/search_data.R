@@ -26,7 +26,7 @@
 #'     \code{taxa}. Supported operators are "AND", "OR". Default is "AND".
 #'     
 #' @note
-#'     This function may not work between 01:00 - 04:00 UTC due to regular maintenance of the EDI Data Repository. If you have reached this warning outside these hours then there may be an unexpected issue that will be resolved shortly. Please try again later.
+#'     This function may not work between 01:00 - 03:00 UTC due to regular maintenance of the EDI Data Repository. If you have reached this warning outside these hours then there may be an unexpected issue that will be resolved shortly. Please try again later.
 #'     
 #'     NEON taxa rank is lowest level identifiable. Higher ranks are not searchable.
 #'     
@@ -110,7 +110,7 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
   
   r <- httr::GET("https://portal.edirepository.org/") # Warn if EDI is down
   if (httr::status_code(r) != 200) {
-    warning("This function may not work between 01:00 - 04:00 UTC due to ",
+    warning("This function may not work between 01:00 - 03:00 UTC due to ",
             "regular maintenance of the EDI Data Repository. If you have ",
             "reached this warning outside these hours then there may be an ",
             "unexpected issue that will be resolved shortly. Please try ",
