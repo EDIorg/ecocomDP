@@ -49,8 +49,6 @@
 #'         \item \strong{<otherEntity>} Describes the meta.xml accompanying 
 #'         each DwC-A. Any other entities listed in the parent EML are removed.
 #'     }
-#'
-#' @export
 #' 
 #' @examples 
 #' \dontrun{

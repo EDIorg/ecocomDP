@@ -16,8 +16,6 @@
 #'
 #' @return 
 #'     (character) Vector of definitions corresponding to codes.
-#'     
-#' @export
 #'
 L0_codes_to_definitions <- function(x, col.name, x.object.name, eml){
   

@@ -41,22 +41,22 @@
 #'    
 #' @examples 
 #' # Validate a set of files
-#' r <- validate_ecocomDP(data.path = system.file("/data", package = "ecocomDP"))
+#' r <- validate_data(data.path = system.file("/data", package = "ecocomDP"))
 #' 
 #' # Validate a list object
 #' d <- read_from_files(system.file("/data", package = "ecocomDP"))
-#' r <- validate_ecocomDP(data.list = d)
+#' r <- validate_data(data.list = d)
 #'         
 #' @export
 #'
-validate_ecocomDP <- function(
+validate_data <- function(
   data.list = NULL,
   data.path = NULL) {
   
   # Validate arguments --------------------------------------------------------
   
   validate_arguments(
-    fun.name = "validate_ecocomDP",
+    fun.name = "validate_data",
     fun.args = as.list(environment()))
   
   # Parameterize --------------------------------------------------------------

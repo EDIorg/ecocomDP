@@ -308,21 +308,21 @@ testthat::test_that("search_data()", {
 })
 
 
-# validate_ecocomDP() ---------------------------------------------------------
+# validate_data() ---------------------------------------------------------
 
-testthat::test_that("validate_ecocomDP()", {
+testthat::test_that("validate_data()", {
   
   # data.path - Is valid
   
   expect_null(
     validate_arguments(
-      "validate_ecocomDP",
+      "validate_data",
       as.list(
         list(data.path = tempdir()))))
   
   expect_error(
     validate_arguments(
-      "validate_ecocomDP",
+      "validate_data",
       as.list(
         list(data.path = paste0(tempdir(), "/aoihebqlnvo333")))))
   
@@ -330,7 +330,7 @@ testthat::test_that("validate_ecocomDP()", {
   
   expect_null(
     validate_arguments(
-      "validate_ecocomDP",
+      "validate_data",
       as.list(
         list(data.list = test_data))))
   
@@ -338,7 +338,7 @@ testthat::test_that("validate_ecocomDP()", {
   test_data2$unsupported_table <- NA
   expect_error(
     validate_arguments(
-      "validate_ecocomDP",
+      "validate_data",
       as.list(
         list(data.list = test_data2))),
     regexp = "Input \'data.list\' has unsupported tables:")

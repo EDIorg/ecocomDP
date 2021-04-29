@@ -1,7 +1,7 @@
 #' Make EML metadata for ecocomDP tables
 #' 
 #' Run this function AFTER you have validated your ecocomDP tables with 
-#' \code{validate_ecocomDP()}.
+#' \code{validate_data()}.
 #'
 #' @param path 
 #'     (character) Path to the directory containing ecocomDP data tables, conversion scripts, and where EML metadata will be written.
@@ -105,7 +105,7 @@
 #' path <- "/Users/csmith/Desktop/ecocomDP"
 #' 
 #' # Validate ecocomDP tables
-#' validate_ecocomDP(path)
+#' validate_data(path)
 #' 
 #' # Use parent EML to define variables of the ecocomDP and manually add variable 
 #' # names and definitions created in the ecocomDP re-formatting process.
@@ -123,7 +123,7 @@
 #' )
 #' 
 #' # Create EML
-#' make_eml(
+#' create_eml(
 #'   path = path,
 #'   parent.package.id = "knb-lter-sev.29.12",
 #'   child.package.id = "edi.101.5",
@@ -142,7 +142,7 @@
 #' )
 #' }
 #'
-make_eml <- function(path,
+create_eml <- function(path,
                      parent.package.id, 
                      child.package.id, 
                      script,

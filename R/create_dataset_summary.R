@@ -33,7 +33,7 @@
 #'     
 #' @export
 #'
-make_dataset_summary <- function(parent.package.id, 
+create_dataset_summary <- function(parent.package.id, 
                                  child.package.id, 
                                  sample.dates, 
                                  taxon.table,
@@ -160,8 +160,6 @@ make_dataset_summary <- function(parent.package.id,
 #'
 #' @return
 #'     (numeric) Area in square meters.
-#'     
-#' @export
 #'
 calulate_geo_extent_bounding_box_m2 <- function(
   lon_west, lon_east, lat_north, lat_south) {

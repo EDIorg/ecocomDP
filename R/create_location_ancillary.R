@@ -32,7 +32,7 @@
 #'     
 #' @export
 #'
-make_location_ancillary <- function(x = NULL, cols = NULL, eml = NULL) {
+create_location_ancillary <- function(x = NULL, cols = NULL, eml = NULL) {
   
   message('Creating location_ancillary')
   

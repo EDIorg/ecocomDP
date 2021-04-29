@@ -139,7 +139,7 @@ is assigned a UUID.}
 \item{return.obj}{(logical; optional) Whether to return the EML as an R object of class \code{EML object}. This EML object can be modified and written to file according to the \href{https://github.com/ropensci/EML}{EML R library}.}
 
 \item{x}{(named list; optional) Alternative input to 
-\code{make_eml()}. Use \code{template_arguments()} 
+\code{create_eml()}. Use \code{template_arguments()} 
 to create \code{x}.}
 }
 \value{
@@ -153,7 +153,7 @@ Render the contents of metadata templates into EML, validate, and write
     to file.
 }
 \details{
-\code{make_eml()} reads the contents of metadata templates, 
+\code{create_eml()} reads the contents of metadata templates, 
     auto-extracts additional metadata from the data entities, appends value 
     added content (e.g. resolving keywords to controlled vocabularies), and 
     adds all the metadata content to locations in the EML schema according 

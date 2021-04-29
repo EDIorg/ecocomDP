@@ -14,7 +14,6 @@
 #'     TODO: "Denormalizd" + describe the unnesting logic.
 #'     TODO: Intended to be used within a function that has already read the 
 #'     data tables.
-#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -28,11 +27,11 @@ join_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
 
   # TODO: Add variable_mapping table if present
   
-  # Flatten location ----------------------------------------------------------
+  # Flatten location
   
   dt_loc_expanded <- flatten_location(dt_loc)
   
-  # Left join -----------------------------------------------------------------
+  # Left join
   # Left join observation, location (expanded), and taxon tables
   # TO DO: ask Colin for his naming convention for temporary objects
   
@@ -68,7 +67,6 @@ join_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
 #'     TODO: "Denormalizd" + describe the unnesting logic.
 #'     TODO: Intended to be used within a function that has already read the 
 #'     data tables.
-#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -85,7 +83,7 @@ long2wide_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
   # Call join
   temp <- join_obs_loc_tax(dt_obs, dt_loc, dt_tax)
   
-  # Remove ecocomDP identifiers -----------------------------------------------
+  # Remove ecocomDP identifiers
   # Because their job is done.
   # TODO: Confirm that it's OK to remove taxon_id because it comes from the 
   # source (L0).
@@ -93,7 +91,7 @@ long2wide_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
   # temp <- dplyr::select(
   #   temp, -c("event_id", "location_id", "observation_id", "taxon_id"))
   
-  # Pivot ---------------------------------------------------------------------
+  # Pivot
   # Pivot the joined df to spread the non-unique columns
   
   join_wide <- tidyr::pivot_wider(
@@ -101,7 +99,7 @@ long2wide_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
     names_from = variable_name,
     values_from=c(observation_id, value, unit))
   
-  # Return --------------------------------------------------------------------
+  # Return
   
   return(join_wide)
   
@@ -122,7 +120,6 @@ long2wide_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
 #'     Dereferences each of the parent_id, creates a site name that includes
 #'     the site names of each parent, and adds the lowest latitude, longitude 
 #'     and elevation available in the table.
-#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -130,7 +127,7 @@ long2wide_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
 #' 
 flatten_location <- function(dt_loc) {
   
-  # Expand location table -----------------------------------------------------
+  # Expand location table
   
   # Rewrite names of locations to indicate their nested arrangements and expand
   # corresponding latitude, longitude, and elevation

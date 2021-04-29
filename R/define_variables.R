@@ -22,7 +22,6 @@
 #'
 #' @export
 #'
-
 define_variables <- function(data.path, parent.pkg.id, environment = "production") {
   message('Retrieving variable definitions and units')
   

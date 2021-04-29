@@ -23,7 +23,7 @@ convert_bes543_to_ecocomDP(path, parent_pkg_id, child_pkg_id)
 
 message('Validating ecocomDP tables')
 
-validate_ecocomDP(
+validate_data(
   data.path = path
 )
 
@@ -70,7 +70,7 @@ additional_contact <- data.frame(
 
 message('Creating EML')
 
-make_eml(
+create_eml(
   data.path = path,
   code.path = path,
   code.files = 'convert_bes543_to_ecocomDP.R',

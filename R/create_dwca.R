@@ -39,7 +39,7 @@
 #'
 #' @examples
 #' 
-L1_to_L2_DwCA <- function(path, 
+create_dwca <- function(path, 
                           core.name, 
                           parent.package.id, 
                           child.package.id,
@@ -161,7 +161,7 @@ L1_to_L2_DwCA <- function(path,
 #'     EDI Data Repository package IDs are currently supported.
 #'
 #' @return
-#' @export
+#' 
 create_table_dwca_occurrence_core <- function(
   dwca_occurrence_core_config,
   dwca_occurrence_core_mapping,
@@ -302,7 +302,6 @@ create_table_dwca_occurrence_core <- function(
 #'
 #' @return
 #'     three tables, event, occurrence, measurementOrFact
-#' @export
 #'
 #' @examples
 #' 

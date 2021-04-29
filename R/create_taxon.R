@@ -27,7 +27,7 @@
 #'     
 #' @export
 #'
-make_taxon <- function(
+create_taxon <- function(
   x = NULL, cols = NULL, taxa = NULL, name.type = "scientific", 
   data.sources = NULL) {
   

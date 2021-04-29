@@ -109,9 +109,9 @@ validate_arguments <- function(fun.name, fun.args) {
     
   }
   
-  # validate_ecocomDP() -------------------------------------------------------
+  # validate_data() -------------------------------------------------------
   
-  if (fun.name == "validate_ecocomDP") {
+  if (fun.name == "validate_data") {
     
     # data.path - Is a valid path
     

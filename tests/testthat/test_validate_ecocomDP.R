@@ -3,7 +3,7 @@
 
 library(ecocomDP)
 
-context("validate_ecocomDP()")
+context("validate_data()")
 
 # Parameterize ----------------------------------------------------------------
 
@@ -393,9 +393,9 @@ testthat::test_that("validate_elevation()", {
   
 })
 
-# validate_ecocomDP() ---------------------------------------------------------
+# validate_data() ---------------------------------------------------------
 
-testthat::test_that("validate_ecocomDP", {
+testthat::test_that("validate_data", {
   
   d <- test_data
   
@@ -438,7 +438,7 @@ testthat::test_that("validate_ecocomDP", {
   d$location$elevation[4] <- 8849
   d$location$elevation[5] <- -10985
   
-  issues <- suppressWarnings(validate_ecocomDP(data.list = d))
+  issues <- suppressWarnings(validate_data(data.list = d))
   expect_equal(length(issues), 15)
   expect_true(is.list(issues))
   expect_true(is.character(issues[[1]]))

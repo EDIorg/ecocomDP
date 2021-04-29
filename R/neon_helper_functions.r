@@ -15,9 +15,9 @@ make_neon_location_table <- function(loc_info, loc_col_names){
   
   table_location <- suppressMessages(
     loc_info %>% 
-      make_location(cols = loc_col_names))
+      create_location(cols = loc_col_names))
   
-  # code to handle updated make_location (updated 18 Sep 2020 in make_location branch)
+  # code to handle updated create_location (updated 18 Sep 2020 in create_location branch)
   if(class(table_location) == "list" &&
      "location" %in% names(table_location)){
     

@@ -35,7 +35,7 @@
 #'     
 #' @export
 #'
-make_taxon_ancillary <- function(x = NULL, cols = NULL, eml = NULL) {
+create_taxon_ancillary <- function(x = NULL, cols = NULL, eml = NULL) {
   
   message('Creating taxon_ancillary')
   

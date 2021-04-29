@@ -1473,8 +1473,6 @@ set_taxonomic_coverage <- function(sci_names) {
 #'     (data frame) Taxonomic authorities and corresponding identifiers
 #'     supported by `resolve_taxa` and `resolve_common`.
 #'
-#' @export
-#'
 view_taxa_authorities <- function(){
   
   # TODO: Add to metadata if ritis, taxize, and worrms are installed then attempts can be made at resolution

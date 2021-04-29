@@ -288,7 +288,7 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
   # Validate ------------------------------------------------------------------
 
   for (i in 1:length(d)) {
-    d[[i]]$validation_issues <- validate_ecocomDP(data.list = d[[i]]$tables)
+    d[[i]]$validation_issues <- validate_data(data.list = d[[i]]$tables)
   }
   
   # Return --------------------------------------------------------------------

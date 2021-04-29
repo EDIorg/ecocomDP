@@ -41,7 +41,7 @@
 #' @export
 #'
 
-make_location <- function(
+create_location <- function(
   x, cols, kml = NULL, col = NULL, parent.package.id = NULL){
   message('Creating location')
   
