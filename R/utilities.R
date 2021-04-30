@@ -377,26 +377,6 @@ api_read_metadata <- function(package.id, environment = 'production'){
 
 
 
-#' Parse character string to POSIXct POSIXt
-#'
-#' @param datetimes (character) Date or datetime
-#'
-#' @return (POSIXct POSIXt) \code{datetimes} parsed by relevant \code{lubridate} function
-#' 
-char2datetime <- function(datetimes) {
-  datetimes <- stringr::str_remove(datetimes, "T.*$")
-  datetimes <- datetimes[!is.na(datetimes)]
-  res <- lubridate::parse_date_time(datetimes, orders = c("ymd", "ymd H", "ymd HM", "ymd HMS"))
-  return(res)
-}
-
-
-
-
-
-
-
-
 
 #' Convert \code{character(0)} to \code{""}
 #'
