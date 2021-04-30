@@ -4,10 +4,10 @@
 \alias{validate_data}
 \title{Validate a dataset against the ecocomDP}
 \usage{
-validate_data(data.list = NULL, data.path = NULL)
+validate_data(dataset = NULL, data.path = NULL)
 }
 \arguments{
-\item{data.list}{(list of data frames) A single dataset return from \code{read_data()}.}
+\item{dataset}{(list of data frames) A single dataset return from \code{read_data()}.}
 
 \item{data.path}{(character) The path to the directory containing ecocomDP tables.}
 }
@@ -51,6 +51,6 @@ r <- validate_data(data.path = system.file("/data", package = "ecocomDP"))
 # Validate a list object
 CHANGE EXAMPLE TO VALIDATE A LIST OBJECT NOT CONSTRUCTED BY read_data() ... BECAUSE THIS FUNC ALREADY VALIDATES (CIRCULAR EXAMPLE) ... IS THIS REALLY A USE CASE?
 d <- read_data(from.files = system.file("/data", package = "ecocomDP"))
-r <- validate_data(data.list = d)
+r <- validate_data(dataset = d)
         
 }

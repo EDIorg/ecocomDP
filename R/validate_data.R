@@ -3,7 +3,7 @@
 #' @description  
 #'     Use this function to verify a dataset conforms to the ecocomDP.
 #' 
-#' @param data.list
+#' @param dataset
 #'     (list of data frames) A single dataset return from \code{read_data()}.
 #' @param data.path 
 #'     (character) The path to the directory containing ecocomDP tables.
@@ -45,12 +45,12 @@
 #' # Validate a list object
 #' CHANGE EXAMPLE TO VALIDATE A LIST OBJECT NOT CONSTRUCTED BY read_data() ... BECAUSE THIS FUNC ALREADY VALIDATES (CIRCULAR EXAMPLE) ... IS THIS REALLY A USE CASE?
 #' d <- read_data(from.files = system.file("/data", package = "ecocomDP"))
-#' r <- validate_data(data.list = d)
+#' r <- validate_data(dataset = d)
 #'         
 #' @export
 #'
 validate_data <- function(
-  data.list = NULL,
+  dataset = NULL,
   data.path = NULL) {
   
   # Validate arguments
@@ -69,7 +69,7 @@ validate_data <- function(
     d <- read_data(from.file = data.path)
     invisible(validate_table_names(data.path = data.path))
   } else {
-    d <- data.list
+    d <- dataset
   }
   id <- names(d)
   d <- d[[1]]$tables # validation runs on tables, don't need other dataset components
