@@ -7,8 +7,7 @@
 validate_data(data.list = NULL, data.path = NULL)
 }
 \arguments{
-\item{data.list}{(list of data frames) A named list of data frames, each of which is an 
-ecocomDP table. See output from \code{read_data()}.}
+\item{data.list}{(list of data frames) A single dataset return from \code{read_data()}.}
 
 \item{data.path}{(character) The path to the directory containing ecocomDP tables.}
 }
@@ -50,7 +49,8 @@ This function is used by ecocomDP creators (to ensure what has been
 r <- validate_data(data.path = system.file("/data", package = "ecocomDP"))
 
 # Validate a list object
-d <- read_from_files(system.file("/data", package = "ecocomDP"))
+CHANGE EXAMPLE TO VALIDATE A LIST OBJECT NOT CONSTRUCTED BY read_data() ... BECAUSE THIS FUNC ALREADY VALIDATES (CIRCULAR EXAMPLE) ... IS THIS REALLY A USE CASE?
+d <- read_data(from.files = system.file("/data", package = "ecocomDP"))
 r <- validate_data(data.list = d)
         
 }

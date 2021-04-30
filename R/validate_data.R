@@ -4,8 +4,7 @@
 #'     Use this function to verify a dataset conforms to the ecocomDP.
 #' 
 #' @param data.list
-#'     (list of data frames) A named list of data frames, each of which is an 
-#'     ecocomDP table. See output from \code{read_data()}.
+#'     (list of data frames) A single dataset return from \code{read_data()}.
 #' @param data.path 
 #'     (character) The path to the directory containing ecocomDP tables.
 #'     
@@ -44,7 +43,8 @@
 #' r <- validate_data(data.path = system.file("/data", package = "ecocomDP"))
 #' 
 #' # Validate a list object
-#' d <- read_from_files(system.file("/data", package = "ecocomDP"))
+#' CHANGE EXAMPLE TO VALIDATE A LIST OBJECT NOT CONSTRUCTED BY read_data() ... BECAUSE THIS FUNC ALREADY VALIDATES (CIRCULAR EXAMPLE) ... IS THIS REALLY A USE CASE?
+#' d <- read_data(from.files = system.file("/data", package = "ecocomDP"))
 #' r <- validate_data(data.list = d)
 #'         
 #' @export
@@ -53,33 +53,32 @@ validate_data <- function(
   data.list = NULL,
   data.path = NULL) {
   
-  # Validate arguments --------------------------------------------------------
+  # Validate arguments
+  # FIXME: Update for full dataset list input
+  # validate_arguments(
+  #   fun.name = "validate_data",
+  #   fun.args = as.list(environment()))
   
-  validate_arguments(
-    fun.name = "validate_data",
-    fun.args = as.list(environment()))
-  
-  # Parameterize --------------------------------------------------------------
+  # Parameterize
   
   criteria <- data.table::fread(
     system.file('validation_criteria.txt', package = 'ecocomDP'))
   
-  # Read data -----------------------------------------------------------------
-  
+  # Read data
   if (!is.null(data.path)) {
-    d <- read_from_files(data.path)
+    d <- read_data(from.file = data.path)
     invisible(validate_table_names(data.path = data.path))
   } else {
     d <- data.list
   }
+  id <- names(d)
+  d <- d[[1]]$tables # validation runs on tables, don't need other dataset components
 
-  # Validate data -------------------------------------------------------------
-  
+  # Validate data
   # Get package/product ID from the dataset_summary table since this function
   # doesn't require an ID input.
-  # FIXME: Reference data structure "d" ... not the package_id of the summary table, which is issue for NEON datasets
-  id <- d$dataset_summary$package_id
-  if (is.null(id)) {
+  
+  if (is.null(id)) { # to catch edge cases where no id can be found
     id <- "unknown data ID"
   }
   
@@ -88,7 +87,6 @@ validate_data <- function(
   # only seeing the first issue encountered.
   
   message("Validating ", id, ":")
-  
   issues_table_presence <- validate_table_presence(d)
   issues_column_names <- validate_column_names(d)
   issues_column_presence <- validate_column_presence(d)
@@ -103,7 +101,7 @@ validate_data <- function(
     validate_latitude_longitude_range(d)
   issues_validate_elevation <- validate_elevation(d)
   
-  # Report validation issues --------------------------------------------------
+  # Report validation issues
   
   # Format results into a human readable format
   
@@ -219,7 +217,6 @@ validate_table_presence <- function(data.list) {
     system.file('validation_criteria.txt', package = 'ecocomDP'))
   
   # Validate
-  
   expected <- criteria$table[
     (is.na(criteria$class)) & (criteria$required == TRUE)]
   required_missing <- expected[!(expected %in% names(data.list))]

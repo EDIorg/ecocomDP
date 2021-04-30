@@ -287,8 +287,12 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
 
   # Validate ------------------------------------------------------------------
 
-  for (i in 1:length(d)) {
-    d[[i]]$validation_issues <- validate_data(data.list = d[[i]]$tables)
+  callstack <- as.character(sys.calls())
+  if (!any(stringr::str_detect(callstack, "validate_data\\("))) { # don't validate if read_data() is called from validate_data()
+    for (i in 1:length(d)) {
+      # FIXME: Enter dataset list object, not just tables
+      d[[i]]$validation_issues <- validate_data(data.list = d[i])
+    }
   }
   
   # Return --------------------------------------------------------------------
@@ -431,8 +435,12 @@ read_from_files <- function(data.path) {
   if (fileext == "rds") {        # rds
     d <- readRDS(data.path)
   } else if (fileext != "rds") { # dir ... note NEON ids cause file_ext() to produce misleading results
+    dirs <- list.dirs(data.path)
+    if (length(dirs) > 1) {         # Don't use parent dir if nested (use case of reading from save_data(..., file.type = .csv))
+      dirs <- dirs[-1]
+    }
     d <- lapply(
-      list.dirs(data.path)[-1],
+      dirs,
       function(path) {
         res <- lapply(
           unique(attr_tbl$table),
@@ -454,7 +462,11 @@ read_from_files <- function(data.path) {
         return(res)
       })
     d <- unlist(d, recursive = FALSE)
-    names(d) <- basename(list.dirs(data.path)[-1])
+    if (length(dirs) > 1){         # Get id from dir if nested (use case of reading from save_data(..., file.type = .csv))
+      names(d) <- basename(dirs)
+    } else {
+      names(d) <- d[[1]]$tables$dataset_summary$package_id
+    }
   }
   return(d)
 }
