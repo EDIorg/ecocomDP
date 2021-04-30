@@ -121,7 +121,7 @@ Columns
 |  column name 	|   type	 |   not NULL required?	|  references cols 	| description | example |
 |---------------|----------|-----------------------|-------------------|--------------|---------| 
 | observation_ancillary_id | character |yes| NA	| the id of the observation_ancillary, a row or record identifier 	| 	TBE01JUN05  	|
-| event_id             | character |yes|(table = observation) event_id    | the ID of the sampling event   | 2009mar03_dive1      |
+| observation_id             | character |yes|(table = observation) observation_id    | The ID of the taxon table.   | 4161      |
 | variable_name            | character |yes| NA | variable measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  sample_z  	|
 | value                    | character | no| NA	| value for variable  	|  5  	|
 | unit                     | character | no| NA	|  unit for variable 	|  m 	|
