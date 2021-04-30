@@ -3,7 +3,11 @@
 #' @description  
 #'     Use this function to verify a dataset conforms to the ecocomDP.
 #' 
+<<<<<<< HEAD
 #' @param data.list
+=======
+#' @param dataset
+>>>>>>> 389f00c6a1347065fe94bf2fa8d57ce5f03736fe
 #'     (list of data frames) A single dataset return from \code{read_data()}.
 #' @param data.path 
 #'     (character) The path to the directory containing ecocomDP tables.
@@ -45,12 +49,16 @@
 #' # Validate a list object
 #' CHANGE EXAMPLE TO VALIDATE A LIST OBJECT NOT CONSTRUCTED BY read_data() ... BECAUSE THIS FUNC ALREADY VALIDATES (CIRCULAR EXAMPLE) ... IS THIS REALLY A USE CASE?
 #' d <- read_data(from.files = system.file("/data", package = "ecocomDP"))
+<<<<<<< HEAD
 #' r <- validate_data(data.list = d)
+=======
+#' r <- validate_data(dataset = d)
+>>>>>>> 389f00c6a1347065fe94bf2fa8d57ce5f03736fe
 #'         
 #' @export
 #'
 validate_data <- function(
-  data.list = NULL,
+  dataset = NULL,
   data.path = NULL) {
   
   # Validate arguments
@@ -69,7 +77,7 @@ validate_data <- function(
     d <- read_data(from.file = data.path)
     invisible(validate_table_names(data.path = data.path))
   } else {
-    d <- data.list
+    d <- dataset
   }
   id <- names(d)
   d <- d[[1]]$tables # validation runs on tables, don't need other dataset components
@@ -349,16 +357,11 @@ validate_column_presence <- function(data.list){
 #'     then rows of invalid formats are returned, otherwise NULL is returned.
 #'
 validate_datetime <- function(data.list) {
-  
   message('  Datetime formats')
-
   # Parameterize
-  
   criteria <- data.table::fread(
     system.file('validation_criteria.txt', package = 'ecocomDP'))
-  
   # Validate
-  
   r <- lapply(
     names(data.list),
     function(x) {
@@ -367,23 +370,19 @@ validate_datetime <- function(data.list) {
           (criteria$class == "Date") &
           !is.na(criteria$column)]
       if (length(datetime_column) > 0) {
-        # TODO: See process note in google doc
         v <- data.list[[x]][[datetime_column]]
-        # Difference in NA count induced by coercion indicates a non-valid 
-        # format
-        
-        # count NAs in datetime field
-        na_count_raw <- sum(is.na(v))
-        
-        # check different date time formats to see if one matches the data
-        # TODO: Use char2datetime()?
+        na_count_raw <- sum(is.na(v))               # count NAs in datetime field
+        v <- as.character(v)                        # coerce to character
+        v <- stringr::str_remove_all(v, "(Z|z).+$") # prepare datetimes for parsing
+        v <- stringr::str_replace(v, "T", " ")
+        # Check different date time formats to see if one matches the data
+        # Difference in NA count induced by coercion indicates a non-valid format
         use_i <- suppressWarnings(
           list(
             lubridate::parse_date_time(v, "ymd HMS"),
             lubridate::parse_date_time(v, "ymd HM"),
             lubridate::parse_date_time(v, "ymd H"),
             lubridate::parse_date_time(v, "ymd")))
-        
         # count NAs for each attempt to parse datetime
         na_count_parsed <- unlist(
           lapply(
@@ -391,18 +390,13 @@ validate_datetime <- function(data.list) {
             function(k) {
               sum(is.na(k))
             }))
-        
         # return info on datetime problems
         if (min(na_count_parsed) > na_count_raw) {
-          
-  
           use_i <- seq(
             length(v))[
               is.na(
                 use_i[[
                   (which(na_count_parsed %in% min(na_count_parsed)))[1]]])]
-          
-          
           paste0(
             "Datetime format. The ", x, " table has unsupported ",
             "datetime formats in rows: ", 
@@ -410,9 +404,7 @@ validate_datetime <- function(data.list) {
         }
       }
     })
-  
-  unlist(r)
-
+  return(unlist(r))
 }
 
 

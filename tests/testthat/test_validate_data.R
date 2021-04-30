@@ -125,15 +125,16 @@ testthat::test_that("validate_column_presence()", {
 # validate_datetime() ---------------------------------------------------------
 
 testthat::test_that("validate_datetime()", {
+<<<<<<< HEAD:tests/testthat/test_validate_data.R
   
   d <- test_data[[1]]$tables
   
+=======
+  d <- test_data[[1]]$tables
+>>>>>>> 389f00c6a1347065fe94bf2fa8d57ce5f03736fe:tests/testthat/test_validate_data.R
   # Return message when datetime formats are valid.
-  
   expect_null(validate_datetime(d))
-  
   # Return character string when datetime formats are invalid.
-  
   for (table in names(d)) {
     d <- test_data[[1]]$tables
     datetime_columns <- criteria$column[
@@ -143,17 +144,17 @@ testthat::test_that("validate_datetime()", {
     if (length(datetime_columns) != 0) {
       for (column in datetime_columns) {
         if (!all(is.na(d[[table]][[column]]))) {
+          d[[table]][[column]] <- as.character(d[[table]][[column]])
           d[[table]][[column]][1:2] <- c("01/02/2003", "01/02/2003")
-          r <- validate_datetime(d)
           expect_true(
             stringr::str_detect(
-              r, 
-              "Datetime format. The .+ table has unsupported"))
+              validate_datetime(d), 
+              paste0("Datetime format. The ", table, " table has unsupported ",
+                     "datetime formats in rows: 1 2")))
         }
       }
     }
   }
-  
 })
 
 # validate_column_classes() ---------------------------------------------------
@@ -233,15 +234,16 @@ testthat::test_that("validate_composite_keys()", {
 # validate_referential_integrity() --------------------------------------------
 
 testthat::test_that("validate_referential_integrity()", {
+<<<<<<< HEAD:tests/testthat/test_validate_data.R
   
   d <- test_data[[1]]$tables
   
+=======
+  d <- test_data[[1]]$tables
+>>>>>>> 389f00c6a1347065fe94bf2fa8d57ce5f03736fe:tests/testthat/test_validate_data.R
   # Valid referential integrity results in message.
-  
   expect_null(validate_referential_integrity(d))
-  
   # Invalid referential integrity results in character string.
-  
   for (table in names(d)) {
     d <- test_data[[1]]$tables
     primary_key <- criteria$column[
@@ -256,23 +258,23 @@ testthat::test_that("validate_referential_integrity()", {
       if (fk_table != table) {
         d <- test_data[[1]]$tables
         d[[fk_table]][[primary_key]][1] <- "invalid_foreign_key"
-        r <- validate_referential_integrity(d)
         expect_true(
           stringr::str_detect(
-            r, 
-            "Referential integrity. The .+ table has these foreign keys"))
+            validate_referential_integrity(d), 
+            paste0("Referential integrity. The ", fk_table, " table has ",
+                   "these foreign keys .+: invalid_foreign_key")))
       } else if (table != "location") {
         if (fk_table == "location") {
           d[[fk_table]][["parent_location_id"]][2] <- "invalid_foreign_key"
           expect_true(
             stringr::str_detect(
-              r, 
-              "Referential integrity. The .+ table has these foreign keys"))
+              validate_referential_integrity(d), 
+              paste0("Referential integrity. The ", fk_table, " table has ",
+                     "these foreign keys .+: invalid_foreign_key")))
         }
       }
     }
   }
-  
 })
 
 # validate_latitude_longitude_format() ----------------------------------------
@@ -359,6 +361,10 @@ testthat::test_that("validate_data", {
   # Create issue for validate_column_presence()
   d[[1]]$tables$taxon$taxon_name <- NULL
   # Create issue for validate_datetime()
+<<<<<<< HEAD:tests/testthat/test_validate_data.R
+=======
+  d[[1]]$tables$location_ancillary$datetime <- as.character(d[[1]]$tables$location_ancillary$datetime)
+>>>>>>> 389f00c6a1347065fe94bf2fa8d57ce5f03736fe:tests/testthat/test_validate_data.R
   d[[1]]$tables$location_ancillary$datetime[1] <- "08/22/2020"
   # Create issue for validate_column_classes()
   d[[1]]$tables$location$latitude <- as.character(d[[1]]$tables$location$latitude)
@@ -387,5 +393,4 @@ testthat::test_that("validate_data", {
   expect_equal(length(issues), 15)
   expect_true(is.list(issues))
   expect_true(is.character(issues[[1]]))
-  
 })
