@@ -20,6 +20,7 @@ plot_alpha_diversity <- function(dataset, alpha = 1) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
     stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
   }
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(dataset)                    # intermediate format for plotting
   message("Plotting ", ds$id, " alpha diversity")
   # Calculate num unique taxa at each site through time and num unique taxa among all sites through time

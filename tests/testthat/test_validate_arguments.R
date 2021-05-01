@@ -11,6 +11,23 @@ test_data <- read_from_files(
   system.file("/data", package = "ecocomDP"))[[1]]$tables
 search_index <- search_data()
 
+# plot_*() --------------------------------------------------------------------
+
+testthat::test_that("plot_*()", {
+  
+  d <- read_example_dataset()
+  # dataset
+  validate_arguments("plot", as.list(list(dataset = d)))
+  # alpha
+  
+  expect_null(
+    validate_arguments(
+      "plot",
+      as.list(
+        list(data.path = tempdir()))))
+  
+})
+
 # read_data() -----------------------------------------------------------------
 
 testthat::test_that("read_data()", {

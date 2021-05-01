@@ -23,6 +23,16 @@ validate_arguments <- function(fun.name, fun.args) {
   criteria <- data.table::fread(
     system.file('validation_criteria.txt', package = 'ecocomDP'))
   
+  # plot_*() ------------------------------------------------------------------
+  
+  if (fun.name == "plot") {
+    if (!is_dataset(fun.args$dataset)) {
+      stop("Input 'dataset' has invalid structure. Structure should match ",
+           "the return from read_data().", call. = F)
+    }
+    
+  }
+  
   # search_data() -------------------------------------------------------------
   
   if (fun.name == "search_data") {
@@ -392,4 +402,34 @@ validate_site <- function(site, id) {
     stop("Sites not available in ", id, ": ", paste(site[!site_exists], collapse = ", "), 
          call. = FALSE)
   }
+}
+
+
+
+
+
+
+
+
+#' Validate dataset structure
+#'
+#' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
+#'
+#' @return (logical) TRUE if has dataset structure otherwise FALSE
+#'
+is_dataset <- function(dataset) {
+  browser()
+  # FIXME: Load criteria
+  if (!is.list(dataset)) {
+    return(FALSE)
+  }                                                             # obj is a list
+  res <- is.list(dataset)                                                             # obj is a list
+  res <- is.character(names(dataset))                                                         # 1st level name is id
+  res <- "tables" %in% names(dataset[[1]])                    # 2nd level has 3 values
+  res <- is.list(is.list(d[[1]]$tables))             # 2nd level objs are lists
+  expect_true(all(names(d[[1]]$tables) %in% unique(criteria$table)))                  # table names are valid
+  for (i in names(d[[1]]$tables)) {                                                   # tables are data.frames
+    expect_true(class(d[[1]]$tables[[i]]) == "data.frame")
+  }
+  
 }
