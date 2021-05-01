@@ -17,7 +17,7 @@ observation	observation_id	character	TRUE	TRUE	FALSE	FALSE	TRUE
 observation	event_id	character	FALSE	FALSE	FALSE	FALSE	TRUE
 observation	package_id	character	TRUE	FALSE	TRUE	TRUE	FALSE
 observation	location_id	character	TRUE	FALSE	TRUE	TRUE	TRUE
-observation	observation_datetime	Date	TRUE	FALSE	FALSE	TRUE	FALSE
+observation	datetime	Date	TRUE	FALSE	FALSE	TRUE	FALSE
 observation	taxon_id	character	TRUE	FALSE	TRUE	TRUE	TRUE
 observation	variable_name	character	TRUE	FALSE	FALSE	TRUE	FALSE
 observation	value	numeric	TRUE	FALSE	FALSE	FALSE	FALSE

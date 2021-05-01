@@ -7,7 +7,7 @@
 #'     keys and has all ecocomDP column names added at this point, specifically
 #'     relevant to the location_ancillary table are the columns "taxon_id", 
 #'     and "author" ("datetime" will be automatically created from the 
-#'     observation table "observation_datetime" column). This funciton 
+#'     observation table "datetime" column). This funciton 
 #'     will not work otherwise.
 #' @param cols
 #'     (character) Names of all columns from \code{x} needed to create 
@@ -64,9 +64,9 @@ create_taxon_ancillary <- function(x = NULL, cols = NULL, eml = NULL) {
   # Create data frame of select variables
   d <- dplyr::select(x, cols)
   
-  # Rename observation_datetime (a standard variable) if listed
+  # Rename datetime (a standard variable) if listed
   d <- tryCatch(
-    dplyr::rename(d, datetime = observation_datetime),
+    dplyr::rename(d, datetime = datetime),
     error = function(cond) {d})
   
   # Now assume variables not belonging to ecocomDP are variables that need to 

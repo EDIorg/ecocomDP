@@ -44,7 +44,7 @@ testthat::test_that("Reads from source APIs", {
       expect_true(class(d[[1]]$tables[[i]]) == "data.frame")
     }
     expect_equal(                                                                     # datetimes are parsed
-      class(d[[1]]$tables$observation$observation_datetime),
+      class(d[[1]]$tables$observation$datetime),
       "Date")
     expect_equal(
       class(d[[1]]$tables$location_ancillary$datetime),

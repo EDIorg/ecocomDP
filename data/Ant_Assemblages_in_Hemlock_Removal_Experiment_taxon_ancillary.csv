@@ -74,7 +74,6 @@ txan_72,tx_72,NA,hl,0.8322,NA
 txan_73,tx_73,NA,hl,0.715666667,NA
 txan_74,tx_74,NA,hl,0.7575,NA
 txan_75,tx_75,NA,hl,0.848333333,NA
-txan_76,tx_76,NA,hl,NA,NA
 txan_77,tx_77,NA,hl,0.582,NA
 txan_78,tx_78,NA,hl,0.61,NA
 txan_79,tx_79,NA,hl,0.9546875,NA
@@ -156,7 +155,6 @@ txan_154,tx_72,NA,rel,0.156212449,NA
 txan_155,tx_73,NA,rel,0.141127154,NA
 txan_156,tx_74,NA,rel,0.133333333,NA
 txan_157,tx_75,NA,rel,0.079764244,NA
-txan_158,tx_76,NA,rel,NA,NA
 txan_159,tx_77,NA,rel,0.24742268,NA
 txan_160,tx_78,NA,rel,0.204918033,NA
 txan_161,tx_79,NA,rel,0.231085714,NA
@@ -238,7 +236,6 @@ txan_236,tx_72,NA,rll,0.88344148,NA
 txan_237,tx_73,NA,rll,0.809268747,NA
 txan_238,tx_74,NA,rll,0.818745875,NA
 txan_239,tx_75,NA,rll,0.860903733,NA
-txan_240,tx_76,NA,rll,NA,NA
 txan_241,tx_77,NA,rll,1.046391753,NA
 txan_242,tx_78,NA,rll,0.819672131,NA
 txan_243,tx_79,NA,rll,0.950628571,NA
@@ -320,7 +317,6 @@ txan_318,tx_72,NA,colony.size,Small,NA
 txan_319,tx_73,NA,colony.size,Small,NA
 txan_320,tx_74,NA,colony.size,Medium,NA
 txan_321,tx_75,NA,colony.size,Medium,NA
-txan_322,tx_76,NA,colony.size,NA,NA
 txan_323,tx_77,NA,colony.size,Large,NA
 txan_324,tx_78,NA,colony.size,Small,NA
 txan_325,tx_79,NA,colony.size,Small,NA
@@ -402,7 +398,6 @@ txan_400,tx_72,NA,feeding.preference,Predatory,NA
 txan_401,tx_73,NA,feeding.preference,Predatory,NA
 txan_402,tx_74,NA,feeding.preference,Predatory,NA
 txan_403,tx_75,NA,feeding.preference,Predatory,NA
-txan_404,tx_76,NA,feeding.preference,Predatory,NA
 txan_405,tx_77,NA,feeding.preference,Omnivore,NA
 txan_406,tx_78,NA,feeding.preference,Omnivore,NA
 txan_407,tx_79,NA,feeding.preference,Omnivore,NA
@@ -484,7 +479,6 @@ txan_482,tx_72,NA,nest.substrate,Soil,NA
 txan_483,tx_73,NA,nest.substrate,Soil,NA
 txan_484,tx_74,NA,nest.substrate,Soil,NA
 txan_485,tx_75,NA,nest.substrate,Soil,NA
-txan_486,tx_76,NA,nest.substrate,Soil,NA
 txan_487,tx_77,NA,nest.substrate,Soil,NA
 txan_488,tx_78,NA,nest.substrate,Soil,NA
 txan_489,tx_79,NA,nest.substrate,Acorns,NA
@@ -566,7 +560,6 @@ txan_564,tx_72,NA,primary.habitat,Open,NA
 txan_565,tx_73,NA,primary.habitat,Open,NA
 txan_566,tx_74,NA,primary.habitat,Forests,NA
 txan_567,tx_75,NA,primary.habitat,Open,NA
-txan_568,tx_76,NA,primary.habitat,Forests,NA
 txan_569,tx_77,NA,primary.habitat,Forests,NA
 txan_570,tx_78,NA,primary.habitat,Open,NA
 txan_571,tx_79,NA,primary.habitat,Forests,NA
@@ -648,7 +641,6 @@ txan_646,tx_72,NA,secondary.habitat,NA,NA
 txan_647,tx_73,NA,secondary.habitat,NA,NA
 txan_648,tx_74,NA,secondary.habitat,NA,NA
 txan_649,tx_75,NA,secondary.habitat,NA,NA
-txan_650,tx_76,NA,secondary.habitat,Grassy,NA
 txan_651,tx_77,NA,secondary.habitat,Grassy,NA
 txan_652,tx_78,NA,secondary.habitat,Wet,NA
 txan_653,tx_79,NA,secondary.habitat,Grassy,NA
@@ -730,7 +722,6 @@ txan_728,tx_72,NA,seed.disperser,N,NA
 txan_729,tx_73,NA,seed.disperser,N,NA
 txan_730,tx_74,NA,seed.disperser,N,NA
 txan_731,tx_75,NA,seed.disperser,N,NA
-txan_732,tx_76,NA,seed.disperser,N,NA
 txan_733,tx_77,NA,seed.disperser,N,NA
 txan_734,tx_78,NA,seed.disperser,N,NA
 txan_735,tx_79,NA,seed.disperser,N,NA
@@ -812,7 +803,6 @@ txan_810,tx_72,NA,slavemaker.sp,N,NA
 txan_811,tx_73,NA,slavemaker.sp,N,NA
 txan_812,tx_74,NA,slavemaker.sp,N,NA
 txan_813,tx_75,NA,slavemaker.sp,N,NA
-txan_814,tx_76,NA,slavemaker.sp,N,NA
 txan_815,tx_77,NA,slavemaker.sp,N,NA
 txan_816,tx_78,NA,slavemaker.sp,N,NA
 txan_817,tx_79,NA,slavemaker.sp,N,NA
@@ -894,7 +884,6 @@ txan_892,tx_72,NA,behavior,NA,NA
 txan_893,tx_73,NA,behavior,NA,NA
 txan_894,tx_74,NA,behavior,NA,NA
 txan_895,tx_75,NA,behavior,NA,NA
-txan_896,tx_76,NA,behavior,NA,NA
 txan_897,tx_77,NA,behavior,dominant,NA
 txan_898,tx_78,NA,behavior,NA,NA
 txan_899,tx_79,NA,behavior,neutral,NA
@@ -976,7 +965,6 @@ txan_974,tx_72,NA,biogeographic.affinity,warm climate,NA
 txan_975,tx_73,NA,biogeographic.affinity,widespread,NA
 txan_976,tx_74,NA,biogeographic.affinity,widespread,NA
 txan_977,tx_75,NA,biogeographic.affinity,warm climate,NA
-txan_978,tx_76,NA,biogeographic.affinity,widespread,NA
 txan_979,tx_77,NA,biogeographic.affinity,widespread,NA
 txan_980,tx_78,NA,biogeographic.affinity,warm climate,NA
 txan_981,tx_79,NA,biogeographic.affinity,widespread,NA
@@ -1058,7 +1046,6 @@ txan_1056,tx_72,NA,source,Del Toro et al. 2015,NA
 txan_1057,tx_73,NA,source,Del Toro et al. 2015,NA
 txan_1058,tx_74,NA,source,Del Toro et al. 2015,NA
 txan_1059,tx_75,NA,source,Del Toro et al. 2015,NA
-txan_1060,tx_76,NA,source,Ellison et al. 2015; www.antweb.org; and www.antwiki.org,NA
 txan_1061,tx_77,NA,source,Del Toro et al. 2015,NA
 txan_1062,tx_78,NA,source,Del Toro et al. 2015,NA
 txan_1063,tx_79,NA,source,Del Toro et al. 2015,NA

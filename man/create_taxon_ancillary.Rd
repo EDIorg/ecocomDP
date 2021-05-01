@@ -13,7 +13,7 @@ created. This master data frame is linked to core tables via primary
 keys and has all ecocomDP column names added at this point, specifically
 relevant to the location_ancillary table are the columns "taxon_id", 
 and "author" ("datetime" will be automatically created from the 
-observation table "observation_datetime" column). This funciton 
+observation table "datetime" column). This funciton 
 will not work otherwise.}
 
 \item{cols}{(character) Names of all columns from \code{x} needed to create 

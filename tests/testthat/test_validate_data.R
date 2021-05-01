@@ -164,7 +164,7 @@ testthat::test_that("validate_column_classes()", {
     for (column in table_columns) {
       d <- test_data[[1]]$tables
       d[[table]][[column]] <- as.logical(d[[table]][[column]])
-      if (column != "observation_datetime" & column != "datetime") { # FIXME: test datetime cols (can be char or Date)
+      if (column != "datetime") { # FIXME: test datetime cols (can be char or Date)
         expect_true(
           stringr::str_detect(
             validate_column_classes(d), 
@@ -215,7 +215,11 @@ testthat::test_that("validate_composite_keys()", {
         criteria$composite_key]
     if (length(composite_key_columns) != 0) {
       for (column in composite_key_columns) {
-        d[[table]][[column]][2] <- d[[table]][[column]][1]
+        if (length(d[[table]][[column]]) == 1) {
+          d[[table]] <- rbind(d[[table]], d[[table]])
+        } else {
+          d[[table]][[column]][2] <- d[[table]][[column]][1]
+        }
       }
       expect_true(
         stringr::str_detect(
@@ -339,13 +343,6 @@ testthat::test_that("validate_data", {
   
   # Create issue for validate_table_presence()
   d[[1]]$tables$dataset_summary <- NULL
-  
-  # Create issue for validate_column_names()
-  # FIXME: This operation fails devtools::check() but passes devtools::test()
-  # colnames(d$taxon_ancillary) <- c(
-  #   "taxon_ancillary_id", "taxon_id", "datetime", "variable_name", "value",
-  #   "invalid_col_name")
-  
   # Create issue for validate_column_presence()
   d[[1]]$tables$taxon$taxon_name <- NULL
   # Create issue for validate_datetime()
@@ -360,7 +357,7 @@ testthat::test_that("validate_data", {
   d[[1]]$tables$location_ancillary$datetime[3] <- d[[1]]$tables$location_ancillary$datetime[2]
   d[[1]]$tables$location_ancillary$variable_name[3] <- d[[1]]$tables$location_ancillary$variable_name[2]
   # Create issue for validate_referential_integrity()
-  d[[1]]$tables$observation$event_id[1] <- "invalid_foreign_key"
+  d[[1]]$tables$observation$observation_id[1] <- "invalid_foreign_key"
   d[[1]]$tables$observation$package_id[1] <- "invalid_foreign_key"
   d[[1]]$tables$observation$location_id[1] <- "invalid_foreign_key"
   d[[1]]$tables$observation$taxon_id[1] <- "invalid_foreign_key"
@@ -374,8 +371,8 @@ testthat::test_that("validate_data", {
   d[[1]]$tables$location$elevation[4] <- 8849
   d[[1]]$tables$location$elevation[5] <- -10985
   
-  issues <- suppressWarnings(validate_data(data.list = d))
-  expect_equal(length(issues), 15)
+  issues <- suppressWarnings(validate_data(dataset = d))
+  expect_equal(length(issues), 17)
   expect_true(is.list(issues))
   expect_true(is.character(issues[[1]]))
 })

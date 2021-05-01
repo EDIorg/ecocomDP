@@ -61,9 +61,9 @@ create_location_ancillary <- function(x = NULL, cols = NULL, eml = NULL) {
   # Create data frame of select variables
   d <- dplyr::select(x, cols)
   
-  # Rename observation_datetime (a standard variable) if listed
+  # Rename datetime (a standard variable) if listed
   d <- tryCatch(
-    dplyr::rename(d, datetime = observation_datetime),
+    dplyr::rename(d, datetime = datetime),
     error = function(cond) {d})
   
   # Now assume variables not belonging to ecocomDP are variables that need to 

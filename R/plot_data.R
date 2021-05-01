@@ -390,17 +390,17 @@ format_for_comm_plots <- function(dataset) {
   }
   
   # Use dates
-  if (is.character(observation$observation_datetime)) {
+  if (is.character(observation$datetime)) {
     warning("Input datetimes are character strings. Accuracy may be improved",
             " if inputs are parsed before calling plot_data().", call. = FALSE)
   }
-  observation$observation_datetime <- lubridate::date(observation$observation_datetime)
+  observation$datetime <- lubridate::date(observation$datetime)
   
   obs <- observation
   taxon_count <- data.frame(
     OBSERVATION_TYPE = "TAXON_COUNT",
     SITE_ID = obs$location_id,
-    DATE = obs$observation_datetime,
+    DATE = obs$datetime,
     VARIABLE_NAME = obs$taxon_id,
     VARIABLE_UNITS = obs$variable_name,
     VALUE = obs$value,

@@ -554,6 +554,8 @@ validate_composite_keys <- function(data.list) {
           (criteria$table == x) & 
             !is.na(criteria$column) & 
             (criteria$composite_key == TRUE)]
+        composite_columns <- composite_columns[                   # expected columns may be missing
+          composite_columns %in% colnames(data.list[[x]])]
         if (length(composite_columns) > 0) {
           d <- dplyr::select(data.list[[x]], composite_columns)
           duplicates <- seq(nrow(d))[duplicated.data.frame(d)]

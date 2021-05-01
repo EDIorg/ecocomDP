@@ -163,7 +163,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
       package_id = my_package_id) %>%
     dplyr::rowwise() %>%
     dplyr:: rename(
-      observation_datetime = collectDate, 
+      datetime = collectDate, 
       taxon_id = taxonID) %>%
     dplyr::mutate(
       neon_event_id = paste(location_id, year, month, sep = "_")) %>%
@@ -178,13 +178,13 @@ map_neon.ecocomdp.10072.001.001 <- function(
                   location_id,
                   neon_event_id, 
                   nightuid, n_trap_nights_per_night_uid,
-                  observation_datetime, 
+                  datetime, 
                   year, month) %>%
     dplyr::distinct() %>%
     dplyr::group_by(
       package_id, neon_event_id, location_id, plotID, year, month) %>%
     dplyr::summarize(
-      observation_datetime = dplyr::first(observation_datetime),
+      datetime = dplyr::first(datetime),
       n_trap_nights_per_bout_per_plot = sum(n_trap_nights_per_night_uid),
       n_nights_per_bout = length(unique(nightuid))) %>%
     dplyr::ungroup()
@@ -228,7 +228,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
       location_id,
       package_id,
       location_id,
-      observation_datetime,
+      datetime,
       taxon_id,
       variable_name,
       value,
@@ -254,7 +254,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
   # data summary ----
   # make dataset_summary -- required table
   
-  years_in_data <- table_observation$observation_datetime %>% lubridate::year()
+  years_in_data <- table_observation$datetime %>% lubridate::year()
   # years_in_data %>% ordered()
   
   table_dataset_summary <- data.frame(
