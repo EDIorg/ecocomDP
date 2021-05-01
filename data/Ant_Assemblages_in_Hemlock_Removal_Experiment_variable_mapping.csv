@@ -1,0 +1,19 @@
+variable_mapping_id,table_name,variable_name,mapped_system,mapped_id,mapped_label
+vama_1,observation,abundance,some system,sys_id_1,sys_lab_1
+vama_2,observation_ancillary,trap.type,some system,sys_id_2,sys_lab_2
+vama_3,observation_ancillary,trap.num,some system,sys_id_3,sys_lab_3
+vama_4,location_ancillary,treatment,some system,sys_id_4,sys_lab_4
+vama_5,location_ancillary,moose.cage,some system,sys_id_5,sys_lab_5
+vama_6,taxon_ancillary,hl,some system,sys_id_6,sys_lab_6
+vama_7,taxon_ancillary,rel,some system,sys_id_7,sys_lab_7
+vama_8,taxon_ancillary,rll,some system,sys_id_8,sys_lab_8
+vama_9,taxon_ancillary,colony.size,some system,sys_id_9,sys_lab_9
+vama_10,taxon_ancillary,feeding.preference,some system,sys_id_10,sys_lab_10
+vama_11,taxon_ancillary,nest.substrate,some system,sys_id_11,sys_lab_11
+vama_12,taxon_ancillary,primary.habitat,some system,sys_id_12,sys_lab_12
+vama_13,taxon_ancillary,secondary.habitat,some system,sys_id_13,sys_lab_13
+vama_14,taxon_ancillary,seed.disperser,some system,sys_id_14,sys_lab_14
+vama_15,taxon_ancillary,slavemaker.sp,some system,sys_id_15,sys_lab_15
+vama_16,taxon_ancillary,behavior,some system,sys_id_16,sys_lab_16
+vama_17,taxon_ancillary,biogeographic.affinity,some system,sys_id_17,sys_lab_17
+vama_18,taxon_ancillary,source,some system,sys_id_18,sys_lab_18

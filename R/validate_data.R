@@ -100,6 +100,7 @@ validate_data <- function(
   issues_validate_latitude_longitude_range <- 
     validate_latitude_longitude_range(d)
   issues_validate_elevation <- validate_elevation(d)
+  issues_validate_variable_mapping <- validate_variable_mapping(d)
   
   # Report validation issues
   
@@ -117,7 +118,8 @@ validate_data <- function(
       issues_referential_integrity,
       issues_validate_latitude_longitude_format,
       issues_validate_latitude_longitude_range,
-      issues_validate_elevation))
+      issues_validate_elevation,
+      issues_validate_variable_mapping))
   
   if (length(validation_issues) != 0) {
     warning("  Validation issues found for ", id, call. = FALSE)
@@ -775,6 +777,43 @@ validate_elevation <- function(data.list) {
   
   unlist(r)
   
+}
+
+
+
+
+
+
+
+
+#' Check variable_mapping
+#' 
+#' @param data.list
+#'     (list of data frames) A named list of data frames, each of which is an 
+#'     ecocomDP table.
+#'
+#' @return 
+#'     (character) If variable_name is not in table_name, then a message is returned.
+#'
+validate_variable_mapping <- function(data.list) {
+  if ("variable_mapping" %in% names(data.list)) {
+    message("  variable_mapping")
+    output <- lapply(
+      unique(data.list$variable_mapping$table_name),
+      function(tbl) {
+        foreign_keys <- unique(data.list[[tbl]]$variable_name) 
+        i <- data.list$variable_mapping$table_name %in% tbl
+        primary_keys <- data.list$variable_mapping$variable_name[i]
+        use_i <- primary_keys %in% foreign_keys
+        if (!all(use_i)) {
+          paste0(
+            "Variable mapping. The variable_mapping table has these variable_name values ",
+            "without a match in the ", tbl, " table: ", 
+            paste(primary_keys[!use_i], collapse = ", "))
+        }
+      })
+    return(unlist(output))
+  }
 }
 
 

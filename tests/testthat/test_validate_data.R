@@ -332,6 +332,28 @@ testthat::test_that("validate_elevation()", {
         "Questionable values exist in rows: 3, 4")))
 })
 
+# validate_variable_mapping() -------------------------------------------------
+
+testthat::test_that("validate_variable_mapping()", {
+  d <- test_data[[1]]$tables
+  # Valid variable_mapping results in message.
+  expect_null(validate_variable_mapping(d))
+  # variable_name in variable_mapping but missing from the referenced table
+  # results in character string
+  for (tbl in unique(d$variable_mapping$table_name)) {
+    d <- test_data[[1]]$tables
+    i <- d$variable_mapping$table_name %in% tbl
+    tblvars <- d$variable_mapping$variable_name[i]
+    d$variable_mapping$variable_name[i] <- paste0("var_", seq(length(tblvars)))
+    expect_true(
+      stringr::str_detect(
+        validate_variable_mapping(d),
+        paste0(
+          "Variable mapping. The variable_mapping table has these ",
+          "variable_name values without a match in the ", tbl, " table: +.")))
+  }
+})
+
 # validate_data() ---------------------------------------------------------
 
 testthat::test_that("validate_data", {
