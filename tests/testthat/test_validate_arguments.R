@@ -14,232 +14,124 @@ search_index <- search_data()
 # plot_*() --------------------------------------------------------------------
 
 testthat::test_that("plot_*()", {
-  
-  d <- read_example_dataset()
-  # dataset
-  validate_arguments("plot", as.list(list(dataset = d)))
+  # dataset (see validate_dataset_structure() tests)
   # alpha
-  
-  expect_null(
-    validate_arguments(
-      "plot",
-      as.list(
-        list(data.path = tempdir()))))
-  
+  expect_null(validate_arguments("plot", as.list(list(alpha = 1))))         # is between 0 and 1
+  expect_error(validate_arguments("plot", as.list(list(alpha = -1))))
+  expect_error(validate_arguments("plot", as.list(list(alpha = 2))))
 })
 
 # read_data() -----------------------------------------------------------------
 
 testthat::test_that("read_data()", {
-  
-  # format - Because inputs to read_data() can vary (i.e. can be a vector of 
-  # id, list of id with associated arguments), they need to be converted to a 
-  # consistent format for processing.
-  
-  # format - NEON id has default values of optional filter arguments listed 
-  # under id. EDI id has NULL listed.
-  
-  input <- formals(read_data)
-  input$id <- c("edi.193.3", "DP1.20166.001")
-  r <- validate_arguments("read_data", input)
-  expect_null(r$id[[1]])
-  expect_true(
-    all(unlist(r$id[[2]]) %in% unlist(formals(read_data))))
-  
-  # format - Single NEON id and custom filter and download arguments are listed 
-  # in the correct locations
-  
-  input <- formals(read_data)
-  input$id <- list(
-    edi.193.3 = NULL,
-    DP1.20166.001 = list(
-      site = c("MAYF", "PRIN"),
-      startdate = "2016-01",
-      enddate = "2018-11"),
-    DP1.20120.001 = list(
-      site = "ARIK",
-      startdate = "2016-01",
-      enddate = "2018-11"))
-  
-  r <- validate_arguments("read_data", input)
-  expect_equal(r$id[[2]]$site, c("MAYF", "PRIN"))
-  expect_true(r$id[[2]]$startdate == "2016-01")
-  expect_true(r$id[[2]]$enddate == "2018-11")
-  expect_equal(r$id[[3]]$site, c("ARIK"))
-  expect_true(r$id[[3]]$startdate == "2016-01")
-  expect_true(r$id[[3]]$enddate == "2018-11")
-  
-  # format - Two NEON id and custom filter and download arguments input as 
-  # recommended
-  
-  input <- formals(read_data)
-  input$id <- "DP1.20166.001"
-  input$site <- "ARIK"
-  input$startdate <- "2020-07"
-  input$enddate <- "2020-08"
-  input$check.size <- TRUE
-  input$nCores <- 2
-  input$forceParallel <- TRUE
-  input$path <- tempdir()
-  input$file.type <- ".csv"
-  
-  r <- validate_arguments("read_data", input)
-  expect_true(r$id[[1]]$site == "ARIK")
-  expect_true(r$id[[1]]$startdate == "2020-07")
-  expect_true(r$id[[1]]$enddate == "2020-08")
-  expect_true(r$path == tempdir())
-  expect_true(isTRUE(r$check.size))
-  expect_true(isTRUE(r$forceParallel))
-  expect_true(r$nCores == 2)
-  expect_true(r$file.type == ".csv")
-  
-  # id - If not valid, then error
-  
-  input <- formals(read_data)
-  input$id <- "invalid_identifier_1"
+  # id
   expect_error(
-    validate_arguments("read_data", input),
-    regexp = "Invalid identifier \'.+\' cannot be read.")
-  
-  input <- formals(read_data)
-  input$id <- "edi.359.1"
-  expect_silent(
-    suppressWarnings(validate_arguments("read_data", input)))
-  
-  input <- formals(read_data)
-  input$id <- "DP1.20120.001"
-  expect_silent(
-    validate_arguments("read_data", input))
-  
-  # id - If a newer revision exists, then id and a warning is returned.
-  
-  input <- formals(read_data)
-  input$id <- "edi.275.3"
-  expect_warning(
-    validate_arguments("read_data", input),
-    regexp = "A newer version of \'.+\' is available.")
-  
-  # path - Is valid
-  
-  input <- formals(read_data)
-  input$path <- "/some/invalid/path"
-  input$id <- "edi.359.1"
+    validate_arguments("read_data", as.list(list(id = 1))), 
+    regexp = "Input 'id' should be character.")
+  expect_error(                                                             # exists
+    validate_arguments("read_data", as.list(list(id = "edi.x.x"))), 
+    regexp = "Invalid identifier 'edi.x.x' cannot be read.")
+  expect_warning(                                                           # warns if newer revision
+    validate_arguments("read_data", as.list(list(id = "edi.124.3"))), 
+    regexp = "A newer version of 'edi.124.3' is available.")
+  # path
+  expect_null(validate_arguments("read_data", as.list(list(path = tempdir())))) # exists
   expect_error(
-    suppressWarnings(validate_arguments("read_data", input)),
+    validate_arguments("read_data", as.list(list(path = "/some/invalid/path"))),
     regexp = "Input \'path\' .+ doesn\'t exist.")
-  
-  # file.type - Is a supported type
-  
-  input <- formals(read_data)
-  input$file.type <- ".txt"
-  input$id <- "edi.359.1"
+  # parse.datetime
+  expect_null(                                                                 # is logical
+    validate_arguments("read_data", as.list(list(parse.datetime = TRUE))))
   expect_error(
-    suppressWarnings(validate_arguments("read_data", input)),
-    regexp = "Unsupported 'file.type'. One of '.rda', '.csv' is expected.")
-  
-  # site - Exists for the data package/product identifier in the search_data() 
-  # default output
-  
-  input <- formals(read_data)
-  input$id <- list(
-    DP1.20120.001 = list(
-      site = c("ARIK", "not a site")))
+    validate_arguments("read_data", as.list(list(parse.datetime = "TRUE"))),
+    regexp = "Input 'parse.datetime' should be logical.")
+  # globally.unique.keys
+  expect_null(                                                                 # is logical
+    validate_arguments("read_data", as.list(list(globally.unique.keys = TRUE))))
   expect_error(
-    validate_arguments("read_data", input),
-    regexp = "Sites not available in .+:")
-  
-  # startdate - Character of YYYY-MM format, and MM is 1-12
-  
-  input <- formals(read_data)
-  input$id <- list(
-    DP1.20120.001 = list(
-      startdate = "2020-08-12"))
+    validate_arguments("read_data", as.list(list(globally.unique.keys = "TRUE"))),
+    regexp = "Input 'globally.unique.keys' should be logical.")
+  # site
+  expect_null(                                                                 # site exists for id
+    validate_arguments("read_data", as.list(list(id = "neon.ecocomdp.20120.001.001",
+                                               site = c("ARIK")))))
   expect_error(
-    suppressWarnings(validate_arguments("read_data", input)),
-    regexp = "Unsupported \'startdate\'. Expected format is YYYY-MM.")
-  
-  input <- formals(read_data)
-  input$id <- list(
-    DP1.20120.001 = list(
-      startdate = "2020-13"))
+    validate_arguments("read_data", as.list(list(id = "neon.ecocomdp.20120.001.001",
+                                                 site = c("ARIK", "not an id")))),
+    regexp = "Sites not available in neon.ecocomdp.20120.001.001: not an id")
+  # startdate
+  expect_null(                                                                 # has YYYY-MM format and MM is 1-12
+    validate_arguments("read_data", as.list(list(startdate = "2020-12"))))
   expect_error(
-    suppressWarnings(validate_arguments("read_data", input)),
-    regexp = "Unsupported \'startdate\'. Expected format is YYYY-MM.")
-  
-  # enddate - Character of YYYY-MM format
-  
-  input <- formals(read_data)
-  input$id <- list(
-    DP1.20120.001 = list(
-      enddate = "2020-08-12"))
+    validate_arguments("read_data", as.list(list(startdate = "2020-12-30"))),
+    regexp = "Unsupported 'startdate'. Expected format is YYYY-MM.")
   expect_error(
-    suppressWarnings(validate_arguments("read_data", input)),
-    regexp = "Unsupported \'enddate\'. Expected format is YYYY-MM.")
-  
-  input <- formals(read_data)
-  input$id <- list(
-    DP1.20120.001 = list(
-      enddate = "2020-13"))
+    validate_arguments("read_data", as.list(list(startdate = "2020-13"))),
+    regexp = "Unsupported 'startdate'. Expected format is YYYY-MM.")
+  # enddate
+  expect_null(                                                                 # has YYYY-MM format and MM is 1-12
+    validate_arguments("read_data", as.list(list(enddate = "2020-12"))))
   expect_error(
-    suppressWarnings(validate_arguments("read_data", input)),
-    regexp = "Unsupported \'enddate\'. Expected format is YYYY-MM.")
-  
-  # check.size - Is logical
-  
-  input <- formals(read_data)
-  input$check.size <- 2
-  input$id <- "edi.359.1"
+    validate_arguments("read_data", as.list(list(enddate = "2020-12-30"))),
+    regexp = "Unsupported 'enddate'. Expected format is YYYY-MM.")
   expect_error(
-    suppressWarnings(validate_arguments("read_data", input)),
-    regexp = "Unsupported \'check.size\' input. Expected is TRUE or FALSE.")
-  
-  # nCores - Is iteger
-  
-  input <- formals(read_data)
-  input$nCores <- 2.5
-  input$id <- "edi.359.1"
+    validate_arguments("read_data", as.list(list(enddate = "2020-13"))),
+    regexp = "Unsupported 'enddate'. Expected format is YYYY-MM.")
+  # package
+  expect_null(                                                                 # has expected type
+    validate_arguments("read_data", as.list(list(package = "basic"))))
+  expect_null(
+    validate_arguments("read_data", as.list(list(package = "expanded"))))
   expect_error(
-    suppressWarnings(validate_arguments("read_data", input)),
-    regexp = "Unsupported \'nCores\' input. Expected is an integer value.")
-  
-  # forceParallel - Is logical
-  
-  input <- formals(read_data)
-  input$forceParallel <- "yes"
-  input$id <- "edi.359.1"
+    validate_arguments("read_data", as.list(list(package = "invalid value"))),
+    regexp = "Input 'package' should be 'basic' or 'expanded'.")
+  # check.size
+  expect_null(                                                                 # is logical
+    validate_arguments("read_data", as.list(list(check.size = TRUE))))
   expect_error(
-    suppressWarnings(validate_arguments("read_data", input)),
-    regexp = "Unsupported \'forceParallel\' input. Expected is TRUE or FALSE.")
-  
-  # globally.unique.keys - Is logical
-  
-  input <- formals(read_data)
-  input$id <- "edi.359.1"
-  input$globally.unique.keys <- "not_a_logical_value"
+    validate_arguments("read_data", as.list(list(check.size = "TRUE"))),
+    regexp = "Input 'check.size' should be logical.")
+  # nCores
+  expect_null(                                                                 # is logical
+    validate_arguments("read_data", as.list(list(nCores = 1))))
   expect_error(
-    suppressWarnings(validate_arguments("read_data", input)),
-    regexp = "Unsupported \'globally.unique.keys\' input. Expected is TRUE or FALSE.")
-  
+    validate_arguments("read_data", as.list(list(nCores = 2.5))),
+    regexp = "Input 'nCores' should be integer.")
+  # forceParallel
+  expect_null(                                                                 # is logical
+    validate_arguments("read_data", as.list(list(forceParallel = TRUE))))
+  expect_error(
+    validate_arguments("read_data", as.list(list(forceParallel = "TRUE"))),
+    regexp = "Input 'forceParallel' should be logical.")
+  # neon.data.save.dir
+  expect_null(validate_arguments("read_data", as.list(list(neon.data.save.dir = tempdir())))) # exists
+  expect_error(
+    validate_arguments("read_data", as.list(list(neon.data.save.dir = "/some/invalid/path"))),
+    regexp = "Input 'neon.data.save.dir' .+ doesn\'t exist.")
+  # from.file
+  expect_null(                                                                 # file or dir exists
+    validate_arguments("read_data", as.list(list(from.file = tempdir()))))
+  expect_error(
+    validate_arguments("read_data", as.list(list(from.file = "/not/a/dir"))),
+    regexp = "Input 'from.file' is a non-existant file or directory.")
 })
 
-# read_from_files() -----------------------------------------------------------
+# save_data() -----------------------------------------------------------------
 
-testthat::test_that("read_from_files()", {
-  
-  # data.path - Is valid
-  
-  expect_null(
-    validate_arguments(
-      "read_from_files",
-      as.list(
-        list(data.path = tempdir()))))
-  
+testthat::test_that("save_data()", {
+  # path
+  expect_null(validate_arguments("save_data", as.list(list(path = tempdir())))) # exists
   expect_error(
-    validate_arguments(
-      "read_from_files",
-      as.list(
-        list(data.path = paste0(tempdir(), "/aoihebqlnvo333")))))
-  
+    validate_arguments("read_data", as.list(list(path = "/some/invalid/path"))),
+    regexp = "Input \'path\' .+ doesn\'t exist.")
+  # file.type
+  expect_null(                                                                 # has expected type
+    validate_arguments("save_data", as.list(list(file.type = ".rds"))))
+  expect_null(
+    validate_arguments("save_data", as.list(list(file.type = ".csv"))))
+  expect_error(
+    validate_arguments("save_data", as.list(list(file.type = "invalid value"))),
+    regexp = "Input 'file.type' should be '.rds' or '.csv'.")
 })
 
 # search_data() ---------------------------------------------------------------
@@ -328,36 +220,35 @@ testthat::test_that("search_data()", {
 # validate_data() ---------------------------------------------------------
 
 testthat::test_that("validate_data()", {
-  
+  test_data <- read_example_dataset()
   # data.path - Is valid
-  
   expect_null(
-    validate_arguments(
-      "validate_data",
-      as.list(
-        list(data.path = tempdir()))))
-  
+    validate_arguments("validate_data", as.list(list(data.path = tempdir()))))
   expect_error(
-    validate_arguments(
-      "validate_data",
-      as.list(
-        list(data.path = paste0(tempdir(), "/aoihebqlnvo333")))))
-  
+    validate_arguments("validate_data", as.list(list(data.path = paste0(tempdir(), "/aoihebqlnvo333")))))
   # data.list - Is valid
-  
   expect_null(
-    validate_arguments(
-      "validate_data",
-      as.list(
-        list(data.list = test_data))))
-  
-  test_data2 <- test_data
-  test_data2$unsupported_table <- NA
-  expect_error(
-    validate_arguments(
-      "validate_data",
-      as.list(
-        list(data.list = test_data2))),
-    regexp = "Input \'data.list\' has unsupported tables:")
-  
+    validate_arguments("validate_data", as.list(list(dataset = test_data))))
+})
+
+# validate_dataset_structure() ------------------------------------------------
+
+testthat::test_that("validate_dataset_structure()", {
+  test_data <- read_example_dataset()
+  expect_null(validate_dataset_structure(test_data))
+  d <- unlist(test_data)                       # obj is a list
+  expect_error(validate_dataset_structure(d))
+  d <- unname(test_data)                       # 1st level name is id
+  expect_error(validate_dataset_structure(d))
+  d <- test_data                               # 2nd level has tables
+  names(d[[1]]) <- c("metadata", "invalid name", "validation_issues")
+  expect_error(validate_dataset_structure(d))
+  d <- test_data                               # table names are valid
+  nms <- names(d[[1]]$tables)
+  nms[1] <- "invalid name"
+  names(d[[1]]$tables) <- nms
+  expect_error(validate_dataset_structure(d))
+  d <- test_data                               # tables are data.frames
+  d[[1]]$tables[[1]] <- as.list(d[[1]]$tables[[1]])
+  expect_error(validate_dataset_structure(d))
 })

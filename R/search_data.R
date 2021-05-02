@@ -108,14 +108,7 @@ search_data <- function(text, taxa, num.taxa, years, sd.between.surveys,
     fun.name = "search_data",
     fun.args = as.list(environment()))
   
-  r <- httr::GET("https://portal.edirepository.org/") # Warn if EDI is down
-  if (httr::status_code(r) != 200) {
-    warning("This function may not work between 01:00 - 03:00 UTC due to ",
-            "regular maintenance of the EDI Data Repository. If you have ",
-            "reached this warning outside these hours then there may be an ",
-            "unexpected issue that will be resolved shortly. Please try ",
-            "again later.", call. = FALSE)
-  }
+  ping_edi() # Warn if EDI is down
   
   # Prepare summary data ------------------------------------------------------
   # Combine summaries of EDI and NEON data. These are created by 

@@ -74,11 +74,10 @@ neon.datascience user accounts)}
     \itemize{
       \item{id - Dataset id}
         \itemize{
-          \item metadata - Info about the dataset. NOTE: This object is underdevelopment and content may change in future releases
-          \item tables - Dataset tables
-          \item validation_issues - If the dataset fails any validation checks, 
-    then they are listed here as a vector of character strings describing 
-    each issue.
+          \item metadata - List of info about the dataset. NOTE: This object is underdevelopment and content may change in future releases.
+          \item tables - List of dataset tables as data.frames.
+          \item validation_issues - List of validation issues. If the dataset fails any validation checks, 
+    then descriptions of each issue are listed here.
       }
     }
 }

@@ -54,10 +54,8 @@ validate_data <- function(
   data.path = NULL) {
   
   # Validate arguments
-  # FIXME: Update for full dataset list input
-  # validate_arguments(
-  #   fun.name = "validate_data",
-  #   fun.args = as.list(environment()))
+  
+  validate_arguments(fun.name = "validate_data", fun.args = as.list(environment()))
   
   # Parameterize
   

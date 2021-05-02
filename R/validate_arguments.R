@@ -26,11 +26,16 @@ validate_arguments <- function(fun.name, fun.args) {
   # plot_*() ------------------------------------------------------------------
   
   if (fun.name == "plot") {
-    if (!is_dataset(fun.args$dataset)) {
-      stop("Input 'dataset' has invalid structure. Structure should match ",
-           "the return from read_data().", call. = F)
+    # dataset
+    if (!is.null(fun.args$dataset)) {
+      validate_dataset_structure(fun.args$dataset)
     }
-    
+    # alpha
+    if (!is.null(fun.args$alpha)) {
+      if (!(fun.args$alpha <= 1 & fun.args$alpha > 0)) {
+        stop("Intput 'alpha' should be 0-1.", call. = FALSE)
+      }
+    }
   }
   
   # search_data() -------------------------------------------------------------
@@ -122,27 +127,15 @@ validate_arguments <- function(fun.name, fun.args) {
   # validate_data() -------------------------------------------------------
   
   if (fun.name == "validate_data") {
-    
-    # data.path - Is a valid path
-    
+    # data.path
     if (!is.null(fun.args$data.path)) {
-      if (!dir.exists(fun.args$data.path)) {
+      if (!dir.exists(fun.args$data.path)) {                                     # exists
         stop("Input 'data.path' doesn't exits.", call. = F)
       }
     }
-
-    # data.list - Is a named list containing only ecocomDP tables
-    
-    if (!is.null(fun.args$data.list)) {
-      if (!is.list(fun.args$data.list)) {
-        stop("Input 'data.list' is not a list.", call. = F)
-      }
-      use_i <- names(fun.args$data.list) %in% unique(criteria$table)
-      if (any(!use_i)) {
-        stop(
-          "Input 'data.list' has unsupported tables: ", 
-          paste(names(fun.args$data.list)[!use_i], collapse = ", "), call. = F)
-      }
+    # dataset
+    if (!is.null(fun.args$dataset)) {
+      validate_dataset_structure(fun.args$dataset)                               # has expected structure
     }
     
   }
@@ -150,180 +143,127 @@ validate_arguments <- function(fun.name, fun.args) {
   # read_data() ---------------------------------------------------------------
   
   if (fun.name == "read_data") {
-    
-    # id - Is required
-    
-    if (is.null(fun.args$id)) {
-      stop("Input 'id' is required.", call. = FALSE)
+    if (is.null(fun.args$from.file)) {                                            # EDI is accessible (required by many functions)
+      ping_edi()
     }
-    
-    # Because inputs to read_data() can vary (i.e. can be a vector of id, list 
-    # of id with associated arguments), they need to be converted to a 
-    # consistent format for processing.
-
-    if (!is.list(fun.args$id)) {
-      empty_list <- vector(mode = "list", length(fun.args$id))
-      names(empty_list) <- unlist(fun.args$id)
-      fun.args$id <- empty_list
-      # List default NEON arguments directly under id if missing
-      for (i in 1:length(fun.args$id)) {
-        if (stringr::str_detect(
-          names(fun.args$id)[i], "^DP.\\.[:digit:]+\\.[:digit:]+")) {
-          if (is.null(fun.args$id[[i]]$site)) {
-            fun.args$id[[i]]$site <- fun.args$site
-          }
-          if (is.null(fun.args$id[[i]]$startdate)) {
-            fun.args$id[[i]]$startdate <- fun.args$startdate
-          }
-          if (is.null(fun.args$id[[i]]$enddate)) {
-            fun.args$id[[i]]$enddate <- fun.args$enddate
-          }
-        }
+    # id
+    if (!is.null(fun.args$id)) {
+      if (!is.character(fun.args$id)) {                                           # is character
+        stop("Input 'id' should be character.", call. = FALSE)
       }
-      # Remove NEON defaults from top level
-      fun.args$site <- NULL
-      fun.args$startdate <- NULL
-      fun.args$enddate <- NULL
+      validate_id(fun.args$id)                                                    # exists and warns if newer
     }
-    
-    # Validate general argument values (i.e. not associated with a specific 
-    # id).
-    
-    # path - Is valid
-    
+    # path
     if (!is.null(fun.args$path)) {
-      if (!dir.exists(fun.args$path)) {
+      if (!dir.exists(fun.args$path)) {                                           # exists
         stop("Input 'path' (", fun.args$path, ") doesn't exist.", call. = FALSE)
       }
     }
-    
-    # file.type - Is a supported type
-    
-    if (!is.null(fun.args$file.type)) {
-      if (!(fun.args$file.type %in% c(".rda", ".csv"))) {
-        stop("Unsupported 'file.type'. One of '.rda', '.csv' is expected.", 
-             call. = FALSE)
+    # parse.datetime
+    if (!is.null(fun.args$parse.datetime)) {
+      if (!is.logical(fun.args$parse.datetime)) {                                 # is logical
+        stop("Input 'parse.datetime' should be logical.", call. = FALSE)
       }
     }
-    
-    # check.size - Is logical
-    
-    if (!is.null(fun.args$check.size) & !is.logical(fun.args$check.size)) {
-      stop("Unsupported 'check.size' input. Expected is TRUE or FALSE.", 
-           call. = FALSE)
+    # globally.unique.keys
+    if (!is.null(fun.args$globally.unique.keys)) {
+      if (!is.logical(fun.args$globally.unique.keys)) {                           # is logical
+        stop("Input 'globally.unique.keys' should be logical.", call. = FALSE)
+      }
     }
-    
-    # nCores - Is iteger
-    
-    if (!is.null(fun.args$check.size)) {
+    # site
+    if (!is.null(fun.args$site) & !is.null(fun.args$id)) {
+      if (all(fun.args$site != "all")) {
+        if (is_neon(fun.args$id)) {
+          validate_site(fun.args$site, fun.args$id)                                # listed sites exist for a specified id
+        }
+      }
+    }
+    # startdate
+    if (!is.null(fun.args$startdate)) {
+      if (!is.na(fun.args$startdate)) {
+        if (!stringr::str_detect(                                                  # has YYYY-MM format
+          fun.args$startdate, "^[:digit:]{4}-[:digit:]{2}$")) {
+          stop("Unsupported 'startdate'. Expected format is YYYY-MM.", 
+               call. = FALSE)
+        }
+        month <- as.integer(                                                       # MM is 1-12
+          stringr::str_extract(
+            fun.args$startdate, "(?<=-)[:digit:]{2}$"))
+        if (!((month > 0) & (month <= 12))) {
+          stop("Unsupported 'startdate'. Expected format is YYYY-MM.", 
+               call. = FALSE)
+        }
+      }
+    }
+    # enddate
+    if (!is.null(fun.args$enddate)) {
+      if (!is.na(fun.args$enddate)) {
+        if (!stringr::str_detect(                                                   # has YYYY-MM format
+          fun.args$enddate, "^[:digit:]{4}-[:digit:]{2}$")) {
+          stop("Unsupported 'enddate'. Expected format is YYYY-MM.", 
+               call. = FALSE)
+        }
+        month <- as.integer(                                                        # MM is 1-12
+          stringr::str_extract(
+            fun.args$enddate, "(?<=-)[:digit:]{2}$"))
+        if (!((month > 0) & (month <= 12))) {
+          stop("Unsupported 'enddate'. Expected format is YYYY-MM.", 
+               call. = FALSE)
+        }
+      }
+    }
+    # package
+    if (!is.null(fun.args$package)) {
+      if (!(fun.args$package %in% c("basic", "expanded"))) {                        # has expected value
+        stop("Input 'package' should be 'basic' or 'expanded'.", call. = FALSE)
+      }
+    }
+    # check.size
+    if (!is.null(fun.args$check.size)) {                                            # is logical
+      if (!is.logical(fun.args$check.size)) {
+        stop("Input 'check.size' should be logical.", call. = FALSE)
+      }
+    }
+    # nCores
+    if (!is.null(fun.args$nCores)) {                                                # is integer
       if (!(fun.args$nCores %% 1 == 0)) {
-        stop("Unsupported 'nCores' input. Expected is an integer value.", 
-             call. = FALSE)
+        stop("Input 'nCores' should be integer.", call. = FALSE)
       }
     }
-    
-    # forceParallel - Is logical
-    
-    if (!is.null(fun.args$check.size) & !is.logical(fun.args$forceParallel)) {
-      stop("Unsupported 'forceParallel' input. Expected is TRUE or FALSE.", 
-           call. = FALSE)
+    # forceParallel
+    if (!is.null(fun.args$forceParallel) & !is.logical(fun.args$forceParallel)) {
+      stop("Input 'forceParallel' should be logical.", call. = FALSE)
     }
-    
-    # forceParallel - Is logical
-    
-    if (!is.null(fun.args$globally.unique.keys) & 
-        !is.logical(fun.args$globally.unique.keys)) {
-      stop("Unsupported 'globally.unique.keys' input. Expected is TRUE or ",
-           "FALSE.", call. = FALSE)
+    # neon.data.save.dir
+    if (!is.null(fun.args$neon.data.save.dir)) {
+      if (!dir.exists(fun.args$neon.data.save.dir)) {                               # exists
+        stop("Input 'neon.data.save.dir' (", fun.args$neon.data.save.dir, ") doesn't exist.", call. = FALSE)
+      }
     }
-    
-    # Validate each id and corresponding set of argument values.
-    
-    invisible(
-      lapply(
-        seq_along(fun.args$id),
-        function(x) {
-          id <- names(fun.args$id)[x]
-          
-          # id - Exists in the search_data() default output. If a newer revision 
-          # exists, a warning is returned.
-          
-          # Wrapping in try() accomodates non-indexed ids of development 
-          # environments, which is an important use case to support
-          try(validate_id(id), silent = TRUE)
-          
-          # For a NEON id, validate associated argument values
-          
-          if (stringr::str_detect(id, "^DP.\\.[:digit:]+\\.[:digit:]+")) {
-
-            # site - Listed sites exist for a specified id
-            
-            if (!is.null(fun.args$id[[x]]$site)) {
-              if (all(fun.args$id[[x]]$site != "all")) {
-                validate_site(fun.args$id[[x]]$site, id)
-              }
-            }
-            
-            # startdate - Character of YYYY-MM format, and MM is 1-12
-            
-            if (!is.null(fun.args$id[[x]]$startdate)) {
-              if (!is.na(fun.args$id[[x]]$startdate)) {
-                if (!stringr::str_detect(
-                  fun.args$id[[x]]$startdate, "^[:digit:]{4}-[:digit:]{2}$")) {
-                  stop("Unsupported 'startdate'. Expected format is YYYY-MM.", 
-                       call. = FALSE)
-                }
-                month <- as.integer(
-                  stringr::str_extract(
-                    fun.args$id[[x]]$startdate, "(?<=-)[:digit:]{2}$"))
-                if (!((month > 0) & (month <= 12))) {
-                  stop("Unsupported 'startdate'. Expected format is YYYY-MM.", 
-                       call. = FALSE)
-                }
-              }
-            }
-            
-            # enddate - Character of YYYY-MM format, and MM is 1-12
-            
-            if (!is.null(fun.args$id[[x]]$enddate)) {
-              if (!is.na(fun.args$id[[x]]$enddate)) {
-                if (!stringr::str_detect(
-                  fun.args$id[[x]]$enddate, "^[:digit:]{4}-[:digit:]{2}$")) {
-                  stop("Unsupported 'enddate'. Expected format is YYYY-MM.", 
-                       call. = FALSE)
-                }
-                month <- as.integer(
-                  stringr::str_extract(
-                    fun.args$id[[x]]$enddate, "(?<=-)[:digit:]{2}$"))
-                if (!((month > 0) & (month <= 12))) {
-                  stop("Unsupported 'enddate'. Expected format is YYYY-MM.", 
-                       call. = FALSE)
-                }
-              }
-            }
-            
-          }
-          
-        }))
-    
-    # Return modified arguments
-    
-    return(fun.args)
-    
+    # from.file
+    if (!is.null(fun.args$from.file)) {
+      if (!any(file.exists(fun.args$from.file) | dir.exists(fun.args$from.file))) { # file or dir exists
+        stop("Input 'from.file' is a non-existant file or directory.", call. = FALSE)
+      }
+    }
   }
   
-  # read_from_files() ---------------------------------------------------------
+  # save_data() ---------------------------------------------------------------
   
-  if (fun.name == "read_from_files") {
-    
-    # data.path - Is a valid path
-    
-    if (!is.null(fun.args$data.path)) {
-      if (!dir.exists(fun.args$data.path)) {
-        stop("Input 'data.path' doesn't exits.", call. = F)
+  if (fun.name == "save_data") {
+    # path
+    if (!is.null(fun.args$path)) {
+      if (!dir.exists(fun.args$path)) {                                           # exists
+        stop("Input 'path' (", fun.args$path, ") doesn't exist.", call. = FALSE)
       }
     }
-    
+    # file.type
+    if (!is.null(fun.args$file.type)) {
+      if (!(fun.args$file.type %in% c(".rds", ".csv"))) {                        # has expected value
+        stop("Input 'file.type' should be '.rds' or '.csv'.", call. = FALSE)
+      }
+    }
   }
   
 }
@@ -415,21 +355,18 @@ validate_site <- function(site, id) {
 #'
 #' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
 #'
-#' @return (logical) TRUE if has dataset structure otherwise FALSE
+#' @details Returns an error if \code{dataset} is malformed
 #'
-is_dataset <- function(dataset) {
-  browser()
-  # FIXME: Load criteria
-  if (!is.list(dataset)) {
-    return(FALSE)
-  }                                                             # obj is a list
-  res <- is.list(dataset)                                                             # obj is a list
-  res <- is.character(names(dataset))                                                         # 1st level name is id
-  res <- "tables" %in% names(dataset[[1]])                    # 2nd level has 3 values
-  res <- is.list(is.list(d[[1]]$tables))             # 2nd level objs are lists
-  expect_true(all(names(d[[1]]$tables) %in% unique(criteria$table)))                  # table names are valid
-  for (i in names(d[[1]]$tables)) {                                                   # tables are data.frames
-    expect_true(class(d[[1]]$tables[[i]]) == "data.frame")
+validate_dataset_structure <- function(dataset) {
+  criteria <- read_criteria()
+  res <- c()
+  res <- c(res, tryCatch(is.list(dataset), error = function(cond) {FALSE})) # is a list
+  res <- c(res, tryCatch(is.character(names(dataset)), error = function(cond) {FALSE})) # 1st level name is id
+  res <- c(res, tryCatch("tables" %in% names(dataset[[1]]), error = function(cond) {FALSE})) # 2nd level has tables
+  res <- c(res, tryCatch(all(names(dataset[[1]]$tables) %in% unique(criteria$table)), error = function(cond) {FALSE})) # table names are valid
+  res <- c(res, tryCatch(all(unlist(lapply(dataset[[1]]$tables, is.data.frame))), error = function(cond) {FALSE})) # tables are data.frames
+  if (!all(res)) {
+    stop("Input 'dataset' has invalid structure. See return from read_data() ",
+         "for more details.", call. = F)
   }
-  
 }

@@ -88,6 +88,7 @@ plot_sampling_times <- function(dataset, alpha = 1) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
     stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
   }
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(dataset)                    # intermediate format for plotting
   message("Plotting ", ds$id, " spatiotemporal sampling effort")
   # Scale font size
@@ -142,6 +143,7 @@ plot_taxa_accum_sites <- function(dataset, alpha = 1) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
     stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
   }
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(dataset)                    # intermediate format for plotting
   message("Plotting ", ds$id, " taxa accumulation over space")
   # Calculate cumulative number of taxa
@@ -207,6 +209,7 @@ plot_taxa_accum_time <- function(dataset, alpha = 1) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
     stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
   }
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(dataset)                    # intermediate format for plotting
   message("Plotting ", ds$id, " taxa accumulation over time")
   # Calculate cumulative number of taxa 
@@ -287,6 +290,7 @@ plot_taxa_shared_sites <- function(dataset) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
     stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
   }
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(dataset)                    # intermediate format for plotting
   message("Plotting ", ds$id, " taxa shared among sites")
   heat_pal_spectral <- colorRampPalette(rev( RColorBrewer::brewer.pal(11, "Spectral")))

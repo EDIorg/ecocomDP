@@ -921,6 +921,26 @@ parse_delim <- function(x){
 
 
 
+#' Is the EDI Data Repository accessible?
+#'
+ping_edi <- function() {
+  r <- httr::GET("https://portal.edirepository.org/") # Warn if EDI is down
+  if (httr::status_code(r) != 200) {
+    warning("This function may not work between 01:00 - 03:00 UTC due to ",
+            "regular maintenance of the EDI Data Repository. If you have ",
+            "reached this warning outside these hours then there may be an ",
+            "unexpected issue that will be resolved shortly. Please try ",
+            "again later.", call. = FALSE)
+  }
+}
+
+
+
+
+
+
+
+
 
 
 

@@ -50,11 +50,10 @@
 #'     \itemize{
 #'       \item{id - Dataset id}
 #'         \itemize{
-#'           \item metadata - Info about the dataset. NOTE: This object is underdevelopment and content may change in future releases
-#'           \item tables - Dataset tables
-#'           \item validation_issues - If the dataset fails any validation checks, 
-#'     then they are listed here as a vector of character strings describing 
-#'     each issue.
+#'           \item metadata - List of info about the dataset. NOTE: This object is underdevelopment and content may change in future releases.
+#'           \item tables - List of dataset tables as data.frames.
+#'           \item validation_issues - List of validation issues. If the dataset fails any validation checks, 
+#'     then descriptions of each issue are listed here.
 #'       }
 #'     }
 #' 
@@ -116,17 +115,7 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
   
   # Validate input arguments --------------------------------------------------
 
-  # fun.args <- validate_arguments("read_data", as.list(environment()))
-  # id <- fun.args$id
-  # path <- fun.args$path
-  # file.type <- fun.args$file.type
-  # site <- fun.args$site
-  # startdate <- fun.args$startdate
-  # enddate <- fun.args$enddate
-  # check.size <- fun.args$check.size
-  # nCores <- fun.args$nCores
-  # token <- fun.args$token
-  # forceParallel <- fun.args$forceParallel
+  validate_arguments(fun.name = "read_data", fun.args = as.list(environment()))
 
   # Parameterize --------------------------------------------------------------
 
@@ -139,16 +128,6 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
   # Read ----------------------------------------------------------------------
   
   if (is.null(from.file)) { # From API
-    
-    r <- httr::GET("https://portal.edirepository.org/") # Warn if EDI is down
-    if (httr::status_code(r) != 200) {
-      warning("This function may not work between 01:00 - 03:00 UTC due to ",
-              "regular maintenance of the EDI Data Repository. If you have ",
-              "reached this warning outside these hours then there may be an ",
-              "unexpected issue that will be resolved shortly. Please try ",
-              "again later.", call. = FALSE)
-    }
-
     if (stringr::str_detect(            # EDI
       id, 
       "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)") && 
