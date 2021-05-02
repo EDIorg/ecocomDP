@@ -1,7 +1,7 @@
 #' Plot alpha diversity (taxa richness) over time and space
 #'
 #' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
-#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100% opaque
+#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100\% opaque
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -69,7 +69,7 @@ plot_alpha_diversity <- function(dataset, alpha = 1) {
 #' Plot spatiotemporal sampling effort
 #'
 #' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
-#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100% opaque
+#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100\% opaque
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -124,7 +124,7 @@ plot_sampling_times <- function(dataset, alpha = 1) {
 #' Plot taxa accumulation curve over space
 #'
 #' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
-#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100% opaque
+#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100\% opaque
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -190,7 +190,7 @@ plot_taxa_accum_sites <- function(dataset, alpha = 1) {
 #' Plot taxa accumulation curves over time (site-specific and total)
 #'
 #' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
-#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100% opaque
+#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100\% opaque
 #' 
 #' @import dplyr
 #' @import ggplot2

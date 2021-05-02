@@ -9,7 +9,7 @@ plot_sampling_times(dataset, alpha = 1)
 \arguments{
 \item{dataset}{(list) Data object returned by \code{read_data()} (? list of named datapackage$tables)}
 
-\item{alpha}{(numeric) Alpha-transparency scale between 0 and 1, where 1 is 100% opaque}
+\item{alpha}{(numeric) Alpha-transparency scale between 0 and 1, where 1 is 100\% opaque}
 }
 \description{
 Plot spatiotemporal sampling effort
