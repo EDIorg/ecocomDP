@@ -1345,6 +1345,26 @@ validate_path <- function(path){
 
 
 
+#' View ecocomDP model diagram
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' view_model_diagram()
+#' }
+#' 
+view_model_diagram <- function() {
+  browseURL("https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/ecocomDP.png")
+}
+
+
+
+
+
+
+
+
 #' Resolve terms to a controlled vocabulary
 #'
 #' @description  
