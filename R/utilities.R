@@ -1345,7 +1345,28 @@ validate_path <- function(path){
 
 
 
-#' View ecocomDP model diagram
+
+#' View ecocomDP table descriptions and requirements
+#'
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' view_model_descriptions()
+#' }
+#' 
+view_model_descriptions <- function() {
+  browseURL("https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_description.md")
+}
+
+
+
+
+
+
+
+
+#' View ecocomDP tables and relationships
 #'
 #' @export
 #'

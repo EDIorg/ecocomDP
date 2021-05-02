@@ -2,12 +2,12 @@
 % Please edit documentation in R/utilities.R
 \name{view_model_diagram}
 \alias{view_model_diagram}
-\title{View ecocomDP model diagram}
+\title{View ecocomDP tables and relationships}
 \usage{
 view_model_diagram()
 }
 \description{
-View ecocomDP model diagram
+View ecocomDP tables and relationships
 }
 \examples{
 \dontrun{
