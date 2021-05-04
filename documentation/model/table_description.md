@@ -59,14 +59,14 @@ Columns
 
 Table: observation
 ---
-Description: This is the core table - which holds the observations being analyzed, eg, organism abundance or density. Observations must be linked to a taxon and to a location. Linking to ancillary observations (via event_id) is optional, and event_id is required to be populated only if the observation_ancillary table is created.
+Description: This is the core table - which holds the observations being analyzed, eg, organism abundance or density. Observations must be linked to a taxon and to a location. Linking to ancillary observations (via observation_id) is optional. The event_id column is a placeholder, as we are considering a structure to model sampling events in the future.
 
 Columns
 
 |  column name 	|   type	|   not NULL required?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|  
 | observation_id         | character |yes|   	|  A unique id for this record      |  4161   	|
-| event_id             | character |yes|(table = observation_ancillary) event_id    | The ID of the sampling event, required if observation_ancillary table is included   | 2009mar03_dive1      |
+| event_id             | character |yes|(table = observation_ancillary) event_id    | The ID of the sampling event, may be used in the future   | 2009mar03_dive1      |
 | package_id           | character |yes|(table = summary) package_id   	| The ID of this data package  	| edi.100001.1   	|
 | location_id | character |yes| (table = location) location_id |  A reference to a location	|  sbc_ABUR_1 	|
 | datetime | datetime  |yes|   	|Date and time of the observation following the ISO 8601 standard format [see here for details](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/datetime.md)| 2017-08-01, 2017-08-01T14:01-07, etc.  	|
