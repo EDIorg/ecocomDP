@@ -65,8 +65,8 @@ Columns
 
 |  column name 	|   type	|   not NULL required?	|  references cols 	| description | example |
 |---------------|---------|-----------------------|-------------------|--------------|---------|  
-| observation_id         | character |yes|   	|  A unique id for this record      |  4161   	|
-| event_id             | character |yes|(table = observation_ancillary) event_id    | The ID of the sampling event, may be used in the future   | 2009mar03_dive1      |
+| observation_id         | character |yes| (table = observation_ancillary) observation_id   	|  A unique id for this record      |  4161   	|
+| event_id             | character |no|   | The ID of the sampling event, may be used in the future   | 2009mar03_dive1      |
 | package_id           | character |yes|(table = summary) package_id   	| The ID of this data package  	| edi.100001.1   	|
 | location_id | character |yes| (table = location) location_id |  A reference to a location	|  sbc_ABUR_1 	|
 | datetime | datetime  |yes|   	|Date and time of the observation following the ISO 8601 standard format [see here for details](https://github.com/EDIorg/ecocomDP/blob/master/documentation/instructions/datetime.md)| 2017-08-01, 2017-08-01T14:01-07, etc.  	|
