@@ -802,9 +802,14 @@
        x="62.049801">variable_name</text>
     <polygon
        transform="translate(-155.4502,881.31267)"
-       style="fill:none;stroke:#000000;image-rendering:auto"
+       style="fill:#f4f7da;stroke:#000000;image-rendering:auto"
        id="polygon4375"
        points="214.5,-671.2 337.5,-671.2 337.5,-652.2 214.5,-652.2 214.5,-652.2 " />
+     <polygon
+        transform="translate(-155.4502,881.31267)"
+        style="fill:url(#diagonalHatch);stroke:#000000;image-rendering:auto"
+        id="polygon4371a"
+        points="214.5,-671.2 337.5,-671.2 337.5,-652.2 214.5,-652.2 214.5,-652.2 " />
     <text
        style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start;image-rendering:auto"
        id="text4377"
