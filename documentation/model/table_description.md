@@ -73,7 +73,7 @@ Columns
 | taxon_id             | character |yes| (table = taxon) taxon_id  	| reference to a taxon ID  	| sbclter_MAPY   	|
 | variable_name        | character |yes|   	| name of the variable measured. in EML metadata, these should be code-def pairs (enumeratedList)  	|  kelp_density  	|
 | value                | float     |yes|   	| value for the variable  	| 7  	|
-| unit                 | character |yes|   	| unit for this variable  	|  numberPerMeterSquared 	|
+| unit                 | character |no|   	| unit for this variable  	|  numberPerMeterSquared 	|
 
 Table: location_ancillary 
 ---
