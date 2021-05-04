@@ -18,7 +18,7 @@ Below is the table list and suggested population order, ie, primary tables first
 |3.| observation |yes| location, taxon, observation_ancillary, dataset_summary | observations about taxa, that are being analyzed. Eg, organism abundance or density, or the data to compute density (count) | variable, value, unit |    | 
 |4.| location_ancillary |no| location | additional info about a place that does not change, in long format. | variable, value, unit (sampling area, lake area, depth of ocean) | location_id, datetime, variable_name |
 |5.| taxon_ancillary|no|  taxon | additonal info about an organism that does not change, in long format | variable, value, unit (phenotypic traits) | taxon_id, date_time, variable_name   |
-|6.| observation_ancillary  | no | observation | additional info about the sampling event (not related to taxa or locations) in long-format  |  variable_name, value, unit | event_id, variable_name  |
+|6.| observation_ancillary  | no | observation | additional info about the sampling event (not related to taxa or locations) in long-format  |  variable_name, value, unit | variable_name  |
 |7.| dataset_summary|yes|  NA | summary info calculated from incoming data. one line table |See examples directory |   |
 |8.| variable_mapping| no |  ONE OF: observation, observation_ancillary, taxon_ancillary, OR location_ancillary | mappings from variable names in tables to external dictionaries | table_name, variable_name, mapped_system, mapped_id, mapped_label | NA   |
 
