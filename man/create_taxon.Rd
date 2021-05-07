@@ -2,41 +2,39 @@
 % Please edit documentation in R/create_taxon.R
 \name{create_taxon}
 \alias{create_taxon}
-\title{Make the taxon table}
+\title{Create the taxon table}
 \usage{
 create_taxon(
-  x = NULL,
-  cols = NULL,
-  taxa = NULL,
-  name.type = "scientific",
-  data.sources = NULL
+  L0_wide,
+  taxon_id = "taxon_id",
+  taxon_rank = "taxon_rank",
+  taxon_name = "taxon_name",
+  authority_system = "authority_system",
+  authority_taxon_id = "authority_taxon_id"
 )
 }
 \arguments{
-\item{x}{(data frame) A data frame containing taxa names (in one or more 
-columns).}
+\item{L0_wide}{(data.frame) The fully joined L0 dataset, in wide format.}
 
-\item{cols}{(character) One or more columns in \code{x} that when combined form a 
-unique taxa that may be resolvable to a taxonomic authority system. 
-(e.g. \code{cols = c("genus", "species")}).}
+\item{taxon_id}{(character) Column in \code{L0_wide} containing the identifier assigned to each unique organism at the observation level.}
 
-\item{taxa}{(character) If not using \code{x} and \code{cols}, then a list of 
-unique taxa can be input using this argument.}
+\item{taxon_rank}{(character; optional) Column in \code{L0_wide} containing the taxonomic rank of the organism in \code{taxon_name}.}
 
-\item{name.type}{(character) Taxonomic name type. Can be: 'scientific', 'common', or 
-'both'.}
+\item{taxon_name}{(character) Column in \code{L0_wide} containing the taxonomic name of the organism.}
 
-\item{data.sources}{(integer) An ordered numeric vector of ID's corresponding to taxonomic 
-authorities to resolve taxa to (in the order of decreasing preference). 
-Run \code{view_taxa_authorities()} to see supported 
-authorities.}
+\item{authority_system}{(character; optional) Column in \code{L0_wide} containing the name of the authority system \code{authority_taxon_id} is from (e.g. "ITIS").}
+
+\item{authority_taxon_id}{(character; optional) Column in \code{L0_wide} containing the identifier corresponding to \code{taxon_name} in the \code{authority_system}.}
 }
 \value{
-A list containing:
-\item{taxon}{A data frame of the taxon table}
-\item{x}{The input \code{x} with an added taxon_id column linking unique
-\code{cols} to the list of taxa in the taxon table.}
+(data.frame) The taxon table of ecocomDP.
 }
 \description{
-Make the taxon table
+Create the taxon table
+}
+\details{
+This function collects specified columns from \code{L0_wide} and returns distinct rows.
+}
+\examples{
+
 }

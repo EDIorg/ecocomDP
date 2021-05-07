@@ -1,141 +1,58 @@
-#' Make dataset_summary table
+#' Create the dataset_summary table
 #'
-#' @description  
-#'     Make the ecocomDP dataset_summary table.
+#' @param L0_wide (data.frame) The fully joined L0 dataset, in wide format.
+#' @param package_id (character) Column in \code{L0_wide} containing the identifier this dataset will have once it's published in a data repository.
+#' @param original_package_id (character; optional) Column in \code{L0_wide} containing the identifier of the L0 dataset in the repository it's published, if applicable (some L0 are not published).
+#' @param length_of_survey_years (character) Column in \code{L0_wide} containing the number of years the study has been ongoing.
+#' @param number_of_years_sampled (character) Column in \code{L0_wide} containing the number of years within the period of the study that samples were taken.
+#' @param std_dev_interval_betw_years (character) Column in \code{L0_wide} containing the standard deviation of the interval between sampling events.
+#' @param max_num_taxa (character) Column in \code{L0_wide} containing the number of unique taxa in this dataset.
+#' @param geo_extent_bounding_box_m2 (character; optional) Column in \code{L0_wide} containing the area of the study location, if applicable (some L0 were collected at a single point).
 #'
-#' @param parent.package.id
-#'     (character) Parent data package identifier composed of scope, 
-#'     identifier, and revision (e.g. 'edi.101.1').
-#' @param child.package.id
-#'     (character) Child data package identifier composed of scope, 
-#'     identifier, and revision (e.g. 'edi.101.1').
-#' @param sample.dates
-#'     (character) Sample dates from which to calculate date fields of the
-#'     dataset_summary table.
-#' @param taxon.table
-#'     (data frame) The ecocomDP taxon table.
-#' @param north
-#'     (numeric) North bounding coordinate of the study area in decimal 
-#'     degrees with values north of the equator being positive.
-#' @param east
-#'     (numeric) East bounding coordinate of the study area in decimal 
-#'     degrees with values west of the prime meridian being negative.
-#' @param south
-#'     (numeric) South bounding coordinate of the study area in decimal 
-#'     degrees with values south of the equator being negative.
-#' @param west
-#'     (numeric) West bounding coordinate of the study area in decimal 
-#'     degrees with values west of the equator being negative.
-#' @param evironment (character) EDI Data Repository environment in which the L0 exists, and which will be used to get the geographic bounding area from the EML metadata. Default is "production".
+#' @details This function collects specified columns from \code{L0_wide} and returns distinct rows.
 #'
-#' @return 
-#'     (data frame) A data frame of the dataset_summary table
+#' @return (data.frame) The dataset_summary table of ecocomDP.
 #'     
 #' @export
+#' 
+#' @examples 
+#' 
 #'
-create_dataset_summary <- function(parent.package.id, 
-                                 child.package.id, 
-                                 sample.dates, 
-                                 taxon.table,
-                                 north,
-                                 east,
-                                 south,
-                                 west,
-                                 environment = "production"){
-  # FIXME: Inputs should be emls not package.ids
-  message('Creating dataset_summary')
-    
-  # Validate inputs
-  if (!is.character(sample.dates)){
-    stop('Input argument "sample.dates" must be of class = character.')
+create_dataset_summary <- function(L0_wide, 
+                                   package_id = "package_id",
+                                   original_package_id = "original_package_id",
+                                   length_of_survey_years = "length_of_survey_years",
+                                   number_of_years_sampled = "number_of_years_sampled",
+                                   std_dev_interval_betw_years = "std_dev_interval_betw_years",
+                                   max_num_taxa = "max_num_taxa",
+                                   geo_extent_bounding_box_m2 = "geo_extent_bounding_box_m2") {
+  message("Creating dataset_summary")
+  # TODO: validate_arguments()
+  # - cols exist in L0_wide for non-required cols
+  # - NULL optional cols if not in L0_wide
+  # - rename cols in L0_wide if not 1-to-1 match
+  # - required cols vs optional cols
+  # - return
+  # get cols
+  cols_to_gather <- c(package_id, original_package_id, length_of_survey_years,
+                      number_of_years_sampled, std_dev_interval_betw_years,
+                      max_num_taxa, geo_extent_bounding_box_m2)
+  res <- L0_wide %>%
+    dplyr::select(all_of(cols_to_gather)) %>%
+    dplyr::distinct()
+  # add missing cols
+  if (is.null(original_package_id)) {
+    res$original_package_id <- NA_character_
   }
-
-  # Initialize dataset_summary table
-  dataset_summary <- data.frame(
-    package_id = rep(NA_character_, length(child.package.id)),
-    original_package_id = rep(NA_character_, length(child.package.id)),
-    length_of_survey_years = rep(NA, length(child.package.id)),
-    number_of_years_sampled = rep(NA, length(child.package.id)),
-    std_dev_interval_betw_years = rep(NA, length(child.package.id)),
-    max_num_taxa = rep(NA, length(child.package.id)),
-    geo_extent_bounding_box_m2 = rep(NA, length(child.package.id)),
-    stringsAsFactors = FALSE)
-  
-  # Add package_id and original_package_id
-  dataset_summary$package_id <- child.package.id
-  dataset_summary$original_package_id <- parent.package.id
-  
-  # Add temporal metrics
-  dates <- dataCleanr::iso8601_read(sample.dates) # FIXME: Use lubridate instead
-  if (is.integer(dates)) {
-    dataset_summary$length_of_survey_years <- max(dates) - min(dates)
-    dataset_summary$number_of_years_sampled <- length(unique(dates))
-    dataset_summary$std_dev_interval_betw_years <- round(sd(diff(unique(dates))/1), 2)
-  } else {
-    dates <- dates %>% na.omit() %>% sort()
-    # length_of_survey_years
-    dataset_summary$length_of_survey_years <-  round(
-      lubridate::time_length(
-        lubridate::interval(min(dates), max(dates)), 
-        unit = 'year'))
-    # number_of_years_sampled
-    dataset_summary$number_of_years_sampled <- length(
-      unique(
-        lubridate::year(dates)))
-    # std_dev_interval_betw_years
-    dataset_summary$std_dev_interval_betw_years <- round(
-      sd(
-        diff(
-          lubridate::year(dates))),
-      2)
+  if (is.null(geo_extent_bounding_box_m2)) {
+    res$geo_extent_bounding_box_m2 <- NA_character_
   }
-  
-  # Add max_num_taxa
-  dataset_summary$max_num_taxa <- nrow(taxon.table)
-  
-  # Add geo_extent_bounding_box_m2
-  
-  if (stringr::str_detect(
-    parent.package.id, 
-    "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)")) {
-    # Source is EDI
-    eml <- suppressMessages(api_read_metadata(parent.package.id, environment = environment))
-    west <- min(
-      as.numeric(
-        xml2::xml_text(
-          xml2::xml_find_all(
-            eml,
-            "//dataset/coverage/geographicCoverage/boundingCoordinates/westBoundingCoordinate"))))
-    east <- max(
-      as.numeric(
-        xml2::xml_text(
-          xml2::xml_find_all(
-            eml,
-            "//dataset/coverage/geographicCoverage/boundingCoordinates/eastBoundingCoordinate"))))
-    south <- min(
-      as.numeric(
-        xml2::xml_text(
-          xml2::xml_find_all(
-            eml,
-            "//dataset/coverage/geographicCoverage/boundingCoordinates/southBoundingCoordinate"))))
-    north <- max(
-      as.numeric(
-        xml2::xml_text(
-          xml2::xml_find_all(
-            eml,
-            "//dataset/coverage/geographicCoverage/boundingCoordinates/northBoundingCoordinate"))))
-  } else if (stringr::str_detect(x, "^DP.\\.[:digit:]+\\.[:digit:]+")) {
-    # Source is NEON
-    # TODO: Add methods for extracting this info from a NEON data product
-  }
-
-  dataset_summary$geo_extent_bounding_box_m2 <- round(
-    calulate_geo_extent_bounding_box_m2(
-      west, east, north, south))
-  
-  # Return
-  dataset_summary
-  
+  # reorder
+  res <- res %>%
+    dplyr::select(package_id, original_package_id, length_of_survey_years,
+                  number_of_years_sampled, std_dev_interval_betw_years,
+                  max_num_taxa, geo_extent_bounding_box_m2)
+  return(res)
 }
 
 
@@ -160,8 +77,15 @@ create_dataset_summary <- function(parent.package.id,
 #'
 #' @return
 #'     (numeric) Area in square meters.
+#'     
+#' @export
+#' 
+#' @examples 
+#' \dontrun{
+#' 
+#' }
 #'
-calulate_geo_extent_bounding_box_m2 <- function(
+calculate_geo_extent_bounding_box_m2 <- function(
   lon_west, lon_east, lat_north, lat_south) {
   df <- data.frame(
     longitude = c(lon_west, lon_east, lon_east, lon_west),

@@ -2,49 +2,46 @@
 % Please edit documentation in R/create_dataset_summary.R
 \name{create_dataset_summary}
 \alias{create_dataset_summary}
-\title{Make dataset_summary table}
+\title{Create the dataset_summary table}
 \usage{
 create_dataset_summary(
-  parent.package.id,
-  child.package.id,
-  sample.dates,
-  taxon.table,
-  north,
-  east,
-  south,
-  west,
-  environment = "production"
+  L0_wide,
+  package_id = "package_id",
+  original_package_id = "original_package_id",
+  length_of_survey_years = "length_of_survey_years",
+  number_of_years_sampled = "number_of_years_sampled",
+  std_dev_interval_betw_years = "std_dev_interval_betw_years",
+  max_num_taxa = "max_num_taxa",
+  geo_extent_bounding_box_m2 = "geo_extent_bounding_box_m2"
 )
 }
 \arguments{
-\item{parent.package.id}{(character) Parent data package identifier composed of scope, 
-identifier, and revision (e.g. 'edi.101.1').}
+\item{L0_wide}{(data.frame) The fully joined L0 dataset, in wide format.}
 
-\item{child.package.id}{(character) Child data package identifier composed of scope, 
-identifier, and revision (e.g. 'edi.101.1').}
+\item{package_id}{(character) Column in \code{L0_wide} containing the identifier this dataset will have once it's published in a data repository.}
 
-\item{sample.dates}{(character) Sample dates from which to calculate date fields of the
-dataset_summary table.}
+\item{original_package_id}{(character; optional) Column in \code{L0_wide} containing the identifier of the L0 dataset in the repository it's published, if applicable (some L0 are not published).}
 
-\item{taxon.table}{(data frame) The ecocomDP taxon table.}
+\item{length_of_survey_years}{(character) Column in \code{L0_wide} containing the number of years the study has been ongoing.}
 
-\item{north}{(numeric) North bounding coordinate of the study area in decimal 
-degrees with values north of the equator being positive.}
+\item{number_of_years_sampled}{(character) Column in \code{L0_wide} containing the number of years within the period of the study that samples were taken.}
 
-\item{east}{(numeric) East bounding coordinate of the study area in decimal 
-degrees with values west of the prime meridian being negative.}
+\item{std_dev_interval_betw_years}{(character) Column in \code{L0_wide} containing the standard deviation of the interval between sampling events.}
 
-\item{south}{(numeric) South bounding coordinate of the study area in decimal 
-degrees with values south of the equator being negative.}
+\item{max_num_taxa}{(character) Column in \code{L0_wide} containing the number of unique taxa in this dataset.}
 
-\item{west}{(numeric) West bounding coordinate of the study area in decimal 
-degrees with values west of the equator being negative.}
-
-\item{evironment}{(character) EDI Data Repository environment in which the L0 exists, and which will be used to get the geographic bounding area from the EML metadata. Default is "production".}
+\item{geo_extent_bounding_box_m2}{(character; optional) Column in \code{L0_wide} containing the area of the study location, if applicable (some L0 were collected at a single point).}
 }
 \value{
-(data frame) A data frame of the dataset_summary table
+(data.frame) The dataset_summary table of ecocomDP.
 }
 \description{
-Make the ecocomDP dataset_summary table.
+Create the dataset_summary table
+}
+\details{
+This function collects specified columns from \code{L0_wide} and returns distinct rows.
+}
+\examples{
+
+
 }

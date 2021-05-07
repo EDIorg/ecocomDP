@@ -2,40 +2,36 @@
 % Please edit documentation in R/create_location_ancillary.R
 \name{create_location_ancillary}
 \alias{create_location_ancillary}
-\title{Make the location ancillary table}
+\title{Create the location_ancillary table}
 \usage{
-create_location_ancillary(x = NULL, cols = NULL, eml = NULL)
+create_location_ancillary(
+  L0_wide,
+  location_id = "location_id",
+  datetime = "datetime",
+  variable_name,
+  unit = "unit"
+)
 }
 \arguments{
-\item{x}{(data frame) The master data frame composed of all joined tables from the 
-parent data package for which the core ecocomDP tables have been, 
-created. This master data frame is linked to core tables via primary 
-keys and has all ecocomDP column names added to this point. This funciton 
-will not work otherwise.}
+\item{L0_wide}{(data.frame) The fully joined L0 dataset, in wide format.}
 
-\item{cols}{(character) Names of all columns from \code{x} needed to create 
-location_ancillary. This function assumes that all columns with names
-corresponding to the ecocomDP location_ancillary table will be treated
-as such. If any \code{cols} are shared between the parent tables (now
-joined in the master data frame) and location_antillary, then there is
-ambiguous meaning and this function will not work.}
+\item{location_id}{(character) Column in \code{L0_wide} containing the identifier assigned to each unique location at the observation level.}
 
-\item{eml}{(xml_document xml_node) EML metadata listing units for variables listed 
-in \code{cols}. Use \code{api_read_metadata()} or 
-\code{xml2::read_xml()} to read the EML file.}
+\item{datetime}{(character; optional) Column in \code{L0_wide} containing the date, and if applicable time, of ancillary location data following the ISO-8601 standard format (i.e. YYYY-MM-DD hh:mm:ss).}
+
+\item{variable_name}{(character) Columns in \code{L0_wide} containing the ancillary location data.}
+
+\item{unit}{(character; optional) Columns in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention <unit>_<variable_name> (e.g. "unit_depth").}
 }
 \value{
-A list containing:
-\item{location_ancillary}{A data frame of the location_ancillary table}
-\item{x}{The input \code{x} with an added location_ancillary_id column linking unique \code{cols} to the location_ancillary table.}
+(data.frame) The location_ancillary table of ecocomDP.
 }
 \description{
-Make the location ancillary table
+Create the location_ancillary table
 }
 \details{
-This is possible because at this point we can distinguish between 
-    standard column names and non-standard column names (variables).
-    
-    This function will not work if variables listed in \code{cols} have 
-    duplicate listing in \code{eml}.
+This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column.
+}
+\examples{
+
 }

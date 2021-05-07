@@ -1,24 +1,22 @@
-#' Create the location_ancillary table
+#' Create the observation_ancillary table
 #'
 #' @param L0_wide (data.frame) The fully joined L0 dataset, in wide format.
-#' @param location_id (character) Column in \code{L0_wide} containing the identifier assigned to each unique location at the observation level.
-#' @param datetime (character; optional) Column in \code{L0_wide} containing the date, and if applicable time, of ancillary location data following the ISO-8601 standard format (i.e. YYYY-MM-DD hh:mm:ss).
-#' @param variable_name (character) Columns in \code{L0_wide} containing the ancillary location data.
-#' @param unit (character; optional) Columns in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention <unit>_<variable_name> (e.g. "unit_depth").
+#' @param observation_id (character) Column in \code{L0_wide} containing the the identifier assigned to each unique observation.
+#' @param variable_name (character) Columns in \code{L0_wide} containing the ancillary observation data.
+#' @param unit (character; optional) Columns in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention <unit>_<variable_name> (e.g. "unit_temperature").
 #' 
 #' @details This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column.
 #'
-#' @return (data.frame) The location_ancillary table of ecocomDP.
+#' @return (data.frame) The observation_ancillary table of ecocomDP.
 #' @export
 #'
 #' @examples
 #' 
-create_location_ancillary <- function(L0_wide, 
-                                      location_id = "location_id", 
-                                      datetime = "datetime", 
-                                      variable_name, 
-                                      unit = "unit") {
-  message("Creating location_ancillary")
+create_observation_ancillary <- function(L0_wide, 
+                                         observation_id = "observation_id", 
+                                         variable_name, 
+                                         unit = NULL) {
+  message("Creating observation_ancillary")
   # TODO: validate_arguments()
   # - cols exist in L0_wide for non-required cols
   # - NULL optional cols if not in L0_wide
@@ -28,12 +26,12 @@ create_location_ancillary <- function(L0_wide,
   # - return
   
   # gather cols
-  cols_to_gather <- c(location_id, datetime, variable_name)
+  cols_to_gather <- c(observation_id, variable_name)
   res <- L0_wide %>%
     dplyr::select(all_of(cols_to_gather)) %>%
     dplyr::mutate(across(variable_name, as.character)) %>% # ancillary table variable_name needs character coercion
     tidyr::pivot_longer(variable_name, names_to = "variable_name", values_to = "value") %>%
-    dplyr::arrange(location_id)
+    dplyr::arrange(observation_id)
   # add units
   if (!is.null(unit)) {
     unit_map <- L0_wide %>% dplyr::select(unit) %>% na.omit()
@@ -45,18 +43,15 @@ create_location_ancillary <- function(L0_wide,
     res <- dplyr::left_join(res, unit_map, by = "variable_name")
   }
   # add missing cols
-  if (is.null(datetime)) {
-    res$datetime <- NA_character_
-  }
   if (is.null(unit)) {
     res$unit <- NA_character_
   }
   # keep only distinct values
   res <- dplyr::distinct(res)
   # add primary key
-  res$location_ancillary_id <- seq(nrow(res))
+  res$observation_ancillary_id <- seq(nrow(res))
   # reorder
   res <- res %>%
-    dplyr::select(location_ancillary_id, location_id, datetime, variable_name, value, unit)
+    dplyr::select(observation_ancillary_id, observation_id, variable_name, value, unit)
   return(res)
 }
