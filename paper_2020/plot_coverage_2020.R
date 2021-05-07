@@ -191,9 +191,9 @@ combined_taxon_cov$Source <-
 # also try split_axis, or something like that (so you can enlarge the lower portion)
 
 # geographic coverage
-plot_geoCov <- ggplot(combined_geo_temporal_cov, aes(x=log10(area_km2), fill=Source ) ) + 
- # geom_histogram( binwidth=1, fill="#69b3a2", color="#e9ecef", alpha=0.7) +
-  geom_histogram( binwidth=.5) +
+plot_geoCov <- ggplot(combined_geo_temporal_cov, aes(x=log10(area_km2), fill=Source) ) + 
+  # geom_histogram( binwidth=1, fill="#69b3a2", color="#e9ecef", alpha=0.7) +
+  geom_histogram(binwidth=.5) +
   # ggtitle("Bin size = 15") +
   theme_minimal_hgrid()  +
   theme(text = element_text(size=12) )+ 
@@ -201,11 +201,12 @@ plot_geoCov <- ggplot(combined_geo_temporal_cov, aes(x=log10(area_km2), fill=Sou
   ylim(0,150) +
   xlab("Log 10 (Area, km^2)") + 
   guides(fill=FALSE)
+plot_geoCov <- plot_geoCov + scale_color_grey()+scale_fill_grey() # Make grey scale
 
 
 # temporal coverage 
 plot_temCov <-   ggplot(combined_geo_temporal_cov, aes(x=n_years, fill=Source)) + 
-#   geom_histogram( binwidth=1, fill="red", color="red", alpha=0.6) +
+  #   geom_histogram( binwidth=1, fill="red", color="red", alpha=0.6) +
   geom_histogram( binwidth=3) +
   theme_minimal_hgrid()  +
   theme(text = element_text(size=12) )+ 
@@ -213,12 +214,13 @@ plot_temCov <-   ggplot(combined_geo_temporal_cov, aes(x=n_years, fill=Source)) 
   ylim(0,250) +
   xlab("Duration, years")  + 
   guides(fill=FALSE) # removes legend
-                        
-                
+plot_temCov <- plot_temCov + scale_color_grey()+scale_fill_grey() # Make grey scale
+
+
 # temporal evenness
 # place holder.
 plot_temEvenness <- ggplot(combined_geo_temporal_cov, aes(x=sd_year_interval, fill=Source)) + 
-#   geom_histogram( binwidth=.5, fill="green", color="green", alpha=0.6) +
+  #   geom_histogram( binwidth=.5, fill="green", color="green", alpha=0.6) +
   geom_histogram( binwidth=.3) +
   theme_minimal_hgrid()  +
   theme(text = element_text(size=12) )+ 
@@ -226,12 +228,36 @@ plot_temEvenness <- ggplot(combined_geo_temporal_cov, aes(x=sd_year_interval, fi
   ylim(0,400) +
   xlab("S.D. sampling interval") + 
   guides(fill=FALSE)
-  
+plot_temEvenness <- plot_temEvenness + scale_color_grey()+scale_fill_grey() # Make grey scale
+
 
 # taxonomic coverage
 # with hints from:
 # https://stackoverflow.com/questions/7263849/what-do-hjust-and-vjust-do-when-making-a-plot-using-ggplot/7267364
-plot_taxonCov <- ggplot(data=combined_taxon_cov, aes(x=taxon_label, fill = Source)) +
+# plot_taxonCov <- ggplot(data=combined_taxon_cov, aes(x=taxon_label, fill = Source)) +
+#   # geom_bar(stat="count", fill="blue", color="blue", alpha=0.5) +
+#   geom_bar(stat="count") +
+#   # scale_y_continuous(expand=c(0,0)) + # removes space between the bar and the tick mark
+#   theme_minimal_hgrid() + 
+#   theme(text = element_text(size=12) )+ 
+#   ylab("Number of Datasets") +
+#   # ylim(0,120) +
+#   xlab("Taxon Group")  +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1) ) +  # hjust sets postition of text
+#   guides(fill=FALSE)
+# plot_taxonCov <- plot_taxonCov + scale_color_grey()+scale_fill_grey() # Make grey scale
+
+## plot
+test <- combined_taxon_cov
+test <- test[!is.na(test$taxon_label), ]
+test$taxon_label <- factor(
+  test$taxon_label, 
+  levels = c("Arthropod", "Plant", "Bird", "Mammal", "Algae", "Mosquito*", "Fish", "Tick*", 
+             "Other terrestrial invertebrate", "Other", "Mollusc", "Echinoderm", "Cnidarian", 
+             "Other aquatic invertebrate", "Worm", "Sponge", "Amphibian", "Reptile"), 
+  ordered = TRUE)
+
+plot_taxonCov <- ggplot(data=test, aes(x=taxon_label, fill = Source)) +
   # geom_bar(stat="count", fill="blue", color="blue", alpha=0.5) +
   geom_bar(stat="count") +
   # scale_y_continuous(expand=c(0,0)) + # removes space between the bar and the tick mark
@@ -242,7 +268,7 @@ plot_taxonCov <- ggplot(data=combined_taxon_cov, aes(x=taxon_label, fill = Sourc
   xlab("Taxon Group")  +
   theme(axis.text.x = element_text(angle = 45, hjust = 1) ) +  # hjust sets postition of text
   guides(fill=FALSE)
-
+plot_taxonCov <- plot_taxonCov + scale_color_grey()+scale_fill_grey() # Make grey scale
 
 
 # arrange plots
