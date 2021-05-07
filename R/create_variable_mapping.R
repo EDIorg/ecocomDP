@@ -84,10 +84,7 @@ create_variable_mapping <- function(observation, observation_ancillary = NULL,
   
   # Add content
   
-  variable_mapping$variable_mapping_id <- paste0(
-    'vama_',
-    seq(length(vars))
-    )
+  variable_mapping$variable_mapping_id <- seq(length(vars))
   
   variable_mapping$table_name <- tbls
   
