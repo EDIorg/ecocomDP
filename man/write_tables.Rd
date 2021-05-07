@@ -6,8 +6,7 @@
 \usage{
 write_tables(
   path,
-  sep,
-  study.name = NULL,
+  sep = ",",
   observation = NULL,
   location = NULL,
   taxon = NULL,
@@ -21,11 +20,7 @@ write_tables(
 \arguments{
 \item{path}{(character) Directory to which the files will be written.}
 
-\item{sep}{(character) Field delimiter used in the ecocomDP tables. Valid options 
-are "," or "\\t".}
-
-\item{study.name}{(character) Name to be prefixed to each ecocomDP table name (e.g. 
-'bird_survey_').}
+\item{sep}{(character) Field delimiter of returned files}
 
 \item{observation}{(data frame) observation table}
 
