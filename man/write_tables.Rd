@@ -44,3 +44,9 @@ ecocomDP tables written to file.
 \description{
 Write ecocomDP tables to file
 }
+\examples{
+\dontrun{
+
+}
+
+}

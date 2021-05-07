@@ -1500,6 +1500,7 @@ vocab_resolve_terms <- function(x, cv, messages = FALSE, interactive = FALSE){
 #'     
 #' @export
 #' 
+#' @examples 
 #' \dontrun{
 #' 
 #' }
