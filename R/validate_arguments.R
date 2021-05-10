@@ -339,8 +339,7 @@ validate_site <- function(site, id) {
       ","))
   site_exists <- site %in% available_sites
   if (!all(site_exists)) {
-    stop("Sites not available in ", id, ": ", paste(site[!site_exists], collapse = ", "), 
-         call. = FALSE)
+    warning("Sites not available in ", id, ": ", paste(site[!site_exists], collapse = ", "))
   }
 }
 

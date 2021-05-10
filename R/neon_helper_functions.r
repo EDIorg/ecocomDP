@@ -13,9 +13,22 @@ make_neon_location_table <- function(loc_info, loc_col_names){
   neon_site_list <- data.table::fread(
     system.file("/data/neon-field-sites.csv", package = "ecocomDP"))
   
+  # populate latitude
+  if("decimalLatitude" %in% names(loc_info)) loc_info <- loc_info %>%
+      dplyr::rename(latitude = decimalLatitude) 
+
+  #populate longitude
+  if("decimalLongitude" %in% names(loc_info)) loc_info <- loc_info %>%
+      dplyr::rename(longitude = decimalLongitude) 
+
+  #populate longitude
+  if("namedLocation" %in% names(loc_info)) loc_info <- loc_info %>%
+      dplyr::mutate(location_id = namedLocation) 
+  
+  # make location table
   table_location <- suppressMessages(
     loc_info %>% 
-      create_location(cols = loc_col_names))
+      ecocomDP::create_location(location_nesting = loc_col_names))
   
   # code to handle updated create_location (updated 18 Sep 2020 in create_location branch)
   if(class(table_location) == "list" &&
@@ -29,19 +42,6 @@ make_neon_location_table <- function(loc_info, loc_col_names){
           unlist() %>%
           dplyr::last()) 
   }
-  
-  
-  # populate latitude
-  if("decimalLatitude" %in% names(loc_info)) table_location$latitude <- 
-    loc_info$decimalLatitude[match(table_location$location_name, loc_info$namedLocation)] 
-  
-  #populate longitude
-  if("decimalLongitude" %in% names(loc_info)) table_location$longitude <- 
-    loc_info$decimalLongitude[match(table_location$location_name, loc_info$namedLocation)] 
-  
-  # populate elevation
-  if("elevation" %in% names(loc_info)) table_location$elevation <- 
-    loc_info$elevation[match(table_location$location_name, loc_info$namedLocation)] 
   
   # replace parent_id with parent_name
   table_location$parent_location_id <- table_location$location_name[
@@ -122,27 +122,8 @@ make_neon_ancillary_location_table <- function(loc_info, loc_col_names, ancillar
 # helper function to make neon ancillary observation tables
 #########################################
 
-# 
-# ancillary_var_names <- c("neon_sample_id",
-#      "neon_event_id",
-#      "parentSampleID",
-#      "sampleCondition",
-#      "laboratoryName",
-#      "perBottleSampleVolume",
-#      "aquaticSiteType",
-#      "habitatType",
-#      "algalSampleType",
-#      "samplerType",
-#      "benthicArea",
-#      "samplingProtocolVersion",
-#      "phytoDepth1","phytoDepth2","phytoDepth3",
-#      "substratumSizeClass")
-# 
-# obs_wide <- table_observation_ecocomDP
-
-
 make_neon_ancillary_observation_table <- function(
-  obs_wide, #must have "event_id" field
+  obs_wide, #must have "observation_id" field
   ancillary_var_names = NULL){
   
   # convert cols that are not char or numeric to char
@@ -156,7 +137,7 @@ make_neon_ancillary_observation_table <- function(
   }
   
   col_names_to_keep <- c(
-    "event_id", ancillary_var_names)
+    "observation_id", ancillary_var_names)
   
   
   table_observation_ancillary <- obs_wide[
@@ -167,11 +148,11 @@ make_neon_ancillary_observation_table <- function(
   table_observation_ancillary <- table_observation_ancillary %>% 
     dplyr::mutate_all(as.character) %>%
     tidyr::pivot_longer(
-      cols = -event_id,
+      cols = -observation_id,
       names_to = "variable_name", 
       values_to = "value") %>% 
     dplyr::mutate(
-      observation_ancillary_id = paste0(variable_name, "_for_", event_id)) %>%
+      observation_ancillary_id = paste0(variable_name, "_for_", observation_id)) %>%
     dplyr::filter(!is.na(value))
   
   # table_observation_ancillary$observation_ancillary_id <- 
@@ -181,7 +162,7 @@ make_neon_ancillary_observation_table <- function(
   table_observation_ancillary <- dplyr::select(
     table_observation_ancillary,
     observation_ancillary_id,
-    event_id,
+    observation_id,
     variable_name,
     value,
     unit) %>% 

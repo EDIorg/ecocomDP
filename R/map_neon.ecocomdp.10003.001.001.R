@@ -53,6 +53,8 @@ map_neon.ecocomdp.10003.001.001 <- function(
 
   
   #location ----
+
+  
   table_location_raw <- data_bird %>%
     dplyr::select(domainID, siteID, plotID, namedLocation, 
                   decimalLatitude, decimalLongitude, elevation, 
@@ -112,14 +114,14 @@ map_neon.ecocomdp.10003.001.001 <- function(
     dplyr::mutate(package_id = my_package_id) %>%
     dplyr:: rename(
       observation_id = uid, 
-      neon_event_id = eventID,
+      event_id = eventID,
       datetime = startDate, 
       taxon_id = taxonID,
       value = clusterSize) %>%
     dplyr::mutate(
-      event_id = observation_id,
       variable_name = "cluster size",
-      unit = "count of individuals") 
+      unit = "count of individuals")  %>%
+    dplyr::filter(!is.na(taxon_id))
   
   table_observation <- table_observation_wide_all %>%
     dplyr::select(
@@ -131,17 +133,12 @@ map_neon.ecocomdp.10003.001.001 <- function(
       taxon_id,
       variable_name,
       value,
-      unit) %>%
-    dplyr::filter(!is.na(taxon_id))
-  
-  
-
+      unit)
 
   table_observation_ancillary <- make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
-      "event_id",
-      "neon_event_id",
+      "observation_id",
       "pointID",
       "pointCountMinute",
       "targetTaxaPresent",
