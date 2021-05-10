@@ -36,6 +36,7 @@
 #' }
 #' 
 save_data <- function(data, path, file.type = ".rds", file.name = NULL) {
+  validate_arguments(fun.name = "save_data", fun.args = as.list(environment()))
   if (is.null(file.name)) {
     file.name <- deparse(substitute(data))
   }

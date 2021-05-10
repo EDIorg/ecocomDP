@@ -1,122 +1,67 @@
-#' Make the taxon ancillary table
+#' Create the taxon_ancillary table
 #'
-#' @param x
-#'     (data frame) The master data frame composed of all joined tables from the 
-#'     parent data package for which the core ecocomDP tables have been, 
-#'     created. This master data frame is linked to core tables via primary 
-#'     keys and has all ecocomDP column names added at this point, specifically
-#'     relevant to the location_ancillary table are the columns "taxon_id", 
-#'     and "author" ("datetime" will be automatically created from the 
-#'     observation table "observation_datetime" column). This funciton 
-#'     will not work otherwise.
-#' @param cols
-#'     (character) Names of all columns from \code{x} needed to create 
-#'     taxon_ancillary. This function assumes that all columns with names
-#'     corresponding to the ecocomDP location_ancillary table will be treated
-#'     as such. If any \code{cols} are shared between the parent tables (now
-#'     joined in the master data frame) and taxon_antillary, then there is
-#'     ambiguous meaning and this function will not work.
-#' @param eml
-#'     (xml_document xml_node) EML metadata listing units for variables listed 
-#'     in \code{cols}. Use \code{api_read_metadata()} or 
-#'     \code{xml2::read_xml()} to read the EML file.
+#' @param L0_wide (data.frame) The fully joined L0 dataset, in wide format.
+#' @param taxon_id (character) Column in \code{L0_wide} containing the identifier assigned to each unique organism at the observation level.
+#' @param datetime (character; optional) Column in \code{L0_wide} containing the date, and if applicable time, of ancillary taxon data following the ISO-8601 standard format (i.e. YYYY-MM-DD hh:mm:ss).
+#' @param variable_name (character) Columns in \code{L0_wide} containing the ancillary taxon data.
+#' @param unit (character; optional) Columns in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention <unit>_<variable_name> (e.g. "unit_average_length").
+#' @param author (character; optional) Column in \code{L0_wide} containing the author associated with identification of taxa listed in the taxon_name column of the taxon table.
+#' 
+#' @details This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column.
 #'
-#' @return 
-#'     (data frame) The taxon_ancillary table.
-#'     
-#' @details 
-#'     This is possible because at this point we can distinguish between 
-#'     standard column names and non-standard column names (variables).
-#'     
-#'     This function will fail to resolve units for a variable if the variable 
-#'     listed in \code{cols} has a duplicate listing in \code{eml}. In such
-#'     cases a warning is returned with the suggestion to remove duplicate 
-#'     variables from the EML when running this function.
-#'     
+#' @return (data.frame) The taxon_ancillary table of ecocomDP.
 #' @export
 #'
-create_taxon_ancillary <- function(x = NULL, cols = NULL, eml = NULL) {
+#' @examples
+#' 
+create_taxon_ancillary <- function(L0_wide, 
+                                   taxon_id = "taxon_id", 
+                                   datetime = "datetime", 
+                                   variable_name, 
+                                   unit = "unit", 
+                                   author = "author") {
+  message("Creating taxon_ancillary")
+  # TODO: validate_arguments()
+  # - cols exist in L0_wide for non-required cols
+  # - NULL optional cols if not in L0_wide
+  # - rename cols in L0_wide if not 1-to-1 match
+  # - check unit_variable_name convention
+  # - required cols vs optional cols
+  # - return
   
-  message('Creating taxon_ancillary')
-  
-  # Validate arguments --------------------------------------------------------
-  
-  if (is.null(x) | is.null(cols) | is.null(eml)) {
-    stop('"x", "cols", and "eml" are required', call. = FALSE)
+  # gather cols
+  cols_to_gather <- c(taxon_id, datetime, variable_name, author)
+  res <- L0_wide %>%
+    dplyr::select(all_of(cols_to_gather)) %>%
+    dplyr::mutate(across(variable_name, as.character)) %>% # ancillary table variable_name needs character coercion
+    tidyr::pivot_longer(variable_name, names_to = "variable_name", values_to = "value") %>%
+    dplyr::arrange(taxon_id)
+  # add units
+  if (!is.null(unit)) {
+    unit_map <- L0_wide %>% dplyr::select(unit) %>% na.omit()
+    unit_map <- data.frame(variable_name = colnames(unit_map),
+                           unit = as.character(unique.data.frame(unit_map)),
+                           stringsAsFactors = FALSE)
+    unit_map$variable_name <- stringr::str_remove_all(unit_map$variable_name, 
+                                                      "unit_")
+    res <- dplyr::left_join(res, unit_map, by = "variable_name")
   }
-  if (!is.data.frame(x)) {
-    stop('"x" must be a data frame', call. = FALSE)
+  # add missing cols
+  if (is.null(datetime)) {
+    res$datetime <- NA_character_
   }
-  if (!is.character(cols)) {
-    stop('"cols" must be character', call. = FALSE)
+  if (is.null(unit)) {
+    res$unit <- NA_character_
   }
-  if (!any(class(eml) %in% c("xml_document", "xml_node"))) {
-    stop('"cols" must be character', call. = FALSE)
+  if (is.null(author)) {
+    res$author <- NA_character_
   }
-  
-  # Parameterize --------------------------------------------------------------
-  
-  criteria <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
-  
-  # Make taxon_ancillary ---------------------------------------------------
-  
-  # Create data frame of select variables
-  d <- dplyr::select(x, cols)
-  
-  # Rename observation_datetime (a standard variable) if listed
-  d <- tryCatch(
-    dplyr::rename(d, datetime = observation_datetime),
-    error = function(cond) {d})
-  
-  # Now assume variables not belonging to ecocomDP are variables that need to 
-  # be gathered into long format.
-  variables_to_gather <- colnames(d)[
-    !(colnames(d) %in% criteria$column[
-      criteria$table %in% "taxon_ancillary"])]
-  d <- tidyr::gather(
-    d, "variable_name", "value", variables_to_gather)
-  
-  # Add missing taxon_ancillary columns and fill with NA
-  taxon_ancillary_columns <- criteria$column[
-    criteria$table %in% "taxon_ancillary"]
-  missing_columns <- na.omit(
-    taxon_ancillary_columns[!(taxon_ancillary_columns %in% colnames(d))])
-  d[, missing_columns] <- NA_character_
-  
-  # Match variables to units and list in the table. If more than one match 
-  # occurs (due to duplicate variable names in the EML) then a warning and 
-  # suggested course of action is returned.
-  attributes <- xml2::xml_find_all(eml, ".//attributeList/attribute")
-  attributeNames <- xml2::xml_text(
-    xml2::xml_find_all(eml, ".//attributeList/attribute/attributeName"))
-  for (col in variables_to_gather) {
-    if (all(is.na(d$unit[d$variable_name %in% col]))) {
-      # No units imported from the master table so look up in eml
-      unit <- xml2::xml_text(
-        xml2::xml_find_all(
-          attributes[attributeNames %in% col], ".//unit"))
-      if (length(unit) == 1) {
-        d$unit[d$variable_name %in% col] <- unit
-      } else if (length(unit) > 1) {
-        # unit may be ambiguous if col is listed more than once
-        warning(
-          "Variable ", col, " occurs more than once in the EML making a ",
-          "one-to-one match with the variables unit ambiguous. Remove ",
-          "duplicate variables from the EML when running this function.",
-          call. = FALSE)
-      }
-    }
-  }
-  
-  # Keep only unique rows, create the taxon_ancillary_id, and reorder 
-  # columns to finalize this table
-  d <- dplyr::distinct(d)
-  d$taxon_ancillary_id <- paste0('txan_', seq(nrow(d)))
-  d <- dplyr::select(
-    d, na.omit(criteria$column[criteria$table %in% "taxon_ancillary"]))
-  
-  # Return
-  d
-  
+  # keep only distinct values
+  res <- dplyr::distinct(res)
+  # add primary key
+  res$taxon_ancillary_id <- seq(nrow(res))
+  # reorder
+  res <- res %>%
+    dplyr::select(taxon_ancillary_id, taxon_id, datetime, variable_name, value, unit, author)
+  return(res)
 }

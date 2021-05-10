@@ -307,7 +307,7 @@ map_neon.ecocomdp.10022.001.002 <- function(
       neon_trap_id = trapID) %>%
     dplyr:: rename(
       observation_id = uid, 
-      observation_datetime = setDate, 
+      datetime = setDate, 
       taxon_id = taxonID,
       value = individualCount/trappingDays) %>%
     dplyr::mutate(
@@ -325,7 +325,7 @@ map_neon.ecocomdp.10022.001.002 <- function(
       event_id,
       package_id,
       location_id,
-      observation_datetime,
+      datetime,
       taxon_id,
       variable_name,
       value,
@@ -351,7 +351,7 @@ map_neon.ecocomdp.10022.001.002 <- function(
   # data summary ----
   # make dataset_summary -- required table
   
-  years_in_data <- table_observation$observation_datetime %>% lubridate::year()
+  years_in_data <- table_observation$datetime %>% lubridate::year()
   # years_in_data %>% ordered()
   
   table_dataset_summary <- data.frame(

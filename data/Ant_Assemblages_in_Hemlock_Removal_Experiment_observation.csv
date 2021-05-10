@@ -1,4 +1,4 @@
-observation_id,event_id,package_id,location_id,observation_datetime,taxon_id,variable_name,value,unit
+observation_id,event_id,package_id,location_id,datetime,taxon_id,variable_name,value,unit
 ob_1,ev_1,edi.193.1,lo_4,2003-01-06,tx_2,abundance,1,
 ob_2,ev_2,edi.193.1,lo_4,2003-01-06,tx_3,abundance,1,
 ob_3,ev_3,edi.193.1,lo_4,2003-01-06,tx_13,abundance,1,

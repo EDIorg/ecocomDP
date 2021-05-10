@@ -1,7 +1,7 @@
 #' Plot alpha diversity (taxa richness) over time and space
 #'
 #' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
-#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100% opaque
+#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100\% opaque
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -20,6 +20,7 @@ plot_alpha_diversity <- function(dataset, alpha = 1) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
     stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
   }
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(dataset)                    # intermediate format for plotting
   message("Plotting ", ds$id, " alpha diversity")
   # Calculate num unique taxa at each site through time and num unique taxa among all sites through time
@@ -68,7 +69,7 @@ plot_alpha_diversity <- function(dataset, alpha = 1) {
 #' Plot spatiotemporal sampling effort
 #'
 #' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
-#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100% opaque
+#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100\% opaque
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -87,6 +88,7 @@ plot_sampling_times <- function(dataset, alpha = 1) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
     stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
   }
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(dataset)                    # intermediate format for plotting
   message("Plotting ", ds$id, " spatiotemporal sampling effort")
   # Scale font size
@@ -122,7 +124,7 @@ plot_sampling_times <- function(dataset, alpha = 1) {
 #' Plot taxa accumulation curve over space
 #'
 #' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
-#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100% opaque
+#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100\% opaque
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -141,6 +143,7 @@ plot_taxa_accum_sites <- function(dataset, alpha = 1) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
     stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
   }
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(dataset)                    # intermediate format for plotting
   message("Plotting ", ds$id, " taxa accumulation over space")
   # Calculate cumulative number of taxa
@@ -187,7 +190,7 @@ plot_taxa_accum_sites <- function(dataset, alpha = 1) {
 #' Plot taxa accumulation curves over time (site-specific and total)
 #'
 #' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
-#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100% opaque
+#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100\% opaque
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -206,6 +209,7 @@ plot_taxa_accum_time <- function(dataset, alpha = 1) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
     stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
   }
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(dataset)                    # intermediate format for plotting
   message("Plotting ", ds$id, " taxa accumulation over time")
   # Calculate cumulative number of taxa 
@@ -286,6 +290,7 @@ plot_taxa_shared_sites <- function(dataset) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
     stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
   }
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(dataset)                    # intermediate format for plotting
   message("Plotting ", ds$id, " taxa shared among sites")
   heat_pal_spectral <- colorRampPalette(rev( RColorBrewer::brewer.pal(11, "Spectral")))
@@ -390,17 +395,17 @@ format_for_comm_plots <- function(dataset) {
   }
   
   # Use dates
-  if (is.character(observation$observation_datetime)) {
+  if (is.character(observation$datetime)) {
     warning("Input datetimes are character strings. Accuracy may be improved",
             " if inputs are parsed before calling plot_data().", call. = FALSE)
   }
-  observation$observation_datetime <- lubridate::date(observation$observation_datetime)
+  observation$datetime <- lubridate::date(observation$datetime)
   
   obs <- observation
   taxon_count <- data.frame(
     OBSERVATION_TYPE = "TAXON_COUNT",
     SITE_ID = obs$location_id,
-    DATE = obs$observation_datetime,
+    DATE = obs$datetime,
     VARIABLE_NAME = obs$taxon_id,
     VARIABLE_UNITS = obs$variable_name,
     VALUE = obs$value,

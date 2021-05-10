@@ -2,45 +2,42 @@
 % Please edit documentation in R/create_location.R
 \name{create_location}
 \alias{create_location}
-\title{Make the ecocomDP location table}
+\title{Create the location table}
 \usage{
-create_location(x, cols, kml = NULL, col = NULL, parent.package.id = NULL)
+create_location(
+  L0_wide,
+  location_id = "location_id",
+  latitude = "latitude",
+  longitude = "longitude",
+  elevation = "elevation",
+  location_nesting = NULL
+)
 }
 \arguments{
-\item{x}{(data frame) A data frame containing sampling location names (in 
-columns) for each observation (rows).}
+\item{L0_wide}{(data.frame) The fully joined L0 dataset, in wide format.}
 
-\item{cols}{(character) Columns in x containing sampling location data. The list 
-order should reflect the hierarchical arrangement of sampling locations.
-E.g.: If 'site' is the coarsest level of observation, 'habitat' is 
-nested within 'site', 'transect' is nested within 'habitat', and 
-'quadrat' is nested within 'transect' then the 'cols' argument should
-be supplied as: cols = c('site', 'habitat','transect', 'quadrat').}
+\item{location_id}{(character) Column in \code{L0_wide} containing the identifier assigned to each unique location at the observation level. Identifiers corresponding to higher location levels will be assigned by this function.}
 
-\item{kml}{A data object (simple feature collection) created with the `st_read``
-function of the `sf`` (simple features) R package. This data object
-contains a field called 'Name'. Values listed in this field must match
-the corresponding values listed in the data frame (x) and specified in
-'cols'.}
+\item{latitude}{(character; optional) Column in \code{L0_wide} containing the latitude in decimal degrees of \code{location_id}. Latitudes south of the equator are negative.}
 
-\item{col}{(character) The column name specified in the input argument 'cols' to 
-which the data in the kml object corresponds to. E.g., if the kml 
-corresponds with with the column named 'site' then enter 'site' for the 
-col argument.}
+\item{longitude}{(character; optional) Column in \code{L0_wide} containing the longitude in decimal degrees of \code{location_id}. Longitudes west of the prime meridian are negative.}
 
-\item{parent.package.id}{(character) Parent data package ID (e.g. "knb-lter-nin.9.1") from which 
-geographicCoverage will be extracted. Currently only works for EDI
-data.}
+\item{elevation}{(character; optional) Column in \code{L0_wide} containing the elevation in meters relative to sea level of \code{location_id}. Above sea level is positive. Below sea level is negative.}
+
+\item{location_nesting}{(character) Columns in \code{L0_wide} containing location names and listed from high to low. Example: \code{location_nesting = c("block", "plot", "subplot")}.}
 }
 \value{
-\item{location}{A data frame of the location table}
-\item{x}{The input data frame \code{x} but with an added location_id column.
-This simplifies alignment of values between \code{x} and location.}
+(data.frame) The location table of ecocomDP.
 }
 \description{
-Make the ecocomDP location table.
+Create the location table
+}
+\details{
+This function collects specified columns from \code{L0_wide}, creates data frames for each \code{location_nesting}, assigns \code{latitude}, \code{longitude}, and \code{elevation} to the lowest nesting level (i.e. the observation level) returning \code{NA} for higher levels (these will have to be filled manually afterwards), and determines the relationships between location_id and parent_location_id from \code{L0_wide} and \code{location_nesting}.
 }
 \note{
-The arguments 'kml' and 'col' only accept single inputs. I.e. does 
-    not support kml data for more than one col.
+Values in \code{location_nesting} columns of \code{L0_wide} should be modifed to provide both context and value before running this function. Not doing so may result in ambiguous location_name values in the resulting location table. Example: A column named "plot" with values "1", "2", "3", in \code{L0_wide} will be listed in the resulting location_name column as values "1", "2", "3" and there will be no way to discern these values correspond with "plot". A general fix is to modify values in the \code{location_nesting} columns of \code{L0_wide} with \code{paste0(column_name, "_", columun_value)}, which will return both the column context and value in the location_name column of the location table as  "plot_1", "plot_2", "plot_3".
+}
+\examples{
+
 }

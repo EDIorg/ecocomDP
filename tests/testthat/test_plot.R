@@ -16,6 +16,9 @@ testthat::test_that("Warns if datetimes are chars", {
 
 testthat::test_that("Warns if duplicate observations", {
   d <- read_example_dataset()
+  d[[1]]$tables$observation <- rbind(
+    d[[1]]$tables$observation,
+    d[[1]]$tables$observation[1, ])
   id <- names(d)
   expect_warning(
     format_for_comm_plots(d),
@@ -33,6 +36,6 @@ testthat::test_that("Warns if > 1 measurement variable", {
   id <- names(d)
   expect_warning(
     format_for_comm_plots(d),
-    regexp = "duplicate observations. Consider aggregating")
+    regexp = "can only handle one. Consider splitting this dataset")
 })
 

@@ -146,7 +146,7 @@ map_neon.ecocomdp.20166.001.001 <- function(
       neon_sample_id = sampleID,
       neon_event_id = eventID,
       location_id = namedLocation,
-      observation_datetime = collectDate,
+      datetime = collectDate,
       taxon_id = acceptedTaxonID,
       variable_name = algalParameter,
       value = density,
@@ -163,7 +163,7 @@ map_neon.ecocomdp.20166.001.001 <- function(
       event_id,
       package_id,
       location_id,
-      observation_datetime,
+      datetime,
       taxon_id,
       variable_name,
       value,
@@ -252,7 +252,7 @@ map_neon.ecocomdp.20166.001.001 <- function(
   
   
   # make dataset_summary -- required table
-  years_in_data <- table_observation$observation_datetime %>% lubridate::year()
+  years_in_data <- table_observation$datetime %>% lubridate::year()
   # years_in_data %>% ordered()
   
  

@@ -1,31 +1,22 @@
-#' Make variable_mapping table
+#' Create the variable_mapping table
 #'
-#' @description  
-#'     Make a data frame of the variable mapping table.
+#' @param observation (data.frame) The observation table.
+#' @param observation_ancillary (data.frame; optional) The observation_ancillary table.
+#' @param location_ancillary (data.frame; optional) The location_ancillary table.
+#' @param taxon_ancillary (data.frame; optional) The taxon_ancillary table.
+#' 
+#' @details This function collects specified data tables, extracts unique variable_name values from each, converts into long (attribute-value) form with the table name and variable_name values to the resulting table's "table_name" and "variable_name" columns, respectively. The resulting table's "mapped_system", "mapped_id", and "mapped_label" are filled with \code{NA} and are to be manually filled.
 #'
-#' @param observation
-#'     (data frame) The completed observation table.
-#' @param observation_ancillary
-#'     (data frame) The completed observation_ancillary table.
-#' @param location_ancillary
-#'     (data frame) The completed location_ancillary table.
-#' @param taxon_ancillary
-#'     (data frame) The completed taxon_ancillary table.
-#'
-#' @return 
-#'     A data frame of the variable_mapping with completed columns:
-#'     \itemize{
-#'         \item{variable_mapping_id}
-#'         \item{table_name}
-#'         \item{variable_name}
-#'     }
-#'     Other columns are filled with NA.
-#'     
+#' @return (data.frame) The variable_mapping table of ecocomDP.
+#' 
 #' @export
+#' 
+#' @examples 
 #'
-
-create_variable_mapping <- function(observation, observation_ancillary = NULL, 
-                                  location_ancillary = NULL, taxon_ancillary = NULL){
+create_variable_mapping <- function(observation, 
+                                    observation_ancillary = NULL, 
+                                    location_ancillary = NULL, 
+                                    taxon_ancillary = NULL) {
   
   message("Creating variable_mapping")
   
@@ -84,10 +75,7 @@ create_variable_mapping <- function(observation, observation_ancillary = NULL,
   
   # Add content
   
-  variable_mapping$variable_mapping_id <- paste0(
-    'vama_',
-    seq(length(vars))
-    )
+  variable_mapping$variable_mapping_id <- seq(length(vars))
   
   variable_mapping$table_name <- tbls
   
@@ -95,7 +83,7 @@ create_variable_mapping <- function(observation, observation_ancillary = NULL,
   
   # Return --------------------------------------------------------------------
   
-  variable_mapping
+  return(variable_mapping)
   
   
 }

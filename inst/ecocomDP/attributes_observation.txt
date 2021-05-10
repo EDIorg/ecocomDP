@@ -3,7 +3,7 @@ observation_id	A unique ID for this record.	character			NA	Not available
 event_id	"The ID of the sampling event. References the event_id field of the observation_ancillary table, if this table exists."	character			NA	Not available
 package_id	The ID of this data package. References the package_id field of the dataset_summary table.	character			NA	Not available
 location_id	A reference to a location. References the location_id field of the location table.	character			NA	Not available
-observation_datetime	Date and time of the observation.	Date			NA	Not available
+datetime	Date and time of the observation.	Date			NA	Not available
 taxon_id	The taxon ID. References the taxon_id field of the taxon table.	character			NA	Not available
 variable_name	Name of the measured variable.	categorical			NA	Not available
 value	Value of the measured variable.	numeric	dimensionless		NA	Not available

@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_variable_mapping.R
 \name{create_variable_mapping}
 \alias{create_variable_mapping}
-\title{Make variable_mapping table}
+\title{Create the variable_mapping table}
 \usage{
 create_variable_mapping(
   observation,
@@ -12,23 +12,23 @@ create_variable_mapping(
 )
 }
 \arguments{
-\item{observation}{(data frame) The completed observation table.}
+\item{observation}{(data.frame) The observation table.}
 
-\item{observation_ancillary}{(data frame) The completed observation_ancillary table.}
+\item{observation_ancillary}{(data.frame; optional) The observation_ancillary table.}
 
-\item{location_ancillary}{(data frame) The completed location_ancillary table.}
+\item{location_ancillary}{(data.frame; optional) The location_ancillary table.}
 
-\item{taxon_ancillary}{(data frame) The completed taxon_ancillary table.}
+\item{taxon_ancillary}{(data.frame; optional) The taxon_ancillary table.}
 }
 \value{
-A data frame of the variable_mapping with completed columns:
-    \itemize{
-        \item{variable_mapping_id}
-        \item{table_name}
-        \item{variable_name}
-    }
-    Other columns are filled with NA.
+(data.frame) The variable_mapping table of ecocomDP.
 }
 \description{
-Make a data frame of the variable mapping table.
+Create the variable_mapping table
+}
+\details{
+This function collects specified data tables, extracts unique variable_name values from each, converts into long (attribute-value) form with the table name and variable_name values to the resulting table's "table_name" and "variable_name" columns, respectively. The resulting table's "mapped_system", "mapped_id", and "mapped_label" are filled with \code{NA} and are to be manually filled.
+}
+\examples{
+
 }

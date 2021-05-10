@@ -2,43 +2,39 @@
 % Please edit documentation in R/create_taxon_ancillary.R
 \name{create_taxon_ancillary}
 \alias{create_taxon_ancillary}
-\title{Make the taxon ancillary table}
+\title{Create the taxon_ancillary table}
 \usage{
-create_taxon_ancillary(x = NULL, cols = NULL, eml = NULL)
+create_taxon_ancillary(
+  L0_wide,
+  taxon_id = "taxon_id",
+  datetime = "datetime",
+  variable_name,
+  unit = "unit",
+  author = "author"
+)
 }
 \arguments{
-\item{x}{(data frame) The master data frame composed of all joined tables from the 
-parent data package for which the core ecocomDP tables have been, 
-created. This master data frame is linked to core tables via primary 
-keys and has all ecocomDP column names added at this point, specifically
-relevant to the location_ancillary table are the columns "taxon_id", 
-and "author" ("datetime" will be automatically created from the 
-observation table "observation_datetime" column). This funciton 
-will not work otherwise.}
+\item{L0_wide}{(data.frame) The fully joined L0 dataset, in wide format.}
 
-\item{cols}{(character) Names of all columns from \code{x} needed to create 
-taxon_ancillary. This function assumes that all columns with names
-corresponding to the ecocomDP location_ancillary table will be treated
-as such. If any \code{cols} are shared between the parent tables (now
-joined in the master data frame) and taxon_antillary, then there is
-ambiguous meaning and this function will not work.}
+\item{taxon_id}{(character) Column in \code{L0_wide} containing the identifier assigned to each unique organism at the observation level.}
 
-\item{eml}{(xml_document xml_node) EML metadata listing units for variables listed 
-in \code{cols}. Use \code{api_read_metadata()} or 
-\code{xml2::read_xml()} to read the EML file.}
+\item{datetime}{(character; optional) Column in \code{L0_wide} containing the date, and if applicable time, of ancillary taxon data following the ISO-8601 standard format (i.e. YYYY-MM-DD hh:mm:ss).}
+
+\item{variable_name}{(character) Columns in \code{L0_wide} containing the ancillary taxon data.}
+
+\item{unit}{(character; optional) Columns in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention <unit>_<variable_name> (e.g. "unit_average_length").}
+
+\item{author}{(character; optional) Column in \code{L0_wide} containing the author associated with identification of taxa listed in the taxon_name column of the taxon table.}
 }
 \value{
-(data frame) The taxon_ancillary table.
+(data.frame) The taxon_ancillary table of ecocomDP.
 }
 \description{
-Make the taxon ancillary table
+Create the taxon_ancillary table
 }
 \details{
-This is possible because at this point we can distinguish between 
-    standard column names and non-standard column names (variables).
-    
-    This function will fail to resolve units for a variable if the variable 
-    listed in \code{cols} has a duplicate listing in \code{eml}. In such
-    cases a warning is returned with the suggestion to remove duplicate 
-    variables from the EML when running this function.
+This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column.
+}
+\examples{
+
 }
