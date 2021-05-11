@@ -191,6 +191,7 @@ map_neon.ecocomdp.10022.001.001 <- function(
   
 
   table_observation_raw <- beetles_counts %>%
+    dplyr::distinct() %>%
     dplyr::rename(
       location_id = namedLocation,
       abundance = count,
@@ -208,10 +209,11 @@ map_neon.ecocomdp.10022.001.001 <- function(
       event_id = sampleID
       # event_id = paste0(location_id, "_", trapID, "_", gsub("^(?i)[a-z]{4}_","",boutID)) #this is same as 'sampleID'
       ) %>%
-    dplyr::ungroup() %>%
-    dplyr::distinct()
+    dplyr::ungroup()
   
-
+  
+  
+  
   table_observation <- table_observation_raw %>% 
     dplyr::select(observation_id,
                   event_id,
