@@ -199,13 +199,15 @@ map_neon.ecocomdp.10022.001.001 <- function(
     dplyr::mutate(
       package_id = my_package_id, 
       observation_id = paste0("obs_",1:nrow(.)),
-      event_id = observation_id,
+      # event_id = observation_id,
       variable_name = "abundance",
       value = abundance/trappingDays,
       unit = "count per trap day") %>%
     dplyr::rowwise() %>%
     dplyr::mutate(
-      neon_event_id = paste0(location_id, "_", trapID, "_", gsub("^(?i)[a-z]{4}_","",boutID))) %>%
+      event_id = sampleID
+      # event_id = paste0(location_id, "_", trapID, "_", gsub("^(?i)[a-z]{4}_","",boutID)) #this is same as 'sampleID'
+      ) %>%
     dplyr::ungroup() %>%
     dplyr::distinct()
   
@@ -228,8 +230,8 @@ map_neon.ecocomdp.10022.001.001 <- function(
   table_observation_ancillary <- make_neon_ancillary_observation_table(
     obs_wide = table_observation_raw,
     ancillary_var_names = c(
-      "event_id",
-      "neon_event_id",
+      "observation_id",
+      # "neon_event_id",
       "sampleID",
       "boutID",
       "trapID",

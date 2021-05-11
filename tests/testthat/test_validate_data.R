@@ -125,7 +125,13 @@ testthat::test_that("validate_column_presence()", {
 # validate_datetime() ---------------------------------------------------------
 
 testthat::test_that("validate_datetime()", {
+<<<<<<< HEAD:tests/testthat/test_validate_data.R
+  
   d <- test_data[[1]]$tables
+  
+=======
+  d <- test_data[[1]]$tables
+>>>>>>> 389f00c6a1347065fe94bf2fa8d57ce5f03736fe:tests/testthat/test_validate_data.R
   # Return message when datetime formats are valid.
   expect_null(validate_datetime(d))
   # Return character string when datetime formats are invalid.
@@ -232,7 +238,13 @@ testthat::test_that("validate_composite_keys()", {
 # validate_referential_integrity() --------------------------------------------
 
 testthat::test_that("validate_referential_integrity()", {
+<<<<<<< HEAD:tests/testthat/test_validate_data.R
+  
   d <- test_data[[1]]$tables
+  
+=======
+  d <- test_data[[1]]$tables
+>>>>>>> 389f00c6a1347065fe94bf2fa8d57ce5f03736fe:tests/testthat/test_validate_data.R
   # Valid referential integrity results in message.
   expect_null(validate_referential_integrity(d))
   # Invalid referential integrity results in character string.
@@ -368,7 +380,10 @@ testthat::test_that("validate_data", {
   # Create issue for validate_column_presence()
   d[[1]]$tables$taxon$taxon_name <- NULL
   # Create issue for validate_datetime()
+<<<<<<< HEAD:tests/testthat/test_validate_data.R
+=======
   d[[1]]$tables$location_ancillary$datetime <- as.character(d[[1]]$tables$location_ancillary$datetime)
+>>>>>>> 389f00c6a1347065fe94bf2fa8d57ce5f03736fe:tests/testthat/test_validate_data.R
   d[[1]]$tables$location_ancillary$datetime[1] <- "08/22/2020"
   # Create issue for validate_column_classes()
   d[[1]]$tables$location$latitude <- as.character(d[[1]]$tables$location$latitude)

@@ -61,20 +61,30 @@ flatten_data <- function(data.list){
   
   # merge all_merged with observation_ancillary
   if("observation_ancillary" %in% names(data.list)){
-    observation_ancillary_long <- data.list$observation_ancillary 
     
-    observation_ancillary_long_wide <- observation_ancillary_long[
-      ,!names(observation_ancillary_long) %in% c("observation_ancillary_id","unit")] %>%
-      tidyr::pivot_wider(
-        names_from = variable_name, 
-        values_from = value,
-        values_fn = dup_fxn) %>%
-      dplyr::select_if(not_all_NAs)
+    #handle missing observation_id or case where all observation_id is na
+    if(!"observation_id" %in% names(data.list$observation_ancillary) || 
+       all(is.na(data.list$observation_ancillary$observation_id)) ){
+      warning("'observation_id' is missing from the observation_ancillary table")
     
-    all_merged <- all_merged %>%
-      dplyr::left_join(observation_ancillary_long_wide, 
-                       by = "event_id",
-                       suffix = c("", "_observation_ancillary"))
+    #the expected case:
+    }else{
+      
+      observation_ancillary_long <- data.list$observation_ancillary 
+      
+      observation_ancillary_long_wide <- observation_ancillary_long[
+        ,!names(observation_ancillary_long) %in% c("observation_ancillary_id","unit")] %>%
+        tidyr::pivot_wider(
+          names_from = variable_name, 
+          values_from = value,
+          values_fn = dup_fxn) %>%
+        dplyr::select_if(not_all_NAs)
+      
+      all_merged <- all_merged %>%
+        dplyr::left_join(observation_ancillary_long_wide, 
+                         by = "observation_id",
+                         suffix = c("", "_observation_ancillary"))
+    }
   }
   
   
