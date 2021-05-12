@@ -85,10 +85,77 @@ create_dataset_summary <- function(L0_wide,
 #' 
 #' }
 #'
-calculate_geo_extent_bounding_box_m2 <- function(
+calc_geo_extent_bounding_box_m2 <- function(
   lon_west, lon_east, lat_north, lat_south) {
   df <- data.frame(
     longitude = c(lon_west, lon_east, lon_east, lon_west),
     latitude = c(lat_north, lat_north, lat_south, lat_south))
   geosphere::areaPolygon(df)
+}
+
+
+
+
+
+
+
+
+#' Calculate length_of_survey_years of the dataset_summary table
+#'
+#' @param dates (Date) A vector of dates
+#'
+#' @return (numeric) Number of years the study has been ongoing
+#' @export
+#'
+#' @examples
+#' 
+calc_length_of_survey_years <- function(dates) {
+  res <- round(
+    lubridate::time_length(
+      lubridate::interval(min(dates), max(dates)),
+      unit = 'year'))
+  return(res)
+}
+
+
+
+
+
+
+
+
+#' Calculate number_of_years_sampled of the dataset_summary table
+#'
+#' @param dates (Date) A vector of dates
+#'
+#' @return (numeric) Number of survey years
+#' @export
+#'
+#' @examples
+#' 
+calc_number_of_years_sampled <- function(dates) {
+  years_sampled <- na.omit(unique(lubridate::year(dates)))
+  res <- length(years_sampled)
+  return(res)
+}
+
+
+
+
+
+
+
+
+#' Calculate std_dev_interval_betw_years of the dataset_summary table
+#'
+#' @param dates (Date) A vector of dates
+#'
+#' @return (numeric) Number of survey years
+#' @export
+#'
+#' @examples
+#' 
+calc_std_dev_interval_betw_years <- function(dates) {
+  res <- round(sd(diff(unique(lubridate::date(dates)))/365), 2)
+  return(res)
 }
