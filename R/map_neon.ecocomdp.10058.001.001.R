@@ -152,9 +152,7 @@ map_neon.ecocomdp.10058.001.001 <- function(
   my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
   
   table_observation_wide_all <- data_plant %>%
-    # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation) %>%
-    # package id
     dplyr::mutate(
       package_id = my_package_id) %>%
     dplyr:: rename(
@@ -164,8 +162,8 @@ map_neon.ecocomdp.10058.001.001 <- function(
       value = percentCover) %>%
     dplyr::rowwise() %>%
     dplyr::mutate(
-      event_id = observation_id,
-      neon_event_id = paste0(location_id,"_",subplot_id,"_",year,"-",boutNumber),
+      # neon_event_id = paste0(location_id,"_",subplot_id,"_",year,"-",boutNumber),
+      event_id = paste0(location_id,"_",subplot_id,"_",year,"-",boutNumber),
       variable_name = "percent cover",
       unit = "percent of plot area covered by taxon",
       presence_absence = 1) %>%
@@ -194,8 +192,8 @@ map_neon.ecocomdp.10058.001.001 <- function(
   table_observation_ancillary <- make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
-      "event_id",
-      "neon_event_id",
+      "observation_id",
+      # "neon_event_id",
       "subplotID", 
       "boutNumber",
       # "subplot_id",

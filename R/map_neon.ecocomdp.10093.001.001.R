@@ -595,6 +595,9 @@ map_neon.ecocomdp.10093.001.001 <- function(
   my_package_id <- paste0(
     neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
   
+  
+  
+  
   table_observation_all <- data_tick %>%
     dplyr::filter(!is.na(totalSampledArea) && totalSampledArea > 0) %>%
     dplyr::distinct() %>%
@@ -609,11 +612,16 @@ map_neon.ecocomdp.10093.001.001 <- function(
       taxon_id = taxonID) %>%
     dplyr::mutate(
       observation_id = paste0("obs_",1:nrow(.)), 
-      event_id = observation_id,
-      neon_sample_id = sampleID,
+      # event_id = observation_id,
+      event_id = paste0(plotID, "_", datetime), #equal to sampleID, but there are NAs for sampleIDs in the data
       variable_name = "abundance",
       value = IndividualCount/totalSampledArea,
       unit = "count per square meter") 
+  
+  
+  
+
+  
   
   table_observation <- table_observation_all %>%
     dplyr::select(
@@ -634,9 +642,9 @@ map_neon.ecocomdp.10093.001.001 <- function(
   table_observation_ancillary <- make_neon_ancillary_observation_table(
     obs_wide = table_observation_all,
     ancillary_var_names = c(
-      "event_id",
+      "observation_id",
       "neon_event_id",
-      "neon_sample_id",
+      # "sampleID",
       "LifeStage",
       "samplingMethod",
       "totalSampledArea",

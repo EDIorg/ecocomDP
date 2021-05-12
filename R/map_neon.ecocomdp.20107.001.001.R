@@ -298,9 +298,9 @@ map_neon.ecocomdp.20107.001.001 <- function(
       value = catch_per_effort) %>%
     dplyr::mutate(
       observation_id = paste0("obs_",1:nrow(.)), 
-      # event_id = eventID,
-      event_id = observation_id,
-      neon_event_id = eventID,
+      event_id = eventID,
+      # event_id = observation_id,
+      # neon_event_id = eventID,
       variable_name = "abundance",
       unit = "catch per unit effort") 
   
@@ -327,8 +327,8 @@ map_neon.ecocomdp.20107.001.001 <- function(
   table_observation_ancillary <- make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
-      "event_id",
-      "neon_event_id",
+      "observation_id",
+      # "neon_event_id",
       "reachID",
       "samplerType",
       "habitatType",

@@ -109,7 +109,6 @@ map_neon.ecocomdp.20120.001.001 <- function(
     
     # remove rows with duplicate information
     dplyr::distinct() %>%
-    
     # rename some columns
     dplyr::rename(taxon_id = acceptedTaxonID,
            taxon_rank = taxonRank,
@@ -137,38 +136,50 @@ map_neon.ecocomdp.20120.001.001 <- function(
   table_observation_raw <- inv_taxonomyProcessed %>% 
     dplyr::filter(targetTaxaPresent == "Y") %>%
     dplyr::distinct() %>% 
-    
+    # add counts for taxa (e.g., different size classes) in same sample together
+    dplyr::group_by(sampleID, acceptedTaxonID, scientificName, taxonRank, ) %>%
+    dplyr::summarize(
+      estimatedTotalCount = sum(estimatedTotalCount, na.rm = TRUE),
+      individualCount = sum(individualCount),
+      subsamplePercent = subsamplePercent %>% unique() %>% paste(collapse = "|"),
+      identificationReferences = identificationReferences %>% unique() %>% paste(collapse = "|"),
+      laboratoryName = laboratoryName %>% unique() %>% paste(collapse = "|"),
+      publicationDate = publicationDate %>% unique() %>% paste(collapse = "|"),
+      release = release %>% unique() %>% paste(collapse = "|")
+    ) %>%
     # Join the columns selected above with two columns from inv_fielddata (the two columns are sampleID and benthicArea)
     dplyr::left_join(
       inv_fielddata %>% 
         dplyr::select(
           sampleID, benthicArea,
+          collectDate,
+          namedLocation,
           eventID, habitatType,
           samplerType, substratumSizeClass,
           ponarDepth, snagLength, snagDiameter,
           remarks)) %>%
-    
     # some new columns called 'variable_name', 'value', and 'unit', and assign values for all rows in the table.
     # variable_name and unit are both assigned the same text strint for all rows. 
-    dplyr::mutate(                  
+    dplyr::ungroup() %>%
+    dplyr::mutate(         
+      observation_id = paste0("obs_",1:nrow(.)),
       neon_sample_id = sampleID,
       variable_name = 'density',
       value = estimatedTotalCount / benthicArea,
       unit = 'count per square meter') %>% 
-    
     # rename some columns
     dplyr::rename(
-      observation_id = uid,
       event_id = sampleID,
       neon_event_id = eventID,
       datetime = collectDate,
       taxon_id = acceptedTaxonID) %>%
-    
     # make a new column called package_id, assign it NA for all rows
     dplyr::mutate(package_id = my_package_id) %>% 
     dplyr::left_join(table_location, by = c("namedLocation" = "location_name"))
   
   
+  
+
     
   table_observation <- table_observation_raw %>%
     dplyr::select(observation_id, 
@@ -191,15 +202,17 @@ map_neon.ecocomdp.20120.001.001 <- function(
   table_observation_ancillary <- make_neon_ancillary_observation_table(
     obs_wide = table_observation_raw,
     ancillary_var_names = c(
-      "event_id",
-      "neon_sample_id",
-      # "neon_event_id",
+      "observation_id",
+      "sampleID",
+      "neon_event_id",
+      "individualCount",
       "subsamplePercent",
-      "laboratoryName",
+      "estimatedTotalCount",
       "benthicArea",
       "habitatType",
       "samplerType", "substratumSizeClass",
       "ponarDepth", "snagLength", "snagDiameter",
+      "laboratoryName",
       "remarks",
       "release",
       "publicationDate"))
