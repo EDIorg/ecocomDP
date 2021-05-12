@@ -118,7 +118,7 @@ map_neon.ecocomdp.20166.001.001 <- function(
     dplyr::distinct()
   
   
- 
+
   # create the observation table by joining with field_data_in
   table_observation_raw <- alg_tax_biomass %>% 
     dplyr::left_join(field_data_in, by = "parentSampleID") %>%
@@ -134,7 +134,7 @@ map_neon.ecocomdp.20166.001.001 <- function(
     dplyr::filter(sampleCondition == "Condition OK")
 
   
-  
+
   my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
   
   # rename fields for ecocomDP
@@ -154,6 +154,7 @@ map_neon.ecocomdp.20166.001.001 <- function(
     dplyr::mutate(
       event_id = neon_sample_id
     )
+
   
 
   # make observation table
@@ -181,9 +182,9 @@ map_neon.ecocomdp.20166.001.001 <- function(
   table_observation_ancillary <- make_neon_ancillary_observation_table(
     obs_wide = table_observation_ecocomDP,
     ancillary_var_names = c(
-      "event_id",
+      "observation_id",
       "neon_sample_id",
-      # "neon_event_id",
+      "neon_event_id",
       "parentSampleID",
       "sampleCondition",
       "laboratoryName",

@@ -202,7 +202,7 @@ map_neon.ecocomdp.10092.001.001 <- function(
     dplyr::mutate(
       package_id = my_package_id,
       event_id = paste0(namedLocation,"_",collectDate),
-      neon_event_id = event_id,
+      # neon_event_id = event_id,
       pos_result_count = dplyr::case_when(
         testResult == "Positive" ~ 1,
         TRUE ~ 0),
@@ -236,13 +236,14 @@ map_neon.ecocomdp.10092.001.001 <- function(
 
   
 
-  
+
   table_observation_aggregate <- table_observation_all[,names_2_keep] %>%
     dplyr::group_by(event_id, taxon_id) %>%
     dplyr::summarize(
       n_tests = length(pos_result_count),
-      n_positive_tests = sum(pos_result_count),
-      value = pos_result_count/n_tests) %>% 
+      n_positive_tests = sum(pos_result_count)) %>%
+    dplyr::mutate(
+      value = n_positive_tests/n_tests) %>% 
     dplyr::distinct() %>%
     dplyr::ungroup() %>%
     dplyr::mutate(
@@ -252,6 +253,8 @@ map_neon.ecocomdp.10092.001.001 <- function(
     ) %>%
     dplyr::left_join(event_data,.) %>%
     dplyr::distinct()
+
+  
 
   
   table_observation <- table_observation_aggregate %>%
@@ -273,9 +276,9 @@ map_neon.ecocomdp.10092.001.001 <- function(
 
   
   table_observation_ancillary <- make_neon_ancillary_observation_table(
-    obs_wide = event_data,
+    obs_wide = table_observation_aggregate,
     ancillary_var_names = c(
-      "event_id",
+      "observation_id",
       # "neon_event_id",
       "n_tests",
       "n_positive_tests",

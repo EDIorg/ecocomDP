@@ -273,7 +273,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
       publicationDate = publicationDate.x) %>%
     dplyr::mutate(
       package_id = my_package_id,
-      event_id = observation_id) %>%
+      event_id = sampleID) %>%
     dplyr::filter(!is.na(taxon_id))
   
   
@@ -295,7 +295,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
   table_observation_ancillary <- make_neon_ancillary_observation_table(
     obs_wide = table_observation_raw,
     ancillary_var_names = c(
-      "event_id",
+      "observation_id",
       "neon_event_id",
       "sortDate",
       "sampleID",
