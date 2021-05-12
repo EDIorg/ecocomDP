@@ -173,96 +173,9 @@ EAL_template_arguments <- function(
     }
     
     read_txt <- function(f) {
-      if (tools::file_ext(f) == "txt") {
-        # .txt is not well supported by EML::set_TextType(). Reading the .txt
-        # file as character strings and parsing to paragraphs works better.
-        para <- as.list(
-          unlist(
-            stringr::str_split(
-              data.table::fread(f), 
-              pattern = "(\r\r)|(\n\n)|(\r\n\r\n)")))
-      } else if (tools::file_ext(f) == "md") {
-        # TODO: Update this section when the EML R library has better support 
-        # for markdown
-        if (stringr::str_detect(
-          basename(f), 
-          paste(
-            attr_tmp$regexpr[
-              (attr_tmp$type == "text") & (attr_tmp$template_name == "methods")],
-            collapse = "|"))) {
-          txt <- EML::set_methods(f)
-          txt <- list(
-            methodStep = list(
-              description = txt$methodStep$description))
-          return(txt)
-        } else {
-          para <- as.list(
-            unlist(
-              stringr::str_split(
-                data.table::fread(f),
-                pattern = "(\r\r)|(\n\n)|(\r\n\r\n)")))
-        }
-      } else if (tools::file_ext(f) == "docx") {
-        # .docx is not well supported by EML::set_TextType() but a 
-        # refactoring of some of this funcions underlying code improves 
-        # performance.
-        docbook <- to_docbook(f)
-        use_i <- stringr::str_detect(
-          xml2::xml_name(xml2::xml_children(docbook)), 
-          "sect")
-        if (any(use_i)) {
-          # To simplify parsing, if <section> is present then section titles 
-          # and children <para> will be flattened into <para>
-          xpath <- paste0(
-            "/article/", 
-            unique(xml2::xml_name(xml2::xml_children(docbook))[use_i]))
-          xml <- xml2::xml_new_root("article")
-          xml2::xml_add_child(xml, "title")
-          lapply(
-            xml2::xml_find_all(docbook, xpath),
-            function(m) {
-              lapply(
-                xml2::xml_children(m),
-                function(n) {
-                  xml2::xml_set_name(n, "para")
-                  xml2::xml_add_child(xml, n)
-                })
-            })
-          para <- emld::as_emld(xml)$para
-        } else {
-          para <- emld::as_emld(to_docbook(f))$para
-        }
-      }
-      # Adjust outputs to match unique structure of abstract, additional_info, 
-      # intellectual_rights, and methods nodes. Use default EML::set_TextType() 
-      # output when NULL otherwise an asynchronous process will occur between 
-      # between "templates" and "tfound" objects.
-      if (stringr::str_detect(
-        basename(f), 
-        paste(
-          attr_tmp$regexpr[
-            (attr_tmp$type == "text") & (attr_tmp$template_name == "methods")],
-          collapse = "|"))) {
-        if (is.null(para)) {
-          txt <- EML::set_methods(f)
-        } else {
-          txt <- list(
-            methodStep = list(
-              description = list(
-                para = para)))
-        }
-      } else {
-        if (is.null(para)) {
-          txt <- EML::set_TextType(f)
-        } else {
-          txt <- list(
-            section = list(),
-            para = para)
-        }
-      }
+      txt <- EML::set_TextType(f)
       txt
     }
-    
     # Loop through each metadata template found at path
     
     tfound <- names(templates)
@@ -515,4 +428,20 @@ to_docbook <- function(file = NULL) {
   ## Unlike EML, treat this as literal!
   xml2::xml_ns_strip(docbook)
   docbook
+}
+
+
+
+
+
+
+
+
+read_template_attributes <- function() {
+  data.table::fread(
+    system.file(
+      '/template_characteristics.txt',
+      package = 'ecocomDP'), 
+    fill = TRUE,
+    blank.lines.skip = TRUE)
 }

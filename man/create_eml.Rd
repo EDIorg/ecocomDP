@@ -115,6 +115,8 @@ This function creates an EML record for an Ecological Community Data
         \code{script} and \code{script.description} arguments. Any other
         entities listed in the parent EML are removed.
     }
+    
+    CURRENTLY ONLY WORKS FOR EDI DATA REPOSITORY
 }
 \examples{
 \dontrun{

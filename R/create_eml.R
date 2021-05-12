@@ -95,6 +95,8 @@
 #'         \code{script} and \code{script.description} arguments. Any other
 #'         entities listed in the parent EML are removed.
 #'     }
+#'     
+#'     CURRENTLY ONLY WORKS FOR EDI DATA REPOSITORY
 #'
 #' @export
 #' 
@@ -251,27 +253,27 @@ create_eml <- function(path,
     }
   }
   
-  if (is.null(cat.vars)) {
-    stop(
-      call. = FALSE,
-      paste(
-        "Input argument 'cat.vars' is missing. Create this input using the",
-        "function 'define_variables()'."
-      )
-    )
-  }
+  # if (is.null(cat.vars)) {
+  #   stop(
+  #     call. = FALSE,
+  #     paste(
+  #       "Input argument 'cat.vars' is missing. Create this input using the",
+  #       "function 'define_variables()'."
+  #     )
+  #   )
+  # }
 
-  if (!all(c("tableName", "attributeName", "code", "definition", "unit") %in%
-      names(cat.vars))) {
-    stop(
-      call. = FALSE,
-      paste(
-        "Input argument 'cat.vars' is missing required columns. Required",
-        "columns are: 'tableName', 'attributeName', 'code', 'definition',",
-        "'unit'."
-      )
-    )
-  }
+  # if (!all(c("tableName", "attributeName", "code", "definition", "unit") %in%
+  #     names(cat.vars))) {
+  #   stop(
+  #     call. = FALSE,
+  #     paste(
+  #       "Input argument 'cat.vars' is missing required columns. Required",
+  #       "columns are: 'tableName', 'attributeName', 'code', 'definition',",
+  #       "'unit'."
+  #     )
+  #   )
+  # }
 
   if (missing(contact)) {
     stop(
@@ -538,19 +540,26 @@ create_eml <- function(path,
     }
   }
   
-  # Create categorical variables templates from input "cat.vars" and add to
-  # the list of inputs to EAL_make_eml()
+  # Get table attributes and definitions from EML then create catvars templates for each data table of this dataset
+  defs <- get_attr_defs(xml_L0)
   
   r <- lapply(
-    unique(cat.vars$tableName),
-    function(table) {
-      categorical_variables_template <- dplyr::select(
-        dplyr::filter(cat.vars, tableName == table),
-        attributeName, code, definition)
-      return(list(content = categorical_variables_template))
+    names(eal_inputs$x$data.table),
+    function(tbl) {
+      has_varname <- "variable_name" %in% colnames(eal_inputs$x$data.table[[tbl]]$content)
+      if (has_varname) {
+        univars <- unique(eal_inputs$x$data.table[[tbl]]$content$variable_name)
+        unidefs <- unname(defs[names(defs) %in% univars])
+        catvars_template <- data.frame(
+          attributeName = "variable_name",
+          code = univars,
+          definition = unidefs,
+          stringsAsFactors = FALSE)
+        return(list(content = catvars_template))
+      }
     })
-  
-  names(r) <- paste0("catvars_", unique(cat.vars$tableName), ".txt")
+  names(r) <- paste0("catvars_", names(eal_inputs$x$data.table), ".txt")
+  r <- Filter(Negate(is.null), r)
   eal_inputs$x$template <- c(eal_inputs$x$template, r)
 
   # Create the taxonomic_coverage template used by EAL_make_eml()
