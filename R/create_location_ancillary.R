@@ -17,7 +17,7 @@ create_location_ancillary <- function(L0_wide,
                                       location_id = "location_id", 
                                       datetime = "datetime", 
                                       variable_name, 
-                                      unit = "unit") {
+                                      unit = NULL) {
   message("Creating location_ancillary")
   # TODO: validate_arguments()
   # - cols exist in L0_wide for non-required cols

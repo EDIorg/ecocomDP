@@ -1,8 +1,8 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-package_id	ID of the level-1 data package (i.e. this data package).	character			NA	Not available
-original_package_id	ID of the level-0 data package (i.e. parent data package).	character			NA	Not available
-length_of_survey_years	Number of years the study has been ongoing.	numeric	dimensionless		NA	Not available
-number_of_years_sampled	Number of years within the period of the study that samples were taken.	numeric	dimensionless		NA	Not available
-std_dev_interval_betw_years	Standard deviation of the interval between sampling events.	numeric	dimensionless		NA	Not available
-max_num_taxa	Number of unique values in the taxon table.	numeric	dimensionless		NA	Not available
+package_id	Identifier of this data package.	character			NA	Not available
+original_package_id	Identifier of source data package.	character			NA	Not available
+length_of_survey_years	Number of years the study has been ongoing.	numeric	nominalYear		NA	Not available
+number_of_years_sampled	Number of years within the period of the study that samples were taken.	numeric	nominalYear		NA	Not available
+std_dev_interval_betw_years	Standard deviation of the interval between sampling events.	numeric	nominalYear		NA	Not available
+max_num_taxa	Number of unique values in the taxon table.	numeric	number		NA	Not available
 geo_extent_bounding_box_m2	Area of the study location.	numeric	meter		NA	Not available

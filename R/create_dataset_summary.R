@@ -90,7 +90,8 @@ calc_geo_extent_bounding_box_m2 <- function(
   df <- data.frame(
     longitude = c(lon_west, lon_east, lon_east, lon_west),
     latitude = c(lat_north, lat_north, lat_south, lat_south))
-  geosphere::areaPolygon(df)
+  res <- round(geosphere::areaPolygon(df))
+  return(res)
 }
 
 

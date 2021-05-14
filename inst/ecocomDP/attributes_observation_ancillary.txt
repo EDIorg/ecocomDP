@@ -1,6 +1,6 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-observation_ancillary_id	"The ID of the observation_ancillary, a row or record ID."	character			NA	Not available
-observation_id	The ID of the sampling event. References the event_id field of the observation table.	character			NA	Not available
-variable_name	Meaured variable.	categorical			NA	Not available
+observation_ancillary_id	Identifier of the observation ancillary information.	character			NA	Not available
+observation_id	A reference to an observation. References the observation_id field of the observation table.	character			NA	Not available
+variable_name	Name of the measured variable.	categorical			NA	Not available
 value	Value of the measured variable.	character			NA	Not available
 unit	Unit of the measured variable.	character			NA	Not available

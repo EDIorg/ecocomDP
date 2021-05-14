@@ -97,6 +97,8 @@
 #'     }
 #'     
 #'     CURRENTLY ONLY WORKS FOR EDI DATA REPOSITORY
+#'     
+#'     TAXA RESOLVED USING taxonomyCleanr METHODS EXPORTED FROM THIS PACKAGE ARE, WILL HAVE THEIR RANKS EXPANDED CREATE_EML(). ALTERNATIVELY COULD DO IT YOUR SELF WITH THESE CONTROLLED TERMS THAT NEED TO BE FOLLOWED.
 #'
 #' @export
 #' 
@@ -385,6 +387,16 @@ create_eml <- function(path,
         }
       }))
   
+  # Arrange tables in the preferred order to be listed in the EML
+  
+  fext <- unique(tools::file_ext(data.table))
+  preferred_order <- c(
+    "observation", "observation_ancillary", "location", "location_ancillary", 
+    "taxon", "taxon_ancillary", "dataset_summary",  "variable_mapping")
+  
+  use_i <- preferred_order %in% tools::file_path_sans_ext(data.table)
+  data.table <- paste0(preferred_order[use_i], ".", fext)
+  
   # Match table names of this L1 to their boiler plate descriptions for use in 
   # EAL_make_eml()
   
@@ -465,10 +477,12 @@ create_eml <- function(path,
   eal_inputs$eml.path <- path
   eal_inputs$dataset.title <- "placeholder"
   eal_inputs$data.table <- data.table
+  eal_inputs$data.table.name <- tools::file_path_sans_ext(data.table)
   eal_inputs$data.table.description <- data.table.description
   eal_inputs$data.table.url <- data.table.url
   eal_inputs$data.table.quote.character <- rep('"', length(data.table))
   eal_inputs$other.entity <- other.entity
+  eal_inputs$other.entity.name <- tools::file_path_sans_ext(other.entity)
   eal_inputs$other.entity.description <- other.entity.description
   eal_inputs$other.entity.url <- other.entity.url
   eal_inputs$package.id <- child.package.id
@@ -526,12 +540,17 @@ create_eml <- function(path,
           sum(is.na(lubridate::parse_date_time(datetime, "ymdH"))),
           sum(is.na(lubridate::parse_date_time(datetime, "ymd")))))
       
-      datetime_format <- c(
-        "YYYY-MM-DD hh:mm:ss",
-        "YYYY-MM-DD hh:mm",
-        "YYYY-MM-DD hh",
-        "YYYY-MM-DD")[
-          which(na_coerced == min(na_coerced))[1]]
+      
+      if ((length(unique(na_coerced)) == 1) & (i != "attributes_observation.txt")) { # Default to observation table's datetime format specifier if no date time in ancillary tables
+        use_i <- eal_inputs$x$template[["attributes_observation.txt"]]$content$dateTimeFormatString != ""
+        datetime_format <- eal_inputs$x$template[["attributes_observation.txt"]]$content$dateTimeFormatString[use_i]
+      } else {
+        datetime_format <- c(
+          "YYYY-MM-DD hh:mm:ss",
+          "YYYY-MM-DD hh:mm",
+          "YYYY-MM-DD hh",
+          "YYYY-MM-DD")[which(na_coerced == min(na_coerced))[1]]
+      }
       
       eal_inputs$x$template[[i]]$content$dateTimeFormatString[
         eal_inputs$x$template[[i]]$content$attributeName == date_column] <- 
@@ -541,6 +560,7 @@ create_eml <- function(path,
   }
   
   # Get table attributes and definitions from EML then create catvars templates for each data table of this dataset
+  
   defs <- get_attr_defs(xml_L0)
   
   r <- lapply(
@@ -558,7 +578,7 @@ create_eml <- function(path,
         return(list(content = catvars_template))
       }
     })
-  names(r) <- paste0("catvars_", names(eal_inputs$x$data.table), ".txt")
+  names(r) <- paste0("catvars_", tools::file_path_sans_ext(names(eal_inputs$x$data.table)), ".txt")
   r <- Filter(Negate(is.null), r)
   eal_inputs$x$template <- c(eal_inputs$x$template, r)
 
@@ -574,8 +594,8 @@ create_eml <- function(path,
     name = taxon$taxon_name,
     name_type = "scientific",
     name_resolved = taxon$taxon_name,
-    authority_system = taxon$authority_system,
-    authority_id = taxon$authority_taxon_id,
+    authority_system = ifelse(!is.null(taxon$authority_system), taxon$authority_system, NA_character_),
+    authority_id = ifelse(!is.null(taxon$authority_taxon_id), taxon$authority_taxon_id, NA_character_),
     stringsAsFactors = FALSE)
   
   eal_inputs$x$template$taxonomic_coverage.txt$content <- taxonomic_coverage
@@ -625,13 +645,13 @@ create_eml <- function(path,
       annotations_subset$subject %in% 
         c(colnames(eal_inputs$x$data.table[[i]]$content), table), ]
     table_annotations$id <- stringr::str_replace(
-      annotations_subset$id, 
+      table_annotations$id, 
       paste0("(?<=/)", table, "(?=$|/)"),
       i)
     table_annotations$context <- stringr::str_replace(
-      annotations_subset$context, table, i)
+      table_annotations$context, table, i)
     table_annotations$subject <- stringr::str_replace(
-      annotations_subset$subject, table, i)
+      table_annotations$subject, paste0("^", table, "$"), i)
     annotations <- rbind(annotations, table_annotations)
   }
   
@@ -639,6 +659,10 @@ create_eml <- function(path,
     names(eal_inputs$x$data.table),
     "variable_mapping")
   if (length(variable_mapping) != 0) {
+    tblnms_varmap <- eal_inputs$x$data.table[[variable_mapping]]$content$table_name # remove missing tables from variable_mapping
+    tblnms_input <- tools::file_path_sans_ext(data.table)
+    tbls2keep <- tblnms_varmap %in% tblnms_input
+    eal_inputs$x$data.table[[variable_mapping]]$content <- eal_inputs$x$data.table[[variable_mapping]]$content[tbls2keep, ]
     variable_mappings_annotations <- lapply(
       unique(eal_inputs$x$data.table[[variable_mapping]]$content$table_name),
       function(table) {
@@ -655,8 +679,8 @@ create_eml <- function(path,
           subject = "variable_name",
           predicate_label = "is about",
           predicate_uri = "http://purl.obolibrary.org/obo/IAO_0000136",
-          object_label = variable_mapping_subset$mapped_label,
-          object_uri = variable_mapping_subset$mapped_id,
+          object_label = ifelse(!is.null(variable_mapping_subset$mapped_label), variable_mapping_subset$mapped_label, ""),
+          object_uri = ifelse(!is.null(variable_mapping_subset$mapped_id), variable_mapping_subset$mapped_id, ""),
           stringsAsFactors = FALSE)
         # Remove duplicate annotations or the variable_name attribute (a column
         # containing multiple variables as apart of a "long" table) will have 
@@ -678,8 +702,17 @@ create_eml <- function(path,
   
   eal_inputs$x$template$annotations.txt$content <- annotations
   
+  # Only include metadata for existing columns (attributes)
+  for (i in data.table) {
+    table <- stringr::str_remove(i, "\\.[:alpha:]*$")
+    tmplt <- paste0("attributes_", table, ".txt")
+    attrnms <- eal_inputs$x$template[[tmplt]]$content$attributeName
+    colnms <- colnames(eal_inputs$x$data.table[[i]]$content)
+    attrs_to_keep <- attrnms %in% colnms
+    eal_inputs$x$template[[tmplt]]$content <- eal_inputs$x$template[[tmplt]]$content[attrs_to_keep, ]
+  }
+
   # Call EAL_make_eml()
-  
   eml_L1 <- suppressWarnings(
     suppressMessages(
       do.call(
@@ -822,7 +855,7 @@ create_eml <- function(path,
   # irregular
   
   # Parse components to be reordered and combined for the L1
-  methods_L1 <- eml_L1$dataset$methods$methodStep[[1]]
+  methods_L1 <- eml_L1$dataset$methods$methodStep
   
   # Get provenance metadata
   # TODO: Support other repository systems

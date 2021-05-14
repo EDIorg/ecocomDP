@@ -1,6 +1,6 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-taxon_id	Identifier used in the dataset.	character			NA	Not available
-taxon_rank	Taxonomic rank of the organism name.	character			NA	Not available
+taxon_id	Identifier assigned to each unique organism.	character			NA	Not available
+taxon_rank	Taxonomic rank of the organism.	character			NA	Not available
 taxon_name	Taxonomic name of the organism.	character			NA	Not available
-authority_system	Name of the system assigning the taxon identifier.	character			NA	Not available
-authority_taxon_id	Identifier in the authority system.	character			NA	Not available
+authority_system	Name of the system assigning the authority_taxon_id.	character			NA	Not available
+authority_taxon_id	Identifier in the authority system corresponding to the taxon_name.	character			NA	Not available

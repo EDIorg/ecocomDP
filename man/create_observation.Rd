@@ -7,13 +7,13 @@
 create_observation(
   L0_wide,
   observation_id = "observation_id",
-  event_id = NULL,
+  event_id = "event_id",
   package_id = "package_id",
   location_id = "location_id",
   datetime = "datetime",
   taxon_id = "taxon_id",
   variable_name,
-  unit = NULL
+  unit = "unit"
 )
 }
 \arguments{

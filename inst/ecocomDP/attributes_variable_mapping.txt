@@ -1,7 +1,7 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-variable_mapping_id	"The ID of the variable mapping, a row or record identifier"	character			NA	Not available
-table_name	The name of the table holding this variable.	character			NA	Not available
-variable_name	The variable name in anothre data table.	character			NA	Not available
-mapped_system	System defining this variable_name.	character			NA	Not available
-mapped_id	ID of the definition in that system.	character			NA	Not available
-mapped_label	Label for this variable in that mapped system.	character			NA	Not available
+variable_mapping_id	Identifier of the variable mapping information.	character			NA	Not available
+table_name	Name of the table containing this variable.	character			NA	Not available
+variable_name	Name of the measured variable.	character			NA	Not available
+mapped_system	System defining variable_name.	character			NA	Not available
+mapped_id	Identifier of the definition in mapped_system.	character			NA	Not available
+mapped_label	Label for variable_name in mapped_system.	character			NA	Not available

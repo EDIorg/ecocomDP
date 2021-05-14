@@ -20,16 +20,16 @@
 #' 
 create_observation <- function(L0_wide, 
                                observation_id = "observation_id",
-                               event_id = NULL, 
+                               event_id = "event_id", 
                                package_id = "package_id",
                                location_id = "location_id", 
                                datetime = "datetime",
                                taxon_id = "taxon_id",
                                variable_name,
-                               unit = NULL) {
+                               unit = "unit") {
   message("Creating observation")
   # TODO: validate_arguments()
-  # - cols exist in L0_wide for non-required cols
+  # - cols exist in L0_wide for non-required cols, convert to NULL if not present
   # - NULL optional cols if not in L0_wide
   # - rename cols in L0_wide if not 1-to-1 match
   # - check unit_variable_name convention

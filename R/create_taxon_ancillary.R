@@ -18,7 +18,7 @@ create_taxon_ancillary <- function(L0_wide,
                                    taxon_id = "taxon_id", 
                                    datetime = "datetime", 
                                    variable_name, 
-                                   unit = "unit", 
+                                   unit = NULL, 
                                    author = "author") {
   message("Creating taxon_ancillary")
   # TODO: validate_arguments()

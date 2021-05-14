@@ -139,7 +139,7 @@ is assigned a UUID.}
 \item{return.obj}{(logical; optional) Whether to return the EML as an R object of class \code{EML object}. This EML object can be modified and written to file according to the \href{https://github.com/ropensci/EML}{EML R library}.}
 
 \item{x}{(named list; optional) Alternative input to 
-\code{create_eml()}. Use \code{template_arguments()} 
+\code{create_eml()}. Use \code{EAL_template_arguments()} 
 to create \code{x}.}
 }
 \value{

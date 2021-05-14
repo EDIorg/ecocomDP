@@ -112,7 +112,7 @@
 #'     (logical; optional) Whether to return the EML as an R object of class \code{EML object}. This EML object can be modified and written to file according to the \href{https://github.com/ropensci/EML}{EML R library}.
 #' @param x
 #'     (named list; optional) Alternative input to 
-#'     \code{create_eml()}. Use \code{template_arguments()} 
+#'     \code{create_eml()}. Use \code{EAL_template_arguments()} 
 #'     to create \code{x}.
 #'     
 #' @return 
@@ -209,12 +209,12 @@ EAL_make_eml <- function(
   }
   
   # Read templates and data ---------------------------------------------------
-  # The reading function (template_arguments()) ignores empty templates located
+  # The reading function (EAL_template_arguments()) ignores empty templates located
   # at path, thereby simplifying logic required to populate EML nodes below.
   
   if (is.null(x)) {
     if (is.null(data.table) & is.null(other.entity)) {      
-      x <- template_arguments(
+      x <- EAL_template_arguments(
         path = path,
         data.path = data.path)$x
     } else if (!is.null(data.table) & is.null(other.entity)) {
@@ -222,7 +222,7 @@ EAL_make_eml <- function(
         validate_file_names(
           path = data.path, 
           data.files = data.table))
-      x <- template_arguments(
+      x <- EAL_template_arguments(
         path = path,
         data.path = data.path,
         data.table = table_names)$x
@@ -231,13 +231,13 @@ EAL_make_eml <- function(
         validate_file_names(
           path = data.path, 
           data.files = data.table))
-      x <- template_arguments(
+      x <- EAL_template_arguments(
         path = path,
         data.path = data.path,
         data.table = table_names,
         other.entity = other.entity)$x
     } else if (is.null(data.table) & !is.null(other.entity)) {
-      x <- template_arguments(
+      x <- EAL_template_arguments(
         path = path,
         data.path = data.path,
         other.entity = other.entity)$x
@@ -915,10 +915,15 @@ EAL_make_eml <- function(
   
   if (any(stringr::str_detect(names(x$template), "methods"))) {
     message("    <methods>")
-    eml$dataset$methods$methodStep <- list(
+    # eml$dataset$methods$methodStep <- list(
+    #   x$template[[
+    #     names(x$template)[stringr::str_detect(names(x$template), "methods")]
+    #     ]]$content$methodStep)
+    
+    eml$dataset$methods$methodStep$description$para <- 
       x$template[[
         names(x$template)[stringr::str_detect(names(x$template), "methods")]
-        ]]$content$methodStep)
+        ]]$content$para[[1]]
   }
   
   # Create <methodStep> (provenance) ------------------------------------------
@@ -1268,7 +1273,6 @@ EAL_make_eml <- function(
         physical$dataFormat$textFormat$simpleDelimited$fieldDelimiter <- fdlim
         
         # Create dataTable
-        
         data_table <- list(
           entityName = data.table.name[which(k == names(x$data.table))],
           entityDescription = data.table.description[which(k == names(x$data.table))],

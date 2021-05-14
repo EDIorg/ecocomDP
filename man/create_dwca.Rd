@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_dwca.R
 \name{create_dwca}
 \alias{create_dwca}
-\title{Creates Darwin Core Archive package from an ecocomDP formatted level-1}
+\title{Creates Darwin Core Archive package from a published ecocomDP formatted level-1}
 \usage{
 create_dwca(
   path,
@@ -19,7 +19,7 @@ create_dwca(
 written.}
 
 \item{core.name}{(character) The Darwin Core central table of the package. Can be: 
-"occurence" (occurrence core) or "event" (event core).}
+"event" (event core). Occurrence core is not yet supported.}
 
 \item{parent.package.id}{(character) ID of an ecocomDP data package. Only 
 EDI Data Repository package IDs are currently supported.}
@@ -50,7 +50,7 @@ Data entities in either the occurrence or event core formats with a
     corresponding EML metadata record and a meta.xml file.
 }
 \description{
-Creates Darwin Core Archive package from an ecocomDP formatted level-1
+Creates Darwin Core Archive package from a published ecocomDP formatted level-1
 }
 \details{
 TODO: Add details

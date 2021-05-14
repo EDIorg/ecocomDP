@@ -9,7 +9,7 @@ create_location_ancillary(
   location_id = "location_id",
   datetime = "datetime",
   variable_name,
-  unit = "unit"
+  unit = NULL
 )
 }
 \arguments{

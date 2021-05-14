@@ -9,7 +9,7 @@ create_taxon_ancillary(
   taxon_id = "taxon_id",
   datetime = "datetime",
   variable_name,
-  unit = "unit",
+  unit = NULL,
   author = "author"
 )
 }

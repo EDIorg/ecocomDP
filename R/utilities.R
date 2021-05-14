@@ -22,6 +22,8 @@ api_get_provenance_metadata <- function(package.id, environment = 'production'){
   
   message(paste('Retrieving provenance metadata for ', package.id))
   
+  ping_edi()
+  
   r <- httr::GET(
     url = paste0(
       url_env(environment),
@@ -75,9 +77,9 @@ api_get_provenance_metadata <- function(package.id, environment = 'production'){
 api_list_data_package_revisions <- function(scope, identifier, filter = NULL, environment = 'production'){
   
   message(paste('Retrieving data package revisions for', 
-                paste(scope, '.', identifier)
-  )
-  )
+                paste(scope, '.', identifier)))
+  
+  ping_edi()
   
   if (is.null(filter)){
     
@@ -185,6 +187,8 @@ api_read_data_entity_name <- function(package.id, identifier, environment = 'pro
   
   message(paste('Retrieving name of', package.id, identifier))
   
+  ping_edi()
+  
   r <- httr::GET(
     url = paste0(
       url_env(environment),
@@ -247,6 +251,8 @@ api_read_data_package <- function(package.id, environment = 'production'){
   
   message(paste('Retrieving resource map for', package.id))
   
+  ping_edi()
+  
   r <- httr::GET(
     url = paste0(
       url_env(environment),
@@ -304,6 +310,8 @@ api_read_data_package_doi <- function(package.id, environment = 'production'){
   
   message(paste('Retrieving DOI for', package.id))
   
+  ping_edi()
+  
   r <- httr::GET(
     url = paste0(
       url_env(environment),
@@ -351,6 +359,8 @@ api_read_data_package_doi <- function(package.id, environment = 'production'){
 api_read_metadata <- function(package.id, environment = 'production'){
   
   message(paste('Retrieving EML for data package', package.id))
+  
+  ping_edi()
   
   r <- httr::GET(
     url = paste0(
@@ -593,7 +603,7 @@ get_attr_defs <- function(eml) {
   defs <- xml2::xml_text(xml2::xml_find_all(nodes, ".//attribute/attributeDefinition"))
   dups <- duplicated(nmes)
   if (any(dups)) {
-    warning("Duplicate attribute names were found in the parent EML when looking up definitions for attributes of this dataset. Dropping these attributes: ", paste(nmes[dups], collapse = ", "), call. = FALSE)
+    # warning("Duplicate attribute names were found in the parent EML when looking up definitions for attributes of this dataset. Dropping these attributes: ", paste(nmes[dups], collapse = ", "), call. = FALSE)
     nmes <- nmes[!dups]
     defs <- defs[!dups]
   }
@@ -628,10 +638,6 @@ get_attr_defs <- function(eml) {
 #'     A character string representation of the EOL character.
 #'
 get_eol <- function(path, file.name, os){
-  
-  # Check arguments
-  
-  validate_arguments(x = as.list(environment()))
   
   # Validate file.name
   
@@ -839,13 +845,13 @@ parse_delim <- function(x){
 #' Is the EDI Data Repository accessible?
 #'
 ping_edi <- function() {
-  r <- httr::GET("https://portal.edirepository.org/") # Warn if EDI is down
+  r <- httr::GET(url = "https://pasta.lternet.edu/package/eml/edi/759") # Warn if EDI is down
   if (httr::status_code(r) != 200) {
-    warning("This function may not work between 01:00 - 03:00 UTC due to ",
-            "regular maintenance of the EDI Data Repository. If you have ",
-            "reached this warning outside these hours then there may be an ",
-            "unexpected issue that will be resolved shortly. Please try ",
-            "again later.", call. = FALSE)
+    stop("The EDI Repository is down for regular maintenance (Wednesday 01:00",
+         " - 03:00 UTC). If you have reached this message outside maintenance",
+         " hours, then there is an unexpected issue that will be resolved ",
+         "shortly. Our apologies for the inconvenience. Please try again ",
+         "later.", call. = FALSE)
   }
 }
 
@@ -1098,6 +1104,53 @@ read_table_dataset_summary <- function(package.id){
   }
   output
   
+}
+
+
+
+
+
+
+
+
+remove_empty_templates <- function(x) {
+  # Removes empty templates (NULL, data frames with 0 rows, or TextType of 0 
+  # characters) from the list object created by template_arguments().
+  # x = template_arguments()$x
+  attr_tmp <- read_template_attributes()
+  use_i <- rep(F, length(x$template))
+  for (i in 1:length(x$template)) {
+    if (is.null(x$template[[i]]$content)) {
+      use_i[i] <- T
+    } else {
+      if (any(attr_tmp$template_name == 
+              tools::file_path_sans_ext(names(x$template[i])))) {
+        if ((attr_tmp$type[
+          attr_tmp$template_name == 
+          tools::file_path_sans_ext(names(x$template[i]))]) == "text") {
+          if (sum(nchar(unlist(x$template[[i]]))) == 0) {
+            use_i[i] <- T
+          }
+        } else if ((attr_tmp$type[
+          attr_tmp$template_name == 
+          tools::file_path_sans_ext(names(x$template[i]))]) == "xml") {
+          if (length(x$template[[i]]$content$taxonomicClassification) == 0) {
+            use_i[i] <- T
+          }
+        } else {
+          if (nrow(x$template[[i]]$content) == 0) {
+            use_i[i] <- T
+          }
+        }
+      }
+    }
+  }
+  if (all(use_i)) {
+    x["template"] <-list(NULL)
+  } else {
+    x$template[use_i] <- NULL
+  }
+  x
 }
 
 
@@ -1517,3 +1570,11 @@ xml_val <- function(nodeset, xpath) {
       trim = T))
   return(res)
 }
+
+
+
+
+
+
+
+

@@ -1,8 +1,8 @@
 attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-taxon_ancillary_id	Identifier for the taxon ancillary.	character			NA	Not available
-taxon_id	The ID of the taxon table. References the taxon_id field of the taxon table.	character			NA	Not available
+taxon_ancillary_id	Identifier of the taxon ancillary information.	character			NA	Not available
+taxon_id	A reference to a taxon. References the taxon_id field of the taxon table.	character			NA	Not available
 datetime	Date and time of the ancillary information.	Date			NA	Not available
-variable_name	The measured variable.	categorical			NA	Not available
-value	Value for the measured variable.	character			NA	Not available
-unit	Unit for the measured variable.	character			NA	Not available
-author	Author associated with taxon identification for this dataset.	character			NA	Not available
+variable_name	Name of the measured variable.	categorical			NA	Not available
+value	Value of the measured variable.	character			NA	Not available
+unit	Unit of the measured variable.	character			NA	Not available
+author	Author associated with identification of the taxon.	character			NA	Not available
