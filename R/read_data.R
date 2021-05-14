@@ -136,7 +136,7 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
       id, 
       "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)") && 
       !grepl("^neon\\.", id)) {
-      d <- read_data_edi(id, parse.datetime)      
+      d <- read_data_edi(id, parse.datetime)
     } else if (grepl("^neon\\.", id)) { # NEON
       d <- map_neon_data_to_ecocomDP(
         id = id, 
@@ -169,7 +169,16 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
           names(d[[x]]$tables),
           function(y) {
             nms <- attr_tbl$column[attr_tbl$table == y]
-            use_i <- setdiff(nms, names(d[[x]]$tables[[y]]))
+            tblnms <- names(d[[x]]$tables[[y]])
+            if ("observation_datetime" %in% tblnms) { # Accomodate legacy data by converting observation_datetime to datetime
+              tblnms[tblnms == "observation_datetime"] <- "datetime"
+              names(d[[x]]$tables[[y]]) <<- tblnms
+            }
+            if ((y == "observation_ancillary") & ("event_id" %in% tblnms)) { # Warn if legacy data linking observation_ancillary through the event_id
+              warning("This dataset conforms to an older version of the ecocomDP model in which the observation_ancillary table is linked through the event_id. Ignore any validation issues related to the observation_ancillary table.", call. = FALSE)
+              assign("event_id", value = d[[x]]$tables[[y]]$event_id, env = parent.env(environment()))
+            }
+            use_i <- setdiff(nms, tblnms)
             if (length(use_i) > 0) {
               d[[x]]$tables[[y]][use_i] <<- NA
               # There seems to be an incompatibility in the handling of 
@@ -182,6 +191,9 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
               }
             }
           })
+        if (exists("event_id")) {
+          assign("event_id", value = event_id, env = parent.env(environment()))
+        }
       }))
 
   # Coerce column classes to ecocomDP specifications. NOTE: This same 
@@ -274,9 +286,17 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
   if (!any(stringr::str_detect(callstack, "validate_data\\("))) { # don't validate if read_data() is called from validate_data()
     for (i in 1:length(d)) {
       # FIXME: Enter dataset list object, not just tables
-
       d[[i]]$validation_issues <- validate_data(dataset = d[i])
     }
+  }
+  
+  # Support legacy versions ---------------------------------------------------
+  
+  if (exists("event_id")) {
+    d[[1]]$tables$observation_ancillary$observation_id <- as.character(event_id)
+    nms <- colnames(d[[1]]$tables$observation_ancillary)
+    nms[nms == "observation_id"] <- "event_id"
+    colnames(d[[1]]$tables$observation_ancillary) <- nms
   }
   
   # Return --------------------------------------------------------------------
@@ -420,9 +440,21 @@ read_from_files <- function(data.path) {
     d <- readRDS(data.path)
   } else if (fileext != "rds") { # dir ... note NEON ids cause file_ext() to produce misleading results
     dirs <- list.dirs(data.path)
-    if (length(dirs) > 1) {         # Don't use parent dir if nested (use case of reading from save_data(..., file.type = .csv))
+    parent_dir_has_tables <- lapply(
+      unique(attr_tbl$table),
+      function(x) {
+        ecocomDP_table <- stringr::str_detect(
+          tools::file_path_sans_ext(list.files(dirs[1])), 
+          paste0("^", x, "$"))
+        return(any(ecocomDP_table))
+      })
+    parent_dir_has_tables <- any(unlist(parent_dir_has_tables))
+    if (parent_dir_has_tables) { # Disambiguate usecases: Parent dir tables is target, but subdir also has tables
+      dirs <- dirs[1]
+    } else if (!parent_dir_has_tables & (length(dirs) > 1)) { # Don't use parent dir if nested (use case of reading from save_data(..., file.type = .csv))
       dirs <- dirs[-1]
     }
+    
     d <- lapply(
       dirs,
       function(path) {
