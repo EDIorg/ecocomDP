@@ -25,7 +25,7 @@ observation	unit	character	FALSE	FALSE	FALSE	FALSE	FALSE
 location_ancillary	NA	NA	FALSE	NA	NA	NA	NA
 location_ancillary	location_ancillary_id	character	TRUE	TRUE	FALSE	FALSE	TRUE
 location_ancillary	location_id	character	TRUE	FALSE	TRUE	TRUE	TRUE
-location_ancillary	datetime	Date	FALSE	FALSE	FALSE	FALSE	FALSE
+location_ancillary	datetime	Date	FALSE	FALSE	FALSE	TRUE	FALSE
 location_ancillary	variable_name	character	TRUE	FALSE	FALSE	TRUE	FALSE
 location_ancillary	value	character	TRUE	FALSE	FALSE	TRUE	FALSE
 location_ancillary	unit	character	FALSE	FALSE	FALSE	FALSE	FALSE
@@ -34,7 +34,7 @@ taxon_ancillary	taxon_ancillary_id	character	TRUE	TRUE	FALSE	FALSE	TRUE
 taxon_ancillary	taxon_id	character	TRUE	FALSE	TRUE	TRUE	TRUE
 taxon_ancillary	datetime	Date	FALSE	FALSE	FALSE	FALSE	FALSE
 taxon_ancillary	variable_name	character	TRUE	FALSE	FALSE	TRUE	FALSE
-taxon_ancillary	value	character	TRUE	FALSE	FALSE	TRUE	FALSE
+taxon_ancillary	value	character	TRUE	FALSE	FALSE	FALSE	FALSE
 taxon_ancillary	unit	character	FALSE	FALSE	FALSE	FALSE	FALSE
 taxon_ancillary	author	character	FALSE	FALSE	FALSE	FALSE	FALSE
 observation_ancillary	NA	NA	FALSE	NA	NA	NA	NA
