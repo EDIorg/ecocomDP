@@ -189,20 +189,24 @@ flatten_data <- function(data.list){
   
   
   # merge taxon_ancillary
+  
+  
+
   if("taxon_ancillary" %in% names(data.list)){
     taxon_ancillary <- data.list$taxon_ancillary %>% 
+      dplyr::select(taxon_id, variable_name, value) %>%
       tidyr::pivot_wider(names_from = variable_name, values_from = value)
     all_merged <- all_merged %>%
       dplyr::left_join(
         taxon_ancillary %>% 
-          dplyr::select(-taxon_ancillary_id) %>% 
           dplyr::select_if(not_all_NAs),
         by = "taxon_id",
         suffix = c("", "_taxon_ancillary"))
   }
   
-
   
+  
+
   # merge other location ancillary data
   if("location_ancillary" %in% names(data.list) &&
      length(
