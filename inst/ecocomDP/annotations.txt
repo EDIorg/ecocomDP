@@ -20,28 +20,28 @@ id	element	context	subject	predicate_label	predicate_uri	object_label	object_uri
 /observation/location_id	/dataTable/attribute	observation	location_id	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType	study location identifier	http://purl.dataone.org/odo/ECSO_00002767
 /observation/datetime	/dataTable/attribute	observation	datetime	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType	date and time of measurement	http://purl.dataone.org/odo/ECSO_00002043
 /observation/taxon_id	/dataTable/attribute	observation	taxon_id	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
-/observation/variable_name	/dataTable/attribute	observation	variable_name	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType	Measurement Type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#MeasurementType
+/observation/variable_name	/dataTable/attribute	observation	variable_name	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /observation/value	/dataTable/attribute	observation	value	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /observation/unit	/dataTable/attribute	observation	unit	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /location_ancillary	/dataTable	dataset	location_ancillary	is about	http://purl.obolibrary.org/obo/IAO_0000136		
 /location_ancillary/location_ancillary_id	/dataTable/attribute	location_ancillary	location_ancillary_id	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /location_ancillary/location_id	/dataTable/attribute	location_ancillary	location_id	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType	study location identifier	http://purl.dataone.org/odo/ECSO_00002767
 /location_ancillary/datetime	/dataTable/attribute	location_ancillary	datetime	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType	date and time of measurement	http://purl.dataone.org/odo/ECSO_00002043
-/location_ancillary/variable_name	/dataTable/attribute	location_ancillary	variable_name	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType	Measurement Type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#MeasurementType
+/location_ancillary/variable_name	/dataTable/attribute	location_ancillary	variable_name	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /location_ancillary/value	/dataTable/attribute	location_ancillary	value	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /location_ancillary/unit	/dataTable/attribute	location_ancillary	unit	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /taxon_ancillary	/dataTable	dataset	taxon_ancillary	is about	http://purl.obolibrary.org/obo/IAO_0000136		
 /taxon_ancillary/taxon_ancillary_id	/dataTable/attribute	taxon_ancillary	taxon_ancillary_id	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /taxon_ancillary/taxon_id	/dataTable/attribute	taxon_ancillary	taxon_id	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /taxon_ancillary/datetime	/dataTable/attribute	taxon_ancillary	datetime	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType	date and time of measurement	http://purl.dataone.org/odo/ECSO_00002043
-/taxon_ancillary/variable_name	/dataTable/attribute	taxon_ancillary	variable_name	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType	Measurement Type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#MeasurementType
+/taxon_ancillary/variable_name	/dataTable/attribute	taxon_ancillary	variable_name	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /taxon_ancillary/value	/dataTable/attribute	taxon_ancillary	value	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /taxon_ancillary/unit	/dataTable/attribute	taxon_ancillary	unit	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /taxon_ancillary/author	/dataTable/attribute	taxon_ancillary	author	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType	observer name	http://purl.dataone.org/odo/ECSO_00002451
 /observation_ancillary	/dataTable	dataset	observation_ancillary	is about	http://purl.obolibrary.org/obo/IAO_0000136		
 /observation_ancillary/observation_ancillary_id	/dataTable/attribute	observation_ancillary	observation_ancillary_id	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /observation_ancillary/observation_id	/dataTable/attribute	observation_ancillary	observation_id	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
-/observation_ancillary/variable_name	/dataTable/attribute	observation_ancillary	variable_name	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType	Measurement Type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#MeasurementType
+/observation_ancillary/variable_name	/dataTable/attribute	observation_ancillary	variable_name	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /observation_ancillary/value	/dataTable/attribute	observation_ancillary	value	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /observation_ancillary/unit	/dataTable/attribute	observation_ancillary	unit	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /dataset_summary	/dataTable	dataset	dataset_summary	is about	http://purl.obolibrary.org/obo/IAO_0000136		
@@ -55,7 +55,7 @@ id	element	context	subject	predicate_label	predicate_uri	object_label	object_uri
 /variable_mapping	/dataTable	dataset	variable_mapping	is about	http://purl.obolibrary.org/obo/IAO_0000136		
 /variable_mapping/variable_mapping_id	/dataTable/attribute	variable_mapping	variable_mapping_id	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /variable_mapping/table_name	/dataTable/attribute	variable_mapping	table_name	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
-/variable_mapping/variable_name	/dataTable/attribute	variable_mapping	variable_name	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType	Measurement Type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#MeasurementType
+/variable_mapping/variable_name	/dataTable/attribute	variable_mapping	variable_name	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /variable_mapping/mapped_system	/dataTable/attribute	variable_mapping	mapped_system	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /variable_mapping/mapped_id	/dataTable/attribute	variable_mapping	mapped_id	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
 /variable_mapping/mapped_label	/dataTable/attribute	variable_mapping	mapped_label	contains measurements of type	http://ecoinformatics.org/oboe/oboe.1.2/oboe-core.owl#containsMeasurementsOfType		
