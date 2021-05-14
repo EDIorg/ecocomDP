@@ -1,34 +1,31 @@
-# plot ds coverage for paper figure
+# plot ds coverage for paper figure (fig 3)
 # historgrams for 
 # temporal coverage - num years
 # temporal evenness (interval SD)
 # geo coverage - square km
-# taxon coverage - # taxa by group
+# bar chart: taxon coverage - # taxa by group
 
 # hsitogram and bar charts are stacked bars, e.g., for each taxon group, NEON= color 1, EDI=color 2
 # to use multi labels and bars side-by-side, you would have to pre-bin and use a bar chart instead of a histogram.
 # ggplot does not have an option to break the Y axis.
 
-# set up
+# SET UP
 setwd('/Users/mob/Desktop/EDI_files_at_msi/EDI/thematic_standardization/ecocomDP_pop_com/git_checkouts/ecocomDP/paper_2020')
 library(ggplot2)
 library(cowplot)
 library(readr)
 library(dplyr)
 library(data.table)
+library(svglite)
 
 
-# load data:
-# NEON_dataset_coverage <- read_csv("NEON_dataset_coverage.csv")
-# EDI_dataset_coverage <- read_csv("EDI_dataset_coverage.csv") 
+# LOAD DATA
 NEON_dataset_coverage <- data.table::fread("NEON_dataset_coverage.csv")
 EDI_dataset_coverage <- data.table::fread("EDI_dataset_coverage.csv") 
 ## edit this file manually to remove some extra fields in rows 42, 60, 61
+# col_types = ("ccnnnnnnnnnc"))
 
-#, col_types = ("ccnnnnnnnnnc"))
-
-
-# manipulate data
+# MANIPULATE DATA
 # calc temporal cov for NEON
 # NEON_dataset_coverage$num_years <- (NEON_dataset_coverage$max_year - NEON_dataset_coverage$min_year) +1
 
@@ -226,26 +223,10 @@ plot_temEvenness <- ggplot(combined_geo_temporal_cov, aes(x=sd_year_interval, fi
   theme(text = element_text(size=12) )+ 
   ylab("") + 
   ylim(0,400) +
-  xlab("S.D. sampling interval") + 
+  xlab("S.D. sampling interval, yrs") + 
   guides(fill=FALSE)
 plot_temEvenness <- plot_temEvenness + scale_color_grey()+scale_fill_grey() # Make grey scale
 
-
-# taxonomic coverage
-# with hints from:
-# https://stackoverflow.com/questions/7263849/what-do-hjust-and-vjust-do-when-making-a-plot-using-ggplot/7267364
-# plot_taxonCov <- ggplot(data=combined_taxon_cov, aes(x=taxon_label, fill = Source)) +
-#   # geom_bar(stat="count", fill="blue", color="blue", alpha=0.5) +
-#   geom_bar(stat="count") +
-#   # scale_y_continuous(expand=c(0,0)) + # removes space between the bar and the tick mark
-#   theme_minimal_hgrid() + 
-#   theme(text = element_text(size=12) )+ 
-#   ylab("Number of Datasets") +
-#   # ylim(0,120) +
-#   xlab("Taxon Group")  +
-#   theme(axis.text.x = element_text(angle = 45, hjust = 1) ) +  # hjust sets postition of text
-#   guides(fill=FALSE)
-# plot_taxonCov <- plot_taxonCov + scale_color_grey()+scale_fill_grey() # Make grey scale
 
 ## plot
 test <- combined_taxon_cov
@@ -265,7 +246,7 @@ plot_taxonCov <- ggplot(data=test, aes(x=taxon_label, fill = Source)) +
   theme(text = element_text(size=12) )+ 
   ylab("Number of Datasets") +
   # ylim(0,120) +
-  xlab("Taxon Group")  +
+  xlab("Group")  +
   theme(axis.text.x = element_text(angle = 45, hjust = 1) ) +  # hjust sets postition of text
   guides(fill=FALSE)
 plot_taxonCov <- plot_taxonCov + scale_color_grey()+scale_fill_grey() # Make grey scale
@@ -281,4 +262,5 @@ top_row <- plot_grid(
   nrow = 1)
 
 p <- plot_grid(top_row, bottom_row, nrow = 2, rel_heights = c(0.8,1))
-ggsave("fig_x.png", p)
+ggsave("fig_3.svg", p)
+ggsave("fig_3.png", p)
