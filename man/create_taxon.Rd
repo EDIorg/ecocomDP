@@ -34,6 +34,8 @@ Create the taxon table
 }
 \details{
 This function collects specified columns from \code{L0_wide} and returns distinct rows.
+
+If taxon authority_system contains values of .... then the corresponding taxa will have their whole hierarchy expanded within the EML metadata returned by create_eml().
 }
 \examples{
 

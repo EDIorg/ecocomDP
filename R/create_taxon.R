@@ -8,6 +8,8 @@
 #' @param authority_taxon_id (character; optional) Column in \code{L0_wide} containing the identifier corresponding to \code{taxon_name} in the \code{authority_system}.
 #' 
 #' @details This function collects specified columns from \code{L0_wide} and returns distinct rows.
+#' 
+#' If taxon authority_system contains values of .... then the corresponding taxa will have their whole hierarchy expanded within the EML metadata returned by create_eml().
 #'
 #' @return (data.frame) The taxon table of ecocomDP.
 #' @export
