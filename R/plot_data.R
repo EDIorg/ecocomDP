@@ -277,8 +277,6 @@ plot_taxa_accum_time <- function(dataset, alpha = 1) {
 #' @import ggplot2
 #' @import tidyr
 #' 
-#' @export
-#' 
 #' @examples
 #' \dontrun{
 #' # one dataset
