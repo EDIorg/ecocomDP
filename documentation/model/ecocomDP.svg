@@ -368,12 +368,13 @@
        x="93.940277">location_id</text>
     <polygon
        transform="translate(-132.55972,706.24914)"
-       style="fill:#ffffff;stroke:none"
+       style="fill:#f4f7da;stroke:none"
        id="polygon4136"
        points="223.5,-287.2 223.5,-287.2 223.5,-306.2 328.5,-306.2 328.5,-287.2 " />
+     
     <polygon
        transform="translate(-132.55972,706.24914)"
-       style="fill:none;stroke:#000000"
+       style="fill:url(#diagonalHatch);stroke:#000000"
        id="polygon4138"
        points="223.5,-287.2 223.5,-287.2 223.5,-306.2 328.5,-306.2 328.5,-287.2 " />
     <text
@@ -935,16 +936,18 @@
        font-size="11.00"
        y="602.32544"
        x="105.06226">variable_name</text>
+     <!-- 
      <polygon
         transform="translate(-126.43774,703.62543)"
         style="fill:#f4f7da;stroke:none"
         id="polygon4448a"
-        points="228.5,-76.2 228.5,-76.2 228.5,-95.2 322.5,-95.2 322.5,-76.2 " />
+        points="228.5,-76.2 228.5,-76.2 228.5,-95.2 322.5,-95.2 322.5,-76.2 " />  -->
     <polygon
        transform="translate(-126.43774,703.62543)"
-       style="fill:url(#diagonalHatch);stroke:#000000"
+       style="fill:none;stroke:#000000"
        id="polygon4448"
        points="228.5,-76.2 228.5,-76.2 228.5,-95.2 322.5,-95.2 322.5,-76.2 " />
+      
     <text
        style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
        id="text4450"
