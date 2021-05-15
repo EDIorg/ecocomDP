@@ -46,11 +46,11 @@ observation_ancillary	unit	character	FALSE	FALSE	FALSE	FALSE	FALSE
 dataset_summary	NA	NA	TRUE	NA	NA	NA	NA
 dataset_summary	package_id	character	TRUE	TRUE	FALSE	TRUE	TRUE
 dataset_summary	original_package_id	character	FALSE	FALSE	FALSE	FALSE	TRUE
-dataset_summary	length_of_survey_years	numeric	TRUE	FALSE	FALSE	TRUE	FALSE
-dataset_summary	number_of_years_sampled	numeric	TRUE	FALSE	FALSE	TRUE	FALSE
-dataset_summary	std_dev_interval_betw_years	numeric	TRUE	FALSE	FALSE	TRUE	FALSE
-dataset_summary	max_num_taxa	numeric	TRUE	FALSE	FALSE	TRUE	FALSE
-dataset_summary	geo_extent_bounding_box_m2	numeric	FALSE	FALSE	FALSE	TRUE	FALSE
+dataset_summary	length_of_survey_years	numeric	TRUE	FALSE	FALSE	FALSE	FALSE
+dataset_summary	number_of_years_sampled	numeric	TRUE	FALSE	FALSE	FALSE	FALSE
+dataset_summary	std_dev_interval_betw_years	numeric	TRUE	FALSE	FALSE	FALSE	FALSE
+dataset_summary	max_num_taxa	numeric	TRUE	FALSE	FALSE	FALSE	FALSE
+dataset_summary	geo_extent_bounding_box_m2	numeric	FALSE	FALSE	FALSE	FALSE	FALSE
 variable_mapping	NA	NA	FALSE	NA	NA	NA	NA
 variable_mapping	variable_mapping_id	character	TRUE	TRUE	FALSE	FALSE	TRUE
 variable_mapping	table_name	character	TRUE	FALSE	FALSE	TRUE	FALSE
