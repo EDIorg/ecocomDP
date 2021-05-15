@@ -1,7 +1,7 @@
 #' Make EML metadata for ecocomDP tables
 #' 
 #' Run this function AFTER you have validated your ecocomDP tables with 
-#' \code{validate_data()}.
+#' \code{validate()}.
 #'
 #' @param path 
 #'     (character) Path to the directory containing ecocomDP data tables, conversion scripts, and where EML metadata will be written.
@@ -109,7 +109,7 @@
 #' path <- "/Users/csmith/Desktop/ecocomDP"
 #' 
 #' # Validate ecocomDP tables
-#' validate_data(path)
+#' validate(path)
 #' 
 #' # Use parent EML to define variables of the ecocomDP and manually add variable 
 #' # names and definitions created in the ecocomDP re-formatting process.

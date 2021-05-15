@@ -283,10 +283,10 @@ read_data <- function(id = NULL, path = NULL, parse.datetime = TRUE,
   # Validate ------------------------------------------------------------------
 
   callstack <- as.character(sys.calls())
-  if (!any(stringr::str_detect(callstack, "validate_data\\("))) { # don't validate if read_data() is called from validate_data()
+  if (!any(stringr::str_detect(callstack, "validate\\("))) { # don't validate if read_data() is called from validate()
     for (i in 1:length(d)) {
       # FIXME: Enter dataset list object, not just tables
-      d[[i]]$validation_issues <- validate_data(dataset = d[i])
+      d[[i]]$validation_issues <- validate(dataset = d[i])
     }
   }
   

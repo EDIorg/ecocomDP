@@ -74,7 +74,7 @@ An EML metadata record for the ecocomDP dataset defined by the arguments
 }
 \description{
 Run this function AFTER you have validated your ecocomDP tables with 
-\code{validate_data()}.
+\code{validate()}.
 }
 \details{
 This function creates an EML record for an Ecological Community Data 
@@ -127,7 +127,7 @@ This function creates an EML record for an Ecological Community Data
 path <- "/Users/csmith/Desktop/ecocomDP"
 
 # Validate ecocomDP tables
-validate_data(path)
+validate(path)
 
 # Use parent EML to define variables of the ecocomDP and manually add variable 
 # names and definitions created in the ecocomDP re-formatting process.

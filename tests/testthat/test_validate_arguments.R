@@ -217,18 +217,18 @@ testthat::test_that("search_data()", {
 })
 
 
-# validate_data() ---------------------------------------------------------
+# validate() ---------------------------------------------------------
 
-testthat::test_that("validate_data()", {
+testthat::test_that("validate()", {
   test_data <- read_example_dataset()
   # data.path - Is valid
   expect_null(
-    validate_arguments("validate_data", as.list(list(data.path = tempdir()))))
+    validate_arguments("validate", as.list(list(data.path = tempdir()))))
   expect_error(
-    validate_arguments("validate_data", as.list(list(data.path = paste0(tempdir(), "/aoihebqlnvo333")))))
+    validate_arguments("validate", as.list(list(data.path = paste0(tempdir(), "/aoihebqlnvo333")))))
   # data.list - Is valid
   expect_null(
-    validate_arguments("validate_data", as.list(list(dataset = test_data))))
+    validate_arguments("validate", as.list(list(dataset = test_data))))
 })
 
 # validate_dataset_structure() ------------------------------------------------

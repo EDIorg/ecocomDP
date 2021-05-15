@@ -124,9 +124,9 @@ validate_arguments <- function(fun.name, fun.args) {
     
   }
   
-  # validate_data() -------------------------------------------------------
+  # validate() -------------------------------------------------------
   
-  if (fun.name == "validate_data") {
+  if (fun.name == "validate") {
     # data.path
     if (!is.null(fun.args$data.path)) {
       if (!dir.exists(fun.args$data.path)) {                                     # exists

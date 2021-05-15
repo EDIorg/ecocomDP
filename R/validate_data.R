@@ -40,22 +40,22 @@
 #'    
 #' @examples 
 #' # Validate a set of files
-#' r <- validate_data(data.path = system.file("/data", package = "ecocomDP"))
+#' r <- validate(data.path = system.file("/data", package = "ecocomDP"))
 #' 
 #' # Validate a list object
 #' CHANGE EXAMPLE TO VALIDATE A LIST OBJECT NOT CONSTRUCTED BY read_data() ... BECAUSE THIS FUNC ALREADY VALIDATES (CIRCULAR EXAMPLE) ... IS THIS REALLY A USE CASE?
 #' d <- read_data(from.files = system.file("/data", package = "ecocomDP"))
-#' r <- validate_data(dataset = d)
+#' r <- validate(dataset = d)
 #'         
 #' @export
 #'
-validate_data <- function(
+validate <- function(
   dataset = NULL,
   data.path = NULL) {
   
   # Validate arguments
   
-  validate_arguments(fun.name = "validate_data", fun.args = as.list(environment()))
+  validate_arguments(fun.name = "validate", fun.args = as.list(environment()))
   
   # Parameterize
   
