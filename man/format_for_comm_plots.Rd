@@ -4,12 +4,12 @@
 \alias{format_for_comm_plots}
 \title{Format dataset for community plotting functions}
 \usage{
-format_for_comm_plots(dataset)
+format_for_comm_plots(observation, id)
 }
 \arguments{
-\item{dataset}{(list) Data object returned by \code{read_data()} (? list of named datapackage$tables)}
+\item{observation}{(data.frame) The observation table of ecocomDP}
 
-\item{id}{(character) Dataset id}
+\item{id}{(character) Dataset id. Used in plot titles.}
 }
 \value{
 (data.frame) Tabular data of \code{id} in a format compatible with plotting functions

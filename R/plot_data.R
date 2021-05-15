@@ -1,7 +1,8 @@
 #' Plot alpha diversity (taxa richness) over time and space
 #'
-#' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
-#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100\% opaque
+#' @param observation (data.frame) The observation table of ecocomDP
+#' @param id (character) Dataset id. Used for plot subtitles.
+#' @param alpha (numeric) Alpha-transparency scale of data points. For when many data points overlap. Between 0 and 1, where 1 is 100\% opaque.
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -16,12 +17,12 @@
 #' # more than one dataset
 #' }
 #' 
-plot_alpha_diversity <- function(dataset, alpha = 1) {
+plot_alpha_diversity <- function(observation, id, alpha = 1) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
     stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
   }
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
-  ds <- format_for_comm_plots(dataset)                    # intermediate format for plotting
+  ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
   message("Plotting ", ds$id, " alpha diversity")
   # Calculate num unique taxa at each site through time and num unique taxa among all sites through time
   calc_ntaxa <- function(ex) {
@@ -68,8 +69,9 @@ plot_alpha_diversity <- function(dataset, alpha = 1) {
 
 #' Plot spatiotemporal sampling effort
 #'
-#' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
-#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100\% opaque
+#' @param observation (data.frame) The observation table of ecocomDP
+#' @param id (character) Dataset id. Used for plot subtitles.
+#' @param alpha (numeric) Alpha-transparency scale of data points. For when many data points overlap. Between 0 and 1, where 1 is 100\% opaque.
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -84,12 +86,12 @@ plot_alpha_diversity <- function(dataset, alpha = 1) {
 #' # more than one dataset
 #' }
 #' 
-plot_sampling_times <- function(dataset, alpha = 1) {
+plot_sampling_times <- function(observation, id, alpha = 1) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
     stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
   }
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
-  ds <- format_for_comm_plots(dataset)                    # intermediate format for plotting
+  ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
   message("Plotting ", ds$id, " spatiotemporal sampling effort")
   # Scale font size
   uniy <- length(unique(ds$dslong$SITE_ID))
@@ -123,8 +125,9 @@ plot_sampling_times <- function(dataset, alpha = 1) {
 
 #' Plot taxa accumulation curve over space
 #'
-#' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
-#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100\% opaque
+#' @param observation (data.frame) The observation table of ecocomDP
+#' @param id (character) Dataset id. Used for plot subtitles.
+#' @param alpha (numeric) Alpha-transparency scale of data points. For when many data points overlap. Between 0 and 1, where 1 is 100\% opaque.
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -139,12 +142,12 @@ plot_sampling_times <- function(dataset, alpha = 1) {
 #' # more than one dataset
 #' }
 #' 
-plot_taxa_accum_sites <- function(dataset, alpha = 1) {
+plot_taxa_accum_sites <- function(observation, id, alpha = 1) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
     stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
   }
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
-  ds <- format_for_comm_plots(dataset)                    # intermediate format for plotting
+  ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
   message("Plotting ", ds$id, " taxa accumulation over space")
   # Calculate cumulative number of taxa
   calc_cuml_taxa_space <- function(ex) {
@@ -189,8 +192,9 @@ plot_taxa_accum_sites <- function(dataset, alpha = 1) {
 
 #' Plot taxa accumulation curves over time (site-specific and total)
 #'
-#' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
-#' @param alpha (numeric) Alpha-transparency scale between 0 and 1, where 1 is 100\% opaque
+#' @param observation (data.frame) The observation table of ecocomDP
+#' @param id (character) Dataset id. Used for plot subtitles.
+#' @param alpha (numeric) Alpha-transparency scale of data points. For when many data points overlap. Between 0 and 1, where 1 is 100\% opaque.
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -205,12 +209,12 @@ plot_taxa_accum_sites <- function(dataset, alpha = 1) {
 #' # more than one dataset
 #' }
 #' 
-plot_taxa_accum_time <- function(dataset, alpha = 1) {
+plot_taxa_accum_time <- function(observation, id, alpha = 1) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
     stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
   }
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
-  ds <- format_for_comm_plots(dataset)                    # intermediate format for plotting
+  ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
   message("Plotting ", ds$id, " taxa accumulation over time")
   # Calculate cumulative number of taxa 
   cuml.taxa.fun <- function(ex){
@@ -349,16 +353,16 @@ plot_taxa_shared_sites <- function(dataset) {
 
 #' Format dataset for community plotting functions
 #'
-#' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
-#' @param id (character) Dataset id
+#' @param observation (data.frame) The observation table of ecocomDP
+#' @param id (character) Dataset id. Used in plot titles.
 #' 
 #' @details Downsteam plotting functions are based on \href{https://github.com/sokole/ltermetacommunities/tree/master/Group2-explore-data}{LTER Metacommunities code} and use their intermediate data input format.
 #'
 #' @return (data.frame) Tabular data of \code{id} in a format compatible with plotting functions
 #' 
-format_for_comm_plots <- function(dataset) {
-  id <- names(dataset)
-  observation <- dataset[[1]]$tables$observation
+format_for_comm_plots <- function(observation, id) {
+  id <- id
+  observation <- observation
   # Constraints
   varname <- unique(observation[c("variable_name", "unit")])                 # Can only handle one variable
   if (nrow(varname) > 1) {
@@ -381,7 +385,7 @@ format_for_comm_plots <- function(dataset) {
                                      unit == varname$unit[1])
     }
   }
-
+  
   # Duplicate observation handling
   dups <- observation %>% dplyr::select(-observation_id, -value, -event_id) %>% duplicated()
   if (any(dups)) {                                                          # Only unique observations allowed

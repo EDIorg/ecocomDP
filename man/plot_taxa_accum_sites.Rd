@@ -4,12 +4,14 @@
 \alias{plot_taxa_accum_sites}
 \title{Plot taxa accumulation curve over space}
 \usage{
-plot_taxa_accum_sites(dataset, alpha = 1)
+plot_taxa_accum_sites(observation, id, alpha = 1)
 }
 \arguments{
-\item{dataset}{(list) Data object returned by \code{read_data()} (? list of named datapackage$tables)}
+\item{observation}{(data.frame) The observation table of ecocomDP}
 
-\item{alpha}{(numeric) Alpha-transparency scale between 0 and 1, where 1 is 100\% opaque}
+\item{id}{(character) Dataset id. Used for plot subtitles.}
+
+\item{alpha}{(numeric) Alpha-transparency scale of data points. For when many data points overlap. Between 0 and 1, where 1 is 100\% opaque.}
 }
 \description{
 Plot taxa accumulation curve over space
