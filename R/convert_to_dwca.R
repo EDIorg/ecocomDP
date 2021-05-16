@@ -39,7 +39,7 @@
 #'
 #' @examples
 #' 
-create_dwca <- function(path, 
+convert_to_dwca <- function(path, 
                           core.name, 
                           parent.package.id, 
                           child.package.id,
