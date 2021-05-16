@@ -132,7 +132,7 @@ search <- function(text, taxa, num.taxa, years, sd.between.surveys,
       load(url(objurl))
     }
     ecocomDP_search_index <- c(summary_data_edi, summary_data_neon)
-    save(ecocomDP_search_index, 
+    base::save(ecocomDP_search_index, 
          file = paste0(tempdir(), "/ecocomDP_search_index.rda"), 
          version = 3)
     d <- ecocomDP_search_index
