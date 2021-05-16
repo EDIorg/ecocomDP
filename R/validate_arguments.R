@@ -249,9 +249,9 @@ validate_arguments <- function(fun.name, fun.args) {
     }
   }
   
-  # save_data() ---------------------------------------------------------------
+  # save() ---------------------------------------------------------------
   
-  if (fun.name == "save_data") {
+  if (fun.name == "save") {
     # path
     if (!is.null(fun.args$path)) {
       if (!dir.exists(fun.args$path)) {                                           # exists

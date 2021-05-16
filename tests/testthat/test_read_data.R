@@ -60,7 +60,7 @@ testthat::test_that("Reads from local files", {
   # From .rds
   d <- read_example_dataset()
   id <- names(d)
-  save_data(d, tempdir())
+  save(d, tempdir())
   d <- suppressWarnings(read(from.file = paste0(tempdir(), "/d.rds")))           # Has expected structure
   expect_true(is.list(d))                                                             # obj is a list
   expect_true(names(d) == id)                                                         # 1st level name is id
@@ -80,7 +80,7 @@ testthat::test_that("Reads from local files", {
   names(d) <- ids
   id <- "d"
   unlink(paste0(tempdir(),"/", id), recursive = TRUE, force = TRUE) 
-  save_data(d, tempdir(), file.type = ".csv")
+  save(d, tempdir(), file.type = ".csv")
   d <- suppressWarnings(read(from.file = paste0(tempdir(), "/", id)))            # Has expected structure
   expect_true(is.list(d))                                                             # obj is a list
   expect_true(all(names(d) %in% ids))                                                 # 1st level name is id
@@ -106,7 +106,7 @@ testthat::test_that("Has datetime parsing option", {
   criteria <- read_criteria()
   d <- read_example_dataset()
   id <- names(d)
-  save_data(d, tempdir())
+  save(d, tempdir())
   d <- suppressWarnings(
     read(from.file = paste0(tempdir(), "/d.rds"), parse.datetime = TRUE))      # not character
   for (tbl in names(d[[1]]$tables)) {

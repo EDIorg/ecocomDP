@@ -29,14 +29,14 @@
 #'   read("edi.359.1"))
 #' 
 #' # Save as .rds
-#' save_data(datasets, "/Users/me/documents/data")
+#' save(datasets, "/Users/me/documents/data")
 #' 
 #' # Save as .csv
-#' save_data(datasets, "/Users/me/documents/data", file.type = ".csv")
+#' save(datasets, "/Users/me/documents/data", file.type = ".csv")
 #' }
 #' 
-save_data <- function(data, path, file.type = ".rds", file.name = NULL) {
-  validate_arguments(fun.name = "save_data", fun.args = as.list(environment()))
+save <- function(data, path, file.type = ".rds", file.name = NULL) {
+  validate_arguments(fun.name = "save", fun.args = as.list(environment()))
   if (is.null(file.name)) {
     file.name <- deparse(substitute(data))
   }

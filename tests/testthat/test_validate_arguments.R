@@ -116,21 +116,21 @@ testthat::test_that("read()", {
     regexp = "Input 'from.file' is a non-existant file or directory.")
 })
 
-# save_data() -----------------------------------------------------------------
+# save() -----------------------------------------------------------------
 
-testthat::test_that("save_data()", {
+testthat::test_that("save()", {
   # path
-  expect_null(validate_arguments("save_data", as.list(list(path = tempdir())))) # exists
+  expect_null(validate_arguments("save", as.list(list(path = tempdir())))) # exists
   expect_error(
     validate_arguments("read", as.list(list(path = "/some/invalid/path"))),
     regexp = "Input \'path\' .+ doesn\'t exist.")
   # file.type
   expect_null(                                                                 # has expected type
-    validate_arguments("save_data", as.list(list(file.type = ".rds"))))
+    validate_arguments("save", as.list(list(file.type = ".rds"))))
   expect_null(
-    validate_arguments("save_data", as.list(list(file.type = ".csv"))))
+    validate_arguments("save", as.list(list(file.type = ".csv"))))
   expect_error(
-    validate_arguments("save_data", as.list(list(file.type = "invalid value"))),
+    validate_arguments("save", as.list(list(file.type = "invalid value"))),
     regexp = "Input 'file.type' should be '.rds' or '.csv'.")
 })
 

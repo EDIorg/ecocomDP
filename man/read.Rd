@@ -67,7 +67,7 @@ neon.datascience user accounts)}
 
 \item{...}{(NEON data only) Other arguments to \code{neonUtilities::loadByProduct()}}
 
-\item{from.file}{(character) Full path to file to be read if .rds, or path to directory if .csv. Supported options are returned by \code{save_data()}}
+\item{from.file}{(character) Full path to file to be read if .rds, or path to directory if .csv. Supported options are returned by \code{save()}}
 }
 \value{
 (list) with the structure: 

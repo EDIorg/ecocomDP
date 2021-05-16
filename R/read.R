@@ -42,7 +42,7 @@
 #' @param ...
 #'     (NEON data only) Other arguments to \code{neonUtilities::loadByProduct()}
 #' @param from.file
-#'     (character) Full path to file to be read if .rds, or path to directory if .csv. Supported options are returned by \code{save_data()}
+#'     (character) Full path to file to be read if .rds, or path to directory if .csv. Supported options are returned by \code{save()}
 #'     
 #'     
 #' @return
@@ -451,7 +451,7 @@ read_from_files <- function(data.path) {
     parent_dir_has_tables <- any(unlist(parent_dir_has_tables))
     if (parent_dir_has_tables) { # Disambiguate usecases: Parent dir tables is target, but subdir also has tables
       dirs <- dirs[1]
-    } else if (!parent_dir_has_tables & (length(dirs) > 1)) { # Don't use parent dir if nested (use case of reading from save_data(..., file.type = .csv))
+    } else if (!parent_dir_has_tables & (length(dirs) > 1)) { # Don't use parent dir if nested (use case of reading from save(..., file.type = .csv))
       dirs <- dirs[-1]
     }
     
@@ -478,7 +478,7 @@ read_from_files <- function(data.path) {
         return(res)
       })
     d <- unlist(d, recursive = FALSE)
-    if (length(dirs) > 1){         # Get id from dir if nested (use case of reading from save_data(..., file.type = .csv))
+    if (length(dirs) > 1){         # Get id from dir if nested (use case of reading from save(..., file.type = .csv))
       names(d) <- basename(dirs)
     } else {
       names(d) <- d[[1]]$tables$dataset_summary$package_id
