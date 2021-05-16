@@ -21,98 +21,98 @@ testthat::test_that("plot_*()", {
   expect_error(validate_arguments("plot", as.list(list(alpha = 2))))
 })
 
-# read_data() -----------------------------------------------------------------
+# read() -----------------------------------------------------------------
 
-testthat::test_that("read_data()", {
+testthat::test_that("read()", {
   # id
   expect_error(
-    validate_arguments("read_data", as.list(list(id = 1))), 
+    validate_arguments("read", as.list(list(id = 1))), 
     regexp = "Input 'id' should be character.")
   expect_error(                                                             # exists
-    validate_arguments("read_data", as.list(list(id = "edi.x.x"))), 
+    validate_arguments("read", as.list(list(id = "edi.x.x"))), 
     regexp = "Invalid identifier 'edi.x.x' cannot be read.")
   expect_warning(                                                           # warns if newer revision
-    validate_arguments("read_data", as.list(list(id = "edi.124.3"))), 
+    validate_arguments("read", as.list(list(id = "edi.124.3"))), 
     regexp = "A newer version of 'edi.124.3' is available.")
   # path
-  expect_null(validate_arguments("read_data", as.list(list(path = tempdir())))) # exists
+  expect_null(validate_arguments("read", as.list(list(path = tempdir())))) # exists
   expect_error(
-    validate_arguments("read_data", as.list(list(path = "/some/invalid/path"))),
+    validate_arguments("read", as.list(list(path = "/some/invalid/path"))),
     regexp = "Input \'path\' .+ doesn\'t exist.")
   # parse.datetime
   expect_null(                                                                 # is logical
-    validate_arguments("read_data", as.list(list(parse.datetime = TRUE))))
+    validate_arguments("read", as.list(list(parse.datetime = TRUE))))
   expect_error(
-    validate_arguments("read_data", as.list(list(parse.datetime = "TRUE"))),
+    validate_arguments("read", as.list(list(parse.datetime = "TRUE"))),
     regexp = "Input 'parse.datetime' should be logical.")
   # globally.unique.keys
   expect_null(                                                                 # is logical
-    validate_arguments("read_data", as.list(list(globally.unique.keys = TRUE))))
+    validate_arguments("read", as.list(list(globally.unique.keys = TRUE))))
   expect_error(
-    validate_arguments("read_data", as.list(list(globally.unique.keys = "TRUE"))),
+    validate_arguments("read", as.list(list(globally.unique.keys = "TRUE"))),
     regexp = "Input 'globally.unique.keys' should be logical.")
   # site
   expect_null(                                                                 # site exists for id
-    validate_arguments("read_data", as.list(list(id = "neon.ecocomdp.20120.001.001",
+    validate_arguments("read", as.list(list(id = "neon.ecocomdp.20120.001.001",
                                                site = c("ARIK")))))
   expect_error(
-    validate_arguments("read_data", as.list(list(id = "neon.ecocomdp.20120.001.001",
+    validate_arguments("read", as.list(list(id = "neon.ecocomdp.20120.001.001",
                                                  site = c("ARIK", "not an id")))),
     regexp = "Sites not available in neon.ecocomdp.20120.001.001: not an id")
   # startdate
   expect_null(                                                                 # has YYYY-MM format and MM is 1-12
-    validate_arguments("read_data", as.list(list(startdate = "2020-12"))))
+    validate_arguments("read", as.list(list(startdate = "2020-12"))))
   expect_error(
-    validate_arguments("read_data", as.list(list(startdate = "2020-12-30"))),
+    validate_arguments("read", as.list(list(startdate = "2020-12-30"))),
     regexp = "Unsupported 'startdate'. Expected format is YYYY-MM.")
   expect_error(
-    validate_arguments("read_data", as.list(list(startdate = "2020-13"))),
+    validate_arguments("read", as.list(list(startdate = "2020-13"))),
     regexp = "Unsupported 'startdate'. Expected format is YYYY-MM.")
   # enddate
   expect_null(                                                                 # has YYYY-MM format and MM is 1-12
-    validate_arguments("read_data", as.list(list(enddate = "2020-12"))))
+    validate_arguments("read", as.list(list(enddate = "2020-12"))))
   expect_error(
-    validate_arguments("read_data", as.list(list(enddate = "2020-12-30"))),
+    validate_arguments("read", as.list(list(enddate = "2020-12-30"))),
     regexp = "Unsupported 'enddate'. Expected format is YYYY-MM.")
   expect_error(
-    validate_arguments("read_data", as.list(list(enddate = "2020-13"))),
+    validate_arguments("read", as.list(list(enddate = "2020-13"))),
     regexp = "Unsupported 'enddate'. Expected format is YYYY-MM.")
   # package
   expect_null(                                                                 # has expected type
-    validate_arguments("read_data", as.list(list(package = "basic"))))
+    validate_arguments("read", as.list(list(package = "basic"))))
   expect_null(
-    validate_arguments("read_data", as.list(list(package = "expanded"))))
+    validate_arguments("read", as.list(list(package = "expanded"))))
   expect_error(
-    validate_arguments("read_data", as.list(list(package = "invalid value"))),
+    validate_arguments("read", as.list(list(package = "invalid value"))),
     regexp = "Input 'package' should be 'basic' or 'expanded'.")
   # check.size
   expect_null(                                                                 # is logical
-    validate_arguments("read_data", as.list(list(check.size = TRUE))))
+    validate_arguments("read", as.list(list(check.size = TRUE))))
   expect_error(
-    validate_arguments("read_data", as.list(list(check.size = "TRUE"))),
+    validate_arguments("read", as.list(list(check.size = "TRUE"))),
     regexp = "Input 'check.size' should be logical.")
   # nCores
   expect_null(                                                                 # is logical
-    validate_arguments("read_data", as.list(list(nCores = 1))))
+    validate_arguments("read", as.list(list(nCores = 1))))
   expect_error(
-    validate_arguments("read_data", as.list(list(nCores = 2.5))),
+    validate_arguments("read", as.list(list(nCores = 2.5))),
     regexp = "Input 'nCores' should be integer.")
   # forceParallel
   expect_null(                                                                 # is logical
-    validate_arguments("read_data", as.list(list(forceParallel = TRUE))))
+    validate_arguments("read", as.list(list(forceParallel = TRUE))))
   expect_error(
-    validate_arguments("read_data", as.list(list(forceParallel = "TRUE"))),
+    validate_arguments("read", as.list(list(forceParallel = "TRUE"))),
     regexp = "Input 'forceParallel' should be logical.")
   # neon.data.save.dir
-  expect_null(validate_arguments("read_data", as.list(list(neon.data.save.dir = tempdir())))) # exists
+  expect_null(validate_arguments("read", as.list(list(neon.data.save.dir = tempdir())))) # exists
   expect_error(
-    validate_arguments("read_data", as.list(list(neon.data.save.dir = "/some/invalid/path"))),
+    validate_arguments("read", as.list(list(neon.data.save.dir = "/some/invalid/path"))),
     regexp = "Input 'neon.data.save.dir' .+ doesn\'t exist.")
   # from.file
   expect_null(                                                                 # file or dir exists
-    validate_arguments("read_data", as.list(list(from.file = tempdir()))))
+    validate_arguments("read", as.list(list(from.file = tempdir()))))
   expect_error(
-    validate_arguments("read_data", as.list(list(from.file = "/not/a/dir"))),
+    validate_arguments("read", as.list(list(from.file = "/not/a/dir"))),
     regexp = "Input 'from.file' is a non-existant file or directory.")
 })
 
@@ -122,7 +122,7 @@ testthat::test_that("save_data()", {
   # path
   expect_null(validate_arguments("save_data", as.list(list(path = tempdir())))) # exists
   expect_error(
-    validate_arguments("read_data", as.list(list(path = "/some/invalid/path"))),
+    validate_arguments("read", as.list(list(path = "/some/invalid/path"))),
     regexp = "Input \'path\' .+ doesn\'t exist.")
   # file.type
   expect_null(                                                                 # has expected type

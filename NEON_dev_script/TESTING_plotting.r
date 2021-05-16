@@ -2,7 +2,7 @@
 rm(list=ls())
 
 # algae
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20166.001.001",
   site = c('COMO','SUGG'), 
   startdate = "2017-06",
@@ -11,7 +11,7 @@ my_result_read_data <- read_data(
   check.size = FALSE)
 
 # macroinverts
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20120.001.001",
   site= c('COMO','LECO','SUGG'), 
   startdate = "2017-06",

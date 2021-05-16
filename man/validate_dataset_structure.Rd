@@ -7,7 +7,7 @@
 validate_dataset_structure(dataset)
 }
 \arguments{
-\item{dataset}{(list) Data object returned by \code{read_data()} (? list of named datapackage$tables)}
+\item{dataset}{(list) Data object returned by \code{read()} (? list of named datapackage$tables)}
 }
 \description{
 Validate dataset structure

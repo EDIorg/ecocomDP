@@ -17,7 +17,7 @@ View(my_search_result)
 #BEETLE update
 rm(list = ls())
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20120.001.001",
   site= c('COMO','LECO','SUGG'), 
   startdate = "2017-06",
@@ -28,13 +28,13 @@ my_result_read_data <- read_data(
 
 
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20120.001.001",
   neon.data.read.path = "my_result/DP1.20120.001_20210430145730.RDS")
 
 neon_raw_data <- readRDS("my_result/DP1.20120.001_20210430145730.RDS")
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20120.001.001",
   neon.data.list = neon_raw_data)
 
@@ -57,7 +57,7 @@ View(tab_flat)
 #BEETLE update
 rm(list = ls())
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10022.001.001",
   site = c('ABBY','BARR'),
   startdate = "2019-06",
@@ -69,13 +69,13 @@ my_result_read_data <- read_data(
 
 
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10022.001.001",
   neon.data.read.path = "my_result/DP1.10022.001_20210430133402.RDS")
 
 neon_raw_data <- readRDS("my_result/DP1.10022.001_20210430133402.RDS")
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10022.001.001",
   neon.data.list = neon_raw_data)
 
@@ -99,7 +99,7 @@ View(tab_flat)
 #BIRD update
 rm(list = ls())
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10003.001.001",
   site = c('ABBY','BARR'),
   startdate = "2019-06",
@@ -112,7 +112,7 @@ my_result_read_data <- read_data(
 my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10003.001.001",
   neon.data.list = NA)
 
@@ -122,7 +122,7 @@ my_result_read_data <- read_data(
 # HERPS
 rm(list = ls())
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10022.001.002",
   site= c("NIWO","DSNY"),
   startdate = "2016-01",
@@ -134,7 +134,7 @@ my_result_read_data <- read_data(
 my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10022.001.002",
   neon.data.list = NA)
 ###############################################
@@ -143,7 +143,7 @@ my_result_read_data <- read_data(
 # MOSQUITO
 rm(list = ls())
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10043.001.001",
   site= c("NIWO","DSNY"),
   startdate = "2016-01",
@@ -155,7 +155,7 @@ my_result_read_data <- read_data(
 my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10043.001.001",
   neon.data.list = NA)
 ###############################################
@@ -164,7 +164,7 @@ my_result_read_data <- read_data(
 # PLANT
 rm(list = ls())
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10058.001.001",
   site= c("NIWO","DSNY"),
   startdate = "2016-01",
@@ -176,7 +176,7 @@ my_result_read_data <- read_data(
 my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10058.001.001",
   neon.data.list = NA)
 ###############################################
@@ -185,7 +185,7 @@ my_result_read_data <- read_data(
 # SMALL_MAMMALS
 rm(list = ls())
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10072.001.001",
   site= c("NIWO","DSNY"),
   startdate = "2016-01",
@@ -198,7 +198,7 @@ my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10072.001.001",
   neon.data.list = NA)
 ###############################################
@@ -207,7 +207,7 @@ my_result_read_data <- read_data(
 # TICK_PATHOGEN
 rm(list = ls())
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10092.001.001",
   site = c("ORNL","OSBS"),
   startdate = "2016-01",
@@ -219,7 +219,7 @@ my_result_read_data <- read_data(
 my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10092.001.001",
   neon.data.list = NA)
 ###############################################
@@ -228,7 +228,7 @@ my_result_read_data <- read_data(
 # TICKS
 rm(list = ls())
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10093.001.001",
   site = c("ORNL","OSBS"),
   startdate = "2016-01",
@@ -240,7 +240,7 @@ my_result_read_data <- read_data(
 my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
   
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10093.001.001",
   neon.data.list = NA)
 ###############################################
@@ -249,7 +249,7 @@ my_result_read_data <- read_data(
 # FISH
 rm(list = ls())
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20107.001.001",
   site = c('COMO','LECO'),
   startdate = "2016-01",
@@ -261,7 +261,7 @@ my_result_read_data <- read_data(
 my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20107.001.001",
   neon.data.list = NA)
 ###############################################
@@ -270,7 +270,7 @@ my_result_read_data <- read_data(
 # MACROINVERTEBRATE
 rm(list = ls())
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20120.001.001",
   site = c('COMO','LECO'),
   startdate = "2019-06",
@@ -282,7 +282,7 @@ my_result_read_data <- read_data(
 my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20120.001.001",
   neon.data.list = NA)
 ###############################################
@@ -291,7 +291,7 @@ my_result_read_data <- read_data(
 # ALGAE
 rm(list = ls())
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20166.001.001",
   site = c('COMO','LECO'),
   startdate = "2017-06",
@@ -303,7 +303,7 @@ my_result_read_data <- read_data(
 my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20166.001.001",
   neon.data.list = NA)
 ###############################################
@@ -312,7 +312,7 @@ my_result_read_data <- read_data(
 # ZOOPS
 rm(list = ls())
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20219.001.001",
   site = c("BARC","SUGG"),
   startdate = "2016-01",
@@ -324,6 +324,6 @@ my_result_read_data <- read_data(
 my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20219.001.001",
   neon.data.list = NA)

@@ -21,7 +21,7 @@ Check for valid date and time formats
 \examples{
 \dontrun{
 # Flatten NEON data
-all_data <- read_data(
+all_data <- read(
 id = "DP1.20120.001",
 site= c('COMO','LECO'),
 startdate = "2019-06",
@@ -32,7 +32,7 @@ my_list_of_tables <- all_data[[1]]$tables
 flat_data <- flatten_data(my_list_of_tables)
 
 # Flatten EDI data
-all_data <- read_data("edi.290.1")
+all_data <- read("edi.290.1")
 my_list_of_tables <- all_data[[1]]$tables
 flat_data <- flatten_data(my_list_of_tables)
 }

@@ -1,7 +1,7 @@
 #' Save ecocomDP data
 #'
 #' @param data 
-#'     (list) Data as a list object created by \code{read_data()}. Name of object will become file name if \code{file.name} is not used. Can be a list of these objects, i.e. more than one.
+#'     (list) Data as a list object created by \code{read()}. Name of object will become file name if \code{file.name} is not used. Can be a list of these objects, i.e. more than one.
 #' @param path
 #'     (character) Path to the directory in which the data will be written.
 #' @param file.type
@@ -24,9 +24,9 @@
 #' \dontrun{
 #' # Read from source
 #' datasets <- c(
-#'   read_data("edi.193.3"),
-#'   read_data("edi.262.1"),
-#'   read_data("edi.359.1"))
+#'   read("edi.193.3"),
+#'   read("edi.262.1"),
+#'   read("edi.359.1"))
 #' 
 #' # Save as .rds
 #' save_data(datasets, "/Users/me/documents/data")

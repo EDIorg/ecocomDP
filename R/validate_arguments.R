@@ -140,9 +140,9 @@ validate_arguments <- function(fun.name, fun.args) {
     
   }
   
-  # read_data() ---------------------------------------------------------------
+  # read() ---------------------------------------------------------------
   
-  if (fun.name == "read_data") {
+  if (fun.name == "read") {
     if (is.null(fun.args$from.file)) {                                            # EDI is accessible (required by many functions)
       ping_edi()
     }
@@ -352,7 +352,7 @@ validate_site <- function(site, id) {
 
 #' Validate dataset structure
 #'
-#' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
+#' @param dataset (list) Data object returned by \code{read()} (? list of named datapackage$tables)
 #'
 #' @details Returns an error if \code{dataset} is malformed
 #'
@@ -365,7 +365,7 @@ validate_dataset_structure <- function(dataset) {
   res <- c(res, tryCatch(all(names(dataset[[1]]$tables) %in% unique(criteria$table)), error = function(cond) {FALSE})) # table names are valid
   res <- c(res, tryCatch(all(unlist(lapply(dataset[[1]]$tables, is.data.frame))), error = function(cond) {FALSE})) # tables are data.frames
   if (!all(res)) {
-    stop("Input 'dataset' has invalid structure. See return from read_data() ",
+    stop("Input 'dataset' has invalid structure. See return from read() ",
          "for more details.", call. = F)
   }
 }

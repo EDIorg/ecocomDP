@@ -274,7 +274,7 @@ plot_taxa_accum_time <- function(observation, id, alpha = 1) {
 
 #' Plot taxa shared among sites
 #' 
-#' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
+#' @param dataset (list) Data object returned by \code{read()} (? list of named datapackage$tables)
 #' 
 #' @import vegan
 #' @import dplyr

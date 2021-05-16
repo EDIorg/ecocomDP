@@ -16,7 +16,7 @@
 #' @examples 
 #' \dontrun{
 #' # Flatten NEON data
-#' all_data <- read_data(
+#' all_data <- read(
 #' id = "DP1.20120.001",
 #' site= c('COMO','LECO'),
 #' startdate = "2019-06",
@@ -27,7 +27,7 @@
 #' flat_data <- flatten_data(my_list_of_tables)
 #' 
 #' # Flatten EDI data
-#' all_data <- read_data("edi.290.1")
+#' all_data <- read("edi.290.1")
 #' my_list_of_tables <- all_data[[1]]$tables
 #' flat_data <- flatten_data(my_list_of_tables)
 #' }
@@ -234,13 +234,13 @@ flatten_data <- function(data.list){
 
 
 # # read in data using ecocomDP
-# all_data <- read_data(
+# all_data <- read(
 #   id = "DP1.20120.001",
 #   site= c('COMO','LECO'), 
 #   startdate = "2019-06",
 #   enddate = "2019-09",
 #   token = Sys.getenv("NEON_TOKEN"))
 # 
-# all_data <- read_data("edi.290.1")
+# all_data <- read("edi.290.1")
 # 
 # data.list <- all_data[[1]]$tables

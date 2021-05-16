@@ -4,7 +4,7 @@
 # BIRD -- event_id maps to NEON eventID
 # NOTE: taxa need to be added within event_id to get abundances per event
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10003.001.001",
   site= c("NIWO","DSNY"), 
   startdate = "2016-01",
@@ -34,7 +34,7 @@ tab_flat %>% group_by(event_id) %>%
 
 #BEETLE -- event_id maps to NEON sampleID, boutID is in ancillary table
 # no expected dup taxa within event_id
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10022.001.001",
   site = c('ABBY','BARR'),
   startdate = "2019-06",
@@ -65,7 +65,7 @@ tab_flat %>% group_by(event_id) %>%
 # HERPS -- event_id maps to NEON sampleID, boutID is in ancillary table
 # no dup taxa within event_id
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10022.001.002",
   site= c("NIWO","DSNY"), 
   startdate = "2016-01",
@@ -92,7 +92,7 @@ tab_flat %>% group_by(event_id) %>%
 # MOSQUITO -- event_id maps to NEON sampleID, neon_event_id maps to eventID
 # no dup taxa expected within event_id, but some do exist. 
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10043.001.001",
   site= c("NIWO","DSNY"), 
   startdate = "2016-01",
@@ -120,7 +120,7 @@ tab_flat %>% group_by(event_id) %>%
 # event_id = paste0(location_id,"_",subplot_id,"_",year,"-",boutNumber)
 # needs post-processing to separate/aggregate data properly for each spatial scale
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10058.001.001",
   site= c("NIWO","DSNY"), 
   startdate = "2016-01",
@@ -147,7 +147,7 @@ tab_flat %>% group_by(event_id) %>%
 # SMALL_MAMMAL - event_id maps to plot/grid by year/month and should not have dup taxa
 # event_id = paste(location_id, year, month, sep = "_"))
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10072.001.001",
   site= c("NIWO","DSNY"), 
   startdate = "2016-01",
@@ -176,7 +176,7 @@ tab_flat %>% group_by(event_id) %>%
 # event_id should not have dup taxa
 # note -- was calculating postivitiy rate incorrectly, should be fixed now. 
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10092.001.001",
   site = c("ORNL","OSBS"),
   startdate = "2016-01",
@@ -205,7 +205,7 @@ tab_flat %>% group_by(event_id) %>%
 # should be no dup in taxa by lifestage combos within a sample/event_id
 # coungs should be summed among lifestages within a sample
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10093.001.001",
   site= c("NIWO","DSNY", "BART"), 
   startdate = "2016-01",
@@ -233,7 +233,7 @@ tab_flat %>% group_by(event_id) %>%
 # event_id = NEON eventID
 # should be no dup taxa within event_id
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20107.001.001",
   site = c(c('COMO','LECO')),
   startdate = "2016-01",
@@ -262,7 +262,7 @@ tab_flat %>% group_by(event_id) %>%
 # neon_event_id = NEON's eventID
 # should not be dup taxa within event_id/sampleID -- different size classes and life states added together in a sampleID -- this is different than what was sent to neonDivData previously
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20120.001.001",
   site= c('COMO','LECO','SUGG'), 
   startdate = "2017-06",
@@ -291,7 +291,7 @@ tab_flat %>% group_by(event_id) %>%
 # no dup taxa should occur within an event_id/neon_sample_id -- but have been seeing some
 # shoudl we add dup taxa densities together?
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20166.001.001",
   site = c('COMO','SUGG'), 
   startdate = "2017-06",
@@ -321,7 +321,7 @@ tab_flat %>% group_by(event_id) %>%
 # event_id = neon_sample_id
 # neon_event_id = NEON's eventID, multiple samples map to a NEON event ID
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20219.001.001",
   site = c("BARC","SUGG"),
   startdate = "2016-01",

@@ -64,7 +64,7 @@ my_result_mapped <- ecocomDP:::map_neon_data_to_ecocomDP(
   check.size = FALSE)
 
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10022.001.001",
   site = c('ABBY','BARR'),
   startdate = "2019-06",
@@ -73,7 +73,7 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
   
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10022.001.001",
   site = c('ABBY','BARR'),
   startdate = "2019-06",
@@ -139,7 +139,7 @@ my_result <- ecocomDP:::map_neon.ecocomdp.20166.001.001(
 my_result$dataset_summary
 
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20166.001.001",
   site = c('COMO','SUGG'), 
   startdate = "2017-06",
@@ -202,7 +202,7 @@ my_result <- map_neon.ecocomdp.20120.001.001(
 my_result$dataset_summary
 
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20120.001.001",
   site= c('COMO','LECO','SUGG'), 
   startdate = "2017-06",
@@ -263,7 +263,7 @@ my_result <- map_neon.ecocomdp.10043.001.001(
 
 my_result$dataset_summary
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10043.001.001",
   site= c("NIWO","DSNY"), 
   startdate = "2016-01",
@@ -327,7 +327,7 @@ my_result %>% names()
 
 
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10003.001.001",
   site= c("NIWO","DSNY"), 
   startdate = "2016-01",
@@ -382,7 +382,7 @@ my_result <- map_neon.ecocomdp.20107.001.001(
 my_result$dataset_summary
 
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20107.001.001",
   site = c(c('COMO','LECO')),
   startdate = "2016-01",
@@ -438,7 +438,7 @@ my_result$tables %>% names()
 my_result$metadata %>% names()
 
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10022.001.002",
   site= c("NIWO","DSNY"), 
   startdate = "2016-01",
@@ -491,7 +491,7 @@ my_result <- map_neon.ecocomdp.10058.001.001(
 my_result$dataset_summary
 
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10058.001.001",
   site= c("NIWO","DSNY"), 
   startdate = "2016-01",
@@ -544,7 +544,7 @@ my_result <- map_neon.ecocomdp.10072.001.001(
 my_result$dataset_summary
 
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10072.001.001",
   site= c("NIWO","DSNY"), 
   startdate = "2016-01",
@@ -586,7 +586,7 @@ obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
 
 rm(list=ls())
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10093.001.001",
   site= c("NIWO","DSNY", "BART"), 
   startdate = "2016-01",
@@ -596,7 +596,7 @@ my_result_read_data <- read_data(
 
 list.files("my_result")
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10093.001.001",
   neon.data.read.path = "my_result/DP1.10093.001_20210320222321.RDS")
 
@@ -646,7 +646,7 @@ my_result <- map_neon.ecocomdp.20219.001.001(
 my_result$dataset_summary
 
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.20219.001.001",
   site = c("BARC","SUGG"),
   startdate = "2016-01",
@@ -699,7 +699,7 @@ my_result <- map_neon.ecocomdp.10092.001.001(
 my_result$dataset_summary
 
 
-my_result_read_data <- read_data(
+my_result_read_data <- read(
   id = "neon.ecocomdp.10092.001.001",
   site = c("ORNL","OSBS"),
   startdate = "2016-01",

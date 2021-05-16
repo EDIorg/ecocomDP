@@ -1009,7 +1009,7 @@ read_criteria <- function() {
 read_example_dataset <- function(parse.datetime = TRUE) {
   fname <- system.file("/data/example_dataset.rds", package = "ecocomDP")
   res <- suppressWarnings(
-    read_data(from.file = fname,
+    read(from.file = fname,
               parse.datetime = parse.datetime))
   return(res)
 }

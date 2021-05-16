@@ -57,8 +57,8 @@ create_dwca <- function(path,
   
   # Load data -----------------------------------------------------------------
   
-  # FIXME: Add environment argument to read_data()
-  d <- read_data(parent.package.id)
+  # FIXME: Add environment argument to read()
+  d <- read(parent.package.id)
   d <- d[[1]]$tables
   
   # Convert tables ------------------------------------------------------------
