@@ -55,23 +55,6 @@ create_dwca <- function(path,
     environment <- "production"
   }
   
-  # Parameterize --------------------------------------------------------------
-  
-  # Eventually will support 2 DwC types: choose occurence-core or event-core. 
-  # occurence is simpler (sightings), event is a better fit for most of our data
-  # TODO: Support event-core
-  
-  dwca_config_file <- suppressMessages(
-    data.table::fread(
-      system.file(
-        "/dwca_occurrence_core/dwca_occurrence_core_config.csv", 
-        package = "ecocomDP")))
-  
-  dwca_mappings_file <- suppressMessages(
-    data.table::fread(
-      system.file("/dwca_occurrence_core/dwca_occurrence_core_mappings.csv", 
-                  package = "ecocomDP")))
-  
   # Load data -----------------------------------------------------------------
   
   # FIXME: Add environment argument to read_data()
@@ -80,23 +63,10 @@ create_dwca <- function(path,
   
   # Convert tables ------------------------------------------------------------
   
-  if (core.name == 'occurrence') {
-    # # call a function to create occurrence core. inputs: data objects, 
-    # # dwca_mappings, dwca_config
-    # r <- create_table_dwca_occurrence_core(
-    #   dwca_occurrence_core_config = dwca_config_file,
-    #   dwca_occurrence_core_mapping = dwca_mappings_file,
-    #   dt_obs = d$observation,
-    #   dt_loc = d$location,
-    #   dt_tax = d$taxon,
-    #   dt_loc_ancil = d$location_ancillary,
-    #   parent.package.id = parent.package.id)
-  } else if (core.name == 'event') {
+  if (core.name == 'event') {
     # call a function to create event core. inputs: data objects, dwca_mappings, dwca_config  
     # print('calling function to create DwC-A, event core')
     r <- create_tables_dwca_event_core(
-      dwca_occurrence_core_config = dwca_config_file,
-      dwca_occurrence_core_mapping = dwca_mappings_file,
       dt_obs = d$observation,
       dt_loc = d$location,
       dt_tax = d$taxon,
@@ -148,149 +118,8 @@ create_dwca <- function(path,
 
 
 
-
-#' Function creates DwC-A tables in occurrence core 
-#'
-#' @param dwca_occurrence_core_config 
-#' @param dwca_occurrence_core_mapping 
-#' @param dt_obs 
-#' @param dt_loc 
-#' @param dt_tax 
-#' @param dt_loc_ancil 
-#' @param parent.package.id
-#'     (character) ID of an ecocomDP data package. Only 
-#'     EDI Data Repository package IDs are currently supported.
-#'
-#' @return
-#' 
-create_table_dwca_occurrence_core <- function(
-  dwca_occurrence_core_config,
-  dwca_occurrence_core_mapping,
-  dt_obs,
-  dt_loc,
-  dt_tax,
-  dt_loc_ancil = NULL,
-  parent.package.id) {
-  # FIXME: Input should be EML not package.id
-  
-  # Load Global Environment config --------------------------------------------
-  
-  if (exists("config.environment", envir = .GlobalEnv)) {
-    environment <- get("config.environment", envir = .GlobalEnv)
-  } else {
-    environment <- "production"
-  }
-  
-  # Validate function inputs --------------------------------------------------
-  # Do you have what you need to get these vars? confirm fields used by mapping 
-  # table are present. Anything that is required by the ecocomDP model already, 
-  # you can assume is present. location_ancillary.value, or 
-  # observation_anncillary.value ?? what does this note mean? do I need these?
-  
-  # If dt_loc_ancil exists, then the occurence table can have sampleValueUnit
-  if (!is.null(dt_loc_ancil)) {
-    include_sampleSizeUnit_sampleSizeValue <- FALSE
-    # TODO: include_sampleSizeUnit_sampleSizeValue <- TRUE
-  } else {
-    include_sampleSizeUnit_sampleSizeValue <- FALSE
-  }
-  
-  # Join the tables -----------------------------------------------------------
-  
-  # TODO: Don't forget locationn ancillary (MOB add issue #)
-  obs_loc_tax <- join_obs_loc_tax(
-    dt_obs = dt_obs, 
-    dt_loc = dt_loc, 
-    dt_tax = dt_tax)
-  
-  # Add column
-  # Create computed vectors:
-  
-  # Define new cols specifically needed for DwC-A
-  obs_loc_tax$lsid <- NA_character_ # TODO: This will be an LSID
-  obs_loc_tax$dc_occurrence_id <- NA_character_ # TODO: Globally unique and persistentt
-  obs_loc_tax$dc_basisofrecord <- NA_character_ # TODO: Will be "MachineObservation" or "MumanObservation" depending on sample type
-  obs_loc_tax$dc_occurrencestatus <-NA_character_ # TODO: Presence (1) or absence (0) and depends on obundance column. Optional.
-  obs_loc_tax$dc_samplingprotocol <-NA_character_ # TODO: The name of, reference to, or description of the method or protocol used during an Event. A string that will be derived from the L1 metadata. Optional.
-  obs_loc_tax$dc_samplesizeunit <-NA_character_ 
-  obs_loc_tax$dc_samplesizevalue <-NA_character_ 
-  # obs_loc_tax$dc_organismquantitytype <-NA_character_ # TODO: The type of quantification system used for the quantity of organisms. Required.
-  
-  # comb_id 
-  # TODO: Form globally unique IDs. See notes.
-  obs_loc_tax$dc_occurrence_id <- paste(
-    child.package.id,
-    seq(nrow(obs_loc_tax)),
-    sep = '.')
-  
-  # occurrence status: choice of present|absent, based on value.
-  obs_loc_tax$dc_occurrencestatus[obs_loc_tax$value %in% 0] <- 'absent'
-  obs_loc_tax$dc_occurrencestatus[
-    obs_loc_tax$value != 0 |
-      !is.na(obs_loc_tax$value)] <-'present'
-  
-  # Use the DOI of the L1 and construct as: "See methods in DOI"
-  obs_loc_tax$dc_samplingprotocol <- paste0(
-    "See methods in ",
-    suppressMessages(
-      api_read_data_package_doi(parent.package.id, environment)))
-  
-  # TODO: Determine if observation was made by an instrument or human. This 
-  # info is stored in the L1 EML keywordSet
-  
-  keywords <- xml2::xml_text(
-      xml2::xml_find_all(
-        suppressMessages(
-          api_read_metadata(parent.package.id, environment)), ".//keyword"))
-  
-  basis_of_record <- trimws(
-    stringr::str_remove(
-      keywords[stringr::str_detect(keywords, "basisOfRecord:")],
-      "basisOfRecord:"))
-  
-  if (length(basis_of_record) == 1) {
-    obs_loc_tax$dc_basisofrecord <- basis_of_record
-  }
-  
-  # TODO: Determine if these have to be here
-  # obs_loc_tax$dc_samplesizevalue
-  
-  # TODO: Determine if these have to be here
-  # obs_loc_tax$dc_samplesizeunit
-  
-  # Create DF for export 
-  occurrence_core <- data.frame(
-    occurrenceId = obs_loc_tax$dc_occurrence_id,
-    basisOfRecord = obs_loc_tax$dc_basisofrecord,
-    locationID = obs_loc_tax$location_id,
-    decimalLatitude = obs_loc_tax$latitude,
-    decimalLongitude = obs_loc_tax$longitude,
-    eventDate = obs_loc_tax$datetime,
-    samplingProtocol = obs_loc_tax$dc_samplingprotocol,
-    sampleSizeValue = obs_loc_tax$dc_samplesizevalue,
-    sampleSizeUnit = obs_loc_tax$dc_samplesizeunit,
-    scientificName = obs_loc_tax$taxon_name,
-    taxonID = obs_loc_tax$authority_taxon_id,
-    nameAccordingTo = obs_loc_tax$authority_system,
-    scientificNameID = obs_loc_tax$lsid,
-    occurrenceStatus = obs_loc_tax$dc_occurrencestatus,
-    organismQuantityType = obs_loc_tax$value,
-    measurementUnit = obs_loc_tax$unit,
-    stringsAsFactors = FALSE)
-  
-  return(
-    list(occurrence = occurrence_core))
-  
-}
-
-
-
-
-
 #' Creates DwC-A tables in event core 
 #'
-#' @param dwca_occurrence_core_config 
-#' @param dwca_occurrence_core_mapping 
 #' @param dt_obs 
 #' @param dt_obs_ancil 
 #' @param dt_loc_ancil 
@@ -307,8 +136,6 @@ create_table_dwca_occurrence_core <- function(
 #' @examples
 #' 
 create_tables_dwca_event_core <- function(
-  dwca_occurrence_core_config,
-  dwca_occurrence_core_mapping,
   dt_obs,
   dt_obs_ancil,
   dt_loc_ancil,
@@ -688,10 +515,12 @@ make_eml_dwca <- function(path,
   eal_inputs$eml.path <- path
   eal_inputs$dataset.title <- "placeholder"
   eal_inputs$data.table <- data.table
+  eal_inputs$data.table.name <- tools::file_path_sans_ext(data.table)
   eal_inputs$data.table.description <- data.table.description
   eal_inputs$data.table.url <- data.table.url
   eal_inputs$data.table.quote.character <- rep('"', length(data.table))
   eal_inputs$other.entity <- other.entity
+  eal_inputs$other.entity.name <- tools::file_path_sans_ext(other.entity)
   eal_inputs$other.entity.description <- other.entity.description
   eal_inputs$other.entity.url <- other.entity.url
   eal_inputs$provenance <- parent.package.id
@@ -858,7 +687,8 @@ make_eml_dwca <- function(path,
   
   # Parse components to be reordered and recombined. Parse para from xml 
   # object because emld parsing is irregular
-  methods_L2 <- eml_L2$dataset$methods$methodStep[[1]]
+  
+  methods_L2 <- eml_L2$dataset$methods$methodStep[1]
   eml_L2$dataset$methods$methodStep[[1]] <- NULL
   
   provenance_L1 <- suppressMessages(

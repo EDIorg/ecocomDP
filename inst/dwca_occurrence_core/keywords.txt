@@ -1,5 +1,0 @@
-keyword	keywordThesaurus
-Darwin Core Archive (DwC-A) Occurrence Core	EDI Controlled Vocabulary
-Taxon: ScientificName	Darwin Core Terms
-Population Abundance	Essential Biodiversity Variables
-Occurrence	Darwin Core Terms

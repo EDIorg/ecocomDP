@@ -5,8 +5,6 @@
 \title{Creates DwC-A tables in event core}
 \usage{
 create_tables_dwca_event_core(
-  dwca_occurrence_core_config,
-  dwca_occurrence_core_mapping,
   dt_obs,
   dt_obs_ancil,
   dt_loc_ancil,
@@ -17,10 +15,6 @@ create_tables_dwca_event_core(
 )
 }
 \arguments{
-\item{dwca_occurrence_core_config}{}
-
-\item{dwca_occurrence_core_mapping}{}
-
 \item{dt_obs}{}
 
 \item{dt_obs_ancil}{}
