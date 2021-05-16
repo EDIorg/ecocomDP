@@ -64,15 +64,15 @@ create_dataset_summary <- function(L0_wide,
 
 #' Calculate geo_extent_bounding_box_m2 of the dataset_summary table
 #'
-#' @param lon_west 
+#' @param west 
 #'     (numeric) West longitude in decimal degrees and negative if west of the 
 #'     prime meridian.
-#' @param lon_east 
+#' @param east 
 #'     (numeric) East longitude in decimal degrees and negative if west of the 
 #'     prime meridian.
-#' @param lat_north 
+#' @param north 
 #'     (numeric) North latitude in decimal degrees.
-#' @param lat_south 
+#' @param south 
 #'     (numeric) North latitude in decimal degrees.
 #'
 #' @return
@@ -86,10 +86,10 @@ create_dataset_summary <- function(L0_wide,
 #' }
 #'
 calc_geo_extent_bounding_box_m2 <- function(
-  lon_west, lon_east, lat_north, lat_south) {
+  west, east, north, south) {
   df <- data.frame(
-    longitude = c(lon_west, lon_east, lon_east, lon_west),
-    latitude = c(lat_north, lat_north, lat_south, lat_south))
+    longitude = c(west, east, east, west),
+    latitude = c(north, north, south, south))
   res <- round(geosphere::areaPolygon(df))
   return(res)
 }

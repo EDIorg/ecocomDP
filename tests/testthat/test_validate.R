@@ -9,8 +9,8 @@ context("validate()")
 
 # Use the example dataset for testing
 
-# test_data <- read(from.file = system.file("/data", package = "ecocomDP"))[[1]]$tables
-test_data <- read(from.file = system.file("/data", package = "ecocomDP"))
+# test_data <- read(from = system.file("/data", package = "ecocomDP"))[[1]]$tables
+test_data <- read(from = system.file("/data", package = "ecocomDP"))
 test_data_file_names <- dir(
   system.file("/data", package = "ecocomDP"), pattern = "Ant_Assemblages_")
 

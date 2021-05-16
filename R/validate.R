@@ -5,7 +5,7 @@
 #' 
 #' @param dataset
 #'     (list of data frames) A single dataset return from \code{read()}.
-#' @param data.path 
+#' @param path 
 #'     (character) The path to the directory containing ecocomDP tables.
 #'     
 #' @note
@@ -22,7 +22,7 @@
 #' @details 
 #'    Validation checks:
 #'    \itemize{
-#'        \item{File names - When using \code{data.path} the data are read from
+#'        \item{File names - When using \code{path} the data are read from
 #'        files and must follow an expected pattern, namely 
 #'        \emph{studyName_ecocomDPTableName.ext} (e.g. 
 #'        \emph{gleon_chloride_observation.csv}).}
@@ -40,18 +40,18 @@
 #'    
 #' @examples 
 #' # Validate a set of files
-#' r <- validate(data.path = system.file("/data", package = "ecocomDP"))
+#' r <- validate(path = system.file("/data", package = "ecocomDP"))
 #' 
 #' # Validate a list object
 #' CHANGE EXAMPLE TO VALIDATE A LIST OBJECT NOT CONSTRUCTED BY read() ... BECAUSE THIS FUNC ALREADY VALIDATES (CIRCULAR EXAMPLE) ... IS THIS REALLY A USE CASE?
-#' d <- read(from.files = system.file("/data", package = "ecocomDP"))
+#' d <- read(from = system.file("/data", package = "ecocomDP"))
 #' r <- validate(dataset = d)
 #'         
 #' @export
 #'
 validate <- function(
   dataset = NULL,
-  data.path = NULL) {
+  path = NULL) {
   
   # Validate arguments
   
@@ -63,9 +63,9 @@ validate <- function(
     system.file('validation_criteria.txt', package = 'ecocomDP'))
   
   # Read data
-  if (!is.null(data.path)) {
-    d <- read(from.file = data.path)
-    invisible(validate_table_names(data.path = data.path))
+  if (!is.null(path)) {
+    d <- read(from = path)
+    invisible(validate_table_names(data.path = path))
   } else {
     d <- dataset
   }

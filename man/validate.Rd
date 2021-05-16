@@ -4,12 +4,12 @@
 \alias{validate}
 \title{Validate a dataset against the ecocomDP}
 \usage{
-validate(dataset = NULL, data.path = NULL)
+validate(dataset = NULL, path = NULL)
 }
 \arguments{
 \item{dataset}{(list of data frames) A single dataset return from \code{read()}.}
 
-\item{data.path}{(character) The path to the directory containing ecocomDP tables.}
+\item{path}{(character) The path to the directory containing ecocomDP tables.}
 }
 \value{
 (character) If issues are found, then a vector of character strings 
@@ -22,7 +22,7 @@ Use this function to verify a dataset conforms to the ecocomDP.
 \details{
 Validation checks:
    \itemize{
-       \item{File names - When using \code{data.path} the data are read from
+       \item{File names - When using \code{path} the data are read from
        files and must follow an expected pattern, namely 
        \emph{studyName_ecocomDPTableName.ext} (e.g. 
        \emph{gleon_chloride_observation.csv}).}
@@ -46,11 +46,11 @@ This function is used by ecocomDP creators (to ensure what has been
 }
 \examples{
 # Validate a set of files
-r <- validate(data.path = system.file("/data", package = "ecocomDP"))
+r <- validate(path = system.file("/data", package = "ecocomDP"))
 
 # Validate a list object
 CHANGE EXAMPLE TO VALIDATE A LIST OBJECT NOT CONSTRUCTED BY read() ... BECAUSE THIS FUNC ALREADY VALIDATES (CIRCULAR EXAMPLE) ... IS THIS REALLY A USE CASE?
-d <- read(from.files = system.file("/data", package = "ecocomDP"))
+d <- read(from = system.file("/data", package = "ecocomDP"))
 r <- validate(dataset = d)
         
 }

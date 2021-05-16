@@ -4,10 +4,10 @@
 \alias{read_example_dataset}
 \title{Read example dataset from /data}
 \usage{
-read_example_dataset(parse.datetime = TRUE)
+read_example_dataset(parse_datetime = TRUE)
 }
 \arguments{
-\item{parse.datetime}{(logical) Attempt to parse datetime character strings through an algorithm. For EDI, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the algorithm iterates through permutations of \code{ymd HMS} orders. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing).}
+\item{parse_datetime}{(logical) Attempt to parse datetime character strings through an algorithm. For EDI, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the algorithm iterates through permutations of \code{ymd HMS} orders. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing).}
 }
 \value{
 (list) Example dataset

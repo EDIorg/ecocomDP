@@ -6,43 +6,45 @@
 \usage{
 convert_to_dwca(
   path,
-  core.name,
-  parent.package.id,
-  child.package.id,
-  data.table.url = NULL,
-  user.id,
-  user.domain
+  core_name,
+  source_id,
+  derived_id,
+  url = NULL,
+  user_id,
+  user_domain
 )
 }
 \arguments{
 \item{path}{(character) Path to the where the DwC-A data objects and EML will be 
 written.}
 
-\item{core.name}{(character) The Darwin Core central table of the package. Can be: 
+\item{core_name}{(character) The Darwin Core central table of the package. Can be: 
 "event" (event core). Occurrence core is not yet supported.}
 
-\item{parent.package.id}{(character) ID of an ecocomDP data package. Only 
+\item{source_id}{(character) ID of an ecocomDP data package. Only 
 EDI Data Repository package IDs are currently supported.}
 
-\item{child.package.id}{(character) ID of DWcA occurrence data package being created.}
+\item{derived_id}{(character) ID of DWcA occurrence data package being created.}
 
-\item{user.id}{(character; optional) Repository user identifier. If more than one, 
+\item{url}{(character) URL to the publicly accessible directory containing DwC-A tables and meta.xml. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and upload of ecocomDP data packages and derived products.}
+
+\item{user_id}{(character; optional) Repository user identifier. If more than one, 
 then enter as a vector of character strings (e.g. 
-\code{c("user_id_1", "user_id_2")}). \code{user.id} sets the 
-/eml/access/principal element for all \code{user.domain} except
-"KNB", "ADC", and if \code{user.domain = NULL}.}
+\code{c("user_id_1", "user_id_2")}). \code{user_id} sets the 
+/eml/access/principal element for all \code{user_domain} except
+"KNB", "ADC", and if \code{user_domain = NULL}.}
 
-\item{user.domain}{(character; optional) Repository domain associated with 
-\code{user.id}. Currently supported values are "EDI" 
+\item{user_domain}{(character; optional) Repository domain associated with 
+\code{user_id}. Currently supported values are "EDI" 
 (Environmental Data Initiative), "LTER" (Long-Term Ecological Research 
 Network), "KNB" (The Knowledge Network for Biocomplexity), "ADC" (The 
 Arctic Data Center). If you'd like your system supported please contact
 maintainers of the ecocomDP R package. If using more than one 
-\code{user.domain}, then enter as a vector of character strings (e.g. 
+\code{user_domain}, then enter as a vector of character strings (e.g. 
 \code{c("user_domain_1", "user_domain_2")}) in the same order as 
-corresponding \code{user.id}. If \code{user.domain} is missing then a 
-default value "unknown" is assigned. \code{user.domain} sets the EML 
-header "system" attribute and for all \code{user.domain}, except "KNB" 
+corresponding \code{user_id}. If \code{user_domain} is missing then a 
+default value "unknown" is assigned. \code{user_domain} sets the EML 
+header "system" attribute and for all \code{user_domain}, except "KNB" 
 and "ADC", sets the /eml/access/principal element attributes and values.}
 }
 \value{

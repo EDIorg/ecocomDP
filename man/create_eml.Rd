@@ -6,41 +6,33 @@
 \usage{
 create_eml(
   path,
-  parent.package.id,
-  child.package.id,
+  source_id,
+  derived_id,
   script,
-  script.description,
-  is.about = NULL,
-  cat.vars,
+  script_description,
+  is_about = NULL,
   contact,
-  user.id,
-  user.domain,
-  basis.of.record = NULL,
+  user_id,
+  user_domain,
+  basis_of_record = NULL,
   url = NULL
 )
 }
 \arguments{
 \item{path}{(character) Path to the directory containing ecocomDP data tables, conversion scripts, and where EML metadata will be written.}
 
-\item{parent.package.id}{(character) Parent data package ID (e.g. "knb-lter-hfr.118.28"). Only 
+\item{source_id}{(character) Parent data package ID (e.g. "knb-lter-hfr.118.28"). Only 
 EDI Data Repository package IDs are currently supported.}
 
-\item{child.package.id}{(character) Child data package ID (e.g. "edi.53.1") to be uploaded to 
+\item{derived_id}{(character) Child data package ID (e.g. "edi.53.1") to be uploaded to 
 EDI Data Repository.}
 
 \item{script}{(character) Names of scripts used to convert and repackage the source 
 data into the ecocomDP.}
 
-\item{script.description}{(character) A description for each object listed under \code{script}.}
+\item{script_description}{(character) A description for each object listed under \code{script}.}
 
-\item{is.about}{(named character) Dataset level annotations describing what this dataset "is about" (L0 keywords converted to object label + URI pairs) describing what the L1 dataset is about. (e.g. \code{is.about = c('level of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002588",' type of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002589")}).}
-
-\item{cat.vars}{(data frame) Categorical variables with associated definitions and 
-units. Create a cat.vars data frame with the 
-\code{define_variables()} function. Variables that can't be 
-defined by the parent package EML should be manually supplied to the 
-cat.vars data frame in one of the scripts specified in the 
-\code{script} argument.}
+\item{is_about}{(named character) Dataset level annotations describing what this dataset "is about" (L0 keywords converted to object label + URI pairs) describing what the L1 dataset is about. (e.g. \code{is_about = c('level of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002588",' type of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002589")}).}
 
 \item{contact}{(data frame) Contact information of this ecocomDP creator.
 The data frame must have these columns:
@@ -51,15 +43,15 @@ The data frame must have these columns:
     \item{electronicMailAddress}
 }}
 
-\item{user.id}{(character) ID(s) of user account(s) associated with the data repository
+\item{user_id}{(character) ID(s) of user account(s) associated with the data repository
 in which this ecocomDP data package will be archived. Only EDI Data 
 Repository IDs are currently supported.}
 
-\item{user.domain}{(character) Domain of the \code{user.id}(s). Only "EDI" and "LTER" are 
+\item{user_domain}{(character) Domain of the \code{user_id}(s). Only "EDI" and "LTER" are 
 currently supported. If more than one, then supply as a vector of 
-character strings in the same order as the corresponding \code{user.id}.}
+character strings in the same order as the corresponding \code{user_id}.}
 
-\item{basis.of.record}{(character) To create a Darwin Core record from this ecocomDP using
+\item{basis_of_record}{(character) To create a Darwin Core record from this ecocomDP using
 \code{L1_to_L2_DwCA()} then the Darwin Core property 
 \href{basisOfRecord}{https://dwc.tdwg.org/terms/#dwc:basisOfRecord}
 requires definition as 
@@ -82,7 +74,7 @@ This function creates an EML record for an Ecological Community Data
     boiler-plate metadata describing the ecocomDP tables. Changes to the 
     parent EML include:
     \itemize{
-        \item \strong{<access>} Adds the \code{user.id} to the list of 
+        \item \strong{<access>} Adds the \code{user_id} to the list of 
         principals granted read and write access to the ecocomDP data 
         package this EML describes.
         \item \strong{<title>} Adds a note that this is a derived data 
@@ -96,7 +88,7 @@ This function creates an EML record for an Ecological Community Data
         "communities", "community composition", "community dynamics", 
         "community patterns", "species composition", "species diversity",
         and "species richness". Darwin Core Terms listed under \code{
-        basis.of.record} are listed and used by \code{L1_to_L2_DwCA()} 
+        basis_of_record} are listed and used by \code{L1_to_L2_DwCA()} 
         to create a Darwin Core Archive of this ecocomDP data package.
         \item \strong{<intellectualRights>} Keeps intact the intellectual
         rights license of the parent data package, or replaces it with
@@ -112,7 +104,7 @@ This function creates an EML record for an Ecological Community Data
         \item \strong{<dataTables>} Replaces the parent data package data
         tables metadata with boiler-plate metadata for the ecocomDP tables.
         \item \strong{<otherEntity>} Describes scripts listed in the 
-        \code{script} and \code{script.description} arguments. Any other
+        \code{script} and \code{script_description} arguments. Any other
         entities listed in the parent EML are removed.
     }
     
@@ -129,12 +121,6 @@ path <- "/Users/csmith/Desktop/ecocomDP"
 # Validate ecocomDP tables
 validate(path)
 
-# Use parent EML to define variables of the ecocomDP and manually add variable 
-# names and definitions created in the ecocomDP re-formatting process.
-catvars <- define_variables(path, "knb-lter-sev.29.12")
-catvars$unit[catvars$code == "Count"] <- "number"
-catvars$definition[catvars$code == "Comments"] <- "A special statement related to an observation"
-
 # Create contact information for the ecocomDP creator
 additional_contact <- data.frame(
   givenName = 'Colin',
@@ -147,20 +133,19 @@ additional_contact <- data.frame(
 # Create EML
 create_eml(
   path = path,
-  parent.package.id = "knb-lter-sev.29.12",
-  child.package.id = "edi.101.5",
+  source_id = "knb-lter-sev.29.12",
+  derived_id = "edi.101.5",
   script = c(
     "convert_sev29_to_ecocomDP.R", 
     "package_edi_333.R"
   ),
-  script.description = c(
+  script_description = c(
     "R script for creating the ecocomDP tables.",
     "R script for creating the ecocomDP EML"
   ),
-  cat.vars = catvars,
   contact = additional_contact,
-  user.id = 'csmith',
-  user.domain = 'LTER',
+  user_id = 'csmith',
+  user_domain = 'LTER',
 )
 }
 

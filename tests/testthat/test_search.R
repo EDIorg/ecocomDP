@@ -101,7 +101,7 @@ testthat::test_that("Arguments control search patterns", {
   expect_true(all(res[r_method_2] %in% r_method_1))
   # Num taxa is a bounding search
   search_num_taxa <- c(0, 10)
-  r_method_1 <- search(num.taxa = search_num_taxa)
+  r_method_1 <- search(num_taxa = search_num_taxa)
   r_method_2 <- lapply(
     names(summary_data),
     function(id) {
@@ -121,9 +121,9 @@ testthat::test_that("Arguments control search patterns", {
   r_method_1 <- c(r_method_1$id[is_edi(r_method_1$id)],
                   r_method_1$source_id[is_neon(r_method_1$id)])
   expect_true(all(res[r_method_2] %in% r_method_1))
-  # years
+  # num_years
   search_years <- c(10, 20)
-  r_method_1 <- search(years = search_years)
+  r_method_1 <- search(num_years = search_years)
   r_method_2 <- lapply(
     names(summary_data),
     function(id) {
@@ -143,9 +143,9 @@ testthat::test_that("Arguments control search patterns", {
   r_method_1 <- c(r_method_1$id[is_edi(r_method_1$id)],
                   r_method_1$source_id[is_neon(r_method_1$id)])
   expect_true(all(res[r_method_2] %in% r_method_1))
-  # sd.between.surveys
+  # sd_years
   search_sd_between_surveys <- c(.25, 1)
-  r_method_1 <- search(sd.between.surveys = search_sd_between_surveys)
+  r_method_1 <- search(sd_years = search_sd_between_surveys)
   r_method_2 <- lapply(
     names(summary_data),
     function(id) {
@@ -167,27 +167,27 @@ testthat::test_that("Arguments control search patterns", {
                   r_method_1$source_id[is_neon(r_method_1$id)])
   expect_true(all(res[r_method_2] %in% r_method_1))
   
-  # geographic.area
+  # area
   # TODO: Implement test
   
-  # boolean.operator "OR" - All unique id of separate term searches should be
+  # boolean "OR" - All unique id of separate term searches should be
   # combined when using the OR operator
   r1 <- search(text = "Lake")
   r2 <- search(text = "River")
-  r_or <- search(text = c("Lake", "River"), boolean.operator = "OR")
+  r_or <- search(text = c("Lake", "River"), boolean = "OR")
   expect_true(all(unique(c(r1$id, r2$id)) %in% unique(r_or$id)))
   r1 <- search(taxa = "Plantae")
   r2 <- search(taxa = "Animalia")
-  r_or <- search(taxa = c("Plantae", "Animalia"), boolean.operator = "OR")
+  r_or <- search(taxa = c("Plantae", "Animalia"), boolean = "OR")
   expect_true(all(unique(c(r1$id, r2$id)) %in% unique(r_or$id)))
-  # boolean.operator "AND" - All unique id of separate term searches should not
+  # boolean "AND" - All unique id of separate term searches should not
   # be expected when using the AND operator
   r1 <- search(text = "Lake")
   r2 <- search(text = "River")
-  r_and <- search(text = c("Lake", "River"), boolean.operator = "AND")
+  r_and <- search(text = c("Lake", "River"), boolean = "AND")
   expect_true(all(intersect(r1$id, r2$id) %in% r_and$id))
   r1 <- search(taxa = "Plantae")
   r2 <- search(taxa = "Animalia")
-  r_and <- search(taxa = c("Plantae", "Animalia"), boolean.operator = "AND")
+  r_and <- search(taxa = c("Plantae", "Animalia"), boolean = "AND")
   expect_true(all(intersect(r1$id, r2$id) %in% r_and$id))
 })

@@ -4,18 +4,18 @@
 \alias{calc_geo_extent_bounding_box_m2}
 \title{Calculate geo_extent_bounding_box_m2 of the dataset_summary table}
 \usage{
-calc_geo_extent_bounding_box_m2(lon_west, lon_east, lat_north, lat_south)
+calc_geo_extent_bounding_box_m2(west, east, north, south)
 }
 \arguments{
-\item{lon_west}{(numeric) West longitude in decimal degrees and negative if west of the 
+\item{west}{(numeric) West longitude in decimal degrees and negative if west of the 
 prime meridian.}
 
-\item{lon_east}{(numeric) East longitude in decimal degrees and negative if west of the 
+\item{east}{(numeric) East longitude in decimal degrees and negative if west of the 
 prime meridian.}
 
-\item{lat_north}{(numeric) North latitude in decimal degrees.}
+\item{north}{(numeric) North latitude in decimal degrees.}
 
-\item{lat_south}{(numeric) North latitude in decimal degrees.}
+\item{south}{(numeric) North latitude in decimal degrees.}
 }
 \value{
 (numeric) Area in square meters.

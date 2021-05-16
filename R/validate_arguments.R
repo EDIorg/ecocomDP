@@ -54,15 +54,15 @@ validate_arguments <- function(fun.name, fun.args) {
       stop("Input 'taxa' must be of class 'character'.", call. = F)
     }
     
-    # num.taxa
+    # num_taxa
     
-    if (!is.null(fun.args$num.taxa)) {
-      if (!is.numeric(fun.args$num.taxa)) {
-        stop("Input 'num.taxa' must be of class 'numeric'.", call. = F)
+    if (!is.null(fun.args$num_taxa)) {
+      if (!is.numeric(fun.args$num_taxa)) {
+        stop("Input 'num_taxa' must be of class 'numeric'.", call. = F)
       }
-      if (length(fun.args$num.taxa) != 2) {
+      if (length(fun.args$num_taxa) != 2) {
         stop(
-          "Input 'num.taxa' must have a minimum and maximum value.", 
+          "Input 'num_taxa' must have a minimum and maximum value.", 
           call. = F)
       }
     }
@@ -80,44 +80,44 @@ validate_arguments <- function(fun.name, fun.args) {
       }
     }
     
-    # sd.between.surveys
+    # sd_years
     
-    if (!is.null(fun.args$sd.between.surveys)) {
-      if (!is.numeric(fun.args$sd.between.surveys)) {
+    if (!is.null(fun.args$sd_years)) {
+      if (!is.numeric(fun.args$sd_years)) {
         stop(
-          "Input 'sd.between.surveys' must be of class 'numeric'.", 
+          "Input 'sd_years' must be of class 'numeric'.", 
           call. = F)
       }
-      if (length(fun.args$sd.between.surveys) != 2) {
+      if (length(fun.args$sd_years) != 2) {
         stop(
-          "Input 'sd.between.surveys' must have a minimum and maximum value.", 
+          "Input 'sd_years' must have a minimum and maximum value.", 
           call. = F)
       }
     }
     
-    # geographic.area
+    # area
     
-    if (!is.null(fun.args$geographic.area)) {
-      if (!is.numeric(fun.args$geographic.area)) {
+    if (!is.null(fun.args$area)) {
+      if (!is.numeric(fun.args$area)) {
         stop(
-          "Input 'geographic.area' must be of class 'numeric'.", 
+          "Input 'area' must be of class 'numeric'.", 
           call. = F)
       }
-      if (length(fun.args$geographic.area) != 4) {
+      if (length(fun.args$area) != 4) {
         stop(
           paste0(
-            "Input 'geographic.area' must have North, East, South, and West ",
+            "Input 'area' must have North, East, South, and West ",
             "coordinates." ), 
           call. = F)
       }
     }
     
-    # boolean.operator
+    # boolean
     
-    if (!is.null(fun.args$boolean.operator)) {
-      if (!(tolower(fun.args$boolean.operator) %in% c("and", "or"))) {
+    if (!is.null(fun.args$boolean)) {
+      if (!(tolower(fun.args$boolean) %in% c("and", "or"))) {
         stop(
-          "Valid inputs to 'boolean.operator' are: 'AND', 'OR'", 
+          "Valid inputs to 'boolean' are: 'AND', 'OR'", 
           call. = F)
       }
     }
@@ -127,10 +127,10 @@ validate_arguments <- function(fun.name, fun.args) {
   # validate() -------------------------------------------------------
   
   if (fun.name == "validate") {
-    # data.path
-    if (!is.null(fun.args$data.path)) {
-      if (!dir.exists(fun.args$data.path)) {                                     # exists
-        stop("Input 'data.path' doesn't exits.", call. = F)
+    # path
+    if (!is.null(fun.args$path)) {
+      if (!dir.exists(fun.args$path)) {                                     # exists
+        stop("Input 'path' doesn't exits.", call. = F)
       }
     }
     # dataset
@@ -143,7 +143,7 @@ validate_arguments <- function(fun.name, fun.args) {
   # read() ---------------------------------------------------------------
   
   if (fun.name == "read") {
-    if (is.null(fun.args$from.file)) {                                            # EDI is accessible (required by many functions)
+    if (is.null(fun.args$from)) {                                            # EDI is accessible (required by many functions)
       ping_edi()
     }
     # id
@@ -159,16 +159,16 @@ validate_arguments <- function(fun.name, fun.args) {
         stop("Input 'path' (", fun.args$path, ") doesn't exist.", call. = FALSE)
       }
     }
-    # parse.datetime
-    if (!is.null(fun.args$parse.datetime)) {
-      if (!is.logical(fun.args$parse.datetime)) {                                 # is logical
-        stop("Input 'parse.datetime' should be logical.", call. = FALSE)
+    # parse_datetime
+    if (!is.null(fun.args$parse_datetime)) {
+      if (!is.logical(fun.args$parse_datetime)) {                                 # is logical
+        stop("Input 'parse_datetime' should be logical.", call. = FALSE)
       }
     }
-    # globally.unique.keys
-    if (!is.null(fun.args$globally.unique.keys)) {
-      if (!is.logical(fun.args$globally.unique.keys)) {                           # is logical
-        stop("Input 'globally.unique.keys' should be logical.", call. = FALSE)
+    # unique_keys
+    if (!is.null(fun.args$unique_keys)) {
+      if (!is.logical(fun.args$unique_keys)) {                           # is logical
+        stop("Input 'unique_keys' should be logical.", call. = FALSE)
       }
     }
     # site
@@ -241,10 +241,10 @@ validate_arguments <- function(fun.name, fun.args) {
         stop("Input 'neon.data.save.dir' (", fun.args$neon.data.save.dir, ") doesn't exist.", call. = FALSE)
       }
     }
-    # from.file
-    if (!is.null(fun.args$from.file)) {
-      if (!any(file.exists(fun.args$from.file) | dir.exists(fun.args$from.file))) { # file or dir exists
-        stop("Input 'from.file' is a non-existant file or directory.", call. = FALSE)
+    # from
+    if (!is.null(fun.args$from)) {
+      if (!any(file.exists(fun.args$from) | dir.exists(fun.args$from))) { # file or dir exists
+        stop("Input 'from' is a non-existant file or directory.", call. = FALSE)
       }
     }
   }
@@ -258,10 +258,10 @@ validate_arguments <- function(fun.name, fun.args) {
         stop("Input 'path' (", fun.args$path, ") doesn't exist.", call. = FALSE)
       }
     }
-    # file.type
-    if (!is.null(fun.args$file.type)) {
-      if (!(fun.args$file.type %in% c(".rds", ".csv"))) {                        # has expected value
-        stop("Input 'file.type' should be '.rds' or '.csv'.", call. = FALSE)
+    # type
+    if (!is.null(fun.args$type)) {
+      if (!(fun.args$type %in% c(".rds", ".csv"))) {                        # has expected value
+        stop("Input 'type' should be '.rds' or '.csv'.", call. = FALSE)
       }
     }
   }

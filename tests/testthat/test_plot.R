@@ -5,7 +5,7 @@ library(ecocomDP)
 # Warns if datetimes are chars ------------------------------------------------
 
 testthat::test_that("Warns if datetimes are chars", {
-  d <- read_example_dataset(parse.datetime = FALSE)
+  d <- read_example_dataset(parse_datetime = FALSE)
   id <- names(d)
   expect_warning(
     format_for_comm_plots(d),

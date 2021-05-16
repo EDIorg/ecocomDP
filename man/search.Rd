@@ -4,35 +4,27 @@
 \alias{search}
 \title{Search ecocomDP data}
 \usage{
-search(
-  text,
-  taxa,
-  num.taxa,
-  years,
-  sd.between.surveys,
-  geographic.area,
-  boolean.operator = "AND"
-)
+search(text, taxa, num_taxa, num_years, sd_years, area, boolean = "AND")
 }
 \arguments{
 \item{text}{(character) Text to search in dataset titles, descriptions, and 
-abstracts. Return includes any word or phrase matches. Is not case sensitive. Works with \code{boolean.operator}}
+abstracts. Return includes any word or phrase matches. Is not case sensitive. Works with \code{boolean}}
 
 \item{taxa}{(character) Taxanomic rank values to search for. The full taxonomic 
 hierarchy of each taxa in the data is searchable for EDI but not NEON (currently). Scientific and 
 common names are supported for EDI, but not NEON (currently.}
 
-\item{num.taxa}{(numeric) Minimum and maximum number of taxa in the data. Return will fall between these bounds.}
+\item{num_taxa}{(numeric) Minimum and maximum number of taxa in the data. Return will fall between these bounds.}
 
-\item{years}{(numeric) Minimum and maximum number of years sampled.}
+\item{num_years}{(numeric) Minimum and maximum number of years sampled.}
 
-\item{sd.between.surveys}{(numeric) Minimum and maximum standard deviation between surveys (in 
+\item{sd_years}{(numeric) Minimum and maximum standard deviation between surveys (in 
 years).}
 
-\item{geographic.area}{(numeric) Decimal degree North, East, South, and West coordinates within
+\item{area}{(numeric) Decimal degree North, East, South, and West coordinates within
 which the data should originate. Any overlapping areas or contained point locations will be returned.}
 
-\item{boolean.operator}{(character) Boolean operator to use when searching \code{text} and 
+\item{boolean}{(character) Boolean operator to use when searching \code{text} and 
 \code{taxa}. Supported operators are "AND", "OR". Default is "AND".}
 }
 \value{
@@ -44,7 +36,7 @@ which the data should originate. Any overlapping areas or contained point locati
         \item title - Title of dataset
         \item description - Description of dataset
         \item abstract - Abstract of dataset
-        \item years - Number of years sampled
+        \item num_years - Number of years sampled
         \item sd_between_samples - Standard deviation between sampling 
         events in years.
         \item sites - Sites names or abbreviations (returned for NEON data
@@ -77,32 +69,32 @@ View(search(text = "Lake"))
 View(search(taxa = "Plantae"))
 
 # Number of taxa searches the count of unique taxa in a dataset
-View(search(num.taxa = c(0, 10)))
+View(search(num_taxa = c(0, 10)))
 
 # Years searches the number of years the dataset covers
-View(search(years = c(10, 20)))
+View(search(num_years = c(10, 20)))
 
 # Standard deviation between surveys searches for a sampling frequency
-View(search(sd.between.surveys = c(.25, 1)))
+View(search(sd_years = c(.25, 1)))
 
 # Geographic area searches where data were collected
-View(search(geographic.area = c(47.1, -86.7, 42.5, -92)))
+View(search(area = c(47.1, -86.7, 42.5, -92)))
 
 # Boolean operators AND (default) & OR combine text and taxa search terms
 View(search(text = c("Lake", "River")))
-View(search(text = c("Lake", "River"), boolean.operator = "OR"))
+View(search(text = c("Lake", "River"), boolean = "OR"))
 View(search(taxa = c("Plantae", "Animalia")))
-View(search(taxa = c("Plantae", "Animalia"), boolean.operator = "OR"))
+View(search(taxa = c("Plantae", "Animalia"), boolean = "OR"))
 
 # Use any combination of search fields to find the data you're looking for
 r <- search(
   text = c("Lake", "River"),
   taxa = c("Plantae", "Animalia"),
-  num.taxa = c(0, 10),
-  years = c(10, 100),
-  sd.between.surveys = c(.01, 100),
-  geographic.area = c(47.1, -86.7, 42.5, -92),
-  boolean.operator = "OR")
+  num_taxa = c(0, 10),
+  num_years = c(10, 100),
+  sd_years = c(.01, 100),
+  area = c(47.1, -86.7, 42.5, -92),
+  boolean = "OR")
 View(r)
 }
         

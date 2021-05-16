@@ -6,7 +6,7 @@
 
 #' Check for valid date and time formats
 #' 
-#' @param data.list
+#' @param tables
 #'     (list of data frames) A named list of data frames, each of which is an 
 #'     ecocomDP table.
 #'
@@ -34,7 +34,7 @@
 #' 
 #' @export
 #' 
-flatten <- function(data.list){
+flatten <- function(tables){
   
   # helper function to determine if a col is all NAs
   # returns boolean
@@ -52,25 +52,25 @@ flatten <- function(data.list){
   
   
   # merge observation table with taxon table
-  all_merged <- data.list$observation %>%
+  all_merged <- tables$observation %>%
     dplyr::select_if(not_all_NAs) %>%
     dplyr::left_join(
-      data.list$taxon %>% dplyr::select_if(not_all_NAs), 
+      tables$taxon %>% dplyr::select_if(not_all_NAs), 
       by = "taxon_id")
   
   
   # merge all_merged with observation_ancillary
-  if("observation_ancillary" %in% names(data.list)){
+  if("observation_ancillary" %in% names(tables)){
     
     #handle missing observation_id or case where all observation_id is na
-    if(!"observation_id" %in% names(data.list$observation_ancillary) || 
-       all(is.na(data.list$observation_ancillary$observation_id)) ){
+    if(!"observation_id" %in% names(tables$observation_ancillary) || 
+       all(is.na(tables$observation_ancillary$observation_id)) ){
       warning("'observation_id' is missing from the observation_ancillary table")
     
     #the expected case:
     }else{
       
-      observation_ancillary_long <- data.list$observation_ancillary 
+      observation_ancillary_long <- tables$observation_ancillary 
       
       observation_ancillary_long_wide <- observation_ancillary_long[
         ,!names(observation_ancillary_long) %in% c("observation_ancillary_id","unit")] %>%
@@ -89,14 +89,14 @@ flatten <- function(data.list){
   
   
   # merge location data and using "NEON location type" from location ancillary data
-  if("location_ancillary" %in% names(data.list) && 
-     "NEON location type" %in% data.list$location_ancillary$variable_name){
+  if("location_ancillary" %in% names(tables) && 
+     "NEON location type" %in% tables$location_ancillary$variable_name){
     
     # merge location and location_ancillary
-    location <- data.list$location %>%
+    location <- tables$location %>%
       dplyr::select_if(not_all_NAs) %>%
       dplyr::left_join(
-        data.list$location_ancillary %>%
+        tables$location_ancillary %>%
           dplyr::filter(variable_name == "NEON location type") %>%
           dplyr::select(location_id, value) %>%
           dplyr::rename(location_type = value))
@@ -159,7 +159,7 @@ flatten <- function(data.list){
     #otherwise, just merge location table with all_merged
     all_merged <- all_merged %>%
       dplyr::left_join(
-        data.list$location %>%
+        tables$location %>%
           dplyr::select_if(not_all_NAs),
         by = "location_id",
         suffix = c("", "_location"))
@@ -168,8 +168,8 @@ flatten <- function(data.list){
 
   # merge additional location_ancillary data
   # only for bottom level when locations are nested
-  if("location_ancillary" %in% names(data.list)){
-    location_ancillary <- data.list$location_ancillary %>%
+  if("location_ancillary" %in% names(tables)){
+    location_ancillary <- tables$location_ancillary %>%
       dplyr::filter(variable_name!="NEON location type",
                     location_id %in% all_merged$location_id)
     
@@ -192,8 +192,8 @@ flatten <- function(data.list){
   
   
 
-  if("taxon_ancillary" %in% names(data.list)){
-    taxon_ancillary <- data.list$taxon_ancillary %>% 
+  if("taxon_ancillary" %in% names(tables)){
+    taxon_ancillary <- tables$taxon_ancillary %>% 
       dplyr::select(taxon_id, variable_name, value) %>%
       tidyr::pivot_wider(names_from = variable_name, values_from = value)
     all_merged <- all_merged %>%
@@ -208,11 +208,11 @@ flatten <- function(data.list){
   
 
   # merge other location ancillary data
-  if("location_ancillary" %in% names(data.list) &&
+  if("location_ancillary" %in% names(tables) &&
      length(
        dplyr::setdiff("NEON location type", 
-                      unique(data.list$location_ancillary$variable_name))) > 0){
-    location_ancillary <- data.list$location_ancillary %>%
+                      unique(tables$location_ancillary$variable_name))) > 0){
+    location_ancillary <- tables$location_ancillary %>%
       # dplyr::filter(variable_name != "NEON location type") %>%
       dplyr::select(-location_ancillary_id) %>%
       tidyr::pivot_wider(
@@ -243,4 +243,4 @@ flatten <- function(data.list){
 # 
 # all_data <- read("edi.290.1")
 # 
-# data.list <- all_data[[1]]$tables
+# tables <- all_data[[1]]$tables

@@ -3,32 +3,34 @@
 #' @param path 
 #'     (character) Path to the where the DwC-A data objects and EML will be 
 #'     written.
-#' @param core.name
+#' @param core_name
 #'     (character) The Darwin Core central table of the package. Can be: 
 #'     "event" (event core). Occurrence core is not yet supported.
-#' @param parent.package.id
+#' @param source_id
 #'     (character) ID of an ecocomDP data package. Only 
 #'     EDI Data Repository package IDs are currently supported.
-#' @param child.package.id
+#' @param derived_id
 #'     (character) ID of DWcA occurrence data package being created.
-#' @param user.id
+#' @param url
+#'     (character) URL to the publicly accessible directory containing DwC-A tables and meta.xml. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and upload of ecocomDP data packages and derived products.
+#' @param user_id
 #'     (character; optional) Repository user identifier. If more than one, 
 #'     then enter as a vector of character strings (e.g. 
-#'     \code{c("user_id_1", "user_id_2")}). \code{user.id} sets the 
-#'     /eml/access/principal element for all \code{user.domain} except
-#'     "KNB", "ADC", and if \code{user.domain = NULL}.
-#' @param user.domain
+#'     \code{c("user_id_1", "user_id_2")}). \code{user_id} sets the 
+#'     /eml/access/principal element for all \code{user_domain} except
+#'     "KNB", "ADC", and if \code{user_domain = NULL}.
+#' @param user_domain
 #'     (character; optional) Repository domain associated with 
-#'     \code{user.id}. Currently supported values are "EDI" 
+#'     \code{user_id}. Currently supported values are "EDI" 
 #'     (Environmental Data Initiative), "LTER" (Long-Term Ecological Research 
 #'     Network), "KNB" (The Knowledge Network for Biocomplexity), "ADC" (The 
 #'     Arctic Data Center). If you'd like your system supported please contact
 #'     maintainers of the ecocomDP R package. If using more than one 
-#'     \code{user.domain}, then enter as a vector of character strings (e.g. 
+#'     \code{user_domain}, then enter as a vector of character strings (e.g. 
 #'     \code{c("user_domain_1", "user_domain_2")}) in the same order as 
-#'     corresponding \code{user.id}. If \code{user.domain} is missing then a 
-#'     default value "unknown" is assigned. \code{user.domain} sets the EML 
-#'     header "system" attribute and for all \code{user.domain}, except "KNB" 
+#'     corresponding \code{user_id}. If \code{user_domain} is missing then a 
+#'     default value "unknown" is assigned. \code{user_domain} sets the EML 
+#'     header "system" attribute and for all \code{user_domain}, except "KNB" 
 #'     and "ADC", sets the /eml/access/principal element attributes and values.
 #' @details
 #'     TODO: Add details
@@ -40,12 +42,12 @@
 #' @examples
 #' 
 convert_to_dwca <- function(path, 
-                          core.name, 
-                          parent.package.id, 
-                          child.package.id,
-                          data.table.url = NULL,
-                          user.id,
-                          user.domain) {
+                          core_name, 
+                          source_id, 
+                          derived_id,
+                          url = NULL,
+                          user_id,
+                          user_domain) {
   
   # Load Global Environment config --------------------------------------------
   
@@ -58,12 +60,12 @@ convert_to_dwca <- function(path,
   # Load data -----------------------------------------------------------------
   
   # FIXME: Add environment argument to read()
-  d <- read(parent.package.id)
+  d <- read(source_id)
   d <- d[[1]]$tables
   
   # Convert tables ------------------------------------------------------------
   
-  if (core.name == 'event') {
+  if (core_name == 'event') {
     # call a function to create event core. inputs: data objects, dwca_mappings, dwca_config  
     # print('calling function to create DwC-A, event core')
     r <- create_tables_dwca_event_core(
@@ -72,8 +74,8 @@ convert_to_dwca <- function(path,
       dt_tax = d$taxon,
       dt_loc_ancil = d$location_ancillary,
       dt_obs_ancil = d$observation_ancillary,
-      parent.package.id = parent.package.id,
-      child.package.id = child.package.id)
+      source_id = source_id,
+      derived_id = derived_id)
   }
   
   # Write tables to file ------------------------------------------------------
@@ -90,11 +92,11 @@ convert_to_dwca <- function(path,
   
   # Write meta.xml ------------------------------------------------------------
   
-  if (core.name == "event") {
+  if (core_name == "event") {
     file.copy(
       from = system.file("/dwca_event_core/meta.xml", package = "ecocomDP"),
       to = path)
-  } else if (core.name == "occurrence") {
+  } else if (core_name == "occurrence") {
     # file.copy(
     #   from = system.file("/dwca_occurrence_core/meta.xml", package = "ecocomDP"),
     #   to = path)
@@ -104,12 +106,12 @@ convert_to_dwca <- function(path,
   
   eml <- make_eml_dwca(
     path = path,
-    core.name = core.name,
-    parent.package.id = parent.package.id, 
-    child.package.id = child.package.id, 
-    user.id = user.id, 
+    core_name = core_name,
+    source_id = source_id, 
+    derived_id = derived_id, 
+    user.id = user_id, 
     user.domain = user.domain,
-    url = data.table.url)
+    url = url)
   
 }
 
@@ -125,10 +127,10 @@ convert_to_dwca <- function(path,
 #' @param dt_loc_ancil 
 #' @param dt_loc 
 #' @param dt_tax 
-#' @param parent.package.id
+#' @param source_id
 #'     (character) ID of an ecocomDP data package. Only 
 #'     EDI Data Repository package IDs are currently supported.
-#' @param child.package.id
+#' @param derived_id
 #'
 #' @return
 #'     three tables, event, occurrence, measurementOrFact
@@ -141,8 +143,8 @@ create_tables_dwca_event_core <- function(
   dt_loc_ancil,
   dt_loc,
   dt_tax,
-  parent.package.id,
-  child.package.id) {
+  source_id,
+  derived_id) {
   # FIXME: Should be parent.eml and child.eml not *.package.id
   message('Creating DwC-A Event Core tables')
   
@@ -182,13 +184,13 @@ create_tables_dwca_event_core <- function(
   # TODO: Form globally unique IDs. See notes.
   obs_loc_tax$dc_occurrence_id <- paste(
     "occ",
-    child.package.id,
+    derived_id,
     seq(nrow(obs_loc_tax)),
     sep = '.')
   
   # TODO: Form globally unique IDs. See notes.
   obs_loc_tax$dc_event_id <- paste(
-    child.package.id,
+    derived_id,
     obs_loc_tax$event_id,
     sep = '.')
   
@@ -196,7 +198,7 @@ create_tables_dwca_event_core <- function(
   obs_loc_tax$dc_samplingprotocol <- paste0(
     "See methods in ",
     suppressMessages( # FIXME: Requires repository specific methods. In the mean time use api_read_data_package_doi() behind the scenes, while opening methods to other repos, or use url or some other identifier here
-      api_read_data_package_doi(parent.package.id, environment)))
+      api_read_data_package_doi(source_id, environment)))
   
   # TODO: Determine if observation was made by an instrument or human. This 
   # info is stored in the L1 EML keywordSet
@@ -204,7 +206,7 @@ create_tables_dwca_event_core <- function(
   keywords <- xml2::xml_text(
     xml2::xml_find_all(
       suppressMessages(
-        api_read_metadata(parent.package.id, environment)), ".//keyword"))
+        api_read_metadata(source_id, environment)), ".//keyword"))
   
   basis_of_record <- trimws(
     stringr::str_remove(
@@ -291,11 +293,11 @@ create_tables_dwca_event_core <- function(
 #'
 #' @param path 
 #'     (character) Path to the directory containing ecocomDP data tables, conversion scripts, and where EML metadata will be written. This \code{path}, when defined on a web server, also serves as the publicly accessible URL from which the data objects can be downloaded.
-#' @param core.name
+#' @param core_name
 #'     (character) The Darwin Core central table of the package. Can be: "occurence" (occurrence core) or "event" (event core).
-#' @param parent.package.id
+#' @param source_id
 #'     (character) ID of an ecocomDP data package. Only EDI Data Repository package IDs are currently supported.
-#' @param child.package.id
+#' @param derived_id
 #'     (character) ID of DWcA occurrence data package being created.
 #' @param repository (character) Data repository in which \code{package.id} resides and associated with \code{environment}. Currently supported repositories are: "EDI" (Environmental Data Initiative). Requests for support of other repositories can be made via \href{https://github.com/EDIorg/ecocomDP}{ecocomDP GitHub} issues. Default is "EDI".
 #' @param user.id
@@ -345,14 +347,14 @@ create_tables_dwca_event_core <- function(
 #' }
 #'
 make_eml_dwca <- function(path, 
-                          core.name, 
-                          parent.package.id, 
-                          child.package.id, 
+                          core_name, 
+                          source_id, 
+                          derived_id, 
                           user.id, 
                           user.domain,
                           url = NULL) {
   
-  message("Creating DwC-A ", stringr::str_to_title(core.name), 
+  message("Creating DwC-A ", stringr::str_to_title(core_name), 
           " Core EML")
   
   # Load Global Environment config --------------------------------------------
@@ -375,11 +377,11 @@ make_eml_dwca <- function(path,
   missing_parent_data_package <- suppressWarnings(
     stringr::str_detect(
       suppressMessages(
-        api_read_metadata(parent.package.id, environment)), 
+        api_read_metadata(source_id, environment)), 
       "Unable to access metadata for packageId:"))
   if (missing_parent_data_package) {
     stop(
-      "The L1 data package '", parent.package.id, "' does not exist.",
+      "The L1 data package '", source_id, "' does not exist.",
       call. = FALSE)
   }
   
@@ -388,11 +390,11 @@ make_eml_dwca <- function(path,
   child_data_package_exists <- suppressWarnings(
     !stringr::str_detect(
       suppressMessages(
-        api_read_metadata(child.package.id, environment)), 
+        api_read_metadata(derived_id, environment)), 
       "Unable to access metadata for packageId:"))
   if (child_data_package_exists) {
     warning(
-      "The L0 data package '", child.package.id, "' already exists.",
+      "The L0 data package '", derived_id, "' already exists.",
       call. = FALSE)
   }
   
@@ -408,8 +410,8 @@ make_eml_dwca <- function(path,
   # Parameterize --------------------------------------------------------------
   
   # Table names, types, and descriptions are standardized for the input 
-  # "core.name"
-  if (core.name == "event") {
+  # "core_name"
+  if (core_name == "event") {
     data.table <- c(
       "event.csv", 
       "occurrence.csv",
@@ -418,13 +420,13 @@ make_eml_dwca <- function(path,
       "DwC-A Event Table", 
       "DwC-A Occurrence Table",
       "DwC-A Extended Measurement Or Fact Table")
-  } else if (core.name == "occurrence") {
+  } else if (core_name == "occurrence") {
     data.table <- "occurrence.csv"
     data.table.description <- "DwC-A Occurrence Table"
   }
   
   # Other entity name, type, and description is standardized for the input 
-  # "core.name"
+  # "core_name"
   other.entity <- "meta.xml"
   other.entity.description <- "The meta file associated with this dataset"
   
@@ -452,7 +454,7 @@ make_eml_dwca <- function(path,
   
   # Read L1 EML ---------------------------------------------------------------
   
-  message("Reading EML of L1 data package ", parent.package.id)
+  message("Reading EML of L1 data package ", source_id)
   
   # Create two objects of the same metadata, eml_L1 (emld list object) for
   # editing, and xml_L1 (xml_document) for easy parsing
@@ -461,16 +463,16 @@ make_eml_dwca <- function(path,
   if (environment == "production") {
     url_parent <- paste0(
       "https://pasta.lternet.edu/package/metadata/eml/",
-      stringr::str_replace_all(parent.package.id, "\\.", "/"))
+      stringr::str_replace_all(source_id, "\\.", "/"))
   } else if (environment == "staging") {
     url_parent <- paste0(
       "https://pasta-s.lternet.edu/package/metadata/eml/",
-      stringr::str_replace_all(parent.package.id, "\\.", "/"))
+      stringr::str_replace_all(source_id, "\\.", "/"))
   }
   
   eml_L1 <- EML::read_eml(url_parent)
   xml_L1 <- suppressMessages(
-    read_eml(parent.package.id))
+    read_eml(source_id))
   
   # Read L0 EML ---------------------------------------------------------------
   
@@ -502,7 +504,7 @@ make_eml_dwca <- function(path,
   # This is not a full EML record, it is only the sections of EML that will be 
   # added to the parent EML.
   
-  message("Creating EML of L2 data package ", child.package.id)
+  message("Creating EML of L2 data package ", derived_id)
   
   # Create list of inputs to EAL_make_eml()
   eal_inputs <- EAL_template_arguments(
@@ -523,8 +525,8 @@ make_eml_dwca <- function(path,
   eal_inputs$other.entity.name <- tools::file_path_sans_ext(other.entity)
   eal_inputs$other.entity.description <- other.entity.description
   eal_inputs$other.entity.url <- other.entity.url
-  eal_inputs$provenance <- parent.package.id
-  eal_inputs$package.id <- child.package.id
+  eal_inputs$provenance <- source_id
+  eal_inputs$package.id <- derived_id
   eal_inputs$user.id <- user.id
   eal_inputs$user.domain <- user.domain
   eal_inputs$return.obj <- TRUE
@@ -579,7 +581,7 @@ make_eml_dwca <- function(path,
   eml_L1$schemaLocation <- paste0(
     "https://eml.ecoinformatics.org/eml-2.2.0  ",
     "https://nis.lternet.edu/schemas/EML/eml-2.2.0/xsd/eml.xsd")
-  eml_L1$packageId <- child.package.id
+  eml_L1$packageId <- derived_id
   eml_L1$system <- "edi"
   
   # Update <access> of parent -------------------------------------------------
@@ -693,7 +695,7 @@ make_eml_dwca <- function(path,
   
   provenance_L1 <- suppressMessages(
     api_get_provenance_metadata(
-      package.id = parent.package.id,
+      package.id = source_id,
       environment = environment))
   provenance_L1 <- EML::read_eml(provenance_L1)
   provenance_L1 <- list(
@@ -733,7 +735,7 @@ make_eml_dwca <- function(path,
   emld::eml_version("eml-2.2.0")
   EML::write_eml(
     eml_L1, 
-    paste0(path, "/", child.package.id, ".xml"))
+    paste0(path, "/", derived_id, ".xml"))
   
   # Validate EML --------------------------------------------------------------
   

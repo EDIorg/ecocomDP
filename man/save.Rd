@@ -4,21 +4,21 @@
 \alias{save}
 \title{Save ecocomDP data}
 \usage{
-save(data, path, file.type = ".rds", file.name = NULL)
+save(data, path, type = ".rds", name = NULL)
 }
 \arguments{
-\item{data}{(list) Data as a list object created by \code{read()}. Name of object will become file name if \code{file.name} is not used. Can be a list of these objects, i.e. more than one.}
+\item{data}{(list) One or more datasets as a list object created by \code{read()}. Name of object will become file name if \code{name} is not used. Can be a list of these objects, i.e. more than one.}
 
 \item{path}{(character) Path to the directory in which the data will be written.}
 
-\item{file.type}{(character) Type of file to save the data to. Default is ".rds" but can also be ".csv". Note: metadata and validation_issues are lost when ".csv". Recommended to use .rds is using R because, all objects in one place, don't have to handle directory naming}
+\item{type}{(character) Type of file to save the data to. Default is ".rds" but can also be ".csv". Note: metadata and validation_issues are lost when ".csv". Recommended to use .rds is using R because, all objects in one place, don't have to handle directory naming}
 
-\item{file.name}{(character) Use this to set the file name (for .rds), or dir name (for .csv) if you'd like to be different than \code{data}.}
+\item{name}{(character) Use this to set the file name (for .rds), or dir name (for .csv) if you'd like to be different than \code{data}.}
 }
 \value{
-\item{.rda}{If \code{file.type} = ".rda", then an .rda representation 
+\item{.rda}{If \code{type} = ".rda", then an .rda representation 
     of \code{data} is returned.}
-    \item{.csv}{If \code{file.type} = ".csv", then an set of .csv files are
+    \item{.csv}{If \code{type} = ".csv", then an set of .csv files are
     written to a sub-directory of \code{path} named after the data 
     package/product ID.}
 }
@@ -40,7 +40,7 @@ datasets <- c(
 save(datasets, "/Users/me/documents/data")
 
 # Save as .csv
-save(datasets, "/Users/me/documents/data", file.type = ".csv")
+save(datasets, "/Users/me/documents/data", type = ".csv")
 }
 
 }

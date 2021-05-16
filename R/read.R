@@ -2,11 +2,9 @@
 #'
 #' @param id
 #'     (character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search()} output. Older versions of ids listed in the "id" column of the \code{search()} output are supported, but a warning is issued.
-#' @param path
-#'     (character) Path to the directory in which the data will be read.
-#' @param parse.datetime
+#' @param parse_datetime
 #'     (logical) Attempt to parse datetime character strings through an algorithm. For EDI, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the algorithm iterates through permutations of \code{ymd HMS} orders. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing).
-#' @param globally.unique.keys
+#' @param unique_keys
 #'     (logical) Whether to create globally unique primary keys (and associated
 #'     foreign keys). Reading multiple datasets raises the issue of referential 
 #'     integrity across datasets. If TRUE, \code{id} is appended to each 
@@ -41,7 +39,7 @@
 #' @param neon.data.read.path (character; NEON data only) Path to read in an RDS file of 'stacked NEON data' from neonUtilities::loadByProduct()
 #' @param ...
 #'     (NEON data only) Other arguments to \code{neonUtilities::loadByProduct()}
-#' @param from.file
+#' @param from
 #'     (character) Full path to file to be read if .rds, or path to directory if .csv. Supported options are returned by \code{save()}
 #'     
 #'     
@@ -95,13 +93,13 @@
 #'   check.size = FALSE)
 #' 
 #' # Read from local .rds
-#' dataset <- read(from.file = "/Users/me/documents/data/dataset.rds")
+#' dataset <- read(from = "/Users/me/documents/data/dataset.rds")
 #' 
 #' # Read from local .csv
-#' dataset <- read(from.file = "/Users/me/documents/data/dataset")
+#' dataset <- read(from = "/Users/me/documents/data/dataset")
 #' 
 #' # Return datetimes as character
-#' dataset <- read("edi.193.3", parse.datetime = FALSE)
+#' dataset <- read("edi.193.3", parse_datetime = FALSE)
 #' 
 #' # Read multiple datasets into list
 #' datasets <- c(
@@ -110,12 +108,12 @@
 #'   read("neon.ecocomdp.20166.001.001"))
 #' }
 #' 
-read <- function(id = NULL, path = NULL, parse.datetime = TRUE, 
-                      globally.unique.keys = FALSE, site = "all", 
+read <- function(id = NULL, parse_datetime = TRUE, 
+                      unique_keys = FALSE, site = "all", 
                       startdate = NA, enddate = NA, package = "basic", 
                       check.size = FALSE, nCores = 1, forceParallel = FALSE, 
                       token = NA, neon.data.save.dir = NULL, 
-                      neon.data.read.path = NULL, ..., from.file = NULL) {
+                      neon.data.read.path = NULL, ..., from = NULL) {
   
   # Validate input arguments --------------------------------------------------
 
@@ -131,12 +129,12 @@ read <- function(id = NULL, path = NULL, parse.datetime = TRUE,
 
   # Read ----------------------------------------------------------------------
   
-  if (is.null(from.file)) { # From API
+  if (is.null(from)) { # From API
     if (stringr::str_detect(            # EDI
       id, 
       "(^knb-lter-[:alpha:]+\\.[:digit:]+\\.[:digit:]+)|(^[:alpha:]+\\.[:digit:]+\\.[:digit:]+)") && 
       !grepl("^neon\\.", id)) {
-      d <- read_data_edi(id, parse.datetime)
+      d <- read_data_edi(id, parse_datetime)
     } else if (grepl("^neon\\.", id)) { # NEON
       d <- map_neon_data_to_ecocomDP(
         id = id, 
@@ -154,7 +152,7 @@ read <- function(id = NULL, path = NULL, parse.datetime = TRUE,
     d <- list(d = d)
     names(d) <- id
   } else {                  # From file
-    d <- read_from_files(from.file)
+    d <- read_from_files(from)
   }
   
   # Modify --------------------------------------------------------------------
@@ -213,7 +211,7 @@ read <- function(id = NULL, path = NULL, parse.datetime = TRUE,
               function(z) {
                 detected <- class(d[[x]]$tables[[y]][[z]])
                 expected <- attr_tbl$class[(attr_tbl$table == y) & (attr_tbl$column == z)]
-                if (isTRUE(parse.datetime) & (expected == "Date") & is.character(detected)) { # NAs should be datetime for consistency
+                if (isTRUE(parse_datetime) & (expected == "Date") & is.character(detected)) { # NAs should be datetime for consistency
                   d[[x]]$tables[[y]][[z]] <<- lubridate::as_date(d[[x]]$tables[[y]][[z]])
                 }
                 if (any(detected %in% c("POSIXct", "POSIXt", "Date", "IDate"))) {
@@ -235,7 +233,7 @@ read <- function(id = NULL, path = NULL, parse.datetime = TRUE,
   # and shouldn't be neccessary as the package_id is very unlikely to be 
   # duplicated).
   
-  if (isTRUE(globally.unique.keys)) {
+  if (isTRUE(unique_keys)) {
     
     invisible(
       lapply(
@@ -267,7 +265,7 @@ read <- function(id = NULL, path = NULL, parse.datetime = TRUE,
   }
   
   # Return datetimes as character
-  if (!isTRUE(parse.datetime)) {
+  if (!isTRUE(parse_datetime)) {
     for (id in names(d)) {
       for (tbl in names(d[[id]]$tables)) {
         dtcols <- stringr::str_detect(colnames(d[[id]]$tables[[tbl]]), "datetime")
@@ -316,13 +314,13 @@ read <- function(id = NULL, path = NULL, parse.datetime = TRUE,
 #'
 #' @param id
 #'     (character) Data package identifier with revision number
-#' @param parse.datetime
+#' @param parse_datetime
 #'     (logical) Attempt to parse datetime character strings through an algorithm that looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. Failed attempts will return a warning.
 #'
 #' @return
 #'     (list) Named list of data tables
 #'     
-read_data_edi <- function(id, parse.datetime = TRUE) {
+read_data_edi <- function(id, parse_datetime = TRUE) {
   
   message("Reading ", id)
   
@@ -395,7 +393,7 @@ read_data_edi <- function(id, parse.datetime = TRUE) {
     frmtstr <- tbl_attrs[[tbl]]$formatString
     if (!is.na(frmtstr)) {
       dtcol <- stringr::str_subset(colnames(output[[tbl]]), "datetime")
-      if (isTRUE(parse.datetime)) {
+      if (isTRUE(parse_datetime)) {
         parsed <- parse_datetime(tbl = tbl, vals = output[[tbl]][[dtcol]], frmt = frmtstr)
         output[[tbl]][[dtcol]] <- parsed
       }
@@ -451,7 +449,7 @@ read_from_files <- function(data.path) {
     parent_dir_has_tables <- any(unlist(parent_dir_has_tables))
     if (parent_dir_has_tables) { # Disambiguate usecases: Parent dir tables is target, but subdir also has tables
       dirs <- dirs[1]
-    } else if (!parent_dir_has_tables & (length(dirs) > 1)) { # Don't use parent dir if nested (use case of reading from save(..., file.type = .csv))
+    } else if (!parent_dir_has_tables & (length(dirs) > 1)) { # Don't use parent dir if nested (use case of reading from save(..., type = .csv))
       dirs <- dirs[-1]
     }
     
@@ -478,7 +476,7 @@ read_from_files <- function(data.path) {
         return(res)
       })
     d <- unlist(d, recursive = FALSE)
-    if (length(dirs) > 1){         # Get id from dir if nested (use case of reading from save(..., file.type = .csv))
+    if (length(dirs) > 1){         # Get id from dir if nested (use case of reading from save(..., type = .csv))
       names(d) <- basename(dirs)
     } else {
       names(d) <- d[[1]]$tables$dataset_summary$package_id

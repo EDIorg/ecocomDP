@@ -6,9 +6,8 @@
 \usage{
 read(
   id = NULL,
-  path = NULL,
-  parse.datetime = TRUE,
-  globally.unique.keys = FALSE,
+  parse_datetime = TRUE,
+  unique_keys = FALSE,
   site = "all",
   startdate = NA,
   enddate = NA,
@@ -20,17 +19,15 @@ read(
   neon.data.save.dir = NULL,
   neon.data.read.path = NULL,
   ...,
-  from.file = NULL
+  from = NULL
 )
 }
 \arguments{
 \item{id}{(character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search()} output. Older versions of ids listed in the "id" column of the \code{search()} output are supported, but a warning is issued.}
 
-\item{path}{(character) Path to the directory in which the data will be read.}
+\item{parse_datetime}{(logical) Attempt to parse datetime character strings through an algorithm. For EDI, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the algorithm iterates through permutations of \code{ymd HMS} orders. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing).}
 
-\item{parse.datetime}{(logical) Attempt to parse datetime character strings through an algorithm. For EDI, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the algorithm iterates through permutations of \code{ymd HMS} orders. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing).}
-
-\item{globally.unique.keys}{(logical) Whether to create globally unique primary keys (and associated
+\item{unique_keys}{(logical) Whether to create globally unique primary keys (and associated
 foreign keys). Reading multiple datasets raises the issue of referential 
 integrity across datasets. If TRUE, \code{id} is appended to each 
 table's primary key and associated foreign key. Defaults to FALSE.}
@@ -67,7 +64,7 @@ neon.datascience user accounts)}
 
 \item{...}{(NEON data only) Other arguments to \code{neonUtilities::loadByProduct()}}
 
-\item{from.file}{(character) Full path to file to be read if .rds, or path to directory if .csv. Supported options are returned by \code{save()}}
+\item{from}{(character) Full path to file to be read if .rds, or path to directory if .csv. Supported options are returned by \code{save()}}
 }
 \value{
 (list) with the structure: 
@@ -121,13 +118,13 @@ dataset <- read(
   check.size = FALSE)
 
 # Read from local .rds
-dataset <- read(from.file = "/Users/me/documents/data/dataset.rds")
+dataset <- read(from = "/Users/me/documents/data/dataset.rds")
 
 # Read from local .csv
-dataset <- read(from.file = "/Users/me/documents/data/dataset")
+dataset <- read(from = "/Users/me/documents/data/dataset")
 
 # Return datetimes as character
-dataset <- read("edi.193.3", parse.datetime = FALSE)
+dataset <- read("edi.193.3", parse_datetime = FALSE)
 
 # Read multiple datasets into list
 datasets <- c(

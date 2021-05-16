@@ -4,12 +4,12 @@
 \alias{read_data_edi}
 \title{Read an ecocomDP dataset from EDI}
 \usage{
-read_data_edi(id, parse.datetime = TRUE)
+read_data_edi(id, parse_datetime = TRUE)
 }
 \arguments{
 \item{id}{(character) Data package identifier with revision number}
 
-\item{parse.datetime}{(logical) Attempt to parse datetime character strings through an algorithm that looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. Failed attempts will return a warning.}
+\item{parse_datetime}{(logical) Attempt to parse datetime character strings through an algorithm that looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. Failed attempts will return a warning.}
 }
 \value{
 (list) Named list of data tables

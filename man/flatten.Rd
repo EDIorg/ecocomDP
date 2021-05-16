@@ -4,10 +4,10 @@
 \alias{flatten}
 \title{Merge tables in ecocomDP dataset}
 \usage{
-flatten(data.list)
+flatten(tables)
 }
 \arguments{
-\item{data.list}{(list of data frames) A named list of data frames, each of which is an 
+\item{tables}{(list of data frames) A named list of data frames, each of which is an 
 ecocomDP table.}
 }
 \value{

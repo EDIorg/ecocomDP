@@ -39,18 +39,18 @@ testthat::test_that("read()", {
   expect_error(
     validate_arguments("read", as.list(list(path = "/some/invalid/path"))),
     regexp = "Input \'path\' .+ doesn\'t exist.")
-  # parse.datetime
+  # parse_datetime
   expect_null(                                                                 # is logical
-    validate_arguments("read", as.list(list(parse.datetime = TRUE))))
+    validate_arguments("read", as.list(list(parse_datetime = TRUE))))
   expect_error(
-    validate_arguments("read", as.list(list(parse.datetime = "TRUE"))),
-    regexp = "Input 'parse.datetime' should be logical.")
-  # globally.unique.keys
+    validate_arguments("read", as.list(list(parse_datetime = "TRUE"))),
+    regexp = "Input 'parse_datetime' should be logical.")
+  # unique_keys
   expect_null(                                                                 # is logical
-    validate_arguments("read", as.list(list(globally.unique.keys = TRUE))))
+    validate_arguments("read", as.list(list(unique_keys = TRUE))))
   expect_error(
-    validate_arguments("read", as.list(list(globally.unique.keys = "TRUE"))),
-    regexp = "Input 'globally.unique.keys' should be logical.")
+    validate_arguments("read", as.list(list(unique_keys = "TRUE"))),
+    regexp = "Input 'unique_keys' should be logical.")
   # site
   expect_null(                                                                 # site exists for id
     validate_arguments("read", as.list(list(id = "neon.ecocomdp.20120.001.001",
@@ -108,12 +108,12 @@ testthat::test_that("read()", {
   expect_error(
     validate_arguments("read", as.list(list(neon.data.save.dir = "/some/invalid/path"))),
     regexp = "Input 'neon.data.save.dir' .+ doesn\'t exist.")
-  # from.file
+  # from
   expect_null(                                                                 # file or dir exists
-    validate_arguments("read", as.list(list(from.file = tempdir()))))
+    validate_arguments("read", as.list(list(from = tempdir()))))
   expect_error(
-    validate_arguments("read", as.list(list(from.file = "/not/a/dir"))),
-    regexp = "Input 'from.file' is a non-existant file or directory.")
+    validate_arguments("read", as.list(list(from = "/not/a/dir"))),
+    regexp = "Input 'from' is a non-existant file or directory.")
 })
 
 # save() -----------------------------------------------------------------
@@ -124,14 +124,14 @@ testthat::test_that("save()", {
   expect_error(
     validate_arguments("read", as.list(list(path = "/some/invalid/path"))),
     regexp = "Input \'path\' .+ doesn\'t exist.")
-  # file.type
+  # type
   expect_null(                                                                 # has expected type
-    validate_arguments("save", as.list(list(file.type = ".rds"))))
+    validate_arguments("save", as.list(list(type = ".rds"))))
   expect_null(
-    validate_arguments("save", as.list(list(file.type = ".csv"))))
+    validate_arguments("save", as.list(list(type = ".csv"))))
   expect_error(
-    validate_arguments("save", as.list(list(file.type = "invalid value"))),
-    regexp = "Input 'file.type' should be '.rds' or '.csv'.")
+    validate_arguments("save", as.list(list(type = "invalid value"))),
+    regexp = "Input 'type' should be '.rds' or '.csv'.")
 })
 
 # search() ---------------------------------------------------------------
@@ -154,65 +154,65 @@ testthat::test_that("search()", {
       as.list(
         list(taxa = c(1, 2, 3)))))
   
-  # taxa.num
+  # num_taxa
   
   expect_error(
     validate_arguments(
       "search",
       as.list(
-        list(num.taxa = "Non-numeric value"))))
+        list(num_taxa = "Non-numeric value"))))
   expect_error(
     validate_arguments(
       "search",
       as.list(
-        list(num.taxa = 1))))
+        list(num_taxa = 1))))
   
-  # years
-  
-  expect_error(
-    validate_arguments(
-      "search",
-      as.list(
-        list(years = "Non-numeric value"))))
-  expect_error(
-    validate_arguments(
-      "search",
-      as.list(
-        list(years = 1))))
-  
-  # sd.between.surveys
+  # num_years
   
   expect_error(
     validate_arguments(
       "search",
       as.list(
-        list(sd.between.surveys = "Non-numeric value"))))
+        list(num_years = "Non-numeric value"))))
   expect_error(
     validate_arguments(
       "search",
       as.list(
-        list(sd.between.surveys = 1))))
+        list(num_years = 1))))
   
-  # geographic.area
-  
-  expect_error(
-    validate_arguments(
-      "search",
-      as.list(
-        list(geographic.area = "Non-numeric value"))))
-  expect_error(
-    validate_arguments(
-      "search",
-      as.list(
-        list(geographic.area = 1))))
-  
-  # boolean.operator
+  # sd_years
   
   expect_error(
     validate_arguments(
       "search",
       as.list(
-        list(boolean.operator = "ANDrew"))))
+        list(sd_years = "Non-numeric value"))))
+  expect_error(
+    validate_arguments(
+      "search",
+      as.list(
+        list(sd_years = 1))))
+  
+  # area
+  
+  expect_error(
+    validate_arguments(
+      "search",
+      as.list(
+        list(area = "Non-numeric value"))))
+  expect_error(
+    validate_arguments(
+      "search",
+      as.list(
+        list(area = 1))))
+  
+  # boolean
+  
+  expect_error(
+    validate_arguments(
+      "search",
+      as.list(
+        list(boolean = "ANDrew"))))
   
 })
 
@@ -221,11 +221,11 @@ testthat::test_that("search()", {
 
 testthat::test_that("validate()", {
   test_data <- read_example_dataset()
-  # data.path - Is valid
+  # path - Is valid
   expect_null(
-    validate_arguments("validate", as.list(list(data.path = tempdir()))))
+    validate_arguments("validate", as.list(list(path = tempdir()))))
   expect_error(
-    validate_arguments("validate", as.list(list(data.path = paste0(tempdir(), "/aoihebqlnvo333")))))
+    validate_arguments("validate", as.list(list(path = paste0(tempdir(), "/aoihebqlnvo333")))))
   # data.list - Is valid
   expect_null(
     validate_arguments("validate", as.list(list(dataset = test_data))))

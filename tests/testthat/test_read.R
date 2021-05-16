@@ -61,7 +61,7 @@ testthat::test_that("Reads from local files", {
   d <- read_example_dataset()
   id <- names(d)
   save(d, tempdir())
-  d <- suppressWarnings(read(from.file = paste0(tempdir(), "/d.rds")))           # Has expected structure
+  d <- suppressWarnings(read(from = paste0(tempdir(), "/d.rds")))           # Has expected structure
   expect_true(is.list(d))                                                             # obj is a list
   expect_true(names(d) == id)                                                         # 1st level name is id
   expect_true(all(names(d[[1]]) %in% c("metadata", "tables", "validation_issues")))   # 2nd level has 3 values
@@ -80,8 +80,8 @@ testthat::test_that("Reads from local files", {
   names(d) <- ids
   id <- "d"
   unlink(paste0(tempdir(),"/", id), recursive = TRUE, force = TRUE) 
-  save(d, tempdir(), file.type = ".csv")
-  d <- suppressWarnings(read(from.file = paste0(tempdir(), "/", id)))            # Has expected structure
+  save(d, tempdir(), type = ".csv")
+  d <- suppressWarnings(read(from = paste0(tempdir(), "/", id)))            # Has expected structure
   expect_true(is.list(d))                                                             # obj is a list
   expect_true(all(names(d) %in% ids))                                                 # 1st level name is id
   for (i in names(d)) {
@@ -108,7 +108,7 @@ testthat::test_that("Has datetime parsing option", {
   id <- names(d)
   save(d, tempdir())
   d <- suppressWarnings(
-    read(from.file = paste0(tempdir(), "/d.rds"), parse.datetime = TRUE))      # not character
+    read(from = paste0(tempdir(), "/d.rds"), parse_datetime = TRUE))      # not character
   for (tbl in names(d[[1]]$tables)) {
     for (colname in colnames(d[[1]]$tables[[tbl]]))
       if (stringr::str_detect(colname, "datetime")) {
@@ -116,7 +116,7 @@ testthat::test_that("Has datetime parsing option", {
       }
   }
   d <- suppressWarnings(
-    read(from.file = paste0(tempdir(), "/d.rds"), parse.datetime = FALSE))     # character
+    read(from = paste0(tempdir(), "/d.rds"), parse_datetime = FALSE))     # character
   for (tbl in names(d[[1]]$tables)) {
     for (colname in colnames(d[[1]]$tables[[tbl]]))
       if (stringr::str_detect(colname, "datetime")) {

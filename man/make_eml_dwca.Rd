@@ -6,9 +6,9 @@
 \usage{
 make_eml_dwca(
   path,
-  core.name,
-  parent.package.id,
-  child.package.id,
+  core_name,
+  source_id,
+  derived_id,
   user.id,
   user.domain,
   url = NULL
@@ -17,11 +17,11 @@ make_eml_dwca(
 \arguments{
 \item{path}{(character) Path to the directory containing ecocomDP data tables, conversion scripts, and where EML metadata will be written. This \code{path}, when defined on a web server, also serves as the publicly accessible URL from which the data objects can be downloaded.}
 
-\item{core.name}{(character) The Darwin Core central table of the package. Can be: "occurence" (occurrence core) or "event" (event core).}
+\item{core_name}{(character) The Darwin Core central table of the package. Can be: "occurence" (occurrence core) or "event" (event core).}
 
-\item{parent.package.id}{(character) ID of an ecocomDP data package. Only EDI Data Repository package IDs are currently supported.}
+\item{source_id}{(character) ID of an ecocomDP data package. Only EDI Data Repository package IDs are currently supported.}
 
-\item{child.package.id}{(character) ID of DWcA occurrence data package being created.}
+\item{derived_id}{(character) ID of DWcA occurrence data package being created.}
 
 \item{user.id}{(character; optional) Repository user identifier. If more than one, then enter as a vector of character strings (e.g. \code{c("user_id_1", "user_id_2")}). \code{user.id} sets the /eml/access/principal element for all \code{user.domain} except "KNB", "ADC", and if \code{user.domain = NULL}.}
 

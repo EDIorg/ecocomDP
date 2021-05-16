@@ -5,26 +5,19 @@
 #'
 #' @param path 
 #'     (character) Path to the directory containing ecocomDP data tables, conversion scripts, and where EML metadata will be written.
-#' @param parent.package.id
+#' @param source_id
 #'     (character) Parent data package ID (e.g. "knb-lter-hfr.118.28"). Only 
 #'     EDI Data Repository package IDs are currently supported.
-#' @param child.package.id
+#' @param derived_id
 #'     (character) Child data package ID (e.g. "edi.53.1") to be uploaded to 
 #'     EDI Data Repository.
 #' @param script
 #'     (character) Names of scripts used to convert and repackage the source 
 #'     data into the ecocomDP.
-#' @param script.description
+#' @param script_description
 #'     (character) A description for each object listed under \code{script}.
-#' @param is.about
-#'     (named character) Dataset level annotations describing what this dataset "is about" (L0 keywords converted to object label + URI pairs) describing what the L1 dataset is about. (e.g. \code{is.about = c('level of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002588",' type of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002589")}).
-#' @param cat.vars
-#'     (data frame) Categorical variables with associated definitions and 
-#'     units. Create a cat.vars data frame with the 
-#'     \code{define_variables()} function. Variables that can't be 
-#'     defined by the parent package EML should be manually supplied to the 
-#'     cat.vars data frame in one of the scripts specified in the 
-#'     \code{script} argument.
+#' @param is_about
+#'     (named character) Dataset level annotations describing what this dataset "is about" (L0 keywords converted to object label + URI pairs) describing what the L1 dataset is about. (e.g. \code{is_about = c('level of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002588",' type of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002589")}).
 #' @param contact
 #'    (data frame) Contact information of this ecocomDP creator.
 #'    The data frame must have these columns:
@@ -34,15 +27,15 @@
 #'        \item{organizationName}
 #'        \item{electronicMailAddress}
 #'    }
-#' @param user.id
+#' @param user_id
 #'     (character) ID(s) of user account(s) associated with the data repository
 #'     in which this ecocomDP data package will be archived. Only EDI Data 
 #'     Repository IDs are currently supported.
-#' @param user.domain
-#'     (character) Domain of the \code{user.id}(s). Only "EDI" and "LTER" are 
+#' @param user_domain
+#'     (character) Domain of the \code{user_id}(s). Only "EDI" and "LTER" are 
 #'     currently supported. If more than one, then supply as a vector of 
-#'     character strings in the same order as the corresponding \code{user.id}.
-#' @param basis.of.record
+#'     character strings in the same order as the corresponding \code{user_id}.
+#' @param basis_of_record
 #'     (character) To create a Darwin Core record from this ecocomDP using
 #'     \code{L1_to_L2_DwCA()} then the Darwin Core property 
 #'     \href{basisOfRecord}{https://dwc.tdwg.org/terms/#dwc:basisOfRecord}
@@ -62,7 +55,7 @@
 #'     boiler-plate metadata describing the ecocomDP tables. Changes to the 
 #'     parent EML include:
 #'     \itemize{
-#'         \item \strong{<access>} Adds the \code{user.id} to the list of 
+#'         \item \strong{<access>} Adds the \code{user_id} to the list of 
 #'         principals granted read and write access to the ecocomDP data 
 #'         package this EML describes.
 #'         \item \strong{<title>} Adds a note that this is a derived data 
@@ -76,7 +69,7 @@
 #'         "communities", "community composition", "community dynamics", 
 #'         "community patterns", "species composition", "species diversity",
 #'         and "species richness". Darwin Core Terms listed under \code{
-#'         basis.of.record} are listed and used by \code{L1_to_L2_DwCA()} 
+#'         basis_of_record} are listed and used by \code{L1_to_L2_DwCA()} 
 #'         to create a Darwin Core Archive of this ecocomDP data package.
 #'         \item \strong{<intellectualRights>} Keeps intact the intellectual
 #'         rights license of the parent data package, or replaces it with
@@ -92,7 +85,7 @@
 #'         \item \strong{<dataTables>} Replaces the parent data package data
 #'         tables metadata with boiler-plate metadata for the ecocomDP tables.
 #'         \item \strong{<otherEntity>} Describes scripts listed in the 
-#'         \code{script} and \code{script.description} arguments. Any other
+#'         \code{script} and \code{script_description} arguments. Any other
 #'         entities listed in the parent EML are removed.
 #'     }
 #'     
@@ -111,12 +104,6 @@
 #' # Validate ecocomDP tables
 #' validate(path)
 #' 
-#' # Use parent EML to define variables of the ecocomDP and manually add variable 
-#' # names and definitions created in the ecocomDP re-formatting process.
-#' catvars <- define_variables(path, "knb-lter-sev.29.12")
-#' catvars$unit[catvars$code == "Count"] <- "number"
-#' catvars$definition[catvars$code == "Comments"] <- "A special statement related to an observation"
-#' 
 #' # Create contact information for the ecocomDP creator
 #' additional_contact <- data.frame(
 #'   givenName = 'Colin',
@@ -129,37 +116,35 @@
 #' # Create EML
 #' create_eml(
 #'   path = path,
-#'   parent.package.id = "knb-lter-sev.29.12",
-#'   child.package.id = "edi.101.5",
+#'   source_id = "knb-lter-sev.29.12",
+#'   derived_id = "edi.101.5",
 #'   script = c(
 #'     "convert_sev29_to_ecocomDP.R", 
 #'     "package_edi_333.R"
 #'   ),
-#'   script.description = c(
+#'   script_description = c(
 #'     "R script for creating the ecocomDP tables.",
 #'     "R script for creating the ecocomDP EML"
 #'   ),
-#'   cat.vars = catvars,
 #'   contact = additional_contact,
-#'   user.id = 'csmith',
-#'   user.domain = 'LTER',
+#'   user_id = 'csmith',
+#'   user_domain = 'LTER',
 #' )
 #' }
 #'
 create_eml <- function(path,
-                     parent.package.id, 
-                     child.package.id, 
+                     source_id, 
+                     derived_id, 
                      script,
-                     script.description,
-                     is.about = NULL,
-                     cat.vars,
+                     script_description,
+                     is_about = NULL,
                      contact,
-                     user.id, 
-                     user.domain,
-                     basis.of.record = NULL,
+                     user_id, 
+                     user_domain,
+                     basis_of_record = NULL,
                      url = NULL) {
   
-  message("Creating EML for derived data package (" , child.package.id, ")")
+  message("Creating EML for derived data package (" , derived_id, ")")
   
   # Load Global Environment config --------------------------------------------
   
@@ -188,11 +173,11 @@ create_eml <- function(path,
   }
   
   # FIXME: Check that the data package exists in the EDI data repository
-  if (missing(parent.package.id)) {
+  if (missing(source_id)) {
     stop(
       call. = FALSE, 
       paste(
-        "Input argument 'parent.package.id' is missing. Please specify the",
+        "Input argument 'source_id' is missing. Please specify the",
         "ID of the parent data package from which this ecocomDP was derived.",
         "NOTE: Only data packages in the EDI Data Repository are currently",
         "supported."
@@ -202,11 +187,11 @@ create_eml <- function(path,
   
   # FIXME: Check that the data package ID is in one of the expected formats
   # (i.e. LTER or EDI). Issue warning, not error.
-  if (missing(child.package.id)) {
+  if (missing(derived_id)) {
     stop(
       call. = FALSE,
       paste(
-        "Input argument 'child.package.id' is missing. Please specify the",
+        "Input argument 'derived_id' is missing. Please specify the",
         "ID of the data package this EML will describe."
       )
     )
@@ -222,11 +207,11 @@ create_eml <- function(path,
     )
   }
   
-  if (missing(script.description)) {
+  if (missing(script_description)) {
     stop(
       call. = FALSE,
       paste(
-        "Input argument 'script.description' is missing. Please describe the",
+        "Input argument 'script_description' is missing. Please describe the",
         "scripts listed under the 'script' argument."
       )
     )
@@ -234,48 +219,26 @@ create_eml <- function(path,
   
   script <- validate_file_names(path, script)
   
-  if (length(script) != length(script.description)) {
+  if (length(script) != length(script_description)) {
     stop(
       call. = FALSE,
       paste(
         "The number of items listed under the 'script' and",
-        "'script.description' arguments must match."
+        "'script_description' arguments must match."
       )
     )
   }
   
   
-  if (!is.null(is.about)) {
-    names <- names(is.about)
-    uris <- unname(is.about)
+  if (!is.null(is_about)) {
+    names <- names(is_about)
+    uris <- unname(is_about)
     if (any(names == "") | any(uris == "")) {
       stop(
-        "Input argument 'is.about' must be a named character vector", 
+        "Input argument 'is_about' must be a named character vector", 
         call. = FALSE)
     }
   }
-  
-  # if (is.null(cat.vars)) {
-  #   stop(
-  #     call. = FALSE,
-  #     paste(
-  #       "Input argument 'cat.vars' is missing. Create this input using the",
-  #       "function 'define_variables()'."
-  #     )
-  #   )
-  # }
-
-  # if (!all(c("tableName", "attributeName", "code", "definition", "unit") %in%
-  #     names(cat.vars))) {
-  #   stop(
-  #     call. = FALSE,
-  #     paste(
-  #       "Input argument 'cat.vars' is missing required columns. Required",
-  #       "columns are: 'tableName', 'attributeName', 'code', 'definition',",
-  #       "'unit'."
-  #     )
-  #   )
-  # }
 
   if (missing(contact)) {
     stop(
@@ -302,62 +265,62 @@ create_eml <- function(path,
     )
   }
   
-  # FIXME: Check the input 'user.id' against the list of EDI/LTER users.
-  if (missing(user.id)) {
+  # FIXME: Check the input 'user_id' against the list of EDI/LTER users.
+  if (missing(user_id)) {
     stop(
       call. = FALSE,
       paste(
-        "Input argument 'user.id' is missing. Please specify the user ID under",
+        "Input argument 'user_id' is missing. Please specify the user ID under",
         "which this data package will be uploaded. NOTE: Only EDI Data",
         "Repository user IDs are currently supported."
       )
     )
   }
   
-  if (missing(user.domain)) {
+  if (missing(user_domain)) {
     stop(
       call. = FALSE,
-      "Input argument 'user.domain' is missing. Please specify the domain",
-      "under which the 'user.id' argument exists. NOTE: Only 'EDI' and 'LTER'",
+      "Input argument 'user_domain' is missing. Please specify the domain",
+      "under which the 'user_id' argument exists. NOTE: Only 'EDI' and 'LTER'",
       "domains are currently supported."
     )
   }
   
-  if (!all(user.domain %in% c("LTER", "EDI"))) {
+  if (!all(user_domain %in% c("LTER", "EDI"))) {
     stop(
       call. = FALSE,
       paste(
-        "Input argument 'user.domain' is not one of the currently supported",
+        "Input argument 'user_domain' is not one of the currently supported",
         "'EDI' or 'LTER'."
       )
     )
   }
   
-  if (length(user.id) != length(user.domain)) {
+  if (length(user_id) != length(user_domain)) {
     stop(
       call. = FALSE,
       paste(
-        "The number of items listed under the 'user.id' and",
-        "'user.domain' arguments must match."
+        "The number of items listed under the 'user_id' and",
+        "'user_domain' arguments must match."
       )
     )
   }
   
-  if (is.null(basis.of.record)) {
+  if (is.null(basis_of_record)) {
     
     # Valuable information a user may want to know.
     warning(
-      "No 'basis.of.record' found. Specifiying the Darwin Core ",
+      "No 'basis_of_record' found. Specifiying the Darwin Core ",
       "'basisOfRecord' property as 'HumanObservation' or ",
       "'MachineObservation' enables conversion of this ecocomDP into a ",
       "Darwin Core Archive.", call. = FALSE)
     
     # Check form
     required_terms <- stringr::str_detect(
-      basis.of.record, "HumanObservation|MachineObservation")
+      basis_of_record, "HumanObservation|MachineObservation")
     if (!any(required_terms)) {
       stop(
-        "Input values listed under 'basis.of.record' must be ",
+        "Input values listed under 'basis_of_record' must be ",
         "'HumanObservation' or 'MachineObservation'", call. = FALSE)
     }
     
@@ -415,7 +378,7 @@ create_eml <- function(path,
   
   if (!is.null(script)) {
     other.entity <- script
-    other.entity.description <- script.description
+    other.entity.description <- script_description
   } else {
     other.entity <- NULL
     other.entity.description <- NULL
@@ -438,7 +401,7 @@ create_eml <- function(path,
 
   # Read L0 EML ---------------------------------------------------------------
   
-  message("Reading EML of L0 data package ", parent.package.id)
+  message("Reading EML of L0 data package ", source_id)
   
   # Create two objects of the same metadata, eml_L0 (emld list object) for
   # editing, and xml_L0 (xml_document) for easy parsing
@@ -447,19 +410,19 @@ create_eml <- function(path,
   if (environment == "production") {
     url_parent <- paste0(
       "https://pasta.lternet.edu/package/metadata/eml/",
-      stringr::str_replace_all(parent.package.id, "\\.", "/"))
+      stringr::str_replace_all(source_id, "\\.", "/"))
   } else if (environment == "staging") {
     url_parent <- paste0(
       "https://pasta-s.lternet.edu/package/metadata/eml/",
-      stringr::str_replace_all(parent.package.id, "\\.", "/"))
+      stringr::str_replace_all(source_id, "\\.", "/"))
   }
 
   eml_L0 <- EML::read_eml(url_parent)
-  xml_L0 <- suppressMessages(read_eml(parent.package.id))
+  xml_L0 <- suppressMessages(read_eml(source_id))
   
   # Create L1 EML -------------------------------------------------------------
   
-  message("Creating EML of L1 data package ", child.package.id)
+  message("Creating EML of L1 data package ", derived_id)
   
   # This will not be a full EML record, it will only contain sections of the L1 
   # EML to combined with the L0 EML.
@@ -485,9 +448,9 @@ create_eml <- function(path,
   eal_inputs$other.entity.name <- tools::file_path_sans_ext(other.entity)
   eal_inputs$other.entity.description <- other.entity.description
   eal_inputs$other.entity.url <- other.entity.url
-  eal_inputs$package.id <- child.package.id
-  eal_inputs$user.id <- user.id
-  eal_inputs$user.domain <- user.domain
+  eal_inputs$package.id <- derived_id
+  eal_inputs$user.id <- user_id
+  eal_inputs$user.domain <- user_domain
   eal_inputs$return.obj <- TRUE
   
   
@@ -610,7 +573,7 @@ create_eml <- function(path,
   annotations <- rbind(
     annotations,
     annotations_map[annotations_map$context %in% "eml", ])
-  if (!is.null(is.about)) {
+  if (!is.null(is_about)) {
     additional_dataset_annotations <- data.frame(
       id = "/dataset",
       element = "/dataset",
@@ -618,8 +581,8 @@ create_eml <- function(path,
       subject = "dataset",
       predicate_label = "is about",
       predicate_uri = "http://purl.obolibrary.org/obo/IAO_0000136",
-      object_label = names(is.about),
-      object_uri = unname(is.about),
+      object_label = names(is_about),
+      object_uri = unname(is_about),
       stringsAsFactors = FALSE)
     annotations <- rbind(annotations, additional_dataset_annotations)
   }
@@ -727,14 +690,14 @@ create_eml <- function(path,
   eml_L0$schemaLocation <- paste0(
     "https://eml.ecoinformatics.org/eml-2.2.0  ",
     "https://nis.lternet.edu/schemas/EML/eml-2.2.0/xsd/eml.xsd")
-  eml_L0$packageId <- child.package.id
+  eml_L0$packageId <- derived_id
   eml_L0$system <- "edi"
   
   # Update <access> -----------------------------------------------------------
   
   # Access control rules are used by some repositories to manage 
-  # editing, viewing, downloading permissions. Adding the user.id and 
-  # user.domain here expands editing permission to the creator of the DwC-A 
+  # editing, viewing, downloading permissions. Adding the user_id and 
+  # user_domain here expands editing permission to the creator of the DwC-A 
   # data package this EML will be apart of.
   
   eml_L0$access$allow <- unique(
@@ -800,13 +763,13 @@ create_eml <- function(path,
     eml_L1$dataset$keywordSet)
   
   # Add Darwin Core basisOfRecord
-  if (!is.null(basis.of.record)) {
+  if (!is.null(basis_of_record)) {
     eml_L0$dataset$keywordSet <- c(
       eml_L0$dataset$keywordSet,
       list(
         list(
           keywordThesaurus = "Darwin Core Terms",
-          keyword = as.list(paste0("basisOfRecord: ", basis.of.record)))))
+          keyword = as.list(paste0("basisOfRecord: ", basis_of_record)))))
   }
 
   # Update <intellectualRights> -----------------------------------------------
@@ -862,7 +825,7 @@ create_eml <- function(path,
   # TODO: Dev create_eml_provenance() function
   r <- suppressMessages(
     api_get_provenance_metadata(
-      package.id = parent.package.id,
+      package.id = source_id,
       environment = environment))
   r <- EML::read_eml(r)
   provenance_L1 <- list(
@@ -898,7 +861,7 @@ create_eml <- function(path,
   emld::eml_version("eml-2.2.0")
   EML::write_eml(
     eml_L0, 
-    paste0(path, "/", child.package.id, ".xml"))
+    paste0(path, "/", derived_id, ".xml"))
 
   # Validate EML --------------------------------------------------------------
 
