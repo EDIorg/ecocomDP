@@ -3,10 +3,8 @@
 #' @description  
 #'     Use this function to verify a dataset conforms to the ecocomDP.
 #' 
-#' @param dataset
-#'     (list of data frames) A single dataset return from \code{read()}.
-#' @param path 
-#'     (character) The path to the directory containing ecocomDP tables.
+#' @param dataset (list) A dataset returned by \code{read()}.
+#' @param path (character) A path to the directory in which the ecocomDP tables can be found.
 #'     
 #' @note
 #'     This function is used by ecocomDP creators (to ensure what has been 

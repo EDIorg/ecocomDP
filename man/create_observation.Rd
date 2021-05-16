@@ -13,15 +13,15 @@ create_observation(
   datetime = "datetime",
   taxon_id = "taxon_id",
   variable_name,
-  unit = "unit"
+  unit = NULL
 )
 }
 \arguments{
-\item{L0_wide}{(data.frame) The fully joined L0 dataset, in wide format.}
+\item{L0_wide}{(data.frame) The fully joined source L0 dataset, in wide format.}
 
-\item{observation_id}{(character) Column in \code{L0_wide} containing the the identifier assigned to each unique observation.}
+\item{observation_id}{(character) Column in \code{L0_wide} containing the identifier assigned to each unique observation.}
 
-\item{event_id}{(character; optional) Column in \code{L0_wide} containing the identifier assigned to each unique sampling event.}
+\item{event_id}{(character) An optional column in \code{L0_wide} containing the identifier assigned to each unique sampling event.}
 
 \item{package_id}{(character) Column in \code{L0_wide} containing the identifier this dataset will have once it's published in a data repository.}
 
@@ -33,7 +33,7 @@ create_observation(
 
 \item{variable_name}{(character) Columns in \code{L0_wide} containing the variables measured.}
 
-\item{unit}{(character; optional) Columns in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention <unit>_<variable_name> (e.g. "unit_abundance").}
+\item{unit}{(character) An optional column in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention <unit>_<variable_name> (e.g. "unit_abundance").}
 }
 \value{
 (data.frame) The location_ancillary table of ecocomDP.
@@ -42,7 +42,7 @@ create_observation(
 Create the observation table
 }
 \details{
-This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column.
+This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column. Default names of optional columns are ignored if they can't be found in \code{L0_wide} (i.e. no need to set as NULL).
 }
 \examples{
 

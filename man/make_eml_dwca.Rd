@@ -21,7 +21,7 @@ make_eml_dwca(
 
 \item{source_id}{(character) ID of an ecocomDP data package. Only EDI Data Repository package IDs are currently supported.}
 
-\item{derived_id}{(character) ID of DWcA occurrence data package being created.}
+\item{derived_id}{(character) Identifier of the DwC-A dataset being created.}
 
 \item{user.id}{(character; optional) Repository user identifier. If more than one, then enter as a vector of character strings (e.g. \code{c("user_id_1", "user_id_2")}). \code{user.id} sets the /eml/access/principal element for all \code{user.domain} except "KNB", "ADC", and if \code{user.domain = NULL}.}
 

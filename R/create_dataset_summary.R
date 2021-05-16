@@ -1,15 +1,15 @@
 #' Create the dataset_summary table
 #'
-#' @param L0_wide (data.frame) The fully joined L0 dataset, in wide format.
+#' @param L0_wide (data.frame) The fully joined source L0 dataset, in wide format.
 #' @param package_id (character) Column in \code{L0_wide} containing the identifier this dataset will have once it's published in a data repository.
-#' @param original_package_id (character; optional) Column in \code{L0_wide} containing the identifier of the L0 dataset in the repository it's published, if applicable (some L0 are not published).
-#' @param length_of_survey_years (character) Column in \code{L0_wide} containing the number of years the study has been ongoing.
-#' @param number_of_years_sampled (character) Column in \code{L0_wide} containing the number of years within the period of the study that samples were taken.
-#' @param std_dev_interval_betw_years (character) Column in \code{L0_wide} containing the standard deviation of the interval between sampling events.
+#' @param original_package_id (character) The optional column in \code{L0_wide} containing the identifier of the L0 dataset in the repository it's published (some L0 are not published).
+#' @param length_of_survey_years (character) Column in \code{L0_wide} containing the number of years the study has been ongoing. Use \code{calc_length_of_survey_years()} to calculate this value.
+#' @param number_of_years_sampled (character) Column in \code{L0_wide} containing the number of years within the period of the study that samples were taken. Use \code{calc_number_of_years_sampled()} to calculate this value.
+#' @param std_dev_interval_betw_years (character) Column in \code{L0_wide} containing the standard deviation of the interval between sampling events. Use \code{calc_std_dev_interval_betw_years()} to calculate this value.
 #' @param max_num_taxa (character) Column in \code{L0_wide} containing the number of unique taxa in this dataset.
-#' @param geo_extent_bounding_box_m2 (character; optional) Column in \code{L0_wide} containing the area of the study location, if applicable (some L0 were collected at a single point).
+#' @param geo_extent_bounding_box_m2 (character) An optional column in \code{L0_wide} containing the area (in meters) of the study location, if applicable (some L0 were collected at a single point). Use \code{calc_geo_extent_bounding_box_m2()} to calculate this value.
 #'
-#' @details This function collects specified columns from \code{L0_wide} and returns distinct rows.
+#' @details This function collects specified columns from \code{L0_wide} and returns distinct rows. Default names of optional columns are ignored if they can't be found in \code{L0_wide} (i.e. no need to set as NULL).
 #'
 #' @return (data.frame) The dataset_summary table of ecocomDP.
 #'     
@@ -64,16 +64,10 @@ create_dataset_summary <- function(L0_wide,
 
 #' Calculate geo_extent_bounding_box_m2 of the dataset_summary table
 #'
-#' @param west 
-#'     (numeric) West longitude in decimal degrees and negative if west of the 
-#'     prime meridian.
-#' @param east 
-#'     (numeric) East longitude in decimal degrees and negative if west of the 
-#'     prime meridian.
-#' @param north 
-#'     (numeric) North latitude in decimal degrees.
-#' @param south 
-#'     (numeric) North latitude in decimal degrees.
+#' @param west (numeric) West longitude in decimal degrees and negative if west of the prime meridian.
+#' @param east (numeric) East longitude in decimal degrees and negative if west of the prime meridian.
+#' @param north (numeric) North latitude in decimal degrees and negative if south of the equator.
+#' @param south (numeric) South latitude in decimal degrees and negative if south of the equator.
 #'
 #' @return
 #'     (numeric) Area in square meters.
@@ -103,7 +97,7 @@ calc_geo_extent_bounding_box_m2 <- function(
 
 #' Calculate length_of_survey_years of the dataset_summary table
 #'
-#' @param dates (Date) A vector of dates
+#' @param dates (Date) Dates from the L0 source dataset encompassing the entire study duration.
 #'
 #' @return (numeric) Number of years the study has been ongoing
 #' @export
@@ -127,7 +121,7 @@ calc_length_of_survey_years <- function(dates) {
 
 #' Calculate number_of_years_sampled of the dataset_summary table
 #'
-#' @param dates (Date) A vector of dates
+#' @param dates (Date) Dates from the L0 source dataset encompassing the entire study duration.
 #'
 #' @return (numeric) Number of survey years
 #' @export
@@ -149,7 +143,7 @@ calc_number_of_years_sampled <- function(dates) {
 
 #' Calculate std_dev_interval_betw_years of the dataset_summary table
 #'
-#' @param dates (Date) A vector of dates
+#' @param dates (Date) Dates from the L0 source dataset encompassing the entire study duration.
 #'
 #' @return (numeric) Number of survey years
 #' @export

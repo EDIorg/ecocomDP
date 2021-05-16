@@ -14,17 +14,17 @@ create_taxon_ancillary(
 )
 }
 \arguments{
-\item{L0_wide}{(data.frame) The fully joined L0 dataset, in wide format.}
+\item{L0_wide}{(data.frame) The fully joined source L0 dataset, in wide format.}
 
 \item{taxon_id}{(character) Column in \code{L0_wide} containing the identifier assigned to each unique organism at the observation level.}
 
-\item{datetime}{(character; optional) Column in \code{L0_wide} containing the date, and if applicable time, of ancillary taxon data following the ISO-8601 standard format (i.e. YYYY-MM-DD hh:mm:ss).}
+\item{datetime}{(character) An optional in \code{L0_wide} containing the date, and if applicable time, of ancillary location data following the ISO-8601 standard format (i.e. YYYY-MM-DD hh:mm:ss).}
 
 \item{variable_name}{(character) Columns in \code{L0_wide} containing the ancillary taxon data.}
 
-\item{unit}{(character; optional) Columns in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention <unit>_<variable_name> (e.g. "unit_average_length").}
+\item{unit}{(character) The optional column in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention <unit>_<variable_name> (e.g. "unit_average_length").}
 
-\item{author}{(character; optional) Column in \code{L0_wide} containing the author associated with identification of taxa listed in the taxon_name column of the taxon table.}
+\item{author}{(character) An optional column in \code{L0_wide} containing the person associated with identification of taxa in the taxon table.}
 }
 \value{
 (data.frame) The taxon_ancillary table of ecocomDP.
@@ -33,7 +33,7 @@ create_taxon_ancillary(
 Create the taxon_ancillary table
 }
 \details{
-This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column.
+This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column. Default names of optional columns are ignored if they can't be found in \code{L0_wide} (i.e. no need to set as NULL).
 }
 \examples{
 

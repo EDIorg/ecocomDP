@@ -7,7 +7,7 @@
 calc_length_of_survey_years(dates)
 }
 \arguments{
-\item{dates}{(Date) A vector of dates}
+\item{dates}{(Date) Dates from the L0 source dataset encompassing the entire study duration.}
 }
 \value{
 (numeric) Number of years the study has been ongoing

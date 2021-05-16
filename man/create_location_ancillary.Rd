@@ -13,15 +13,15 @@ create_location_ancillary(
 )
 }
 \arguments{
-\item{L0_wide}{(data.frame) The fully joined L0 dataset, in wide format.}
+\item{L0_wide}{(data.frame) The fully joined source L0 dataset, in wide format.}
 
 \item{location_id}{(character) Column in \code{L0_wide} containing the identifier assigned to each unique location at the observation level.}
 
-\item{datetime}{(character; optional) Column in \code{L0_wide} containing the date, and if applicable time, of ancillary location data following the ISO-8601 standard format (i.e. YYYY-MM-DD hh:mm:ss).}
+\item{datetime}{(character) An optional column in \code{L0_wide} containing the date, and if applicable time, of ancillary location data following the ISO-8601 standard format (i.e. YYYY-MM-DD hh:mm:ss).}
 
 \item{variable_name}{(character) Columns in \code{L0_wide} containing the ancillary location data.}
 
-\item{unit}{(character; optional) Columns in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention <unit>_<variable_name> (e.g. "unit_depth").}
+\item{unit}{(character) An optional column in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention <unit>_<variable_name> (e.g. "unit_depth").}
 }
 \value{
 (data.frame) The location_ancillary table of ecocomDP.
@@ -30,7 +30,7 @@ create_location_ancillary(
 Create the location_ancillary table
 }
 \details{
-This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column.
+This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column. Default names of optional columns are ignored if they can't be found in \code{L0_wide} (i.e. no need to set as NULL).
 }
 \examples{
 

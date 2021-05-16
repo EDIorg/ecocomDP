@@ -1,13 +1,13 @@
 #' Create the taxon table
 #'
-#' @param L0_wide (data.frame) The fully joined L0 dataset, in wide format.
+#' @param L0_wide (data.frame) The fully joined source L0 dataset, in wide format.
 #' @param taxon_id (character) Column in \code{L0_wide} containing the identifier assigned to each unique organism at the observation level.
-#' @param taxon_rank (character; optional) Column in \code{L0_wide} containing the taxonomic rank of the organism in \code{taxon_name}.
+#' @param taxon_rank (character) The optional column in \code{L0_wide} containing the taxonomic rank of the organism in \code{taxon_name}.
 #' @param taxon_name (character) Column in \code{L0_wide} containing the taxonomic name of the organism.
-#' @param authority_system (character; optional) Column in \code{L0_wide} containing the name of the authority system \code{authority_taxon_id} is from (e.g. "ITIS").
-#' @param authority_taxon_id (character; optional) Column in \code{L0_wide} containing the identifier corresponding to \code{taxon_name} in the \code{authority_system}.
+#' @param authority_system (character) An optional column in \code{L0_wide} containing the name of the authority system \code{authority_taxon_id} is from (e.g. "ITIS").
+#' @param authority_taxon_id (character) An optional column in \code{L0_wide} containing the identifier corresponding to \code{taxon_name} in the \code{authority_system}.
 #' 
-#' @details This function collects specified columns from \code{L0_wide} and returns distinct rows.
+#' @details This function collects specified columns from \code{L0_wide} and returns distinct rows. Default names of optional columns are ignored if they can't be found in \code{L0_wide} (i.e. no need to set as NULL).
 #' 
 #' If taxon authority_system contains values of .... then the corresponding taxa will have their whole hierarchy expanded within the EML metadata returned by create_eml().
 #'

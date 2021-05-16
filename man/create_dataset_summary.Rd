@@ -16,21 +16,21 @@ create_dataset_summary(
 )
 }
 \arguments{
-\item{L0_wide}{(data.frame) The fully joined L0 dataset, in wide format.}
+\item{L0_wide}{(data.frame) The fully joined source L0 dataset, in wide format.}
 
 \item{package_id}{(character) Column in \code{L0_wide} containing the identifier this dataset will have once it's published in a data repository.}
 
-\item{original_package_id}{(character; optional) Column in \code{L0_wide} containing the identifier of the L0 dataset in the repository it's published, if applicable (some L0 are not published).}
+\item{original_package_id}{(character) The optional column in \code{L0_wide} containing the identifier of the L0 dataset in the repository it's published (some L0 are not published).}
 
-\item{length_of_survey_years}{(character) Column in \code{L0_wide} containing the number of years the study has been ongoing.}
+\item{length_of_survey_years}{(character) Column in \code{L0_wide} containing the number of years the study has been ongoing. Use \code{calc_length_of_survey_years()} to calculate this value.}
 
-\item{number_of_years_sampled}{(character) Column in \code{L0_wide} containing the number of years within the period of the study that samples were taken.}
+\item{number_of_years_sampled}{(character) Column in \code{L0_wide} containing the number of years within the period of the study that samples were taken. Use \code{calc_number_of_years_sampled()} to calculate this value.}
 
-\item{std_dev_interval_betw_years}{(character) Column in \code{L0_wide} containing the standard deviation of the interval between sampling events.}
+\item{std_dev_interval_betw_years}{(character) Column in \code{L0_wide} containing the standard deviation of the interval between sampling events. Use \code{calc_std_dev_interval_betw_years()} to calculate this value.}
 
 \item{max_num_taxa}{(character) Column in \code{L0_wide} containing the number of unique taxa in this dataset.}
 
-\item{geo_extent_bounding_box_m2}{(character; optional) Column in \code{L0_wide} containing the area of the study location, if applicable (some L0 were collected at a single point).}
+\item{geo_extent_bounding_box_m2}{(character) An optional column in \code{L0_wide} containing the area (in meters) of the study location, if applicable (some L0 were collected at a single point). Use \code{calc_geo_extent_bounding_box_m2()} to calculate this value.}
 }
 \value{
 (data.frame) The dataset_summary table of ecocomDP.
@@ -39,7 +39,7 @@ create_dataset_summary(
 Create the dataset_summary table
 }
 \details{
-This function collects specified columns from \code{L0_wide} and returns distinct rows.
+This function collects specified columns from \code{L0_wide} and returns distinct rows. Default names of optional columns are ignored if they can't be found in \code{L0_wide} (i.e. no need to set as NULL).
 }
 \examples{
 

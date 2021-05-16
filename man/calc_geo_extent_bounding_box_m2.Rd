@@ -7,15 +7,13 @@
 calc_geo_extent_bounding_box_m2(west, east, north, south)
 }
 \arguments{
-\item{west}{(numeric) West longitude in decimal degrees and negative if west of the 
-prime meridian.}
+\item{west}{(numeric) West longitude in decimal degrees and negative if west of the prime meridian.}
 
-\item{east}{(numeric) East longitude in decimal degrees and negative if west of the 
-prime meridian.}
+\item{east}{(numeric) East longitude in decimal degrees and negative if west of the prime meridian.}
 
-\item{north}{(numeric) North latitude in decimal degrees.}
+\item{north}{(numeric) North latitude in decimal degrees and negative if south of the equator.}
 
-\item{south}{(numeric) North latitude in decimal degrees.}
+\item{south}{(numeric) South latitude in decimal degrees and negative if south of the equator.}
 }
 \value{
 (numeric) Area in square meters.

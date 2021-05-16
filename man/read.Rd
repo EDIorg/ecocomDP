@@ -23,48 +23,35 @@ read(
 )
 }
 \arguments{
-\item{id}{(character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search()} output. Older versions of ids listed in the "id" column of the \code{search()} output are supported, but a warning is issued.}
+\item{id}{(character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search()} output. Older versions of datasets can be read, but a warning is issued.}
 
-\item{parse_datetime}{(logical) Attempt to parse datetime character strings through an algorithm. For EDI, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the algorithm iterates through permutations of \code{ymd HMS} orders. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing).}
+\item{parse_datetime}{(logical) Attempt to parse datetime character strings through an algorithm. For EDI data, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the formatString is standardized. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing with a warning).}
 
-\item{unique_keys}{(logical) Whether to create globally unique primary keys (and associated
-foreign keys). Reading multiple datasets raises the issue of referential 
-integrity across datasets. If TRUE, \code{id} is appended to each 
-table's primary key and associated foreign key. Defaults to FALSE.}
+\item{unique_keys}{(logical) Whether to create globally unique primary keys (and associated foreign keys). Useful in maintaining referential integrity when working with multiple datasets. If TRUE, \code{id} is appended to each table's primary key and associated foreign key. Default is\code{FALSE}.}
 
-\item{site}{(character; NEON data only) A character vector of site codes to filter 
-data on. Sites are listed in the "sites" column of the 
-\code{search()} output. Defaults to "all", meaning all sites.}
+\item{site}{(character) For NEON data, a character vector of site codes to filter data on. Sites are listed in the "sites" column of the \code{search()} output. Defaults to "all", meaning all sites.}
 
-\item{startdate}{(character; NEON data only) Start date to filter on in the form YYYY-MM. 
-Defaults to NA, meaning all available dates.}
+\item{startdate}{(character) For NEON data, the start date to filter on in the form YYYY-MM. Defaults to NA, meaning all available dates.}
 
-\item{enddate}{(character; NEON data only) End date to filter on in the form YYYY-MM. 
-Defaults to NA, meaning all available dates.}
+\item{enddate}{(character) For NEON data, the end date to filter on in the form YYYY-MM. Defaults to NA, meaning all available dates.}
 
-\item{package}{(character; NEON data only) Either 'basic' or 'expanded', indicating 
-which data package to download. Defaults to basic.}
+\item{package}{(character) For NEON data, either 'basic' or 'expanded', indicating which data package to download. Defaults to basic.}
 
-\item{check.size}{(logical; NEON data only) Should the user approve the total file size 
-before downloading? Defaults to FALSE.}
+\item{check.size}{(logical) For NEON data, should the user approve the total file size before downloading? Defaults to FALSE.}
 
-\item{nCores}{(integer; NEON data only) The number of cores to parallelize the 
-stacking procedure. Defaults to 1.}
+\item{nCores}{(integer) For NEON data, the number of cores to parallelize the stacking procedure. Defaults to 1.}
 
-\item{forceParallel}{(logical; NEON data only) If the data volume to be processed does not 
-meet minimum requirements to run in parallel, this overrides. Defaults 
-to FALSE.}
+\item{forceParallel}{(logical) For NEON data, if the data volume to be processed does not meet minimum requirements to run in parallel, this overrides. Defaults to FALSE.}
 
-\item{token}{(character; NEON data only) User specific API token (generated within 
-neon.datascience user accounts)}
+\item{token}{(character) For NEON data, a user specific API token (generated within neon.datascience user accounts).}
 
-\item{neon.data.save.dir}{(character; NEON data only) A character string that indicates the directory where NEON source data should be saved upon download from the NEON API. Data are downloaded using neonUtilities::loadByProduct() and saved in this directory as an RDS file. The filename will follow the format <NEON data product ID>_<timestamp>.RDS}
+\item{neon.data.save.dir}{(character) For NEON data, an optional argument indicating the directory where NEON source data should be saved upon download from the NEON API. Data are downloaded using \code{neonUtilities::loadByProduct()} and saved in this directory as an RDS file. The filename will follow the format <NEON data product ID>_<timestamp>.RDS}
 
-\item{neon.data.read.path}{(character; NEON data only) Path to read in an RDS file of 'stacked NEON data' from neonUtilities::loadByProduct()}
+\item{neon.data.read.path}{(character) For NEON data, an optional argument defining a path to read in an RDS file of 'stacked NEON data' from \code{neonUtilities::loadByProduct()}. See details below for more information.}
 
 \item{...}{(NEON data only) Other arguments to \code{neonUtilities::loadByProduct()}}
 
-\item{from}{(character) Full path to file to be read if .rds, or path to directory if .csv. Supported options are returned by \code{save()}}
+\item{from}{(character) Full path of file to be read (if .rds), or path to directory (if .csv).}
 }
 \value{
 (list) with the structure: 

@@ -7,7 +7,7 @@
 calc_number_of_years_sampled(dates)
 }
 \arguments{
-\item{dates}{(Date) A vector of dates}
+\item{dates}{(Date) Dates from the L0 source dataset encompassing the entire study duration.}
 }
 \value{
 (numeric) Number of survey years

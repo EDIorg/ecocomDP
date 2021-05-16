@@ -7,16 +7,13 @@
 flatten(tables)
 }
 \arguments{
-\item{tables}{(list of data frames) A named list of data frames, each of which is an 
-ecocomDP table.}
+\item{tables}{(list) A named list of data.frames of an ecocomDP dataset.}
 }
 \value{
 (data.frame) a single data.frame of merged tables for an ecocomDP data package
 }
 \description{
 This function joins a list of data.frames following the ecocomDP data pattern
-
-Check for valid date and time formats
 }
 \examples{
 \dontrun{

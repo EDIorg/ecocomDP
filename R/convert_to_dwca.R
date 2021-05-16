@@ -1,37 +1,12 @@
 #' Creates Darwin Core Archive package from a published ecocomDP formatted level-1
 #'
-#' @param path 
-#'     (character) Path to the where the DwC-A data objects and EML will be 
-#'     written.
-#' @param core_name
-#'     (character) The Darwin Core central table of the package. Can be: 
-#'     "event" (event core). Occurrence core is not yet supported.
-#' @param source_id
-#'     (character) ID of an ecocomDP data package. Only 
-#'     EDI Data Repository package IDs are currently supported.
-#' @param derived_id
-#'     (character) ID of DWcA occurrence data package being created.
-#' @param url
-#'     (character) URL to the publicly accessible directory containing DwC-A tables and meta.xml. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and upload of ecocomDP data packages and derived products.
-#' @param user_id
-#'     (character; optional) Repository user identifier. If more than one, 
-#'     then enter as a vector of character strings (e.g. 
-#'     \code{c("user_id_1", "user_id_2")}). \code{user_id} sets the 
-#'     /eml/access/principal element for all \code{user_domain} except
-#'     "KNB", "ADC", and if \code{user_domain = NULL}.
-#' @param user_domain
-#'     (character; optional) Repository domain associated with 
-#'     \code{user_id}. Currently supported values are "EDI" 
-#'     (Environmental Data Initiative), "LTER" (Long-Term Ecological Research 
-#'     Network), "KNB" (The Knowledge Network for Biocomplexity), "ADC" (The 
-#'     Arctic Data Center). If you'd like your system supported please contact
-#'     maintainers of the ecocomDP R package. If using more than one 
-#'     \code{user_domain}, then enter as a vector of character strings (e.g. 
-#'     \code{c("user_domain_1", "user_domain_2")}) in the same order as 
-#'     corresponding \code{user_id}. If \code{user_domain} is missing then a 
-#'     default value "unknown" is assigned. \code{user_domain} sets the EML 
-#'     header "system" attribute and for all \code{user_domain}, except "KNB" 
-#'     and "ADC", sets the /eml/access/principal element attributes and values.
+#' @param path (character) Path to which the DwC-A data objects and EML will be written.
+#' @param core_name (character) The central table of the Darwin Core package being created. Can be: "event" (event core). Occurrence core is not yet supported.
+#' @param source_id (character) Identifier of an ecocomDP data package published in a supported repository. Currently, the EDI Data Repository is supported.
+#' @param derived_id (character) Identifier of the DwC-A dataset being created.
+#' @param url (character) URL to the publicly accessible directory containing DwC-A tables and meta.xml. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and publication of datasets.
+#' @param user_id (character) Identifier of user account associated with the data repository in which this ecocomDP dataset will be archived. Only \code{user_id} from the EDI is currently supported.
+#' @param user_domain (character) Domain of the \code{user_id}. Only "EDI" is currently supported. If more than one, then supply as a vector of character strings in the same order as \code{user_id}.
 #' @details
 #'     TODO: Add details
 #' @return
@@ -130,7 +105,7 @@ convert_to_dwca <- function(path,
 #' @param source_id
 #'     (character) ID of an ecocomDP data package. Only 
 #'     EDI Data Repository package IDs are currently supported.
-#' @param derived_id
+#' @param derived_id (character) Identifier of the DwC-A dataset being created.
 #'
 #' @return
 #'     three tables, event, occurrence, measurementOrFact
@@ -297,8 +272,7 @@ create_tables_dwca_event_core <- function(
 #'     (character) The Darwin Core central table of the package. Can be: "occurence" (occurrence core) or "event" (event core).
 #' @param source_id
 #'     (character) ID of an ecocomDP data package. Only EDI Data Repository package IDs are currently supported.
-#' @param derived_id
-#'     (character) ID of DWcA occurrence data package being created.
+#' @param derived_id (character) Identifier of the DwC-A dataset being created.
 #' @param repository (character) Data repository in which \code{package.id} resides and associated with \code{environment}. Currently supported repositories are: "EDI" (Environmental Data Initiative). Requests for support of other repositories can be made via \href{https://github.com/EDIorg/ecocomDP}{ecocomDP GitHub} issues. Default is "EDI".
 #' @param user.id
 #'     (character; optional) Repository user identifier. If more than one, then enter as a vector of character strings (e.g. \code{c("user_id_1", "user_id_2")}). \code{user.id} sets the /eml/access/principal element for all \code{user.domain} except "KNB", "ADC", and if \code{user.domain = NULL}.

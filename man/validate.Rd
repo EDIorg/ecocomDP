@@ -7,9 +7,9 @@
 validate(dataset = NULL, path = NULL)
 }
 \arguments{
-\item{dataset}{(list of data frames) A single dataset return from \code{read()}.}
+\item{dataset}{(list) A dataset returned by \code{read()}.}
 
-\item{path}{(character) The path to the directory containing ecocomDP tables.}
+\item{path}{(character) A path to the directory in which the ecocomDP tables can be found.}
 }
 \value{
 (character) If issues are found, then a vector of character strings 

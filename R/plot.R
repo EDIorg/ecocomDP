@@ -1,8 +1,8 @@
 #' Plot alpha diversity (taxa richness) over time and space
 #'
-#' @param observation (data.frame) The observation table of ecocomDP
-#' @param id (character) Dataset id. Used for plot subtitles.
-#' @param alpha (numeric) Alpha-transparency scale of data points. For when many data points overlap. Between 0 and 1, where 1 is 100\% opaque.
+#' @param observation (data.frame) The observation table.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -69,9 +69,9 @@ plot_alpha_diversity <- function(observation, id, alpha = 1) {
 
 #' Plot spatiotemporal sampling effort
 #'
-#' @param observation (data.frame) The observation table of ecocomDP
-#' @param id (character) Dataset id. Used for plot subtitles.
-#' @param alpha (numeric) Alpha-transparency scale of data points. For when many data points overlap. Between 0 and 1, where 1 is 100\% opaque.
+#' @param observation (data.frame) The observation table.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -125,9 +125,9 @@ plot_sampling_times <- function(observation, id, alpha = 1) {
 
 #' Plot taxa accumulation curve over space
 #'
-#' @param observation (data.frame) The observation table of ecocomDP
-#' @param id (character) Dataset id. Used for plot subtitles.
-#' @param alpha (numeric) Alpha-transparency scale of data points. For when many data points overlap. Between 0 and 1, where 1 is 100\% opaque.
+#' @param observation (data.frame) The observation table.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -192,9 +192,9 @@ plot_taxa_accum_sites <- function(observation, id, alpha = 1) {
 
 #' Plot taxa accumulation curves over time (site-specific and total)
 #'
-#' @param observation (data.frame) The observation table of ecocomDP
-#' @param id (character) Dataset id. Used for plot subtitles.
-#' @param alpha (numeric) Alpha-transparency scale of data points. For when many data points overlap. Between 0 and 1, where 1 is 100\% opaque.
+#' @param observation (data.frame) The observation table.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -275,7 +275,7 @@ plot_taxa_accum_time <- function(observation, id, alpha = 1) {
 #' Format dataset for community plotting functions
 #'
 #' @param observation (data.frame) The observation table of ecocomDP
-#' @param id (character) Dataset id. Used in plot titles.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' 
 #' @details Downsteam plotting functions are based on \href{https://github.com/sokole/ltermetacommunities/tree/master/Group2-explore-data}{LTER Metacommunities code} and use their intermediate data input format.
 #'

@@ -28,7 +28,7 @@ create_tables_dwca_event_core(
 \item{source_id}{(character) ID of an ecocomDP data package. Only 
 EDI Data Repository package IDs are currently supported.}
 
-\item{derived_id}{}
+\item{derived_id}{(character) Identifier of the DwC-A dataset being created.}
 }
 \value{
 three tables, event, occurrence, measurementOrFact

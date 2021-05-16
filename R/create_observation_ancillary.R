@@ -1,11 +1,11 @@
 #' Create the observation_ancillary table
 #'
-#' @param L0_wide (data.frame) The fully joined L0 dataset, in wide format.
-#' @param observation_id (character) Column in \code{L0_wide} containing the the identifier assigned to each unique observation.
+#' @param L0_wide (data.frame) The fully joined source L0 dataset, in wide format.
+#' @param observation_id (character) Column in \code{L0_wide} containing the identifier assigned to each unique observation.
 #' @param variable_name (character) Columns in \code{L0_wide} containing the ancillary observation data.
-#' @param unit (character; optional) Columns in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention <unit>_<variable_name> (e.g. "unit_temperature").
+#' @param unit (character) An optional column in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention <unit>_<variable_name> (e.g. "unit_temperature").
 #' 
-#' @details This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column.
+#' @details This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column. Default names of optional columns are ignored if they can't be found in \code{L0_wide} (i.e. no need to set as NULL).
 #'
 #' @return (data.frame) The observation_ancillary table of ecocomDP.
 #' @export

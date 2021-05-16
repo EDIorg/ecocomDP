@@ -4,26 +4,14 @@
 #' Environmental Data Initiative (EDI) and the National Ecological Observatory
 #' Network (NEON).
 #' 
-#' @param text
-#'     (character) Text to search in dataset titles, descriptions, and 
-#'     abstracts. Return includes any word or phrase matches. Is not case sensitive. Works with \code{boolean}
-#' @param taxa
-#'     (character) Taxanomic rank values to search for. The full taxonomic 
-#'     hierarchy of each taxa in the data is searchable for EDI but not NEON (currently). Scientific and 
-#'     common names are supported for EDI, but not NEON (currently.
-#' @param num_taxa
-#'     (numeric) Minimum and maximum number of taxa in the data. Return will fall between these bounds.
-#' @param num_years
-#'     (numeric) Minimum and maximum number of years sampled.
-#' @param sd_years
-#'     (numeric) Minimum and maximum standard deviation between surveys (in 
-#'     years).
-#' @param area
-#'     (numeric) Decimal degree North, East, South, and West coordinates within
-#'     which the data should originate. Any overlapping areas or contained point locations will be returned.
-#' @param boolean
-#'     (character) Boolean operator to use when searching \code{text} and 
-#'     \code{taxa}. Supported operators are "AND", "OR". Default is "AND".
+#' @param text (character) Text to search in dataset titles, descriptions, and abstracts. Datasets matching any exact words or phrase will be returned. Is not case sensitive. Works with \code{boolean}
+#' @param taxa (character) Taxanomic rank values to search on. The full taxonomic hierarchy of each taxa in a dataset is searchable for EDI (including common names) but not yet NEON, in which cases the lowest level rank value is searchable.
+#' @param num_taxa (numeric) Minimum and maximum number of taxa the dataset should contain. Any datasets within this range will be returned.
+#' @param num_years (numeric) Minimum and maximum number of years sampled the dataset should contain. Any datasets within this range will be returned.
+#' @param sd_years (numeric) Minimum and maximum standard deviation between survey dates (in years). Any datasets within this range will be returned.
+#' @param area (numeric) Bounding coordinates within which the data should originate. Accepted values are in decimal degrees and in the order: North, East, South, West. Any datasets with overlapping areas or contained points will be returned.
+#' @param boolean (character) Boolean operator to use when searching \code{text} and 
+#'     \code{taxa}. Supported operators are: "AND", "OR". Default is "AND".
 #'     
 #' @note
 #'     This function may not work between 01:00 - 03:00 UTC due to regular maintenance of the EDI Data Repository. If you have reached this warning outside these hours then there may be an unexpected issue that will be resolved shortly. Please try again later.

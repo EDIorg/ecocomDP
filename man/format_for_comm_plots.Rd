@@ -9,7 +9,7 @@ format_for_comm_plots(observation, id)
 \arguments{
 \item{observation}{(data.frame) The observation table of ecocomDP}
 
-\item{id}{(character) Dataset id. Used in plot titles.}
+\item{id}{(character) Identifier of dataset to be used in plot subtitles.}
 }
 \value{
 (data.frame) Tabular data of \code{id} in a format compatible with plotting functions

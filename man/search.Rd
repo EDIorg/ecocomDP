@@ -7,25 +7,20 @@
 search(text, taxa, num_taxa, num_years, sd_years, area, boolean = "AND")
 }
 \arguments{
-\item{text}{(character) Text to search in dataset titles, descriptions, and 
-abstracts. Return includes any word or phrase matches. Is not case sensitive. Works with \code{boolean}}
+\item{text}{(character) Text to search in dataset titles, descriptions, and abstracts. Datasets matching any exact words or phrase will be returned. Is not case sensitive. Works with \code{boolean}}
 
-\item{taxa}{(character) Taxanomic rank values to search for. The full taxonomic 
-hierarchy of each taxa in the data is searchable for EDI but not NEON (currently). Scientific and 
-common names are supported for EDI, but not NEON (currently.}
+\item{taxa}{(character) Taxanomic rank values to search on. The full taxonomic hierarchy of each taxa in a dataset is searchable for EDI (including common names) but not yet NEON, in which cases the lowest level rank value is searchable.}
 
-\item{num_taxa}{(numeric) Minimum and maximum number of taxa in the data. Return will fall between these bounds.}
+\item{num_taxa}{(numeric) Minimum and maximum number of taxa the dataset should contain. Any datasets within this range will be returned.}
 
-\item{num_years}{(numeric) Minimum and maximum number of years sampled.}
+\item{num_years}{(numeric) Minimum and maximum number of years sampled the dataset should contain. Any datasets within this range will be returned.}
 
-\item{sd_years}{(numeric) Minimum and maximum standard deviation between surveys (in 
-years).}
+\item{sd_years}{(numeric) Minimum and maximum standard deviation between survey dates (in years). Any datasets within this range will be returned.}
 
-\item{area}{(numeric) Decimal degree North, East, South, and West coordinates within
-which the data should originate. Any overlapping areas or contained point locations will be returned.}
+\item{area}{(numeric) Bounding coordinates within which the data should originate. Accepted values are in decimal degrees and in the order: North, East, South, West. Any datasets with overlapping areas or contained points will be returned.}
 
 \item{boolean}{(character) Boolean operator to use when searching \code{text} and 
-\code{taxa}. Supported operators are "AND", "OR". Default is "AND".}
+\code{taxa}. Supported operators are: "AND", "OR". Default is "AND".}
 }
 \value{
 (data.frame) Search results with these feilds:

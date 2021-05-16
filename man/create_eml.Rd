@@ -19,23 +19,19 @@ create_eml(
 )
 }
 \arguments{
-\item{path}{(character) Path to the directory containing ecocomDP data tables, conversion scripts, and where EML metadata will be written.}
+\item{path}{(character) Path to the directory containing ecocomDP tables, conversion scripts, and where EML metadata will be written.}
 
-\item{source_id}{(character) Parent data package ID (e.g. "knb-lter-hfr.118.28"). Only 
-EDI Data Repository package IDs are currently supported.}
+\item{source_id}{(character) Identifier of a data package published in a supported repository. Currently, the EDI Data Repository is supported.}
 
-\item{derived_id}{(character) Child data package ID (e.g. "edi.53.1") to be uploaded to 
-EDI Data Repository.}
+\item{derived_id}{(character) Identifier of the dataset being created.}
 
-\item{script}{(character) Names of scripts used to convert and repackage the source 
-data into the ecocomDP.}
+\item{script}{(character) Name(s) of scripts used to convert the source dataset into the ecocomDP and create EML metadata for it.}
 
 \item{script_description}{(character) A description for each object listed under \code{script}.}
 
-\item{is_about}{(named character) Dataset level annotations describing what this dataset "is about" (L0 keywords converted to object label + URI pairs) describing what the L1 dataset is about. (e.g. \code{is_about = c('level of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002588",' type of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002589")}).}
+\item{is_about}{(named character) An optional argument for specifying dataset level annotations describing what this dataset "is about" (e.g. \code{is_about = c('level of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002588",' type of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002589")}).}
 
-\item{contact}{(data frame) Contact information of this ecocomDP creator.
-The data frame must have these columns:
+\item{contact}{(data.frame) Contact information for the person that created this ecocomDP dataset, containing these columns:
 \itemize{
     \item{givenName}
     \item{surName}
@@ -43,22 +39,13 @@ The data frame must have these columns:
     \item{electronicMailAddress}
 }}
 
-\item{user_id}{(character) ID(s) of user account(s) associated with the data repository
-in which this ecocomDP data package will be archived. Only EDI Data 
-Repository IDs are currently supported.}
+\item{user_id}{(character) Identifier of user account associated with the data repository in which this ecocomDP dataset will be archived. Only \code{user_id} from the EDI is currently supported.}
 
-\item{user_domain}{(character) Domain of the \code{user_id}(s). Only "EDI" and "LTER" are 
-currently supported. If more than one, then supply as a vector of 
-character strings in the same order as the corresponding \code{user_id}.}
+\item{user_domain}{(character) Domain of the \code{user_id}. Only "EDI" is currently supported. If more than one, then supply as a vector of character strings in the same order as \code{user_id}.}
 
-\item{basis_of_record}{(character) To create a Darwin Core record from this ecocomDP using
-\code{L1_to_L2_DwCA()} then the Darwin Core property 
-\href{basisOfRecord}{https://dwc.tdwg.org/terms/#dwc:basisOfRecord}
-requires definition as 
-\href{HumanObservation}{http://rs.tdwg.org/dwc/terms/HumanObservation} or 
-\href{MachineObservation}{http://rs.tdwg.org/dwc/terms/MachineObservation}.}
+\item{basis_of_record}{(character) An optional argument to facilitate creation of a Darwin Core record from this dataset using \code{convert_to_dwca()}. Use this to define the Darwin Core property \href{basisOfRecord}{https://dwc.tdwg.org/terms/#dwc:basisOfRecord} as \href{HumanObservation}{http://rs.tdwg.org/dwc/terms/HumanObservation} or \href{MachineObservation}{http://rs.tdwg.org/dwc/terms/MachineObservation}.}
 
-\item{url}{(character) URL to the publicly accessible directory containing ecocomDP data tables, conversion scripts, and EML metadata. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and upload of ecocomDP data packages and derived products.}
+\item{url}{(character) URL to the publicly accessible directory containing ecocomDP tables, conversion script, and EML metadata. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and publication of datasets.}
 }
 \value{
 An EML metadata record for the ecocomDP dataset defined by the arguments

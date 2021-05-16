@@ -7,11 +7,11 @@
 plot_sampling_times(observation, id, alpha = 1)
 }
 \arguments{
-\item{observation}{(data.frame) The observation table of ecocomDP}
+\item{observation}{(data.frame) The observation table.}
 
-\item{id}{(character) Dataset id. Used for plot subtitles.}
+\item{id}{(character) Identifier of dataset to be used in plot subtitles.}
 
-\item{alpha}{(numeric) Alpha-transparency scale of data points. For when many data points overlap. Between 0 and 1, where 1 is 100\% opaque.}
+\item{alpha}{(numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.}
 }
 \description{
 Plot spatiotemporal sampling effort

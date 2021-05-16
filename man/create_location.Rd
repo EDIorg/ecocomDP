@@ -14,17 +14,17 @@ create_location(
 )
 }
 \arguments{
-\item{L0_wide}{(data.frame) The fully joined L0 dataset, in wide format.}
+\item{L0_wide}{(data.frame) The fully joined source L0 dataset, in wide format.}
 
 \item{location_id}{(character) Column in \code{L0_wide} containing the identifier assigned to each unique location at the observation level. Identifiers corresponding to higher location levels will be assigned by this function.}
 
-\item{latitude}{(character; optional) Column in \code{L0_wide} containing the latitude in decimal degrees of \code{location_id}. Latitudes south of the equator are negative.}
+\item{latitude}{(character) An optional column in \code{L0_wide} containing the latitude in decimal degrees of \code{location_id}. Latitudes south of the equator are negative.}
 
-\item{longitude}{(character; optional) Column in \code{L0_wide} containing the longitude in decimal degrees of \code{location_id}. Longitudes west of the prime meridian are negative.}
+\item{longitude}{(character) An optional column in \code{L0_wide} containing the longitude in decimal degrees of \code{location_id}. Longitudes west of the prime meridian are negative.}
 
-\item{elevation}{(character; optional) Column in \code{L0_wide} containing the elevation in meters relative to sea level of \code{location_id}. Above sea level is positive. Below sea level is negative.}
+\item{elevation}{(character) An optional column in \code{L0_wide} containing the elevation in meters relative to sea level of \code{location_id}. Above sea level is positive. Below sea level is negative.}
 
-\item{nesting}{(character) Columns in \code{L0_wide} containing location names and listed from high to low. Example: \code{nesting = c("block", "plot", "subplot")}.}
+\item{nesting}{(character) Columns in \code{L0_wide} of sampling locations, the group of which forms a nested set, ordered from high to low (e.g. \code{nesting = c("region", "state", "county", "plot", "subplot")}).}
 }
 \value{
 (data.frame) The location table of ecocomDP.
@@ -33,7 +33,7 @@ create_location(
 Create the location table
 }
 \details{
-This function collects specified columns from \code{L0_wide}, creates data frames for each \code{nesting}, assigns \code{latitude}, \code{longitude}, and \code{elevation} to the lowest nesting level (i.e. the observation level) returning \code{NA} for higher levels (these will have to be filled manually afterwards), and determines the relationships between location_id and parent_location_id from \code{L0_wide} and \code{nesting}.
+This function collects specified columns from \code{L0_wide}, creates data frames for each \code{nesting}, assigns \code{latitude}, \code{longitude}, and \code{elevation} to the lowest nesting level (i.e. the observation level) returning \code{NA} for higher levels (these will have to be filled manually afterwards), and determines the relationships between location_id and parent_location_id from \code{L0_wide} and \code{nesting}. Default names of optional columns are ignored if they can't be found in \code{L0_wide} (i.e. no need to set as NULL).
 }
 \note{
 Values in \code{nesting} columns of \code{L0_wide} should be modifed to provide both context and value before running this function. Not doing so may result in ambiguous location_name values in the resulting location table. Example: A column named "plot" with values "1", "2", "3", in \code{L0_wide} will be listed in the resulting location_name column as values "1", "2", "3" and there will be no way to discern these values correspond with "plot". A general fix is to modify values in the \code{nesting} columns of \code{L0_wide} with \code{paste0(column_name, "_", columun_value)}, which will return both the column context and value in the location_name column of the location table as  "plot_1", "plot_2", "plot_3".

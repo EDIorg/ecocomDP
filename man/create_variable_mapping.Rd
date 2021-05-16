@@ -14,11 +14,11 @@ create_variable_mapping(
 \arguments{
 \item{observation}{(data.frame) The observation table.}
 
-\item{observation_ancillary}{(data.frame; optional) The observation_ancillary table.}
+\item{observation_ancillary}{(data.frame) The optional observation_ancillary table.}
 
-\item{location_ancillary}{(data.frame; optional) The location_ancillary table.}
+\item{location_ancillary}{(data.frame) The optional location_ancillary table.}
 
-\item{taxon_ancillary}{(data.frame; optional) The taxon_ancillary table.}
+\item{taxon_ancillary}{(data.frame) The optional taxon_ancillary table.}
 }
 \value{
 (data.frame) The variable_mapping table of ecocomDP.

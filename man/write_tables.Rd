@@ -18,25 +18,25 @@ write_tables(
 )
 }
 \arguments{
-\item{path}{(character) Directory to which the files will be written.}
+\item{path}{(character) A path to the directory in which the files will be written.}
 
-\item{sep}{(character) Field delimiter of returned files}
+\item{sep}{(character) Field delimiter to use when writing files.}
 
-\item{observation}{(data frame) observation table}
+\item{observation}{(data.frame) The observation table.}
 
-\item{location}{(data frame) location table}
+\item{location}{(data.frame) The location table.}
 
-\item{taxon}{(data frame) taxon table}
+\item{taxon}{(data.frame) The taxon table.}
 
-\item{dataset_summary}{(data frame) dataset_summary table}
+\item{dataset_summary}{(data.frame) The dataset_summary table.}
 
-\item{observation_ancillary}{(data frame) observation_ancillary table}
+\item{observation_ancillary}{(data.frame) The observation_ancillary table.}
 
-\item{location_ancillary}{(data frame) location_ancillary table}
+\item{location_ancillary}{(data.frame) The location_ancillary table.}
 
-\item{taxon_ancillary}{(data frame) taxon_ancillary table}
+\item{taxon_ancillary}{(data.frame) The taxon_ancillary table.}
 
-\item{variable_mapping}{(data frame) variable_mapping table}
+\item{variable_mapping}{(data.frame) The variable_mapping table.}
 }
 \value{
 ecocomDP tables written to file.
