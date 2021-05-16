@@ -1,5 +1,5 @@
 # Tests are organized around function calls (e.g. all tests listed under 
-# search_data() are relevant to the argument inputs to that function).
+# search() are relevant to the argument inputs to that function).
 
 context("validate_arguments()")
 
@@ -9,7 +9,7 @@ library(ecocomDP)
 
 test_data <- read_from_files(
   system.file("/data", package = "ecocomDP"))[[1]]$tables
-search_index <- search_data()
+search_index <- search()
 
 # plot_*() --------------------------------------------------------------------
 
@@ -134,15 +134,15 @@ testthat::test_that("save_data()", {
     regexp = "Input 'file.type' should be '.rds' or '.csv'.")
 })
 
-# search_data() ---------------------------------------------------------------
+# search() ---------------------------------------------------------------
 
-testthat::test_that("search_data()", {
+testthat::test_that("search()", {
   
   # text
   
   expect_error(
     validate_arguments(
-      "search_data",
+      "search",
       as.list(
         list(text = c(1, 2, 3)))))
   
@@ -150,7 +150,7 @@ testthat::test_that("search_data()", {
   
   expect_error(
     validate_arguments(
-      "search_data",
+      "search",
       as.list(
         list(taxa = c(1, 2, 3)))))
   
@@ -158,12 +158,12 @@ testthat::test_that("search_data()", {
   
   expect_error(
     validate_arguments(
-      "search_data",
+      "search",
       as.list(
         list(num.taxa = "Non-numeric value"))))
   expect_error(
     validate_arguments(
-      "search_data",
+      "search",
       as.list(
         list(num.taxa = 1))))
   
@@ -171,12 +171,12 @@ testthat::test_that("search_data()", {
   
   expect_error(
     validate_arguments(
-      "search_data",
+      "search",
       as.list(
         list(years = "Non-numeric value"))))
   expect_error(
     validate_arguments(
-      "search_data",
+      "search",
       as.list(
         list(years = 1))))
   
@@ -184,12 +184,12 @@ testthat::test_that("search_data()", {
   
   expect_error(
     validate_arguments(
-      "search_data",
+      "search",
       as.list(
         list(sd.between.surveys = "Non-numeric value"))))
   expect_error(
     validate_arguments(
-      "search_data",
+      "search",
       as.list(
         list(sd.between.surveys = 1))))
   
@@ -197,12 +197,12 @@ testthat::test_that("search_data()", {
   
   expect_error(
     validate_arguments(
-      "search_data",
+      "search",
       as.list(
         list(geographic.area = "Non-numeric value"))))
   expect_error(
     validate_arguments(
-      "search_data",
+      "search",
       as.list(
         list(geographic.area = 1))))
   
@@ -210,7 +210,7 @@ testthat::test_that("search_data()", {
   
   expect_error(
     validate_arguments(
-      "search_data",
+      "search",
       as.list(
         list(boolean.operator = "ANDrew"))))
   

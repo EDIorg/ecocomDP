@@ -38,9 +38,9 @@ validate_arguments <- function(fun.name, fun.args) {
     }
   }
   
-  # search_data() -------------------------------------------------------------
+  # search() -------------------------------------------------------------
   
-  if (fun.name == "search_data") {
+  if (fun.name == "search") {
     
     # text
     
@@ -279,7 +279,7 @@ validate_arguments <- function(fun.name, fun.args) {
 #'     (character) A data package/product identifier for an ecocomDP dataset.
 #'     
 #' @details 
-#'     If invalid (i.e. not listed in the return of \code{search_data()}), then
+#'     If invalid (i.e. not listed in the return of \code{search()}), then
 #'     an error is returned.
 #' 
 #'     If the exact \code{id} is not indexed, but it is an EDI data package, 
@@ -287,7 +287,7 @@ validate_arguments <- function(fun.name, fun.args) {
 #'     available.
 #' 
 validate_id <- function(id) {
-  search_index <- suppressMessages(search_data())
+  search_index <- suppressMessages(search())
   if (!(id %in% search_index$id)) {
     possible_revision <- stringr::str_detect(
       id,
@@ -323,16 +323,16 @@ validate_id <- function(id) {
 #' @param site 
 #'     (character; NEON data only) A character vector of site codes to filter 
 #'     data on. Sites are listed in the "sites" column of the 
-#'     \code{search_data()} output.
+#'     \code{search()} output.
 #' @param id
 #'     (character) A data package/product identifier.
 #'     
 #' @details 
-#'     If invalid (i.e. not listed in the return of \code{search_data()}), then
+#'     If invalid (i.e. not listed in the return of \code{search()}), then
 #'     an error is returned.
 #' 
 validate_site <- function(site, id) {
-  search_index <- suppressMessages(search_data())
+  search_index <- suppressMessages(search())
   available_sites <- unlist(
     stringr::str_split(
       search_index$sites[search_index$id == id], 

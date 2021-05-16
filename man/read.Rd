@@ -24,7 +24,7 @@ read(
 )
 }
 \arguments{
-\item{id}{(character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search_data()} output. Older versions of ids listed in the "id" column of the \code{search_data()} output are supported, but a warning is issued.}
+\item{id}{(character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search()} output. Older versions of ids listed in the "id" column of the \code{search()} output are supported, but a warning is issued.}
 
 \item{path}{(character) Path to the directory in which the data will be read.}
 
@@ -37,7 +37,7 @@ table's primary key and associated foreign key. Defaults to FALSE.}
 
 \item{site}{(character; NEON data only) A character vector of site codes to filter 
 data on. Sites are listed in the "sites" column of the 
-\code{search_data()} output. Defaults to "all", meaning all sites.}
+\code{search()} output. Defaults to "all", meaning all sites.}
 
 \item{startdate}{(character; NEON data only) Start date to filter on in the form YYYY-MM. 
 Defaults to NA, meaning all available dates.}

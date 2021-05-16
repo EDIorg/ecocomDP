@@ -107,7 +107,7 @@ map_neon_data_to_ecocomDP(
 
 \item{...}{Additional arguments passed to neonUtilities::loadByProduct().}
 
-\item{id}{(character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search_data()} output. e.g., \code{neon.ecocomdp.20166.001.001} is the \code{id} for "ALGAE Periphyton, seston, and phytoplankton collection" converted to the ecocomDP format from the NEON source data product DP1.20166.001.}
+\item{id}{(character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search()} output. e.g., \code{neon.ecocomdp.20166.001.001} is the \code{id} for "ALGAE Periphyton, seston, and phytoplankton collection" converted to the ecocomDP format from the NEON source data product DP1.20166.001.}
 
 \item{neon.data.save.dir}{(character) Directory to save NEON source data that has been downloaded via \code{neonUtilities::loadByProduct()}}
 

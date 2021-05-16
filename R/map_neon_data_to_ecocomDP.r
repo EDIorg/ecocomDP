@@ -8,7 +8,7 @@
 #' @description
 #' Pull files from the NEON API by data product, merge data for each table, and convert to ecocomDP format. Please see neonUtilities::loadByProduct for more information. 
 #'
-#' @param id (character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search_data()} output. e.g., \code{neon.ecocomdp.20166.001.001} is the \code{id} for "ALGAE Periphyton, seston, and phytoplankton collection" converted to the ecocomDP format from the NEON source data product DP1.20166.001. 
+#' @param id (character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search()} output. e.g., \code{neon.ecocomdp.20166.001.001} is the \code{id} for "ALGAE Periphyton, seston, and phytoplankton collection" converted to the ecocomDP format from the NEON source data product DP1.20166.001. 
 #' @param neon.data.save.dir (character) Directory to save NEON source data that has been downloaded via \code{neonUtilities::loadByProduct()}
 #' @param neon.data.read.path (character) Path to read in an RDS file of 'stacked NEON data' from \code{neonUtilities::loadByProduct()}
 #' @param neon.data.list (list) A list of stacked NEON data tables to be mapped to ecocomDP. Must match the chosen mapping method in 'id'
@@ -178,7 +178,7 @@ map_neon_data_to_ecocomDP <- function(
   
   
   # get taxon group
-  neon_dp_table <- ecocomDP::search_data("NEON")
+  neon_dp_table <- ecocomDP::search("NEON")
   taxon_group <- neon_dp_table$title[neon_dp_table$id == id] %>%
     stringr::str_split(" ") %>%
     unlist() %>%

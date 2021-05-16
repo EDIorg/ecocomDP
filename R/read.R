@@ -1,7 +1,7 @@
 #' Read ecocomDP data
 #'
 #' @param id
-#'     (character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search_data()} output. Older versions of ids listed in the "id" column of the \code{search_data()} output are supported, but a warning is issued.
+#'     (character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search()} output. Older versions of ids listed in the "id" column of the \code{search()} output are supported, but a warning is issued.
 #' @param path
 #'     (character) Path to the directory in which the data will be read.
 #' @param parse.datetime
@@ -14,7 +14,7 @@
 #' @param site 
 #'     (character; NEON data only) A character vector of site codes to filter 
 #'     data on. Sites are listed in the "sites" column of the 
-#'     \code{search_data()} output. Defaults to "all", meaning all sites.
+#'     \code{search()} output. Defaults to "all", meaning all sites.
 #' @param startdate
 #'     (character; NEON data only) Start date to filter on in the form YYYY-MM. 
 #'     Defaults to NA, meaning all available dates.
@@ -403,7 +403,7 @@ read_data_edi <- function(id, parse.datetime = TRUE) {
   }
   
   # Parse metadata
-  search_index <- suppressMessages(search_data())
+  search_index <- suppressMessages(search())
   i <- search_index$id == id
   meta = list(url = search_index$url[i])
   

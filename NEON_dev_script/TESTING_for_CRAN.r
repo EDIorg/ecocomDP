@@ -2,7 +2,7 @@
 rm(list=ls())
 gc()
 
-search_result <- ecocomDP::search_data("beetle")
+search_result <- ecocomDP::search("beetle")
 
 # ----
 # edi beetles
@@ -25,7 +25,7 @@ obs_anc_summary %>% dplyr::filter(n_unique_vals > 1)
 # ----
 # edi mammals
 
-search_result <- ecocomDP::search_data("mammal")
+search_result <- ecocomDP::search("mammal")
 search_result %>% select(id, title)
 
 # ----

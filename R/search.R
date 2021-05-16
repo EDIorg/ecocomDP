@@ -53,34 +53,34 @@
 #' @examples
 #' dontrun{
 #' # Empty search returns all available data
-#' View(search_data())
+#' View(search())
 #' 
 #' # Text searches titles, descriptions, and abstracts
-#' View(search_data(text = "Lake"))
+#' View(search(text = "Lake"))
 #' 
 #' # Taxa searches any taxonomic rank of an organism
-#' View(search_data(taxa = "Plantae"))
+#' View(search(taxa = "Plantae"))
 #' 
 #' # Number of taxa searches the count of unique taxa in a dataset
-#' View(search_data(num.taxa = c(0, 10)))
+#' View(search(num.taxa = c(0, 10)))
 #' 
 #' # Years searches the number of years the dataset covers
-#' View(search_data(years = c(10, 20)))
+#' View(search(years = c(10, 20)))
 #' 
 #' # Standard deviation between surveys searches for a sampling frequency
-#' View(search_data(sd.between.surveys = c(.25, 1)))
+#' View(search(sd.between.surveys = c(.25, 1)))
 #' 
 #' # Geographic area searches where data were collected
-#' View(search_data(geographic.area = c(47.1, -86.7, 42.5, -92)))
+#' View(search(geographic.area = c(47.1, -86.7, 42.5, -92)))
 #' 
 #' # Boolean operators AND (default) & OR combine text and taxa search terms
-#' View(search_data(text = c("Lake", "River")))
-#' View(search_data(text = c("Lake", "River"), boolean.operator = "OR"))
-#' View(search_data(taxa = c("Plantae", "Animalia")))
-#' View(search_data(taxa = c("Plantae", "Animalia"), boolean.operator = "OR"))
+#' View(search(text = c("Lake", "River")))
+#' View(search(text = c("Lake", "River"), boolean.operator = "OR"))
+#' View(search(taxa = c("Plantae", "Animalia")))
+#' View(search(taxa = c("Plantae", "Animalia"), boolean.operator = "OR"))
 #' 
 #' # Use any combination of search fields to find the data you're looking for
-#' r <- search_data(
+#' r <- search(
 #'   text = c("Lake", "River"),
 #'   taxa = c("Plantae", "Animalia"),
 #'   num.taxa = c(0, 10),
@@ -93,19 +93,19 @@
 #'         
 #' @export
 #'
-search_data <- function(text, taxa, num.taxa, years, sd.between.surveys, 
+search <- function(text, taxa, num.taxa, years, sd.between.surveys, 
                         geographic.area, boolean.operator = "AND") {
   
   # TODO: Add argument to search within a NEON site. Currently searches return
   # data products if any of the search parameters are true for any of the 
   # sites.
   
-  message("Searching data ...")
+  # message("Searching data ...")
   
   # Validate arguments --------------------------------------------------------
   
   validate_arguments(
-    fun.name = "search_data",
+    fun.name = "search",
     fun.args = as.list(environment()))
   
   ping_edi() # Warn if EDI is down

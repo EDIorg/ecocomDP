@@ -8,7 +8,7 @@
 
 
 
-my_search_result <- ecocomDP::search_data("NEON")
+my_search_result <- ecocomDP::search("NEON")
 View(my_search_result)
 
 ###############################################
