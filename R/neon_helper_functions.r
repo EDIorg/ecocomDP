@@ -16,11 +16,11 @@ make_neon_location_table <- function(loc_info, loc_col_names){
   # populate latitude
   if("decimalLatitude" %in% names(loc_info)) loc_info <- loc_info %>%
       dplyr::rename(latitude = decimalLatitude) 
-
+  
   #populate longitude
   if("decimalLongitude" %in% names(loc_info)) loc_info <- loc_info %>%
       dplyr::rename(longitude = decimalLongitude) 
-
+  
   #populate longitude
   if("namedLocation" %in% names(loc_info)) loc_info <- loc_info %>%
       dplyr::mutate(location_id = namedLocation) 
