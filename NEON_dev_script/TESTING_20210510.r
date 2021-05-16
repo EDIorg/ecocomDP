@@ -16,7 +16,7 @@ my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
 tab_flat <- my_result_read_data[[1]]$tables %>% 
-  ecocomDP::flatten_data() %>% 
+  ecocomDP::flatten() %>% 
   as.data.frame()
 
 View(tab_flat)
@@ -47,7 +47,7 @@ my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
 tab_flat <- my_result_read_data[[1]]$tables %>% 
-  ecocomDP::flatten_data() %>% 
+  ecocomDP::flatten() %>% 
   as.data.frame()
 
 View(tab_flat)
@@ -77,7 +77,7 @@ my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
 tab_flat <- my_result_read_data[[1]]$tables %>% 
-  ecocomDP::flatten_data() %>% 
+  ecocomDP::flatten() %>% 
   as.data.frame()
 
 View(tab_flat)
@@ -104,7 +104,7 @@ my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
 tab_flat <- my_result_read_data[[1]]$tables %>% 
-  ecocomDP::flatten_data() %>% 
+  ecocomDP::flatten() %>% 
   as.data.frame()
 
 View(tab_flat)
@@ -132,7 +132,7 @@ my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
 tab_flat <- my_result_read_data[[1]]$tables %>% 
-  ecocomDP::flatten_data() %>% 
+  ecocomDP::flatten() %>% 
   as.data.frame()
 
 View(tab_flat)
@@ -159,7 +159,7 @@ my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
 tab_flat <- my_result_read_data[[1]]$tables %>% 
-  ecocomDP::flatten_data() %>% 
+  ecocomDP::flatten() %>% 
   as.data.frame()
 
 View(tab_flat)
@@ -188,7 +188,7 @@ my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
 tab_flat <- my_result_read_data[[1]]$tables %>% 
-  ecocomDP::flatten_data() %>% 
+  ecocomDP::flatten() %>% 
   as.data.frame()
 
 View(tab_flat)
@@ -217,7 +217,7 @@ my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
 tab_flat <- my_result_read_data[[1]]$tables %>% 
-  ecocomDP::flatten_data() %>% 
+  ecocomDP::flatten() %>% 
   as.data.frame()
 
 View(tab_flat)
@@ -245,7 +245,7 @@ my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
 tab_flat <- my_result_read_data[[1]]$tables %>% 
-  ecocomDP::flatten_data() %>% 
+  ecocomDP::flatten() %>% 
   as.data.frame()
 
 View(tab_flat)
@@ -274,7 +274,7 @@ my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
 tab_flat <- my_result_read_data[[1]]$tables %>% 
-  ecocomDP::flatten_data() %>% 
+  ecocomDP::flatten() %>% 
   as.data.frame()
 
 View(tab_flat)
@@ -303,7 +303,7 @@ my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
 tab_flat <- my_result_read_data[[1]]$tables %>% 
-  ecocomDP::flatten_data() %>% 
+  ecocomDP::flatten() %>% 
   as.data.frame()
 
 View(tab_flat)
@@ -333,7 +333,7 @@ my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
 tab_flat <- my_result_read_data[[1]]$tables %>% 
-  ecocomDP::flatten_data() %>% 
+  ecocomDP::flatten() %>% 
   as.data.frame()
 
 View(tab_flat)

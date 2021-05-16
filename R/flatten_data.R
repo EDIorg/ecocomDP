@@ -24,17 +24,17 @@
 #' token = Sys.getenv("NEON_TOKEN"))
 #' 
 #' my_list_of_tables <- all_data[[1]]$tables
-#' flat_data <- flatten_data(my_list_of_tables)
+#' flat_data <- flatten(my_list_of_tables)
 #' 
 #' # Flatten EDI data
 #' all_data <- read("edi.290.1")
 #' my_list_of_tables <- all_data[[1]]$tables
-#' flat_data <- flatten_data(my_list_of_tables)
+#' flat_data <- flatten(my_list_of_tables)
 #' }
 #' 
 #' @export
 #' 
-flatten_data <- function(data.list){
+flatten <- function(data.list){
   
   # helper function to determine if a col is all NAs
   # returns boolean
@@ -229,7 +229,7 @@ flatten_data <- function(data.list){
   
   return(all_merged)
   
-} # end of flatten_data
+} # end of flatten
 
 
 

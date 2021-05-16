@@ -19,7 +19,7 @@ my_result_read_data <- read(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-flat_data <- my_result_read_data[[1]]$tables %>% flatten_data()
+flat_data <- my_result_read_data[[1]]$tables %>% flatten()
 
 my_result_read_data %>% ecocomDP::plot_alpha_diversity()
 my_result_read_data %>% ecocomDP::plot_sampling_times()
