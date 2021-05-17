@@ -20,7 +20,7 @@ Below is the table list and suggested population order, ie, primary tables first
 |5.| taxon_ancillary|no|  taxon | additonal info about an organism that does not change, in long format | variable, value, unit (phenotypic traits) |  combination of (taxon_id, variable_name, value)   |
 |6.| observation_ancillary  | no | observation | additional info about the sampling event (not related to taxa or locations) in long-format  | variable_name, value, unit |  combination of (observation_id, variable_name, value)  |
 |7.| dataset_summary|yes|  NA | summary info calculated from incoming data. one line table |See examples directory |   |
-|8.| variable_mapping| no |  ONE OF: observation, observation_ancillary, taxon_ancillary, OR location_ancillary | mappings from variable names in tables to external dictionaries | table_name, variable_name, mapped_system, mapped_id, mapped_label | NA   |
+|8.| variable_mapping| no |  ONE OF: observation, observation_ancillary, taxon_ancillary, OR location_ancillary | mappings from variable names in tables to external dictionaries | table_name, variable_name | NA   |
 
 
 _____
