@@ -41,7 +41,7 @@ observation_ancillary	NA	NA	FALSE	NA	NA	NA	NA
 observation_ancillary	observation_ancillary_id	character	TRUE	TRUE	FALSE	FALSE	TRUE
 observation_ancillary	observation_id	character	TRUE	FALSE	TRUE	TRUE	TRUE
 observation_ancillary	variable_name	character	TRUE	FALSE	FALSE	TRUE	FALSE
-observation_ancillary	value	character	TRUE	FALSE	FALSE	TRUE	FALSE
+observation_ancillary	value	character	TRUE	FALSE	FALSE	FALSE	FALSE
 observation_ancillary	unit	character	FALSE	FALSE	FALSE	FALSE	FALSE
 dataset_summary	NA	NA	TRUE	NA	NA	NA	NA
 dataset_summary	package_id	character	TRUE	TRUE	FALSE	TRUE	TRUE
