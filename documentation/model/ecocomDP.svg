@@ -401,14 +401,14 @@
        x="93.940277">variable_name</text>
      <polygon
         transform="translate(-132.55972,706.24914)"
-        style="fill:#f4f7da;stroke:none"
+        style="fill:none;stroke:#000000"
         id="polygon4148a"
         points="223.5,-249.2 223.5,-249.2 223.5,-268.2 328.5,-268.2 328.5,-249.2 " />
-    <polygon
+    <!-- <polygon
        transform="translate(-132.55972,706.24914)"
        style="fill:url(#diagonalHatch);stroke:#000000"
        id="polygon4148"
-       points="223.5,-249.2 223.5,-249.2 223.5,-268.2 328.5,-268.2 328.5,-249.2 " />
+       points="223.5,-249.2 223.5,-249.2 223.5,-268.2 328.5,-268.2 328.5,-249.2 " /> -->
     <text
        style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start"
        id="text4150"
@@ -803,14 +803,14 @@
        x="62.049801">variable_name</text>
     <polygon
        transform="translate(-155.4502,881.31267)"
-       style="fill:#f4f7da;stroke:#000000;image-rendering:auto"
+       style="fill:none;stroke:#000000;image-rendering:auto"
        id="polygon4375"
        points="214.5,-671.2 337.5,-671.2 337.5,-652.2 214.5,-652.2 214.5,-652.2 " />
-     <polygon
+    <!-- <polygon
         transform="translate(-155.4502,881.31267)"
         style="fill:url(#diagonalHatch);stroke:#000000;image-rendering:auto"
         id="polygon4371a"
-        points="214.5,-671.2 337.5,-671.2 337.5,-652.2 214.5,-652.2 214.5,-652.2 " />
+        points="214.5,-671.2 337.5,-671.2 337.5,-652.2 214.5,-652.2 214.5,-652.2 " /> -->
     <text
        style="font-size:11px;font-family:Helvetica, sans-Serif;text-anchor:start;image-rendering:auto"
        id="text4377"
