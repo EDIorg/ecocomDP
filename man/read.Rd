@@ -2,7 +2,7 @@
 % Please edit documentation in R/read.R
 \name{read}
 \alias{read}
-\title{Read ecocomDP data}
+\title{Read an ecocomDP dataset}
 \usage{
 read(
   id = NULL,
@@ -45,11 +45,11 @@ read(
 
 \item{token}{(character) For NEON data, a user specific API token (generated within neon.datascience user accounts).}
 
-\item{neon.data.save.dir}{(character) For NEON data, an optional argument indicating the directory where NEON source data should be saved upon download from the NEON API. Data are downloaded using \code{neonUtilities::loadByProduct()} and saved in this directory as an RDS file. The filename will follow the format <NEON data product ID>_<timestamp>.RDS}
+\item{neon.data.save.dir}{(character) For NEON data, an optional and experimental argument (i.e. may not be supported in future releases), indicating the directory where NEON source data should be saved upon download from the NEON API. Data are downloaded using \code{neonUtilities::loadByProduct()} and saved in this directory as an RDS file. The filename will follow the format <NEON data product ID>_<timestamp>.RDS}
 
-\item{neon.data.read.path}{(character) For NEON data, an optional argument defining a path to read in an RDS file of 'stacked NEON data' from \code{neonUtilities::loadByProduct()}. See details below for more information.}
+\item{neon.data.read.path}{(character) For NEON data, an optional and experimental argument (i.e. may not be supported in future releases), defining a path to read in an RDS file of 'stacked NEON data' from \code{neonUtilities::loadByProduct()}. See details below for more information.}
 
-\item{...}{(NEON data only) Other arguments to \code{neonUtilities::loadByProduct()}}
+\item{...}{For NEON data, other arguments to \code{neonUtilities::loadByProduct()}}
 
 \item{from}{(character) Full path of file to be read (if .rds), or path to directory (if .csv).}
 }
@@ -66,7 +66,7 @@ read(
     }
 }
 \description{
-Read ecocomDP data
+Read an ecocomDP dataset
 }
 \details{
 Validation checks are applied to each dataset ensuring they comply with 
@@ -84,9 +84,7 @@ Validation checks are applied to each dataset ensuring they comply with
     Provisional NEON data. Despite NEON's controlled data entry, at times, errors are found in published data; for example, an analytical lab may adjust its calibration curve and re-calculate past analyses, or field scientists may discover a past misidentification. In these cases, Level 0 data are edited and the data are re-processed to Level 1 and re-published. Published data files include a time stamp in the file name; a new time stamp indicates data have been re-published and may contain differences from previously published data. Data are subject to re-processing at any time during an initial provisional period; data releases are never re-processed. All records downloaded from the NEON API will have a "release" field. For any provisional record, the value of this field will be "PROVISIONAL", otherwise, this field will have a value indicating the version of the release to which the record belongs. More details can be found at https://www.neonscience.org/data-samples/data-management/data-revisions-releases.
 }
 \note{
-This function may not work between 01:00 - 03:00 UTC due to regular maintenance of the EDI Data Repository. If you have reached this warning outside these hours then there may be an unexpected issue that will be resolved shortly. Please try again later.
-
-DESCRIBE WHAT PROVISIONAL NEON DATA IS, HOW TO IDENTIFIY IT IN THE RETURN FROM read().
+This function may not work between 01:00 - 03:00 UTC due to regular maintenance of the EDI Data Repository.
 }
 \examples{
 \dontrun{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_dataset_summary.R
 \name{calc_std_dev_interval_betw_years}
 \alias{calc_std_dev_interval_betw_years}
-\title{Calculate std_dev_interval_betw_years of the dataset_summary table}
+\title{Calculate the std_dev_interval_betw_years for the dataset_summary table}
 \usage{
 calc_std_dev_interval_betw_years(dates)
 }
@@ -10,10 +10,10 @@ calc_std_dev_interval_betw_years(dates)
 \item{dates}{(Date) Dates from the L0 source dataset encompassing the entire study duration.}
 }
 \value{
-(numeric) Number of survey years
+(numeric) The standard deviation between sampling events, in years.
 }
 \description{
-Calculate std_dev_interval_betw_years of the dataset_summary table
+Calculate the std_dev_interval_betw_years for the dataset_summary table
 }
 \examples{
 

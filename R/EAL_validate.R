@@ -308,6 +308,9 @@ validate_taxonomic_coverage_completeness <- function(x) {
 # Helper functions ------------------------------------------------------------
 
 
+
+
+
 #' View issues to function inputs
 #'
 #' @return
@@ -315,8 +318,6 @@ validate_taxonomic_coverage_completeness <- function(x) {
 #'     
 #' @details 
 #'     Validation functions \code{validate_arguments()} and \code{validate_templates()} return a list of issues to the global environment in \code{argument_issues} and \code{template_issues} list objects, respectively. The \code{view_issues()} function wraps these issues in \code{message()} to provide a human readable form.
-#'     
-#' @export
 #'
 issues <- function() {
   

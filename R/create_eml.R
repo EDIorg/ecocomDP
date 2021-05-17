@@ -1,8 +1,5 @@
-#' Make EML metadata for ecocomDP tables
+#' Create EML metadata for ecocomDP tables
 #' 
-#' Run this function AFTER you have validated your ecocomDP tables with 
-#' \code{validate()}.
-#'
 #' @param path (character) Path to the directory containing ecocomDP tables, conversion scripts, and where EML metadata will be written.
 #' @param source_id (character) Identifier of a data package published in a supported repository. Currently, the EDI Data Repository is supported.
 #' @param derived_id (character) Identifier of the dataset being created.
@@ -21,15 +18,9 @@
 #' @param basis_of_record (character) An optional argument to facilitate creation of a Darwin Core record from this dataset using \code{convert_to_dwca()}. Use this to define the Darwin Core property \href{basisOfRecord}{https://dwc.tdwg.org/terms/#dwc:basisOfRecord} as \href{HumanObservation}{http://rs.tdwg.org/dwc/terms/HumanObservation} or \href{MachineObservation}{http://rs.tdwg.org/dwc/terms/MachineObservation}.
 #' @param url (character) URL to the publicly accessible directory containing ecocomDP tables, conversion script, and EML metadata. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and publication of datasets.
 #'
-#' @return 
-#'     An EML metadata record for the ecocomDP dataset defined by the arguments
-#'     to this function.
+#' @return An EML metadata file.
 #'
-#' @details 
-#'     This function creates an EML record for an Ecological Community Data 
-#'     Pattern (ecocomDP) combining metadata from the parent data package and
-#'     boiler-plate metadata describing the ecocomDP tables. Changes to the 
-#'     parent EML include:
+#' @details This function creates an EML record for an ecocomDP by combining metadata from \code{source_id} with boiler-plate metadata describing the ecocomDP. Changes to the parent EML include:
 #'     \itemize{
 #'         \item \strong{<access>} Adds the \code{user_id} to the list of 
 #'         principals granted read and write access to the ecocomDP data 
@@ -65,9 +56,7 @@
 #'         entities listed in the parent EML are removed.
 #'     }
 #'     
-#'     CURRENTLY ONLY WORKS FOR EDI DATA REPOSITORY
-#'     
-#'     TAXA RESOLVED USING taxonomyCleanr METHODS EXPORTED FROM THIS PACKAGE ARE, WILL HAVE THEIR RANKS EXPANDED CREATE_EML(). ALTERNATIVELY COULD DO IT YOUR SELF WITH THESE CONTROLLED TERMS THAT NEED TO BE FOLLOWED.
+#'     Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. https://www.itis.gov/, http://www.marinespecies.org/, or https://gbif.org), will have their full taxonomic hierarchy expanded, including any common names for each level.
 #'
 #' @export
 #' 

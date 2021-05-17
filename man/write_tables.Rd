@@ -20,7 +20,7 @@ write_tables(
 \arguments{
 \item{path}{(character) A path to the directory in which the files will be written.}
 
-\item{sep}{(character) Field delimiter to use when writing files.}
+\item{sep}{(character) Field delimiter to use when writing files. Default is comma.}
 
 \item{observation}{(data.frame) The observation table.}
 
@@ -39,7 +39,7 @@ write_tables(
 \item{variable_mapping}{(data.frame) The variable_mapping table.}
 }
 \value{
-ecocomDP tables written to file.
+ecocomDP tables as \code{sep} delimited files
 }
 \description{
 Write ecocomDP tables to file

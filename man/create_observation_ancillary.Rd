@@ -21,7 +21,7 @@ create_observation_ancillary(
 \item{unit}{(character) An optional column in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention <unit>_<variable_name> (e.g. "unit_temperature").}
 }
 \value{
-(data.frame) The observation_ancillary table of ecocomDP.
+(data.frame) The observation_ancillary table.
 }
 \description{
 Create the observation_ancillary table

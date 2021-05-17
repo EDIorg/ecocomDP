@@ -1611,7 +1611,7 @@ vocab_resolve_terms <- function(x, cv, messages = FALSE, interactive = FALSE){
 #' Write ecocomDP tables to file
 #'
 #' @param path (character) A path to the directory in which the files will be written.
-#' @param sep (character) Field delimiter to use when writing files.
+#' @param sep (character) Field delimiter to use when writing files. Default is comma.
 #' @param observation (data.frame) The observation table.
 #' @param location (data.frame) The location table.
 #' @param taxon (data.frame) The taxon table.
@@ -1621,8 +1621,7 @@ vocab_resolve_terms <- function(x, cv, messages = FALSE, interactive = FALSE){
 #' @param taxon_ancillary (data.frame) The taxon_ancillary table.
 #' @param variable_mapping (data.frame) The variable_mapping table.
 #'
-#' @return 
-#'     ecocomDP tables written to file.
+#' @return ecocomDP tables as \code{sep} delimited files
 #'     
 #' @export
 #' 

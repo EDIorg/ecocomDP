@@ -27,7 +27,7 @@ create_taxon_ancillary(
 \item{author}{(character) An optional column in \code{L0_wide} containing the person associated with identification of taxa in the taxon table.}
 }
 \value{
-(data.frame) The taxon_ancillary table of ecocomDP.
+(data.frame) The taxon_ancillary table.
 }
 \description{
 Create the taxon_ancillary table

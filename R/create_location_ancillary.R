@@ -8,7 +8,8 @@
 #' 
 #' @details This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column. Default names of optional columns are ignored if they can't be found in \code{L0_wide} (i.e. no need to set as NULL).
 #'
-#' @return (data.frame) The location_ancillary table of ecocomDP.
+#' @return (data.frame) The location_ancillary table.
+#' 
 #' @export
 #'
 #' @examples

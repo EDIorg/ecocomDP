@@ -2,28 +2,25 @@
 % Please edit documentation in R/save.R
 \name{save}
 \alias{save}
-\title{Save ecocomDP data}
+\title{Save an ecocomDP dataset}
 \usage{
-save(data, path, type = ".rds", name = NULL)
+save(dataset, path, type = ".rds", name = NULL)
 }
 \arguments{
-\item{data}{(list) One or more datasets returned by \code{read()}. Name of the data object will become the file name if \code{name} is not used.}
+\item{dataset}{(list) One or more datasets returned by \code{read()}. Name of the \code{dataset} object will become the file name if \code{name} is not used.}
 
-\item{path}{(character) Path to the directory in which the data will be written.}
+\item{path}{(character) Path to the directory in which \code{dataset} will be written.}
 
-\item{type}{(character) Type of file to save the data as. Default is ".rds" but can also be ".csv". Note: metadata and validation_issues are lost when using ".csv".}
+\item{type}{(character) Type of file to save the \code{dataset} as. Default is ".rds" but can also be ".csv". Note: metadata and validation_issues are lost when using ".csv".}
 
-\item{name}{(character) An optional argument for setting the saved file name (for .rds), or dir name (for .csv) if you'd like it to be different than \code{data}'s object name.}
+\item{name}{(character) An optional argument for setting the saved file name (for .rds), or dir name (for .csv) if you'd like it to be different than \code{dataset}'s object name.}
 }
 \value{
-\item{.rda}{If \code{type} = ".rda", then an .rda representation 
-    of \code{data} is returned.}
-    \item{.csv}{If \code{type} = ".csv", then an set of .csv files are
-    written to a sub-directory of \code{path} named after the data 
-    package/product ID.}
+\item{.rda}{If \code{type} = ".rda", then an .rda representation of \code{dataset} is returned.}
+    \item{.csv}{If \code{type} = ".csv", then an set of .csv files are written to a sub-directory of \code{path} named after the data package/product ID.}
 }
 \description{
-Save ecocomDP data
+Save an ecocomDP dataset
 }
 \note{
 Subsequent calls won't overwrite dirs or files

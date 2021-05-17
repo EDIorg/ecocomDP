@@ -33,7 +33,7 @@ create_dataset_summary(
 \item{geo_extent_bounding_box_m2}{(character) An optional column in \code{L0_wide} containing the area (in meters) of the study location, if applicable (some L0 were collected at a single point). Use \code{calc_geo_extent_bounding_box_m2()} to calculate this value.}
 }
 \value{
-(data.frame) The dataset_summary table of ecocomDP.
+(data.frame) The dataset_summary table.
 }
 \description{
 Create the dataset_summary table
@@ -42,6 +42,5 @@ Create the dataset_summary table
 This function collects specified columns from \code{L0_wide} and returns distinct rows. Default names of optional columns are ignored if they can't be found in \code{L0_wide} (i.e. no need to set as NULL).
 }
 \examples{
-
 
 }

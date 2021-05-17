@@ -1,40 +1,31 @@
-#' Validate a dataset against the ecocomDP
-#'
-#' @description  
-#'     Use this function to verify a dataset conforms to the ecocomDP.
+#' Check if a dataset conforms to the ecocomDP model
 #' 
 #' @param dataset (list) A dataset returned by \code{read()}.
 #' @param path (character) A path to the directory in which the ecocomDP tables can be found.
 #'     
-#' @note
-#'     This function is used by ecocomDP creators (to ensure what has been 
-#'     created is valid), maintainers (to improve the quality of archived
-#'     ecocomDP datasets), and users (to ensure the data being used is free of
-#'     model error).
+#' @note This function is used by ecocomDP creators (to ensure what has been created is valid), maintainers (to improve the quality of archived ecocomDP datasets), and users (to ensure the data being used is free of error).
 #'     
-#' @return 
-#'     (character) If issues are found, then a vector of character strings 
-#'     describing validation issues is returned along with a warning. If no 
-#'     issues are found then a NULL is returned.
+#' @return (character) If any checks fail, then a list of validation issues are returned along with a warning. If no issues are found then NULL is returned.
 #'          
 #' @details 
 #'    Validation checks:
 #'    \itemize{
-#'        \item{File names - When using \code{path} the data are read from
-#'        files and must follow an expected pattern, namely 
-#'        \emph{studyName_ecocomDPTableName.ext} (e.g. 
-#'        \emph{gleon_chloride_observation.csv}).}
-#'        \item{Table presence - Some tables are required, others are not.}
-#'        \item{Column names - Column names must follow specification.}
-#'        \item{Column presence - Some columns are required, others are not.}
-#'        \item{Column classes - Column classes must follow specification.}
-#'        \item{Datetime format - Date and datetime formats must follow 
-#'        specification.}
-#'        \item{Primary keys - Primary keys of tables must be valid.}
-#'        \item{Composite keys - Composite keys of tables must be valid.}
-#'        \item{Referential integrity - Referential integrity among tables must 
-#'        be valid.}
+#'        \item{File names - File names are the ecocomDP table names.}
+#'        \item{Table presence - Required tables are present.}
+#'        \item{Column names - Column names of all tables match the model.}
+#'        \item{Column presence - Required columns are present.}
+#'        \item{Column classes - Column classes match the model specification.}
+#'        \item{Datetime format - Date and time formats follow the model specification.}
+#'        \item{Primary keys - Primary keys of tables are unique.}
+#'        \item{Composite keys - Composite keys (unique constraints) of each table are unique.}
+#'        \item{Referential integrity - Foreign keys have a corresponding primary key.}
+#'        \item{Coordinate format - Values are in decimal degree format.}
+#'        \item{Coordinate range - Values are within -90 to 90 and -180 to 180.}
+#'        \item{Elevation - Values are less than Mount Everest (8848 m) and greater than Mariana Trench (-10984 m).}
+#'        \item{Variable mapping - variable_name is in table_name.}
 #'    }
+#'    
+#' @export
 #'    
 #' @examples 
 #' # Validate a set of files
@@ -44,8 +35,6 @@
 #' CHANGE EXAMPLE TO VALIDATE A LIST OBJECT NOT CONSTRUCTED BY read() ... BECAUSE THIS FUNC ALREADY VALIDATES (CIRCULAR EXAMPLE) ... IS THIS REALLY A USE CASE?
 #' d <- read(from = system.file("/data", package = "ecocomDP"))
 #' r <- validate(dataset = d)
-#'         
-#' @export
 #'
 validate <- function(
   dataset = NULL,

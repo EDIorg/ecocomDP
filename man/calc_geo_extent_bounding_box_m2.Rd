@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_dataset_summary.R
 \name{calc_geo_extent_bounding_box_m2}
 \alias{calc_geo_extent_bounding_box_m2}
-\title{Calculate geo_extent_bounding_box_m2 of the dataset_summary table}
+\title{Calculate the geo_extent_bounding_box_m2 for the dataset_summary table}
 \usage{
 calc_geo_extent_bounding_box_m2(west, east, north, south)
 }
@@ -16,14 +16,11 @@ calc_geo_extent_bounding_box_m2(west, east, north, south)
 \item{south}{(numeric) South latitude in decimal degrees and negative if south of the equator.}
 }
 \value{
-(numeric) Area in square meters.
+(numeric) Area of study site in square meters.
 }
 \description{
-Calculate geo_extent_bounding_box_m2 of the dataset_summary table
+Calculate the geo_extent_bounding_box_m2 for the dataset_summary table
 }
 \examples{
-\dontrun{
-
-}
 
 }

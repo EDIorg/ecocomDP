@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_eml.R
 \name{create_eml}
 \alias{create_eml}
-\title{Make EML metadata for ecocomDP tables}
+\title{Create EML metadata for ecocomDP tables}
 \usage{
 create_eml(
   path,
@@ -48,18 +48,13 @@ create_eml(
 \item{url}{(character) URL to the publicly accessible directory containing ecocomDP tables, conversion script, and EML metadata. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and publication of datasets.}
 }
 \value{
-An EML metadata record for the ecocomDP dataset defined by the arguments
-    to this function.
+An EML metadata file.
 }
 \description{
-Run this function AFTER you have validated your ecocomDP tables with 
-\code{validate()}.
+Create EML metadata for ecocomDP tables
 }
 \details{
-This function creates an EML record for an Ecological Community Data 
-    Pattern (ecocomDP) combining metadata from the parent data package and
-    boiler-plate metadata describing the ecocomDP tables. Changes to the 
-    parent EML include:
+This function creates an EML record for an ecocomDP by combining metadata from \code{source_id} with boiler-plate metadata describing the ecocomDP. Changes to the parent EML include:
     \itemize{
         \item \strong{<access>} Adds the \code{user_id} to the list of 
         principals granted read and write access to the ecocomDP data 
@@ -95,9 +90,7 @@ This function creates an EML record for an Ecological Community Data
         entities listed in the parent EML are removed.
     }
     
-    CURRENTLY ONLY WORKS FOR EDI DATA REPOSITORY
-    
-    TAXA RESOLVED USING taxonomyCleanr METHODS EXPORTED FROM THIS PACKAGE ARE, WILL HAVE THEIR RANKS EXPANDED CREATE_EML(). ALTERNATIVELY COULD DO IT YOUR SELF WITH THESE CONTROLLED TERMS THAT NEED TO BE FOLLOWED.
+    Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. https://www.itis.gov/, http://www.marinespecies.org/, or https://gbif.org), will have their full taxonomic hierarchy expanded, including any common names for each level.
 }
 \examples{
 \dontrun{

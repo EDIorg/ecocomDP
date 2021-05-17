@@ -1,12 +1,10 @@
-#' Merge tables in ecocomDP dataset
-#'
-#' @description  
-#'     This function joins a list of data.frames following the ecocomDP data pattern
+#' Join all tables of an ecocomDP dataset and spread into wide format
 #' 
-#' @param tables (list) A named list of data.frames of an ecocomDP dataset.
+#' @param tables (list) A named list of ecocomDP tables (as data.frames).
 #'
-#' @return 
-#'     (data.frame) a single data.frame of merged tables for an ecocomDP data package
+#' @return (data.frame) A single wide table created by joining and spreading all \code{tables}.
+#' 
+#' @export
 #'
 #' @examples 
 #' \dontrun{
@@ -26,8 +24,6 @@
 #' my_list_of_tables <- all_data[[1]]$tables
 #' flat_data <- flatten(my_list_of_tables)
 #' }
-#' 
-#' @export
 #' 
 flatten <- function(tables){
   

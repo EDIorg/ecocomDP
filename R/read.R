@@ -1,4 +1,4 @@
-#' Read ecocomDP data
+#' Read an ecocomDP dataset
 #'
 #' @param id (character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search()} output. Older versions of datasets can be read, but a warning is issued.
 #' @param parse_datetime (logical) Attempt to parse datetime character strings through an algorithm. For EDI data, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the formatString is standardized. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing with a warning).
@@ -11,10 +11,9 @@
 #' @param nCores (integer) For NEON data, the number of cores to parallelize the stacking procedure. Defaults to 1.
 #' @param forceParallel (logical) For NEON data, if the data volume to be processed does not meet minimum requirements to run in parallel, this overrides. Defaults to FALSE.
 #' @param token (character) For NEON data, a user specific API token (generated within neon.datascience user accounts).
-#' @param neon.data.save.dir (character) For NEON data, an optional argument indicating the directory where NEON source data should be saved upon download from the NEON API. Data are downloaded using \code{neonUtilities::loadByProduct()} and saved in this directory as an RDS file. The filename will follow the format <NEON data product ID>_<timestamp>.RDS
-#' @param neon.data.read.path (character) For NEON data, an optional argument defining a path to read in an RDS file of 'stacked NEON data' from \code{neonUtilities::loadByProduct()}. See details below for more information.
-#' @param ...
-#'     (NEON data only) Other arguments to \code{neonUtilities::loadByProduct()}
+#' @param neon.data.save.dir (character) For NEON data, an optional and experimental argument (i.e. may not be supported in future releases), indicating the directory where NEON source data should be saved upon download from the NEON API. Data are downloaded using \code{neonUtilities::loadByProduct()} and saved in this directory as an RDS file. The filename will follow the format <NEON data product ID>_<timestamp>.RDS
+#' @param neon.data.read.path (character) For NEON data, an optional and experimental argument (i.e. may not be supported in future releases), defining a path to read in an RDS file of 'stacked NEON data' from \code{neonUtilities::loadByProduct()}. See details below for more information.
+#' @param ... For NEON data, other arguments to \code{neonUtilities::loadByProduct()}
 #' @param from (character) Full path of file to be read (if .rds), or path to directory (if .csv).
 #'     
 #' @return
@@ -29,9 +28,7 @@
 #'       }
 #'     }
 #' 
-#' @note This function may not work between 01:00 - 03:00 UTC due to regular maintenance of the EDI Data Repository. If you have reached this warning outside these hours then there may be an unexpected issue that will be resolved shortly. Please try again later.
-#' 
-#' DESCRIBE WHAT PROVISIONAL NEON DATA IS, HOW TO IDENTIFIY IT IN THE RETURN FROM read().
+#' @note This function may not work between 01:00 - 03:00 UTC due to regular maintenance of the EDI Data Repository.
 #' 
 #' @details 
 #'     Validation checks are applied to each dataset ensuring they comply with 

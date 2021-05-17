@@ -36,7 +36,7 @@ create_observation(
 \item{unit}{(character) An optional column in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention <unit>_<variable_name> (e.g. "unit_abundance").}
 }
 \value{
-(data.frame) The location_ancillary table of ecocomDP.
+(data.frame) The observation table.
 }
 \description{
 Create the observation table

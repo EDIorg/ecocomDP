@@ -1,8 +1,4 @@
-#' Search ecocomDP data
-#' 
-#' Use this function to search across ecocomDP data made available by the 
-#' Environmental Data Initiative (EDI) and the National Ecological Observatory
-#' Network (NEON).
+#' Search across all ecocomDP datasets
 #' 
 #' @param text (character) Text to search in dataset titles, descriptions, and abstracts. Datasets matching any exact words or phrase will be returned. Is not case sensitive. Works with \code{boolean}
 #' @param taxa (character) Taxanomic rank values to search on. The full taxonomic hierarchy of each taxa in a dataset is searchable for EDI (including common names) but not yet NEON, in which cases the lowest level rank value is searchable.
@@ -13,31 +9,27 @@
 #' @param boolean (character) Boolean operator to use when searching \code{text} and 
 #'     \code{taxa}. Supported operators are: "AND", "OR". Default is "AND".
 #'     
-#' @note
-#'     This function may not work between 01:00 - 03:00 UTC due to regular maintenance of the EDI Data Repository. If you have reached this warning outside these hours then there may be an unexpected issue that will be resolved shortly. Please try again later.
+#' @note This function may not work between 01:00 - 03:00 UTC due to regular maintenance of the EDI Data Repository.
 #'     
-#'     NEON taxa rank is lowest level identifiable. Higher ranks are not searchable.
-#'     
-#' @return 
-#'     (data.frame) Search results with these feilds:
+#' @return (data.frame) Search results with these feilds:
 #'     \itemize{
-#'         \item source - Source from which the data originate. Currently 
-#'         supported are "EDI" and "NEON".
-#'         \item id - Identifier of dataset
-#'         \item title - Title of dataset
-#'         \item description - Description of dataset
-#'         \item abstract - Abstract of dataset
-#'         \item num_years - Number of years sampled
-#'         \item sd_between_samples - Standard deviation between sampling 
-#'         events in years.
-#'         \item sites - Sites names or abbreviations (returned for NEON data
-#'         sources but not EDI)
-#'         \item url - URL to dataset
+#'         \item source - Source from which the dataset originates. Currently supported are "EDI" and "NEON".
+#'         \item id - Identifier of the dataset.
+#'         \item title - Title of the dataset.
+#'         \item description - Description of dataset. Only returned for NEON datasets.
+#'         \item abstract - Abstract of dataset.
+#'         \item years - Number of years sampled.
+#'         \item sampling_interval - Standard deviation between sampling events in years.
+#'         \item sites - Sites names or abbreviations. Only returned for NEON datasets.
+#'         \item url - URL to dataset.
+#'         \item source_id - Identifier of source L0 dataset.
+#'         \item source_id_url - URL to source L0 dataset.
 #'     }
 #'     
-#' @details 
-#'     Currently, to accomodate multiple L1 versions of NEON data products, search results for a NEON L0 will also list all the L1 versions available for the match. This method is based on the assumption that the summary data among L1 versions is the same, which may need to be addressed in the future. A list of L0 and corresponding L1 identifiers are listed in /inst/L1_versions.txt. Each L1 version is accompanied by qualifying text that's appended to the title, abstract, and descriptions for comprehension of the differences among L1 versions.
-#'     
+#' @details Currently, to accomodate multiple L1 versions of NEON data products, search results for a NEON L0 will also list all the L1 versions available for the match. This method is based on the assumption that the summary data among L1 versions is the same, which may need to be addressed in the future. A list of L0 and corresponding L1 identifiers are listed in /inst/L1_versions.txt. Each L1 version is accompanied by qualifying text that's appended to the title, abstract, and descriptions for comprehension of the differences among L1 versions.
+#' 
+#' @export
+#' 
 #' @examples
 #' dontrun{
 #' # Empty search returns all available data
@@ -78,8 +70,6 @@
 #'   boolean = "OR")
 #' View(r)
 #' }
-#'         
-#' @export
 #'
 search <- function(text, taxa, num_taxa, num_years, sd_years, 
                         area, boolean = "AND") {

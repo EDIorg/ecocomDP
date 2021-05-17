@@ -27,7 +27,7 @@ create_taxon(
 \item{authority_taxon_id}{(character) An optional column in \code{L0_wide} containing the identifier corresponding to \code{taxon_name} in the \code{authority_system}.}
 }
 \value{
-(data.frame) The taxon table of ecocomDP.
+(data.frame) The taxon table.
 }
 \description{
 Create the taxon table
@@ -35,7 +35,7 @@ Create the taxon table
 \details{
 This function collects specified columns from \code{L0_wide} and returns distinct rows. Default names of optional columns are ignored if they can't be found in \code{L0_wide} (i.e. no need to set as NULL).
 
-If taxon authority_system contains values of .... then the corresponding taxa will have their whole hierarchy expanded within the EML metadata returned by create_eml().
+Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. https://www.itis.gov/, http://www.marinespecies.org/, or https://gbif.org), will have their full taxonomic hierarchy expanded, including any common names for each level.
 }
 \examples{
 

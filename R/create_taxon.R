@@ -9,9 +9,10 @@
 #' 
 #' @details This function collects specified columns from \code{L0_wide} and returns distinct rows. Default names of optional columns are ignored if they can't be found in \code{L0_wide} (i.e. no need to set as NULL).
 #' 
-#' If taxon authority_system contains values of .... then the corresponding taxa will have their whole hierarchy expanded within the EML metadata returned by create_eml().
+#' Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. https://www.itis.gov/, http://www.marinespecies.org/, or https://gbif.org), will have their full taxonomic hierarchy expanded, including any common names for each level.
 #'
-#' @return (data.frame) The taxon table of ecocomDP.
+#' @return (data.frame) The taxon table.
+#' 
 #' @export
 #'
 #' @examples

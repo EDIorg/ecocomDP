@@ -2,7 +2,7 @@
 % Please edit documentation in R/convert_to_dwca.R
 \name{convert_to_dwca}
 \alias{convert_to_dwca}
-\title{Creates Darwin Core Archive package from a published ecocomDP formatted level-1}
+\title{Convert ecocomDP to Darwin Core Archive}
 \usage{
 convert_to_dwca(
   path,
@@ -30,14 +30,13 @@ convert_to_dwca(
 \item{user_domain}{(character) Domain of the \code{user_id}. Only "EDI" is currently supported. If more than one, then supply as a vector of character strings in the same order as \code{user_id}.}
 }
 \value{
-Data entities in either the occurrence or event core formats with a
-    corresponding EML metadata record and a meta.xml file.
+DwC-A tables, meta.xml, and corresponding EML metadata.
 }
 \description{
-Creates Darwin Core Archive package from a published ecocomDP formatted level-1
+Convert ecocomDP to Darwin Core Archive
 }
 \details{
-TODO: Add details
+Reads in an ecocomDP dataset from a supported repository and converts it to a DwC-A package.
 }
 \examples{
 

@@ -21,7 +21,7 @@ create_variable_mapping(
 \item{taxon_ancillary}{(data.frame) The optional taxon_ancillary table.}
 }
 \value{
-(data.frame) The variable_mapping table of ecocomDP.
+(data.frame) The variable_mapping table.
 }
 \description{
 Create the variable_mapping table

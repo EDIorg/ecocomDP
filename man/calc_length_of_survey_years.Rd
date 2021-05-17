@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_dataset_summary.R
 \name{calc_length_of_survey_years}
 \alias{calc_length_of_survey_years}
-\title{Calculate length_of_survey_years of the dataset_summary table}
+\title{Calculate the length_of_survey_years for the dataset_summary table}
 \usage{
 calc_length_of_survey_years(dates)
 }
@@ -10,10 +10,10 @@ calc_length_of_survey_years(dates)
 \item{dates}{(Date) Dates from the L0 source dataset encompassing the entire study duration.}
 }
 \value{
-(numeric) Number of years the study has been ongoing
+(numeric) Number of years the study has been ongoing.
 }
 \description{
-Calculate length_of_survey_years of the dataset_summary table
+Calculate the length_of_survey_years for the dataset_summary table
 }
 \examples{
 

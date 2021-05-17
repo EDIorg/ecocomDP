@@ -1,4 +1,4 @@
-#' Creates Darwin Core Archive package from a published ecocomDP formatted level-1
+#' Convert ecocomDP to Darwin Core Archive
 #'
 #' @param path (character) Path to which the DwC-A data objects and EML will be written.
 #' @param core_name (character) The central table of the Darwin Core package being created. Can be: "event" (event core). Occurrence core is not yet supported.
@@ -7,11 +7,11 @@
 #' @param url (character) URL to the publicly accessible directory containing DwC-A tables and meta.xml. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and publication of datasets.
 #' @param user_id (character) Identifier of user account associated with the data repository in which this ecocomDP dataset will be archived. Only \code{user_id} from the EDI is currently supported.
 #' @param user_domain (character) Domain of the \code{user_id}. Only "EDI" is currently supported. If more than one, then supply as a vector of character strings in the same order as \code{user_id}.
-#' @details
-#'     TODO: Add details
-#' @return
-#'     Data entities in either the occurrence or event core formats with a
-#'     corresponding EML metadata record and a meta.xml file.
+#' 
+#' @details Reads in an ecocomDP dataset from a supported repository and converts it to a DwC-A package.
+#' 
+#' @return DwC-A tables, meta.xml, and corresponding EML metadata.
+#' 
 #' @export
 #'
 #' @examples

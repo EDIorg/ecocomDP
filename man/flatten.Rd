@@ -2,18 +2,18 @@
 % Please edit documentation in R/flatten.R
 \name{flatten}
 \alias{flatten}
-\title{Merge tables in ecocomDP dataset}
+\title{Join all tables of an ecocomDP dataset and spread into wide format}
 \usage{
 flatten(tables)
 }
 \arguments{
-\item{tables}{(list) A named list of data.frames of an ecocomDP dataset.}
+\item{tables}{(list) A named list of ecocomDP tables (as data.frames).}
 }
 \value{
-(data.frame) a single data.frame of merged tables for an ecocomDP data package
+(data.frame) A single wide table created by joining and spreading all \code{tables}.
 }
 \description{
-This function joins a list of data.frames following the ecocomDP data pattern
+Join all tables of an ecocomDP dataset and spread into wide format
 }
 \examples{
 \dontrun{

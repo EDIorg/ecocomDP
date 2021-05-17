@@ -7,7 +7,7 @@
 #' 
 #' @details This function collects specified data tables, extracts unique variable_name values from each, converts into long (attribute-value) form with the table name and variable_name values to the resulting table's "table_name" and "variable_name" columns, respectively. The resulting table's "mapped_system", "mapped_id", and "mapped_label" are filled with \code{NA} and are to be manually filled.
 #'
-#' @return (data.frame) The variable_mapping table of ecocomDP.
+#' @return (data.frame) The variable_mapping table.
 #' 
 #' @export
 #' 
