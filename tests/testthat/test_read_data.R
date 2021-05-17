@@ -1,4 +1,4 @@
-context("read()")
+context("read_data()")
 
 library(ecocomDP)
 
@@ -8,7 +8,7 @@ testthat::test_that("Reads from source APIs", {
   criteria <- read_criteria()
   # From EDI
   id <- "edi.193.3"
-  d <- try(suppressWarnings(read(id = id)), silent = TRUE)
+  d <- try(suppressWarnings(read_data(id = id)), silent = TRUE)
   if (class(d) != "try-error") {                                                      # Has expected structure
     expect_true(is.list(d))                                                           # obj is a list
     expect_true(names(d) == id)                                                       # 1st level name is id
@@ -25,7 +25,7 @@ testthat::test_that("Reads from source APIs", {
   id <- "neon.ecocomdp.20107.001.001"
   d <- try(
     suppressWarnings(
-      read(
+      read_data(
         id = id, 
         site = c("MAYF", "CARI"), 
         startdate = "2016-01", 
@@ -60,8 +60,8 @@ testthat::test_that("Reads from local files", {
   # From .rds
   d <- read_example_dataset()
   id <- names(d)
-  save(d, tempdir())
-  d <- suppressWarnings(read(from = paste0(tempdir(), "/d.rds")))           # Has expected structure
+  save_data(d, tempdir())
+  d <- suppressWarnings(read_data(from = paste0(tempdir(), "/d.rds")))           # Has expected structure
   expect_true(is.list(d))                                                             # obj is a list
   expect_true(names(d) == id)                                                         # 1st level name is id
   expect_true(all(names(d[[1]]) %in% c("metadata", "tables", "validation_issues")))   # 2nd level has 3 values
@@ -80,8 +80,8 @@ testthat::test_that("Reads from local files", {
   names(d) <- ids
   id <- "d"
   unlink(paste0(tempdir(),"/", id), recursive = TRUE, force = TRUE) 
-  save(d, tempdir(), type = ".csv")
-  d <- suppressWarnings(read(from = paste0(tempdir(), "/", id)))            # Has expected structure
+  save_data(d, tempdir(), type = ".csv")
+  d <- suppressWarnings(read_data(from = paste0(tempdir(), "/", id)))            # Has expected structure
   expect_true(is.list(d))                                                             # obj is a list
   expect_true(all(names(d) %in% ids))                                                 # 1st level name is id
   for (i in names(d)) {
@@ -106,9 +106,9 @@ testthat::test_that("Has datetime parsing option", {
   criteria <- read_criteria()
   d <- read_example_dataset()
   id <- names(d)
-  save(d, tempdir())
+  save_data(d, tempdir())
   d <- suppressWarnings(
-    read(from = paste0(tempdir(), "/d.rds"), parse_datetime = TRUE))      # not character
+    read_data(from = paste0(tempdir(), "/d.rds"), parse_datetime = TRUE))      # not character
   for (tbl in names(d[[1]]$tables)) {
     for (colname in colnames(d[[1]]$tables[[tbl]]))
       if (stringr::str_detect(colname, "datetime")) {
@@ -116,7 +116,7 @@ testthat::test_that("Has datetime parsing option", {
       }
   }
   d <- suppressWarnings(
-    read(from = paste0(tempdir(), "/d.rds"), parse_datetime = FALSE))     # character
+    read_data(from = paste0(tempdir(), "/d.rds"), parse_datetime = FALSE))     # character
   for (tbl in names(d[[1]]$tables)) {
     for (colname in colnames(d[[1]]$tables[[tbl]]))
       if (stringr::str_detect(colname, "datetime")) {

@@ -37,6 +37,8 @@ This function collects specified columns from \code{L0_wide}, creates data frame
 }
 \note{
 Values in \code{nesting} columns of \code{L0_wide} should be modifed to provide both context and value before running this function. Not doing so may result in ambiguous location_name values in the resulting location table. Example: A column named "plot" with values "1", "2", "3", in \code{L0_wide} will be listed in the resulting location_name column as values "1", "2", "3" and there will be no way to discern these values correspond with "plot". A general fix is to modify values in the \code{nesting} columns of \code{L0_wide} with \code{paste0(<column name>, "_", <columun value>)}, which will return both the column context and value in the location_name column of the location table as  "plot_1", "plot_2", "plot_3".
+
+Additionally, latitude, longitude, and elevation of sites nested above the observation level will have to be manually added after the location data.frame is returned.
 }
 \examples{
 

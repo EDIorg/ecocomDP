@@ -34,8 +34,8 @@ convert_to_dwca <- function(path,
   
   # Load data -----------------------------------------------------------------
   
-  # FIXME: Add environment argument to read()
-  d <- read(source_id)
+  # FIXME: Add environment argument to read_data()
+  d <- read_data(source_id)
   d <- d[[1]]$tables
   
   # Convert tables ------------------------------------------------------------

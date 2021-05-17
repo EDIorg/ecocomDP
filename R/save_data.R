@@ -1,6 +1,6 @@
 #' Save an ecocomDP dataset
 #'
-#' @param dataset (list) One or more datasets returned by \code{read()}. Name of the \code{dataset} object will become the file name if \code{name} is not used.
+#' @param dataset (list) One or more datasets returned by \code{read_data()}. Name of the \code{dataset} object will become the file name if \code{name} is not used.
 #' @param path (character) Path to the directory in which \code{dataset} will be written.
 #' @param type (character) Type of file to save the \code{dataset} as. Default is ".rds" but can also be ".csv". Note: metadata and validation_issues are lost when using ".csv".
 #' @param name (character) An optional argument for setting the saved file name (for .rds), or dir name (for .csv) if you'd like it to be different than \code{dataset}'s object name.
@@ -17,19 +17,19 @@
 #' \dontrun{
 #' # Read from source
 #' datasets <- c(
-#'   read("edi.193.3"),
-#'   read("edi.262.1"),
-#'   read("edi.359.1"))
+#'   read_data("edi.193.3"),
+#'   read_data("edi.262.1"),
+#'   read_data("edi.359.1"))
 #' 
 #' # Save as .rds
-#' save(datasets, "/Users/me/documents/data")
+#' save_data(datasets, "/Users/me/documents/data")
 #' 
 #' # Save as .csv
-#' save(datasets, "/Users/me/documents/data", type = ".csv")
+#' save_data(datasets, "/Users/me/documents/data", type = ".csv")
 #' }
 #' 
-save <- function(dataset, path, type = ".rds", name = NULL) {
-  validate_arguments(fun.name = "save", fun.args = as.list(environment()))
+save_data <- function(dataset, path, type = ".rds", name = NULL) {
+  validate_arguments(fun.name = "save_data", fun.args = as.list(environment()))
   if (is.null(name)) {
     name <- deparse(substitute(dataset))
   }

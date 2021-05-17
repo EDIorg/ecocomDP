@@ -1,6 +1,6 @@
 #' Check if a dataset conforms to the ecocomDP model
 #' 
-#' @param dataset (list) A dataset returned by \code{read()}.
+#' @param dataset (list) A dataset returned by \code{read_data()}.
 #' @param path (character) A path to the directory in which the ecocomDP tables can be found.
 #'     
 #' @note This function is used by ecocomDP creators (to ensure what has been created is valid), maintainers (to improve the quality of archived ecocomDP datasets), and users (to ensure the data being used is free of error).
@@ -29,20 +29,20 @@
 #'    
 #' @examples 
 #' # Validate a set of files
-#' r <- validate(path = system.file("/data", package = "ecocomDP"))
+#' r <- validate_data(path = system.file("/data", package = "ecocomDP"))
 #' 
 #' # Validate a list object
-#' CHANGE EXAMPLE TO VALIDATE A LIST OBJECT NOT CONSTRUCTED BY read() ... BECAUSE THIS FUNC ALREADY VALIDATES (CIRCULAR EXAMPLE) ... IS THIS REALLY A USE CASE?
-#' d <- read(from = system.file("/data", package = "ecocomDP"))
-#' r <- validate(dataset = d)
+#' CHANGE EXAMPLE TO VALIDATE A LIST OBJECT NOT CONSTRUCTED BY read_data() ... BECAUSE THIS FUNC ALREADY VALIDATES (CIRCULAR EXAMPLE) ... IS THIS REALLY A USE CASE?
+#' d <- read_data(from = system.file("/data", package = "ecocomDP"))
+#' r <- validate_data(dataset = d)
 #'
-validate <- function(
+validate_data <- function(
   dataset = NULL,
   path = NULL) {
   
   # Validate arguments
   
-  validate_arguments(fun.name = "validate", fun.args = as.list(environment()))
+  validate_arguments(fun.name = "validate_data", fun.args = as.list(environment()))
   
   # Parameterize
   
@@ -51,7 +51,7 @@ validate <- function(
   
   # Read data
   if (!is.null(path)) {
-    d <- read(from = path)
+    d <- read_data(from = path)
     invisible(validate_table_names(data.path = path))
   } else {
     d <- dataset

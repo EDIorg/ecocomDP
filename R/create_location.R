@@ -10,6 +10,8 @@
 #' @details This function collects specified columns from \code{L0_wide}, creates data frames for each \code{nesting}, assigns \code{latitude}, \code{longitude}, and \code{elevation} to the lowest nesting level (i.e. the observation level) returning \code{NA} for higher levels (these will have to be filled manually afterwards), and determines the relationships between location_id and parent_location_id from \code{L0_wide} and \code{nesting}. Default names of optional columns are ignored if they can't be found in \code{L0_wide} (i.e. no need to set as NULL).
 #'     
 #' @note Values in \code{nesting} columns of \code{L0_wide} should be modifed to provide both context and value before running this function. Not doing so may result in ambiguous location_name values in the resulting location table. Example: A column named "plot" with values "1", "2", "3", in \code{L0_wide} will be listed in the resulting location_name column as values "1", "2", "3" and there will be no way to discern these values correspond with "plot". A general fix is to modify values in the \code{nesting} columns of \code{L0_wide} with \code{paste0(<column name>, "_", <columun value>)}, which will return both the column context and value in the location_name column of the location table as  "plot_1", "plot_2", "plot_3".
+#' 
+#' Additionally, latitude, longitude, and elevation of sites nested above the observation level will have to be manually added after the location data.frame is returned.
 #'
 #' @return (data.frame) The location table.
 #'     
@@ -23,14 +25,13 @@ create_location <- function(L0_wide,
                             longitude = "longitude", 
                             elevation = "elevation",
                             nesting = NULL) {
+  
   # TODO: validate_arguments()
-  # - if nesting = NULL then ....
-  # - cols exist in L0_wide for non-required cols
+  # TODO: manipulation (in validate_arguments()?)
+  # - if nesting = NULL then what?
   # - NULL optional cols if not in L0_wide
   # - rename cols in L0_wide if not 1-to-1 match
-  # - return
-  # - required cols vs optional cols
-  # TODO: Metadtaa note: lat, lon, and elev of site levels nested higher in the tree, above the observation level must be manually added after the location data frame is created
+
   message("Creating location")
   cols_to_gather <- c(location_id, latitude, longitude, elevation, nesting)
   loc_wide <- L0_wide %>%

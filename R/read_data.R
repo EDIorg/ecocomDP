@@ -1,9 +1,9 @@
 #' Read an ecocomDP dataset
 #'
-#' @param id (character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search()} output. Older versions of datasets can be read, but a warning is issued.
+#' @param id (character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search_data()} output. Older versions of datasets can be read, but a warning is issued.
 #' @param parse_datetime (logical) Attempt to parse datetime character strings through an algorithm. For EDI data, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the formatString is standardized. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing with a warning).
 #' @param unique_keys (logical) Whether to create globally unique primary keys (and associated foreign keys). Useful in maintaining referential integrity when working with multiple datasets. If TRUE, \code{id} is appended to each table's primary key and associated foreign key. Default is\code{FALSE}.
-#' @param site (character) For NEON data, a character vector of site codes to filter data on. Sites are listed in the "sites" column of the \code{search()} output. Defaults to "all", meaning all sites.
+#' @param site (character) For NEON data, a character vector of site codes to filter data on. Sites are listed in the "sites" column of the \code{search_data()} output. Defaults to "all", meaning all sites.
 #' @param startdate (character) For NEON data, the start date to filter on in the form YYYY-MM. Defaults to NA, meaning all available dates.
 #' @param enddate (character) For NEON data, the end date to filter on in the form YYYY-MM. Defaults to NA, meaning all available dates.
 #' @param package (character) For NEON data, either 'basic' or 'expanded', indicating which data package to download. Defaults to basic.
@@ -41,7 +41,7 @@
 #'     
 #'     Validation happens each time files are read, from source APIs or local environments.
 #'     
-#'     Details for read() function regarding NEON data: Using this function to read data with an \code{id} that begins with "neon.ecocomdp" will result in a query to download NEON data from the NEON Data Portal API using \code{neonUtilities::loadByProduct()}. If a query includes provisional data (or if you are not sure if the query includes provisional data), we recommend saving a copy of the data in the original format provided by NEON in addition to the derived ecocomDP data package. To do this, provide a directory path using the \code{neon.data.read.path} argument. For example, the query \code{my_ecocomdp_data <- read(id = "neon.ecocomdp.10022.001.001", neon.data.save.dir = "my_neon_data")} will download the data for NEON Data Product ID DP1.10022.001 (ground beetles in pitfall traps) and convert it to the ecocomDP data model. In doing so, a copy of the original NEON download will be saved in the directory "my_ neon_data with the filename "DP1.10022.001_<timestamp>.RDS" and the derived data package in the ecocomDP format will be stored in your R environment in an object named "my_ecocomdp_data". Further, if you wish to reload a previously downloaded NEON dataset into the ecocomDP format, you can do so using \code{my_ecocomdp_data <- read(id = "neon.ecocomdp.10022.001.001", neon.data.read.path = "my_neon_data/DP1.10022.001_<timestamp>.RDS")}
+#'     Details for \code{read_data()} function regarding NEON data: Using this function to read data with an \code{id} that begins with "neon.ecocomdp" will result in a query to download NEON data from the NEON Data Portal API using \code{neonUtilities::loadByProduct()}. If a query includes provisional data (or if you are not sure if the query includes provisional data), we recommend saving a copy of the data in the original format provided by NEON in addition to the derived ecocomDP data package. To do this, provide a directory path using the \code{neon.data.read.path} argument. For example, the query \code{my_ecocomdp_data <- read_data(id = "neon.ecocomdp.10022.001.001", neon.data.save.dir = "my_neon_data")} will download the data for NEON Data Product ID DP1.10022.001 (ground beetles in pitfall traps) and convert it to the ecocomDP data model. In doing so, a copy of the original NEON download will be saved in the directory "my_ neon_data with the filename "DP1.10022.001_<timestamp>.RDS" and the derived data package in the ecocomDP format will be stored in your R environment in an object named "my_ecocomdp_data". Further, if you wish to reload a previously downloaded NEON dataset into the ecocomDP format, you can do so using \code{my_ecocomdp_data <- read_data(id = "neon.ecocomdp.10022.001.001", neon.data.read.path = "my_neon_data/DP1.10022.001_<timestamp>.RDS")}
 #'     
 #'     Provisional NEON data. Despite NEON's controlled data entry, at times, errors are found in published data; for example, an analytical lab may adjust its calibration curve and re-calculate past analyses, or field scientists may discover a past misidentification. In these cases, Level 0 data are edited and the data are re-processed to Level 1 and re-published. Published data files include a time stamp in the file name; a new time stamp indicates data have been re-published and may contain differences from previously published data. Data are subject to re-processing at any time during an initial provisional period; data releases are never re-processed. All records downloaded from the NEON API will have a "release" field. For any provisional record, the value of this field will be "PROVISIONAL", otherwise, this field will have a value indicating the version of the release to which the record belongs. More details can be found at https://www.neonscience.org/data-samples/data-management/data-revisions-releases.
 #'     
@@ -50,13 +50,13 @@
 #' @examples
 #' \dontrun{
 #' # Read from EDI
-#' dataset <- read("edi.193.3")
+#' dataset <- read_data("edi.193.3")
 #' 
 #' # Read from NEON
-#' dataset <- read("neon.ecocomdp.20166.001.001")
+#' dataset <- read_data("neon.ecocomdp.20166.001.001")
 #' 
 #' # Read from NEON with filters
-#' dataset <- read(
+#' dataset <- read_data(
 #'   id = "neon.ecocomdp.20166.001.001", 
 #'   site = c("MAYF", "PRIN"),
 #'   startdate = "2016-01", 
@@ -64,22 +64,22 @@
 #'   check.size = FALSE)
 #' 
 #' # Read from local .rds
-#' dataset <- read(from = "/Users/me/documents/data/dataset.rds")
+#' dataset <- read_data(from = "/Users/me/documents/data/dataset.rds")
 #' 
 #' # Read from local .csv
-#' dataset <- read(from = "/Users/me/documents/data/dataset")
+#' dataset <- read_data(from = "/Users/me/documents/data/dataset")
 #' 
 #' # Return datetimes as character
-#' dataset <- read("edi.193.3", parse_datetime = FALSE)
+#' dataset <- read_data("edi.193.3", parse_datetime = FALSE)
 #' 
 #' # Read multiple datasets into list
 #' datasets <- c(
-#'   read("edi.193.3"),
-#'   read("edi.262.1"),
-#'   read("neon.ecocomdp.20166.001.001"))
+#'   read_data("edi.193.3"),
+#'   read_data("edi.262.1"),
+#'   read_data("neon.ecocomdp.20166.001.001"))
 #' }
 #' 
-read <- function(id = NULL, parse_datetime = TRUE, 
+read_data <- function(id = NULL, parse_datetime = TRUE, 
                       unique_keys = FALSE, site = "all", 
                       startdate = NA, enddate = NA, package = "basic", 
                       check.size = FALSE, nCores = 1, forceParallel = FALSE, 
@@ -88,7 +88,7 @@ read <- function(id = NULL, parse_datetime = TRUE,
   
   # Validate input arguments --------------------------------------------------
 
-  validate_arguments(fun.name = "read", fun.args = as.list(environment()))
+  validate_arguments(fun.name = "read_data", fun.args = as.list(environment()))
 
   # Parameterize --------------------------------------------------------------
 
@@ -252,10 +252,10 @@ read <- function(id = NULL, parse_datetime = TRUE,
   # Validate ------------------------------------------------------------------
 
   callstack <- as.character(sys.calls())
-  if (!any(stringr::str_detect(callstack, "validate\\("))) { # don't validate if read() is called from validate()
+  if (!any(stringr::str_detect(callstack, "validate_data\\("))) { # don't validate if read_data() is called from validate()
     for (i in 1:length(d)) {
       # FIXME: Enter dataset list object, not just tables
-      d[[i]]$validation_issues <- validate(dataset = d[i])
+      d[[i]]$validation_issues <- validate_data(dataset = d[i])
     }
   }
   
@@ -372,7 +372,7 @@ read_data_edi <- function(id, parse_datetime = TRUE) {
   }
   
   # Parse metadata
-  search_index <- suppressMessages(search())
+  search_index <- suppressMessages(search_data())
   i <- search_index$id == id
   meta = list(url = search_index$url[i])
   
@@ -420,7 +420,7 @@ read_from_files <- function(data.path) {
     parent_dir_has_tables <- any(unlist(parent_dir_has_tables))
     if (parent_dir_has_tables) { # Disambiguate usecases: Parent dir tables is target, but subdir also has tables
       dirs <- dirs[1]
-    } else if (!parent_dir_has_tables & (length(dirs) > 1)) { # Don't use parent dir if nested (use case of reading from save(..., type = .csv))
+    } else if (!parent_dir_has_tables & (length(dirs) > 1)) { # Don't use parent dir if nested (use case of reading from save_data(..., type = .csv))
       dirs <- dirs[-1]
     }
     
@@ -447,7 +447,7 @@ read_from_files <- function(data.path) {
         return(res)
       })
     d <- unlist(d, recursive = FALSE)
-    if (length(dirs) > 1){         # Get id from dir if nested (use case of reading from save(..., type = .csv))
+    if (length(dirs) > 1){         # Get id from dir if nested (use case of reading from save_data(..., type = .csv))
       names(d) <- basename(dirs)
     } else {
       names(d) <- d[[1]]$tables$dataset_summary$package_id

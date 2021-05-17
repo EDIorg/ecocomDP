@@ -22,13 +22,11 @@ create_taxon_ancillary <- function(L0_wide,
                                    unit = NULL, 
                                    author = "author") {
   message("Creating taxon_ancillary")
+  
   # TODO: validate_arguments()
-  # - cols exist in L0_wide for non-required cols
+  # TODO: manipulation (in validate_arguments()?)
   # - NULL optional cols if not in L0_wide
   # - rename cols in L0_wide if not 1-to-1 match
-  # - check unit_variable_name convention
-  # - required cols vs optional cols
-  # - return
   
   # gather cols
   cols_to_gather <- c(taxon_id, datetime, variable_name, author)

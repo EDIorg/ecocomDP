@@ -9,7 +9,7 @@
 #' @examples 
 #' \dontrun{
 #' # Flatten NEON data
-#' all_data <- read(
+#' all_data <- read_data(
 #' id = "DP1.20120.001",
 #' site= c('COMO','LECO'),
 #' startdate = "2019-06",
@@ -17,15 +17,15 @@
 #' token = Sys.getenv("NEON_TOKEN"))
 #' 
 #' my_list_of_tables <- all_data[[1]]$tables
-#' flat_data <- flatten(my_list_of_tables)
+#' flat_data <- flatten_data(my_list_of_tables)
 #' 
 #' # Flatten EDI data
-#' all_data <- read("edi.290.1")
+#' all_data <- read_data("edi.290.1")
 #' my_list_of_tables <- all_data[[1]]$tables
-#' flat_data <- flatten(my_list_of_tables)
+#' flat_data <- flatten_data(my_list_of_tables)
 #' }
 #' 
-flatten <- function(tables){
+flatten_data <- function(tables){
   
   # helper function to determine if a col is all NAs
   # returns boolean
@@ -225,13 +225,13 @@ flatten <- function(tables){
 
 
 # # read in data using ecocomDP
-# all_data <- read(
+# all_data <- read_data(
 #   id = "DP1.20120.001",
 #   site= c('COMO','LECO'), 
 #   startdate = "2019-06",
 #   enddate = "2019-09",
 #   token = Sys.getenv("NEON_TOKEN"))
 # 
-# all_data <- read("edi.290.1")
+# all_data <- read_data("edi.290.1")
 # 
 # tables <- all_data[[1]]$tables

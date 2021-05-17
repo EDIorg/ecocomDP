@@ -26,12 +26,14 @@ create_dataset_summary <- function(L0_wide,
                                    max_num_taxa = "max_num_taxa",
                                    geo_extent_bounding_box_m2 = "geo_extent_bounding_box_m2") {
   message("Creating dataset_summary")
+  
   # TODO: validate_arguments()
-  # - cols exist in L0_wide for non-required cols
+  # TODO: manipulation (in validate_arguments()?)
   # - NULL optional cols if not in L0_wide
   # - rename cols in L0_wide if not 1-to-1 match
-  # - required cols vs optional cols
-  # - return
+  validate_arguments(fun.name = "create", fun.args = as.list(environment()))
+  
+  
   # get cols
   cols_to_gather <- c(package_id, original_package_id, length_of_survey_years,
                       number_of_years_sampled, std_dev_interval_betw_years,

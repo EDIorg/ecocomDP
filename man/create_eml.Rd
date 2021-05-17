@@ -99,7 +99,7 @@ This function creates an EML record for an ecocomDP by combining metadata from \
 path <- "/Users/csmith/Desktop/ecocomDP"
 
 # Validate ecocomDP tables
-validate(path)
+validate_datapath)
 
 # Create contact information for the ecocomDP creator
 additional_contact <- data.frame(

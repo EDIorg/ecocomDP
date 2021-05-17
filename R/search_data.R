@@ -33,34 +33,34 @@
 #' @examples
 #' dontrun{
 #' # Empty search returns all available data
-#' View(search())
+#' View(search_data())
 #' 
 #' # Text searches titles, descriptions, and abstracts
-#' View(search(text = "Lake"))
+#' View(search_data(text = "Lake"))
 #' 
 #' # Taxa searches any taxonomic rank of an organism
-#' View(search(taxa = "Plantae"))
+#' View(search_data(taxa = "Plantae"))
 #' 
 #' # Number of taxa searches the count of unique taxa in a dataset
-#' View(search(num_taxa = c(0, 10)))
+#' View(search_data(num_taxa = c(0, 10)))
 #' 
 #' # Years searches the number of years the dataset covers
-#' View(search(num_years = c(10, 20)))
+#' View(search_data(num_years = c(10, 20)))
 #' 
 #' # Standard deviation between surveys searches for a sampling frequency
-#' View(search(sd_years = c(.25, 1)))
+#' View(search_data(sd_years = c(.25, 1)))
 #' 
 #' # Geographic area searches where data were collected
-#' View(search(area = c(47.1, -86.7, 42.5, -92)))
+#' View(search_data(area = c(47.1, -86.7, 42.5, -92)))
 #' 
 #' # Boolean operators AND (default) & OR combine text and taxa search terms
-#' View(search(text = c("Lake", "River")))
-#' View(search(text = c("Lake", "River"), boolean = "OR"))
-#' View(search(taxa = c("Plantae", "Animalia")))
-#' View(search(taxa = c("Plantae", "Animalia"), boolean = "OR"))
+#' View(search_data(text = c("Lake", "River")))
+#' View(search_data(text = c("Lake", "River"), boolean = "OR"))
+#' View(search_data(taxa = c("Plantae", "Animalia")))
+#' View(search_data(taxa = c("Plantae", "Animalia"), boolean = "OR"))
 #' 
 #' # Use any combination of search fields to find the data you're looking for
-#' r <- search(
+#' r <- search_data(
 #'   text = c("Lake", "River"),
 #'   taxa = c("Plantae", "Animalia"),
 #'   num_taxa = c(0, 10),
@@ -71,19 +71,19 @@
 #' View(r)
 #' }
 #'
-search <- function(text, taxa, num_taxa, num_years, sd_years, 
+search_data <- function(text, taxa, num_taxa, num_years, sd_years, 
                         area, boolean = "AND") {
   
   # TODO: Add argument to search within a NEON site. Currently searches return
   # data products if any of the search parameters are true for any of the 
   # sites.
   
-  # message("Searching data ...")
+  message("Searching data ...")
   
   # Validate arguments --------------------------------------------------------
   
   validate_arguments(
-    fun.name = "search",
+    fun.name = "search_data",
     fun.args = as.list(environment()))
   
   ping_edi() # Warn if EDI is down
@@ -110,7 +110,7 @@ search <- function(text, taxa, num_taxa, num_years, sd_years,
       load(url(objurl))
     }
     ecocomDP_search_index <- c(summary_data_edi, summary_data_neon)
-    base::save(ecocomDP_search_index, 
+    save(ecocomDP_search_index, 
          file = paste0(tempdir(), "/ecocomDP_search_index.rda"), 
          version = 3)
     d <- ecocomDP_search_index

@@ -2,7 +2,7 @@
 rm(list=ls())
 
 # algae
-my_result_read_data <- read(
+my_result_read_data <- read_data(
   id = "neon.ecocomdp.20166.001.001",
   site = c('COMO','SUGG'), 
   startdate = "2017-06",
@@ -11,7 +11,7 @@ my_result_read_data <- read(
   check.size = FALSE)
 
 # macroinverts
-my_result_read_data <- read(
+my_result_read_data <- read_data(
   id = "neon.ecocomdp.20120.001.001",
   site= c('COMO','LECO','SUGG'), 
   startdate = "2017-06",
@@ -19,7 +19,7 @@ my_result_read_data <- read(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-flat_data <- my_result_read_data[[1]]$tables %>% flatten()
+flat_data <- my_result_read_data[[1]]$tables %>% flatten_data()
 
 my_result_read_data %>% ecocomDP::plot_alpha_diversity()
 my_result_read_data %>% ecocomDP::plot_sampling_times()

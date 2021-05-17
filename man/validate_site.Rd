@@ -9,7 +9,7 @@ validate_site(site, id)
 \arguments{
 \item{site}{(character; NEON data only) A character vector of site codes to filter 
 data on. Sites are listed in the "sites" column of the 
-\code{search()} output.}
+\code{search_data()} output.}
 
 \item{id}{(character) A data package/product identifier.}
 }
@@ -17,6 +17,6 @@ data on. Sites are listed in the "sites" column of the
 Validate site name (for NEON data products only)
 }
 \details{
-If invalid (i.e. not listed in the return of \code{search()}), then
+If invalid (i.e. not listed in the return of \code{search_data()}), then
     an error is returned.
 }

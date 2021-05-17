@@ -1,5 +1,5 @@
 # Tests are organized around function calls (e.g. all tests listed under 
-# search() are relevant to the argument inputs to that function).
+# search_data() are relevant to the argument inputs to that function).
 
 context("validate_arguments()")
 
@@ -9,7 +9,7 @@ library(ecocomDP)
 
 test_data <- read_from_files(
   system.file("/data", package = "ecocomDP"))[[1]]$tables
-search_index <- search()
+search_index <- search_data()
 
 # plot_*() --------------------------------------------------------------------
 
@@ -21,128 +21,128 @@ testthat::test_that("plot_*()", {
   expect_error(validate_arguments("plot", as.list(list(alpha = 2))))
 })
 
-# read() -----------------------------------------------------------------
+# read_data() -----------------------------------------------------------------
 
-testthat::test_that("read()", {
+testthat::test_that("read_data()", {
   # id
   expect_error(
-    validate_arguments("read", as.list(list(id = 1))), 
+    validate_arguments("read_data", as.list(list(id = 1))), 
     regexp = "Input 'id' should be character.")
   expect_error(                                                             # exists
-    validate_arguments("read", as.list(list(id = "edi.x.x"))), 
+    validate_arguments("read_data", as.list(list(id = "edi.x.x"))), 
     regexp = "Invalid identifier 'edi.x.x' cannot be read.")
   expect_warning(                                                           # warns if newer revision
-    validate_arguments("read", as.list(list(id = "edi.124.3"))), 
+    validate_arguments("read_data", as.list(list(id = "edi.124.3"))), 
     regexp = "A newer version of 'edi.124.3' is available.")
   # path
-  expect_null(validate_arguments("read", as.list(list(path = tempdir())))) # exists
+  expect_null(validate_arguments("read_data", as.list(list(path = tempdir())))) # exists
   expect_error(
-    validate_arguments("read", as.list(list(path = "/some/invalid/path"))),
+    validate_arguments("read_data", as.list(list(path = "/some/invalid/path"))),
     regexp = "Input \'path\' .+ doesn\'t exist.")
   # parse_datetime
   expect_null(                                                                 # is logical
-    validate_arguments("read", as.list(list(parse_datetime = TRUE))))
+    validate_arguments("read_data", as.list(list(parse_datetime = TRUE))))
   expect_error(
-    validate_arguments("read", as.list(list(parse_datetime = "TRUE"))),
+    validate_arguments("read_data", as.list(list(parse_datetime = "TRUE"))),
     regexp = "Input 'parse_datetime' should be logical.")
   # unique_keys
   expect_null(                                                                 # is logical
-    validate_arguments("read", as.list(list(unique_keys = TRUE))))
+    validate_arguments("read_data", as.list(list(unique_keys = TRUE))))
   expect_error(
-    validate_arguments("read", as.list(list(unique_keys = "TRUE"))),
+    validate_arguments("read_data", as.list(list(unique_keys = "TRUE"))),
     regexp = "Input 'unique_keys' should be logical.")
   # site
   expect_null(                                                                 # site exists for id
-    validate_arguments("read", as.list(list(id = "neon.ecocomdp.20120.001.001",
+    validate_arguments("read_data", as.list(list(id = "neon.ecocomdp.20120.001.001",
                                                site = c("ARIK")))))
   expect_error(
-    validate_arguments("read", as.list(list(id = "neon.ecocomdp.20120.001.001",
+    validate_arguments("read_data", as.list(list(id = "neon.ecocomdp.20120.001.001",
                                                  site = c("ARIK", "not an id")))),
     regexp = "Sites not available in neon.ecocomdp.20120.001.001: not an id")
   # startdate
   expect_null(                                                                 # has YYYY-MM format and MM is 1-12
-    validate_arguments("read", as.list(list(startdate = "2020-12"))))
+    validate_arguments("read_data", as.list(list(startdate = "2020-12"))))
   expect_error(
-    validate_arguments("read", as.list(list(startdate = "2020-12-30"))),
+    validate_arguments("read_data", as.list(list(startdate = "2020-12-30"))),
     regexp = "Unsupported 'startdate'. Expected format is YYYY-MM.")
   expect_error(
-    validate_arguments("read", as.list(list(startdate = "2020-13"))),
+    validate_arguments("read_data", as.list(list(startdate = "2020-13"))),
     regexp = "Unsupported 'startdate'. Expected format is YYYY-MM.")
   # enddate
   expect_null(                                                                 # has YYYY-MM format and MM is 1-12
-    validate_arguments("read", as.list(list(enddate = "2020-12"))))
+    validate_arguments("read_data", as.list(list(enddate = "2020-12"))))
   expect_error(
-    validate_arguments("read", as.list(list(enddate = "2020-12-30"))),
+    validate_arguments("read_data", as.list(list(enddate = "2020-12-30"))),
     regexp = "Unsupported 'enddate'. Expected format is YYYY-MM.")
   expect_error(
-    validate_arguments("read", as.list(list(enddate = "2020-13"))),
+    validate_arguments("read_data", as.list(list(enddate = "2020-13"))),
     regexp = "Unsupported 'enddate'. Expected format is YYYY-MM.")
   # package
   expect_null(                                                                 # has expected type
-    validate_arguments("read", as.list(list(package = "basic"))))
+    validate_arguments("read_data", as.list(list(package = "basic"))))
   expect_null(
-    validate_arguments("read", as.list(list(package = "expanded"))))
+    validate_arguments("read_data", as.list(list(package = "expanded"))))
   expect_error(
-    validate_arguments("read", as.list(list(package = "invalid value"))),
+    validate_arguments("read_data", as.list(list(package = "invalid value"))),
     regexp = "Input 'package' should be 'basic' or 'expanded'.")
   # check.size
   expect_null(                                                                 # is logical
-    validate_arguments("read", as.list(list(check.size = TRUE))))
+    validate_arguments("read_data", as.list(list(check.size = TRUE))))
   expect_error(
-    validate_arguments("read", as.list(list(check.size = "TRUE"))),
+    validate_arguments("read_data", as.list(list(check.size = "TRUE"))),
     regexp = "Input 'check.size' should be logical.")
   # nCores
   expect_null(                                                                 # is logical
-    validate_arguments("read", as.list(list(nCores = 1))))
+    validate_arguments("read_data", as.list(list(nCores = 1))))
   expect_error(
-    validate_arguments("read", as.list(list(nCores = 2.5))),
+    validate_arguments("read_data", as.list(list(nCores = 2.5))),
     regexp = "Input 'nCores' should be integer.")
   # forceParallel
   expect_null(                                                                 # is logical
-    validate_arguments("read", as.list(list(forceParallel = TRUE))))
+    validate_arguments("read_data", as.list(list(forceParallel = TRUE))))
   expect_error(
-    validate_arguments("read", as.list(list(forceParallel = "TRUE"))),
+    validate_arguments("read_data", as.list(list(forceParallel = "TRUE"))),
     regexp = "Input 'forceParallel' should be logical.")
   # neon.data.save.dir
-  expect_null(validate_arguments("read", as.list(list(neon.data.save.dir = tempdir())))) # exists
+  expect_null(validate_arguments("read_data", as.list(list(neon.data.save.dir = tempdir())))) # exists
   expect_error(
-    validate_arguments("read", as.list(list(neon.data.save.dir = "/some/invalid/path"))),
+    validate_arguments("read_data", as.list(list(neon.data.save.dir = "/some/invalid/path"))),
     regexp = "Input 'neon.data.save.dir' .+ doesn\'t exist.")
   # from
   expect_null(                                                                 # file or dir exists
-    validate_arguments("read", as.list(list(from = tempdir()))))
+    validate_arguments("read_data", as.list(list(from = tempdir()))))
   expect_error(
-    validate_arguments("read", as.list(list(from = "/not/a/dir"))),
+    validate_arguments("read_data", as.list(list(from = "/not/a/dir"))),
     regexp = "Input 'from' is a non-existant file or directory.")
 })
 
-# save() -----------------------------------------------------------------
+# save_data() -----------------------------------------------------------------
 
-testthat::test_that("save()", {
+testthat::test_that("save_data()", {
   # path
-  expect_null(validate_arguments("save", as.list(list(path = tempdir())))) # exists
+  expect_null(validate_arguments("save_data", as.list(list(path = tempdir())))) # exists
   expect_error(
-    validate_arguments("read", as.list(list(path = "/some/invalid/path"))),
+    validate_arguments("read_data", as.list(list(path = "/some/invalid/path"))),
     regexp = "Input \'path\' .+ doesn\'t exist.")
   # type
   expect_null(                                                                 # has expected type
-    validate_arguments("save", as.list(list(type = ".rds"))))
+    validate_arguments("save_data", as.list(list(type = ".rds"))))
   expect_null(
-    validate_arguments("save", as.list(list(type = ".csv"))))
+    validate_arguments("save_data", as.list(list(type = ".csv"))))
   expect_error(
-    validate_arguments("save", as.list(list(type = "invalid value"))),
+    validate_arguments("save_data", as.list(list(type = "invalid value"))),
     regexp = "Input 'type' should be '.rds' or '.csv'.")
 })
 
-# search() ---------------------------------------------------------------
+# search_data() ---------------------------------------------------------------
 
-testthat::test_that("search()", {
+testthat::test_that("search_data()", {
   
   # text
   
   expect_error(
     validate_arguments(
-      "search",
+      "search_data",
       as.list(
         list(text = c(1, 2, 3)))))
   
@@ -150,7 +150,7 @@ testthat::test_that("search()", {
   
   expect_error(
     validate_arguments(
-      "search",
+      "search_data",
       as.list(
         list(taxa = c(1, 2, 3)))))
   
@@ -158,12 +158,12 @@ testthat::test_that("search()", {
   
   expect_error(
     validate_arguments(
-      "search",
+      "search_data",
       as.list(
         list(num_taxa = "Non-numeric value"))))
   expect_error(
     validate_arguments(
-      "search",
+      "search_data",
       as.list(
         list(num_taxa = 1))))
   
@@ -171,12 +171,12 @@ testthat::test_that("search()", {
   
   expect_error(
     validate_arguments(
-      "search",
+      "search_data",
       as.list(
         list(num_years = "Non-numeric value"))))
   expect_error(
     validate_arguments(
-      "search",
+      "search_data",
       as.list(
         list(num_years = 1))))
   
@@ -184,12 +184,12 @@ testthat::test_that("search()", {
   
   expect_error(
     validate_arguments(
-      "search",
+      "search_data",
       as.list(
         list(sd_years = "Non-numeric value"))))
   expect_error(
     validate_arguments(
-      "search",
+      "search_data",
       as.list(
         list(sd_years = 1))))
   
@@ -197,12 +197,12 @@ testthat::test_that("search()", {
   
   expect_error(
     validate_arguments(
-      "search",
+      "search_data",
       as.list(
         list(area = "Non-numeric value"))))
   expect_error(
     validate_arguments(
-      "search",
+      "search_data",
       as.list(
         list(area = 1))))
   
@@ -210,25 +210,25 @@ testthat::test_that("search()", {
   
   expect_error(
     validate_arguments(
-      "search",
+      "search_data",
       as.list(
         list(boolean = "ANDrew"))))
   
 })
 
 
-# validate() ---------------------------------------------------------
+# validate_data() ---------------------------------------------------------
 
-testthat::test_that("validate()", {
+testthat::test_that("validate_data()", {
   test_data <- read_example_dataset()
   # path - Is valid
   expect_null(
-    validate_arguments("validate", as.list(list(path = tempdir()))))
+    validate_arguments("validate_data", as.list(list(path = tempdir()))))
   expect_error(
-    validate_arguments("validate", as.list(list(path = paste0(tempdir(), "/aoihebqlnvo333")))))
+    validate_arguments("validate_data", as.list(list(path = paste0(tempdir(), "/aoihebqlnvo333")))))
   # data.list - Is valid
   expect_null(
-    validate_arguments("validate", as.list(list(dataset = test_data))))
+    validate_arguments("validate_data", as.list(list(dataset = test_data))))
 })
 
 # validate_dataset_structure() ------------------------------------------------

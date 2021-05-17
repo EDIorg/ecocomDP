@@ -28,16 +28,14 @@ create_observation <- function(L0_wide,
                                variable_name,
                                unit = NULL) {
   message("Creating observation")
+  
   # TODO: validate_arguments()
-  # - cols exist in L0_wide for non-required cols, convert to NULL if not present
+  # TODO: manipulation (in validate_arguments()?)
   # - NULL optional cols if not in L0_wide
   # - rename cols in L0_wide if not 1-to-1 match
   # - check unit_variable_name convention
-  # - required cols vs optional cols
-  # - return
   
-  # TODO: Update location_name_nesting, an ordered list of location names from the L0_wide that correspond to location_id
-  # gather cols
+  
   cols_to_gather <- c(observation_id, event_id, package_id, location_id, datetime, taxon_id, variable_name, unit)
   res <- L0_wide %>%
     dplyr::select(all_of(cols_to_gather)) %>%

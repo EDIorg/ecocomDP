@@ -1,4 +1,4 @@
-context("search()")
+context("search_data()")
 
 library(ecocomDP)
 
@@ -10,7 +10,7 @@ testthat::test_that("Search index is saved for future calls in session", {
   is_local <- "ecocomDP_search_index.rda" %in% dir(tempdir())
   expect_false(is_local)
   # Is created during first call
-  r <- search()
+  r <- search_data()
   is_local <- "ecocomDP_search_index.rda" %in% dir(tempdir())
   expect_true(is_local)
 })
@@ -18,7 +18,7 @@ testthat::test_that("Search index is saved for future calls in session", {
 # result attributes -----------------------------------------------------------
 
 testthat::test_that("Search results have a general format", {
-  r <- search()
+  r <- search_data()
   # Is a table with expected columns and classes
   expect_true(is.data.frame(r))
   cols <- c("source", "id", "title", "description", "abstract", "years",
@@ -32,7 +32,7 @@ testthat::test_that("Search results have a general format", {
 
 
 testthat::test_that("Some info is expected by all sources", {
-  r <- search()
+  r <- search_data()
   expect_true(all(!is.na(r$source)))
   expect_true(all(!is.na(r$id)))
   expect_true(all(!is.na(r$title)))
@@ -43,7 +43,7 @@ testthat::test_that("Some info is expected by all sources", {
 
 
 testthat::test_that("Some info is source specific", {
-  r <- search()
+  r <- search_data()
   r_edi<- r[is_edi(r$id), ]
   r_neon<- r[is_neon(r$id), ]
   # Descriptions only for NEON
@@ -70,15 +70,15 @@ testthat::test_that("Arguments control search patterns", {
   load(paste0(tempdir(), "/ecocomDP_search_index.rda"))
   summary_data <- ecocomDP_search_index
   # text arg searches across titles, abstracts, descriptions
-  r <- search(text = "Small mammal box trapping")
+  r <- search_data(text = "Small mammal box trapping")
   expect_equal(nrow(r), 1)
-  r <- search(text = "South Carolina")
+  r <- search_data(text = "South Carolina")
   expect_true(nrow(r) >= 4)
-  r <- search(text = "For a description of how NEON L1 data were mapped ")
+  r <- search_data(text = "For a description of how NEON L1 data were mapped ")
   expect_true(nrow(r) >= 12)
   # taxa arg searches across taxa ranks
   taxa_search <- "Chordata"
-  r_method_1 <- search(taxa = taxa_search)  # Search method 1
+  r_method_1 <- search_data(taxa = taxa_search)  # Search method 1
   r_method_2 <- lapply(                          # Search method 2
     names(summary_data),
     function(id) {
@@ -101,7 +101,7 @@ testthat::test_that("Arguments control search patterns", {
   expect_true(all(res[r_method_2] %in% r_method_1))
   # Num taxa is a bounding search
   search_num_taxa <- c(0, 10)
-  r_method_1 <- search(num_taxa = search_num_taxa)
+  r_method_1 <- search_data(num_taxa = search_num_taxa)
   r_method_2 <- lapply(
     names(summary_data),
     function(id) {
@@ -123,7 +123,7 @@ testthat::test_that("Arguments control search patterns", {
   expect_true(all(res[r_method_2] %in% r_method_1))
   # num_years
   search_years <- c(10, 20)
-  r_method_1 <- search(num_years = search_years)
+  r_method_1 <- search_data(num_years = search_years)
   r_method_2 <- lapply(
     names(summary_data),
     function(id) {
@@ -145,7 +145,7 @@ testthat::test_that("Arguments control search patterns", {
   expect_true(all(res[r_method_2] %in% r_method_1))
   # sd_years
   search_sd_between_surveys <- c(.25, 1)
-  r_method_1 <- search(sd_years = search_sd_between_surveys)
+  r_method_1 <- search_data(sd_years = search_sd_between_surveys)
   r_method_2 <- lapply(
     names(summary_data),
     function(id) {
@@ -172,22 +172,22 @@ testthat::test_that("Arguments control search patterns", {
   
   # boolean "OR" - All unique id of separate term searches should be
   # combined when using the OR operator
-  r1 <- search(text = "Lake")
-  r2 <- search(text = "River")
-  r_or <- search(text = c("Lake", "River"), boolean = "OR")
+  r1 <- search_data(text = "Lake")
+  r2 <- search_data(text = "River")
+  r_or <- search_data(text = c("Lake", "River"), boolean = "OR")
   expect_true(all(unique(c(r1$id, r2$id)) %in% unique(r_or$id)))
-  r1 <- search(taxa = "Plantae")
-  r2 <- search(taxa = "Animalia")
-  r_or <- search(taxa = c("Plantae", "Animalia"), boolean = "OR")
+  r1 <- search_data(taxa = "Plantae")
+  r2 <- search_data(taxa = "Animalia")
+  r_or <- search_data(taxa = c("Plantae", "Animalia"), boolean = "OR")
   expect_true(all(unique(c(r1$id, r2$id)) %in% unique(r_or$id)))
   # boolean "AND" - All unique id of separate term searches should not
   # be expected when using the AND operator
-  r1 <- search(text = "Lake")
-  r2 <- search(text = "River")
-  r_and <- search(text = c("Lake", "River"), boolean = "AND")
+  r1 <- search_data(text = "Lake")
+  r2 <- search_data(text = "River")
+  r_and <- search_data(text = c("Lake", "River"), boolean = "AND")
   expect_true(all(intersect(r1$id, r2$id) %in% r_and$id))
-  r1 <- search(taxa = "Plantae")
-  r2 <- search(taxa = "Animalia")
-  r_and <- search(taxa = c("Plantae", "Animalia"), boolean = "AND")
+  r1 <- search_data(taxa = "Plantae")
+  r2 <- search_data(taxa = "Animalia")
+  r_and <- search_data(taxa = c("Plantae", "Animalia"), boolean = "AND")
   expect_true(all(intersect(r1$id, r2$id) %in% r_and$id))
 })

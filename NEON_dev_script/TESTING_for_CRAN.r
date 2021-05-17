@@ -2,13 +2,13 @@
 rm(list=ls())
 gc()
 
-search_result <- ecocomDP::search("beetle")
+search_result <- ecocomDP::search_data("beetle")
 
 # ----
 # edi beetles
 my_id <- "edi.251.1"
-my_data_edi <- ecocomDP::read(my_id)
-my_data_flat <- my_data_edi[[1]]$tables %>% ecocomDP::flatten()
+my_data_edi <- ecocomDP::read_data(my_id)
+my_data_flat <- my_data_edi[[1]]$tables %>% ecocomDP::flatten_data()
 my_data_edi[[1]]$tables %>% list2env(.GlobalEnv)
 
 obs_anc_summary <- observation_ancillary %>%
@@ -25,13 +25,13 @@ obs_anc_summary %>% dplyr::filter(n_unique_vals > 1)
 # ----
 # edi mammals
 
-search_result <- ecocomDP::search("mammal")
+search_result <- ecocomDP::search_data("mammal")
 search_result %>% select(id, title)
 
 # ----
 my_id <- "edi.329.1"
-my_data_edi <- ecocomDP::read(my_id)
-my_data_flat <- my_data_edi[[1]]$tables %>% ecocomDP::flatten()
+my_data_edi <- ecocomDP::read_data(my_id)
+my_data_flat <- my_data_edi[[1]]$tables %>% ecocomDP::flatten_data()
 my_data_edi[[1]]$tables %>% list2env(.GlobalEnv)
 
 obs_anc_summary <- observation_ancillary %>%
@@ -44,8 +44,8 @@ obs_anc_summary %>% dplyr::filter(n_unique_vals > 1)
 
 # ----
 my_id <- "edi.328.1"
-my_data_edi <- ecocomDP::read(my_id)
-my_data_flat <- my_data_edi[[1]]$tables %>% ecocomDP::flatten()
+my_data_edi <- ecocomDP::read_data(my_id)
+my_data_flat <- my_data_edi[[1]]$tables %>% ecocomDP::flatten_data()
 my_data_edi[[1]]$tables %>% list2env(.GlobalEnv)
 
 obs_anc_summary <- observation_ancillary %>%

@@ -3,14 +3,14 @@
 
 library(ecocomDP)
 
-context("validate()")
+context("validate_data()")
 
 # Parameterize ----------------------------------------------------------------
 
 # Use the example dataset for testing
 
-# test_data <- read(from = system.file("/data", package = "ecocomDP"))[[1]]$tables
-test_data <- read(from = system.file("/data", package = "ecocomDP"))
+# test_data <- read_data(from = system.file("/data", package = "ecocomDP"))[[1]]$tables
+test_data <- read_data(from = system.file("/data", package = "ecocomDP"))
 test_data_file_names <- dir(
   system.file("/data", package = "ecocomDP"), pattern = "Ant_Assemblages_")
 
@@ -354,9 +354,9 @@ testthat::test_that("validate_variable_mapping()", {
   }
 })
 
-# validate() ---------------------------------------------------------
+# validate_data() ---------------------------------------------------------
 
-testthat::test_that("validate", {
+testthat::test_that("validate_data", {
   
   d <- test_data
   
@@ -393,7 +393,7 @@ testthat::test_that("validate", {
   d[[1]]$tables$location$elevation[4] <- 8849
   d[[1]]$tables$location$elevation[5] <- -10985
   
-  issues <- suppressWarnings(validate(dataset = d))
+  issues <- suppressWarnings(validate_data(dataset = d))
   expect_equal(length(issues), 17)
   expect_true(is.list(issues))
   expect_true(is.character(issues[[1]]))

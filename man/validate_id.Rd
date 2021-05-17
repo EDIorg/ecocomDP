@@ -13,7 +13,7 @@ validate_id(id)
 Validate data package/product identifier
 }
 \details{
-If invalid (i.e. not listed in the return of \code{search()}), then
+If invalid (i.e. not listed in the return of \code{search_data()}), then
     an error is returned.
 
     If the exact \code{id} is not indexed, but it is an EDI data package, 

@@ -23,6 +23,13 @@ validate_arguments <- function(fun.name, fun.args) {
   criteria <- data.table::fread(
     system.file('validation_criteria.txt', package = 'ecocomDP'))
   
+  # create_*() ----------------------------------------------------------------
+  
+  if (fun.name == "create") {
+    browser()
+    list2env(funargs, envir = environment())
+  }
+  
   # plot_*() ------------------------------------------------------------------
   
   if (fun.name == "plot") {
@@ -38,9 +45,9 @@ validate_arguments <- function(fun.name, fun.args) {
     }
   }
   
-  # search() -------------------------------------------------------------
+  # search_data() -------------------------------------------------------------
   
-  if (fun.name == "search") {
+  if (fun.name == "search_data") {
     
     # text
     
@@ -124,9 +131,9 @@ validate_arguments <- function(fun.name, fun.args) {
     
   }
   
-  # validate() -------------------------------------------------------
+  # validate_data() -------------------------------------------------------
   
-  if (fun.name == "validate") {
+  if (fun.name == "validate_data") {
     # path
     if (!is.null(fun.args$path)) {
       if (!dir.exists(fun.args$path)) {                                     # exists
@@ -140,9 +147,9 @@ validate_arguments <- function(fun.name, fun.args) {
     
   }
   
-  # read() ---------------------------------------------------------------
+  # read_data() ---------------------------------------------------------------
   
-  if (fun.name == "read") {
+  if (fun.name == "read_data") {
     if (is.null(fun.args$from)) {                                            # EDI is accessible (required by many functions)
       ping_edi()
     }
@@ -249,9 +256,9 @@ validate_arguments <- function(fun.name, fun.args) {
     }
   }
   
-  # save() ---------------------------------------------------------------
+  # save_data() ---------------------------------------------------------------
   
-  if (fun.name == "save") {
+  if (fun.name == "save_data") {
     # path
     if (!is.null(fun.args$path)) {
       if (!dir.exists(fun.args$path)) {                                           # exists
@@ -279,7 +286,7 @@ validate_arguments <- function(fun.name, fun.args) {
 #'     (character) A data package/product identifier for an ecocomDP dataset.
 #'     
 #' @details 
-#'     If invalid (i.e. not listed in the return of \code{search()}), then
+#'     If invalid (i.e. not listed in the return of \code{search_data()}), then
 #'     an error is returned.
 #' 
 #'     If the exact \code{id} is not indexed, but it is an EDI data package, 
@@ -287,7 +294,7 @@ validate_arguments <- function(fun.name, fun.args) {
 #'     available.
 #' 
 validate_id <- function(id) {
-  search_index <- suppressMessages(search())
+  search_index <- suppressMessages(search_data())
   if (!(id %in% search_index$id)) {
     possible_revision <- stringr::str_detect(
       id,
@@ -323,16 +330,16 @@ validate_id <- function(id) {
 #' @param site 
 #'     (character; NEON data only) A character vector of site codes to filter 
 #'     data on. Sites are listed in the "sites" column of the 
-#'     \code{search()} output.
+#'     \code{search_data()} output.
 #' @param id
 #'     (character) A data package/product identifier.
 #'     
 #' @details 
-#'     If invalid (i.e. not listed in the return of \code{search()}), then
+#'     If invalid (i.e. not listed in the return of \code{search_data()}), then
 #'     an error is returned.
 #' 
 validate_site <- function(site, id) {
-  search_index <- suppressMessages(search())
+  search_index <- suppressMessages(search_data())
   available_sites <- unlist(
     stringr::str_split(
       search_index$sites[search_index$id == id], 
@@ -352,7 +359,7 @@ validate_site <- function(site, id) {
 
 #' Validate dataset structure
 #'
-#' @param dataset (list) Data object returned by \code{read()} (? list of named datapackage$tables)
+#' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
 #'
 #' @details Returns an error if \code{dataset} is malformed
 #'
@@ -365,7 +372,7 @@ validate_dataset_structure <- function(dataset) {
   res <- c(res, tryCatch(all(names(dataset[[1]]$tables) %in% unique(criteria$table)), error = function(cond) {FALSE})) # table names are valid
   res <- c(res, tryCatch(all(unlist(lapply(dataset[[1]]$tables, is.data.frame))), error = function(cond) {FALSE})) # tables are data.frames
   if (!all(res)) {
-    stop("Input 'dataset' has invalid structure. See return from read() ",
+    stop("Input 'dataset' has invalid structure. See return from read_data() ",
          "for more details.", call. = F)
   }
 }
