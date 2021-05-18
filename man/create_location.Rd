@@ -10,7 +10,7 @@ create_location(
   latitude = "latitude",
   longitude = "longitude",
   elevation = "elevation",
-  nesting = NULL
+  nesting
 )
 }
 \arguments{

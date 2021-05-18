@@ -11,6 +11,115 @@ test_data <- read_from_files(
   system.file("/data", package = "ecocomDP"))[[1]]$tables
 search_index <- search_data()
 
+# create_*() ------------------------------------------------------------------
+
+# NOTE: validate_arguments() returns values to the calling environment (here)
+
+testthat::test_that("create_*(): No issues (default inputs)", {
+  inputs <- as.list(
+    list(
+      L0_wide = read_example_L0_wide(),
+      taxon_id = "taxon_id",
+      datetime = "datetime",
+      variable_name = c("hl", "rel", "colony.size"),
+      unit = c("unit_hl", "unit_rel")))
+  validate_arguments("create_taxon_ancillary", inputs)
+  # Outputs match inputs
+  expect_true(identical(L0_wide, inputs$L0_wide))
+  expect_equal(taxon_id, inputs$taxon_id)
+  expect_equal(datetime, inputs$datetime)
+  expect_equal(variable_name, inputs$variable_name)
+  expect_equal(unit, inputs$unit)
+})
+
+testthat::test_that("create_*(): No issues (user specified inputs; column renaming)", {
+  wide <- read_example_L0_wide()
+  cols <- colnames(wide) # rename cols in wide to simulate user inputs
+  cols[cols == "taxon_id"] <- "taxon_code"
+  cols[cols == "datetime"] <- "date"
+  cols[cols == "hl"] <- "head_length"
+  cols[cols == "unit_hl"] <- "unit_head_length"
+  colnames(wide) <- cols
+  inputs <- as.list(
+    list(
+      L0_wide = wide,
+      taxon_id = "taxon_code",
+      datetime = "date",
+      variable_name = c("head_length", "rel", "colony.size"),
+      unit = c("unit_head_length", "unit_rel")))
+  validate_arguments("create_taxon_ancillary", inputs)
+  # Inputs have been modified to follow the L1 specification
+  expect_false(identical(inputs$L0_wide, L0_wide))
+  expect_true(!any(c("date", "taxon_code") %in% colnames(L0_wide)))
+  expect_true(all(c("datetime", "taxon_id") %in% colnames(L0_wide)))
+  expect_true(taxon_id == "taxon_id")
+  expect_true(datetime == "datetime")
+  expect_equal(variable_name, inputs$variable_name)
+  expect_equal(unit, inputs$unit)
+})
+
+# columns not in L0_wide (location_id, variable_name, unit, nesting)
+testthat::test_that("create_*(): Error if column is not in L0_wide", {
+  
+  wide <- read_example_L0_wide()
+  
+  inputs <- as.list( # A column w/defaults
+    list(
+      L0_wide = wide,
+      taxon_id = "not_an_id_col",
+      datetime = "datetime",
+      variable_name = c("hl", "rel", "colony.size"),
+      unit = c("unit_hl", "unit_rel")))
+  expect_error(validate_arguments("create_taxon_ancillary", inputs), 
+               regexp = "Columns not in \'L0_wide\': not_an_id_col")
+  
+  inputs <- as.list( # A datetime column
+    list(
+      L0_wide = wide,
+      taxon_id = "taxon_id",
+      datetime = "not_a_datetime_column",
+      variable_name = c("hl", "rel", "colony.size"),
+      unit = c("unit_hl", "unit_rel")))
+  expect_error(validate_arguments("create_taxon_ancillary", inputs), 
+               regexp = "Columns not in \'L0_wide\': not_a_datetime_column")
+  
+  inputs <- as.list( # A variable_name column
+    list(
+      L0_wide = wide,
+      taxon_id = "taxon_id",
+      datetime = "datetime",
+      variable_name = c("hl", "rel", "colony.size", "not_a_varname_col"),
+      unit = c("unit_hl", "unit_rel")))
+  expect_error(validate_arguments("create_taxon_ancillary", inputs), 
+               regexp = "Columns not in \'L0_wide\': not_a_varname_col")
+  
+  inputs <- as.list(  # A unit column
+    list(
+      L0_wide = wide,
+      taxon_id = "taxon_id",
+      datetime = "datetime",
+      variable_name = c("hl", "rel", "colony.size"),
+      unit = c("unit_hl", "unit_rel", "not_a_unit_col")))
+  expect_error(validate_arguments("create_taxon_ancillary", inputs), 
+               regexp = "Columns not in \'L0_wide\': not_a_unit_col")
+  
+  inputs <- as.list(  # A nesting column
+    list(
+      L0_wide = wide,
+      location_id = "location_id",
+      latitude = "latitude",
+      longitude = "longitude", 
+      elevation = "elevation",
+      nesting = c("not_a_nesting_col")))
+  expect_error(validate_arguments("create_location", inputs), 
+               regexp = "Columns not in \'L0_wide\': not_a_nesting_col")
+  
+})
+
+# unexpected unit form
+# unit doesn't match variable_name
+# nesting shouldn't be NULL
+
 # plot_*() --------------------------------------------------------------------
 
 testthat::test_that("plot_*()", {

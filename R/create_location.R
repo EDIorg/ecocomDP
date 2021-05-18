@@ -24,7 +24,7 @@ create_location <- function(L0_wide,
                             latitude = "latitude",
                             longitude = "longitude", 
                             elevation = "elevation",
-                            nesting = NULL) {
+                            nesting) {
   
   # TODO: validate_arguments()
   # TODO: manipulation (in validate_arguments()?)
