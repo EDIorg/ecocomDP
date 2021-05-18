@@ -11,7 +11,7 @@ make_neon_location_table <- function(loc_info, loc_col_names){
   
   
   neon_site_list <- data.table::fread(
-    system.file("/data/neon-field-sites.csv", package = "ecocomDP"))
+    system.file("/extdata/neon-field-sites.csv", package = "ecocomDP"))
   
   # populate latitude
   if("decimalLatitude" %in% names(loc_info)) loc_info <- loc_info %>%
