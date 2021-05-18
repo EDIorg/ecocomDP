@@ -1189,6 +1189,22 @@ read_example_dataset <- function(parse_datetime = TRUE) {
 
 
 
+#' Read example L0_wide table
+#'
+#' @return (data.frame) Example L0_wide table 
+#' 
+read_example_L0_wide <- function() {
+  res <- readRDS(system.file("/data/example_L0_wide.rds", package = "ecocomDP"))
+  return(res)
+}
+
+
+
+
+
+
+
+
 #' Read EML metadata from a data repository
 #' 
 #' @description A wrapper function to repository specific read methods (the repository arg drives the logic).
