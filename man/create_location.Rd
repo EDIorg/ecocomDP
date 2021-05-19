@@ -51,6 +51,6 @@ location <- create_location(
   longitude = "longitude", 
   elevation = "elevation")
 
-head(location)
+location
 
 }

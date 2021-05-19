@@ -20,7 +20,7 @@
 #'   location_id = "location_id",
 #'   variable_name = "treatment")
 #' 
-#' head(location_ancillary)
+#' location_ancillary
 #' 
 create_location_ancillary <- function(L0_wide, 
                                       location_id, 

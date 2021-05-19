@@ -40,6 +40,6 @@ location_ancillary <- create_location_ancillary(
   location_id = "location_id",
   variable_name = "treatment")
 
-head(location_ancillary)
+location_ancillary
 
 }

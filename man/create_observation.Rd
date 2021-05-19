@@ -58,6 +58,6 @@ observation <- create_observation(
   variable_name = "abundance",
   unit = "unit_abundance")
 
-head(observation)
+observation
 
 }

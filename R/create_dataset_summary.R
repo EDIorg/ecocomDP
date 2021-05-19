@@ -28,7 +28,7 @@
 #'   max_num_taxa = "max_num_taxa", 
 #'   geo_extent_bounding_box_m2 = "geo_extent_bounding_box_m2")
 #' 
-#' head(dataset_summary)
+#' dataset_summary
 #' 
 create_dataset_summary <- function(L0_wide, 
                                    package_id,

@@ -30,7 +30,7 @@
 #'   variable_name = "abundance",
 #'   unit = "unit_abundance")
 #' 
-#' head(observation)
+#' observation
 #' 
 create_observation <- function(L0_wide, 
                                observation_id,

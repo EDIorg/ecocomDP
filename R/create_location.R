@@ -28,7 +28,7 @@
 #'   longitude = "longitude", 
 #'   elevation = "elevation")
 #' 
-#' head(location)
+#' location
 #' 
 create_location <- function(L0_wide, 
                             location_id,
