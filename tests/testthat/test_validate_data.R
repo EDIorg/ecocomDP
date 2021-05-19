@@ -21,7 +21,7 @@ criteria <- data.table::fread(
 
 # validate_table_names() ------------------------------------------------------
 
-# FIXME: This test fails devtools::check() but passes devtools::test()
+# TODO: This test fails devtools::check() but passes devtools::test()
 # testthat::test_that("validate_table_names()", {
 #   
 #   file.copy(
@@ -164,7 +164,7 @@ testthat::test_that("validate_column_classes()", {
     for (column in table_columns) {
       d <- test_data[[1]]$tables
       d[[table]][[column]] <- as.logical(d[[table]][[column]])
-      if (column != "datetime") { # FIXME: test datetime cols (can be char or Date)
+      if (column != "datetime") {
         expect_true(
           stringr::str_detect(
             validate_column_classes(d), 

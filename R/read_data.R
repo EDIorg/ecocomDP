@@ -254,7 +254,6 @@ read_data <- function(id = NULL, parse_datetime = TRUE,
   callstack <- as.character(sys.calls())
   if (!any(stringr::str_detect(callstack, "validate_data\\("))) { # don't validate if read_data() is called from validate()
     for (i in 1:length(d)) {
-      # FIXME: Enter dataset list object, not just tables
       d[[i]]$validation_issues <- validate_data(dataset = d[i])
     }
   }
@@ -401,7 +400,6 @@ read_data_edi <- function(id, parse_datetime = TRUE) {
 #'     (\url{https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md})}
 #' 
 read_from_files <- function(data.path) {
-  # TODO: validate_arguments("read_from_files", as.list(environment()))
   attr_tbl <- read_criteria()
   attr_tbl <- attr_tbl[!is.na(attr_tbl$column), ]
   fileext <- tools::file_ext(data.path)

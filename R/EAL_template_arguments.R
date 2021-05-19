@@ -146,7 +146,7 @@ EAL_template_arguments <- function(
     
     read_tbl <- function(f) {
       
-      # FIXME: Convert NA to "" expected by EAL funcitons. Assume NA listed
+      # Convert NA to "" expected by EAL funcitons. Assume NA listed
       # under missingValueCode of the attributes template is "" unless 
       # accompanied by a missingValueCodeExplanation
       
@@ -201,7 +201,7 @@ EAL_template_arguments <- function(
       
       # Read annotations ------------------------------------------------------
       
-      # FIXME: Use read_tbl()
+      # Use read_tbl()
       if (stringr::str_detect(
         tfound[i], 
         attr_tmp$regexpr[attr_tmp$template_name == "annotations"])) {
@@ -272,7 +272,7 @@ EAL_template_arguments <- function(
       
       # Read keywords ---------------------------------------------------------
       
-      # FIXME: Remove rows with empty keywords
+      # Remove rows with empty keywords
       
       if (stringr::str_detect(
         tfound[i], 
@@ -292,7 +292,7 @@ EAL_template_arguments <- function(
       
       # Read personnel --------------------------------------------------------
       
-      # FIXME: Homogenize case of the 'role' field (i.e. use tolower())
+      # Homogenize case of the 'role' field (i.e. use tolower())
       
       if (stringr::str_detect(
         tfound[i], 
@@ -331,7 +331,7 @@ EAL_template_arguments <- function(
   
   # Read data tables ----------------------------------------------------------
   
-  # FIXME: Warn user of possible empty columns (i.e. "V([:digit:])*")
+  # Warn user of possible empty columns (i.e. "V([:digit:])*")
   if (!is.null(data.table)) {
     
     for (i in 1:length(data.table)) {

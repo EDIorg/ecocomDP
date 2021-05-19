@@ -21,17 +21,3 @@ join_obs_loc_tax(dt_obs, dt_loc, dt_tax)
 \description{
 Join observation, location, and taxon tables in a wide format
 }
-\details{
-TODO: "Denormalizd" + describe the unnesting logic.
-    TODO: Intended to be used within a function that has already read the 
-    data tables.
-}
-\examples{
-\dontrun{
-long2wide_obs_loc_tax(
-  dt_obs = my_package_observation,
-  dt_loc = my_package_location,
-  dt_tax = my_package_taxon)
-}
-
-}

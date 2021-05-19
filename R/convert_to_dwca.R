@@ -34,7 +34,6 @@ convert_to_dwca <- function(path,
   
   # Load data -----------------------------------------------------------------
   
-  # FIXME: Add environment argument to read_data()
   d <- read_data(source_id)
   d <- d[[1]]$tables
   
@@ -120,7 +119,7 @@ create_tables_dwca_event_core <- function(
   dt_tax,
   source_id,
   derived_id) {
-  # FIXME: Should be parent.eml and child.eml not *.package.id
+  
   message('Creating DwC-A Event Core tables')
   
   # Load Global Environment config --------------------------------------------
@@ -139,7 +138,6 @@ create_tables_dwca_event_core <- function(
   
   # Join the tables -----------------------------------------------------------
   
-  # TODO: Don't forget locationn ancillary (MOB add issue #). An enhancement.
   obs_loc_tax <- join_obs_loc_tax(
     dt_obs = dt_obs, 
     dt_loc = dt_loc, 
@@ -149,21 +147,19 @@ create_tables_dwca_event_core <- function(
   # Create computed vectors:
   
   # Define new cols specifically needed for DwC-A
-  obs_loc_tax$lsid <- NA_character_ # TODO: This will be an LSID
-  obs_loc_tax$dc_occurrence_id <- NA_character_ # TODO: Globally unique and persistentt
-  obs_loc_tax$dc_samplingprotocol <-NA_character_ # TODO: The name of, reference to, or description of the method or protocol used during an Event. A string that will be derived from the L1 metadata. Optional.
+  obs_loc_tax$lsid <- NA_character_
+  obs_loc_tax$dc_occurrence_id <- NA_character_
+  obs_loc_tax$dc_samplingprotocol <-NA_character_
   obs_loc_tax$dc_event_id <-NA_character_
   obs_loc_tax$dc_dataset_name <-NA_character_
   
   # comb_id 
-  # TODO: Form globally unique IDs. See notes.
   obs_loc_tax$dc_occurrence_id <- paste(
     "occ",
     derived_id,
     seq(nrow(obs_loc_tax)),
     sep = '.')
   
-  # TODO: Form globally unique IDs. See notes.
   obs_loc_tax$dc_event_id <- paste(
     derived_id,
     obs_loc_tax$event_id,
@@ -172,10 +168,9 @@ create_tables_dwca_event_core <- function(
   # Use the DOI of the L1 and construct as: "See methods in DOI"
   obs_loc_tax$dc_samplingprotocol <- paste0(
     "See methods in ",
-    suppressMessages( # FIXME: Requires repository specific methods. In the mean time use api_read_data_package_doi() behind the scenes, while opening methods to other repos, or use url or some other identifier here
-      api_read_data_package_doi(source_id, environment)))
+    suppressMessages(api_read_data_package_doi(source_id, environment)))
   
-  # TODO: Determine if observation was made by an instrument or human. This 
+  # Determine if observation was made by an instrument or human. This 
   # info is stored in the L1 EML keywordSet
   
   keywords <- xml2::xml_text(
@@ -195,8 +190,6 @@ create_tables_dwca_event_core <- function(
   }
 
   # datasetName 
-  # TODO: Determine method. Maybe use title of L0, because we add note about 
-  # ecocomDP in level 1. Could shortname if exists and title if not.
   dc_dataset_name <- "Dataset name"
   
   # Create event --------------------------------------------------------------
@@ -244,7 +237,7 @@ create_tables_dwca_event_core <- function(
     eventID = obs_loc_tax$dc_event_id,
     occurrenceID = obs_loc_tax$dc_occurrence_id,
     measurementType = obs_loc_tax$variable_name,
-    measurementTypeID = NA_character_, # TODO: the variable mapping annotation (obs_loc_tax$variable_mapping)
+    measurementTypeID = NA_character_,
     measurementValue = obs_loc_tax$value,
     measurementUnit = obs_loc_tax$unit,
     stringsAsFactors = FALSE)
@@ -379,8 +372,6 @@ make_eml_dwca <- function(path,
       "arguments must match.", call. = FALSE)
   }
   
-  # TODO: Check "url"
-  
   # Parameterize --------------------------------------------------------------
   
   # Table names, types, and descriptions are standardized for the input 
@@ -433,7 +424,6 @@ make_eml_dwca <- function(path,
   # Create two objects of the same metadata, eml_L1 (emld list object) for
   # editing, and xml_L1 (xml_document) for easy parsing
   
-  # FIXME: Extend support to environments in other repository systems
   if (environment == "production") {
     url_parent <- paste0(
       "https://pasta.lternet.edu/package/metadata/eml/",
@@ -644,10 +634,6 @@ make_eml_dwca <- function(path,
   eml_L1$dataset$keywordSet <- c(
     eml_L2$dataset$keywordSet, 
     keywords_L1_to_keep)
-  
-  # TODO: Add measurement variable in a standardized and human readable way.
-  
-  # TODO: Add GBIF terms at /eml/dataset (first) and /eml/dataset/dataTable (second)
   
   # Update <intellectualRights> -----------------------------------------------
   

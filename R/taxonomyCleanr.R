@@ -780,7 +780,7 @@ make_taxonomicCoverage <- function(
   
   message('Creating <taxonomicCoverage>')
   
-  # FIXME: Not all taxonomic authority systems are supported by this function.
+  # Not all taxonomic authority systems are supported by this function.
   # Testing and reporting of supported authorities in the function
   # documentation is needed. Additionally, the valid inputs to authority and
   # authority ID need to be definied in the function documentation so users can
@@ -1475,7 +1475,6 @@ set_taxonomic_coverage <- function(sci_names) {
 #'
 view_taxa_authorities <- function(){
   
-  # TODO: Add to metadata if ritis, taxize, and worrms are installed then attempts can be made at resolution
   suggs <- c("ritis", "taxize", "worrms") # suggested packages
   suggsmissing <- !unlist(lapply(suggs, requireNamespace, quietly = TRUE))
   if (any(suggsmissing)) {

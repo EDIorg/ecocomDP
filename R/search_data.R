@@ -74,10 +74,6 @@
 search_data <- function(text, taxa, num_taxa, num_years, sd_years, 
                         area, boolean = "AND") {
   
-  # TODO: Add argument to search within a NEON site. Currently searches return
-  # data products if any of the search parameters are true for any of the 
-  # sites.
-  
   message("Searching data ...")
   
   # Validate arguments --------------------------------------------------------
@@ -266,7 +262,6 @@ search_data <- function(text, taxa, num_taxa, num_years, sd_years,
     # Search geographic coverage - Methods support point locations (location 
     # falls within the area defined by area) and areas (overlap 
     # between location area and the area defined by area).
-    # FIXME: Add support for sourthern and western hemispheres
     
     if (!missing(area)) {
       geographic_area_i <- rep(F, length(d[[i]]$coordinates))

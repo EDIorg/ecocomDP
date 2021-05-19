@@ -199,7 +199,6 @@ EAL_make_eml <- function(
   
   # Handle deprecated arguments
   
-  # FIXME: Remove October 2021
   if (!is.null(provenance)) {
     warning(
       paste0(
@@ -252,7 +251,6 @@ EAL_make_eml <- function(
   # attributes.txt templates are input as files. In contrast, when inputs are 
   # supplied by the argument "x" and when is.na() returns TRUE for values in
   # the missingValueCode field, these NAs are converted to "".
-  # TODO: Move this process to validate_templates()
   
   for (k in names(x$template)) {
     if (is.data.frame(x$template[[k]]$content)) {
@@ -277,14 +275,10 @@ EAL_make_eml <- function(
   
   # Modify templates ----------------------------------------------------------
   # Modification of some template content helps with downstream processes.
-  # FIXME: Move this section to validate_templates()
   
   # catvars.txt:
   # - Remove incomplete cases
   # - Remove white space
-  # FIXME: Ignore blank (i.e. "") categorical codes (implement this in 
-  # the metadata quality check functions to be developed? See GitHub 
-  # issue #46)
   
   use_i <- stringr::str_detect(
     names(x$template), 
@@ -425,7 +419,7 @@ EAL_make_eml <- function(
               "https://orcid.org/", 
               x$template$personnel.txt$content[info_row,"userId"]))
         }
-        # FIXME Blank entries ('') result in closing tags when EML is written
+        # Blank entries ('') result in closing tags when EML is written
         # to file. Need function to set all elements of value = '' to NULL.
         contact <- rapply(
           contact,
@@ -457,7 +451,7 @@ EAL_make_eml <- function(
             "https://orcid.org/", 
             x$template$personnel.txt$content[info_row,"userId"]))
       }
-      # FIXME Blank entries ('') result in closing tags when EML is written
+      # Blank entries ('') result in closing tags when EML is written
       # to file. Need function to set all elements of value = '' to NULL.
       creator <- rapply(
         creator,
@@ -489,7 +483,7 @@ EAL_make_eml <- function(
             "https://orcid.org/", 
             x$template$personnel.txt$content[info_row,"userId"]))
       }
-      # FIXME Blank entries ('') result in closing tags when EML is written
+      # Blank entries ('') result in closing tags when EML is written
       # to file. Need function to set all elements of value = '' to NULL.
       rp_personnel <- rapply(
         rp_personnel,
@@ -520,7 +514,7 @@ EAL_make_eml <- function(
             "https://orcid.org/", 
             x$template$personnel.txt$content[info_row,"userId"]))
       }
-      # FIXME Blank entries ('') result in closing tags when EML is written
+      # Blank entries ('') result in closing tags when EML is written
       # to file. Need function to set all elements of value = '' to NULL.
       rp_personnel <- rapply(
         rp_personnel,
@@ -575,7 +569,7 @@ EAL_make_eml <- function(
               "https://orcid.org/", 
               x$template$personnel.txt$content[info_row,"userId"]))
         }
-        # FIXME Blank entries ('') result in closing tags when EML is written
+        # Blank entries ('') result in closing tags when EML is written
         # to file. Need function to set all elements of value = '' to NULL.
         associated_party <- rapply(
           associated_party,
@@ -811,7 +805,6 @@ EAL_make_eml <- function(
   # Create <geographicCoverage> -----------------------------------------------
   
   # Check for multiple geographic coverage inputs.
-  # FIXME: On May 1, 2020 remove support for bounding_boxes.txt
   if (is.null(geographic.coordinates) & !any(stringr::str_detect(
     names(x$template), 
     "geographic_coverage.txt|bounding_boxes.txt"))) {
@@ -857,9 +850,9 @@ EAL_make_eml <- function(
   # 2.) The taxonomic_coverage.txt template listing taxa and authorities. 
   # Attempts are made to get the full hierarchy of taxonomic rank values for 
   # each taxa and render to EML.
-  # FIXME: Create methods for adding taxonomic authorities. Only ITIS is 
+  # Create methods for adding taxonomic authorities. Only ITIS is 
   # currently supported.
-  # FIXME: Allow taxonomic hierarchies to be supplied as a table (i.e. align
+  # Allow taxonomic hierarchies to be supplied as a table (i.e. align
   # taxonomic_coverage.txt with the taxonomicCoverage option of 
   # EML::set_coverage()).
   
@@ -870,7 +863,6 @@ EAL_make_eml <- function(
   } else if (!is.null(x$template$taxonomic_coverage.txt)) {
     message("        <taxonomicCoverage>")
     tc <- try(
-      # TODO: Is return correct when taxa are not resolved to authorities?
       suppressMessages(
         make_taxonomicCoverage(
           taxa.clean = x$template$taxonomic_coverage.txt$content$name_resolved,
@@ -930,9 +922,6 @@ EAL_make_eml <- function(
   # Get provenance metadata from supported systems (repositories) and external 
   # sources (everything else), then combine as a list of methodStep.
   
-  # TODO: Support provenance metadata models used by other EML based 
-  # repositories.
-  
   if (!is.null(x$template$provenance.txt$content)) {
     
     # Identify internal sources
@@ -981,7 +970,7 @@ EAL_make_eml <- function(
       x$template$provenance.txt$content$dataPackageID == "", ]
     
     # Parse external sources.
-    # FIXME: Some elements require an explicit NULL value to prevent them from 
+    # Some elements require an explicit NULL value to prevent them from 
     # being displayed in the returned EML as closing tags (i.e. </tag>). This 
     # is an issue in the EML R package. Is there a more concise way of handling
     # this issue than implemented here?
@@ -1113,7 +1102,7 @@ EAL_make_eml <- function(
         
         # Add attributes.txt contents to the data frame input expected by 
         # EML::set_attributes().
-        # FIXME: Order of attributes listed in the template may not be match 
+        # Order of attributes listed in the template may not be match 
         # the order listed in the table so ... reorder attributes according
         # to the data table listing.
         
@@ -1176,7 +1165,7 @@ EAL_make_eml <- function(
           } else {
             attributes$numberType[i] <- "whole"
           }
-          # FIXME: Calculate precision for numeric attributes. Alternatively
+          # Calculate precision for numeric attributes. Alternatively
           # this should be added to the attributes template so precision can
           # be manually defined by the metadata creator.
         }
@@ -1222,7 +1211,6 @@ EAL_make_eml <- function(
         }
         
         # Set physical
-        # FIXME: Auto-detect numHeaderLines
         physical <- suppressMessages(
           EML::set_physical(
             paste0(data.path, "/", k),
@@ -1280,7 +1268,7 @@ EAL_make_eml <- function(
           attributeList = attributeList,
           numberOfRecords = as.character(nrow(x$data.table[[k]]$content)))
         
-        # FIXME: EML v2.0.0 handles absense of missingValue codes differently
+        # EML v2.0.0 handles absense of missingValue codes differently
         # than EML v 1.0.3. This fixes the issue here, though it may be better
         # to implement the fix in EML v2.0.0.
         for (j in seq_along(data_table$attributeList$attribute)){
@@ -1304,7 +1292,7 @@ EAL_make_eml <- function(
       function(k) {
         message(paste0("    <otherEntity> (", k, ")"))
         # Set physical
-        # FIXME: Some sub-routine in EML::set_physical() doesn't like the .zip 
+        # Some sub-routine in EML::set_physical() doesn't like the .zip 
         # file extension, so we suppress the warning here so users aren't 
         # uneccessarily burdened by it. Not a great solution since helpful 
         # warnings will be lost.

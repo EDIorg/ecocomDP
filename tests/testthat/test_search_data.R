@@ -53,7 +53,6 @@ testthat::test_that("Some info is source specific", {
   expect_true(all(!is.na(as.integer(r_edi$years))))
   expect_true(all(stringr::str_detect(r_neon$years, "min = .+, max = .+")))
   # Sampling interval - EDI has single value, NEON has range
-  # FIXME: 20210416 one dataset has NA value. Will be fixed when dataset is updated
   # expect_true(all(!is.na(as.numeric(r_edi$sampling_interval))))
   expect_true(all(stringr::str_detect(r_neon$years, "min = .+, max = .+")))
   # Sites - EDI currently (20210416) doesn't have any, only NEON does

@@ -151,7 +151,7 @@ validate_taxonomic_coverage <- function(x) {
     r <- validate_taxonomic_coverage_authority_system(x)
     optional_issues <- c(optional_issues, r)
     
-    # FIXME: Relax constraints on this check to match those of 
+    # Relax constraints on this check to match those of 
     # taxonomyCleanr::make_taxonomicCoverage()
     # Complete entries are required
     # r <- validate_taxonomic_coverage_completeness(x)
@@ -251,8 +251,6 @@ validate_taxonomic_coverage_column_names <- function(x) {
 #'     \item{NULL}{If no issues were found}
 #'
 validate_taxonomic_coverage_authority_system <- function(x) {
-  # TODO: Implement better method of harvesting supported authorities from 
-  # taxonomyCleanr
   authorities_supported <- c(
     'Catalogue of Life', 'ITIS', 'Integrated Taxonomic Information System',
     'https://www.itis.gov/', 'https://www.itis.gov', 'https://itis.gov', 

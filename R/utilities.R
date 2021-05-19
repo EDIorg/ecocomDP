@@ -1108,22 +1108,8 @@ is_empty_nodeset <- function(nodeset) {
 #'     (data.frame) Joined observation, location, and taxon tables in a wide 
 #'     format, where the location table has been unnested for latitude, 
 #'     longitude, and site names.
-#' @details 
-#'     TODO: "Denormalizd" + describe the unnesting logic.
-#'     TODO: Intended to be used within a function that has already read the 
-#'     data tables.
-#'
-#' @examples
-#' \dontrun{
-#' long2wide_obs_loc_tax(
-#'   dt_obs = my_package_observation,
-#'   dt_loc = my_package_location,
-#'   dt_tax = my_package_taxon)
-#' }
 #' 
 join_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
-  
-  # TODO: Add variable_mapping table if present
   
   # Flatten location
   
