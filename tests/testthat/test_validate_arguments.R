@@ -17,7 +17,7 @@ search_index <- search_data()
 # so tests are confined to func calls which are garbage collected.
 
 testthat::test_that("create_*(): L0 cols match L1 cols", {
-  wide <- read_example_L0_wide()
+  wide <- ants_L0_wide
   inputs <- as.list(
     list(
       L0_wide = wide,
@@ -35,7 +35,7 @@ testthat::test_that("create_*(): L0 cols match L1 cols", {
 })
 
 testthat::test_that("create_*(): L0 cols map to L1 cols", {
-  wide <- read_example_L0_wide()
+  wide <- ants_L0_wide
   cols <- colnames(wide) # change some L0 col names
   cols[cols == "taxon_id"] <- "taxon_code"
   cols[cols == "datetime"] <- "date"
@@ -63,7 +63,7 @@ testthat::test_that("create_*(): L0 cols map to L1 cols", {
 
 testthat::test_that("create_*(): Error if inputs cols are not in L0_wide", {
   
-  wide <- read_example_L0_wide()
+  wide <- ants_L0_wide
   
   inputs <- as.list( # An _id column
     list(
@@ -119,7 +119,7 @@ testthat::test_that("create_*(): Error if inputs cols are not in L0_wide", {
 })
 
 testthat::test_that("create_*(): NULL cols are fine when not required", {
-  wide <- read_example_L0_wide()
+  wide <- ants_L0_wide
   inputs <- as.list(
     list(
       L0_wide = wide,
@@ -130,7 +130,7 @@ testthat::test_that("create_*(): NULL cols are fine when not required", {
 })
 
 testthat::test_that("create_*(): unit format", {
-  wide <- read_example_L0_wide()
+  wide <- ants_L0_wide
   inputs <- as.list(
     list(
       L0_wide = wide,
@@ -142,7 +142,7 @@ testthat::test_that("create_*(): unit format", {
 })
 
 testthat::test_that("create_*(): unit without matching variable_name", {
-  wide <- read_example_L0_wide()
+  wide <- ants_L0_wide
   cols <- colnames(wide)
   cols[1] <- "unit_nomatch"
   colnames(wide) <- cols
@@ -365,7 +365,7 @@ testthat::test_that("search_data()", {
 # validate_data() ---------------------------------------------------------
 
 testthat::test_that("validate_data()", {
-  test_data <- read_example_dataset()
+  test_data <- ants_L1
   # path - Is valid
   expect_null(
     validate_arguments("validate_data", as.list(list(path = tempdir()))))
@@ -379,7 +379,7 @@ testthat::test_that("validate_data()", {
 # validate_dataset_structure() ------------------------------------------------
 
 testthat::test_that("validate_dataset_structure()", {
-  test_data <- read_example_dataset()
+  test_data <- ants_L1
   expect_null(validate_dataset_structure(test_data))
   d <- unlist(test_data)                       # obj is a list
   expect_error(validate_dataset_structure(d))

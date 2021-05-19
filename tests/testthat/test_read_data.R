@@ -58,7 +58,7 @@ testthat::test_that("Reads from source APIs", {
 testthat::test_that("Reads from local files", {
   criteria <- read_criteria()
   # From .rds
-  d <- read_example_dataset()
+  d <- ants_L1
   id <- names(d)
   save_data(d, tempdir())
   d <- suppressWarnings(read_data(from = paste0(tempdir(), "/d.rds")))           # Has expected structure
@@ -74,7 +74,7 @@ testthat::test_that("Reads from local files", {
   }
   unlink(paste0(tempdir(), "/d.rds"), recursive = TRUE, force = TRUE) 
   # From .csv
-  d <- read_example_dataset()                                                         # create example datasets
+  d <- ants_L1                                                         # create example datasets
   d <- c(d, d, d)
   ids <- c("edi.193.3", "edi.262.1", "edi.359.1")
   names(d) <- ids
@@ -104,7 +104,7 @@ testthat::test_that("Reads from local files", {
 
 testthat::test_that("Has datetime parsing option", {
   criteria <- read_criteria()
-  d <- read_example_dataset()
+  d <- ants_L1
   id <- names(d)
   save_data(d, tempdir())
   d <- suppressWarnings(

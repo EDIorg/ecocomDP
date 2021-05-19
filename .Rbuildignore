@@ -4,3 +4,4 @@
 ^codemeta\.json$
 ^cran-comments\.md$
 ^README\.Rmd$
+^data-raw$

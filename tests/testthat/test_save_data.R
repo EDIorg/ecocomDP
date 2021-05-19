@@ -5,7 +5,7 @@ library(ecocomDP)
 
 testthat::test_that("Objects are saved to fomat and have expected structure", {
   criteria <- read_criteria()
-  d <- read_example_dataset()                                # create example datasets
+  d <- ants_L1                                # create example datasets
   datasets <- c(d, d, d)
   ids <- c("edi.193.3", "edi.262.1", "edi.359.1")
   names(datasets) <- ids
@@ -36,7 +36,7 @@ testthat::test_that("Objects are saved to fomat and have expected structure", {
 
 testthat::test_that("control names with name", {
   criteria <- read_criteria()
-  d <- read_example_dataset()                                               # create example datasets
+  d <- ants_L1                                               # create example datasets
   datasets <- c(d, d, d)
   ids <- c("edi.193.3", "edi.262.1", "edi.359.1")
   names(datasets) <- ids
