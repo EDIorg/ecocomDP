@@ -36,5 +36,18 @@ Create the taxon_ancillary table
 This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column.
 }
 \examples{
+wide <- ants_L0_wide
+
+taxon_ancillary <- ecocomDP::create_taxon_ancillary(
+  L0_wide = wide,
+  taxon_id = "taxon_id",
+  variable_name = c(
+    "subfamily", "hl", "rel", "rll", "colony.size", 
+    "feeding.preference", "nest.substrate", "primary.habitat", 
+    "secondary.habitat", "seed.disperser", "slavemaker.sp", 
+    "behavior", "biogeographic.affinity", "source"),
+  unit = c("unit_hl", "unit_rel", "unit_rll"))
+
+taxon_ancillary
 
 }

@@ -14,6 +14,19 @@
 #' @export
 #'
 #' @examples
+#' wide <- ants_L0_wide
+#' 
+#' taxon_ancillary <- ecocomDP::create_taxon_ancillary(
+#'   L0_wide = wide,
+#'   taxon_id = "taxon_id",
+#'   variable_name = c(
+#'     "subfamily", "hl", "rel", "rll", "colony.size", 
+#'     "feeding.preference", "nest.substrate", "primary.habitat", 
+#'     "secondary.habitat", "seed.disperser", "slavemaker.sp", 
+#'     "behavior", "biogeographic.affinity", "source"),
+#'   unit = c("unit_hl", "unit_rel", "unit_rll"))
+#' 
+#' taxon_ancillary
 #' 
 create_taxon_ancillary <- function(L0_wide, 
                                    taxon_id, 
