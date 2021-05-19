@@ -27,81 +27,43 @@ validate_arguments <- function(fun.name, fun.args) {
   
   if (stringr::str_detect(fun.name, "^create_")) {
     
-    # These "create" funcs share features which can be validated together
     wide <- fun.args$L0_wide
-    colmap <- fun.args[names(fun.args) %in% na.omit(criteria$column)] # Col args can be assigned any value, so we need a map
+    cols <- fun.args[names(fun.args) %in% na.omit(criteria$column)] # Col args can be assigned any value, so we need a map
     
-    # Required inputs are the intersection of func args and required table cols
-    tblname <- stringr::str_remove(fun.name, "create_")
-    tbl_rqrd <- criteria$column[(criteria$table %in% tblname) &        # cols required by table
-                                  (criteria$required == TRUE)]
-    fun_rqrd <- names(colmap)                                          # cols required by func
-    cols_expctd <- unlist(colmap[base::intersect(tbl_rqrd, fun_rqrd)]) # cols expected in wide
-    msng <- !(cols_expctd %in% colnames(wide))
-    if (any(msng)) {
-      stop("Columns not in 'L0_wide': ", paste(cols_expctd[msng], collapse = ", "), call. = FALSE)
+    # Check input cols exist in L0_wide
+    cols_expctd <- unlist(cols, use.names = FALSE)
+    cols_in_wide <- cols_expctd %in% colnames(wide)
+    if (!all(cols_in_wide)) {
+      stop("Columns not in 'L0_wide': ", paste(cols_expctd[!cols_in_wide], collapse = ", "), call. = FALSE)
     }
     
-    # Catch datetime edge case here or will break downstream
-    if (!is.null(fun.args$datetime)) {
-      msng <- !(fun.args$datetime %in% colnames(wide))
-      if (any(msng)) {
-        stop("Columns not in 'L0_wide': ", fun.args$datetime, call. = FALSE)
-      }
-    }
-    
-    # Rename wide cols to L1 cols so output matches L1 specifications
-    cols2rename <- base::setdiff(names(colmap), c("variable_name", "unit", "nesting"))
-    cols_old <- unname(unlist(colmap[cols2rename]))
-    cols_new <- names(unlist(colmap[cols2rename]))
-    cols <- colnames(wide)
-    i <- match(cols_old, cols)
-    cols[i] <- cols_new
-    colnames(wide) <- cols
-    # update inputs
-    i <- match(cols_old, colmap)
-    colmap[i] <- cols_new[i]
-    
-    # Differentiate between defaults and user inputs. Set any not in wide to NULL. No defaults for variable_name, unit, and nesting.
-    cols_expctd <- base::setdiff(names(colmap), c("variable_name", "unit", "nesting"))
-    msng <- !(cols_expctd %in% colnames(wide))
-    colmap[cols_expctd[msng]] <- list(NULL)
+    # Rename input cols according to L1 specifications so the resulting L1 table is valid
+    cols2rename <- base::setdiff(names(cols), c("variable_name", "unit", "nesting"))
+    cols2rename <- unlist(cols[cols2rename])
+    cols_wide <- colnames(wide)
+    cols_wide[match(cols2rename, cols_wide)] <- names(cols2rename)
+    colnames(wide) <- cols_wide
+    cols[names(cols2rename)] <- names(cols[names(cols2rename)])
 
-    # Unit is not required in any table so checks are here
-    if ("unit" %in% names(colmap)) {
-      if (!is.null(colmap$unit)) {
-        msng <- !(unlist(colmap$unit) %in% colnames(wide)) # exists in wide
-        if (any(msng)) {
-          stop("Columns not in 'L0_wide': ", paste(unlist(colmap$unit)[msng], collapse = ", "), call. = FALSE)
-        }
-        hasfrmt <- stringr::str_detect(colmap$unit, "^unit_") # has the correct form
-        if (!all(hasfrmt)) {
-          stop("Inputs to 'unit' should have the form 'unit_<variable_name>'. These have unexpected form: ", paste(colmap$unit[!hasfrmt], collapse = ", "), call. = FALSE)
-        }
-        if (!is.null(colmap$variable_name)) {
-          hasmatch <- stringr::str_remove_all(colmap$unit, "^unit_") %in% colmap$variable_name # has matching variable_name
-          if (!all(hasmatch)) {
-            stop("Inputs to 'unit' without a 'variable_name' match: ", paste(colmap$unit[!hasmatch], collapse = ", "), call. = FALSE)
-          }
+    # Check unit cols follow required format and have matching variable_name, otherwise downstream processes will error
+    if ("unit" %in% names(cols)) {
+      hasfrmt <- stringr::str_detect(cols$unit, "^unit_")
+      if (!all(hasfrmt)) {
+        stop("Unexpected 'unit' formats: ", 
+             paste(cols$unit[!hasfrmt], collapse = ", "), call. = FALSE)
+      }
+      if (!is.null(cols$variable_name)) {
+        hasmatch <- stringr::str_remove_all(cols$unit, "^unit_") %in% cols$variable_name
+        if (!all(hasmatch)) {
+          stop("Input 'unit' without 'variable_name' match: ", 
+               paste(cols$unit[!hasmatch], collapse = ", "), call. = FALSE)
         }
       }
     }
     
-    # Nesting is an edge case
-    
-    if ("nesting" %in% names(fun.args)) {
-      if (is.null(fun.args$nesting)) {
-        stop("Input 'nesting' is required.", call. = FALSE)
-      }
-      msng <- !(unlist(fun.args$nesting) %in% colnames(wide)) # exists in wide
-      if (any(msng)) {
-        stop("Columns not in 'L0_wide': ", paste(unlist(fun.args$nesting)[msng], collapse = ", "), call. = FALSE)
-      }
-    }
-    
-    # Return modifications to arguments of the calling function for use
+    # Return modified arguments to the calling function
     fun.args$L0_wide <- wide
-    fun.args[names(colmap)] <- colmap
+    fun.args[names(cols)] <- cols
     list2env(fun.args, envir = parent.frame(1))
 
   }

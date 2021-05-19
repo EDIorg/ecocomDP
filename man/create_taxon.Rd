@@ -6,11 +6,11 @@
 \usage{
 create_taxon(
   L0_wide,
-  taxon_id = "taxon_id",
-  taxon_rank = "taxon_rank",
-  taxon_name = "taxon_name",
-  authority_system = "authority_system",
-  authority_taxon_id = "authority_taxon_id"
+  taxon_id,
+  taxon_rank = NULL,
+  taxon_name,
+  authority_system = NULL,
+  authority_taxon_id = NULL
 )
 }
 \arguments{
@@ -33,7 +33,7 @@ create_taxon(
 Create the taxon table
 }
 \details{
-This function collects specified columns from \code{L0_wide} and returns distinct rows. Default names of optional columns are ignored if they can't be found in \code{L0_wide} (i.e. no need to set as NULL).
+This function collects specified columns from \code{L0_wide} and returns distinct rows.
 
 Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. https://www.itis.gov/, http://www.marinespecies.org/, or https://gbif.org), will have their full taxonomic hierarchy expanded, including any common names for each level.
 }

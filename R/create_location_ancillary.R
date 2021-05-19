@@ -4,9 +4,9 @@
 #' @param location_id (character) Column in \code{L0_wide} containing the identifier assigned to each unique location at the observation level.
 #' @param datetime (character) An optional column in \code{L0_wide} containing the date, and if applicable time, of ancillary location data following the ISO-8601 standard format (i.e. YYYY-MM-DD hh:mm:ss).
 #' @param variable_name (character) Columns in \code{L0_wide} containing the ancillary location data.
-#' @param unit (character) An optional column in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention <unit>_<variable_name> (e.g. "unit_depth").
+#' @param unit (character) An optional column in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention: unit_<variable_name> (e.g. "unit_depth").
 #' 
-#' @details This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column. Default names of optional columns are ignored if they can't be found in \code{L0_wide} (i.e. no need to set as NULL).
+#' @details This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column.
 #'
 #' @return (data.frame) The location_ancillary table.
 #' 
@@ -15,8 +15,8 @@
 #' @examples
 #' 
 create_location_ancillary <- function(L0_wide, 
-                                      location_id = "location_id", 
-                                      datetime = "datetime", 
+                                      location_id, 
+                                      datetime = NULL, 
                                       variable_name, 
                                       unit = NULL) {
   message("Creating location_ancillary")

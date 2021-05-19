@@ -2,14 +2,14 @@
 #'
 #' @param L0_wide (data.frame) The fully joined source L0 dataset, in wide format.
 #' @param package_id (character) Column in \code{L0_wide} containing the identifier this dataset will have once it's published in a data repository.
-#' @param original_package_id (character) The optional column in \code{L0_wide} containing the identifier of the L0 dataset in the repository it's published (some L0 are not published).
+#' @param original_package_id (character) An optional column in \code{L0_wide} containing the identifier of the L0 dataset in the repository it's published (some L0 are not published).
 #' @param length_of_survey_years (character) Column in \code{L0_wide} containing the number of years the study has been ongoing. Use \code{calc_length_of_survey_years()} to calculate this value.
 #' @param number_of_years_sampled (character) Column in \code{L0_wide} containing the number of years within the period of the study that samples were taken. Use \code{calc_number_of_years_sampled()} to calculate this value.
 #' @param std_dev_interval_betw_years (character) Column in \code{L0_wide} containing the standard deviation of the interval between sampling events. Use \code{calc_std_dev_interval_betw_years()} to calculate this value.
 #' @param max_num_taxa (character) Column in \code{L0_wide} containing the number of unique taxa in this dataset.
 #' @param geo_extent_bounding_box_m2 (character) An optional column in \code{L0_wide} containing the area (in meters) of the study location, if applicable (some L0 were collected at a single point). Use \code{calc_geo_extent_bounding_box_m2()} to calculate this value.
 #'
-#' @details This function collects specified columns from \code{L0_wide} and returns distinct rows. Default names of optional columns are ignored if they can't be found in \code{L0_wide} (i.e. no need to set as NULL).
+#' @details This function collects specified columns from \code{L0_wide} and returns distinct rows.
 #'
 #' @return (data.frame) The dataset_summary table.
 #'     
@@ -18,13 +18,13 @@
 #' @examples 
 #' 
 create_dataset_summary <- function(L0_wide, 
-                                   package_id = "package_id",
-                                   original_package_id = "original_package_id",
-                                   length_of_survey_years = "length_of_survey_years",
-                                   number_of_years_sampled = "number_of_years_sampled",
-                                   std_dev_interval_betw_years = "std_dev_interval_betw_years",
-                                   max_num_taxa = "max_num_taxa",
-                                   geo_extent_bounding_box_m2 = "geo_extent_bounding_box_m2") {
+                                   package_id,
+                                   original_package_id = NULL,
+                                   length_of_survey_years,
+                                   number_of_years_sampled,
+                                   std_dev_interval_betw_years,
+                                   max_num_taxa,
+                                   geo_extent_bounding_box_m2 = NULL) {
   message("Creating dataset_summary")
   
   # TODO: validate_arguments()

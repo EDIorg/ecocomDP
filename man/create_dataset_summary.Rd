@@ -6,13 +6,13 @@
 \usage{
 create_dataset_summary(
   L0_wide,
-  package_id = "package_id",
-  original_package_id = "original_package_id",
-  length_of_survey_years = "length_of_survey_years",
-  number_of_years_sampled = "number_of_years_sampled",
-  std_dev_interval_betw_years = "std_dev_interval_betw_years",
-  max_num_taxa = "max_num_taxa",
-  geo_extent_bounding_box_m2 = "geo_extent_bounding_box_m2"
+  package_id,
+  original_package_id = NULL,
+  length_of_survey_years,
+  number_of_years_sampled,
+  std_dev_interval_betw_years,
+  max_num_taxa,
+  geo_extent_bounding_box_m2 = NULL
 )
 }
 \arguments{
@@ -20,7 +20,7 @@ create_dataset_summary(
 
 \item{package_id}{(character) Column in \code{L0_wide} containing the identifier this dataset will have once it's published in a data repository.}
 
-\item{original_package_id}{(character) The optional column in \code{L0_wide} containing the identifier of the L0 dataset in the repository it's published (some L0 are not published).}
+\item{original_package_id}{(character) An optional column in \code{L0_wide} containing the identifier of the L0 dataset in the repository it's published (some L0 are not published).}
 
 \item{length_of_survey_years}{(character) Column in \code{L0_wide} containing the number of years the study has been ongoing. Use \code{calc_length_of_survey_years()} to calculate this value.}
 
@@ -39,7 +39,7 @@ create_dataset_summary(
 Create the dataset_summary table
 }
 \details{
-This function collects specified columns from \code{L0_wide} and returns distinct rows. Default names of optional columns are ignored if they can't be found in \code{L0_wide} (i.e. no need to set as NULL).
+This function collects specified columns from \code{L0_wide} and returns distinct rows.
 }
 \examples{
 

@@ -13,28 +13,30 @@ search_index <- search_data()
 
 # create_*() ------------------------------------------------------------------
 
-# NOTE: validate_arguments() returns values to the calling environment (here)
+# NOTE: validate_arguments() returns values to the calling environment (here),
+# so tests are confined to func calls which are garbage collected.
 
-testthat::test_that("create_*(): No issues (default inputs)", {
+testthat::test_that("create_*(): L0 cols match L1 cols", {
+  wide <- read_example_L0_wide()
   inputs <- as.list(
     list(
-      L0_wide = read_example_L0_wide(),
+      L0_wide = wide,
       taxon_id = "taxon_id",
       datetime = "datetime",
       variable_name = c("hl", "rel", "colony.size"),
       unit = c("unit_hl", "unit_rel")))
   validate_arguments("create_taxon_ancillary", inputs)
   # Outputs match inputs
-  expect_true(identical(L0_wide, inputs$L0_wide))
-  expect_equal(taxon_id, inputs$taxon_id)
-  expect_equal(datetime, inputs$datetime)
-  expect_equal(variable_name, inputs$variable_name)
-  expect_equal(unit, inputs$unit)
+  expect_true(identical(inputs$L0_wide, L0_wide))
+  expect_equal(inputs$taxon_id, taxon_id)
+  expect_equal(inputs$datetime, datetime)
+  expect_equal(inputs$variable_name, variable_name)
+  expect_equal(inputs$unit, unit)
 })
 
-testthat::test_that("create_*(): No issues (user specified inputs; column renaming)", {
+testthat::test_that("create_*(): L0 cols map to L1 cols", {
   wide <- read_example_L0_wide()
-  cols <- colnames(wide) # rename cols in wide to simulate user inputs
+  cols <- colnames(wide) # change some L0 col names
   cols[cols == "taxon_id"] <- "taxon_code"
   cols[cols == "datetime"] <- "date"
   cols[cols == "hl"] <- "head_length"
@@ -48,22 +50,22 @@ testthat::test_that("create_*(): No issues (user specified inputs; column renami
       variable_name = c("head_length", "rel", "colony.size"),
       unit = c("unit_head_length", "unit_rel")))
   validate_arguments("create_taxon_ancillary", inputs)
-  # Inputs have been modified to follow the L1 specification
+  # After validation, the L0 cols have been replaced by L1 cols
   expect_false(identical(inputs$L0_wide, L0_wide))
   expect_true(!any(c("date", "taxon_code") %in% colnames(L0_wide)))
   expect_true(all(c("datetime", "taxon_id") %in% colnames(L0_wide)))
   expect_true(taxon_id == "taxon_id")
   expect_true(datetime == "datetime")
-  expect_equal(variable_name, inputs$variable_name)
-  expect_equal(unit, inputs$unit)
+  # but the variable_name and unit cols have been untouched.
+  expect_equal(inputs$variable_name, variable_name)
+  expect_equal(inputs$unit, unit)
 })
 
-# columns not in L0_wide (location_id, variable_name, unit, nesting)
-testthat::test_that("create_*(): Error if column is not in L0_wide", {
+testthat::test_that("create_*(): Error if inputs cols are not in L0_wide", {
   
   wide <- read_example_L0_wide()
   
-  inputs <- as.list( # A column w/defaults
+  inputs <- as.list( # An _id column
     list(
       L0_wide = wide,
       taxon_id = "not_an_id_col",
@@ -103,22 +105,56 @@ testthat::test_that("create_*(): Error if column is not in L0_wide", {
   expect_error(validate_arguments("create_taxon_ancillary", inputs), 
                regexp = "Columns not in \'L0_wide\': not_a_unit_col")
   
-  inputs <- as.list(  # A nesting column
+  inputs <- as.list(  # A location_name column
     list(
       L0_wide = wide,
       location_id = "location_id",
       latitude = "latitude",
       longitude = "longitude", 
       elevation = "elevation",
-      nesting = c("not_a_nesting_col")))
+      location_name = c("not_a_nesting_col")))
   expect_error(validate_arguments("create_location", inputs), 
                regexp = "Columns not in \'L0_wide\': not_a_nesting_col")
-  
+
 })
 
-# unexpected unit form
-# unit doesn't match variable_name
-# nesting shouldn't be NULL
+testthat::test_that("create_*(): NULL cols are fine when not required", {
+  wide <- read_example_L0_wide()
+  inputs <- as.list(
+    list(
+      L0_wide = wide,
+      taxon_id = "taxon_id",
+      variable_name = c("hl", "rel", "colony.size"),
+      unit = c("unit_hl", "unit_rel")))
+  expect_null(validate_arguments("create_taxon_ancillary", inputs))
+})
+
+testthat::test_that("create_*(): unit format", {
+  wide <- read_example_L0_wide()
+  inputs <- as.list(
+    list(
+      L0_wide = wide,
+      taxon_id = "taxon_id",
+      variable_name = c("hl", "rel", "colony.size"),
+      unit = c("hl", "rel")))
+  expect_error(validate_arguments("create_taxon_ancillary", inputs),
+               regexp = "Unexpected \'unit\' formats: hl, rel")
+})
+
+testthat::test_that("create_*(): unit without matching variable_name", {
+  wide <- read_example_L0_wide()
+  cols <- colnames(wide)
+  cols[1] <- "unit_nomatch"
+  colnames(wide) <- cols
+  inputs <- as.list(
+    list(
+      L0_wide = wide,
+      taxon_id = "taxon_id",
+      variable_name = c("hl", "rel", "colony.size"),
+      unit = c("unit_nomatch", "unit_rel")))
+  expect_error(validate_arguments("create_taxon_ancillary", inputs),
+               regexp = "Input \'unit\' without .+ match: unit_nomatch")
+})
 
 # plot_*() --------------------------------------------------------------------
 
