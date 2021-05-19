@@ -8,14 +8,27 @@
 #' @param std_dev_interval_betw_years (character) Column in \code{L0_wide} containing the standard deviation of the interval between sampling events. Use \code{calc_std_dev_interval_betw_years()} to calculate this value.
 #' @param max_num_taxa (character) Column in \code{L0_wide} containing the number of unique taxa in this dataset.
 #' @param geo_extent_bounding_box_m2 (character) An optional column in \code{L0_wide} containing the area (in meters) of the study location, if applicable (some L0 were collected at a single point). Use \code{calc_geo_extent_bounding_box_m2()} to calculate this value.
-#'
+#' 
 #' @details This function collects specified columns from \code{L0_wide} and returns distinct rows.
-#'
+#' 
 #' @return (data.frame) The dataset_summary table.
-#'     
+#' 
 #' @export
 #' 
 #' @examples 
+#' wide <- ants_L0_wide
+#' 
+#' dataset_summary <- create_dataset_summary(
+#'   L0_wide = wide, 
+#'   package_id = "package_id", 
+#'   original_package_id = "original_package_id", 
+#'   length_of_survey_years = "length_of_survey_years",
+#'   number_of_years_sampled = "number_of_years_sampled", 
+#'   std_dev_interval_betw_years = "std_dev_interval_betw_years", 
+#'   max_num_taxa = "max_num_taxa", 
+#'   geo_extent_bounding_box_m2 = "geo_extent_bounding_box_m2")
+#' 
+#' head(dataset_summary)
 #' 
 create_dataset_summary <- function(L0_wide, 
                                    package_id,
