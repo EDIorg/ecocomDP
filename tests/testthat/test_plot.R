@@ -5,10 +5,11 @@ library(ecocomDP)
 # Warns if datetimes are chars ------------------------------------------------
 
 testthat::test_that("Warns if datetimes are chars", {
-  d <- ants_L1
-  id <- names(d)
+  id <- names(ants_L1)
+  d <- ants_L1[[1]]$tables$observation
+  d$datetime <- as.character(d$datetime)
   expect_warning(
-    format_for_comm_plots(d),
+    format_for_comm_plots(observation = d, id = id),
     regexp = "Input datetimes are character strings. Accuracy may be improved")
 })
 
@@ -20,8 +21,9 @@ testthat::test_that("Warns if duplicate observations", {
     d[[1]]$tables$observation,
     d[[1]]$tables$observation[1, ])
   id <- names(d)
+  d <- d[[1]]$tables$observation
   expect_warning(
-    format_for_comm_plots(d),
+    format_for_comm_plots(observation = d, id = id),
     regexp = "duplicate observations. Consider aggregating")
 })
 
@@ -34,8 +36,9 @@ testthat::test_that("Warns if > 1 measurement variable", {
   obs2$unit <- "Another unit"
   d[[1]]$tables$observation <- rbind(d[[1]]$tables$observation, obs2)
   id <- names(d)
+  d <- d[[1]]$tables$observation
   expect_warning(
-    format_for_comm_plots(d),
+    format_for_comm_plots(observation = d, id = id),
     regexp = "can only handle one. Consider splitting this dataset")
 })
 
