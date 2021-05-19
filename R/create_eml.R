@@ -137,7 +137,6 @@ create_eml <- function(path,
     )
   }
   
-  # FIXME: Check that the data package exists in the EDI data repository
   if (missing(source_id)) {
     stop(
       call. = FALSE, 
@@ -150,8 +149,6 @@ create_eml <- function(path,
     )
   }
   
-  # FIXME: Check that the data package ID is in one of the expected formats
-  # (i.e. LTER or EDI). Issue warning, not error.
   if (missing(derived_id)) {
     stop(
       call. = FALSE,
@@ -230,7 +227,6 @@ create_eml <- function(path,
     )
   }
   
-  # FIXME: Check the input 'user_id' against the list of EDI/LTER users.
   if (missing(user_id)) {
     stop(
       call. = FALSE,
@@ -290,8 +286,6 @@ create_eml <- function(path,
     }
     
   }
-  
-  # TODO: Check "url"
   
   # Parameterize --------------------------------------------------------------
   
@@ -371,7 +365,6 @@ create_eml <- function(path,
   # Create two objects of the same metadata, eml_L0 (emld list object) for
   # editing, and xml_L0 (xml_document) for easy parsing
     
-  # FIXME: Extend support to environments in other repository systems
   if (environment == "production") {
     url_parent <- paste0(
       "https://pasta.lternet.edu/package/metadata/eml/",
@@ -779,15 +772,10 @@ create_eml <- function(path,
   
   message("    <methods>")
   
-  # FIXME: Parse L0 methods from xml rather than emld since the latter can be
-  # irregular
-  
   # Parse components to be reordered and combined for the L1
   methods_L1 <- eml_L1$dataset$methods$methodStep
   
   # Get provenance metadata
-  # TODO: Support other repository systems
-  # TODO: Dev create_eml_provenance() function
   r <- suppressMessages(
     api_get_provenance_metadata(
       package.id = source_id,

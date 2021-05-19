@@ -27,11 +27,7 @@ create_dataset_summary <- function(L0_wide,
                                    geo_extent_bounding_box_m2 = NULL) {
   message("Creating dataset_summary")
   
-  # TODO: validate_arguments()
-  # TODO: manipulation (in validate_arguments()?)
-  # - NULL optional cols if not in L0_wide
-  # - rename cols in L0_wide if not 1-to-1 match
-  validate_arguments(fun.name = "create", fun.args = as.list(environment()))
+  validate_arguments(fun.name = "create_dataset_summary", fun.args = as.list(environment()))
   
   
   # get cols

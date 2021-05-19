@@ -20,18 +20,9 @@ create_location_ancillary <- function(L0_wide,
                                       variable_name, 
                                       unit = NULL) {
   message("Creating location_ancillary")
+  
   validate_arguments(fun.name = "create_location_ancillary", fun.args = as.list(environment()))
-  browser()
-  # list2env(r, envir = environment())
-  
-  # TODO: validate_arguments()
-  # TODO: manipulation (in validate_arguments()?)
-  # - NULL optional cols if not in L0_wide
-  # - rename cols in L0_wide if not 1-to-1 match
-  # - check unit_variable_name convention
-  
-  
-  
+
   # gather cols
   cols_to_gather <- c(location_id, datetime, variable_name)
   res <- L0_wide %>%

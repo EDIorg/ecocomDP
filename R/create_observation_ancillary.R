@@ -19,11 +19,7 @@ create_observation_ancillary <- function(L0_wide,
                                          unit = NULL) {
   message("Creating observation_ancillary")
   
-  # TODO: validate_arguments()
-  # TODO: manipulation (in validate_arguments()?)
-  # - NULL optional cols if not in L0_wide
-  # - rename cols in L0_wide if not 1-to-1 match
-  # - check unit_variable_name convention
+  validate_arguments(fun.name = "create_observation_ancillary", fun.args = as.list(environment()))
   
   # gather cols
   cols_to_gather <- c(observation_id, variable_name)

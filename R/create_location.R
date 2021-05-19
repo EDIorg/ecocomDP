@@ -26,11 +26,7 @@ create_location <- function(L0_wide,
                             longitude = NULL, 
                             elevation = NULL) {
   
-  # TODO: validate_arguments()
-  # TODO: manipulation (in validate_arguments()?)
-  # - if location_name = NULL then what?
-  # - NULL optional cols if not in L0_wide
-  # - rename cols in L0_wide if not 1-to-1 match
+  validate_arguments(fun.name = "create_location", fun.args = as.list(environment()))
 
   message("Creating location")
   cols_to_gather <- c(location_id, latitude, longitude, elevation, location_name)

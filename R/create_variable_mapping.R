@@ -20,12 +20,6 @@ create_variable_mapping <- function(observation,
   
   message("Creating variable_mapping")
   
-  # Check arguments -----------------------------------------------------------
-  
-  if (missing(observation)){
-    stop('Input argument "observation" is missing!')
-  }
-  
   # Get unique variables from tables ------------------------------------------
   
   # Initialize storage

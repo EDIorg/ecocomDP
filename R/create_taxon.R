@@ -25,11 +25,7 @@ create_taxon <- function(L0_wide,
                          authority_taxon_id = NULL) {
   message("Creating taxon")
   
-  # TODO: validate_arguments()
-  # TODO: manipulation (in validate_arguments()?)
-  # - NULL optional cols if not in L0_wide
-  # - rename cols in L0_wide if not 1-to-1 match
-  # - Check authority_system value construction? (maybe this is a validate_data() option)
+  validate_arguments(fun.name = "create_taxon", fun.args = as.list(environment()))
   
   # gather cols
   cols_to_gather <- c(taxon_id, taxon_rank, taxon_name, authority_system, authority_taxon_id)
