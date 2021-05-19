@@ -18,6 +18,17 @@
 #' @export
 #' 
 #' @examples 
+#' wide <- ants_L0_wide
+#' 
+#' location <- create_location(
+#'   L0_wide = wide, 
+#'   location_id = "location_id", 
+#'   location_name = c("block", "plot"), 
+#'   latitude = "latitude", 
+#'   longitude = "longitude", 
+#'   elevation = "elevation")
+#' 
+#' head(location)
 #' 
 create_location <- function(L0_wide, 
                             location_id,
@@ -25,14 +36,15 @@ create_location <- function(L0_wide,
                             latitude = NULL,
                             longitude = NULL, 
                             elevation = NULL) {
-  
-  validate_arguments(fun.name = "create_location", fun.args = as.list(environment()))
 
   message("Creating location")
+  validate_arguments(fun.name = "create_location", fun.args = as.list(environment()))
+  
   cols_to_gather <- c(location_id, latitude, longitude, elevation, location_name)
   loc_wide <- L0_wide %>%
     dplyr::select(all_of(c(location_id, latitude, longitude, elevation, location_name))) %>%
     dplyr::distinct()
+  
   # Add any missing columns to loc_wide because downstream depend on them
   if (is.null(latitude)) {
     loc_wide$latitude <- NA
@@ -43,6 +55,7 @@ create_location <- function(L0_wide,
   if (is.null(elevation)) {
     loc_wide$elevation <- NA
   }
+  
   # create list of data frames for each level of location_name
   res <- lapply(
     seq_along(location_name),
@@ -69,6 +82,7 @@ create_location <- function(L0_wide,
       }
       return(res)
     })
+  
   # Add look up parent_location_id for each level of location_name
   invisible(
     lapply(
@@ -78,16 +92,18 @@ create_location <- function(L0_wide,
           map <- loc_wide %>% # map location_name at this level to location_name one level up)
             dplyr::select(c(location_name[i-1], location_name[i])) 
           for (r in seq(nrow(res[[i]]))) {
-            location_name <- res[[i]]$location_name[r]
+            locname <- res[[i]]$location_name[r]
             parent_location_name <- map[[location_name[i-1]]][
-              map[[location_name[i]]] == location_name]
+              map[[location_name[i]]] == locname]
             parent_location_id <- res[[i-1]]$location_id[
               res[[i-1]]$location_name == parent_location_name]
             res[[i]]$parent_location_id[r] <<- parent_location_id
           }
         }
       }))
+  
   # combine data frames
   res <- dplyr::bind_rows(res)
+  
   return(res)
 }

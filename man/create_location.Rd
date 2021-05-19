@@ -41,5 +41,16 @@ Values in \code{location_name} columns of \code{L0_wide} should be modifed to pr
 Additionally, latitude, longitude, and elevation of sites nested above the observation level will have to be manually added after the location data.frame is returned.
 }
 \examples{
+wide <- ants_L0_wide
+
+location <- create_location(
+  L0_wide = wide, 
+  location_id = "location_id", 
+  location_name = c("block", "plot"), 
+  latitude = "latitude", 
+  longitude = "longitude", 
+  elevation = "elevation")
+
+head(location)
 
 }

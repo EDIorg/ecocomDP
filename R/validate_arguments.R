@@ -37,7 +37,7 @@ validate_arguments <- function(fun.name, fun.args) {
     }
     
     # Rename input cols according to L1 specifications so the resulting L1 table is valid
-    cols2rename <- base::setdiff(names(cols), c("variable_name", "unit", "nesting"))
+    cols2rename <- base::setdiff(names(cols), c("variable_name", "unit", "location_name"))
     cols2rename <- unlist(cols[cols2rename])
     cols_wide <- colnames(wide)
     cols_wide[match(cols2rename, cols_wide)] <- names(cols2rename)
