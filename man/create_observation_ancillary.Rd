@@ -30,5 +30,13 @@ Create the observation_ancillary table
 This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column.
 }
 \examples{
+wide <- ants_L0_wide
+
+observation_ancillary <- create_observation_ancillary(
+  L0_wide = wide,
+  observation_id = "observation_id", 
+  variable_name = c("trap.type", "trap.num", "moose.cage"))
+
+observation_ancillary
 
 }

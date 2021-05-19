@@ -12,6 +12,14 @@
 #' @export
 #'
 #' @examples
+#' wide <- ants_L0_wide
+#' 
+#' observation_ancillary <- create_observation_ancillary(
+#'   L0_wide = wide,
+#'   observation_id = "observation_id", 
+#'   variable_name = c("trap.type", "trap.num", "moose.cage"))
+#' 
+#' observation_ancillary
 #' 
 create_observation_ancillary <- function(L0_wide, 
                                          observation_id, 
