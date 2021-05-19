@@ -1142,7 +1142,7 @@ join_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
 #' 
 read_criteria <- function() {
   res <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
+    system.file('extdata', 'validation_criteria.txt', package = 'ecocomDP'))
   return(res)
 }
 

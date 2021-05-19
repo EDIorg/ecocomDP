@@ -291,8 +291,7 @@ create_eml <- function(path,
   
   # Read attributes of ecocomDP tables for reference
   
-  attr_tbl <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  attr_tbl <- read_criteria()
   attr_tbl <- attr_tbl[!is.na(attr_tbl$column), ]
   
   # Get table names for this L1 dataset for use in EAL_make_eml()

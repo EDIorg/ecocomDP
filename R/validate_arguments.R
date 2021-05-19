@@ -20,8 +20,7 @@ validate_arguments <- function(fun.name, fun.args) {
   use_i <- sapply(fun.args, function(X) identical(X, quote(expr=)))
   fun.args[use_i] <- list(NULL)
   
-  criteria <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  criteria <- read_criteria()
   
   # create_*() ----------------------------------------------------------------
   

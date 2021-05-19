@@ -46,8 +46,7 @@ validate_data <- function(
   
   # Parameterize
   
-  criteria <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  criteria <- read_criteria()
   
   # Read data
   if (!is.null(path)) {
@@ -147,8 +146,7 @@ validate_table_names <- function(data.path = NULL) {
   
   # Parameterize
   
-  criteria <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  criteria <- read_criteria()
   
   # Validate
   
@@ -200,8 +198,7 @@ validate_table_presence <- function(data.list) {
   
   # Parameterize
   
-  criteria <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  criteria <- read_criteria()
   
   # Validate
   expected <- criteria$table[
@@ -239,8 +236,7 @@ validate_column_names <- function(data.list) {
   
   # Parameterize
   
-  criteria <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  criteria <- read_criteria()
   
   # Validate
   
@@ -290,8 +286,7 @@ validate_column_presence <- function(data.list){
 
   # Parameterize
   
-  criteria <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  criteria <- read_criteria()
   
   # Validate
   
@@ -338,8 +333,7 @@ validate_column_presence <- function(data.list){
 validate_datetime <- function(data.list) {
   message('  Datetime formats')
   # Parameterize
-  criteria <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  criteria <- read_criteria()
   # Validate
   r <- lapply(
     names(data.list),
@@ -410,8 +404,7 @@ validate_column_classes <- function(data.list) {
   
   # Parameterize
 
-  criteria <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  criteria <- read_criteria()
 
   # Validate
   
@@ -479,8 +472,7 @@ validate_primary_keys <- function(data.list) {
   
   # Parameterize
   
-  criteria <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  criteria <- read_criteria()
   
   # Validate
   
@@ -528,8 +520,7 @@ validate_composite_keys <- function(data.list) {
   
   # Parameterize
   
-  criteria <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  criteria <- read_criteria()
   
   # Validate
   
@@ -583,8 +574,7 @@ validate_referential_integrity <- function(data.list) {
 
   # Parameterize
   
-  criteria <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  criteria <- read_criteria()
   
   # Validate
   

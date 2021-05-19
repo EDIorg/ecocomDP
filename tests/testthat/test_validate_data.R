@@ -16,8 +16,7 @@ test_data_file_names <- dir(
 
 # Load validation criteria for tables and columns
 
-criteria <- data.table::fread(
-  system.file('validation_criteria.txt', package = 'ecocomDP'))
+criteria <- read_criteria()
 
 # validate_table_names() ------------------------------------------------------
 

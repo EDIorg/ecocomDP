@@ -94,8 +94,7 @@ read_data <- function(id = NULL, parse_datetime = TRUE,
 
   # Get ecocomDP attributes for validation and coercion
   
-  attr_tbl <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  attr_tbl <- read_criteria()
   attr_tbl <- attr_tbl[!is.na(attr_tbl$column), ]
 
   # Read ----------------------------------------------------------------------
@@ -303,8 +302,7 @@ read_data_edi <- function(id, parse_datetime = TRUE) {
   
   # Get ecocomDP attributes for validation and coercion
   
-  attr_tbl <- data.table::fread(
-    system.file('validation_criteria.txt', package = 'ecocomDP'))
+  attr_tbl <- read_criteria()
   
   # Get table metadata for reading
   
