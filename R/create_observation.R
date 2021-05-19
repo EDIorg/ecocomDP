@@ -17,6 +17,20 @@
 #' @export
 #'
 #' @examples
+#' wide <- ants_L0_wide
+#' 
+#' observation <- create_observation(
+#'   L0_wide = wide, 
+#'   observation_id = "observation_id", 
+#'   event_id = "event_id", 
+#'   package_id = "package_id",
+#'   location_id = "location_id", 
+#'   datetime = "datetime", 
+#'   taxon_id = "taxon_id", 
+#'   variable_name = "abundance",
+#'   unit = "unit_abundance")
+#' 
+#' head(observation)
 #' 
 create_observation <- function(L0_wide, 
                                observation_id,

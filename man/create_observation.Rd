@@ -45,5 +45,19 @@ Create the observation table
 This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column.
 }
 \examples{
+wide <- ants_L0_wide
+
+observation <- create_observation(
+  L0_wide = wide, 
+  observation_id = "observation_id", 
+  event_id = "event_id", 
+  package_id = "package_id",
+  location_id = "location_id", 
+  datetime = "datetime", 
+  taxon_id = "taxon_id", 
+  variable_name = "abundance",
+  unit = "unit_abundance")
+
+head(observation)
 
 }
