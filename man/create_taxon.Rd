@@ -38,5 +38,16 @@ This function collects specified columns from \code{L0_wide} and returns distinc
 Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. https://www.itis.gov/, http://www.marinespecies.org/, or https://gbif.org), will have their full taxonomic hierarchy expanded, including any common names for each level.
 }
 \examples{
+wide <- ants_L0_wide
+
+taxon <- create_taxon(
+  L0_wide = wide, 
+  taxon_id = "taxon_id", 
+  taxon_rank = "taxon_rank", 
+  taxon_name = "taxon_name", 
+  authority_system = "authority_system", 
+  authority_taxon_id = "authority_taxon_id")
+
+taxon
 
 }

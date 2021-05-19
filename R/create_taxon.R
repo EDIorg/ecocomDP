@@ -16,6 +16,17 @@
 #' @export
 #'
 #' @examples
+#' wide <- ants_L0_wide
+#' 
+#' taxon <- create_taxon(
+#'   L0_wide = wide, 
+#'   taxon_id = "taxon_id", 
+#'   taxon_rank = "taxon_rank", 
+#'   taxon_name = "taxon_name", 
+#'   authority_system = "authority_system", 
+#'   authority_taxon_id = "authority_taxon_id")
+#' 
+#' taxon
 #' 
 create_taxon <- function(L0_wide, 
                          taxon_id,
