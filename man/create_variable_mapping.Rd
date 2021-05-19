@@ -30,5 +30,49 @@ Create the variable_mapping table
 This function collects specified data tables, extracts unique variable_name values from each, converts into long (attribute-value) form with the table name and variable_name values to the resulting table's "table_name" and "variable_name" columns, respectively. The resulting table's "mapped_system", "mapped_id", and "mapped_label" are filled with \code{NA} and are to be manually filled.
 }
 \examples{
+wide <- ants_L0_wide
+
+# Create inputs to variable_mapping()
+
+observation <- create_observation(
+  L0_wide = wide, 
+  observation_id = "observation_id", 
+  event_id = "event_id", 
+  package_id = "package_id",
+  location_id = "location_id", 
+  datetime = "datetime", 
+  taxon_id = "taxon_id", 
+  variable_name = "abundance",
+  unit = "unit_abundance")
+
+observation_ancillary <- create_observation_ancillary(
+  L0_wide = wide,
+  observation_id = "observation_id", 
+  variable_name = c("trap.type", "trap.num", "moose.cage"))
+
+location_ancillary <- create_location_ancillary(
+  L0_wide = wide,
+  location_id = "location_id",
+  variable_name = "treatment")
+
+taxon_ancillary <- create_taxon_ancillary(
+  L0_wide = wide,
+  taxon_id = "taxon_id",
+  variable_name = c(
+    "subfamily", "hl", "rel", "rll", "colony.size", 
+    "feeding.preference", "nest.substrate", "primary.habitat", 
+    "secondary.habitat", "seed.disperser", "slavemaker.sp", 
+    "behavior", "biogeographic.affinity", "source"),
+  unit = c("unit_hl", "unit_rel", "unit_rll"))
+
+# Create variable_mapping table
+
+variable_mapping <- create_variable_mapping(
+  observation = observation,
+  observation_ancillary = observation_ancillary,
+  location_ancillary = location_ancillary, 
+  taxon_ancillary = taxon_ancillary)
+
+variable_mapping
 
 }
