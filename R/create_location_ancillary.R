@@ -13,6 +13,14 @@
 #' @export
 #'
 #' @examples
+#' wide <- ants_L0_wide
+#' 
+#' location_ancillary <- create_location_ancillary(
+#'   L0_wide = wide,
+#'   location_id = "location_id",
+#'   variable_name = "treatment")
+#' 
+#' head(location_ancillary)
 #' 
 create_location_ancillary <- function(L0_wide, 
                                       location_id, 

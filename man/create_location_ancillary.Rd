@@ -33,5 +33,13 @@ Create the location_ancillary table
 This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column.
 }
 \examples{
+wide <- ants_L0_wide
+
+location_ancillary <- create_location_ancillary(
+  L0_wide = wide,
+  location_id = "location_id",
+  variable_name = "treatment")
+
+head(location_ancillary)
 
 }
