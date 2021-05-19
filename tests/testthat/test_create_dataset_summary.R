@@ -4,7 +4,7 @@ library(ecocomDP)
 
 # create_dataset_summary() ----------------------------------------------------
 
-testthat::test_that("create_dataset_summary()", {
+testthat::test_that("Standard L1 column inputs", {
   crit <- read_criteria()
   wide <- ants_L0_wide
   res <- create_dataset_summary(
@@ -16,6 +16,35 @@ testthat::test_that("create_dataset_summary()", {
     std_dev_interval_betw_years = "std_dev_interval_betw_years", 
     max_num_taxa = "max_num_taxa", 
     geo_extent_bounding_box_m2 = "geo_extent_bounding_box_m2")
+  # Is data.frame with expected columns
+  expect_s3_class(res, "data.frame")
+  crit_cols <- na.omit(crit$column[crit$table == "dataset_summary"])
+  expect_true(all(crit_cols %in% colnames(res)))
+  # Is not empty
+  expect_true(nrow(res) != 0)
+})
+
+testthat::test_that("Non-Standard column inputs", {
+  crit <- read_criteria()
+  wide <- ants_L0_wide
+  cols <- colnames(wide)
+  cols[cols == "package_id"] <- "pkgid"
+  cols[cols == "original_package_id"] <- "og_pkgid"
+  cols[cols == "length_of_survey_years"] <- "lsy"
+  cols[cols == "number_of_years_sampled"] <- "nys"
+  cols[cols == "std_dev_interval_betw_years"] <- "sdiby"
+  cols[cols == "max_num_taxa"] <- "mnt"
+  cols[cols == "geo_extent_bounding_box_m2"] <- "gebb"
+  colnames(wide) <- cols
+  res <- create_dataset_summary(
+    L0_wide = wide, 
+    package_id = "pkgid", 
+    original_package_id = "og_pkgid", 
+    length_of_survey_years = "lsy",
+    number_of_years_sampled = "nys", 
+    std_dev_interval_betw_years = "sdiby", 
+    max_num_taxa = "mnt", 
+    geo_extent_bounding_box_m2 = "gebb")
   # Is data.frame with expected columns
   expect_s3_class(res, "data.frame")
   crit_cols <- na.omit(crit$column[crit$table == "dataset_summary"])
