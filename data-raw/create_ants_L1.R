@@ -6,4 +6,4 @@ library(ecocomDP)
 ants_L1 <- read_data(id = "edi.193.4")
 
 # Save to /data
-usethis::use_data(ants_L1)
+usethis::use_data(ants_L1, overwrite = TRUE)
