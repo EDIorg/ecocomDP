@@ -28,7 +28,7 @@ make_neon_location_table <- function(loc_info, loc_col_names){
   # make location table
   table_location <- suppressMessages(
     loc_info %>% 
-      ecocomDP::create_location(nesting = loc_col_names))
+      ecocomDP::create_location(location_name = loc_col_names))
   
   # code to handle updated create_location (updated 18 Sep 2020 in create_location branch)
   if(class(table_location) == "list" &&
