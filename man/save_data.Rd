@@ -13,11 +13,11 @@ save_data(dataset, path, type = ".rds", name = NULL)
 
 \item{type}{(character) Type of file to save the \code{dataset} as. Default is ".rds" but can also be ".csv". Note: metadata and validation_issues are lost when using ".csv".}
 
-\item{name}{(character) An optional argument for setting the saved file name (for .rds), or dir name (for .csv) if you'd like it to be different than \code{dataset}'s object name.}
+\item{name}{(character) An optional argument for setting the saved file name (for .rds) if you'd like it to be different than \code{dataset}'s object name.}
 }
 \value{
-\item{.rda}{If \code{type} = ".rda", then an .rda representation of \code{dataset} is returned.}
-    \item{.csv}{If \code{type} = ".csv", then an set of .csv files are written to a sub-directory of \code{path} named after the data package/product ID.}
+\item{.rda}{If \code{type = ".rda"}, then an .rda representation of \code{dataset} is returned.}
+    \item{.csv}{If \code{type = ".csv"}, then an set of .csv files are written to a sub-directory of \code{path} named after the data package/product ID.}
 }
 \description{
 Save an ecocomDP dataset
@@ -38,6 +38,7 @@ save_data(datasets, "/Users/me/documents/data")
 
 # Save as .csv
 save_data(datasets, "/Users/me/documents/data", type = ".csv")
+
 }
 
 }
