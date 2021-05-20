@@ -7,7 +7,7 @@ library(ecocomDP)
 testthat::test_that("Standard L1 column inputs", {
   crit <- read_criteria()
   wide <- ants_L0_wide
-  res <- ecocomDP::create_taxon_ancillary(
+  res <- create_taxon_ancillary(
     L0_wide = wide,
     taxon_id = "taxon_id",
     variable_name = c(

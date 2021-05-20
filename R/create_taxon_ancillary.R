@@ -16,7 +16,7 @@
 #' @examples
 #' wide <- ants_L0_wide
 #' 
-#' taxon_ancillary <- ecocomDP::create_taxon_ancillary(
+#' taxon_ancillary <- create_taxon_ancillary(
 #'   L0_wide = wide,
 #'   taxon_id = "taxon_id",
 #'   variable_name = c(

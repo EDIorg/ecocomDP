@@ -178,7 +178,7 @@ map_neon_data_to_ecocomDP <- function(
   
   
   # get taxon group
-  neon_dp_table <- ecocomDP::search_data("NEON")
+  neon_dp_table <- search_data("NEON")
   taxon_group <- neon_dp_table$title[neon_dp_table$id == id] %>%
     stringr::str_split(" ") %>%
     unlist() %>%
