@@ -31,33 +31,45 @@
 #' @export
 #' 
 #' @examples
-#' dontrun{
-#' # Empty search returns all available data
-#' View(search_data())
+#' # Empty search returns all available datasets
+#' r <- search_data()
+#' # View(r)
 #' 
-#' # Text searches titles, descriptions, and abstracts
-#' View(search_data(text = "Lake"))
+#' # "text" searches titles, descriptions, and abstracts
+#' r <- search_data(text = "Lake")
+#' # View(r)
 #' 
-#' # Taxa searches any taxonomic rank of an organism
-#' View(search_data(taxa = "Plantae"))
+#' # "taxa" searches taxonomic ranks for a match
+#' r <- search_data(taxa = "Plantae")
+#' # View(r)
 #' 
-#' # Number of taxa searches the count of unique taxa in a dataset
-#' View(search_data(num_taxa = c(0, 10)))
+#' # "num_taxa" searches the count of unique taxa in a dataset
+#' r <- search_data(num_taxa = c(0, 10))
+#' # View(r)
 #' 
-#' # Years searches the number of years the dataset covers
-#' View(search_data(num_years = c(10, 20)))
+#' # "num_years" searches the number of years sampled
+#' r <- search_data(num_years = c(10, 20))
+#' # View(r)
 #' 
-#' # Standard deviation between surveys searches for a sampling frequency
-#' View(search_data(sd_years = c(.25, 1)))
+#' # "sd_years" searches the sampling frequency
+#' r <- search_data(sd_years = c(.25, 1))
+#' # View(r)
 #' 
-#' # Geographic area searches where data were collected
-#' View(search_data(area = c(47.1, -86.7, 42.5, -92)))
+#' # "area" searches where data were collected
+#' r <- search_data(area = c(47.1, -86.7, 42.5, -92))
+#' # View(r)
 #' 
-#' # Boolean operators AND (default) & OR combine text and taxa search terms
-#' View(search_data(text = c("Lake", "River")))
-#' View(search_data(text = c("Lake", "River"), boolean = "OR"))
-#' View(search_data(taxa = c("Plantae", "Animalia")))
-#' View(search_data(taxa = c("Plantae", "Animalia"), boolean = "OR"))
+#' # "boolean" operators "AND" (default) & "OR" combine text and taxa search terms
+#' r <- search_data(text = c("Lake", "River"))
+#' # View(r)
+#' r <- search_data(text = c("Lake", "River"), boolean = "OR")
+#' # View(r)
+#' 
+#' r <- search_data(taxa = c("Plantae", "Animalia"))
+#' # View(r)
+#' 
+#' r <- search_data(taxa = c("Plantae", "Animalia"), boolean = "OR")
+#' # View(r)
 #' 
 #' # Use any combination of search fields to find the data you're looking for
 #' r <- search_data(
@@ -68,8 +80,7 @@
 #'   sd_years = c(.01, 100),
 #'   area = c(47.1, -86.7, 42.5, -92),
 #'   boolean = "OR")
-#' View(r)
-#' }
+#' # View(r)
 #'
 search_data <- function(text, taxa, num_taxa, num_years, sd_years, 
                         area, boolean = "AND") {
