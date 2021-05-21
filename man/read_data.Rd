@@ -51,7 +51,7 @@ read_data(
 
 \item{...}{For NEON data, other arguments to \code{neonUtilities::loadByProduct()}}
 
-\item{from}{(character) Full path of file to be read (if .rds), or path to directory (if .csv).}
+\item{from}{(character) Full path of file to be read (if .rds), or path to directory containing saved datasets (if .csv).}
 }
 \value{
 (list) with the structure: 
@@ -87,35 +87,39 @@ Validation checks are applied to each dataset ensuring they comply with
 This function may not work between 01:00 - 03:00 UTC due to regular maintenance of the EDI Data Repository.
 }
 \examples{
-\dontrun{
 # Read from EDI
-dataset <- read_data("edi.193.3")
+dataset <- read_data("edi.193.4")
 
-# Read from NEON
-dataset <- read_data("neon.ecocomdp.20166.001.001")
+# Read from NEON (full dataset)
+dataset <- read_data("neon.ecocomdp.20120.001.001")
 
-# Read from NEON with filters
+# Read from NEON with filters (partial dataset)
 dataset <- read_data(
-  id = "neon.ecocomdp.20166.001.001", 
-  site = c("MAYF", "PRIN"),
-  startdate = "2016-01", 
-  enddate = "2018-11",
+  id = "neon.ecocomdp.20120.001.001", 
+  site = c("COMO", "LECO", "SUGG"),
+  startdate = "2017-06", 
+  enddate = "2019-09",
   check.size = FALSE)
 
+# Read with datetimes as character
+dataset <- read_data("edi.193.4", parse_datetime = FALSE)
+is.character(dataset$edi.193.4$tables$observation$datetime)
+
+# Save a list of datasets for reading
+datasets <- c(ants_L1, ants_L1, ants_L1)   # 3 of the same, with differnt names
+names(datasets) <- c("ds1", "ds2", "ds3")
+mypath <- paste0(tempdir(), "/data")       # A place for saving
+dir.create(mypath)
+save_data(datasets, mypath)                # Save as .rds
+save_data(datasets, mypath, type = ".csv") # Save as .csv
+
 # Read from local .rds
-dataset <- read_data(from = "/Users/me/documents/data/dataset.rds")
+dataset <- read_data(from = paste0(mypath, "/datasets.rds"))
 
 # Read from local .csv
-dataset <- read_data(from = "/Users/me/documents/data/dataset")
+dataset <- read_data(from = mypath)
 
-# Return datetimes as character
-dataset <- read_data("edi.193.3", parse_datetime = FALSE)
-
-# Read multiple datasets into list
-datasets <- c(
-  read_data("edi.193.3"),
-  read_data("edi.262.1"),
-  read_data("neon.ecocomdp.20166.001.001"))
-}
+# Clean up
+unlink(mypath, recursive = TRUE)
 
 }

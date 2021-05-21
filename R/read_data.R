@@ -14,7 +14,7 @@
 #' @param neon.data.save.dir (character) For NEON data, an optional and experimental argument (i.e. may not be supported in future releases), indicating the directory where NEON source data should be saved upon download from the NEON API. Data are downloaded using \code{neonUtilities::loadByProduct()} and saved in this directory as an RDS file. The filename will follow the format <NEON data product ID>_<timestamp>.RDS
 #' @param neon.data.read.path (character) For NEON data, an optional and experimental argument (i.e. may not be supported in future releases), defining a path to read in an RDS file of 'stacked NEON data' from \code{neonUtilities::loadByProduct()}. See details below for more information.
 #' @param ... For NEON data, other arguments to \code{neonUtilities::loadByProduct()}
-#' @param from (character) Full path of file to be read (if .rds), or path to directory (if .csv).
+#' @param from (character) Full path of file to be read (if .rds), or path to directory containing saved datasets (if .csv).
 #'     
 #' @return
 #'     (list) with the structure: 
@@ -48,36 +48,40 @@
 #' @export
 #' 
 #' @examples
-#' \dontrun{
 #' # Read from EDI
-#' dataset <- read_data("edi.193.3")
+#' dataset <- read_data("edi.193.4")
 #' 
-#' # Read from NEON
-#' dataset <- read_data("neon.ecocomdp.20166.001.001")
+#' # Read from NEON (full dataset)
+#' dataset <- read_data("neon.ecocomdp.20120.001.001")
 #' 
-#' # Read from NEON with filters
+#' # Read from NEON with filters (partial dataset)
 #' dataset <- read_data(
-#'   id = "neon.ecocomdp.20166.001.001", 
-#'   site = c("MAYF", "PRIN"),
-#'   startdate = "2016-01", 
-#'   enddate = "2018-11",
+#'   id = "neon.ecocomdp.20120.001.001", 
+#'   site = c("COMO", "LECO", "SUGG"),
+#'   startdate = "2017-06", 
+#'   enddate = "2019-09",
 #'   check.size = FALSE)
 #' 
+#' # Read with datetimes as character
+#' dataset <- read_data("edi.193.4", parse_datetime = FALSE)
+#' is.character(dataset$edi.193.4$tables$observation$datetime)
+#' 
+#' # Save a list of datasets for reading
+#' datasets <- c(ants_L1, ants_L1, ants_L1)   # 3 of the same, with differnt names
+#' names(datasets) <- c("ds1", "ds2", "ds3")
+#' mypath <- paste0(tempdir(), "/data")       # A place for saving
+#' dir.create(mypath)
+#' save_data(datasets, mypath)                # Save as .rds
+#' save_data(datasets, mypath, type = ".csv") # Save as .csv
+#' 
 #' # Read from local .rds
-#' dataset <- read_data(from = "/Users/me/documents/data/dataset.rds")
+#' dataset <- read_data(from = paste0(mypath, "/datasets.rds"))
 #' 
 #' # Read from local .csv
-#' dataset <- read_data(from = "/Users/me/documents/data/dataset")
+#' dataset <- read_data(from = mypath)
 #' 
-#' # Return datetimes as character
-#' dataset <- read_data("edi.193.3", parse_datetime = FALSE)
-#' 
-#' # Read multiple datasets into list
-#' datasets <- c(
-#'   read_data("edi.193.3"),
-#'   read_data("edi.262.1"),
-#'   read_data("neon.ecocomdp.20166.001.001"))
-#' }
+#' # Clean up
+#' unlink(mypath, recursive = TRUE)
 #' 
 read_data <- function(id = NULL, parse_datetime = TRUE, 
                       unique_keys = FALSE, site = "all", 
@@ -369,9 +373,7 @@ read_data_edi <- function(id, parse_datetime = TRUE) {
   }
   
   # Parse metadata
-  search_index <- suppressMessages(search_data())
-  i <- search_index$id == id
-  meta = list(url = search_index$url[i])
+  meta = list(url = paste0("https://portal.edirepository.org/nis/mapbrowse?packageid=", id))
   
   # Return
   res <- list(metadata = meta, tables = output)
@@ -405,48 +407,94 @@ read_from_files <- function(data.path) {
     d <- readRDS(data.path)
   } else if (fileext != "rds") { # dir ... note NEON ids cause file_ext() to produce misleading results
     dirs <- list.dirs(data.path)
-    parent_dir_has_tables <- lapply(
-      unique(attr_tbl$table),
-      function(x) {
-        ecocomDP_table <- stringr::str_detect(
-          tools::file_path_sans_ext(list.files(dirs[1])), 
-          paste0("^", x, "$"))
-        return(any(ecocomDP_table))
-      })
-    parent_dir_has_tables <- any(unlist(parent_dir_has_tables))
-    if (parent_dir_has_tables) { # Disambiguate usecases: Parent dir tables is target, but subdir also has tables
-      dirs <- dirs[1]
-    } else if (!parent_dir_has_tables & (length(dirs) > 1)) { # Don't use parent dir if nested (use case of reading from save_data(..., type = .csv))
-      dirs <- dirs[-1]
-    }
-    
-    d <- lapply(
-      dirs,
-      function(path) {
-        res <- lapply(
+    parent_dir_has_tables <- any( # does the parent dir have any L1 tables?
+      unlist(
+        lapply(
           unique(attr_tbl$table),
           function(x) {
             ecocomDP_table <- stringr::str_detect(
-              list.files(path), 
-              paste0("(?<=.{0,10000})", x, "(?=\\.[:alnum:]*$)"))
-            if (any(ecocomDP_table)) {
-              res <- data.table::fread(
-                paste0(path, "/", list.files(path)[ecocomDP_table]))
-              res <- as.data.frame(res)
-              return(res)
-            }
-          })
-        names(res) <- unique(attr_tbl$table)
-        res[sapply(res, is.null)] <- NULL
-        res <- list(
-          list(metadata = NULL, tables = res))
-        return(res)
-      })
-    d <- unlist(d, recursive = FALSE)
-    if (length(dirs) > 1){         # Get id from dir if nested (use case of reading from save_data(..., type = .csv))
-      names(d) <- basename(dirs)
+              tools::file_path_sans_ext(list.files(dirs[1])), 
+              paste0("^", x, "$"))
+            return(any(ecocomDP_table))
+          })))
+    if (parent_dir_has_tables) {                              # Don't look in subdirs if parent has tables
+      dirs <- dirs[1]
+      d <- read_dir(dirs)
+    } else if (!parent_dir_has_tables & (length(dirs) > 1)) { # Identify subdirs with tables
+      dirs <- dirs[-1]
+      i <- unlist(
+        lapply(
+          dirs,
+          function(dirc) {
+            r <- any(
+              unlist(
+                lapply(
+                  unique(attr_tbl$table),
+                  function(x) {
+                    ecocomDP_table <- stringr::str_detect(
+                      tools::file_path_sans_ext(list.files(dirc)), 
+                      paste0("^", x, "$"))
+                    return(any(ecocomDP_table))
+                  })))
+            return(r)
+          }))
+      dirs_w_tables <- dirs[i]
+      d <- read_dir(dirs_w_tables)
     } else {
-      names(d) <- d[[1]]$tables$dataset_summary$package_id
+      stop("No identifiable L1 tables at ", data.path, call. = FALSE)
+      d <- NULL
+    }
+    
+  }
+  return(d)
+}
+
+
+
+
+
+
+
+
+#' Read L1 tables in path
+#'
+#' @param paths (character) One or more paths to a directories
+#'
+#' @return (list) The L1 dataset object
+#' 
+read_dir <- function(paths) {
+  attr_tbl <- read_criteria()
+  d <- lapply(
+    paths,
+    function(path) {
+      res <- lapply(
+        unique(attr_tbl$table),
+        function(x) {
+          ecocomDP_table <- stringr::str_detect(
+            list.files(path), 
+            paste0("(?<=.{0,10000})", x, "(?=\\.[:alnum:]*$)"))
+          if (any(ecocomDP_table)) {
+            res <- data.table::fread(
+              paste0(path, "/", list.files(path)[ecocomDP_table]))
+            res <- as.data.frame(res)
+            return(res)
+          }
+        })
+      names(res) <- unique(attr_tbl$table)
+      res[sapply(res, is.null)] <- NULL
+      res <- list(
+        list(metadata = NULL, tables = res))
+      return(res)
+    })
+  d <- unlist(d, recursive = FALSE)
+  if (length(paths) != 0){         # Get id from dir if nested (use case of reading from save_data(..., type = .csv))
+    names(d) <- basename(paths)
+  } else {
+    package_id <- d[[1]]$tables$dataset_summary$package_id
+    if (is.na(package_id) | (package_id == "")) {
+      names(d) <- "unknown"
+    } else {
+      names(d) <- package_id
     }
   }
   return(d)

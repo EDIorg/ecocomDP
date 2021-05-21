@@ -53,15 +53,15 @@ testthat::test_that("Reads from source APIs", {
 })
 
 
-# Reads from local files ------------------------------------------------------
+# Reads from local .rds -------------------------------------------------------
 
-testthat::test_that("Reads from local files", {
+testthat::test_that("Reads from local .rds", {
   criteria <- read_criteria()
   # From .rds
   d <- ants_L1
   id <- names(d)
   save_data(d, tempdir())
-  d <- suppressWarnings(read_data(from = paste0(tempdir(), "/d.rds")))           # Has expected structure
+  d <- read_data(from = paste0(tempdir(), "/d.rds"))                                  # Has expected structure
   expect_true(is.list(d))                                                             # obj is a list
   expect_true(names(d) == id)                                                         # 1st level name is id
   expect_true(all(names(d[[1]]) %in% c("metadata", "tables", "validation_issues")))   # 2nd level has 3 values
@@ -73,15 +73,21 @@ testthat::test_that("Reads from local files", {
     expect_true(class(d[[1]]$tables[[i]]) == "data.frame")
   }
   unlink(paste0(tempdir(), "/d.rds"), recursive = TRUE, force = TRUE) 
+})
+
+# Reads from local .csv directories -------------------------------------------
+
+testthat::test_that("Reads from local .csv directories", {
+  criteria <- read_criteria()
   # From .csv
   d <- ants_L1                                                         # create example datasets
   d <- c(d, d, d)
   ids <- c("edi.193.3", "edi.262.1", "edi.359.1")
   names(d) <- ids
   id <- "d"
-  unlink(paste0(tempdir(),"/", id), recursive = TRUE, force = TRUE) 
+  unlink(paste0(tempdir(),"/", ids), recursive = TRUE, force = TRUE) 
   save_data(d, tempdir(), type = ".csv")
-  d <- suppressWarnings(read_data(from = paste0(tempdir(), "/", id)))            # Has expected structure
+  d <- read_data(from = tempdir())            # Has expected structure
   expect_true(is.list(d))                                                             # obj is a list
   expect_true(all(names(d) %in% ids))                                                 # 1st level name is id
   for (i in names(d)) {
@@ -96,9 +102,53 @@ testthat::test_that("Reads from local files", {
       expect_true(class(d[[i]]$tables[[j]]) == "data.frame")
     }
   }
-  unlink(paste0(tempdir(),"/", id), recursive = TRUE, force = TRUE) 
+  unlink(paste0(tempdir(),"/", ids), recursive = TRUE, force = TRUE) 
 })
 
+# Reads tables with valid names in path ---------------------------------------
+
+testthat::test_that("Reads tables with valid names in path", {
+  # Parameterize
+  mytopdir <- tempdir()
+  mypath <- paste0(mytopdir, "/datasets")
+  unlink(mypath, recursive = TRUE, force = TRUE)
+  dir.create(mypath)
+  crit <- read_criteria()
+  d <- ants_L1
+  # Set up test files
+  save_data(d, mypath, type = ".csv")
+  readpath <- paste0(mypath, "/", names(d))
+  # Test
+  d_fromfile <- read_data(from = readpath)
+  expect_true(all(names(d_fromfile[[1]]$tables) %in% unique(crit$table)))
+  expect_equal(length(d_fromfile[[1]]$tables), length(dir(readpath)))
+  unlink(mypath, recursive = TRUE, force = TRUE)
+})
+
+# Ignores tables with invalid names in path -----------------------------------
+
+testthat::test_that("Ignores tables with invalid names in path", {
+  # Parameterize
+  mytopdir <- tempdir()
+  mypath <- paste0(mytopdir, "/datasets")
+  unlink(mypath, recursive = TRUE, force = TRUE)
+  dir.create(mypath)
+  crit <- read_criteria()
+  d <- ants_L1
+  # Set up test files
+  tblnms <- names(d[[1]]$tables)
+  tblnms[c(1,2)] <- c("1", "2") 
+  names(d[[1]]$tables) <- tblnms
+  save_data(d, mypath, type = ".csv")
+  readpath <- paste0(mypath, "/", names(d))
+  # Test
+  expect_warning(read_data(from = readpath), regexp = "Validation issues")
+  d_fromfile <- suppressWarnings(read_data(from = readpath))
+  expect_true(!any(c("1", "2") %in% names(d_fromfile[[1]]$tables)))
+  expect_true(all(names(d_fromfile[[1]]$tables) %in% unique(crit$table)))
+  expect_false(length(d_fromfile[[1]]$tables) == length(dir(readpath)))
+  unlink(mypath, recursive = TRUE, force = TRUE)
+})
 
 # Has datetime parsing option -------------------------------------------------
 
