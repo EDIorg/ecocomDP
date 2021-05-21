@@ -26,19 +26,24 @@ Save an ecocomDP dataset
 Subsequent calls won't overwrite dirs or files
 }
 \examples{
-\dontrun{
-# Read from source
-datasets <- c(
-  read_data("edi.193.3"),
-  read_data("edi.262.1"),
-  read_data("edi.359.1"))
+# Create a list of datasets
+datasets <- c(ants_L1, ants_L1, ants_L1)  # 3 of the same, with differnt names
+names(datasets) <- c("ds1", "ds2", "ds3")
+
+# Create directory for the data
+mypath <- paste0(tempdir(), "/data")
+dir.create(mypath)
 
 # Save as .rds
-save_data(datasets, "/Users/me/documents/data")
+save_data(datasets, mypath)
+
+# Save as .rds with the name "mydata"
+save_data(datasets, mypath, name = "mydata")
 
 # Save as .csv
-save_data(datasets, "/Users/me/documents/data", type = ".csv")
+save_data(datasets, mypath, type = ".csv")
 
-}
+# Clean up
+unlink(mypath, recursive = TRUE)
 
 }
