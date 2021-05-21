@@ -39,12 +39,24 @@ Validation checks:
 This function is used by ecocomDP creators (to ensure what has been created is valid), maintainers (to improve the quality of archived ecocomDP datasets), and users (to ensure the data being used is free of error).
 }
 \examples{
-# Validate a set of files
-r <- validate_data(path = system.file("/data", package = "ecocomDP"))
+# Write a set of ecocomDP tables to file for validation
+mydir <- paste0(tempdir(), "/dataset")
+dir.create(mydir)
+write_tables(
+  path = mydir,
+  observation = ants_L1$edi.193.4$tables$observation, 
+  observation_ancillary = ants_L1$edi.193.4$tables$observation_ancillary,
+  location = ants_L1$edi.193.4$tables$location,
+  location_ancillary = ants_L1$edi.193.4$tables$location_ancillary,
+  taxon = ants_L1$edi.193.4$tables$taxon,
+  taxon_ancillary = ants_L1$edi.193.4$tables$taxon_ancillary,
+  dataset_summary = ants_L1$edi.193.4$tables$dataset_summary,
+  variable_mapping = ants_L1$edi.193.4$tables$variable_mapping)
 
-# Validate a list object
-CHANGE EXAMPLE TO VALIDATE A LIST OBJECT NOT CONSTRUCTED BY read_data() ... BECAUSE THIS FUNC ALREADY VALIDATES (CIRCULAR EXAMPLE) ... IS THIS REALLY A USE CASE?
-d <- read_data(from = system.file("/data", package = "ecocomDP"))
-r <- validate_data(dataset = d)
+# Validate
+validate_data(path = mydir)
+
+# Clean up
+unlink(mydir, recursive = TRUE)
 
 }

@@ -8,14 +8,9 @@ context("validate_data()")
 # Parameterize ----------------------------------------------------------------
 
 # Use the example dataset for testing
-
-# test_data <- read_data(from = system.file("/data", package = "ecocomDP"))[[1]]$tables
-test_data <- read_data(from = system.file("/data", package = "ecocomDP"))
-test_data_file_names <- dir(
-  system.file("/data", package = "ecocomDP"), pattern = "Ant_Assemblages_")
+test_data <- ants_L1
 
 # Load validation criteria for tables and columns
-
 criteria <- read_criteria()
 
 # validate_table_names() ------------------------------------------------------
