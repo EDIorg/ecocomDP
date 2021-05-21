@@ -1591,9 +1591,39 @@ vocab_resolve_terms <- function(x, cv, messages = FALSE, interactive = FALSE){
 #' @export
 #' 
 #' @examples 
-#' \dontrun{
+#' # Create directory for the tables
+#' mypath <- paste0(tempdir(), "/data")
+#' dir.create(mypath)
 #' 
-#' }
+#' # Create a couple inputs to write_tables()
+#' 
+#' wide <- ants_L0_wide
+#' 
+#' observation <- create_observation(
+#'   L0_wide = wide, 
+#'   observation_id = "observation_id", 
+#'   event_id = "event_id", 
+#'   package_id = "package_id",
+#'   location_id = "location_id", 
+#'   datetime = "datetime", 
+#'   taxon_id = "taxon_id", 
+#'   variable_name = "abundance",
+#'   unit = "unit_abundance")
+#' 
+#' observation_ancillary <- create_observation_ancillary(
+#'   L0_wide = wide,
+#'   observation_id = "observation_id", 
+#'   variable_name = c("trap.type", "trap.num", "moose.cage"))
+#' 
+#' # Write tables to file
+#' 
+#' write_tables(
+#'   path = mypath, 
+#'   observation = observation, 
+#'   observation_ancillary = observation_ancillary)
+#' 
+#' # Clean up
+#' unlink(mypath, recursive = TRUE)
 #'
 write_tables <- function(
   path, sep = ",", observation = NULL, location = NULL, 
