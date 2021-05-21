@@ -1447,7 +1447,7 @@ validate_path <- function(path){
 
 
 
-#' View ecocomDP table descriptions and requirements
+#' View descriptions and requirements of ecocomDP tables
 #'
 #' @export
 #'
@@ -1467,7 +1467,7 @@ view_model_descriptions <- function() {
 
 
 
-#' View ecocomDP tables and relationships
+#' View diagram of ecocomDP tables and relationships
 #'
 #' @export
 #'
@@ -1477,7 +1477,7 @@ view_model_descriptions <- function() {
 #' }
 #' 
 view_model_diagram <- function() {
-  browseURL("https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/ecocomDP.png")
+  browseURL("https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md")
 }
 
 

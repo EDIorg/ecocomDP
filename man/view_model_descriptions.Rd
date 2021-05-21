@@ -2,12 +2,12 @@
 % Please edit documentation in R/utilities.R
 \name{view_model_descriptions}
 \alias{view_model_descriptions}
-\title{View ecocomDP table descriptions and requirements}
+\title{View descriptions and requirements of ecocomDP tables}
 \usage{
 view_model_descriptions()
 }
 \description{
-View ecocomDP table descriptions and requirements
+View descriptions and requirements of ecocomDP tables
 }
 \examples{
 \dontrun{
