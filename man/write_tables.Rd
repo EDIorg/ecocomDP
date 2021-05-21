@@ -76,6 +76,8 @@ write_tables(
   observation = observation, 
   observation_ancillary = observation_ancillary)
 
+dir(mypath)
+
 # Clean up
 unlink(mypath, recursive = TRUE)
 
