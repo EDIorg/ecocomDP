@@ -93,40 +93,47 @@ This function creates an EML record for an ecocomDP by combining metadata from \
     Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. https://www.itis.gov/, http://www.marinespecies.org/, or https://gbif.org), will have their full taxonomic hierarchy expanded, including any common names for each level.
 }
 \examples{
-\dontrun{
+# Create directory with ecocomDP tables for create_eml()
+mypath <- paste0(tempdir(), "/data")
+dir.create(mypath)
+inpts <- c(ants_L1$edi.193.4$tables, path = mypath)
+do.call(write_tables, inpts)
+file.copy(system.file("extdata", "create_ecocomDP.R", package = "ecocomDP"), mypath)
 
-# Set path to ecocomDP tables and scripts
-path <- "/Users/csmith/Desktop/ecocomDP"
+dir(mypath)
 
-# Validate ecocomDP tables
-validate_datapath)
+# Describe, with annotations, what the source L0 dataset "is about"
+dataset_annotations <- c(
+  `species abundance` = "http://purl.dataone.org/odo/ECSO_00001688",
+  Population = "http://purl.dataone.org/odo/ECSO_00000311",
+  `level of ecological disturbance` = "http://purl.dataone.org/odo/ECSO_00002588",
+  `type of ecological disturbance` = "http://purl.dataone.org/odo/ECSO_00002589")
 
-# Create contact information for the ecocomDP creator
+# Add self as contact information incase questions arise
 additional_contact <- data.frame(
   givenName = 'Colin',
   surName = 'Smith',
   organizationName = 'Environmental Data Initiative',
-  electronicMailAddress = 'csmith@wisc.edu',
-  stringsAsFactors = FALSE
-)
+  electronicMailAddress = 'ecocomdp@gmail.com',
+  stringsAsFactors = FALSE)
 
 # Create EML
-create_eml(
-  path = path,
-  source_id = "knb-lter-sev.29.12",
-  derived_id = "edi.101.5",
-  script = c(
-    "convert_sev29_to_ecocomDP.R", 
-    "package_edi_333.R"
-  ),
-  script_description = c(
-    "R script for creating the ecocomDP tables.",
-    "R script for creating the ecocomDP EML"
-  ),
+eml <- create_eml(
+  path = mypath,
+  source_id = "knb-lter-hfr.118.32",
+  derived_id = "edi.193.4",
+  is_about = dataset_annotations,
+  script = "create_ecocomDP.R",
+  script_description = "A function for converting knb-lter-hrf.118 to ecocomDP",
   contact = additional_contact,
-  user_id = 'csmith',
-  user_domain = 'LTER',
-)
-}
+  user_id = 'ecocomdp',
+  user_domain = 'EDI',
+  basis_of_record = "HumanObservation")
+
+dir(mypath)
+# View(eml)
+
+# Clean up
+unlink(mypath, recursive = TRUE)
 
 }
