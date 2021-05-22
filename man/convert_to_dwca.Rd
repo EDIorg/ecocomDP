@@ -39,5 +39,22 @@ Convert ecocomDP to Darwin Core Archive
 Reads in an ecocomDP dataset from a supported repository and converts it to a DwC-A package.
 }
 \examples{
+# Create directory for DwC-A outputs
+mypath <- paste0(tempdir(), "/data")
+dir.create(mypath)
+
+# Convert an EDI published ecocomDP dataset to a DwC-A
+convert_to_dwca(
+  path = mypath, 
+  core_name = "event", 
+  source_id = "edi.193.4", 
+  derived_id = "edi.834.1", 
+  user_id = "ecocomdp",
+  user_domain = "EDI")
+
+dir(mypath)
+
+# Clean up
+unlink(mypath, recursive = TRUE)
 
 }
