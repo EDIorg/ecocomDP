@@ -51,7 +51,7 @@ plot_alpha_diversity <- function(observation, id, alpha = 1) {
     geom_line(data = ntaxa$total_ntaxa, aes(x = DATE, y = ntaxa, group = 1), color="black") +
     labs(title = "Alpha diversity (taxa richness) over time and space", subtitle = ds$id) +
     xlab("Year") +
-    ylab(paste0("Taxa observed (", ds$vunit, ")")) +
+    ylab(paste0("Taxa observed")) +
     scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") +
     guides(
       color = guide_legend(title = "Site", label.theme = element_text(size = 6)),
@@ -179,7 +179,7 @@ plot_taxa_accum_sites <- function(observation, id, alpha = 1) {
     geom_line() +
     labs(title = "Taxa accumulation curve over space", subtitle = ds$id) +
     xlab("Cumulative number of sites") +
-    ylab(paste0("Cumulative taxa observed (", ds$vunit, ")")) +
+    ylab(paste0("Cumulative taxa observed")) +
     theme_bw()
 }
 
@@ -257,12 +257,89 @@ plot_taxa_accum_time <- function(observation, id, alpha = 1) {
     geom_line(data = cuml.taxa.all.sites, aes(x = year, y = no.taxa)) +
     labs(title = "Taxa accumulation curves over time (site-specific and total)", subtitle = ds$id) +
     xlab("Year") +
-    ylab(paste0("Cumulative taxa observed (", ds$vunit, ")")) +
+    ylab(paste0("Cumulative taxa observed")) +
     scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") + 
     guides(color = guide_legend(title = "Site", label.theme = element_text(size = 6)),
            fill = guide_legend(title = "All sites")) +
     ylim(c(0, max(cuml.taxa.all.sites$no.taxa))) +
     theme_bw()
+}
+
+
+
+
+
+
+
+
+#' Plot number of taxa shared among sites
+#' 
+#' @param observation (data.frame) The observation table.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' 
+#' @import dplyr
+#' @import ggplot2
+#' @import tidyr
+#' 
+#' @examples
+#' \dontrun{
+#' # one dataset
+#' # - summarizing sometimes required
+#' # more than one dataset
+#' }
+#' 
+plot_taxa_shared_sites <- function(observation, id) {
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
+    stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
+  }
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  ds <- format_for_comm_plots(observation, id)                  # intermediate format for plotting
+  message("Plotting ", ds$id, " taxa shared among sites")
+  heat_pal_spectral <- colorRampPalette(rev( RColorBrewer::brewer.pal(11, "Spectral")))
+  # Count taxa shared between sites in a site by taxa matrix
+  shared.species <- function(comm) {
+    sites <- comm[, 1]
+    share.mat <- matrix(NA, nrow = length(sites), ncol = length(sites), dimnames = list(sites, sites))
+    site.pairs <- expand.grid(site1 = sites, site2 = sites)
+    site.pairs$shared <- NA
+    for(pair in 1:nrow(site.pairs)) {
+      site1 <- comm[site.pairs$site1[pair], -1]
+      site2 <- comm[site.pairs$site2[pair], -1]
+      site.pairs$shared[pair] <- sum(site1 == 1 & site2 == 1, na.rm = TRUE)
+    }
+    return(site.pairs)
+  }
+  # aggregate years by cumulative abundances
+  comm.cumul <- ds$dswide %>% 
+    group_by(SITE_ID) %>% 
+    select(-OBSERVATION_TYPE, -DATE) %>%
+    summarise_all(sum, na.rm = TRUE)
+  # Convert sum abundance to presence absense
+  vals <- comm.cumul %>% dplyr::select(-SITE_ID)
+  vals[vals > 0] <- 1
+  comm.cumul <- dplyr::bind_cols(comm.cumul[, 1], vals)
+  shared.taxa <- shared.species(as.data.frame(comm.cumul))
+  # scale font size
+  uniy <- length(unique(shared.taxa$site1))
+  if (uniy < 30) {
+    txty <- NULL
+  } else if (uniy < 60) {
+    txty <- 6
+  } else if (uniy >= 60) {
+    txty <- 4
+  }
+  # Plot
+  ggplot(shared.taxa, aes(x = site1, y = site2, fill = shared)) +
+    geom_raster() +
+    scale_fill_gradientn(colours = heat_pal_spectral(100), name = paste0("Taxa shared")) +
+    theme_bw() +
+    labs(title = "Taxa shared among sites", subtitle = ds$id) +
+    xlab("Site") +
+    ylab("Site") +
+    theme(
+      aspect.ratio = 1, 
+      axis.text.x.bottom = element_text(size = txty, angle = 90, hjust = 1, vjust = 0.5),
+      axis.text.y.left = element_text(size = txty))
 }
 
 
@@ -283,19 +360,12 @@ plot_taxa_accum_time <- function(observation, id, alpha = 1) {
 #' 
 format_for_comm_plots <- function(observation, id) {
   id <- id
-  observation <- observation
   # Constraints
   varname <- unique(observation[c("variable_name", "unit")])                 # Can only handle one variable
   if (nrow(varname) > 1) {
-    warning("The observation table of ", id, " has more than one variable ",
-            "and unit combination:\n", paste0("  variable = ", 
-                                              varname$variable_name, 
-                                              ", unit = ", varname$unit, 
-                                              collapse = "\n"), 
-            "\n plot_data() can only handle one. Consider splitting this ",
-            "dataset. Using the first set and dropping the others.", 
-            call. = FALSE)
-    
+    warning("Input 'observation' has > 1 unique variable_name and unit ",
+            "combination. Only the first will be used (", 
+            varname$variable_name, ", ", varname$unit, ").", call. = FALSE)
     if (is.na(varname$unit[1])) {
       observation <- dplyr::filter(observation, 
                                    variable_name == varname$variable_name[1] & 
@@ -307,13 +377,9 @@ format_for_comm_plots <- function(observation, id) {
     }
   }
   
-  # Duplicate observation handling
+  # Methods used by this processing don't require aggregation of non-unique observations, so drop duplicates without warning
   dups <- observation %>% dplyr::select(-observation_id, -value, -event_id) %>% duplicated()
-  if (any(dups)) {                                                          # Only unique observations allowed
-    warning("The observation table of ", id, " has ", sum(dups), " duplicate ",
-            "observations. Consider aggregating these observations by date ",
-            "and location before passing to plot_data(). Dropping duplicates ",
-            "and continuing. ", call. = FALSE)
+  if (any(dups)) {
     observation <- observation[!dups, ]
   }
   
@@ -340,11 +406,9 @@ format_for_comm_plots <- function(observation, id) {
   dswide <- dslong %>%                                        # wide form
     dplyr::select(-VARIABLE_UNITS) %>%
     tidyr::pivot_wider(names_from = VARIABLE_NAME, values_from = VALUE)
-  vunit <- unique(dslong$VARIABLE_UNITS)                      # variable unit
   res <- list(
     id = id,
     dslong = dslong,
-    dswide = dswide,
-    vunit = vunit)
+    dswide = dswide)
   return(res)
 }
