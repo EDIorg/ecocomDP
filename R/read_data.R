@@ -147,7 +147,7 @@ read_data <- function(id = NULL, parse_datetime = TRUE,
               names(d[[x]]$tables[[y]]) <<- tblnms
             }
             if ((y == "observation_ancillary") & ("event_id" %in% tblnms)) { # Warn if legacy data linking observation_ancillary through the event_id
-              warning("This dataset conforms to an older version of the ecocomDP model in which the observation_ancillary table is linked through the event_id. Ignore any validation issues related to the observation_ancillary table.", call. = FALSE)
+              warning("This dataset conforms to an older version of the ecocomDP model in which the observation_ancillary table is linked through the event_id. No validation checks will be applied to the observation_ancillary table.", call. = FALSE)
               assign("event_id", value = d[[x]]$tables[[y]]$event_id, env = parent.env(environment()))
             }
             use_i <- setdiff(nms, tblnms)
@@ -268,6 +268,8 @@ read_data <- function(id = NULL, parse_datetime = TRUE,
     nms <- colnames(d[[1]]$tables$observation_ancillary)
     nms[nms == "observation_id"] <- "event_id"
     colnames(d[[1]]$tables$observation_ancillary) <- nms
+    i <- stringr::str_detect(d[[1]]$validation_issues, "observation_ancillary")
+    d[[1]]$validation_issues[[i]] <- NULL # observation_ancillary related issues can be prohibitively long, so remove as a convenience
   }
   
   # Return --------------------------------------------------------------------
