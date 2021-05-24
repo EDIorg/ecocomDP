@@ -148,11 +148,11 @@ map_neon.ecocomdp.20166.001.001 <- function(
       location_id = namedLocation,
       datetime = collectDate,
       taxon_id = acceptedTaxonID,
-      variable_name = algalParameter,
       value = density,
       unit = cell_density_standardized_unit) %>%
     dplyr::mutate(
-      event_id = neon_sample_id
+      event_id = neon_sample_id,
+      variable_name = "cell density"
     )
 
   
