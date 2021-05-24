@@ -8,27 +8,24 @@
 # not to be exported
 #########################################
 make_neon_location_table <- function(loc_info, loc_col_names){
-  
-  
+
   neon_site_list <- data.table::fread(
     system.file("/extdata/neon-field-sites.csv", package = "ecocomDP"))
   
-  # populate latitude
-  if("decimalLatitude" %in% names(loc_info)) loc_info <- loc_info %>%
-      dplyr::rename(latitude = decimalLatitude) 
-  
-  #populate longitude
-  if("decimalLongitude" %in% names(loc_info)) loc_info <- loc_info %>%
-      dplyr::rename(longitude = decimalLongitude) 
-  
-  #populate longitude
+   
+  #populate location_id
   if("namedLocation" %in% names(loc_info)) loc_info <- loc_info %>%
-      dplyr::mutate(location_id = namedLocation) 
+      dplyr::mutate(location_id = namedLocation)
   
   # make location table
   table_location <- suppressMessages(
-    loc_info %>% 
-      create_location(location_name = loc_col_names))
+      ecocomDP::create_location(
+        L0_wide = loc_info,
+        location_id = "location_id",
+        latitude = "decimalLatitude",
+        longitude = "decimalLongitude",
+        elevation = "elevation",
+        location_name = loc_col_names))
   
   # code to handle updated create_location (updated 18 Sep 2020 in create_location branch)
   if(class(table_location) == "list" &&
