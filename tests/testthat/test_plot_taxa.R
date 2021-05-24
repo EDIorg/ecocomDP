@@ -1,4 +1,4 @@
-context("plotting")
+context("plot_taxa")
 
 library(ecocomDP)
 

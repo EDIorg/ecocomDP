@@ -1,125 +1,4 @@
-#' Plot alpha diversity (taxa richness) through time
-#'
-#' @param observation (data.frame) The observation table.
-#' @param id (character) Identifier of dataset to be used in plot subtitles.
-#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
-#' 
-#' @import dplyr
-#' @import ggplot2
-#' @import tidyr
-#' 
-#' @export
-#' 
-#' @examples
-#' observation <- ants_L1[[1]]$tables$observation
-#' id <- names(ants_L1)
-#' 
-#' plot_alpha_diversity(observation, id)
-#' 
-plot_alpha_diversity <- function(observation, id, alpha = 1) {
-  if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
-    stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
-  }
-  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
-  ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
-  # Calculate num unique taxa at each site through time and num unique taxa among all sites through time
-  calc_ntaxa <- function(ex) {
-    ntaxa <- ex %>%
-      filter(VALUE > 0) %>%
-      select(DATE, VARIABLE_NAME, SITE_ID) %>%
-      unique() %>%
-      mutate(ntaxa = 1) %>%
-      group_by(SITE_ID, DATE) %>%
-      summarize(ntaxa = sum(ntaxa))
-    total_ntaxa <- ex %>%
-      filter(VALUE > 0) %>%
-      select(DATE, VARIABLE_NAME) %>%
-      unique() %>%
-      mutate(ntaxa = 1) %>%
-      group_by(DATE) %>%
-      summarize(ntaxa = sum(ntaxa))
-    return(list(ntaxa = ntaxa, total_ntaxa = total_ntaxa))
-  }
-  ntaxa <- calc_ntaxa(ds$dslong)
-  # Plot
-  ggplot() +
-    geom_point(data = ntaxa$ntaxa, aes(x = DATE, y = ntaxa, group = SITE_ID, color = SITE_ID), alpha = alpha) +
-    geom_line(data = ntaxa$ntaxa, aes(x = DATE, y = ntaxa, group = SITE_ID, color = SITE_ID), alpha = alpha) +
-    geom_point(data = ntaxa$total_ntaxa, aes(x = DATE, y = ntaxa, fill = ""), color="black") +
-    geom_line(data = ntaxa$total_ntaxa, aes(x = DATE, y = ntaxa, group = 1), color="black") +
-    labs(title = "Alpha diversity through time", subtitle = ds$id) +
-    xlab("Year") +
-    ylab(paste0("Number of taxa observed")) +
-    scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") +
-    guides(
-      color = guide_legend(title = "Site", label.theme = element_text(size = 6)),
-      fill = guide_legend(title = "All sites")) +
-    ylim(c(0, max(ntaxa$total_ntaxa$ntaxa))) +
-    theme_bw()
-}
-
-
-
-
-
-
-
-
-#' Plot dates and times samples were taken
-#'
-#' @param observation (data.frame) The observation table.
-#' @param id (character) Identifier of dataset to be used in plot subtitles.
-#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
-#' 
-#' @import dplyr
-#' @import ggplot2
-#' @import tidyr
-#' 
-#' @export
-#' 
-#' @examples
-#' observation <- ants_L1[[1]]$tables$observation
-#' id <- names(ants_L1)
-#' 
-#' plot_sample_time(observation, id)
-#' 
-plot_sample_time <- function(observation, id, alpha = 1) {
-  if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
-    stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
-  }
-  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
-  ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
-  # Scale font size
-  uniy <- length(unique(ds$dslong$SITE_ID))
-  if (uniy < 30) {
-    txty <- NULL
-  } else if (uniy < 60) {
-    txty <- 6
-  } else if (uniy >= 60) {
-    txty <- 4
-  }
-  # Plot
-  ggplot() +
-    geom_point(data = ds$dslong, aes(x = DATE, y = SITE_ID), alpha = alpha) +
-    theme_bw() +
-    labs(title = "Sample times", subtitle = ds$id) +
-    xlab("Year") +
-    ylab("Site") +
-    scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") +
-    theme_bw() +
-    theme(
-      axis.text.y.left = element_text(size = txty),
-      plot.margin = margin(0.1, 0.25, 0.1, 0.1, "in"))
-}
-
-
-
-
-
-
-
-
-#' Plot taxa accumulation across site accumulation
+#' Plot taxa accumulation by site accumulation
 #'
 #' @param observation (data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
@@ -171,7 +50,7 @@ plot_taxa_accum_sites <- function(observation, id, alpha = 1) {
   ggplot(data = no.taxa.space, aes(x = no.site, y = no.taxa)) + 
     geom_point() +
     geom_line() +
-    labs(title = "Taxa accumulation over sites", subtitle = ds$id) +
+    labs(title = "Taxa accumulation by site accumulation", subtitle = ds$id) +
     xlab("Cumulative number of sites") +
     ylab(paste0("Cumulative number of taxa")) +
     theme_bw()
@@ -255,6 +134,127 @@ plot_taxa_accum_time <- function(observation, id, alpha = 1) {
            fill = guide_legend(title = "All sites")) +
     ylim(c(0, max(cuml.taxa.all.sites$no.taxa))) +
     theme_bw()
+}
+
+
+
+
+
+
+
+
+#' Plot diversity (taxa richness) through time
+#'
+#' @param observation (data.frame) The observation table.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
+#' 
+#' @import dplyr
+#' @import ggplot2
+#' @import tidyr
+#' 
+#' @export
+#' 
+#' @examples
+#' observation <- ants_L1[[1]]$tables$observation
+#' id <- names(ants_L1)
+#' 
+#' plot_taxa_diversity(observation, id)
+#' 
+plot_taxa_diversity <- function(observation, id, alpha = 1) {
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
+    stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
+  }
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
+  # Calculate num unique taxa at each site through time and num unique taxa among all sites through time
+  calc_ntaxa <- function(ex) {
+    ntaxa <- ex %>%
+      filter(VALUE > 0) %>%
+      select(DATE, VARIABLE_NAME, SITE_ID) %>%
+      unique() %>%
+      mutate(ntaxa = 1) %>%
+      group_by(SITE_ID, DATE) %>%
+      summarize(ntaxa = sum(ntaxa))
+    total_ntaxa <- ex %>%
+      filter(VALUE > 0) %>%
+      select(DATE, VARIABLE_NAME) %>%
+      unique() %>%
+      mutate(ntaxa = 1) %>%
+      group_by(DATE) %>%
+      summarize(ntaxa = sum(ntaxa))
+    return(list(ntaxa = ntaxa, total_ntaxa = total_ntaxa))
+  }
+  ntaxa <- calc_ntaxa(ds$dslong)
+  # Plot
+  ggplot() +
+    geom_point(data = ntaxa$ntaxa, aes(x = DATE, y = ntaxa, group = SITE_ID, color = SITE_ID), alpha = alpha) +
+    geom_line(data = ntaxa$ntaxa, aes(x = DATE, y = ntaxa, group = SITE_ID, color = SITE_ID), alpha = alpha) +
+    geom_point(data = ntaxa$total_ntaxa, aes(x = DATE, y = ntaxa, fill = ""), color="black") +
+    geom_line(data = ntaxa$total_ntaxa, aes(x = DATE, y = ntaxa, group = 1), color="black") +
+    labs(title = "Diversity through time", subtitle = ds$id) +
+    xlab("Year") +
+    ylab(paste0("Number of taxa observed")) +
+    scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") +
+    guides(
+      color = guide_legend(title = "Site", label.theme = element_text(size = 6)),
+      fill = guide_legend(title = "All sites")) +
+    ylim(c(0, max(ntaxa$total_ntaxa$ntaxa))) +
+    theme_bw()
+}
+
+
+
+
+
+
+
+
+#' Plot dates and times samples were taken
+#'
+#' @param observation (data.frame) The observation table.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
+#' 
+#' @import dplyr
+#' @import ggplot2
+#' @import tidyr
+#' 
+#' @export
+#' 
+#' @examples
+#' observation <- ants_L1[[1]]$tables$observation
+#' id <- names(ants_L1)
+#' 
+#' plot_taxa_sample_time(observation, id)
+#' 
+plot_taxa_sample_time <- function(observation, id, alpha = 1) {
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
+    stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
+  }
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
+  # Scale font size
+  uniy <- length(unique(ds$dslong$SITE_ID))
+  if (uniy < 30) {
+    txty <- NULL
+  } else if (uniy < 60) {
+    txty <- 6
+  } else if (uniy >= 60) {
+    txty <- 4
+  }
+  # Plot
+  ggplot() +
+    geom_point(data = ds$dslong, aes(x = DATE, y = SITE_ID), alpha = alpha) +
+    theme_bw() +
+    labs(title = "Sample times", subtitle = ds$id) +
+    xlab("Year") +
+    ylab("Site") +
+    scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") +
+    theme_bw() +
+    theme(
+      axis.text.y.left = element_text(size = txty),
+      plot.margin = margin(0.1, 0.25, 0.1, 0.1, "in"))
 }
 
 
