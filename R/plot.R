@@ -1,4 +1,4 @@
-#' Plot alpha diversity (taxa richness) over time and space
+#' Plot alpha diversity (taxa richness) through time
 #'
 #' @param observation (data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
@@ -11,11 +11,10 @@
 #' @export
 #' 
 #' @examples
-#' \dontrun{
-#' # one dataset
-#' # - summarizing sometimes required
-#' # more than one dataset
-#' }
+#' observation <- ants_L1[[1]]$tables$observation
+#' id <- names(ants_L1)
+#' 
+#' plot_alpha_diversity(observation, id)
 #' 
 plot_alpha_diversity <- function(observation, id, alpha = 1) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
@@ -23,7 +22,6 @@ plot_alpha_diversity <- function(observation, id, alpha = 1) {
   }
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
-  message("Plotting ", ds$id, " alpha diversity")
   # Calculate num unique taxa at each site through time and num unique taxa among all sites through time
   calc_ntaxa <- function(ex) {
     ntaxa <- ex %>%
@@ -49,9 +47,9 @@ plot_alpha_diversity <- function(observation, id, alpha = 1) {
     geom_line(data = ntaxa$ntaxa, aes(x = DATE, y = ntaxa, group = SITE_ID, color = SITE_ID), alpha = alpha) +
     geom_point(data = ntaxa$total_ntaxa, aes(x = DATE, y = ntaxa, fill = ""), color="black") +
     geom_line(data = ntaxa$total_ntaxa, aes(x = DATE, y = ntaxa, group = 1), color="black") +
-    labs(title = "Alpha diversity (taxa richness) over time and space", subtitle = ds$id) +
+    labs(title = "Alpha diversity through time", subtitle = ds$id) +
     xlab("Year") +
-    ylab(paste0("Taxa observed")) +
+    ylab(paste0("Number of taxa observed")) +
     scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") +
     guides(
       color = guide_legend(title = "Site", label.theme = element_text(size = 6)),
@@ -67,7 +65,7 @@ plot_alpha_diversity <- function(observation, id, alpha = 1) {
 
 
 
-#' Plot spatiotemporal sampling effort
+#' Plot dates and times samples were taken
 #'
 #' @param observation (data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
@@ -80,19 +78,17 @@ plot_alpha_diversity <- function(observation, id, alpha = 1) {
 #' @export
 #' 
 #' @examples
-#' \dontrun{
-#' # one dataset
-#' # - summarizing sometimes required
-#' # more than one dataset
-#' }
+#' observation <- ants_L1[[1]]$tables$observation
+#' id <- names(ants_L1)
 #' 
-plot_sampling_times <- function(observation, id, alpha = 1) {
+#' plot_sample_time(observation, id)
+#' 
+plot_sample_time <- function(observation, id, alpha = 1) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
     stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
   }
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
-  message("Plotting ", ds$id, " spatiotemporal sampling effort")
   # Scale font size
   uniy <- length(unique(ds$dslong$SITE_ID))
   if (uniy < 30) {
@@ -106,7 +102,7 @@ plot_sampling_times <- function(observation, id, alpha = 1) {
   ggplot() +
     geom_point(data = ds$dslong, aes(x = DATE, y = SITE_ID), alpha = alpha) +
     theme_bw() +
-    labs(title = "Spatiotemporal sampling effort", subtitle = ds$id) +
+    labs(title = "Sample times", subtitle = ds$id) +
     xlab("Year") +
     ylab("Site") +
     scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") +
@@ -123,7 +119,7 @@ plot_sampling_times <- function(observation, id, alpha = 1) {
 
 
 
-#' Plot taxa accumulation curve over space
+#' Plot taxa accumulation across site accumulation
 #'
 #' @param observation (data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
@@ -136,11 +132,10 @@ plot_sampling_times <- function(observation, id, alpha = 1) {
 #' @export
 #' 
 #' @examples
-#' \dontrun{
-#' # one dataset
-#' # - summarizing sometimes required
-#' # more than one dataset
-#' }
+#' observation <- ants_L1[[1]]$tables$observation
+#' id <- names(ants_L1)
+#' 
+#' plot_taxa_accum_sites(observation, id)
 #' 
 plot_taxa_accum_sites <- function(observation, id, alpha = 1) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
@@ -148,7 +143,6 @@ plot_taxa_accum_sites <- function(observation, id, alpha = 1) {
   }
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
-  message("Plotting ", ds$id, " taxa accumulation over space")
   # Calculate cumulative number of taxa
   calc_cuml_taxa_space <- function(ex) {
     taxa.s.list <- list()
@@ -177,9 +171,9 @@ plot_taxa_accum_sites <- function(observation, id, alpha = 1) {
   ggplot(data = no.taxa.space, aes(x = no.site, y = no.taxa)) + 
     geom_point() +
     geom_line() +
-    labs(title = "Taxa accumulation curve over space", subtitle = ds$id) +
+    labs(title = "Taxa accumulation over sites", subtitle = ds$id) +
     xlab("Cumulative number of sites") +
-    ylab(paste0("Cumulative taxa observed")) +
+    ylab(paste0("Cumulative number of taxa")) +
     theme_bw()
 }
 
@@ -190,7 +184,7 @@ plot_taxa_accum_sites <- function(observation, id, alpha = 1) {
 
 
 
-#' Plot taxa accumulation curves over time (site-specific and total)
+#' Plot taxa accumulation through time
 #'
 #' @param observation (data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
@@ -203,11 +197,10 @@ plot_taxa_accum_sites <- function(observation, id, alpha = 1) {
 #' @export
 #' 
 #' @examples
-#' \dontrun{
-#' # one dataset
-#' # - summarizing sometimes required
-#' # more than one dataset
-#' }
+#' observation <- ants_L1[[1]]$tables$observation
+#' id <- names(ants_L1)
+#' 
+#' plot_taxa_accum_time(observation, id)
 #' 
 plot_taxa_accum_time <- function(observation, id, alpha = 1) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
@@ -215,7 +208,6 @@ plot_taxa_accum_time <- function(observation, id, alpha = 1) {
   }
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
-  message("Plotting ", ds$id, " taxa accumulation over time")
   # Calculate cumulative number of taxa 
   cuml.taxa.fun <- function(ex){
     taxa.t.list <- list()
@@ -255,9 +247,9 @@ plot_taxa_accum_time <- function(observation, id, alpha = 1) {
     geom_line(data = cuml.taxa.by.site, aes(x = year, y = no.taxa, color = SITE_ID), alpha = alpha) +
     geom_point(data = cuml.taxa.all.sites, aes(x = year, y = no.taxa, fill = "")) +
     geom_line(data = cuml.taxa.all.sites, aes(x = year, y = no.taxa)) +
-    labs(title = "Taxa accumulation curves over time (site-specific and total)", subtitle = ds$id) +
+    labs(title = "Accumulation of taxa through time", subtitle = ds$id) +
     xlab("Year") +
-    ylab(paste0("Cumulative taxa observed")) +
+    ylab(paste0("Cumulative number of taxa")) +
     scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") + 
     guides(color = guide_legend(title = "Site", label.theme = element_text(size = 6)),
            fill = guide_legend(title = "All sites")) +
@@ -272,7 +264,7 @@ plot_taxa_accum_time <- function(observation, id, alpha = 1) {
 
 
 
-#' Plot number of taxa shared among sites
+#' Plot number of unique taxa shared across sites
 #' 
 #' @param observation (data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
@@ -282,11 +274,10 @@ plot_taxa_accum_time <- function(observation, id, alpha = 1) {
 #' @import tidyr
 #' 
 #' @examples
-#' \dontrun{
-#' # one dataset
-#' # - summarizing sometimes required
-#' # more than one dataset
-#' }
+#' observation <- ants_L1[[1]]$tables$observation
+#' id <- names(ants_L1)
+#' 
+#' plot_taxa_shared_sites(observation, id)
 #' 
 plot_taxa_shared_sites <- function(observation, id) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
@@ -294,7 +285,6 @@ plot_taxa_shared_sites <- function(observation, id) {
   }
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                  # intermediate format for plotting
-  message("Plotting ", ds$id, " taxa shared among sites")
   heat_pal_spectral <- colorRampPalette(rev( RColorBrewer::brewer.pal(11, "Spectral")))
   # Count taxa shared between sites in a site by taxa matrix
   shared.species <- function(comm) {
@@ -329,17 +319,23 @@ plot_taxa_shared_sites <- function(observation, id) {
     txty <- 4
   }
   # Plot
-  ggplot(shared.taxa, aes(x = site1, y = site2, fill = shared)) +
+  p <- ggplot(shared.taxa, aes(x = site1, y = site2, fill = shared)) +
     geom_raster() +
     scale_fill_gradientn(colours = heat_pal_spectral(100), name = paste0("Taxa shared")) +
     theme_bw() +
-    labs(title = "Taxa shared among sites", subtitle = ds$id) +
+    labs(title = "Number of taxa shared across sites", subtitle = ds$id) +
     xlab("Site") +
     ylab("Site") +
     theme(
       aspect.ratio = 1, 
       axis.text.x.bottom = element_text(size = txty, angle = 90, hjust = 1, vjust = 0.5),
       axis.text.y.left = element_text(size = txty))
+  if (is.null(txty)) {
+    p <- p + annotate("text", x = shared.taxa$site1, y = shared.taxa$site2, label = shared.taxa$shared)
+  } else {
+    p <- p + annotate("text", x = shared.taxa$site1, y = shared.taxa$site2, label = shared.taxa$shared, size = txty)
+  }
+  p
 }
 
 

@@ -13,20 +13,6 @@ testthat::test_that("Warns if datetimes are chars", {
     regexp = "Input datetimes are character strings. Accuracy may be improved")
 })
 
-# Warns if duplicate observations ---------------------------------------------
-
-testthat::test_that("Warns if duplicate observations", {
-  d <- ants_L1
-  d[[1]]$tables$observation <- rbind(
-    d[[1]]$tables$observation,
-    d[[1]]$tables$observation[1, ])
-  id <- names(d)
-  d <- d[[1]]$tables$observation
-  expect_warning(
-    format_for_comm_plots(observation = d, id = id),
-    regexp = "duplicate observations. Consider aggregating")
-})
-
 # Warns if > 1 measurement variable -------------------------------------------
 
 testthat::test_that("Warns if > 1 measurement variable", {
@@ -39,6 +25,6 @@ testthat::test_that("Warns if > 1 measurement variable", {
   d <- d[[1]]$tables$observation
   expect_warning(
     format_for_comm_plots(observation = d, id = id),
-    regexp = "can only handle one. Consider splitting this dataset")
+    regexp = "has > 1 unique variable_name and unit combination")
 })
 

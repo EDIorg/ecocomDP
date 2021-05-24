@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot_taxa_accum_sites}
 \alias{plot_taxa_accum_sites}
-\title{Plot taxa accumulation curve over space}
+\title{Plot taxa accumulation across site accumulation}
 \usage{
 plot_taxa_accum_sites(observation, id, alpha = 1)
 }
@@ -14,13 +14,12 @@ plot_taxa_accum_sites(observation, id, alpha = 1)
 \item{alpha}{(numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.}
 }
 \description{
-Plot taxa accumulation curve over space
+Plot taxa accumulation across site accumulation
 }
 \examples{
-\dontrun{
-# one dataset
-# - summarizing sometimes required
-# more than one dataset
-}
+observation <- ants_L1[[1]]$tables$observation
+id <- names(ants_L1)
+
+plot_taxa_accum_sites(observation, id)
 
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot_taxa_accum_time}
 \alias{plot_taxa_accum_time}
-\title{Plot taxa accumulation curves over time (site-specific and total)}
+\title{Plot taxa accumulation through time}
 \usage{
 plot_taxa_accum_time(observation, id, alpha = 1)
 }
@@ -14,13 +14,12 @@ plot_taxa_accum_time(observation, id, alpha = 1)
 \item{alpha}{(numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.}
 }
 \description{
-Plot taxa accumulation curves over time (site-specific and total)
+Plot taxa accumulation through time
 }
 \examples{
-\dontrun{
-# one dataset
-# - summarizing sometimes required
-# more than one dataset
-}
+observation <- ants_L1[[1]]$tables$observation
+id <- names(ants_L1)
+
+plot_taxa_accum_time(observation, id)
 
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{plot_taxa_shared_sites}
 \alias{plot_taxa_shared_sites}
-\title{Plot number of taxa shared among sites}
+\title{Plot number of unique taxa shared across sites}
 \usage{
 plot_taxa_shared_sites(observation, id)
 }
@@ -12,13 +12,12 @@ plot_taxa_shared_sites(observation, id)
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}
 }
 \description{
-Plot number of taxa shared among sites
+Plot number of unique taxa shared across sites
 }
 \examples{
-\dontrun{
-# one dataset
-# - summarizing sometimes required
-# more than one dataset
-}
+observation <- ants_L1[[1]]$tables$observation
+id <- names(ants_L1)
+
+plot_taxa_shared_sites(observation, id)
 
 }
