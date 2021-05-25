@@ -17,3 +17,65 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(ecocomDP)
 ```
+
+```{r}
+library(ecocomDP)
+
+# Search for data of interest across common facets ----------------------------
+
+# Use any combination of search fields to find the data you're looking for
+r <- search_data( # TODO: refactor for example
+  text = c("Lake", "River"),
+  taxa = c("Plantae", "Animalia"),
+  num.taxa = c(0, 10),
+  years = c(10, 100),
+  sd.between.surveys = c(.01, 100),
+  geographic.area = c(47.1, -86.7, 42.5, -92),
+  boolean.operator = "OR")
+View(r)
+
+# Read datasets ---------------------------------------------------------------
+
+d <- read_data("edi.xxxxx") # TODO: refactor for example
+
+# Save datasets --------------------------------------------------------------
+# Save datasets locally, this saves time downloading in the future
+
+path_tbls <- "C:\\Users\\Colin\\Documents\\EDI\\data_sets\\ecocomDP_revision"
+save_data(d, path) # default is .rds
+save_data(d, path, file.type = ".csv") # but maybe you want to access the data in a different language via .csv
+
+# Read locally saved datasets -------------------------------------------------
+
+d <- read_data(from.file = path_tbls)
+
+# Visually explore a dataset with the plotters --------------------------------
+# More often than not, some aggregation of observations is required to create a meaningful plot, which requires some understanding
+
+# You'll get warnings if you don't
+plot_sampling_times(d)
+
+# summarize observations
+
+plot_sampling_times(d)
+
+# Looks like some aggregation is required due to irregular sampling intervals
+
+plot_alpha_diversity(d)
+plot_taxa_accum_sites(d)
+plot_taxa_accum_time(d)
+plot_taxa_shared_sites(d)
+
+# Work with a dataset in wide form --------------------------------------------
+
+dflat <- ecocomDP::flatten_data(data.list = d[[1]]$tables)
+# Notes on what is returned and what is not that needs to be referenced in the L1
+head(dflat)
+
+# Some general notes on iteration ---------------------------------------------
+# Saving datasets together is a common usecase and an operation may apply across
+# more than one
+
+# Some general notes on aggregation of datasets -------------------------------
+# Globally unique keys keep datasets from getting mixed up.
+```

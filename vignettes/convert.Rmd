@@ -1,0 +1,40 @@
+---
+title: "convert"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{convert}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(ecocomDP)
+```
+
+```{r}
+# Converting an ecocomDP dataset to a Darwin Core Archive is as simple as a single function call. Currently, the L1 ecocomDP dataset must be published in a data repository. Converts edi.193.4 (ecocomDP) into edi.834.1 (DwC-A, event core).
+
+# Source and derived data packages:
+# edi.193.4 - https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=193&revision=4
+# edi.834.1 - https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=834&revision=1
+
+
+mydir <- "C:\\Users\\Colin\\Documents\\EDI\\data_sets\\ecocomDP_revision_DwCA"
+
+convert_to_dwca(
+  path = mypath, 
+  core_name = "event", 
+  source_id = "edi.193.4", 
+  derived_id = "edi.834.1", 
+  user_id = "ecocomdp",
+  user_domain = "EDI")
+
+# And there you have it. The DwCA tables and metadata, ready to be published in a repository.
+```
