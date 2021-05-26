@@ -16,44 +16,33 @@ testthat::test_that("Round trip (from L0 wide to L1 wide)", {
   # 2.) Relatedly, the L0 column listing location names, at the observation level, is now "location_name".
   # 3.) Primary keys, row identifiers, of the ancillary tables are now present.
   
-  cols_L0_wide <- colnames(L0_wide)
-  cols_L1_flat <- colnames(L1_flat)
+  # Adjust L0 wide to our expectations
+  L0_wide <- L0_wide %>% 
+    dplyr::select(-block) %>%           # A higher level location lost when flattened
+    dplyr::rename(location_name = plot) # Becomes "location_name" when flattened
   
-  # Create set of L0 wide columns to test
-  loc_cols <- c("block", "plot") # Location columns
-  # dataset_summary_cols <- c("original_package_id",
-  #                           "length_of_survey_years",
-  #                           "number_of_years_sampled",
-  #                           "std_dev_interval_betw_years",
-  #                           "geo_extent_bounding_box_m2",
-  #                           "max_num_taxa")
-  # TODO: Rename plot column
+  # TEST: All L0 wide columns (with above exceptions) should be in L1 flat
+  cols_missing_from_L1 <- base::setdiff(colnames(L0_wide), colnames(L1_flat))
+  expect_true(length(cols_missing_from_L1) == 0)
+  
+  # TEST: All L1 flat columns should be in L0 wide
+  cols_missing_from_L0 <- base::setdiff(colnames(L1_flat), colnames(L0_wide))
+  expect_true(length(cols_missing_from_L0) == 0)
+  
   
   # Create set of L1 flat columns to test
+  # TODO test that some columns were not included
+  # L1_flat <- L1_flat %>%
+  #   dplyr::select(-c("observation_ancillary_id", # Primary keys of ancillary tables (these were generated during L1 creation)
+  #                    "location_ancillary_id", 
+  #                    "taxon_ancillary_id", 
+  #                    "variable_mapping_id"))
   
+  # TODO TEST: Column classifications should be equivalent
   
-  # Columns originally in L0 wide but now missing from L1 flat
-  cols_missing_from_L1 <- base::setdiff(cols_L0_wide, cols_L1_flat)
+  # TODO TEST: Missing non-required columns isn't an issue
   
-  
-  ancil_key_cols <- c("observation_ancillary_id", # Primary keys of ancillary tables (these were generated during L1 creation)
-                      "location_ancillary_id", 
-                      "taxon_ancillary_id", 
-                      "variable_mapping_id")
-  
-  cols_not_expected_to_return_to_L1_flat <- c(location_cols, dataset_summary_cols)
-  cols_missing_from_L1 <- cols_missing_from_L1[!(cols_missing_from_L1 %in% cols_not_expected_to_return_to_L1_flat)]
-  
-  expect_true(length(cols_missing_from_L1) == 0) # All expected columns of L1 flat are accounted present
-  
-  # TODO: Not only should these columns not be expected, but they should be absent (i.e. returning unnecessary information)
-  # TEST: None of this set should be present
-  
-  # TODO: Columns in L1 flat that were never in L0 wide.
-  # TEST: Anything in L1 flat that is outside the set of columns from L0 wide + ancillary_pkeys is an outlier and should be excluded
-  
-  
-  # Column "A" in L0 wide has the same values in column "A" of L1 flat
+  # TODO TEST: Observation "A" in L0 wide has the same values in observation "A" of L1 flat
   invisible(
     lapply(
       colnames(L0_wide),

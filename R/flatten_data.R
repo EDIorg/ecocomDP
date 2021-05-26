@@ -25,32 +25,16 @@
 #' flat_data <- flatten_data(my_list_of_tables)
 #' }
 #' 
-flatten_data <- function(tables){
+flatten_data <- function(tables) {
   
-  # helper function to determine if a col is all NAs
-  # returns boolean
-  not_all_NAs <- function(x)!all(is.na(x))
-  
-  dup_fxn <- function(x){
-    x <- unlist(x)
-    if(class(x) == "numeric"){
-      message(paste0("WARNING: duplicate values observed for during pivot_wider"))
-      return(mean(x, na.rm = TRUE))
-    }else{
-      return(paste(x, collapse = " | "))
-    }
-  }
-  
-  
-  # merge observation table with taxon table
+  # Merge observation table with taxon table
   all_merged <- tables$observation %>%
     dplyr::select_if(not_all_NAs) %>%
     dplyr::left_join(
-      tables$taxon %>% dplyr::select_if(not_all_NAs), 
+      tables$taxon %>% dplyr::select_if(not_all_NAs),
       by = "taxon_id")
   
-  
-  # merge all_merged with observation_ancillary
+  # Merge observation_ancillary
   if("observation_ancillary" %in% names(tables)){
     
     #handle missing observation_id or case where all observation_id is na
@@ -60,19 +44,9 @@ flatten_data <- function(tables){
     
     #the expected case:
     }else{
-      
-      observation_ancillary_long <- tables$observation_ancillary 
-      
-      observation_ancillary_long_wide <- observation_ancillary_long[
-        ,!names(observation_ancillary_long) %in% c("observation_ancillary_id","unit")] %>%
-        tidyr::pivot_wider(
-          names_from = variable_name, 
-          values_from = value,
-          values_fn = dup_fxn) %>%
-        dplyr::select_if(not_all_NAs)
-      
+      observation_ancillary_wide <- flatten_ancillary(tables$observation_ancillary)
       all_merged <- all_merged %>%
-        dplyr::left_join(observation_ancillary_long_wide, 
+        dplyr::left_join(observation_ancillary_wide, 
                          by = "observation_id",
                          suffix = c("", "_observation_ancillary"))
     }
@@ -160,36 +134,31 @@ flatten_data <- function(tables){
   # merge additional location_ancillary data
   # only for bottom level when locations are nested
   if("location_ancillary" %in% names(tables)){
+    
     location_ancillary <- tables$location_ancillary %>%
       dplyr::filter(variable_name!="NEON location type",
                     location_id %in% all_merged$location_id)
     
-    if(nrow(location_ancillary) > 0){
-      location_ancillary_wide <- location_ancillary %>%
-        dplyr::select(location_id, variable_name, value) %>%
-        tidyr::pivot_wider(names_from = variable_name, values_from = value)
+    if (nrow(location_ancillary) > 0) {
+      location_ancillary_wide <- flatten_ancillary(location_ancillary)
       all_merged <- all_merged %>%
         dplyr::left_join(
-          location_ancillary_wide %>% 
+          location_ancillary_wide %>%
             dplyr::select_if(not_all_NAs),
           by = "location_id",
           suffix = c("", "_location_ancillary"))
     }
+    
   }
   
   
   
   # merge taxon_ancillary
-  
-  
-
   if("taxon_ancillary" %in% names(tables)){
-    taxon_ancillary <- tables$taxon_ancillary %>% 
-      dplyr::select(taxon_id, variable_name, value) %>%
-      tidyr::pivot_wider(names_from = variable_name, values_from = value)
+    taxon_ancillary_wide <- flatten_ancillary(tables$taxon_ancillary)
     all_merged <- all_merged %>%
       dplyr::left_join(
-        taxon_ancillary %>% 
+        taxon_ancillary_wide %>%
           dplyr::select_if(not_all_NAs),
         by = "taxon_id",
         suffix = c("", "_taxon_ancillary"))
@@ -212,26 +181,113 @@ flatten_data <- function(tables){
     
     all_merged <- all_merged %>%
       dplyr::left_join(
-        location_ancillary %>% 
+        location_ancillary %>%
           dplyr::select_if(not_all_NAs),
         by = "location_id",
         suffix = c("", "_location_ancillary"))
   }
   
+  # Merge dataset_summary
+  if ("dataset_summary" %in% names(tables)) {
+    dataset_summary <- tables$dataset_summary
+    all_merged <- all_merged %>%
+      dplyr::left_join(dataset_summary, by = "package_id")
+  }
+  
+  # TODO Coerce column classes. Often a numeric type has been stored as character in the long L1 tables. But some columns (primarily ids) should remain character
+  
   return(all_merged)
   
-} # end of flatten
+}
 
 
 
-# # read in data using ecocomDP
-# all_data <- read_data(
-#   id = "DP1.20120.001",
-#   site= c('COMO','LECO'), 
-#   startdate = "2019-06",
-#   enddate = "2019-09",
-#   token = Sys.getenv("NEON_TOKEN"))
-# 
-# all_data <- read_data("edi.290.1")
-# 
-# tables <- all_data[[1]]$tables
+
+
+
+
+
+#' Flatten ancillary table
+#'
+#' @param ancillary_table (data.frame) Ancillary table to flatten. Can be: observation_ancillary, location_ancillary, or taxon_ancillary.
+#'
+#' @return (data.frame) A flattened version of \code{ancillary_table} with units added following the unit_<variable_name> convention, and sorted so the unit immediately follows its corresponding variable_name.
+#' 
+flatten_ancillary <- function(ancillary_table) {
+  # Spread on variable_name and value, then add units later
+  fkey <- stringr::str_subset(colnames(ancillary_table), "(?<!ancillary_)id") # Use regexpr to select id column to later join on
+  auth <- ifelse("author" %in% colnames(ancillary_table), "author", list(NULL))
+  vars <- c(fkey, "variable_name", "value", unlist(auth))
+  df <- ancillary_table %>% 
+    dplyr::select(vars) %>%
+    tidyr::pivot_wider(names_from = variable_name, 
+                       values_from = value)
+  # Add units
+  unts <- ancillary_table$unit
+  if (!is.null(unts) & not_all_NAs(unts)) {
+    unts_df <- ancillary_table %>% # Get units
+      dplyr::select(variable_name, unit) %>%
+      dplyr::distinct() %>%
+      na.omit() %>% 
+      tidyr::pivot_wider(names_from = variable_name, values_from = unit)
+    # Rename for sorting
+    colnames(unts_df) <- paste0(colnames(unts_df), "_unit")
+    # Append to flattened df
+    df <- dplyr::bind_cols(df, unts_df)
+    colnames(df)
+    # Sort so units are adjacent their variable
+    df <- df %>%  
+      dplyr::select(order(colnames(df)))
+    # Rename following convention
+    cols <- colnames(df)
+    i <- stringr::str_detect(colnames(df), "_unit")
+    varnames <- stringr::str_remove_all(cols[i], "_unit")
+    cols[i] <- paste0("unit_", varnames)
+    colnames(df) <- cols
+  }
+  df <- df %>% dplyr::select_if(not_all_NAs)
+  return(df)
+}
+
+
+
+
+
+
+
+
+#' Determine if a col is all NAs
+#'
+#' @param x A vector of values
+#'
+#' @return (logical) TRUE if not all NAs, otherwise FALSE
+#' 
+not_all_NAs <- function(x) {
+  !all(is.na(x))
+}
+
+
+
+
+
+
+
+
+#' Helper to handle duplicates
+#'
+#' @param x A vector of values
+#'
+#' @return A vector of values, averaged or concatenated
+#' 
+#' @details Helper function to handle duplicates within the observation_ancillary table. Modifications to the ecocomDP model and corresponding validation checks prohibit duplicates within ancillary tables, but this function handles instances where a user flattens data that could not otherwise be flattened.
+#'
+dup_fxn <- function(x){
+  x <- unlist(x)
+  if(class(x) == "numeric"){
+    message(paste0("WARNING: duplicate values observed for during pivot_wider. Duplicates will be averaged."))
+    return(mean(x, na.rm = TRUE))
+  }else{
+    message(paste0("WARNING: duplicate values observed for during pivot_wider. Duplicates will be concatenated and pipe delimited."))
+    return(paste(x, collapse = " | "))
+  }
+}
