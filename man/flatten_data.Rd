@@ -2,7 +2,7 @@
 % Please edit documentation in R/flatten_data.R
 \name{flatten_data}
 \alias{flatten_data}
-\title{Join all tables of an ecocomDP dataset and spread into wide format}
+\title{Join all tables of an ecocomDP dataset and spread into flat format}
 \usage{
 flatten_data(tables)
 }
@@ -10,10 +10,10 @@ flatten_data(tables)
 \item{tables}{(list) A named list of ecocomDP tables (as data.frames).}
 }
 \value{
-(data.frame) A single wide table created by joining and spreading all \code{tables}.
+(data.frame) A single flat table created by joining and spreading all \code{tables}.
 }
 \description{
-Join all tables of an ecocomDP dataset and spread into wide format
+Join all tables of an ecocomDP dataset and spread into flat format
 }
 \examples{
 \dontrun{

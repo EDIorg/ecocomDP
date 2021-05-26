@@ -20,7 +20,7 @@ make_neon_location_table <- function(loc_info, loc_col_names){
   # make location table
   table_location <- suppressMessages(
       ecocomDP::create_location(
-        L0_wide = loc_info,
+        L0_flat = loc_info,
         location_id = "location_id",
         latitude = "decimalLatitude",
         longitude = "decimalLongitude",

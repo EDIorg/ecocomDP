@@ -31,19 +31,20 @@ testthat::test_that("write_tables()", {
   # Parameterize
   mypath <- paste0(tempdir(), "/data")
   dir.create(mypath)
-  wide <- ants_L0_wide
+  flat <- ants_L0_flat
   observation <- create_observation(
-    L0_wide = wide, 
+    L0_flat = flat, 
     observation_id = "observation_id", 
     event_id = "event_id", 
     package_id = "package_id",
     location_id = "location_id", 
     datetime = "datetime", 
     taxon_id = "taxon_id", 
-    variable_name = "abundance",
-    unit = "unit_abundance")
+    variable_name = "variable_name",
+    value = "value",
+    unit = "unit")
   observation_ancillary <- create_observation_ancillary(
-    L0_wide = wide,
+    L0_flat = flat,
     observation_id = "observation_id", 
     variable_name = c("trap.type", "trap.num", "moose.cage"))
   # Write tables to file

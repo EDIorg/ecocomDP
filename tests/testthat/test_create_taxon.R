@@ -6,9 +6,9 @@ library(ecocomDP)
 
 testthat::test_that("Standard L1 column inputs", {
   crit <- read_criteria()
-  wide <- ants_L0_wide
+  flat <- ants_L0_flat
   res <- create_taxon(
-    L0_wide = wide, 
+    L0_flat = flat, 
     taxon_id = "taxon_id", 
     taxon_rank = "taxon_rank", 
     taxon_name = "taxon_name", 

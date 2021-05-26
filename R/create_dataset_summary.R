@@ -1,25 +1,27 @@
 #' Create the dataset_summary table
 #'
-#' @param L0_wide (data.frame) The fully joined source L0 dataset, in wide format.
-#' @param package_id (character) Column in \code{L0_wide} containing the identifier this dataset will have once it's published in a data repository.
-#' @param original_package_id (character) An optional column in \code{L0_wide} containing the identifier of the L0 dataset in the repository it's published (some L0 are not published).
-#' @param length_of_survey_years (character) Column in \code{L0_wide} containing the number of years the study has been ongoing. Use \code{calc_length_of_survey_years()} to calculate this value.
-#' @param number_of_years_sampled (character) Column in \code{L0_wide} containing the number of years within the period of the study that samples were taken. Use \code{calc_number_of_years_sampled()} to calculate this value.
-#' @param std_dev_interval_betw_years (character) Column in \code{L0_wide} containing the standard deviation of the interval between sampling events. Use \code{calc_std_dev_interval_betw_years()} to calculate this value.
-#' @param max_num_taxa (character) Column in \code{L0_wide} containing the number of unique taxa in this dataset.
-#' @param geo_extent_bounding_box_m2 (character) An optional column in \code{L0_wide} containing the area (in meters) of the study location, if applicable (some L0 were collected at a single point). Use \code{calc_geo_extent_bounding_box_m2()} to calculate this value.
+#' @param L0_flat (data.frame) The fully joined source L0 dataset, in "flat" format (see details).
+#' @param package_id (character) Column in \code{L0_flat} containing the identifier this dataset will have once it's published in a data repository.
+#' @param original_package_id (character) An optional column in \code{L0_flat} containing the identifier of the L0 dataset in the repository it's published (some L0 are not published).
+#' @param length_of_survey_years (character) Column in \code{L0_flat} containing the number of years the study has been ongoing. Use \code{calc_length_of_survey_years()} to calculate this value.
+#' @param number_of_years_sampled (character) Column in \code{L0_flat} containing the number of years within the period of the study that samples were taken. Use \code{calc_number_of_years_sampled()} to calculate this value.
+#' @param std_dev_interval_betw_years (character) Column in \code{L0_flat} containing the standard deviation of the interval between sampling events. Use \code{calc_std_dev_interval_betw_years()} to calculate this value.
+#' @param max_num_taxa (character) Column in \code{L0_flat} containing the number of unique taxa in this dataset.
+#' @param geo_extent_bounding_box_m2 (character) An optional column in \code{L0_flat} containing the area (in meters) of the study location, if applicable (some L0 were collected at a single point). Use \code{calc_geo_extent_bounding_box_m2()} to calculate this value.
 #' 
-#' @details This function collects specified columns from \code{L0_wide} and returns distinct rows.
+#' @details "flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" ecocomDP tables can be consistely spread due to the frequent occurence of L0 source datasets with > 1 core observation variable.
+#' 
+#' This function collects specified columns from \code{L0_flat} and returns distinct rows.
 #' 
 #' @return (data.frame) The dataset_summary table.
 #' 
 #' @export
 #' 
 #' @examples 
-#' wide <- ants_L0_wide
+#' flat <- ants_L0_flat
 #' 
 #' dataset_summary <- create_dataset_summary(
-#'   L0_wide = wide, 
+#'   L0_flat = flat, 
 #'   package_id = "package_id", 
 #'   original_package_id = "original_package_id", 
 #'   length_of_survey_years = "length_of_survey_years",
@@ -30,7 +32,7 @@
 #' 
 #' dataset_summary
 #' 
-create_dataset_summary <- function(L0_wide, 
+create_dataset_summary <- function(L0_flat, 
                                    package_id,
                                    original_package_id = NULL,
                                    length_of_survey_years,
@@ -47,7 +49,7 @@ create_dataset_summary <- function(L0_wide,
   cols_to_gather <- c(package_id, original_package_id, length_of_survey_years,
                       number_of_years_sampled, std_dev_interval_betw_years,
                       max_num_taxa, geo_extent_bounding_box_m2)
-  res <- L0_wide %>%
+  res <- L0_flat %>%
     dplyr::select(all_of(cols_to_gather)) %>%
     dplyr::distinct()
   # add missing cols

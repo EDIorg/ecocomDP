@@ -26,42 +26,44 @@ validate_arguments <- function(fun.name, fun.args) {
   
   if (stringr::str_detect(fun.name, "^create_")) {
     
-    wide <- fun.args$L0_wide
+    flat <- fun.args$L0_flat
     cols <- fun.args[names(fun.args) %in% na.omit(criteria$column)] # Col args can be assigned any value, so we need a map
     
-    # Check input cols exist in L0_wide
+    # Check input cols exist in L0_flat
     cols_expctd <- unlist(cols, use.names = FALSE)
-    cols_in_wide <- cols_expctd %in% colnames(wide)
-    if (!all(cols_in_wide)) {
-      stop("Columns not in 'L0_wide': ", paste(cols_expctd[!cols_in_wide], collapse = ", "), call. = FALSE)
+    cols_in_flat <- cols_expctd %in% colnames(flat)
+    if (!all(cols_in_flat)) {
+      stop("Columns not in 'L0_flat': ", paste(cols_expctd[!cols_in_flat], collapse = ", "), call. = FALSE)
     }
     
     # Rename input cols according to L1 specifications so the resulting L1 table is valid
     cols2rename <- base::setdiff(names(cols), c("variable_name", "unit", "location_name"))
     cols2rename <- unlist(cols[cols2rename])
-    cols_wide <- colnames(wide)
-    cols_wide[match(cols2rename, cols_wide)] <- names(cols2rename)
-    colnames(wide) <- cols_wide
+    cols_flat <- colnames(flat)
+    cols_flat[match(cols2rename, cols_flat)] <- names(cols2rename)
+    colnames(flat) <- cols_flat
     cols[names(cols2rename)] <- names(cols[names(cols2rename)])
 
     # Check unit cols follow required format and have matching variable_name, otherwise downstream processes will error
-    if ("unit" %in% names(cols)) {
-      hasfrmt <- stringr::str_detect(cols$unit, "^unit_")
-      if (!all(hasfrmt)) {
-        stop("Unexpected 'unit' formats: ", 
-             paste(cols$unit[!hasfrmt], collapse = ", "), call. = FALSE)
-      }
-      if (!is.null(cols$variable_name)) {
-        hasmatch <- stringr::str_remove_all(cols$unit, "^unit_") %in% cols$variable_name
-        if (!all(hasmatch)) {
-          stop("Input 'unit' without 'variable_name' match: ", 
-               paste(cols$unit[!hasmatch], collapse = ", "), call. = FALSE)
+    if (fun.name != "create_observation") { # Exception: Unit input to create_observation() is already gathered
+      if ("unit" %in% names(cols)) {
+        hasfrmt <- stringr::str_detect(cols$unit, "^unit_")
+        if (!all(hasfrmt)) {
+          stop("Unexpected 'unit' formats: ", 
+               paste(cols$unit[!hasfrmt], collapse = ", "), call. = FALSE)
+        }
+        if (!is.null(cols$variable_name)) {
+          hasmatch <- stringr::str_remove_all(cols$unit, "^unit_") %in% cols$variable_name
+          if (!all(hasmatch)) {
+            stop("Input 'unit' without 'variable_name' match: ", 
+                 paste(cols$unit[!hasmatch], collapse = ", "), call. = FALSE)
+          }
         }
       }
     }
     
     # Return modified arguments to the calling function
-    fun.args$L0_wide <- wide
+    fun.args$L0_flat <- flat
     fun.args[names(cols)] <- cols
     list2env(fun.args, envir = parent.frame(1))
 

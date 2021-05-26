@@ -1,8 +1,8 @@
-#' Join all tables of an ecocomDP dataset and spread into wide format
+#' Join all tables of an ecocomDP dataset and spread into flat format
 #' 
 #' @param tables (list) A named list of ecocomDP tables (as data.frames).
 #'
-#' @return (data.frame) A single wide table created by joining and spreading all \code{tables}.
+#' @return (data.frame) A single flat table created by joining and spreading all \code{tables}.
 #' 
 #' @export
 #'

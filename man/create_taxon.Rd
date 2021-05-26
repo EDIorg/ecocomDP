@@ -5,7 +5,7 @@
 \title{Create the taxon table}
 \usage{
 create_taxon(
-  L0_wide,
+  L0_flat,
   taxon_id,
   taxon_rank = NULL,
   taxon_name,
@@ -14,17 +14,17 @@ create_taxon(
 )
 }
 \arguments{
-\item{L0_wide}{(data.frame) The fully joined source L0 dataset, in wide format.}
+\item{L0_flat}{(data.frame) The fully joined source L0 dataset, in "flat" format (see details).}
 
-\item{taxon_id}{(character) Column in \code{L0_wide} containing the identifier assigned to each unique organism at the observation level.}
+\item{taxon_id}{(character) Column in \code{L0_flat} containing the identifier assigned to each unique organism at the observation level.}
 
-\item{taxon_rank}{(character) The optional column in \code{L0_wide} containing the taxonomic rank of the organism in \code{taxon_name}.}
+\item{taxon_rank}{(character) The optional column in \code{L0_flat} containing the taxonomic rank of the organism in \code{taxon_name}.}
 
-\item{taxon_name}{(character) Column in \code{L0_wide} containing the taxonomic name of the organism.}
+\item{taxon_name}{(character) Column in \code{L0_flat} containing the taxonomic name of the organism.}
 
-\item{authority_system}{(character) An optional column in \code{L0_wide} containing the name of the authority system \code{authority_taxon_id} is from (e.g. "ITIS").}
+\item{authority_system}{(character) An optional column in \code{L0_flat} containing the name of the authority system \code{authority_taxon_id} is from (e.g. "ITIS").}
 
-\item{authority_taxon_id}{(character) An optional column in \code{L0_wide} containing the identifier corresponding to \code{taxon_name} in the \code{authority_system}.}
+\item{authority_taxon_id}{(character) An optional column in \code{L0_flat} containing the identifier corresponding to \code{taxon_name} in the \code{authority_system}.}
 }
 \value{
 (data.frame) The taxon table.
@@ -33,15 +33,17 @@ create_taxon(
 Create the taxon table
 }
 \details{
-This function collects specified columns from \code{L0_wide} and returns distinct rows.
+"flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" ecocomDP tables can be consistely spread due to the frequent occurence of L0 source datasets with > 1 core observation variable.
+
+This function collects specified columns from \code{L0_flat} and returns distinct rows.
 
 Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. https://www.itis.gov/, http://www.marinespecies.org/, or https://gbif.org), will have their full taxonomic hierarchy expanded, including any common names for each level.
 }
 \examples{
-wide <- ants_L0_wide
+flat <- ants_L0_flat
 
 taxon <- create_taxon(
-  L0_wide = wide, 
+  L0_flat = flat, 
   taxon_id = "taxon_id", 
   taxon_rank = "taxon_rank", 
   taxon_name = "taxon_name", 

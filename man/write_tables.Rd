@@ -51,10 +51,10 @@ dir.create(mypath)
 
 # Create a couple inputs to write_tables()
 
-wide <- ants_L0_wide
+flat <- ants_L0_flat
 
 observation <- create_observation(
-  L0_wide = wide, 
+  L0_flat = flat, 
   observation_id = "observation_id", 
   event_id = "event_id", 
   package_id = "package_id",
@@ -65,7 +65,7 @@ observation <- create_observation(
   unit = "unit_abundance")
 
 observation_ancillary <- create_observation_ancillary(
-  L0_wide = wide,
+  L0_flat = flat,
   observation_id = "observation_id", 
   variable_name = c("trap.type", "trap.num", "moose.cage"))
 

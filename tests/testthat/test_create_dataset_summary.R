@@ -6,9 +6,9 @@ library(ecocomDP)
 
 testthat::test_that("Standard L1 column inputs", {
   crit <- read_criteria()
-  wide <- ants_L0_wide
+  flat <- ants_L0_flat
   res <- create_dataset_summary(
-    L0_wide = wide, 
+    L0_flat = flat, 
     package_id = "package_id", 
     original_package_id = "original_package_id", 
     length_of_survey_years = "length_of_survey_years",
@@ -26,8 +26,8 @@ testthat::test_that("Standard L1 column inputs", {
 
 testthat::test_that("Non-Standard column inputs", {
   crit <- read_criteria()
-  wide <- ants_L0_wide
-  cols <- colnames(wide)
+  flat <- ants_L0_flat
+  cols <- colnames(flat)
   cols[cols == "package_id"] <- "pkgid"
   cols[cols == "original_package_id"] <- "og_pkgid"
   cols[cols == "length_of_survey_years"] <- "lsy"
@@ -35,9 +35,9 @@ testthat::test_that("Non-Standard column inputs", {
   cols[cols == "std_dev_interval_betw_years"] <- "sdiby"
   cols[cols == "max_num_taxa"] <- "mnt"
   cols[cols == "geo_extent_bounding_box_m2"] <- "gebb"
-  colnames(wide) <- cols
+  colnames(flat) <- cols
   res <- create_dataset_summary(
-    L0_wide = wide, 
+    L0_flat = flat, 
     package_id = "pkgid", 
     original_package_id = "og_pkgid", 
     length_of_survey_years = "lsy",
@@ -64,24 +64,24 @@ testthat::test_that("calc_geo_extent_bounding_box_m2()", {
 # calc_length_of_survey_years() -----------------------------------------------
 
 testthat::test_that("calc_length_of_survey_years()", {
-  wide <- ants_L0_wide
-  res <- calc_length_of_survey_years(dates = wide$datetime)
+  flat <- ants_L0_flat
+  res <- calc_length_of_survey_years(dates = flat$datetime)
   expect_true(is.numeric(res))
 })
 
 # calc_number_of_years_sampled() ----------------------------------------------
 
 testthat::test_that("calc_number_of_years_sampled()", {
-  wide <- ants_L0_wide
-  res <- calc_number_of_years_sampled(dates = wide$datetime)
+  flat <- ants_L0_flat
+  res <- calc_number_of_years_sampled(dates = flat$datetime)
   expect_true(is.numeric(res))
 })
 
 # calc_std_dev_interval_betw_years() ------------------------------------------
 
 testthat::test_that("calc_std_dev_interval_betw_years()", {
-  wide <- ants_L0_wide
-  res <- calc_std_dev_interval_betw_years(dates = wide$datetime)
+  flat <- ants_L0_flat
+  res <- calc_std_dev_interval_betw_years(dates = flat$datetime)
   expect_true(is.numeric(res))
 })
 

@@ -5,7 +5,7 @@
 \title{Create the observation table}
 \usage{
 create_observation(
-  L0_wide,
+  L0_flat,
   observation_id,
   event_id = NULL,
   package_id,
@@ -13,27 +13,30 @@ create_observation(
   datetime,
   taxon_id,
   variable_name,
+  value,
   unit = NULL
 )
 }
 \arguments{
-\item{L0_wide}{(data.frame) The fully joined source L0 dataset, in wide format.}
+\item{L0_flat}{(data.frame) The fully joined source L0 dataset, in "flat" format (see details).}
 
-\item{observation_id}{(character) Column in \code{L0_wide} containing the identifier assigned to each unique observation.}
+\item{observation_id}{(character) Column in \code{L0_flat} containing the identifier assigned to each unique observation.}
 
-\item{event_id}{(character) An optional column in \code{L0_wide} containing the identifier assigned to each unique sampling event.}
+\item{event_id}{(character) An optional column in \code{L0_flat} containing the identifier assigned to each unique sampling event.}
 
-\item{package_id}{(character) Column in \code{L0_wide} containing the identifier this dataset will have once it's published in a data repository.}
+\item{package_id}{(character) Column in \code{L0_flat} containing the identifier this dataset will have once it's published in a data repository.}
 
-\item{location_id}{(character) Column in \code{L0_wide} containing the identifier assigned to each unique location at the observation level.}
+\item{location_id}{(character) Column in \code{L0_flat} containing the identifier assigned to each unique location at the observation level.}
 
-\item{datetime}{(character) Column in \code{L0_wide} containing the date, and if applicable time, of the observation following the ISO-8601 standard format (i.e. YYYY-MM-DD hh:mm:ss).}
+\item{datetime}{(character) Column in \code{L0_flat} containing the date, and if applicable time, of the observation following the ISO-8601 standard format (i.e. YYYY-MM-DD hh:mm:ss).}
 
-\item{taxon_id}{(character) Column in \code{L0_wide} containing the identifier assigned to each unique organism at the observation level.}
+\item{taxon_id}{(character) Column in \code{L0_flat} containing the identifier assigned to each unique organism at the observation level.}
 
-\item{variable_name}{(character) Columns in \code{L0_wide} containing the variables measured.}
+\item{variable_name}{(character) Column in \code{L0_flat} containing the names of variables measured.}
 
-\item{unit}{(character) An optional column in \code{L0_wide} containing the units of each \code{variable_name} following the column naming convention: unit_<variable_name> (e.g. "unit_abundance").}
+\item{value}{(character) Column in \code{L0_flat} containing the values of \code{variable_name}.}
+
+\item{unit}{(character) An optional column in \code{L0_flat} containing the units of \code{variable_name}.}
 }
 \value{
 (data.frame) The observation table.
@@ -42,21 +45,24 @@ create_observation(
 Create the observation table
 }
 \details{
-This function collects specified columns from \code{L0_wide}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column.
+"flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" ecocomDP tables can be consistely spread due to the frequent occurence of L0 source datasets with > 1 core observation variable.
+
+This function collects specified columns from \code{L0_flat}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column.
 }
 \examples{
-wide <- ants_L0_wide
+flat <- ants_L0_flat
 
 observation <- create_observation(
-  L0_wide = wide, 
+  L0_flat = flat, 
   observation_id = "observation_id", 
   event_id = "event_id", 
   package_id = "package_id",
   location_id = "location_id", 
   datetime = "datetime", 
   taxon_id = "taxon_id", 
-  variable_name = "abundance",
-  unit = "unit_abundance")
+  variable_name = "variable_name",
+  value = "value",
+  unit = "unit")
 
 observation
 

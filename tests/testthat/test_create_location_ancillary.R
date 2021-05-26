@@ -6,9 +6,9 @@ library(ecocomDP)
 
 testthat::test_that("Standard L1 column inputs", {
   crit <- read_criteria()
-  wide <- ants_L0_wide
+  flat <- ants_L0_flat
   res <- create_location_ancillary(
-    L0_wide = wide,
+    L0_flat = flat,
     location_id = "location_id",
     variable_name = "treatment")
   # Is data.frame with expected columns
