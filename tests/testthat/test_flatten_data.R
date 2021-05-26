@@ -19,6 +19,7 @@ testthat::test_that("Round trip (from L0 flat to L1 flat)", {
   # Adjust L0 flat to our expectations
   L0_flat <- L0_flat %>% 
     dplyr::select(-block) %>%           # A higher level location lost when flattened
+    dplyr::select(-author) %>%           # Columns of NA are dropped when flattened
     dplyr::rename(location_name = plot) # Becomes "location_name" when flattened
   
   # TEST: All L0 flat columns (with above exceptions) should be in L1 flat
@@ -29,16 +30,9 @@ testthat::test_that("Round trip (from L0 flat to L1 flat)", {
   cols_missing_from_L0 <- base::setdiff(colnames(L1_flat), colnames(L0_flat))
   expect_true(length(cols_missing_from_L0) == 0)
   
-  
-  # Create set of L1 flat columns to test
-  # TODO test that some columns were not included
-  # L1_flat <- L1_flat %>%
-  #   dplyr::select(-c("observation_ancillary_id", # Primary keys of ancillary tables (these were generated during L1 creation)
-  #                    "location_ancillary_id", 
-  #                    "taxon_ancillary_id", 
-  #                    "variable_mapping_id"))
-  
-  # TODO TEST: Column classifications should be equivalent
+  # TEST: Column classifications should be equivalent
+  L0_classes <- unlist(lapply(L0_flat, class))
+  L1_classes <- unlist(lapply(L1_flat, class))
   
   # TODO TEST: Missing non-required columns isn't an issue
   
