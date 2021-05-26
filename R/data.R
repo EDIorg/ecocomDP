@@ -1,6 +1,6 @@
-#' Joined and wide version of EDI data package knb-lter-hfr.118.32
+#' Joined and flat version of EDI data package knb-lter-hfr.118.32
 #'
-#' A fully joined and wide version of EDI data package knb-lter-hfr.118.32 (Ant Assemblages in Hemlock Removal Experiment at Harvard Forest since 2003) with all relevant ecocomDP L1 identifiers and content added. Use this dataset as an input to the \code{L0_wide} argument of the "create" functions.
+#' A fully joined and flat version of EDI data package knb-lter-hfr.118.32 (Ant Assemblages in Hemlock Removal Experiment at Harvard Forest since 2003) with all relevant ecocomDP L1 identifiers and content added. Use this dataset as an input to the \code{L0_flat} argument of the "create" functions.
 #'
 #' @format A data frame with 2931 rows and 45 variables:
 #' \describe{
@@ -9,7 +9,7 @@
 #'   ...
 #' }
 #' @source \url{https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-hfr&identifier=118&revision=32}
-"ants_L0_wide"
+"ants_L0_flat"
 
 
 
