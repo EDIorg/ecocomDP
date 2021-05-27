@@ -2,50 +2,94 @@ context("flatten_data()")
 
 library(ecocomDP)
 
-#  ------------------------------------------------------
+# Compare L0 flat and L1 flat - The column names and values of the L0 flat and L1 flattened tables should match, with a few exceptions:
+# 1.) Locations - All locations above the level at which observations were made were lost during flattening. This information cannot be retrieved without implementing a convention to use during the L0 to L1 conversion process. 
+# 2.) Relatedly, the L0 column listing location names, at the observation level, is now "location_name".
+# 3.) Primary keys, row identifiers, of the ancillary tables are now present.
 
-testthat::test_that("Round trip (from L0 flat to L1 flat)", {
-  
+# Column presence -------------------------------------------------------------
+
+testthat::test_that("Column presence", {
   # Parameterize
   crit <- read_criteria()
   L0_flat <- ants_L0_flat
   L1_flat <- ecocomDP::flatten_data(ants_L1[[1]]$tables)
-  
-  # Compare L0 flat and L1 flat - The column names and values of the L0 flat and L1 flattened tables should match, with a few exceptions:
-  # 1.) Locations - All locations above the level at which observations were made were lost during flattening. This information cannot be retrieved without implementing a convention to use during the L0 to L1 conversion process. 
-  # 2.) Relatedly, the L0 column listing location names, at the observation level, is now "location_name".
-  # 3.) Primary keys, row identifiers, of the ancillary tables are now present.
-  
   # Adjust L0 flat to our expectations
   L0_flat <- L0_flat %>% 
     dplyr::select(-block) %>%           # A higher level location lost when flattened
     dplyr::select(-author) %>%           # Columns of NA are dropped when flattened
     dplyr::rename(location_name = plot) # Becomes "location_name" when flattened
-  
   # TEST: All L0 flat columns (with above exceptions) should be in L1 flat
   cols_missing_from_L1 <- base::setdiff(colnames(L0_flat), colnames(L1_flat))
   expect_true(length(cols_missing_from_L1) == 0)
-  
   # TEST: All L1 flat columns should be in L0 flat
   cols_missing_from_L0 <- base::setdiff(colnames(L1_flat), colnames(L0_flat))
   expect_true(length(cols_missing_from_L0) == 0)
-  
-  # TEST: Column classifications should be equivalent
-  L0_classes <- unlist(lapply(L0_flat, class))
-  L1_classes <- unlist(lapply(L1_flat, class))
-  
-  # TODO TEST: Missing non-required columns isn't an issue
-  
-  # TODO TEST: Observation "A" in L0 flat has the same values in observation "A" of L1 flat
-  invisible(
-    lapply(
-      colnames(L0_flat),
-      function(L0_col) {
-        # same number of values
-        expect_true(length(a) == length(b))
-        # same values, but possibly in a different order
-        expect_true(identical(sort(df$a), sort(df$b)))
-      }))
-  
 })
 
+# Column classes --------------------------------------------------------------
+
+testthat::test_that("Column classes", {
+  # Parameterize
+  crit <- read_criteria()
+  L0_flat <- ants_L0_flat
+  L1_flat <- ecocomDP::flatten_data(ants_L1[[1]]$tables)
+  # Adjust L0 flat to our expectations
+  L0_flat <- L0_flat %>% 
+    dplyr::select(-block) %>%           # A higher level location lost when flattened
+    dplyr::select(-author) %>%           # Columns of NA are dropped when flattened
+    dplyr::rename(location_name = plot) # Becomes "location_name" when flattened
+  # TEST: flatten_data() applies a set of "smart" class coercions to return numeric values stored in the L1 as character back to their original numeric class. The following code tests that column classifications in L1 should be "similar" to those in L0.
+  L0_classes <- unlist(lapply(L0_flat, class))
+  L1_classes <- unlist(lapply(L1_flat, class))
+  # Harmonize classes (because there is some variation) before comparing
+  L0_classes[stringr::str_detect(names(L0_classes), "id")] <- "character" # identifiers should be character
+  L1_classes[stringr::str_detect(names(L1_classes), "id")] <- "character"
+  L0_classes[stringr::str_detect(L0_classes, "integer")] <- "numeric"     # integer ~= numeric
+  L1_classes[stringr::str_detect(L1_classes, "integer")] <- "numeric"
+  # Compare col classes
+  for (i in seq(L1_classes)) {
+    col <- L1_classes[i]
+    if (names(col) %in% names(L0_classes)) {
+      use_i <- names(L0_classes) %in% names(col)
+      if (any(use_i)) {
+        expect_equal(L0_classes[use_i], col)
+      }
+    }
+  }
+})
+
+# Observations (rows) match ---------------------------------------------------
+
+# TODO Implement this test?
+# testthat::test_that("Observations (rows) match", {
+#   # Parameterize
+#   crit <- read_criteria()
+#   L0_flat <- ants_L0_flat
+#   L1_flat <- ecocomDP::flatten_data(ants_L1[[1]]$tables)
+#   # Adjust L0 flat to our expectations
+#   L0_flat <- L0_flat %>% 
+#     dplyr::select(-block) %>%           # A higher level location lost when flattened
+#     dplyr::select(-author) %>%           # Columns of NA are dropped when flattened
+#     dplyr::rename(location_name = plot) # Becomes "location_name" when flattened
+#   # TEST: Observation "A" in L0 flat has the same values in observation "A" of L1 flat
+#   # TODO observation_id are identical
+#   # TODO match cols and sort, then compare (some subset?)
+# })
+
+# Missing non-required columns isn't an issue ---------------------------------
+
+testthat::test_that("Missing non-required columns isn't an issue", {
+  # Parameterize
+  crit <- read_criteria() %>% 
+    dplyr::filter(required == TRUE, !is.na(column)) %>%
+    dplyr::select(table, column)
+  tbls <- ants_L1[[1]]$tables
+  # Throw out all non-required columns
+  for (tname in names(tbls)) {
+    rqd <- crit$column[crit$table %in% tname]
+    tbls[[tname]] <- tbls[[tname]] %>% dplyr::select(dplyr::any_of(rqd))
+  }
+  # TODO TEST: Missing non-required columns isn't an issue
+  L1_flat <- ecocomDP::flatten_data(tbls)
+})

@@ -167,8 +167,14 @@ flatten_data <- function(tables) {
       dplyr::left_join(dataset_summary, by = "package_id")
   }
   
-  # TODO Coerce column classes. Often a numeric type has been stored as character in the long L1 tables. But some columns (primarily ids) should remain character
+  # Coerce columns to correct classes
+  all_merged <- coerce_all_merged(all_merged)
   
+  # Remove any unwanted columns
+  vars <- "parent_location_id"
+  all_merged <- all_merged %>% dplyr::select(-dplyr::any_of(vars))
+  
+  # Return
   return(all_merged)
   
 }
@@ -263,4 +269,43 @@ dup_fxn <- function(x){
     message(paste0("WARNING: duplicate values observed for during pivot_wider. Duplicates will be concatenated and pipe delimited."))
     return(paste(x, collapse = " | "))
   }
+}
+
+
+
+
+
+
+
+#' Coerce columns of flatten_data()'s "all_merged" to correct classes
+#'
+#' @param x (data.frame) The all_merged object
+#'
+#' @return (data.frame) \code{x} with column classes coerced to ecocomDP specifications or numeric if not an ecocomDP column and if no NAs are generated.
+#' 
+coerce_all_merged <- function(x) {
+  # Coerce column classes. Often a numeric type has been stored as character in the long L1 tables. But some columns (primarily ids) should remain character
+  crit <- read_criteria() %>% 
+    dplyr::select(column, class) %>% 
+    dplyr::filter(column != "datetime", column != "value") %>%
+    dplyr::distinct()
+  for (col in colnames(x)) {
+    # Coerce cols to ecocomDP criteria and coerce anything outside this set to numeric as long as no NAs are introduced (i.e. cases that are likely character types)
+    if (col %in% crit$column) {                                         # is ecocomDP col
+      expctd <- crit$class[crit$column %in% col]
+      if (expctd == "character" & class(x[[col]]) != expctd) {
+        x[[col]] <- as.character(x[[col]])
+      }
+      if (expctd == "numeric" & class(x[[col]]) != expctd) {
+        x[[col]] <- as.numeric(x[[col]])
+      }
+    } else if (col %in% "datetime") {                                   # is ecocomDP datetime col
+      # Do nothing, because datetimes are unambiguous
+    } else {                                                            # is likely a variable
+      x[[col]] <- tryCatch(
+        as.numeric(x[[col]]), 
+        warning = function(w) x[[col]])
+    }
+  }
+  return(x)
 }
