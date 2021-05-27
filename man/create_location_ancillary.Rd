@@ -42,6 +42,6 @@ location_ancillary <- create_location_ancillary(
   location_id = "location_id",
   variable_name = "treatment")
 
-location_ancillary
+str(location_ancillary)
 
 }

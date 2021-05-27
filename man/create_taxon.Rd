@@ -50,6 +50,6 @@ taxon <- create_taxon(
   authority_system = "authority_system", 
   authority_taxon_id = "authority_taxon_id")
 
-taxon
+str(taxon)
 
 }

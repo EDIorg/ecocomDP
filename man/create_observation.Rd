@@ -64,6 +64,6 @@ observation <- create_observation(
   value = "value",
   unit = "unit")
 
-observation
+str(observation)
 
 }

@@ -50,6 +50,6 @@ taxon_ancillary <- create_taxon_ancillary(
     "behavior", "biogeographic.affinity", "source"),
   unit = c("unit_hl", "unit_rel", "unit_rll"))
 
-taxon_ancillary
+str(taxon_ancillary)
 
 }

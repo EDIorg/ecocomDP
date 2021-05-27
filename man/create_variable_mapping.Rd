@@ -74,6 +74,6 @@ variable_mapping <- create_variable_mapping(
   location_ancillary = location_ancillary, 
   taxon_ancillary = taxon_ancillary)
 
-variable_mapping
+str(variable_mapping)
 
 }

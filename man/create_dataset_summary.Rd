@@ -56,6 +56,6 @@ dataset_summary <- create_dataset_summary(
   max_num_taxa = "max_num_taxa", 
   geo_extent_bounding_box_m2 = "geo_extent_bounding_box_m2")
 
-dataset_summary
+str(dataset_summary)
 
 }

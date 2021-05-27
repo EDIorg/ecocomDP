@@ -53,6 +53,6 @@ location <- create_location(
   longitude = "longitude", 
   elevation = "elevation")
 
-location
+str(location)
 
 }

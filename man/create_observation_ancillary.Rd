@@ -39,6 +39,6 @@ observation_ancillary <- create_observation_ancillary(
   observation_id = "observation_id", 
   variable_name = c("trap.type", "trap.num", "moose.cage"))
 
-observation_ancillary
+str(observation_ancillary)
 
 }
