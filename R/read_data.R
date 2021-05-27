@@ -50,6 +50,7 @@
 #' @examples
 #' # Read from EDI
 #' dataset <- read_data("edi.193.4")
+#' # str(dataset)
 #' 
 #' # Read from NEON (full dataset)
 #' dataset <- read_data("neon.ecocomdp.20120.001.001")
@@ -75,10 +76,10 @@
 #' save_data(datasets, mypath, type = ".csv") # Save as .csv
 #' 
 #' # Read from local .rds
-#' dataset <- read_data(from = paste0(mypath, "/datasets.rds"))
+#' datasets <- read_data(from = paste0(mypath, "/datasets.rds"))
 #' 
 #' # Read from local .csv
-#' dataset <- read_data(from = mypath)
+#' datasets <- read_data(from = mypath)
 #' 
 #' # Clean up
 #' unlink(mypath, recursive = TRUE)

@@ -54,39 +54,29 @@ r <- search_data()
 
 # "text" searches titles, descriptions, and abstracts
 r <- search_data(text = "Lake")
-# View(r)
 
 # "taxa" searches taxonomic ranks for a match
 r <- search_data(taxa = "Plantae")
-# View(r)
 
 # "num_taxa" searches the count of unique taxa in a dataset
 r <- search_data(num_taxa = c(0, 10))
-# View(r)
 
 # "num_years" searches the number of years sampled
 r <- search_data(num_years = c(10, 20))
-# View(r)
 
 # "sd_years" searches the sampling frequency
 r <- search_data(sd_years = c(.25, 1))
-# View(r)
 
 # "area" searches where data were collected
 r <- search_data(area = c(47.1, -86.7, 42.5, -92))
-# View(r)
 
 # "boolean" operators "AND" (default) & "OR" combine text and taxa search terms
 r <- search_data(text = c("Lake", "River"))
-# View(r)
 r <- search_data(text = c("Lake", "River"), boolean = "OR")
-# View(r)
 
 r <- search_data(taxa = c("Plantae", "Animalia"))
-# View(r)
 
 r <- search_data(taxa = c("Plantae", "Animalia"), boolean = "OR")
-# View(r)
 
 # Use any combination of search fields to find the data you're looking for
 r <- search_data(
@@ -97,6 +87,5 @@ r <- search_data(
   sd_years = c(.01, 100),
   area = c(47.1, -86.7, 42.5, -92),
   boolean = "OR")
-# View(r)
 
 }

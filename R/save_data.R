@@ -24,12 +24,15 @@
 #' 
 #' # Save as .rds
 #' save_data(datasets, mypath)
+#' dir(mypath)
 #' 
 #' # Save as .rds with the name "mydata"
 #' save_data(datasets, mypath, name = "mydata")
+#' dir(mypath)
 #' 
 #' # Save as .csv
 #' save_data(datasets, mypath, type = ".csv")
+#' dir(mypath)
 #' 
 #' # Clean up
 #' unlink(mypath, recursive = TRUE)
