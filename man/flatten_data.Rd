@@ -10,16 +10,22 @@ flatten_data(tables)
 \item{tables}{(list) A named list of ecocomDP tables as data.frames}
 }
 \value{
-(data.frame) A single flat table created by joining and spreading all \code{tables} except observation
+(data.frame) A single flat table created by joining and spreading all \code{tables}. See details for more information on this "flat" format.
 }
 \description{
 Join all tables of an ecocomDP dataset and spread into flat format
+}
+\details{
+"flat" format refers to the fully joined ecocomDP dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" ecocomDP tables can be consistely spread due to the frequent occurence of L0 source datasets with > 1 core observation variable.
+}
+\note{
+Ancillary identifiers are dropped from the returned data frame.
 }
 \examples{
 dataset <- ants_L1
 
 flat <- flatten_data(dataset[[1]]$tables)
 
-flat
+str(flat)
 
 }

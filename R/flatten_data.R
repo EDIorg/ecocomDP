@@ -2,7 +2,11 @@
 #' 
 #' @param tables (list) A named list of ecocomDP tables as data.frames
 #'
-#' @return (data.frame) A single flat table created by joining and spreading all \code{tables} except observation
+#' @return (data.frame) A single flat table created by joining and spreading all \code{tables}. See details for more information on this "flat" format.
+#' 
+#' @details "flat" format refers to the fully joined ecocomDP dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" ecocomDP tables can be consistely spread due to the frequent occurence of L0 source datasets with > 1 core observation variable.
+#' 
+#' @note Ancillary identifiers are dropped from the returned data frame.
 #' 
 #' @export
 #'
@@ -11,27 +15,22 @@
 #' 
 #' flat <- flatten_data(dataset[[1]]$tables)
 #' 
-#' flat
+#' str(flat)
 #' 
 flatten_data <- function(tables) {
   
-  # Merge observation table with taxon table
+  # Start with observation
   all_merged <- tables$observation %>%
-    dplyr::select_if(not_all_NAs) %>%
-    dplyr::left_join(
-      tables$taxon %>% dplyr::select_if(not_all_NAs),
-      by = "taxon_id")
+    dplyr::select_if(not_all_NAs)
   
   # Merge observation_ancillary
   if ("observation_ancillary" %in% names(tables)) {
-    
     #handle missing observation_id or case where all observation_id is na
     if (!"observation_id" %in% names(tables$observation_ancillary) || 
-       all(is.na(tables$observation_ancillary$observation_id)) ) {
+        all(is.na(tables$observation_ancillary$observation_id)) ) {
       warning("'observation_id' is missing from the observation_ancillary table")
-    
-    #the expected case:
     }else{
+      #the expected case:
       observation_ancillary_wide <- flatten_ancillary(tables$observation_ancillary)
       all_merged <- all_merged %>%
         dplyr::left_join(observation_ancillary_wide, 
@@ -40,87 +39,75 @@ flatten_data <- function(tables) {
     }
   }
   
-  
-  # merge location data and using "NEON location type" from location ancillary data
-  if("location_ancillary" %in% names(tables) && 
-     "NEON location type" %in% tables$location_ancillary$variable_name){
-    
-    # merge location and location_ancillary
-    location <- tables$location %>%
-      dplyr::select_if(not_all_NAs) %>%
-      dplyr::left_join(
-        tables$location_ancillary %>%
-          dplyr::filter(variable_name == "NEON location type") %>%
-          dplyr::select(location_id, value) %>%
-          dplyr::rename(location_type = value))
-    
-    # extract a list of the location types
-    location_type_list <- location$location_type %>% unique()
-    
-    # identify ultimate parents... i.e., records with no parents
-    location_parent <- location %>% 
-      dplyr::filter(is.na(parent_location_id)) %>%
-      dplyr::select(location_id, location_type)
-    
-    # identify all records that have parents
-    location_child <- location %>% 
-      dplyr::filter(!is.na(parent_location_id))
-    
-    
-
-    
-    # loop through from ultimate parents down, joining with child records, until there are no more children
-    while(nrow(location_child) > 0){
-      
-      # inner join parents to children
-      location_new <- location_child %>% 
-        dplyr::inner_join(
-        location_parent %>% 
-          dplyr::rename(location_type_parent = location_type),
-        by = c("parent_location_id" = "location_id"))
-      
-      # rename parent location id column by location type
-      new_parent_location_id_name <- location_new$location_type_parent[1]
-      names(location_new)[names(location_new)=="parent_location_id"] <- new_parent_location_id_name
-      location_new <- location_new %>% 
-        dplyr::select(-location_type_parent)
-      
-      # see if there are any children left that have not been joined to parents
-      location_child <- location_child %>%
-        dplyr::filter(!location_id %in% location_new$location_id)
-      
-      # if there are still children, re-assign parent table
-      if (nrow(location_child) > 0){
-        location_parent <- location_new[,names(location_new) %in% 
-                                          c("location_id", "location_type", location_type_list)]
-      }else{
-        
-        # otherwise, clean up new location table and return as output
+  # Merge location data and using "NEON location type" from location ancillary data
+  if("location" %in% names(tables)) {
+    last_col <- ncol(all_merged) # Index of last column for sorting
+    if (("location_ancillary" %in% names(tables)) & 
+        ("NEON location type" %in% tables$location_ancillary$variable_name)) {
+      # merge location and location_ancillary
+      location <- tables$location %>%
+        dplyr::select_if(not_all_NAs) %>%
+        dplyr::left_join(
+          tables$location_ancillary %>%
+            dplyr::filter(variable_name == "NEON location type") %>%
+            dplyr::select(location_id, value) %>%
+            dplyr::rename(location_type = value))
+      # extract a list of the location types
+      location_type_list <- location$location_type %>% unique()
+      # identify ultimate parents... i.e., records with no parents
+      location_parent <- location %>% 
+        dplyr::filter(is.na(parent_location_id)) %>%
+        dplyr::select(location_id, location_type)
+      # identify all records that have parents
+      location_child <- location %>% 
+        dplyr::filter(!is.na(parent_location_id))
+      # loop through from ultimate parents down, joining with child records, until there are no more children
+      while(nrow(location_child) > 0){
+        # inner join parents to children
+        location_new <- location_child %>% 
+          dplyr::inner_join(
+            location_parent %>% 
+              dplyr::rename(location_type_parent = location_type),
+            by = c("parent_location_id" = "location_id"))
+        # rename parent location id column by location type
+        new_parent_location_id_name <- location_new$location_type_parent[1]
+        names(location_new)[names(location_new)=="parent_location_id"] <- new_parent_location_id_name
         location_new <- location_new %>% 
-          dplyr::select(-location_type)
+          dplyr::select(-location_type_parent)
+        # see if there are any children left that have not been joined to parents
+        location_child <- location_child %>%
+          dplyr::filter(!location_id %in% location_new$location_id)
+        # if there are still children, re-assign parent table
+        if (nrow(location_child) > 0){
+          location_parent <- location_new[,names(location_new) %in% 
+                                            c("location_id", "location_type", location_type_list)]
+        }else{
+          # otherwise, clean up new location table and return as output
+          location_new <- location_new %>% 
+            dplyr::select(-location_type)
+        }
       }
+      all_merged <- all_merged %>%
+        dplyr::left_join(
+          location_new, 
+          by = "location_id",
+          suffix = c("", "_location"))
+    } else {
+      #otherwise, just merge location table with all_merged
+      all_merged <- all_merged %>%
+        dplyr::left_join(
+          tables$location %>%
+            dplyr::select_if(not_all_NAs),
+          by = "location_id",
+          suffix = c("", "_location"))
     }
-    
-
-    all_merged <- all_merged %>%
-      dplyr::left_join(
-        location_new, 
-        by = "location_id",
-        suffix = c("", "_location"))
-    
-  }else{
-    #otherwise, just merge location table with all_merged
-    all_merged <- all_merged %>%
-      dplyr::left_join(
-        tables$location %>%
-          dplyr::select_if(not_all_NAs),
-        by = "location_id",
-        suffix = c("", "_location"))
+    # Sort, move location_id to beginning of location cols
+    last_col <- colnames(all_merged)[last_col]
+    all_merged <- all_merged %>% 
+      relocate(location_id, .after = last_col)
   }
   
-
-  # merge additional location_ancillary data
-  # only for bottom level when locations are nested
+  # Merge location_ancillary data only for bottom level when locations are nested
   if ("location_ancillary" %in% names(tables)) {
     location_ancillary <- tables$location_ancillary %>%
       dplyr::filter(variable_name != "NEON location type",
@@ -136,8 +123,21 @@ flatten_data <- function(tables) {
     }
   }
   
+  # Merge taxon table
+  if ("taxon" %in% names(tables)) {
+    last_col <- ncol(all_merged) # Index of last column for sorting
+    all_merged <- all_merged %>%
+      dplyr::left_join(
+        tables$taxon %>%
+          dplyr::select_if(not_all_NAs),
+        by = "taxon_id")
+    # Sort, move taxon_id to beginning of taxon cols
+    last_col <- colnames(all_merged)[last_col]
+    all_merged <- all_merged %>% 
+      relocate(taxon_id, .after = last_col)
+  }
   
-  # merge taxon_ancillary
+  # Merge taxon_ancillary
   if ("taxon_ancillary" %in% names(tables)) {
     taxon_ancillary_wide <- flatten_ancillary(tables$taxon_ancillary)
     all_merged <- all_merged %>%
@@ -150,9 +150,15 @@ flatten_data <- function(tables) {
   
   # Merge dataset_summary
   if ("dataset_summary" %in% names(tables)) {
-    dataset_summary <- tables$dataset_summary
+    last_col <- ncol(all_merged) # Index of last column for sorting
     all_merged <- all_merged %>%
-      dplyr::left_join(dataset_summary, by = "package_id")
+      dplyr::left_join(
+        tables$dataset_summary %>% dplyr::select_if(not_all_NAs), 
+        by = "package_id")
+    # Sort, move package_id to beginning of dataset_summary cols
+    last_col <- colnames(all_merged)[last_col]
+    all_merged <- all_merged %>% 
+      relocate(package_id, .after = last_col)
   }
   
   # Coerce columns to correct classes
@@ -166,6 +172,7 @@ flatten_data <- function(tables) {
   return(all_merged)
   
 }
+
 
 
 
