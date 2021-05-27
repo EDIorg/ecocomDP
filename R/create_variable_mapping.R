@@ -56,7 +56,7 @@
 #'   location_ancillary = location_ancillary, 
 #'   taxon_ancillary = taxon_ancillary)
 #' 
-#' variable_mapping
+#' str(variable_mapping)
 #' 
 create_variable_mapping <- function(observation, 
                                     observation_ancillary = NULL, 
@@ -119,6 +119,9 @@ create_variable_mapping <- function(observation,
   variable_mapping$table_name <- tbls
   
   variable_mapping$variable_name <- vars
+  
+  # coerce classes
+  variable_mapping <- coerce_table_classes(variable_mapping, "variable_mapping")
   
   # Return --------------------------------------------------------------------
   

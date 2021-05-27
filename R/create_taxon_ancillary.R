@@ -28,7 +28,7 @@
 #'     "behavior", "biogeographic.affinity", "source"),
 #'   unit = c("unit_hl", "unit_rel", "unit_rll"))
 #' 
-#' taxon_ancillary
+#' str(taxon_ancillary)
 #' 
 create_taxon_ancillary <- function(L0_flat, 
                                    taxon_id, 
@@ -74,5 +74,7 @@ create_taxon_ancillary <- function(L0_flat,
   # reorder
   res <- res %>%
     dplyr::select(taxon_ancillary_id, taxon_id, datetime, variable_name, value, unit, author)
+  # coerce classes
+  res <- coerce_table_classes(res, "taxon_ancillary")
   return(res)
 }

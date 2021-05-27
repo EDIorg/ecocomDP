@@ -30,7 +30,7 @@
 #'   longitude = "longitude", 
 #'   elevation = "elevation")
 #' 
-#' location
+#' str(location)
 #' 
 create_location <- function(L0_flat, 
                             location_id,
@@ -106,6 +106,7 @@ create_location <- function(L0_flat,
   
   # combine data frames
   res <- dplyr::bind_rows(res)
-  
+  # coerce classes
+  res <- coerce_table_classes(res, "location")
   return(res)
 }

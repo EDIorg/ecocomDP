@@ -28,7 +28,7 @@
 #'   authority_system = "authority_system", 
 #'   authority_taxon_id = "authority_taxon_id")
 #' 
-#' taxon
+#' str(taxon)
 #' 
 create_taxon <- function(L0_flat, 
                          taxon_id,
@@ -59,5 +59,7 @@ create_taxon <- function(L0_flat,
   # reorder
   res <- res %>%
     dplyr::select(taxon_id, taxon_rank, taxon_name, authority_system, authority_taxon_id)
+  # coerce classes
+  res <- coerce_table_classes(res, "taxon")
   return(res)
 }

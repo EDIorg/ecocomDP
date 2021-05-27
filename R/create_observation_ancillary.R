@@ -21,7 +21,7 @@
 #'   observation_id = "observation_id", 
 #'   variable_name = c("trap.type", "trap.num", "moose.cage"))
 #' 
-#' observation_ancillary
+#' str(observation_ancillary)
 #' 
 create_observation_ancillary <- function(L0_flat, 
                                          observation_id, 
@@ -59,5 +59,7 @@ create_observation_ancillary <- function(L0_flat,
   # reorder
   res <- res %>%
     dplyr::select(observation_ancillary_id, observation_id, variable_name, value, unit)
+  # coerce classes
+  res <- coerce_table_classes(res, "observation_ancillary")
   return(res)
 }

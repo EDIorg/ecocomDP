@@ -409,6 +409,38 @@ cnvmt <- function(txt) {
 
 
 
+#' Coerce table classes to ecocomDP specifications
+#'
+#' @param tbl (data.frame) Table to coerce
+#' @param name (character) Table name
+#'
+#' @return (data.frame) \code{tbl} with column classes coerced to ecocomDP model specifications
+#' 
+#' @details Datetime columns are not coerced. These are unchanged from the input class.
+#' 
+coerce_table_classes <- function(tbl, name) {
+  crit <- read_criteria() %>% 
+    dplyr::filter(table == name) %>% 
+    dplyr::select(column, class) %>% 
+    na.omit()
+  for (col in colnames(tbl)) {
+    colclass <- crit$class[crit$column == col]
+    if (colclass == "character") {
+      tbl[[col]] <- as.character(tbl[[col]])
+    } else if (colclass == "numeric") {
+      tbl[[col]] <- as.numeric(tbl[[col]])
+    }
+  }
+  return(tbl)
+}
+
+
+
+
+
+
+
+
 #' Detect field delimiter of file
 #'
 #' @param path (character) Path in which \code{data.files} are found

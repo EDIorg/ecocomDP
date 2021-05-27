@@ -34,7 +34,7 @@
 #'   value = "value",
 #'   unit = "unit")
 #' 
-#' observation
+#' str(observation)
 #' 
 create_observation <- function(L0_flat, 
                                observation_id,
@@ -64,5 +64,7 @@ create_observation <- function(L0_flat,
   # reorder
   res <- res %>%
     dplyr::select(observation_id, event_id, package_id, location_id, datetime, taxon_id, variable_name, value, unit)
+  # coerce classes
+  res <- coerce_table_classes(res, "observation")
   return(res)
 }

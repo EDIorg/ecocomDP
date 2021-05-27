@@ -22,7 +22,7 @@
 #'   location_id = "location_id",
 #'   variable_name = "treatment")
 #' 
-#' location_ancillary
+#' str(location_ancillary)
 #' 
 create_location_ancillary <- function(L0_flat, 
                                       location_id, 
@@ -64,5 +64,7 @@ create_location_ancillary <- function(L0_flat,
   # reorder
   res <- res %>%
     dplyr::select(location_ancillary_id, location_id, datetime, variable_name, value, unit)
+  # coerce classes
+  res <- coerce_table_classes(res, "location_ancillary")
   return(res)
 }
