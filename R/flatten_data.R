@@ -1,29 +1,17 @@
 #' Join all tables of an ecocomDP dataset and spread into flat format
 #' 
-#' @param tables (list) A named list of ecocomDP tables (as data.frames).
+#' @param tables (list) A named list of ecocomDP tables as data.frames
 #'
-#' @return (data.frame) A single flat table created by joining and spreading all \code{tables}.
+#' @return (data.frame) A single flat table created by joining and spreading all \code{tables} except observation
 #' 
 #' @export
 #'
 #' @examples 
-#' \dontrun{
-#' # Flatten NEON data
-#' all_data <- read_data(
-#' id = "DP1.20120.001",
-#' site= c('COMO','LECO'),
-#' startdate = "2019-06",
-#' enddate = "2019-09",
-#' token = Sys.getenv("NEON_TOKEN"))
+#' dataset <- ants_L1
 #' 
-#' my_list_of_tables <- all_data[[1]]$tables
-#' flat_data <- flatten_data(my_list_of_tables)
+#' flat <- flatten_data(dataset[[1]]$tables)
 #' 
-#' # Flatten EDI data
-#' all_data <- read_data("edi.290.1")
-#' my_list_of_tables <- all_data[[1]]$tables
-#' flat_data <- flatten_data(my_list_of_tables)
-#' }
+#' flat
 #' 
 flatten_data <- function(tables) {
   

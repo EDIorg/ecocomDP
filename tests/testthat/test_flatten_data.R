@@ -47,7 +47,7 @@ testthat::test_that("Column classes", {
   L1_classes[stringr::str_detect(names(L1_classes), "id")] <- "character"
   L0_classes[stringr::str_detect(L0_classes, "integer")] <- "numeric"     # integer ~= numeric
   L1_classes[stringr::str_detect(L1_classes, "integer")] <- "numeric"
-  # Compare col classes
+  # TEST: Compare col classes
   for (i in seq(L1_classes)) {
     col <- L1_classes[i]
     if (names(col) %in% names(L0_classes)) {
@@ -77,9 +77,10 @@ testthat::test_that("Column classes", {
 #   # TODO match cols and sort, then compare (some subset?)
 # })
 
-# Missing non-required columns isn't an issue ---------------------------------
+# Non-required columns --------------------------------------------------------
+# Non-required columns of ecocomDP aren't required by flatten_data()
 
-testthat::test_that("Missing non-required columns isn't an issue", {
+testthat::test_that("Non-required columns", {
   # Parameterize
   crit <- read_criteria() %>% 
     dplyr::filter(required == TRUE, !is.na(column)) %>%
@@ -90,6 +91,12 @@ testthat::test_that("Missing non-required columns isn't an issue", {
     rqd <- crit$column[crit$table %in% tname]
     tbls[[tname]] <- tbls[[tname]] %>% dplyr::select(dplyr::any_of(rqd))
   }
-  # TODO TEST: Missing non-required columns isn't an issue
+  # TEST: Missing non-required columns isn't an issue
   L1_flat <- ecocomDP::flatten_data(tbls)
+  cols_in <- unname(unlist(lapply(tbls, colnames)))
+  cols_out <- colnames(L1_flat)
+  dif <- base::setdiff(cols_in, cols_out)
+  expect_equal(dif, # Difference is a set of cols that shouldn't be returned by anyway
+    c("location_ancillary_id", "taxon_ancillary_id", "observation_ancillary_id", 
+      "variable_mapping_id", "table_name"))
 })
