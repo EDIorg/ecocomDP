@@ -5,13 +5,33 @@ context("validate_arguments()")
 
 library(ecocomDP)
 
-# Parameterize ----------------------------------------------------------------
+# convert_*() -----------------------------------------------------------------
 
-test_data <- read_from_files(
-  system.file("/data", package = "ecocomDP"))[[1]]$tables
-search_index <- search_data()
+testthat::test_that("convert_to_dwca()", {
+  # core_name
+  inputs <- as.list(
+    list(core_name = "core"))
+  expect_error(validate_arguments("convert_to_dwca", inputs), 
+               regexp = "Invalid input to 'core_name'")
+})
 
-# create_*() ------------------------------------------------------------------
+# create_eml() ----------------------------------------------------------------
+
+testthat::test_that("create_eml()", {
+  # basis_of_record
+  expect_null(
+    validate_arguments("create_eml", 
+                       as.list(list(basis_of_record = "HumanObservation"))))
+  expect_null(
+    validate_arguments("create_eml", 
+                       as.list(list(basis_of_record = "MachineObservation"))))
+  expect_error(
+    validate_arguments("create_eml", 
+                       as.list(list(basis_of_record = "not_an_option"))),
+    regexp = "Invalid input to 'basis_of_record'")
+})
+
+# create_tables() -------------------------------------------------------------
 
 # NOTE: validate_arguments() returns values to the calling environment (here),
 # so tests are confined to func calls which are garbage collected.
@@ -156,10 +176,49 @@ testthat::test_that("create_*(): unit without matching variable_name", {
                regexp = "Input \'unit\' without .+ match: unit_nomatch")
 })
 
+testthat::test_that("create_observation(): only 1 variable_name, value, unit", {
+  flat <- ants_L0_flat
+  inputs <- as.list(
+    list(
+      L0_flat = flat,
+      observation_id = "observation_id",
+      event_id = "event_id",
+      package_id = "package_id",
+      location_id = "location_id",
+      datetime = "datetime",
+      taxon_id = "taxon_id",
+      variable_name = c("input1", "input2"),
+      value = c("input1", "input2"),
+      unit = c("input1", "input2")))
+  expect_error(validate_arguments("create_observation", inputs),
+               regexp = "Only one input is allowed")
+})
+
+# flatten_data() --------------------------------------------------------------
+
+testthat::test_that("flatten_data()", {
+  # expected input
+  expect_null(
+    validate_arguments("flatten_data", 
+                       as.list(list(tables = ants_L1[[1]]$tables))))
+  # bad names
+  badnms <- names(ants_L1[[1]]$tables)
+  badnms[1] <- "a bad name"
+  names(ants_L1[[1]]$tables) <- badnms
+  expect_error(
+    validate_arguments("flatten_data", 
+                       as.list(list(tables = ants_L1[[1]]$tables))), 
+    regexp = "Unrecognized tables")
+  # invalid structure
+  expect_error(
+    validate_arguments("flatten_data", 
+                       as.list(list(tables = ants_L1[[1]]$tables$taxon))), 
+    regexp = "Input 'tables' should be a list")
+})
+
 # plot_*() --------------------------------------------------------------------
 
 testthat::test_that("plot_*()", {
-  # dataset (see validate_dataset_structure() tests)
   # alpha
   expect_null(validate_arguments("plot", as.list(list(alpha = 1))))         # is between 0 and 1
   expect_error(validate_arguments("plot", as.list(list(alpha = -1))))

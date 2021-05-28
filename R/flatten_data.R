@@ -19,6 +19,8 @@
 #' 
 flatten_data <- function(tables) {
   
+  validate_arguments(fun.name = "flatten_data", fun.args = as.list(environment()))
+  
   # Start with observation
   all_merged <- tables$observation %>%
     dplyr::select_if(not_all_NAs)

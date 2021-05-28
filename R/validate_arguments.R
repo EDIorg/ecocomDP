@@ -22,12 +22,37 @@ validate_arguments <- function(fun.name, fun.args) {
   
   criteria <- read_criteria()
   
-  # create_*() ----------------------------------------------------------------
+  # convert_to_dwca() ---------------------------------------------------------
+  
+  if (fun.name == "convert_to_dwca") {
+    if (fun.args$core_name != "event") {
+      stop("Invalid input to 'core_name'. Only 'event' is currently supported.", call. = FALSE)
+    }
+  }
+  
+  # create_eml() --------------------------------------------------------------
+  
+  if (fun.name == "create_eml") {
+    if ((fun.args$basis_of_record != "HumanObservation") &
+        (fun.args$basis_of_record != "MachineObservation")) {
+      stop("Invalid input to 'basis_of_record'. Must be 'HumanObservation' or 'MachineObservation'.", call. = FALSE)
+    }
+  }
+  
+  # create_tables() -----------------------------------------------------------
   
   if (stringr::str_detect(fun.name, "^create_")) {
     
     flat <- fun.args$L0_flat
     cols <- fun.args[names(fun.args) %in% na.omit(criteria$column)] # Col args can be assigned any value, so we need a map
+    
+    # Table specific checks
+    if (fun.name == "create_observation") {
+      var_lengths <- c(length(fun.args$variable_name), length(fun.args$value), length(fun.args$unit))
+      if (any(var_lengths != 1)) {
+        stop("Only one input is allowed to 'variable_name', 'value', and 'unit'. Gather your primary observation variables into long format before calling this function.", call. = FALSE)
+      }
+    }
     
     # Check input cols exist in L0_flat
     cols_expctd <- unlist(cols, use.names = FALSE)
@@ -69,13 +94,25 @@ validate_arguments <- function(fun.name, fun.args) {
 
   }
   
+  # flatten_data() ------------------------------------------------------------
+  
+  if (fun.name == "flatten_data") {
+    crit <- read_criteria()
+    # list
+    if (class(fun.args$tables) != "list") {
+      stop("Input 'tables' should be a list.", call. = FALSE)
+    }
+    # names
+    nms <- names(fun.args$tables)
+    expctd <- nms %in% unique(crit$table)
+    if (any(!expctd)) {
+      stop("Unrecognized tables: ", paste(nms[!expctd], collapse = ", "), call. = FALSE)
+    }
+  }
+  
   # plot_*() ------------------------------------------------------------------
   
   if (fun.name == "plot") {
-    # dataset
-    if (!is.null(fun.args$dataset)) {
-      validate_dataset_structure(fun.args$dataset)
-    }
     # alpha
     if (!is.null(fun.args$alpha)) {
       if (!(fun.args$alpha <= 1 & fun.args$alpha > 0)) {
@@ -113,13 +150,13 @@ validate_arguments <- function(fun.name, fun.args) {
       }
     }
 
-    # years
+    # num_years
     
-    if (!is.null(fun.args$years)) {
-      if (!is.numeric(fun.args$years)) {
+    if (!is.null(fun.args$num_years)) {
+      if (!is.numeric(fun.args$num_years)) {
         stop("Input 'years' must be of class 'numeric'.", call. = F)
       }
-      if (length(fun.args$years) != 2) {
+      if (length(fun.args$num_years) != 2) {
         stop(
           "Input 'years' must have a minimum and maximum value.", 
           call. = F)

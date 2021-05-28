@@ -41,6 +41,8 @@ convert_to_dwca <- function(path,
                           user_id,
                           user_domain) {
   
+  validate_arguments(fun.name = "convert_to_dwca", fun.args = as.list(environment()))
+  
   # Load Global Environment config --------------------------------------------
   
   if (exists("environment", envir = .GlobalEnv)) {
