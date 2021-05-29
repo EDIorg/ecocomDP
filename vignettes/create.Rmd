@@ -1,5 +1,5 @@
 ---
-title: "Creating new data"
+title: "Create"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Creating new data}
@@ -14,19 +14,24 @@ knitr::opts_chunk$set(
 )
 ```
 
+An ecocomDP dataset is created from one or more source datasets by way of a processing script (CALL IT A FUNCTION RATHER THAN A SCRIPT?). The script reads in source data via host APIs, performs a series of reformatting operations, and outputs tables and metadata in the ecocomDP format. These outputs are then archived (e.g. The Environmental Data Initiative (EDI)) or made immediately availabe (e.g. The National Ecological Observatory Network (NEON)). Whether you archive or serve it on demand depends on the persistence of the host and the license underwhich the source data were released. In either case, the processing script provides a fully reproducibile and automated routine for recreating the derived ecocomDP dataset when a new version of the source data are released.
+
+Below is an example script that reads a source dataset from the EDI data repository and converts it into the derived L1 ecocomDP dataset which in turn is archived in the EDI data repository. For an example script that converts a dataset from an access endpoint on demand each time it's called, see the map_neon_data_to_ecocomDP.R source code.
+
 ```{r setup}
 library(ecocomDP)
 ```
 
-```{r}
-# This function converts EDI data package "knb-lter-hfr.118" into the ecocomDP,
-# which in turn is archived in EDI as data package "edi.193". Specifically this
-# function reads in knb-lter-hfr.118 tables and metadata directly from the EDI
-# repository, then synthesizes and reformats this information into ecocomDP 
-# tables and metadata, and finally performs a set of validation checks to 
-# ensure the result is compliant with the ecocomDP model.
+## Create: From data repository to data repository
+
+### The script:
+
+```{r eval=FALSE}
+# About this script -----------------------------------------------------------
 #
-# Source and derived data packages:
+# This function converts EDI data package "knb-lter-hfr.118" into the ecocomDP, which is then archived as EDI data package "edi.193".
+#
+# Landing pages of source and derived data:
 # knb-lter-hfr.118 - https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-hfr&identifier=118
 # edi.193 - https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=193
 #
@@ -34,45 +39,44 @@ library(ecocomDP)
 # derived edi.193 whenever new data are added to the source knb-lter-hrf.118.
 # The framework executing this maintenance routine is hosted on a remote server
 # and jumps into action whenever an event notification is received for 
-# knb-lter-hrf.118 is received. The maintenance routine parses the notification
-# to get the input values to the 5 arguments of this function:
+# a knb-lter-hrf.118 update. The maintenance routine parses the notification
+# to get the input values to the 4 arguments of this function:
 #
 # 1.) "path" - The directory to which the ecocomDP tables will be written.
-# 2.) "package.id.L0" - The identifier of the source data package.
-# 3.) "package.id.L1" - The identifier of the derived data package.
-# 4.) "environment" - The environment of the data repository in which 
-#     package.id.L0 and package.id.L1 are found. Some repositories have
-#     "development", "staging", and "production" environments, which may affect
-#     repository API calls.
-# 5.) "url" - The URL through which the derived data tables and metadata can be
-#     downloaded by the repository in which the derived data package will be
-#     be archived.
+# 2.) "source_id" - The identifier of the source dataset.
+# 3.) "derived_id" - The identifier of the derived dataset.
+# 4.) "url" - The URL by which the derived tables and metadata can be
+#     downloaded by the repository. This argument is used when automating the repository publication step, but not used when manually publishing.
 #
 # If you would like your conversion script hooked into this maintenance 
 # routine, then use the same conventions of this function.
 
+# Begin script ----------------------------------------------------------------
+
+# Libraries used by the create_ecocomDP() function
+
 library(ecocomDP)
-library(EDIutils)       # remotes::install_github("EDIorg/EDIutils")
-library(taxonomyCleanr) # remotes::install_github("EDIorg/taxonomyCleanr")
 library(xml2)
 library(magrittr)
 library(data.table)
 library(lubridate)
 library(tidyr)
-
+library(dplyr)
+library(EDIutils)       # remotes::install_github("EDIorg/EDIutils")
+library(taxonomyCleanr) # remotes::install_github("EDIorg/taxonomyCleanr")
 
 create_ecocomDP <- function(path,
-                            package.id.L0, 
-                            package.id.L1, 
-                            environment,
+                            source_id, 
+                            derived_id, 
                             url = NULL) {
   
-  # Read source metadata and data ---------------------------------------------
+  # Read source data and metadata ---------------------------------------------
+  
   # The source dataset is about the changing community composition and functional traits of ant species in response to the invasive hemlock woolly adelgid. Observations are made across habitat types within the Harvard Experimental Forest. The dataset consists of 2 tables, a primary table (hf118-01-ants.csv) containing abundances at sites through time, and an ancillary table listing physical and functional traits of observed species (hf118-02-functional-traits.csv).
   
   # Read EML metadata and data tables directly from the EDI Data Repository
   
-  eml <- EDIutils::api_read_metadata(package.id.L0, environment)
+  eml <- EDIutils::api_read_metadata(source_id)
   data <- EDIutils::read_tables(
     eml = eml, 
     strip.white = TRUE,
@@ -86,7 +90,8 @@ create_ecocomDP <- function(path,
   ants$date <- lubridate::ymd(ants$date)
 
   # Create flat version of source dataset -------------------------------------
-  # Joining all source data and relevant metadata into a flat master table both simplifies parsing into ecocomDP tables and maintains referential integrity among data elements.
+  
+  # Joining all source data and relevant metadata into one big flat table both simplifies parsing into ecocomDP tables and maintains referential integrity among data elements.
   
   # Remove duplicate data from the ancillary table and join on species codes once the column names match
   
@@ -94,7 +99,7 @@ create_ecocomDP <- function(path,
   traits <- traits %>% dplyr::rename(code = species.code)
   wide <- dplyr::left_join(ants, traits, by = "code")
   
-  # Make "flat" the flattest version ecocomDP datasets can return to. This is the input form the create_*() funcs operate on.
+  # Convert wide to "flat", i.e. the wide form but gathered on core observation variables, which are often > 1 in source datasets. This is the "widest" form ecocomDP datasets can be consistently returned to and is the input format required by the table creation functions we will use below. This dataset only has one core observation variable, "abundance".
   
   wide <- wide %>% dplyr::rename(value_abundance = abundance)
   flat <- tidyr::pivot_longer(
@@ -103,23 +108,23 @@ create_ecocomDP <- function(path,
     names_to = c(".value", "variable_name"), 
     names_sep = '\\_')
   
-  # Sorting and arranging rows of this flat table according to sampling date and location at this point will result in a nice human readable dataset. This is merely cosmetic and completely optional.
+  # Sorting and arranging rows by sample date and location will result in a nice human readable dataset, which is merely cosmetic and completely optional.
   
   flat <- flat %>% dplyr::arrange(date, plot, block)
   
-  # Each row of the flat table represents an observation of taxa abundance and should therefore be assigned a unique ID.
+  # Each row represents an observation of taxa abundance and should therefore be assigned a unique identifier.
   
   flat$observation_id <- seq(nrow(flat))
   
-  # Observations are made in plots, which are nested in blocks. Each unique combination of these locations creates a location ID.
+  # Observations are made in plots, which are nested in blocks. Each unique combination of these creates a location identifier.
   
   flat$location_id <- flat %>% group_by(plot, block) %>% group_indices()
   
-  # Each unique combination of location and date form a sampling event
+  # Each unique combination of location and date form a sampling event.
   
   flat$event_id <- flat %>% group_by(date, plot, block) %>% group_indices()
   
-  # Because the context (i.e. plot and block) will be lost when values are converted into the long (attribute-value) location table of ecocomDP, we should combine the context and values to preserve meaning.
+  # Because the location context (i.e. plot and block) will be lost when values are converted into the long (attribute-value) location table, we should combine the context and values into a single value to preserve meaning.
   
   flat$plot <- paste0("plot_", flat$plot)
   flat$block <- paste0("block_", flat$block)
@@ -152,7 +157,7 @@ create_ecocomDP <- function(path,
   
   flat$taxon_id <- flat %>% group_by(taxon_name) %>% group_indices()
   
-  # While not required, resolving taxonomic entities to an authority system greatly improves the discoverability and interoperability of the derived ecocomDP dataset. We can resolve taxa by send taxon_name values to taxonomyCleanr for direct matches against the Integrated Taxonomic Information System (ITIS; https://www.itis.gov/).
+  # While not required, resolving taxonomic entities to an authority system improves the discoverability and interoperability of the ecocomDP dataset. We can resolve taxa by send taxon_name values to taxonomyCleanr for direct matches against the Integrated Taxonomic Information System (ITIS; https://www.itis.gov/).
   
   taxa_resolved <- taxonomyCleanr::resolve_sci_taxa(
     x = unique(flat$taxon_name),
@@ -178,15 +183,15 @@ create_ecocomDP <- function(path,
   number_of_taxa <- length(unique(flat$taxon_name))
   bounding_box_m2 <- ecocomDP::calc_geo_extent_bounding_box_m2(west, east, north, south)
   
-  flat$package_id <- package.id.L1
-  flat$original_package_id <- package.id.L0
+  flat$package_id <- derived_id
+  flat$original_package_id <- source_id
   flat$length_of_survey_years <- length_of_survey
   flat$number_of_years_sampled <- years_sampled
   flat$std_dev_interval_betw_years <- std_dev_betw_years
   flat$max_num_taxa <- number_of_taxa
   flat$geo_extent_bounding_box_m2 <- bounding_box_m2
   
-  # Rename columns of the source dataset to match the ecocomDP model, and remove any remaining columns of redundant information that should not be included in the derived ecocomDP dataset.
+  # Rename columns that have a matching ecocomDP column, and remove columns of redundant information that should not be included in the ecocomDP dataset ("year" can be recalculated from datetime and code was a key that no longer has use).
   
   flat <- flat %>% dplyr::rename(datetime = date) %>% dplyr::select(-year, -code)
   
@@ -194,11 +199,11 @@ create_ecocomDP <- function(path,
   
   flat$author <- NA_character_
   
-  # Parse ecocomDP tables -----------------------------------------------------
-  # The hard work is done! The flat master source table is complete and we can now use the "create" functions to parse it into the ecocomDP tables. Each ecocomDP table has an associated create function.
+  # Create ecocomDP tables ----------------------------------------------------
+  
+  # The hard work is done! The flat table contains all the source data and information (and more) and we can now use the "create" functions to parse it into the ecocomDP tables. Each ecocomDP table has an associated create function.
   
   # Create the core ecocomDP tables. These are required.
-  # FIXME: Add general comments on what arguments mean and why their values (i.e. what data cols mean)
   
   observation <- ecocomDP::create_observation(
     L0_flat = flat, 
@@ -343,7 +348,7 @@ create_ecocomDP <- function(path,
   variable_mapping$mapped_id[i] <- 'http://purl.org/dc/terms/references'
   variable_mapping$mapped_label[i] <- 'references'
   
-  # Write ecocomDP tables to file
+  # Write tables to file
   
   ecocomDP::write_tables(
     path = path, 
@@ -357,45 +362,183 @@ create_ecocomDP <- function(path,
     variable_mapping = variable_mapping)
   
   # Validate ecocomDP tables --------------------------------------------------
+  
   # Validation checks ensure the derived set of tables comply with the ecocomDP
-  # model and enable use of the data accordingly. Any issues at this point 
+  # model. Any issues at this point 
   # should be addressed in the lines of code above, the tables rewritten, and 
-  # another run of validate(), just to be certain the fix did what it was
+  # another round of validation, just to be certain the fix did what it was
   # supposed to.
   
   issues <- ecocomDP::validate_data(path = path)
   
   # Create ecocomDP metadata --------------------------------------------------
-  # Before publishing the derived ecocomDP dataset in the EDI Data Repository (or any other repository supporting EML metadata) we need to describe it. The known structure of the derived ecocomDP dataset allows us to apply boilerplate metadata to describe the tables, and utilize the create_eml() function to mix in important elements of the source and derived datasets.
   
-  # Convert L0 keywords to annotations for the L1
-  # "is about"
+  # Before publishing the derived ecocomDP dataset in the EDI Data Repository (or any other repository supporting EML metadata) we need to describe it. The known structure of the ecocomDP dataset allows us to apply boilerplate metadata to describe the tables, and utilize the create_eml() function to mix in important elements of the source dataset.
   
-  dataset_annotations <- c( # FIXME: dataset level annotations that are not boilerplate to the model
+  # Convert dataset level keywords listed in the source L0 to dataset level annotations in the derived L1. These predicate "is about" is used with these annotations.
+  
+  dataset_annotations <- c(
     `species abundance` = "http://purl.dataone.org/odo/ECSO_00001688",
     Population = "http://purl.dataone.org/odo/ECSO_00000311",
     `level of ecological disturbance` = "http://purl.dataone.org/odo/ECSO_00002588",
     `type of ecological disturbance` = "http://purl.dataone.org/odo/ECSO_00002589")
   
-  # Add contact information for the author of these ecocomDP scripts
+  # Add contact information for the author of this ecocomDP script and dataset
   
   additional_contact <- data.frame(
     givenName = 'Colin',
     surName = 'Smith',
-    organizationName = 'Environmental Data Initiative', # FIXME: Don't require this
+    organizationName = 'Environmental Data Initiative',
     electronicMailAddress = 'ecocomdp@gmail.com',
     stringsAsFactors = FALSE)
   
   eml <- ecocomDP::create_eml(
     path = path,
-    source_id = package.id.L0,
-    derived_id = package.id.L1,
+    source_id = source_id,
+    derived_id = derived_id,
     is_about = dataset_annotations,
     script = "create_ecocomDP.R",
     script_description = "A function for converting knb-lter-hrf.118 to ecocomDP",
     contact = additional_contact,
     user_id = 'ecocomdp',
     user_domain = 'EDI',
-    basis_of_record = "HumanObservation") # FIXME: darwin core terms facilitate annotation of downstream L2 conversion
+    basis_of_record = "HumanObservation")
+  
 }
+```
+
+### Running the script:
+
+```{r eval=FALSE}
+
+# Create directory for output files
+mypath <- paste0(tempdir(), "/edi_193")
+dir.create(mypath)
+
+# Create ecocomDP dataset
+create_ecocomDP(
+  path = mypath, 
+  source_id = "knb-lter-hfr.118.32", 
+  derived_id = "edi.193.4")
+#> Retrieving EML for data package knb-lter-hfr.118.32
+#>  [0%] Downloaded 0 bytes...
+#>  [0%] Downloaded 0 bytes...
+#> Searching ITIS for "Aphaenogaster picea"
+#> Searching ITIS for "Camponotus novaeboracensis"
+#> Searching ITIS for "Aphaenogaster fulva"
+#> Searching ITIS for "Temnothorax longispinosus"
+#> Searching ITIS for "Stenemma impar"
+#> Searching ITIS for "Stenemma diecki"
+#> Searching ITIS for "Camponotus pennsylvanicus"
+#> Searching ITIS for "Lasius americanus"
+#> Searching ITIS for "Myrmica punctiventris"
+#> Searching ITIS for "Lasius nearcticus"
+#> Searching ITIS for "Formica subaenescens"
+#> Searching ITIS for "Lasius umbratus"
+#> Searching ITIS for "Formica subsericea"
+#> Searching ITIS for "Formica aserva"
+#> Searching ITIS for "Formica neogagates"
+#> Searching ITIS for "Camponotus nearcticus"
+#> Searching ITIS for "Ponera pennsylvanica"
+#> Searching ITIS for "Stenamma brevicorne"
+#> Searching ITIS for "Lasius claviger"
+#> Searching ITIS for "Stenamma impar"
+#> Searching ITIS for "Temnothorax lognispinosus"
+#> Searching ITIS for "Stenamma diecki"
+#> Searching ITIS for "Camponotus herculeanus"
+#> Searching ITIS for "Lasius speculiventris"
+#> Searching ITIS for "Stenamma schmitti"
+#> Searching ITIS for "Lasius neoniger"
+#> Searching ITIS for "Camponotus pennsylvanica"
+#> Searching ITIS for "Tapinoma sessile"
+#> Searching ITIS for "Myrmica AF-smi"
+#> Searching ITIS for "Formica neorufibarbis"
+#> Searching ITIS for "Myrmica incompleta"
+#> Searching ITIS for "Formica argentea"
+#> Searching ITIS for "Myrmica AF-scu"
+#> Searching ITIS for "Formica dolosa"
+#> Searching ITIS for "Formica subintegra"
+#> Searching ITIS for "Formica incerta"
+#> Searching ITIS for "Myrmica nearctica"
+#> Searching ITIS for "Formica pergandei"
+#> Searching ITIS for "Formica lasioides"
+#> Searching ITIS for "Myrmica pinetorum"
+#> Searching ITIS for "Leptothorax canadensis"
+#> Searching ITIS for "Myrmica detritinodis"
+#> Searching ITIS for "Myrmecina americana"
+#> Searching ITIS for "Crematogaster lineolata"
+#> Searching ITIS for "Lasius interjectus"
+#> Searching ITIS for "Camponotus chromaiodes"
+#> Searching ITIS for "Formica pallidefulva"
+#> Searching ITIS for "Temnothorax ambiguus"
+#> Searching ITIS for "Lasius subglaber"
+#> Searching ITIS for "Formica rubicunda"
+#> Searching ITIS for "Lasius brevicornis"
+#> Searching ITIS for "Lasius aphidicolus"
+#> Searching ITIS for "Formica integra"
+#> Creating observation
+#> Creating location
+#> Creating taxon
+#> Creating dataset_summary
+#> Creating observation_ancillary
+#> Creating location_ancillary
+#> Creating taxon_ancillary
+#> Creating variable_mapping
+#> Writing tables to file:
+#>   observation
+#>   location
+#>   taxon
+#>   dataset_summary
+#>   observation_ancillary
+#>   location_ancillary
+#>   taxon_ancillary
+#>   variable_mapping
+#> File names
+#> Validating ecocomDP_revision:
+#>   Required tables
+#>   Column names
+#>   Required columns
+#>   Column classes
+#>   Datetime formats
+#>   Primary keys
+#>   Composite keys
+#>   Referential integrity
+#>   Latitude and longitude format
+#>   Latitude and longitude range
+#>   Elevation
+#>   variable_mapping
+#> Creating EML for derived data package (edi.193.4)
+#> Reading EML of L0 data package knb-lter-hfr.118.32
+#> Creating EML of L1 data package edi.193.4
+#> Updating:
+#> <eml>
+#>   <dataset>
+#>     <alternateIdentifier>
+#>     <title>
+#>     <pubDate>
+#>     <keywordSet>
+#>     <contact>
+#>     <methods>
+#>     <dataTable>
+#>     <otherEntity>
+#>     <annotations>
+#> </eml>
+#> Writing EML
+#> Validating EML
+#>   Validation passed :)
+#> Done.
+
+# The working dir contains the derived L1 tables and metadata, ready for upload to an EML based data repository
+dir(mypath)
+#>  [1] "create_ecocomDP.R"        
+#>  [2] "dataset_summary.csv"      
+#>  [3] "edi.193.4.xml"            
+#>  [4] "location.csv"             
+#>  [5] "location_ancillary.csv"   
+#>  [6] "observation.csv"          
+#>  [7] "observation_ancillary.csv"
+#>  [8] "taxon.csv"                
+#>  [9] "taxon_ancillary.csv"      
+#> [10] "variable_mapping.csv"
+
 ```
