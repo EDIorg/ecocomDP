@@ -376,7 +376,7 @@ search_data <- function(text, taxa, num_taxa, num_years, sd_years,
   } else {
     # output <- dplyr::distinct(format_search_results(output))
     output <- dplyr::distinct(output)
-    output <- as.data.frame(output)
+    output <- tidyr::as_tibble(output)
     return(output)
   }
 
