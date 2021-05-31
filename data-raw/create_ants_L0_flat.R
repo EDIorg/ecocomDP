@@ -146,6 +146,6 @@ create_ants_L0_flat <- function(path = NULL,
   
   # Save to /data
   ants_L0_flat <- flat
-  usethis::use_data(ants_L0_flat)
+  usethis::use_data(ants_L0_flat, overwrite = TRUE)
   
 }
