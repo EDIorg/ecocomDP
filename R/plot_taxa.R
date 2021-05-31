@@ -273,6 +273,8 @@ plot_taxa_sample_time <- function(observation, id, alpha = 1) {
 #' @import ggplot2
 #' @import tidyr
 #' 
+#' @export
+#' 
 #' @examples
 #' observation <- ants_L1[[1]]$tables$observation
 #' id <- names(ants_L1)
