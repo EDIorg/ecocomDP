@@ -1,5 +1,5 @@
 ---
-title: "Using data"
+title: "Use"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Using data}
@@ -8,74 +8,252 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+options(tibble.print_min = 4L, tibble.print_max = 4L)
 ```
+
+A set of "use" functions help you search, read, save, plot, and flatten ecocomDP datasets.
 
 ```{r setup}
 library(ecocomDP)
 ```
 
+## Search
+
+Find datasets of interest by searching on one or more query parameters. 
+
+All available datasets are returned with an empty call to `search_data()`:
+
 ```{r}
-library(ecocomDP)
+search_data()
+```
 
-# Search for data of interest across common facets ----------------------------
+The "taxa" parameter enables searching on any taxonomic rank value. Find datasets about insects:
 
-# Use any combination of search fields to find the data you're looking for
-r <- search_data( # TODO: refactor for example
-  text = c("Lake", "River"),
-  taxa = c("Plantae", "Animalia"),
-  num.taxa = c(0, 10),
-  years = c(10, 100),
-  sd.between.surveys = c(.01, 100),
-  geographic.area = c(47.1, -86.7, 42.5, -92),
-  boolean.operator = "OR")
-View(r)
+```{r}
+search_data(taxa = "Insecta")
+```
 
-# Read datasets ---------------------------------------------------------------
+The "num_years" parameter lets you find datasets within a range of sampling years. Datasets with 20 to 40 years of sampling:
 
-d <- read_data("edi.xxxxx") # TODO: refactor for example
+```{r}
+search_data(num_years = c(20, 40))
+```
 
-# Save datasets --------------------------------------------------------------
-# Save datasets locally, this saves time downloading in the future
+The "area" parameter facilitates searches by geographic regions. Datasets originating from the Northeast United States:
 
-path_tbls <- "C:\\Users\\Colin\\Documents\\EDI\\data_sets\\ecocomDP_revision"
-save_data(d, path) # default is .rds
-save_data(d, path, file.type = ".csv") # but maybe you want to access the data in a different language via .csv
+```{r}
+search_data(area = c(47, -70, 38, -90))
+```
 
-# Read locally saved datasets -------------------------------------------------
+Combine query parameters to narrow results:
 
-d <- read_data(from.file = path_tbls)
+```{r}
+search_data(taxa = "Insecta", num_years = c(20, 100), area = c(47, -70, 38, -90))
+```
 
-# Visually explore a dataset with the plotters --------------------------------
-# More often than not, some aggregation of observations is required to create a meaningful plot, which requires some understanding
+Assign results to a variable and learn more:
 
-# You'll get warnings if you don't
-plot_sampling_times(d)
+```{r}
+r <- search_data(taxa = "Insecta", num_years = c(20, 100), area = c(47, -70, 38, -90))
+r$title
+```
 
-# summarize observations
+See `?search_data` for additional query parameters.
 
-plot_sampling_times(d)
+## Read and Save
 
-# Looks like some aggregation is required due to irregular sampling intervals
+Read datasets from host APIs to get the newest authoritative version, save local copies for manipulation, and re-read local copies to resume saved work.
 
-plot_alpha_diversity(d)
-plot_taxa_accum_sites(d)
-plot_taxa_accum_time(d)
-plot_taxa_shared_sites(d)
+Read from the host API:
 
-# Work with a dataset in wide form --------------------------------------------
+```{r eval=FALSE}
+dataset_1 <- read_data("edi.193.4")
+#> Reading edi.193.4
+#>  [0%] Downloaded 0 bytes...
+#>  [0%] Downloaded 0 bytes...
+#>  [0%] Downloaded 0 bytes...
+#>  [0%] Downloaded 0 bytes...
+#>  [0%] Downloaded 0 bytes...
+#>  [0%] Downloaded 0 bytes...
+#>  [0%] Downloaded 0 bytes...
+#>  [0%] Downloaded 0 bytes...
+#>
+#> Validating edi.193.4:
+#>   Required tables
+#>   Column names
+#>   Required columns
+#>   Column classes
+#>   Datetime formats
+#>   Primary keys
+#>   Composite keys
+#>   Referential integrity
+#>   Latitude and longitude format
+#>   Latitude and longitude range
+#>   Elevation
+```
 
-dflat <- ecocomDP::flatten_data(data.list = d[[1]]$tables)
-# Notes on what is returned and what is not that needs to be referenced in the L1
-head(dflat)
+Read from the host API with filters when datasets are large (currently only for NEON datasets):
 
-# Some general notes on iteration ---------------------------------------------
-# Saving datasets together is a common usecase and an operation may apply across
-# more than one
+```{r eval=FALSE}
+dataset_2 <- read_data(
+  id = "neon.ecocomdp.20120.001.001", 
+  site = c("COMO", "LECO", "SUGG"),
+  startdate = "2017-06", 
+  enddate = "2019-09",
+  check.size = FALSE)
+#> Finding available files
+#>   |==================================================================| 100%
+#> 
+#> Downloading files totaling approximately 1.588594 MB
+#> Downloading 20 files
+#>   |====================================================================| 100%
+#> 
+#> Unpacking zip files using 1 cores.
+#>   |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+#> Stacking operation across a single core.
+#> Stacking table inv_fieldData
+#>   |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+#> Stacking table inv_persample
+#>   |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+#> Stacking table inv_pervial
+#>   |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+#> Stacking table inv_taxonomyProcessed
+#>   |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=02s  
+#> Stacking table inv_taxonomyRaw
+#>   |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=02s  
+#> Copied the most recent publication of validation file to /stackedFiles
+#> Copied the most recent publication of categoricalCodes file to /stackedFiles
+#> Copied the most recent publication of variable definition file to /stackedFiles
+#> Finished: Stacked 5 data tables and 3 metadata tables!
+#> Stacking took 4.732454 secs
+#> Joining, by = c("uid", "sampleID")
+#> Joining, by = "sampleID"
+#>
+#> Validating neon.ecocomdp.20120.001.001:
+#>   Required tables
+#>   Column names
+#>   Required columns
+#>   Column classes
+#>   Datetime formats
+#>   Primary keys
+#>   Composite keys
+#>   Referential integrity
+#>   Latitude and longitude format
+#>   Latitude and longitude range
+#>   Elevation
+```
 
-# Some general notes on aggregation of datasets -------------------------------
-# Globally unique keys keep datasets from getting mixed up.
+A dataset is returned as a list of metadata, tables, and validation issues (if there are any). The dataset ID is assigned to the top level for reference.
+
+```{r include=FALSE}
+dataset_1 <- ants_L1
+```
+
+```{r}
+str(dataset_1)
+```
+
+Save a local copy as .rds:
+
+```{r include=FALSE}
+datasets <- c(ants_L1, ants_L1)
+```
+
+```{r, eval=FALSE}
+datasets <- c(dataset_1, dataset_2)
+mypath <- paste0(tempdir(), "/data")
+
+save_data(datasets, mypath)
+```
+
+Save a local copy as .csv:
+
+```{r, eval=FALSE}
+save_data(datasets, mypath, type = ".csv")
+```
+
+Read a local copy from .rds
+
+```{r, eval=FALSE}
+datasets <- read_data(from = paste0(mypath, "/datasets.rds"))
+#> Validating edi.193.4:
+#>   Required tables
+#>   Column names
+#>   Required columns
+#>   Column classes
+#>   Datetime formats
+#>   Primary keys
+#>   Composite keys
+#>   Referential integrity
+#>   Latitude and longitude format
+#>   Latitude and longitude range
+#>   Elevation
+#> Validating neon.ecocomdp.20120.001.001:
+#>   Required tables
+#>   Column names
+#>   Required columns
+#>   Column classes
+#>   Datetime formats
+#>   Primary keys
+#>   Composite keys
+#>   Referential integrity
+#>   Latitude and longitude format
+#>   Latitude and longitude range
+#>   Elevation
+```
+
+Read a local copy from .csv:
+
+```{r, eval=FALSE}
+datasets <- read_data(from = mypath)
+#> Validating edi.193.4:
+#>   Required tables
+#>   Column names
+#>   Required columns
+#>   Column classes
+#>   Datetime formats
+#>   Primary keys
+#>   Composite keys
+#>   Referential integrity
+#>   Latitude and longitude format
+#>   Latitude and longitude range
+#>   Elevation
+#> Validating neon.ecocomdp.20120.001.001:
+#>   Required tables
+#>   Column names
+#>   Required columns
+#>   Column classes
+#>   Datetime formats
+#>   Primary keys
+#>   Composite keys
+#>   Referential integrity
+#>   Latitude and longitude format
+#>   Latitude and longitude range
+#>   Elevation
+
+```
+
+## Plot
+
+Visually explore a dataset with some basic plots:
+
+```{r fig.height=4, fig.width=7}
+observation_table <- datasets[[1]]$tables$observation
+dataset_id <- names(datasets[1])
+
+plot_taxa_sample_time(observation_table, dataset_id)
+plot_taxa_diversity(observation_table, dataset_id)
+plot_taxa_accum_sites(observation_table, dataset_id)
+plot_taxa_accum_time(observation_table, dataset_id)
+plot_taxa_shared_sites(observation_table, dataset_id)
+```
+
+## Flatten
+
+Working with a "flat" version of a dataset may be your preference at times. A "flat" version is where all tables have been joined and spread wide except for the core observation variables, which remain in long form.
+
+```{r}
+flat <- flatten_data(datasets[[1]]$tables)
+flat
 ```
