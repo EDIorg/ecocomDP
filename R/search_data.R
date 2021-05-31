@@ -74,8 +74,6 @@
 search_data <- function(text, taxa, num_taxa, num_years, sd_years, 
                         area, boolean = "AND") {
   
-  message("Searching data ...")
-  
   # Validate arguments --------------------------------------------------------
   
   validate_arguments(
