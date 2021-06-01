@@ -63,8 +63,6 @@ create_variable_mapping <- function(observation,
                                     location_ancillary = NULL, 
                                     taxon_ancillary = NULL) {
   
-  message("Creating variable_mapping")
-  
   # Get unique variables from tables ------------------------------------------
   
   # Initialize storage

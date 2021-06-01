@@ -36,7 +36,6 @@ create_taxon_ancillary <- function(L0_flat,
                                    variable_name, 
                                    unit = NULL, 
                                    author = NULL) {
-  message("Creating taxon_ancillary")
   
   validate_arguments(fun.name = "create_taxon_ancillary", fun.args = as.list(environment()))
   

@@ -39,7 +39,6 @@ create_location <- function(L0_flat,
                             longitude = NULL, 
                             elevation = NULL) {
 
-  message("Creating location")
   validate_arguments(fun.name = "create_location", fun.args = as.list(environment()))
   
   cols_to_gather <- c(location_id, latitude, longitude, elevation, location_name)

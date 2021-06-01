@@ -36,7 +36,6 @@ create_taxon <- function(L0_flat,
                          taxon_name,
                          authority_system = NULL, 
                          authority_taxon_id = NULL) {
-  message("Creating taxon")
   
   validate_arguments(fun.name = "create_taxon", fun.args = as.list(environment()))
   

@@ -46,7 +46,7 @@ create_observation <- function(L0_flat,
                                variable_name,
                                value,
                                unit = NULL) {
-  message("Creating observation")
+  
   validate_arguments(fun.name = "create_observation", fun.args = as.list(environment()))
   # Get cols
   cols_to_gather <- c(observation_id, event_id, package_id, location_id, datetime, taxon_id, variable_name, value, unit)

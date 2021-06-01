@@ -29,7 +29,6 @@ create_location_ancillary <- function(L0_flat,
                                       datetime = NULL, 
                                       variable_name, 
                                       unit = NULL) {
-  message("Creating location_ancillary")
   
   validate_arguments(fun.name = "create_location_ancillary", fun.args = as.list(environment()))
 

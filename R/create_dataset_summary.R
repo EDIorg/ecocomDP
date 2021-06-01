@@ -40,7 +40,6 @@ create_dataset_summary <- function(L0_flat,
                                    std_dev_interval_betw_years,
                                    max_num_taxa,
                                    geo_extent_bounding_box_m2 = NULL) {
-  message("Creating dataset_summary")
   
   validate_arguments(fun.name = "create_dataset_summary", fun.args = as.list(environment()))
   

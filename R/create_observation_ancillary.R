@@ -27,7 +27,6 @@ create_observation_ancillary <- function(L0_flat,
                                          observation_id, 
                                          variable_name, 
                                          unit = NULL) {
-  message("Creating observation_ancillary")
   
   validate_arguments(fun.name = "create_observation_ancillary", fun.args = as.list(environment()))
   
