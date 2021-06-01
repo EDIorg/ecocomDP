@@ -547,15 +547,6 @@ create_ecocomDP(
 #> Searching ITIS for "Lasius aphidicolus"
 #> Searching ITIS for "Formica integra"
 #>
-#> Creating observation
-#> Creating location
-#> Creating taxon
-#> Creating dataset_summary
-#> Creating observation_ancillary
-#> Creating location_ancillary
-#> Creating taxon_ancillary
-#> Creating variable_mapping
-#>
 #> Writing tables to file:
 #>   observation
 #>   location

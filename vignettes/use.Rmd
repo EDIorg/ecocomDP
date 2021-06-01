@@ -91,6 +91,7 @@ dataset_1 <- read_data("edi.193.4")
 #>   Latitude and longitude format
 #>   Latitude and longitude range
 #>   Elevation
+#>   variable_mapping
 ```
 
 Read from the host API with filters when datasets are large (currently only for NEON datasets):
@@ -142,6 +143,7 @@ dataset_2 <- read_data(
 #>   Latitude and longitude format
 #>   Latitude and longitude range
 #>   Elevation
+#>   variable_mapping
 ```
 
 A dataset is returned as a list of metadata, tables, and validation issues (if there are any). The dataset ID is assigned to the top level for reference.
@@ -190,6 +192,7 @@ datasets <- read_data(from = paste0(mypath, "/datasets.rds"))
 #>   Latitude and longitude format
 #>   Latitude and longitude range
 #>   Elevation
+#>   variable_mapping
 #> Validating neon.ecocomdp.20120.001.001:
 #>   Required tables
 #>   Column names
@@ -202,6 +205,7 @@ datasets <- read_data(from = paste0(mypath, "/datasets.rds"))
 #>   Latitude and longitude format
 #>   Latitude and longitude range
 #>   Elevation
+#>   variable_mapping
 ```
 
 Read a local copy from .csv:
@@ -220,6 +224,7 @@ datasets <- read_data(from = mypath)
 #>   Latitude and longitude format
 #>   Latitude and longitude range
 #>   Elevation
+#>   variable_mapping
 #> Validating neon.ecocomdp.20120.001.001:
 #>   Required tables
 #>   Column names
@@ -232,6 +237,7 @@ datasets <- read_data(from = mypath)
 #>   Latitude and longitude format
 #>   Latitude and longitude range
 #>   Elevation
+#>   variable_mapping
 
 ```
 
