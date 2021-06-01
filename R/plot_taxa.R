@@ -17,9 +17,6 @@
 #' plot_taxa_accum_sites(observation, id)
 #' 
 plot_taxa_accum_sites <- function(observation, id, alpha = 1) {
-  if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
-    stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
-  }
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
   # Calculate cumulative number of taxa
@@ -82,9 +79,6 @@ plot_taxa_accum_sites <- function(observation, id, alpha = 1) {
 #' plot_taxa_accum_time(observation, id)
 #' 
 plot_taxa_accum_time <- function(observation, id, alpha = 1) {
-  if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
-    stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
-  }
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
   # Calculate cumulative number of taxa 
@@ -162,9 +156,6 @@ plot_taxa_accum_time <- function(observation, id, alpha = 1) {
 #' plot_taxa_diversity(observation, id)
 #' 
 plot_taxa_diversity <- function(observation, id, alpha = 1) {
-  if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
-    stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
-  }
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
   # Calculate num unique taxa at each site through time and num unique taxa among all sites through time
@@ -229,9 +220,6 @@ plot_taxa_diversity <- function(observation, id, alpha = 1) {
 #' plot_taxa_sample_time(observation, id)
 #' 
 plot_taxa_sample_time <- function(observation, id, alpha = 1) {
-  if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
-    stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
-  }
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
   # Scale font size
@@ -282,9 +270,6 @@ plot_taxa_sample_time <- function(observation, id, alpha = 1) {
 #' plot_taxa_shared_sites(observation, id)
 #' 
 plot_taxa_shared_sites <- function(observation, id) {
-  if (!requireNamespace("ggplot2", quietly = TRUE)) {           # ggplot2 is a suggested package
-    stop("Package 'ggplot2' is required but is not installed", call. = FALSE)
-  }
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                  # intermediate format for plotting
   heat_pal_spectral <- colorRampPalette(rev( RColorBrewer::brewer.pal(11, "Spectral")))
