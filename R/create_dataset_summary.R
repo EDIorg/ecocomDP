@@ -9,9 +9,9 @@
 #' @param max_num_taxa (character) Column in \code{L0_flat} containing the number of unique taxa in the source L0 dataset.
 #' @param geo_extent_bounding_box_m2 (character) An optional column in \code{L0_flat} containing the area (in meters) of the study location, if applicable (some L0 were collected at a single point). Use \code{calc_geo_extent_bounding_box_m2()} to calculate this value.
 #' 
-#' @details "flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" an L1 ecocomDP dataset can be consistently spread due to the frequent occurrence of L0 source datasets with > 1 core observation variable.
+#' @details This function collects specified columns from \code{L0_flat} and returns distinct rows.
 #' 
-#' This function collects specified columns from \code{L0_flat} and returns distinct rows.
+#' "flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" an L1 ecocomDP dataset can be consistently spread due to the frequent occurrence of L0 source datasets with > 1 core observation variable.
 #' 
 #' @return (tbl_df, tbl, data.frame) The dataset_summary table.
 #' 

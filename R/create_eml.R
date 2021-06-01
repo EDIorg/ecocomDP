@@ -1,11 +1,11 @@
-#' Create EML metadata for ecocomDP tables
+#' Create EML metadata for an ecocomDP dataset
 #' 
-#' @param path (character) Path to the directory containing ecocomDP tables, conversion scripts, and where EML metadata will be written.
+#' @param path (character) Path to the directory containing ecocomDP tables, conversion script, and where EML metadata will be written.
 #' @param source_id (character) Identifier of a data package published in a supported repository. Currently, the EDI Data Repository is supported.
 #' @param derived_id (character) Identifier of the dataset being created.
-#' @param script (character) Name(s) of scripts used to convert the source dataset into the ecocomDP and create EML metadata for it.
-#' @param script_description (character) A description for each object listed under \code{script}.
-#' @param is_about (named character) An optional argument for specifying dataset level annotations describing what this dataset "is about" (e.g. \code{is_about = c('level of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002588",' type of ecological disturbance' = "http://purl.dataone.org/odo/ECSO_00002589")}).
+#' @param script (character) Name of file used to convert \code{source_id} to \code{derived_id}.
+#' @param script_description (character) Description of \code{script}.
+#' @param is_about (named character) An optional argument for specifying dataset level annotations describing what this dataset "is about".
 #' @param contact (data.frame) Contact information for the person that created this ecocomDP dataset, containing these columns:
 #'    \itemize{
 #'        \item{givenName}
@@ -13,47 +13,29 @@
 #'        \item{organizationName}
 #'        \item{electronicMailAddress}
 #'    }
-#' @param user_id (character) Identifier of user account associated with the data repository in which this ecocomDP dataset will be archived. Only \code{user_id} from the EDI is currently supported.
-#' @param user_domain (character) Domain of the \code{user_id}. Only "EDI" is currently supported. If more than one, then supply as a vector of character strings in the same order as \code{user_id}.
+#' @param user_id (character) Identifier of user associated with \code{user_domain}.
+#' @param user_domain (character) Domain (data repository) the \code{user_id} belongs to. Currently, EDI is supported.
 #' @param basis_of_record (character) An optional argument to facilitate creation of a Darwin Core record from this dataset using \code{convert_to_dwca()}. Use this to define the Darwin Core property \href{basisOfRecord}{https://dwc.tdwg.org/terms/#dwc:basisOfRecord} as \href{HumanObservation}{http://rs.tdwg.org/dwc/terms/HumanObservation} or \href{MachineObservation}{http://rs.tdwg.org/dwc/terms/MachineObservation}.
-#' @param url (character) URL to the publicly accessible directory containing ecocomDP tables, conversion script, and EML metadata. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and publication of datasets.
+#' @param url (character) URL to the publicly accessible directory containing ecocomDP tables, conversion script, and EML metadata. This argument supports direct download of the data entities by a data repository and is used for automated revisioning and publication.
 #'
 #' @return An EML metadata file.
 #'
-#' @details This function creates an EML record for an ecocomDP by combining metadata from \code{source_id} with boiler-plate metadata describing the ecocomDP. Changes to the parent EML include:
+#' @details This function creates an EML record for an ecocomDP by combining metadata from \code{source_id} with boiler-plate metadata describing the ecocomDP model. Changes to the \code{source_id} EML include:
 #'     \itemize{
-#'         \item \strong{<access>} Adds the \code{user_id} to the list of 
-#'         principals granted read and write access to the ecocomDP data 
-#'         package this EML describes.
-#'         \item \strong{<title>} Adds a note that this is a derived data 
-#'         package in the ecocomDP format.
+#'         \item \strong{<access>} Adds \code{user_id} to the list of principals granted read and write access to the ecocomDP data package this EML describes.
+#'         \item \strong{<title>} Adds a note that this is a derived data package in the ecocomDP format.
 #'         \item \strong{<pubDate>} Adds the date this EML was created.
-#'         \item \strong{<abstract>} Adds a note that this is a derived data 
-#'         package in the ecocomDP format.
+#'         \item \strong{<abstract>} Adds a note that this is a derived data package in the ecocomDP format.
 #'         \item \strong{<keywordSet} Adds the "ecocomDP" keyword to enable
-#'         search and discovery of all ecocomDP data packages in the EDI Data
-#'         Repository, and 7 terms from the LTER Controlled vocabulary:
-#'         "communities", "community composition", "community dynamics", 
-#'         "community patterns", "species composition", "species diversity",
-#'         and "species richness". Darwin Core Terms listed under \code{
-#'         basis_of_record} are listed and used by \code{L1_to_L2_DwCA()} 
-#'         to create a Darwin Core Archive of this ecocomDP data package.
-#'         \item \strong{<intellectualRights>} Keeps intact the intellectual
-#'         rights license of the parent data package, or replaces it with
-#'         "CCO" (https://creativecommons.org/publicdomain/zero/1.0/legalcode).
-#'         \item \strong{<taxonomicCoverage>} Updates the taxonomic coverage 
-#'         element with data supplied in the taxon table of the ecocomDP.
-#'         \item \strong{<contact>} Adds contact information of the ecocomDP
-#'         creator to the list of contacts in the parent data package EML.
-#'         \item \strong{<methodStep>} Adds a note that this data package was
-#'         created by the scripts listed under the \code{script} argument,
-#'         and adds provenance metadata noting that this is a derived data 
-#'         and describing where the parent data package can be accessed.
-#'         \item \strong{<dataTables>} Replaces the parent data package data
-#'         tables metadata with boiler-plate metadata for the ecocomDP tables.
-#'         \item \strong{<otherEntity>} Describes scripts listed in the 
-#'         \code{script} and \code{script_description} arguments. Any other
-#'         entities listed in the parent EML are removed.
+#'         search and discovery of all ecocomDP data packages in the data repository it is published, and 7 terms from the LTER Controlled vocabulary: "communities", "community composition", "community dynamics", "community patterns", "species composition", "species diversity", and "species richness". Darwin Core Terms listed under \code{basis_of_record} are listed and used by \code{convert_to_dwca()} to create a Darwin Core Archive of this ecocomDP data package.
+#'         \item \strong{<intellectualRights>} Keeps intact the original intellectual rights license \code{source_id} was released under, or uses "CCO" (https://creativecommons.org/publicdomain/zero/1.0/legalcode) if missing.
+#'         \item \strong{<taxonomicCoverage>} Appends to the taxonomic coverage 
+#'         element with data supplied in the ecocomDP taxon table.
+#'         \item \strong{<contact>} Adds the ecocomDP creator as a point of contact.
+#'         \item \strong{<methodStep>} Adds a note that this data package was created by the \code{script}, and adds provenance metadata noting that this is a derived dataset and describes where the \code{source_id} can be accessed.
+#'         \item \strong{<dataTables>} Replaces the \code{source_id} table metadata with descriptions of the the ecocomDP tables.
+#'         \item \strong{<otherEntity>} Adds \code{script} and \code{script_description}. otherEntities of \code{source_id} are removed.
+#'         \item \strong{<annotations>} Adds boilerplate annotations describing the ecocomDP at the dataset, entity, and entity attribute levels.
 #'     }
 #'     
 #'     Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. https://www.itis.gov/, http://www.marinespecies.org/, or https://gbif.org), will have their full taxonomic hierarchy expanded, including any common names for each level.

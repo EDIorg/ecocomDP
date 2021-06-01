@@ -1,12 +1,12 @@
-#' Convert ecocomDP to Darwin Core Archive
+#' Convert an ecocomDP dataset to a Darwin Core Archive dataset
 #'
 #' @param path (character) Path to which the DwC-A data objects and EML will be written.
-#' @param core_name (character) The central table of the Darwin Core package being created. Can be: "event" (event core). Occurrence core is not yet supported.
-#' @param source_id (character) Identifier of an ecocomDP data package published in a supported repository. Currently, the EDI Data Repository is supported.
+#' @param core_name (character) The central table of the DwC-A dataset being created. Can be: "event" (event core). Occurrence core is not yet supported.
+#' @param source_id (character) Identifier of an ecocomDP dataset published in a supported repository. Currently, the EDI Data Repository is supported.
 #' @param derived_id (character) Identifier of the DwC-A dataset being created.
-#' @param url (character) URL to the publicly accessible directory containing DwC-A tables and meta.xml. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and publication of datasets.
+#' @param url (character) URL to the publicly accessible directory containing DwC-A data objects. This argument supports direct download of the data entities by a data repository and is used for automated revisioning and publication.
 #' @param user_id (character) Identifier of user account associated with the data repository in which this ecocomDP dataset will be archived. Only \code{user_id} from the EDI is currently supported.
-#' @param user_domain (character) Domain of the \code{user_id}. Only "EDI" is currently supported. If more than one, then supply as a vector of character strings in the same order as \code{user_id}.
+#' @param user_domain (character) Domain (data repository) the \code{user_id} belongs to. Currently, EDI is supported.
 #' 
 #' @details Reads in an ecocomDP dataset from a supported repository and converts it to a DwC-A package.
 #' 
@@ -153,7 +153,7 @@ create_tables_dwca_event_core <- function(
   # Do you have what you need to get these vars? confirm fields used by mapping 
   # table are present. Anything that is required by the ecocomDP model already, 
   # you can assume is present. location_ancillary.value, or 
-  # observation_anncillary.value ?? what does this note mean? do I need these?
+  # observation_ancillary.value ?? what does this note mean? do I need these?
   
   # Join the tables -----------------------------------------------------------
   
