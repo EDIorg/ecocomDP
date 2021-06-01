@@ -323,7 +323,7 @@ plot_taxa_shared_sites <- function(observation, id) {
   # Plot
   p <- ggplot(shared.taxa, aes(x = site1, y = site2, fill = shared)) +
     geom_raster() +
-    scale_fill_gradient(colours = heat_pal_spectral(100), name = paste0("Taxa shared")) +
+    scale_fill_gradientn(colours = heat_pal_spectral(100), name = paste0("Taxa shared")) + 
     theme_bw() +
     labs(title = "Number of taxa shared across sites", subtitle = ds$id) +
     xlab("Site") +
