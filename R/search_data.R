@@ -1,6 +1,6 @@
 #' Search across all ecocomDP datasets
 #' 
-#' @param text (character) Text to search for in dataset titles, descriptions, and abstracts. Datasets matching any exact words or phrase will be returned. Is not case sensitive. Works with \code{boolean}
+#' @param text (character) Text to search for in dataset titles, descriptions, and abstracts. Datasets matching any exact words or phrase will be returned. Can be a regular expression as used by \code{stringr::str_detect()}. Is not case sensitive. Works with \code{boolean}.
 #' @param taxa (character) Taxonomic rank values to search on. The full taxonomic hierarchy of each taxa in a dataset is searchable for EDI (including common names) but not yet NEON, in which cases the lowest level rank value is searchable.
 #' @param num_taxa (numeric) Minimum and maximum number of taxa the dataset should contain. Any datasets within this range will be returned.
 #' @param num_years (numeric) Minimum and maximum number of years sampled the dataset should contain. Any datasets within this range will be returned.
@@ -80,7 +80,7 @@ search_data <- function(text, taxa, num_taxa, num_years, sd_years,
     fun.args = as.list(environment()))
   
   ping_edi() # Warn if EDI is down
-  
+
   # Prepare summary data ------------------------------------------------------
   # Combine summaries of EDI and NEON data. These are created by 
   # summarize_data_edi() and summarize_data_neon() respectively.

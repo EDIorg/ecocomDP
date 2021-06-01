@@ -190,3 +190,4 @@ testthat::test_that("Arguments control search patterns", {
   r_and <- search_data(taxa = c("Plantae", "Animalia"), boolean = "AND")
   expect_true(all(intersect(r1$id, r2$id) %in% r_and$id))
 })
+

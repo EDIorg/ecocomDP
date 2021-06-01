@@ -7,7 +7,7 @@
 search_data(text, taxa, num_taxa, num_years, sd_years, area, boolean = "AND")
 }
 \arguments{
-\item{text}{(character) Text to search for in dataset titles, descriptions, and abstracts. Datasets matching any exact words or phrase will be returned. Is not case sensitive. Works with \code{boolean}}
+\item{text}{(character) Text to search for in dataset titles, descriptions, and abstracts. Datasets matching any exact words or phrase will be returned. Can be a regular expression as used by \code{stringr::str_detect()}. Is not case sensitive. Works with \code{boolean}.}
 
 \item{taxa}{(character) Taxonomic rank values to search on. The full taxonomic hierarchy of each taxa in a dataset is searchable for EDI (including common names) but not yet NEON, in which cases the lowest level rank value is searchable.}
 
