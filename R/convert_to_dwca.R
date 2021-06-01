@@ -380,7 +380,7 @@ make_eml_dwca <- function(path,
       "Unable to access metadata for packageId:"))
   if (child_data_package_exists) {
     warning(
-      "The L0 data package '", derived_id, "' already exists.",
+      "The L2 data package '", derived_id, "' already exists.",
       call. = FALSE)
   }
   
