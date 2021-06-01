@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_dataset_summary.R
 \name{calc_number_of_years_sampled}
 \alias{calc_number_of_years_sampled}
-\title{Calculate the number_of_years_sampled for the dataset_summary table}
+\title{Calculate number_of_years_sampled for the dataset_summary table}
 \usage{
 calc_number_of_years_sampled(dates)
 }
@@ -10,11 +10,8 @@ calc_number_of_years_sampled(dates)
 \item{dates}{(Date) Dates from the L0 source dataset encompassing the entire study duration.}
 }
 \value{
-(numeric) Number of survey years in which a sample was taken
+(numeric) Number of survey years in which a sample was taken.
 }
 \description{
-Calculate the number_of_years_sampled for the dataset_summary table
-}
-\examples{
-
+Calculate number_of_years_sampled for the dataset_summary table
 }

@@ -7,7 +7,7 @@
 save_data(dataset, path, type = ".rds", name = NULL)
 }
 \arguments{
-\item{dataset}{(list) One or more datasets returned by \code{read_data()}. Name of the \code{dataset} object will become the file name if \code{name} is not used.}
+\item{dataset}{(list) One or more datasets of the structure returned by \code{read_data()}. Name of the \code{dataset} object will become the file name if \code{name} is not used.}
 
 \item{path}{(character) Path to the directory in which \code{dataset} will be written.}
 
@@ -16,18 +16,18 @@ save_data(dataset, path, type = ".rds", name = NULL)
 \item{name}{(character) An optional argument for setting the saved file name (for .rds) if you'd like it to be different than \code{dataset}'s object name.}
 }
 \value{
-\item{.rda}{If \code{type = ".rda"}, then an .rda representation of \code{dataset} is returned.}
+\item{.rds}{If \code{type = ".rds"}, then an .rds representation of \code{dataset} is returned.}
     \item{.csv}{If \code{type = ".csv"}, then an set of .csv files are written to a sub-directory of \code{path} named after the data package/product ID.}
 }
 \description{
 Save an ecocomDP dataset
 }
 \note{
-Subsequent calls won't overwrite dirs or files
+Subsequent calls won't overwrite files or directories
 }
 \examples{
 # Create a list of datasets
-datasets <- c(ants_L1, ants_L1, ants_L1)  # 3 of the same, with differnt names
+datasets <- c(ants_L1, ants_L1, ants_L1)  # 3 of the same, with different names
 names(datasets) <- c("ds1", "ds2", "ds3")
 
 # Create directory for the data

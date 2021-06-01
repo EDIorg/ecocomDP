@@ -1,12 +1,12 @@
-#' Join all tables of an ecocomDP dataset and spread into flat format
+#' Flatten an ecocomDP dataset
 #' 
-#' @param tables (list) A named list of ecocomDP tables as data.frames
+#' @param tables (list of tbl_df, tbl, data.frame) A named list of ecocomDP tables.
 #'
-#' @return (data.frame) A single flat table created by joining and spreading all \code{tables}. See details for more information on this "flat" format.
+#' @return (tbl_df, tbl, data.frame) A single flat table created by joining and spreading all \code{tables}, except the observation table. See details for more information on this "flat" format.
 #' 
-#' @details "flat" format refers to the fully joined ecocomDP dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" ecocomDP tables can be consistely spread due to the frequent occurence of L0 source datasets with > 1 core observation variable.
+#' @details "flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" an L1 ecocomDP dataset can be consistently spread due to the frequent occurrence of L0 source datasets with > 1 core observation variable.
 #' 
-#' @note Ancillary identifiers are dropped from the returned data frame.
+#' @note Ancillary identifiers are dropped from the returned object.
 #' 
 #' @export
 #'
@@ -15,7 +15,7 @@
 #' 
 #' flat <- flatten_data(dataset[[1]]$tables)
 #' 
-#' str(flat)
+#' flat
 #' 
 flatten_data <- function(tables) {
   

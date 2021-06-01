@@ -1,17 +1,17 @@
 #' Create the taxon_ancillary table
 #'
-#' @param L0_flat (data.frame) The fully joined source L0 dataset, in "flat" format (see details).
+#' @param L0_flat (tbl_df, tbl, data.frame) The fully joined source L0 dataset, in "flat" format (see details).
 #' @param taxon_id (character) Column in \code{L0_flat} containing the identifier assigned to each unique organism at the observation level.
-#' @param datetime (character) An optional in \code{L0_flat} containing the date, and if applicable time, of ancillary location data following the ISO-8601 standard format (i.e. YYYY-MM-DD hh:mm:ss).
+#' @param datetime (character) An optional in \code{L0_flat} containing the date, and if applicable time, of ancillary location data following the ISO-8601 standard format (e.g. YYYY-MM-DD hh:mm:ss).
 #' @param variable_name (character) Columns in \code{L0_flat} containing the ancillary taxon data.
 #' @param unit (character) An optional column in \code{L0_flat} containing the units of each \code{variable_name} following the column naming convention: unit_<variable_name> (e.g. "unit_average_length").
 #' @param author (character) An optional column in \code{L0_flat} containing the person associated with identification of taxa in the taxon table.
 #' 
-#' @details "flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" ecocomDP tables can be consistely spread due to the frequent occurence of L0 source datasets with > 1 core observation variable.
+#' @details "flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" an L1 ecocomDP dataset can be consistently spread due to the frequent occurrence of L0 source datasets with > 1 core observation variable.
 #' 
 #' This function collects specified columns from \code{L0_flat}, converts into long (attribute-value) form with \code{variable_name} names and values to the resulting table's "variable_name" and "value" columns, respectively. Regular expression matching joins \code{unit} to any associated \code{variable_name} and is listed in the resulting table's "unit" column.
 #'
-#' @return (data.frame) The taxon_ancillary table.
+#' @return (tbl_df, tbl, data.frame) The taxon_ancillary table.
 #' 
 #' @export
 #'
@@ -28,7 +28,7 @@
 #'     "behavior", "biogeographic.affinity", "source"),
 #'   unit = c("unit_hl", "unit_rel", "unit_rll"))
 #' 
-#' str(taxon_ancillary)
+#' taxon_ancillary
 #' 
 create_taxon_ancillary <- function(L0_flat, 
                                    taxon_id, 

@@ -22,21 +22,21 @@ write_tables(
 
 \item{sep}{(character) Field delimiter to use when writing files. Default is comma.}
 
-\item{observation}{(data.frame) The observation table.}
+\item{observation}{(tbl_df, tbl, data.frame) The observation table.}
 
-\item{location}{(data.frame) The location table.}
+\item{location}{(tbl_df, tbl, data.frame) The location table.}
 
-\item{taxon}{(data.frame) The taxon table.}
+\item{taxon}{(tbl_df, tbl, data.frame) The taxon table.}
 
-\item{dataset_summary}{(data.frame) The dataset_summary table.}
+\item{dataset_summary}{(tbl_df, tbl, data.frame) The dataset_summary table.}
 
-\item{observation_ancillary}{(data.frame) The observation_ancillary table.}
+\item{observation_ancillary}{(tbl_df, tbl, data.frame) The observation_ancillary table.}
 
-\item{location_ancillary}{(data.frame) The location_ancillary table.}
+\item{location_ancillary}{(tbl_df, tbl, data.frame) The location_ancillary table.}
 
-\item{taxon_ancillary}{(data.frame) The taxon_ancillary table.}
+\item{taxon_ancillary}{(tbl_df, tbl, data.frame) The taxon_ancillary table.}
 
-\item{variable_mapping}{(data.frame) The variable_mapping table.}
+\item{variable_mapping}{(tbl_df, tbl, data.frame) The variable_mapping table.}
 }
 \value{
 ecocomDP tables as \code{sep} delimited files

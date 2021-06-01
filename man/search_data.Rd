@@ -7,9 +7,9 @@
 search_data(text, taxa, num_taxa, num_years, sd_years, area, boolean = "AND")
 }
 \arguments{
-\item{text}{(character) Text to search in dataset titles, descriptions, and abstracts. Datasets matching any exact words or phrase will be returned. Is not case sensitive. Works with \code{boolean}}
+\item{text}{(character) Text to search for in dataset titles, descriptions, and abstracts. Datasets matching any exact words or phrase will be returned. Is not case sensitive. Works with \code{boolean}}
 
-\item{taxa}{(character) Taxanomic rank values to search on. The full taxonomic hierarchy of each taxa in a dataset is searchable for EDI (including common names) but not yet NEON, in which cases the lowest level rank value is searchable.}
+\item{taxa}{(character) Taxonomic rank values to search on. The full taxonomic hierarchy of each taxa in a dataset is searchable for EDI (including common names) but not yet NEON, in which cases the lowest level rank value is searchable.}
 
 \item{num_taxa}{(numeric) Minimum and maximum number of taxa the dataset should contain. Any datasets within this range will be returned.}
 
@@ -23,7 +23,7 @@ search_data(text, taxa, num_taxa, num_years, sd_years, area, boolean = "AND")
 \code{taxa}. Supported operators are: "AND", "OR". Default is "AND".}
 }
 \value{
-(data.frame) Search results with these feilds:
+(tbl_df, tbl, data.frame) Search results with these feilds:
     \itemize{
         \item source - Source from which the dataset originates. Currently supported are "EDI" and "NEON".
         \item id - Identifier of the dataset.
@@ -42,44 +42,43 @@ search_data(text, taxa, num_taxa, num_years, sd_years, area, boolean = "AND")
 Search across all ecocomDP datasets
 }
 \details{
-Currently, to accomodate multiple L1 versions of NEON data products, search results for a NEON L0 will also list all the L1 versions available for the match. This method is based on the assumption that the summary data among L1 versions is the same, which may need to be addressed in the future. A list of L0 and corresponding L1 identifiers are listed in /inst/L1_versions.txt. Each L1 version is accompanied by qualifying text that's appended to the title, abstract, and descriptions for comprehension of the differences among L1 versions.
+Currently, to accommodate multiple L1 versions of NEON data products, search results for a NEON L0 will also list all the L1 versions available for the match. This method is based on the assumption that the summary data among L1 versions is the same, which may need to be addressed in the future. A list of L0 and corresponding L1 identifiers are listed in /inst/L1_versions.txt. Each L1 version is accompanied by qualifying text that's appended to the title, abstract, and descriptions for comprehension of the differences among L1 versions.
 }
 \note{
-This function may not work between 01:00 - 03:00 UTC due to regular maintenance of the EDI Data Repository.
+This function may not work between 01:00 - 03:00 UTC on Wednesdays due to regular maintenance of the EDI Data Repository.
 }
 \examples{
 # Empty search returns all available datasets
-r <- search_data()
-# View(r)
+search_data()
 
 # "text" searches titles, descriptions, and abstracts
-r <- search_data(text = "Lake")
+search_data(text = "Lake")
 
 # "taxa" searches taxonomic ranks for a match
-r <- search_data(taxa = "Plantae")
+search_data(taxa = "Plantae")
 
 # "num_taxa" searches the count of unique taxa in a dataset
-r <- search_data(num_taxa = c(0, 10))
+search_data(num_taxa = c(0, 10))
 
 # "num_years" searches the number of years sampled
-r <- search_data(num_years = c(10, 20))
+search_data(num_years = c(10, 20))
 
 # "sd_years" searches the sampling frequency
-r <- search_data(sd_years = c(.25, 1))
+search_data(sd_years = c(.25, 1))
 
 # "area" searches where data were collected
-r <- search_data(area = c(47.1, -86.7, 42.5, -92))
+search_data(area = c(47.1, -86.7, 42.5, -92))
 
 # "boolean" operators "AND" (default) & "OR" combine text and taxa search terms
-r <- search_data(text = c("Lake", "River"))
-r <- search_data(text = c("Lake", "River"), boolean = "OR")
+search_data(text = c("Lake", "River"))
+search_data(text = c("Lake", "River"), boolean = "OR")
 
-r <- search_data(taxa = c("Plantae", "Animalia"))
+search_data(taxa = c("Plantae", "Animalia"))
 
-r <- search_data(taxa = c("Plantae", "Animalia"), boolean = "OR")
+search_data(taxa = c("Plantae", "Animalia"), boolean = "OR")
 
 # Use any combination of search fields to find the data you're looking for
-r <- search_data(
+search_data(
   text = c("Lake", "River"),
   taxa = c("Plantae", "Animalia"),
   num_taxa = c(0, 10),

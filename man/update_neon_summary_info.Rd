@@ -13,7 +13,7 @@ update_neon_summary_info(d)
 (list) \code{d} with added info
 }
 \description{
-This temporarily accomodates NEON's plan for multiple L1 versions and will have to be refactored to support other data sources adopting this use case. A permanent solution is to refactor the \code{summarize_data_neon()} and \code{summarize_data_edi()} functions to return the exact objects of interest.
+This temporarily accommodates NEON's plan for multiple L1 versions and will have to be refactored to support other data sources adopting this use case. A permanent solution is to refactor the \code{summarize_data_neon()} and \code{summarize_data_edi()} functions to return the exact objects of interest.
 }
 \details{
 Joins /inst/L1_versions.txt (a file holding version info) with \code{d} and does a little reformatting.

@@ -13,7 +13,7 @@ Duplicate file names are not allowed.}
 \value{
 (list) A named list of \code{id}, each including: 
     \item{metadata}{A list of information about the data.}
-    \item{tables}{A list of data.frames following the ecocomDP format 
+    \item{tables}{A list of tbl_df, tbl, data.frames following the ecocomDP format 
     (\url{https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md})}
 }
 \description{

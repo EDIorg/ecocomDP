@@ -7,7 +7,7 @@
 plot_taxa_shared_sites(observation, id)
 }
 \arguments{
-\item{observation}{(data.frame) The observation table.}
+\item{observation}{(tbl_df, tbl, data.frame) The observation table.}
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}
 }

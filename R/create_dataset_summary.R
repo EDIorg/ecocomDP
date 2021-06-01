@@ -1,19 +1,19 @@
 #' Create the dataset_summary table
 #'
-#' @param L0_flat (data.frame) The fully joined source L0 dataset, in "flat" format (see details).
-#' @param package_id (character) Column in \code{L0_flat} containing the identifier this dataset will have once it's published in a data repository.
-#' @param original_package_id (character) An optional column in \code{L0_flat} containing the identifier of the L0 dataset in the repository it's published (some L0 are not published).
+#' @param L0_flat (tbl_df, tbl, data.frame) The fully joined source L0 dataset, in "flat" format (see details).
+#' @param package_id (character) Column in \code{L0_flat} containing the identifier of the derived L1 dataset.
+#' @param original_package_id (character) An optional column in \code{L0_flat} containing the identifier of the source L0 dataset.
 #' @param length_of_survey_years (character) Column in \code{L0_flat} containing the number of years the study has been ongoing. Use \code{calc_length_of_survey_years()} to calculate this value.
-#' @param number_of_years_sampled (character) Column in \code{L0_flat} containing the number of years within the period of the study that samples were taken. Use \code{calc_number_of_years_sampled()} to calculate this value.
+#' @param number_of_years_sampled (character) Column in \code{L0_flat} containing the number of years within the period of study that samples were taken. Use \code{calc_number_of_years_sampled()} to calculate this value.
 #' @param std_dev_interval_betw_years (character) Column in \code{L0_flat} containing the standard deviation of the interval between sampling events. Use \code{calc_std_dev_interval_betw_years()} to calculate this value.
-#' @param max_num_taxa (character) Column in \code{L0_flat} containing the number of unique taxa in this dataset.
+#' @param max_num_taxa (character) Column in \code{L0_flat} containing the number of unique taxa in the source L0 dataset.
 #' @param geo_extent_bounding_box_m2 (character) An optional column in \code{L0_flat} containing the area (in meters) of the study location, if applicable (some L0 were collected at a single point). Use \code{calc_geo_extent_bounding_box_m2()} to calculate this value.
 #' 
-#' @details "flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" ecocomDP tables can be consistely spread due to the frequent occurence of L0 source datasets with > 1 core observation variable.
+#' @details "flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" an L1 ecocomDP dataset can be consistently spread due to the frequent occurrence of L0 source datasets with > 1 core observation variable.
 #' 
 #' This function collects specified columns from \code{L0_flat} and returns distinct rows.
 #' 
-#' @return (data.frame) The dataset_summary table.
+#' @return (tbl_df, tbl, data.frame) The dataset_summary table.
 #' 
 #' @export
 #' 
@@ -30,7 +30,7 @@
 #'   max_num_taxa = "max_num_taxa", 
 #'   geo_extent_bounding_box_m2 = "geo_extent_bounding_box_m2")
 #' 
-#' str(dataset_summary)
+#' dataset_summary
 #' 
 create_dataset_summary <- function(L0_flat, 
                                    package_id,
@@ -76,18 +76,16 @@ create_dataset_summary <- function(L0_flat,
 
 
 
-#' Calculate the geo_extent_bounding_box_m2 for the dataset_summary table
+#' Calculate geo_extent_bounding_box_m2 for the dataset_summary table
 #'
 #' @param west (numeric) West longitude in decimal degrees and negative if west of the prime meridian.
 #' @param east (numeric) East longitude in decimal degrees and negative if west of the prime meridian.
 #' @param north (numeric) North latitude in decimal degrees and negative if south of the equator.
 #' @param south (numeric) South latitude in decimal degrees and negative if south of the equator.
 #'
-#' @return (numeric) Area of study site in square meters.
+#' @return (numeric) Area of study site in meters squared.
 #'     
 #' @export
-#' 
-#' @examples 
 #'
 calc_geo_extent_bounding_box_m2 <- function(
   west, east, north, south) {
@@ -105,15 +103,13 @@ calc_geo_extent_bounding_box_m2 <- function(
 
 
 
-#' Calculate the length_of_survey_years for the dataset_summary table
+#' Calculate length_of_survey_years for the dataset_summary table
 #'
 #' @param dates (Date) Dates from the L0 source dataset encompassing the entire study duration.
 #'
 #' @return (numeric) Number of years the study has been ongoing.
 #' 
 #' @export
-#'
-#' @examples
 #' 
 calc_length_of_survey_years <- function(dates) {
   res <- round(
@@ -130,15 +126,13 @@ calc_length_of_survey_years <- function(dates) {
 
 
 
-#' Calculate the number_of_years_sampled for the dataset_summary table
+#' Calculate number_of_years_sampled for the dataset_summary table
 #'
 #' @param dates (Date) Dates from the L0 source dataset encompassing the entire study duration.
 #'
-#' @return (numeric) Number of survey years in which a sample was taken
+#' @return (numeric) Number of survey years in which a sample was taken.
 #' 
 #' @export
-#'
-#' @examples
 #' 
 calc_number_of_years_sampled <- function(dates) {
   years_sampled <- na.omit(unique(lubridate::year(dates)))
@@ -153,15 +147,13 @@ calc_number_of_years_sampled <- function(dates) {
 
 
 
-#' Calculate the std_dev_interval_betw_years for the dataset_summary table
+#' Calculate std_dev_interval_betw_years for the dataset_summary table
 #'
 #' @param dates (Date) Dates from the L0 source dataset encompassing the entire study duration.
 #'
-#' @return (numeric) The standard deviation between sampling events, in years.
+#' @return (numeric) The standard deviation between sampling events (in years).
 #' 
 #' @export
-#'
-#' @examples
 #' 
 calc_std_dev_interval_betw_years <- function(dates) {
   res <- round(sd(diff(unique(lubridate::date(dates)))/365), 2)

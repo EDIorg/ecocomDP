@@ -1,8 +1,8 @@
 #' Read an ecocomDP dataset
 #'
 #' @param id (character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search_data()} output. Older versions of datasets can be read, but a warning is issued.
-#' @param parse_datetime (logical) Attempt to parse datetime character strings through an algorithm. For EDI data, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the formatString is standardized. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing with a warning).
-#' @param unique_keys (logical) Whether to create globally unique primary keys (and associated foreign keys). Useful in maintaining referential integrity when working with multiple datasets. If TRUE, \code{id} is appended to each table's primary key and associated foreign key. Default is\code{FALSE}.
+#' @param parse_datetime (logical) Parse datetime values if TRUE, otherwise return as character strings.
+#' @param unique_keys (logical) Whether to create globally unique primary keys (and associated foreign keys). Useful in maintaining referential integrity when working with multiple datasets. If TRUE, \code{id} is appended to each table's primary key and associated foreign key. Default is FALSE.
 #' @param site (character) For NEON data, a character vector of site codes to filter data on. Sites are listed in the "sites" column of the \code{search_data()} output. Defaults to "all", meaning all sites.
 #' @param startdate (character) For NEON data, the start date to filter on in the form YYYY-MM. Defaults to NA, meaning all available dates.
 #' @param enddate (character) For NEON data, the end date to filter on in the form YYYY-MM. Defaults to NA, meaning all available dates.
@@ -11,33 +11,29 @@
 #' @param nCores (integer) For NEON data, the number of cores to parallelize the stacking procedure. Defaults to 1.
 #' @param forceParallel (logical) For NEON data, if the data volume to be processed does not meet minimum requirements to run in parallel, this overrides. Defaults to FALSE.
 #' @param token (character) For NEON data, a user specific API token (generated within neon.datascience user accounts).
-#' @param neon.data.save.dir (character) For NEON data, an optional and experimental argument (i.e. may not be supported in future releases), indicating the directory where NEON source data should be saved upon download from the NEON API. Data are downloaded using \code{neonUtilities::loadByProduct()} and saved in this directory as an RDS file. The filename will follow the format <NEON data product ID>_<timestamp>.RDS
-#' @param neon.data.read.path (character) For NEON data, an optional and experimental argument (i.e. may not be supported in future releases), defining a path to read in an RDS file of 'stacked NEON data' from \code{neonUtilities::loadByProduct()}. See details below for more information.
+#' @param neon.data.save.dir (character) For NEON data, an optional and experimental argument (i.e. may not be supported in future releases), indicating the directory where NEON source data should be saved upon download from the NEON API. Data are downloaded using \code{neonUtilities::loadByProduct()} and saved in this directory as an .rds file. The filename will follow the format <NEON data product ID>_<timestamp>.rds
+#' @param neon.data.read.path (character) For NEON data, an optional and experimental argument (i.e. may not be supported in future releases), defining a path to read in an .rds file of 'stacked NEON data' from \code{neonUtilities::loadByProduct()}. See details below for more information.
 #' @param ... For NEON data, other arguments to \code{neonUtilities::loadByProduct()}
 #' @param from (character) Full path of file to be read (if .rds), or path to directory containing saved datasets (if .csv).
 #'     
 #' @return
-#'     (list) with the structure: 
+#'     (list) with the structure:
 #'     \itemize{
-#'       \item{id - Dataset id}
+#'       \item{id - Dataset identifier}
 #'         \itemize{
 #'           \item metadata - List of info about the dataset. NOTE: This object is underdevelopment and content may change in future releases.
-#'           \item tables - List of dataset tables as data.frames.
+#'           \item tables - List of dataset tables as tbl_df, tbl, data.frames.
 #'           \item validation_issues - List of validation issues. If the dataset fails any validation checks, 
 #'     then descriptions of each issue are listed here.
 #'       }
 #'     }
 #' 
-#' @note This function may not work between 01:00 - 03:00 UTC due to regular maintenance of the EDI Data Repository.
+#' @note This function may not work between 01:00 - 03:00 UTC on Wednesdays due to regular maintenance of the EDI Data Repository.
 #' 
 #' @details 
-#'     Validation checks are applied to each dataset ensuring they comply with 
-#'     the ecocomDP. A warning is issued when any validation check fails 
-#'     (please report these to \url{https://github.com/EDIorg/ecocomDP/issues}). 
-#'     All datasets are returned, even if they fail validation.
+#'     Validation checks are applied to each dataset ensuring it complies with the ecocomDP model. A warning is issued when any validation checks fail. All datasets are returned, even if they fail validation.
 #'     
-#'     Column classes are coerced to those defined in the ecocomDP 
-#'     specification.
+#'     Column classes are coerced to those defined in the ecocomDP specification.
 #'     
 #'     Validation happens each time files are read, from source APIs or local environments.
 #'     
@@ -68,7 +64,7 @@
 #' is.character(dataset$edi.193.4$tables$observation$datetime)
 #' 
 #' # Save a list of datasets for reading
-#' datasets <- c(ants_L1, ants_L1, ants_L1)   # 3 of the same, with differnt names
+#' datasets <- c(ants_L1, ants_L1, ants_L1)   # 3 of the same, with different names
 #' names(datasets) <- c("ds1", "ds2", "ds3")
 #' mypath <- paste0(tempdir(), "/data")       # A place for saving
 #' dir.create(mypath)
@@ -143,7 +139,7 @@ read_data <- function(id = NULL, parse_datetime = TRUE,
           function(y) {
             nms <- attr_tbl$column[attr_tbl$table == y]
             tblnms <- names(d[[x]]$tables[[y]])
-            if ("observation_datetime" %in% tblnms) { # Accomodate legacy data by converting observation_datetime to datetime
+            if ("observation_datetime" %in% tblnms) { # accommodate legacy data by converting observation_datetime to datetime
               tblnms[tblnms == "observation_datetime"] <- "datetime"
               names(d[[x]]$tables[[y]]) <<- tblnms
             }
@@ -205,7 +201,7 @@ read_data <- function(id = NULL, parse_datetime = TRUE,
   
   # Append package_id to primary keys to ensure referential integrity (except
   # package_id, appending package_id to package_id changes the field definition
-  # and shouldn't be neccessary as the package_id is very unlikely to be 
+  # and shouldn't be necessary as the package_id is very unlikely to be 
   # duplicated).
   
   if (isTRUE(unique_keys)) {
@@ -399,7 +395,7 @@ read_data_edi <- function(id, parse_datetime = TRUE) {
 #' @return
 #'     (list) A named list of \code{id}, each including: 
 #'     \item{metadata}{A list of information about the data.}
-#'     \item{tables}{A list of data.frames following the ecocomDP format 
+#'     \item{tables}{A list of tbl_df, tbl, data.frames following the ecocomDP format 
 #'     (\url{https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md})}
 #' 
 read_from_files <- function(data.path) {

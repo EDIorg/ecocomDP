@@ -1,11 +1,11 @@
-#' Check if a dataset conforms to the ecocomDP model
+#' Validate a dataset against the ecocomDP model
 #' 
-#' @param dataset (list) A dataset returned by \code{read_data()}.
-#' @param path (character) A path to the directory in which the ecocomDP tables can be found.
+#' @param dataset (list) A dataset of the structure returned by \code{read_data()}.
+#' @param path (character) Path to a directory containing ecocomDP tables as files.
 #'     
 #' @note This function is used by ecocomDP creators (to ensure what has been created is valid), maintainers (to improve the quality of archived ecocomDP datasets), and users (to ensure the data being used is free of error).
 #'     
-#' @return (character) If any checks fail, then a list of validation issues are returned along with a warning. If no issues are found then NULL is returned.
+#' @return (list) If any checks fail, then a list of validation issues are returned along with a warning. If no issues are found then NULL is returned.
 #'          
 #' @details 
 #'    Validation checks:
@@ -339,7 +339,7 @@ validate_column_presence <- function(data.list){
 #'     ecocomDP table.
 #'
 #' @return 
-#'     (character) If date and time data are not formmated to specification, 
+#'     (character) If date and time data are not formatted to specification, 
 #'     then rows of invalid formats are returned, otherwise NULL is returned.
 #'
 validate_datetime <- function(data.list) {

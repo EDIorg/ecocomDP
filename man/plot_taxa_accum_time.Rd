@@ -7,7 +7,7 @@
 plot_taxa_accum_time(observation, id, alpha = 1)
 }
 \arguments{
-\item{observation}{(data.frame) The observation table.}
+\item{observation}{(tbl_df, tbl, data.frame) The observation table.}
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}
 

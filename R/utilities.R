@@ -1609,14 +1609,14 @@ vocab_resolve_terms <- function(x, cv, messages = FALSE, interactive = FALSE){
 #'
 #' @param path (character) A path to the directory in which the files will be written.
 #' @param sep (character) Field delimiter to use when writing files. Default is comma.
-#' @param observation (data.frame) The observation table.
-#' @param location (data.frame) The location table.
-#' @param taxon (data.frame) The taxon table.
-#' @param dataset_summary (data.frame) The dataset_summary table.
-#' @param observation_ancillary (data.frame) The observation_ancillary table.
-#' @param location_ancillary (data.frame) The location_ancillary table.
-#' @param taxon_ancillary (data.frame) The taxon_ancillary table.
-#' @param variable_mapping (data.frame) The variable_mapping table.
+#' @param observation (tbl_df, tbl, data.frame) The observation table.
+#' @param location (tbl_df, tbl, data.frame) The location table.
+#' @param taxon (tbl_df, tbl, data.frame) The taxon table.
+#' @param dataset_summary (tbl_df, tbl, data.frame) The dataset_summary table.
+#' @param observation_ancillary (tbl_df, tbl, data.frame) The observation_ancillary table.
+#' @param location_ancillary (tbl_df, tbl, data.frame) The location_ancillary table.
+#' @param taxon_ancillary (tbl_df, tbl, data.frame) The taxon_ancillary table.
+#' @param variable_mapping (tbl_df, tbl, data.frame) The variable_mapping table.
 #'
 #' @return ecocomDP tables as \code{sep} delimited files
 #'     

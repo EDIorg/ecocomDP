@@ -25,9 +25,9 @@ read_data(
 \arguments{
 \item{id}{(character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search_data()} output. Older versions of datasets can be read, but a warning is issued.}
 
-\item{parse_datetime}{(logical) Attempt to parse datetime character strings through an algorithm. For EDI data, the algorithm looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. For NEON, the formatString is standardized. Failed attempts will return a warning. Default is \code{TRUE}. No attempt is made at using time zones if included (these are dropped before parsing with a warning).}
+\item{parse_datetime}{(logical) Parse datetime values if TRUE, otherwise return as character strings.}
 
-\item{unique_keys}{(logical) Whether to create globally unique primary keys (and associated foreign keys). Useful in maintaining referential integrity when working with multiple datasets. If TRUE, \code{id} is appended to each table's primary key and associated foreign key. Default is\code{FALSE}.}
+\item{unique_keys}{(logical) Whether to create globally unique primary keys (and associated foreign keys). Useful in maintaining referential integrity when working with multiple datasets. If TRUE, \code{id} is appended to each table's primary key and associated foreign key. Default is FALSE.}
 
 \item{site}{(character) For NEON data, a character vector of site codes to filter data on. Sites are listed in the "sites" column of the \code{search_data()} output. Defaults to "all", meaning all sites.}
 
@@ -45,21 +45,21 @@ read_data(
 
 \item{token}{(character) For NEON data, a user specific API token (generated within neon.datascience user accounts).}
 
-\item{neon.data.save.dir}{(character) For NEON data, an optional and experimental argument (i.e. may not be supported in future releases), indicating the directory where NEON source data should be saved upon download from the NEON API. Data are downloaded using \code{neonUtilities::loadByProduct()} and saved in this directory as an RDS file. The filename will follow the format <NEON data product ID>_<timestamp>.RDS}
+\item{neon.data.save.dir}{(character) For NEON data, an optional and experimental argument (i.e. may not be supported in future releases), indicating the directory where NEON source data should be saved upon download from the NEON API. Data are downloaded using \code{neonUtilities::loadByProduct()} and saved in this directory as an .rds file. The filename will follow the format <NEON data product ID>_<timestamp>.rds}
 
-\item{neon.data.read.path}{(character) For NEON data, an optional and experimental argument (i.e. may not be supported in future releases), defining a path to read in an RDS file of 'stacked NEON data' from \code{neonUtilities::loadByProduct()}. See details below for more information.}
+\item{neon.data.read.path}{(character) For NEON data, an optional and experimental argument (i.e. may not be supported in future releases), defining a path to read in an .rds file of 'stacked NEON data' from \code{neonUtilities::loadByProduct()}. See details below for more information.}
 
 \item{...}{For NEON data, other arguments to \code{neonUtilities::loadByProduct()}}
 
 \item{from}{(character) Full path of file to be read (if .rds), or path to directory containing saved datasets (if .csv).}
 }
 \value{
-(list) with the structure: 
+(list) with the structure:
     \itemize{
-      \item{id - Dataset id}
+      \item{id - Dataset identifier}
         \itemize{
           \item metadata - List of info about the dataset. NOTE: This object is underdevelopment and content may change in future releases.
-          \item tables - List of dataset tables as data.frames.
+          \item tables - List of dataset tables as tbl_df, tbl, data.frames.
           \item validation_issues - List of validation issues. If the dataset fails any validation checks, 
     then descriptions of each issue are listed here.
       }
@@ -69,13 +69,9 @@ read_data(
 Read an ecocomDP dataset
 }
 \details{
-Validation checks are applied to each dataset ensuring they comply with 
-    the ecocomDP. A warning is issued when any validation check fails 
-    (please report these to \url{https://github.com/EDIorg/ecocomDP/issues}). 
-    All datasets are returned, even if they fail validation.
+Validation checks are applied to each dataset ensuring it complies with the ecocomDP model. A warning is issued when any validation checks fail. All datasets are returned, even if they fail validation.
     
-    Column classes are coerced to those defined in the ecocomDP 
-    specification.
+    Column classes are coerced to those defined in the ecocomDP specification.
     
     Validation happens each time files are read, from source APIs or local environments.
     
@@ -84,7 +80,7 @@ Validation checks are applied to each dataset ensuring they comply with
     Provisional NEON data. Despite NEON's controlled data entry, at times, errors are found in published data; for example, an analytical lab may adjust its calibration curve and re-calculate past analyses, or field scientists may discover a past misidentification. In these cases, Level 0 data are edited and the data are re-processed to Level 1 and re-published. Published data files include a time stamp in the file name; a new time stamp indicates data have been re-published and may contain differences from previously published data. Data are subject to re-processing at any time during an initial provisional period; data releases are never re-processed. All records downloaded from the NEON API will have a "release" field. For any provisional record, the value of this field will be "PROVISIONAL", otherwise, this field will have a value indicating the version of the release to which the record belongs. More details can be found at https://www.neonscience.org/data-samples/data-management/data-revisions-releases.
 }
 \note{
-This function may not work between 01:00 - 03:00 UTC due to regular maintenance of the EDI Data Repository.
+This function may not work between 01:00 - 03:00 UTC on Wednesdays due to regular maintenance of the EDI Data Repository.
 }
 \examples{
 # Read from EDI
@@ -107,7 +103,7 @@ dataset <- read_data("edi.193.4", parse_datetime = FALSE)
 is.character(dataset$edi.193.4$tables$observation$datetime)
 
 # Save a list of datasets for reading
-datasets <- c(ants_L1, ants_L1, ants_L1)   # 3 of the same, with differnt names
+datasets <- c(ants_L1, ants_L1, ants_L1)   # 3 of the same, with different names
 names(datasets) <- c("ds1", "ds2", "ds3")
 mypath <- paste0(tempdir(), "/data")       # A place for saving
 dir.create(mypath)

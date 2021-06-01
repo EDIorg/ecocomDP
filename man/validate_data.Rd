@@ -2,20 +2,20 @@
 % Please edit documentation in R/validate_data.R
 \name{validate_data}
 \alias{validate_data}
-\title{Check if a dataset conforms to the ecocomDP model}
+\title{Validate a dataset against the ecocomDP model}
 \usage{
 validate_data(dataset = NULL, path = NULL)
 }
 \arguments{
-\item{dataset}{(list) A dataset returned by \code{read_data()}.}
+\item{dataset}{(list) A dataset of the structure returned by \code{read_data()}.}
 
-\item{path}{(character) A path to the directory in which the ecocomDP tables can be found.}
+\item{path}{(character) Path to a directory containing ecocomDP tables as files.}
 }
 \value{
-(character) If any checks fail, then a list of validation issues are returned along with a warning. If no issues are found then NULL is returned.
+(list) If any checks fail, then a list of validation issues are returned along with a warning. If no issues are found then NULL is returned.
 }
 \description{
-Check if a dataset conforms to the ecocomDP model
+Validate a dataset against the ecocomDP model
 }
 \details{
 Validation checks:

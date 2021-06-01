@@ -1,6 +1,6 @@
 #' Plot taxa accumulation by site accumulation
 #'
-#' @param observation (data.frame) The observation table.
+#' @param observation (tbl_df, tbl, data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' 
@@ -65,7 +65,7 @@ plot_taxa_accum_sites <- function(observation, id, alpha = 1) {
 
 #' Plot taxa accumulation through time
 #'
-#' @param observation (data.frame) The observation table.
+#' @param observation (tbl_df, tbl, data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' 
@@ -145,7 +145,7 @@ plot_taxa_accum_time <- function(observation, id, alpha = 1) {
 
 #' Plot diversity (taxa richness) through time
 #'
-#' @param observation (data.frame) The observation table.
+#' @param observation (tbl_df, tbl, data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' 
@@ -212,7 +212,7 @@ plot_taxa_diversity <- function(observation, id, alpha = 1) {
 
 #' Plot dates and times samples were taken
 #'
-#' @param observation (data.frame) The observation table.
+#' @param observation (tbl_df, tbl, data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' 
@@ -266,7 +266,7 @@ plot_taxa_sample_time <- function(observation, id, alpha = 1) {
 
 #' Plot number of unique taxa shared across sites
 #' 
-#' @param observation (data.frame) The observation table.
+#' @param observation (tbl_df, tbl, data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' 
 #' @import dplyr
@@ -306,7 +306,7 @@ plot_taxa_shared_sites <- function(observation, id) {
     group_by(SITE_ID) %>% 
     select(-OBSERVATION_TYPE, -DATE) %>%
     summarise_all(sum, na.rm = TRUE)
-  # Convert sum abundance to presence absense
+  # Convert sum abundance to presence absence
   vals <- comm.cumul %>% dplyr::select(-SITE_ID)
   vals[vals > 0] <- 1
   comm.cumul <- dplyr::bind_cols(comm.cumul[, 1], vals)
@@ -323,7 +323,7 @@ plot_taxa_shared_sites <- function(observation, id) {
   # Plot
   p <- ggplot(shared.taxa, aes(x = site1, y = site2, fill = shared)) +
     geom_raster() +
-    scale_fill_gradientn(colours = heat_pal_spectral(100), name = paste0("Taxa shared")) +
+    scale_fill_gradient(colours = heat_pal_spectral(100), name = paste0("Taxa shared")) +
     theme_bw() +
     labs(title = "Number of taxa shared across sites", subtitle = ds$id) +
     xlab("Site") +
@@ -349,12 +349,12 @@ plot_taxa_shared_sites <- function(observation, id) {
 
 #' Format dataset for community plotting functions
 #'
-#' @param observation (data.frame) The observation table of ecocomDP
+#' @param observation (tbl_df, tbl, data.frame) The observation table of ecocomDP
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' 
-#' @details Downsteam plotting functions are based on \href{https://github.com/sokole/ltermetacommunities/tree/master/Group2-explore-data}{LTER Metacommunities code} and use their intermediate data input format.
+#' @details Downstream plotting functions are based on \href{https://github.com/sokole/ltermetacommunities/tree/master/Group2-explore-data}{LTER Metacommunities code} and use their intermediate data input format.
 #'
-#' @return (data.frame) Tabular data of \code{id} in a format compatible with plotting functions
+#' @return (tbl_df, tbl, data.frame) Tabular data of \code{id} in a format compatible with plotting functions
 #' 
 format_for_comm_plots <- function(observation, id) {
   id <- id

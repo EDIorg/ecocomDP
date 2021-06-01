@@ -1,21 +1,21 @@
 #' Save an ecocomDP dataset
 #'
-#' @param dataset (list) One or more datasets returned by \code{read_data()}. Name of the \code{dataset} object will become the file name if \code{name} is not used.
+#' @param dataset (list) One or more datasets of the structure returned by \code{read_data()}. Name of the \code{dataset} object will become the file name if \code{name} is not used.
 #' @param path (character) Path to the directory in which \code{dataset} will be written.
 #' @param type (character) Type of file to save the \code{dataset} as. Default is ".rds" but can also be ".csv". Note: metadata and validation_issues are lost when using ".csv".
 #' @param name (character) An optional argument for setting the saved file name (for .rds) if you'd like it to be different than \code{dataset}'s object name.
 #'     
-#' @note Subsequent calls won't overwrite dirs or files
+#' @note Subsequent calls won't overwrite files or directories
 #'
 #' @return
-#'     \item{.rda}{If \code{type = ".rda"}, then an .rda representation of \code{dataset} is returned.}
+#'     \item{.rds}{If \code{type = ".rds"}, then an .rds representation of \code{dataset} is returned.}
 #'     \item{.csv}{If \code{type = ".csv"}, then an set of .csv files are written to a sub-directory of \code{path} named after the data package/product ID.}
 #'     
 #' @export
 #'
 #' @examples
 #' # Create a list of datasets
-#' datasets <- c(ants_L1, ants_L1, ants_L1)  # 3 of the same, with differnt names
+#' datasets <- c(ants_L1, ants_L1, ants_L1)  # 3 of the same, with different names
 #' names(datasets) <- c("ds1", "ds2", "ds3")
 #' 
 #' # Create directory for the data

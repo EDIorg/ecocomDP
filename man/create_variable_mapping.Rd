@@ -12,16 +12,16 @@ create_variable_mapping(
 )
 }
 \arguments{
-\item{observation}{(data.frame) The observation table.}
+\item{observation}{(tbl_df, tbl, data.frame) The observation table.}
 
-\item{observation_ancillary}{(data.frame) The optional observation_ancillary table.}
+\item{observation_ancillary}{(tbl_df, tbl, data.frame) The optional observation_ancillary table.}
 
-\item{location_ancillary}{(data.frame) The optional location_ancillary table.}
+\item{location_ancillary}{(tbl_df, tbl, data.frame) The optional location_ancillary table.}
 
-\item{taxon_ancillary}{(data.frame) The optional taxon_ancillary table.}
+\item{taxon_ancillary}{(tbl_df, tbl, data.frame) The optional taxon_ancillary table.}
 }
 \value{
-(data.frame) The variable_mapping table.
+(tbl_df, tbl, data.frame) The variable_mapping table.
 }
 \description{
 Create the variable_mapping table
@@ -74,6 +74,6 @@ variable_mapping <- create_variable_mapping(
   location_ancillary = location_ancillary, 
   taxon_ancillary = taxon_ancillary)
 
-str(variable_mapping)
+variable_mapping
 
 }

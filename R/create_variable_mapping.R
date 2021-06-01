@@ -1,13 +1,13 @@
 #' Create the variable_mapping table
 #'
-#' @param observation (data.frame) The observation table.
-#' @param observation_ancillary (data.frame) The optional observation_ancillary table.
-#' @param location_ancillary (data.frame) The optional location_ancillary table.
-#' @param taxon_ancillary (data.frame) The optional taxon_ancillary table.
+#' @param observation (tbl_df, tbl, data.frame) The observation table.
+#' @param observation_ancillary (tbl_df, tbl, data.frame) The optional observation_ancillary table.
+#' @param location_ancillary (tbl_df, tbl, data.frame) The optional location_ancillary table.
+#' @param taxon_ancillary (tbl_df, tbl, data.frame) The optional taxon_ancillary table.
 #' 
 #' @details This function collects specified data tables, extracts unique variable_name values from each, converts into long (attribute-value) form with the table name and variable_name values to the resulting table's "table_name" and "variable_name" columns, respectively. The resulting table's "mapped_system", "mapped_id", and "mapped_label" are filled with \code{NA} and are to be manually filled.
 #'
-#' @return (data.frame) The variable_mapping table.
+#' @return (tbl_df, tbl, data.frame) The variable_mapping table.
 #' 
 #' @export
 #' 
@@ -56,7 +56,7 @@
 #'   location_ancillary = location_ancillary, 
 #'   taxon_ancillary = taxon_ancillary)
 #' 
-#' str(variable_mapping)
+#' variable_mapping
 #' 
 create_variable_mapping <- function(observation, 
                                     observation_ancillary = NULL, 

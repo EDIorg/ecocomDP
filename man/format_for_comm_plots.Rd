@@ -7,16 +7,16 @@
 format_for_comm_plots(observation, id)
 }
 \arguments{
-\item{observation}{(data.frame) The observation table of ecocomDP}
+\item{observation}{(tbl_df, tbl, data.frame) The observation table of ecocomDP}
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}
 }
 \value{
-(data.frame) Tabular data of \code{id} in a format compatible with plotting functions
+(tbl_df, tbl, data.frame) Tabular data of \code{id} in a format compatible with plotting functions
 }
 \description{
 Format dataset for community plotting functions
 }
 \details{
-Downsteam plotting functions are based on \href{https://github.com/sokole/ltermetacommunities/tree/master/Group2-explore-data}{LTER Metacommunities code} and use their intermediate data input format.
+Downstream plotting functions are based on \href{https://github.com/sokole/ltermetacommunities/tree/master/Group2-explore-data}{LTER Metacommunities code} and use their intermediate data input format.
 }
