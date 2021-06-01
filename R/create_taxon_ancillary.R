@@ -75,6 +75,6 @@ create_taxon_ancillary <- function(L0_flat,
   res <- res %>%
     dplyr::select(taxon_ancillary_id, taxon_id, datetime, variable_name, value, unit, author)
   # coerce classes
-  res <- coerce_table_classes(res, "taxon_ancillary")
+  res <- coerce_table_classes(res, "taxon_ancillary", class(L0_flat))
   return(res)
 }

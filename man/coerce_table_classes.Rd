@@ -4,15 +4,17 @@
 \alias{coerce_table_classes}
 \title{Coerce table classes to ecocomDP specifications}
 \usage{
-coerce_table_classes(tbl, name)
+coerce_table_classes(tbl, name, cls)
 }
 \arguments{
 \item{tbl}{(data.frame) Table to coerce}
 
 \item{name}{(character) Table name}
+
+\item{cls}{(character) Class of L0_flat input.}
 }
 \value{
-(data.frame) \code{tbl} with column classes coerced to ecocomDP model specifications
+\code{tbl} with column classes coerced to ecocomDP model specifications and of the input type specified by \code{cls}.
 }
 \description{
 Coerce table classes to ecocomDP specifications

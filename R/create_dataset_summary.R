@@ -65,7 +65,7 @@ create_dataset_summary <- function(L0_flat,
                   number_of_years_sampled, std_dev_interval_betw_years,
                   max_num_taxa, geo_extent_bounding_box_m2)
   # coerce classes
-  res <- coerce_table_classes(res, "dataset_summary")
+  res <- coerce_table_classes(res, "dataset_summary", class(res))
   return(res)
 }
 

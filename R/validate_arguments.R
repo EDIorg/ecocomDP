@@ -99,7 +99,7 @@ validate_arguments <- function(fun.name, fun.args) {
   if (fun.name == "flatten_data") {
     crit <- read_criteria()
     # list
-    if (class(fun.args$tables) != "list") {
+    if (all(class(fun.args$tables) != "list")) {
       stop("Input 'tables' should be a list.", call. = FALSE)
     }
     # names

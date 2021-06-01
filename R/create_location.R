@@ -107,6 +107,6 @@ create_location <- function(L0_flat,
   # combine data frames
   res <- dplyr::bind_rows(res)
   # coerce classes
-  res <- coerce_table_classes(res, "location")
+  res <- coerce_table_classes(res, "location", class(L0_flat))
   return(res)
 }

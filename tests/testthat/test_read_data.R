@@ -70,7 +70,7 @@ testthat::test_that("Reads from local .rds", {
   }
   expect_true(all(names(d[[1]]$tables) %in% unique(criteria$table)))                  # table names are valid
   for (i in names(d[[1]]$tables)) {                                                   # tables are data.frames
-    expect_true(class(d[[1]]$tables[[i]]) == "data.frame")
+    expect_true(any(class(d[[1]]$tables[[i]]) == "data.frame"))
   }
   unlink(paste0(tempdir(), "/d.rds"), recursive = TRUE, force = TRUE) 
 })

@@ -413,12 +413,13 @@ cnvmt <- function(txt) {
 #'
 #' @param tbl (data.frame) Table to coerce
 #' @param name (character) Table name
+#' @param cls (character) Class of L0_flat input.
 #'
-#' @return (data.frame) \code{tbl} with column classes coerced to ecocomDP model specifications
+#' @return \code{tbl} with column classes coerced to ecocomDP model specifications and of the input type specified by \code{cls}.
 #' 
 #' @details Datetime columns are not coerced. These are unchanged from the input class.
 #' 
-coerce_table_classes <- function(tbl, name) {
+coerce_table_classes <- function(tbl, name, cls) {
   crit <- read_criteria() %>% 
     dplyr::filter(table == name) %>% 
     dplyr::select(column, class) %>% 
@@ -430,6 +431,11 @@ coerce_table_classes <- function(tbl, name) {
     } else if (colclass == "numeric") {
       tbl[[col]] <- as.numeric(tbl[[col]])
     }
+  }
+  if (all(c("tbl_df", "tbl", "data.frame") %in% cls)) {
+    tbl <- tidyr::as_tibble(tbl)
+  } else {
+    tbl <- as.data.frame(tbl)
   }
   return(tbl)
 }

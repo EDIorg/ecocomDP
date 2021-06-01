@@ -65,6 +65,6 @@ create_location_ancillary <- function(L0_flat,
   res <- res %>%
     dplyr::select(location_ancillary_id, location_id, datetime, variable_name, value, unit)
   # coerce classes
-  res <- coerce_table_classes(res, "location_ancillary")
+  res <- coerce_table_classes(res, "location_ancillary", class(L0_flat))
   return(res)
 }

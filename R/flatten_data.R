@@ -166,6 +166,14 @@ flatten_data <- function(tables) {
   # Coerce columns to correct classes
   all_merged <- coerce_all_merged(all_merged)
   
+  # Coerce table class
+  cls <- class(tables$observation)
+  if (all(c("tbl_df", "tbl", "data.frame") %in% class(cls))) {
+    all_merged <- tidyr::as_tibble(all_merged)
+  } else {
+    all_merged <- as.data.frame(all_merged)
+  }
+  
   # Remove any unwanted columns
   vars <- "parent_location_id"
   all_merged <- all_merged %>% dplyr::select(-dplyr::any_of(vars))

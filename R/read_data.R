@@ -22,7 +22,7 @@
 #'       \item{id - Dataset identifier}
 #'         \itemize{
 #'           \item metadata - List of info about the dataset. NOTE: This object is underdevelopment and content may change in future releases.
-#'           \item tables - List of dataset tables as tbl_df, tbl, data.frames.
+#'           \item tables - List of dataset tables as data.frames.
 #'           \item validation_issues - List of validation issues. If the dataset fails any validation checks, 
 #'     then descriptions of each issue are listed here.
 #'       }

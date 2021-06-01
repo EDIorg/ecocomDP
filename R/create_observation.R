@@ -65,6 +65,6 @@ create_observation <- function(L0_flat,
   res <- res %>%
     dplyr::select(observation_id, event_id, package_id, location_id, datetime, taxon_id, variable_name, value, unit)
   # coerce classes
-  res <- coerce_table_classes(res, "observation")
+  res <- coerce_table_classes(res, "observation", class(L0_flat))
   return(res)
 }

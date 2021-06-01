@@ -60,6 +60,6 @@ create_taxon <- function(L0_flat,
   res <- res %>%
     dplyr::select(taxon_id, taxon_rank, taxon_name, authority_system, authority_taxon_id)
   # coerce classes
-  res <- coerce_table_classes(res, "taxon")
+  res <- coerce_table_classes(res, "taxon", class(L0_flat))
   return(res)
 }

@@ -121,7 +121,7 @@ create_variable_mapping <- function(observation,
   variable_mapping$variable_name <- vars
   
   # coerce classes
-  variable_mapping <- coerce_table_classes(variable_mapping, "variable_mapping")
+  variable_mapping <- coerce_table_classes(variable_mapping, "variable_mapping", class(observation))
   
   # Return --------------------------------------------------------------------
   
