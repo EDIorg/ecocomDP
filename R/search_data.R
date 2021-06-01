@@ -40,25 +40,8 @@
 #' # "taxa" searches taxonomic ranks for a match
 #' search_data(taxa = "Plantae")
 #' 
-#' # "num_taxa" searches the count of unique taxa in a dataset
-#' search_data(num_taxa = c(0, 10))
-#' 
 #' # "num_years" searches the number of years sampled
 #' search_data(num_years = c(10, 20))
-#' 
-#' # "sd_years" searches the sampling frequency
-#' search_data(sd_years = c(.25, 1))
-#' 
-#' # "area" searches where data were collected
-#' search_data(area = c(47.1, -86.7, 42.5, -92))
-#' 
-#' # "boolean" operators "AND" (default) & "OR" combine text and taxa search terms
-#' search_data(text = c("Lake", "River"))
-#' search_data(text = c("Lake", "River"), boolean = "OR")
-#' 
-#' search_data(taxa = c("Plantae", "Animalia"))
-#' 
-#' search_data(taxa = c("Plantae", "Animalia"), boolean = "OR")
 #' 
 #' # Use any combination of search fields to find the data you're looking for
 #' search_data(
