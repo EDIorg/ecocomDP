@@ -124,6 +124,9 @@ datasets <- read_data(from = paste0(mypath, "/datasets.rds"))
 # Read from local .csv
 datasets <- read_data(from = mypath)
 
+# A dataset is returned as a list of metadata, tables, and validation issues (if there are any). The dataset ID is assigned to the top level for reference.
+str(datasets[1])
+
 # Clean up
 unlink(mypath, recursive = TRUE)
 
