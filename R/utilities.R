@@ -1645,8 +1645,9 @@ vocab_resolve_terms <- function(x, cv, messages = FALSE, interactive = FALSE){
 #'   location_id = "location_id", 
 #'   datetime = "datetime", 
 #'   taxon_id = "taxon_id", 
-#'   variable_name = "abundance",
-#'   unit = "unit_abundance")
+#'   variable_name = "variable_name",
+#'   value = "value",
+#'   unit = "unit")
 #' 
 #' observation_ancillary <- create_observation_ancillary(
 #'   L0_flat = flat,
