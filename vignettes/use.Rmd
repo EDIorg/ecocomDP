@@ -163,6 +163,7 @@ datasets <- c(ants_L1, ants_L1)
 ```{r, eval=FALSE}
 datasets <- c(dataset_1, dataset_2)
 mypath <- paste0(tempdir(), "/data")
+dir.create(mypath)
 
 save_data(datasets, mypath)
 ```
