@@ -2,7 +2,7 @@
 title: "Create"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Creating new data}
+  %\VignetteIndexEntry{Create}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

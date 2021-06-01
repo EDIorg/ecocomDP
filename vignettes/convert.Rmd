@@ -2,7 +2,7 @@
 title: "Convert"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{convert}
+  %\VignetteIndexEntry{Convert}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
