@@ -1,0 +1,62 @@
+title: ecocomDP
+
+template:
+  bootswatch: spacelab
+
+reference:
+  - title: Create
+    desc: Create ecocomDP tables and metadata
+    contents:
+    - create_observation
+    - create_location
+    - create_taxon
+    - create_dataset_summary
+    - create_observation_ancillary
+    - create_location_ancillary
+    - create_taxon_ancillary
+    - create_variable_mapping
+    - validate_data
+    - write_tables
+  - title: Use
+    desc: Use ecocomDP datasets
+    contents:
+    - search_data
+    - read_data
+    - save_data
+    - plot_taxa_sample_time
+    - plot_taxa_diversity
+    - plot_taxa_accum_sites
+    - plot_taxa_accum_time
+    - plot_taxa_shared_sites
+    - flatten_data
+  - title: Convert
+    desc: Convert ecocomDP datasets to other model formats
+    contents:
+    - convert_to_dwca
+  - title: Helpers
+    desc: Misc. functions
+    contents:
+    - view_model_diagram
+    - view_model_descriptions
+    - calc_geo_extent_bounding_box_m2
+    - calc_length_of_survey_years
+    - calc_number_of_years_sampled
+    - calc_std_dev_interval_betw_years
+    
+navbar:
+  title: ~
+  type: default
+  left:
+    - text: Functions
+      href: reference/index.html
+    - text: Articles
+      menu:
+      - text: Create
+        href: articles/create.html
+      - text: Use
+        href: articles/use.html
+      - text: Convert
+        href: articles/convert.html
+    - text: News
+      href: news/index.html
+      
