@@ -1,9 +1,7 @@
 Package: ecocomDP
 Type: Package
-Title: Create and Use the Ecological Community Data Pattern
-Description: A collection of functions to translate your data to the Ecological 
-    Community Data Pattern (ecocomDP), make EML for the ecocomDP, and 
-    synthesize data in the ecocomDP format.
+Title: The Ecological Community Design Pattern
+Description: A collection of functions for creating and using datasets in the Ecological Community Design Pattern (ecocomDP), a flexible and distributed data model for synthesis of community survey data.
 Version: 0.0.0.9000
 Authors@R: 
     c(person(given = "Colin",
