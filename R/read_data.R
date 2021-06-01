@@ -44,13 +44,18 @@
 #' @export
 #' 
 #' @examples
+#' \dontrun{
 #' # Read from EDI
 #' dataset <- read_data("edi.193.4")
 #' # str(dataset)
+#' }
 #' 
+#' \dontrun{
 #' # Read from NEON (full dataset)
 #' dataset <- read_data("neon.ecocomdp.20120.001.001")
+#' }
 #' 
+#' \dontrun{
 #' # Read from NEON with filters (partial dataset)
 #' dataset <- read_data(
 #'   id = "neon.ecocomdp.20120.001.001", 
@@ -58,10 +63,13 @@
 #'   startdate = "2017-06", 
 #'   enddate = "2019-09",
 #'   check.size = FALSE)
+#' }
 #' 
+#' \dontrun{
 #' # Read with datetimes as character
 #' dataset <- read_data("edi.193.4", parse_datetime = FALSE)
 #' is.character(dataset$edi.193.4$tables$observation$datetime)
+#' }
 #' 
 #' # Save a list of datasets for reading
 #' datasets <- c(ants_L1, ants_L1, ants_L1)   # 3 of the same, with different names
