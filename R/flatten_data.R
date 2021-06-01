@@ -168,7 +168,7 @@ flatten_data <- function(tables) {
   
   # Coerce table class
   cls <- class(tables$observation)
-  if (all(c("tbl_df", "tbl", "data.frame") %in% class(cls))) {
+  if (all(c("tbl_df", "tbl", "data.frame") %in% cls)) {
     all_merged <- tidyr::as_tibble(all_merged)
   } else {
     all_merged <- as.data.frame(all_merged)
