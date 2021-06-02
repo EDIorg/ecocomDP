@@ -862,6 +862,17 @@ EAL_make_eml <- function(
       x$template$taxonomicCoverage.xml$content
   } else if (!is.null(x$template$taxonomic_coverage.txt)) {
     message("        <taxonomicCoverage>")
+    # Check for suggested packages
+    if (!requireNamespace("ritis", quietly = TRUE)) {
+      warning("Package 'ritis' is required for taxonomic rank expansion but is not installed", call. = FALSE)
+    }
+    if (!requireNamespace("taxize", quietly = TRUE)) {
+      warning("Package 'taxize' is required for taxonomic rank expansion but is not installed", call. = FALSE)
+    }
+    if (!requireNamespace("worrms", quietly = TRUE)) {
+      warning("Package 'worrms' is required for taxonomic rank expansion but is not installed", call. = FALSE)
+    }
+    # Expand taxonomic ranks and create taxonomic coverage
     tc <- try(
       suppressMessages(
         make_taxonomicCoverage(

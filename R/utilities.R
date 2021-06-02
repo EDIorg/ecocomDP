@@ -516,6 +516,11 @@ detect_delimiter <- function(path, data.files, os) {
 #'
 detect_delimiter_method_2 <- function(path, data.files, os){
   
+  # Check for suggested package
+  if (!requireNamespace("reader", quietly = TRUE)) {
+    warning("Package 'reader' is required for delimiter detection but is not installed", call. = FALSE)
+  }
+  
   # Validate data tables
   
   data_files <- validate_file_names(path, data.files)
