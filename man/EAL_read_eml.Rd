@@ -47,11 +47,3 @@ When representing EML in the emld list structure, nodes that have
     Extending support to all nodes capable of having 1 or more children is
     welcomed.
 }
-\examples{
-eml <- EMLassemblyline::read_eml(
-  path = system.file("/examples/eml", package = "EMLassemblyline"),
-  eml = "edi.260.3.xml"
-)
-
-
-}

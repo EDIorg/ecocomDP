@@ -743,33 +743,6 @@ load_gnr_datasources <- function() {
 #'
 #' @note The name of this function is a bit misleading. The return value is actually a list of taxonomicClassification nodes, which occur immediately below taxonomicCoverage (i.e. ../taxonomicCoverage/taxonomicClassification).
 #'
-#' @examples
-#' \dontrun{
-#'
-#' # Set working directory
-#' setwd("/Users/me/Documents/data_packages/pkg_260")
-#'
-#' # For taxa resolved to a supported authority
-#' taxcov <- make_taxonomicCoverage(
-#'   taxa.clean = c("Oncorhynchus tshawytscha", "Oncorhynchus nerka"),
-#'   authority = c("WORMS", "WORMS"),
-#'   authority.id = c("158075", "254569"),
-#'   path = ".")
-#'
-#' # For taxa resolved to an unsupported authority
-#' taxcov <- make_taxonomicCoverage(
-#'   taxa.clean = c("Taxon-1", "Taxon-2"),
-#'   authority = c("https://some-authority.org", "https://some-authority.org"),
-#'   authority.id = c("123", "456"),
-#'   path = ".")
-#'
-#' # For taxa not resolved to an authority
-#' taxcov <- make_taxonomicCoverage(
-#'   taxa.clean = c("Taxon-1", "Taxon-2"),
-#'   path = ".")
-#'
-#' }
-#'
 make_taxonomicCoverage <- function(
   taxa.clean,
   authority = NA,
@@ -1280,23 +1253,6 @@ resolve_comm_taxa <- function(x = NULL, data.sources, path = NULL){
 #'     authority ID, and score are returned. If using \code{path}, then an
 #'     updated version of taxa_map.csv will be returned to \code{path} and
 #'     a data frame of taxa_map.csv to the R environment.
-#'
-#' @examples
-#' \dontrun{
-#'   # Input a list of taxa
-#'
-#'   r <- resolve_sci_taxa(
-#'     x = c("Cupressus macrocarpa", "Oncorhynchus tshawytscha", "Poa pratensis"),
-#'     data.sources = c(3,11))
-#'   r
-#'
-#'   # Input taxa_map.csv
-#'
-#'   data <- data.table::fread(file = system.file('example_data.txt', package = 'taxonomyCleanr'))
-#'   tm <- create_taxa_map(path = tempdir(), x = data, col = "Species")
-#'   r <- resolve_sci_taxa(data.sources = 3, path = tempdir())
-#'   tm <- read_taxa_map(path = tempdir())
-#' }
 #'
 resolve_sci_taxa <- function(x = NULL, data.sources, path = NULL){
   

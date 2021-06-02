@@ -18,7 +18,3 @@ Increment data package version number
 \details{
 Supports repository specific methods.
 }
-\examples{
-increment_package_version("edi.100.1")
-
-}

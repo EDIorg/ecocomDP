@@ -28,21 +28,3 @@ provenance throughout the data cleaning process. Create this file with
 \description{
 Resolve taxa to preferred authorities and get associated IDs.
 }
-\examples{
-\dontrun{
-  # Input a list of taxa
-
-  r <- resolve_sci_taxa(
-    x = c("Cupressus macrocarpa", "Oncorhynchus tshawytscha", "Poa pratensis"),
-    data.sources = c(3,11))
-  r
-
-  # Input taxa_map.csv
-
-  data <- data.table::fread(file = system.file('example_data.txt', package = 'taxonomyCleanr'))
-  tm <- create_taxa_map(path = tempdir(), x = data, col = "Species")
-  r <- resolve_sci_taxa(data.sources = 3, path = tempdir())
-  tm <- read_taxa_map(path = tempdir())
-}
-
-}

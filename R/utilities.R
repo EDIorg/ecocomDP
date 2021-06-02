@@ -1029,11 +1029,6 @@ NULL
 #' @return (character) Previous data package version
 #' 
 #' @details Supports repository specific methods.
-#'
-#' @examples
-#' \dontrun{
-#' #' get_previous_data_package_version("edi.100.2")
-#' }
 #' 
 get_previous_version <- function(package.id) {
   
@@ -1089,8 +1084,6 @@ get_previous_version <- function(package.id) {
 #' 
 #' @details Supports repository specific methods.
 #'
-#' @examples
-#' increment_package_version("edi.100.1")
 #' 
 increment_package_version <- function(package.id) {
   
@@ -1204,8 +1197,6 @@ read_criteria <- function() {
 #' @param package.id (character) Data package identifier
 #'
 #' @return (xml_document, xml_node) EML metadata
-#'
-#' @examples
 #' 
 read_eml <- function(package.id) {
   
@@ -1282,12 +1273,6 @@ read_eml <- function(package.id) {
 #'     
 #'     Extending support to all nodes capable of having 1 or more children is
 #'     welcomed.
-#'     
-#' @examples 
-#' eml <- EMLassemblyline::read_eml(
-#'   path = system.file("/examples/eml", package = "EMLassemblyline"),
-#'   eml = "edi.260.3.xml"
-#' )
 #' 
 #' 
 EAL_read_eml <- function(path, eml) {

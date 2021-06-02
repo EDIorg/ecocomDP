@@ -15,6 +15,3 @@ read_eml(package.id)
 \description{
 A wrapper function to repository specific read methods (the repository arg drives the logic).
 }
-\examples{
-
-}

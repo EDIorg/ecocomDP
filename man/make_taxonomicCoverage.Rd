@@ -39,31 +39,3 @@ This function uses \code{get_classification()} to expand taxa, resolved to suppo
 \note{
 The name of this function is a bit misleading. The return value is actually a list of taxonomicClassification nodes, which occur immediately below taxonomicCoverage (i.e. ../taxonomicCoverage/taxonomicClassification).
 }
-\examples{
-\dontrun{
-
-# Set working directory
-setwd("/Users/me/Documents/data_packages/pkg_260")
-
-# For taxa resolved to a supported authority
-taxcov <- make_taxonomicCoverage(
-  taxa.clean = c("Oncorhynchus tshawytscha", "Oncorhynchus nerka"),
-  authority = c("WORMS", "WORMS"),
-  authority.id = c("158075", "254569"),
-  path = ".")
-
-# For taxa resolved to an unsupported authority
-taxcov <- make_taxonomicCoverage(
-  taxa.clean = c("Taxon-1", "Taxon-2"),
-  authority = c("https://some-authority.org", "https://some-authority.org"),
-  authority.id = c("123", "456"),
-  path = ".")
-
-# For taxa not resolved to an authority
-taxcov <- make_taxonomicCoverage(
-  taxa.clean = c("Taxon-1", "Taxon-2"),
-  path = ".")
-
-}
-
-}

@@ -18,9 +18,3 @@ Get previous data package version
 \details{
 Supports repository specific methods.
 }
-\examples{
-\dontrun{
-#' get_previous_data_package_version("edi.100.2")
-}
-
-}

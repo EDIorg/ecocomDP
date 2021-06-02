@@ -32,23 +32,3 @@ All annotated elements are assigned ids and their annotations are
     consumers harvest this information and supports annotation of EML 
     elements requiring id+references.
 }
-\examples{
-
-# Annotate an EML file --------------------------------------------------------
-#
-# Annotate an existing EML file (edi.260.3.xml) and write a new version 
-# (edi.260.4.xml)
-
-eml <- annotate_eml(
- annotations = system.file("/examples/pkg_260/metadata_templates_overflow/annotations.txt", package = "EMLassemblyline"),
- eml.in = system.file("/examples/eml/edi.260.3.xml", package = "EMLassemblyline"),
- eml.out = paste0(tempdir(), "/edi.260.4.xml")
-)
-eml
-
-# Remove the EML files from the temporary directory
-
-unlink(paste0(tempdir(), "/edi.260.3.xml"))
-unlink(paste0(tempdir(), "/edi.260.4.xml"))
-
-}
