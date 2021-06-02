@@ -115,18 +115,15 @@ convert_to_dwca <- function(path,
 
 #' Creates DwC-A tables in event core 
 #'
-#' @param dt_obs 
-#' @param dt_obs_ancil 
-#' @param dt_loc_ancil 
-#' @param dt_loc 
-#' @param dt_tax 
-#' @param source_id
-#'     (character) ID of an ecocomDP data package. Only 
-#'     EDI Data Repository package IDs are currently supported.
+#' @param dt_obs (data.frame) Observation table
+#' @param dt_obs_ancil (data.frame) Observation ancillary table
+#' @param dt_loc_ancil (data.frame) Location ancillary table
+#' @param dt_loc (data.frame) Location table
+#' @param dt_tax (data.frame) Taxon table
+#' @param source_id (character) ID of an ecocomDP data package. Only EDI Data Repository package IDs are currently supported.
 #' @param derived_id (character) Identifier of the DwC-A dataset being created.
 #'
-#' @return
-#'     three tables, event, occurrence, measurementOrFact
+#' @return (.csv) event, occurrence, measurementOrFact tables
 #'
 create_tables_dwca_event_core <- function(
   dt_obs,

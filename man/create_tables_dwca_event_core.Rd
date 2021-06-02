@@ -15,23 +15,22 @@ create_tables_dwca_event_core(
 )
 }
 \arguments{
-\item{dt_obs}{}
+\item{dt_obs}{(data.frame) Observation table}
 
-\item{dt_obs_ancil}{}
+\item{dt_obs_ancil}{(data.frame) Observation ancillary table}
 
-\item{dt_loc_ancil}{}
+\item{dt_loc_ancil}{(data.frame) Location ancillary table}
 
-\item{dt_loc}{}
+\item{dt_loc}{(data.frame) Location table}
 
-\item{dt_tax}{}
+\item{dt_tax}{(data.frame) Taxon table}
 
-\item{source_id}{(character) ID of an ecocomDP data package. Only 
-EDI Data Repository package IDs are currently supported.}
+\item{source_id}{(character) ID of an ecocomDP data package. Only EDI Data Repository package IDs are currently supported.}
 
 \item{derived_id}{(character) Identifier of the DwC-A dataset being created.}
 }
 \value{
-three tables, event, occurrence, measurementOrFact
+(.csv) event, occurrence, measurementOrFact tables
 }
 \description{
 Creates DwC-A tables in event core
