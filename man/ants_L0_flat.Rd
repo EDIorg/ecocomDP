@@ -7,9 +7,52 @@
 \format{
 A data frame with 2931 rows and 45 variables:
 \describe{
-  \item{datetime}{Sample dates}
-  \item{block}{Sample location}
-  ...
+  \item{datetime}{dates}
+  \item{block}{block}
+  \item{plot}{plot number}
+  \item{treatment}{treatment type}
+  \item{moose.cage}{location of grid with respect to moose exclosure}
+  \item{trap.type}{trap type}
+  \item{trap.num}{applies only to pitfall cups}
+  \item{subfamily}{ant subfamily}
+  \item{hl}{head length. We used trait definitions from Del Toro et al. (2015) and filled in missing species' data with information from Ellison et al.}
+  \item{rel}{eye length relative to body size}
+  \item{rll}{femur length relative to body size}
+  \item{colony.size}{size of colony for each species}
+  \item{feeding.preference}{feeding preference for each species}
+  \item{nest.substrate}{nest substrate}
+  \item{primary.habitat}{primary habitat}
+  \item{secondary.habitat}{secondary habitat associations}
+  \item{seed.disperser}{whether or not a seed dispersing species}
+  \item{slavemaker.sp}{whether or not a slavemaking species}
+  \item{behavior}{classifications based on behavioral interactions with other ants}
+  \item{biogeographi.affinity}{biogeographic affinity based on available occurrence records}
+  \item{source}{where trait information was found. Full citations for literature are as follows: Del Toro, I., R.R. Silva, and A.M. Ellison. 2015. Predicated impacts of climatic change on ant functional diversity and distributions in eastern North American forests. Diversity and Distributions 21:781-791; Ellison, A.M., N.J. Gotelli, G. Alpert, and E.J. Farnsworth. 2012. A field guide to the ants of New England. Yale University Press, New Haven, Connecticut, USA.}
+  \item{unit_hl}{units for "hl" variable}
+  \item{unit_rel}{units for "rel" variable}
+  \item{unit_rll}{units for "rll" variable}
+  \item{variable_name}{variables of the primary observation table}
+  \item{value}{values of variable_name}
+  \item{unit}{units of variable_name}
+  \item{observation_id}{the observation id}
+  \item{location_id}{the location id}
+  \item{event_id}{the event id}
+  \item{latitude}{approximate latitude of study area}
+  \item{longitude}{approximate longitude of study area}
+  \item{elevation}{approximate elevation of study area}
+  \item{taxon_name}{name of organism}
+  \item{taxon_id}{the taxon id}
+  \item{taxon_rank}{the taxon rank}
+  \item{authority_system}{the authority system taxon_name was resolved to}
+  \item{authority_system_id}{the id of taxon_name in authority_system}
+  \item{package_id}{the identifier of this ecocomDP dataset}
+  \item{original_package_id}{the identifier of the source dataset}
+  \item{length_of_survey_years}{number of years the survey has been ongoing}
+  \item{number_of_years_sampled}{number of years during the survey that samples were taken}
+  \item{std_dev_interval_betw_years}{the standard deviation between surveys in years}
+  \item{max_num_taxa}{number of unique taxa in this dataset}
+  \item{geo_extent_bounding_box_m2}{the study area in meters squared}
+  \item{author}{person associated with identifying taxon_name}
 }
 }
 \source{
