@@ -4,8 +4,7 @@
 \alias{api_read_data_entity_name}
 \title{Read data entity name}
 \usage{
-api_read_data_entity_name(package.id, identifier, 
-    environment = 'production')
+api_read_data_entity_name(package.id, identifier, environment = "production")
 }
 \arguments{
 \item{package.id}{(character) Package identifier composed of scope, identifier, and

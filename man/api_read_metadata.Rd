@@ -4,7 +4,7 @@
 \alias{api_read_metadata}
 \title{Read metadata}
 \usage{
-api_read_metadata(package.id, environment = 'production')
+api_read_metadata(package.id, environment = "production")
 }
 \arguments{
 \item{package.id}{(character) Package identifier composed of scope, identifier, and

@@ -4,8 +4,7 @@
 \alias{api_read_data_package}
 \title{Read data package}
 \usage{
-api_read_data_package(package.id, 
-    environment = 'production')
+api_read_data_package(package.id, environment = "production")
 }
 \arguments{
 \item{package.id}{(character) Package identifier composed of scope, identifier, and

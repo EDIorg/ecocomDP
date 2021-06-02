@@ -4,8 +4,12 @@
 \alias{api_list_data_package_revisions}
 \title{List data package revisions}
 \usage{
-api_list_data_package_revisions(scope, identifier, filter = NULL, 
-    environment = 'production')
+api_list_data_package_revisions(
+  scope,
+  identifier,
+  filter = NULL,
+  environment = "production"
+)
 }
 \arguments{
 \item{scope}{(character) Data package scope (e.g. 'edi', 'knb-lter-bnz').}

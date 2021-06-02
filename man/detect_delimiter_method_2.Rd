@@ -4,11 +4,7 @@
 \alias{detect_delimiter_method_2}
 \title{Get field delimiters of input files (method 2)}
 \usage{
-detect_delimiter(
-  path, 
-  data.files, 
-  os
-)
+detect_delimiter_method_2(path, data.files, os)
 }
 \arguments{
 \item{path}{(character) Path to files.}

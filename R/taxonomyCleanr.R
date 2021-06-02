@@ -4,9 +4,6 @@
 #'     Use fuzzy searching in the Global Names Resolver to correct spelling
 #'     and locate appropriate authorities.
 #'
-#' @usage
-#'     get_authority(taxon, data.source)
-#'
 #' @param taxon
 #'     A character string representation of the taxon to search on.
 #' @param data.source
@@ -344,9 +341,6 @@ get_classification <- function(taxa.clean,
 #' @description
 #'     Get a taxonomic identifier for a taxon name and corresponding authority.
 #'
-#' @usage
-#'     get_id(taxon, authority)
-#'
 #' @param taxon
 #'     A character string specifying taxon to get the ID for.
 #' @param authority
@@ -518,9 +512,6 @@ get_id <- function(taxon, authority){
 #'
 #' @description
 #'     Get a taxonomic identifier for a taxon name and corresponding authority.
-#'
-#' @usage
-#'     get_id_common(taxon, authority)
 #'
 #' @param taxon
 #'     A character string specifying taxon to get the ID for.
@@ -842,9 +833,6 @@ make_taxonomicCoverage <- function(
 #'     returned information. A complete return contains both an authority
 #'     name and an authority ID for a taxon.
 #'
-#' @usage
-#'     optimize_match(x, data.sources)
-#'
 #' @param x
 #'     (character) A character string specifying the taxon.
 #' @param data.sources
@@ -966,9 +954,6 @@ optimize_match <- function(x, data.sources){
 #'     Optimize the common taxon match to an authority based on completeness of
 #'     returned information. A complete return contains both an authority
 #'     name and an authority ID for a taxon.
-#'
-#' @usage
-#'     optimize_match_common(x, data.sources)
 #'
 #' @param x
 #'     (character) A character string specifying the taxon.
@@ -1417,9 +1402,6 @@ set_taxonomic_coverage <- function(sci_names) {
 #'
 #' @description
 #'     List taxonomic authorities supported by taxonomic funcs.
-#'
-#' @usage
-#'     view_taxa_authorities()
 #'
 #' @details
 #'     View taxonomic authorities supported by `resolve_taxa` and

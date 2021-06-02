@@ -4,7 +4,7 @@
 \alias{api_get_provenance_metadata}
 \title{Get provenance metadata}
 \usage{
-api_get_provenance_metadata(package.id, environment = 'production')
+api_get_provenance_metadata(package.id, environment = "production")
 }
 \arguments{
 \item{package.id}{(character) Package identifier composed of scope, identifier, and

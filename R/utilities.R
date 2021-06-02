@@ -5,8 +5,6 @@
 #'     document containing a single methods element in the request message 
 #'     body.
 #'
-#' @usage api_get_provenance_metadata(package.id, environment = 'production')
-#'
 #' @param package.id
 #'     (character) Package identifier composed of scope, identifier, and
 #'     revision (e.g. 'edi.101.1').
@@ -56,9 +54,6 @@ api_get_provenance_metadata <- function(package.id, environment = 'production'){
 #'     identifier values to match in the URI. The request may be filtered by 
 #'     applying the modifiers “oldest” or “newest” to the “filter” query 
 #'     parameter.
-#'
-#' @usage api_list_data_package_revisions(scope, identifier, filter = NULL, 
-#'     environment = 'production')
 #'
 #' @param scope
 #'     (character) Data package scope (e.g. 'edi', 'knb-lter-bnz').
@@ -167,9 +162,6 @@ api_list_data_package_revisions <- function(scope, identifier, filter = NULL, en
 #'     revision, and entity identifier of the data entity whose name is 
 #'     to be read in the URI.
 #'
-#' @usage api_read_data_entity_name(package.id, identifier, 
-#'     environment = 'production')
-#'
 #' @param package.id
 #'     (character) Package identifier composed of scope, identifier, and
 #'     revision (e.g. 'edi.101.1').
@@ -234,9 +226,6 @@ api_read_data_entity_name <- function(package.id, identifier, environment = 'pro
 #'     map with reference URLs to each of the metadata, data, and quality 
 #'     report resources that comprise the data package.
 #'
-#' @usage api_read_data_package(package.id, 
-#'     environment = 'production')
-#'
 #' @param package.id
 #'     (character) Package identifier composed of scope, identifier, and
 #'     revision (e.g. 'edi.101.1').
@@ -294,8 +283,6 @@ api_read_data_package <- function(package.id, environment = 'production'){
 #'     Read Data Package DOI operation, specifying the scope, identifier, 
 #'     and revision of the data package DOI to be read in the URI.
 #'
-#' @usage api_read_data_package_doi(package.id, environment = 'production')
-#'
 #' @param package.id
 #'     (character) Package identifier composed of scope, identifier, and
 #'     revision (e.g. 'edi.101.1').
@@ -342,8 +329,6 @@ api_read_data_package_doi <- function(package.id, environment = 'production'){
 #' @description
 #'     Read Metadata (EML) operation, specifying the scope, identifier, and 
 #'     revision of the EML document to be read in the URI.
-#'
-#' @usage api_read_metadata(package.id, environment = 'production')
 #'
 #' @param package.id
 #'     (character) Package identifier composed of scope, identifier, and
@@ -491,13 +476,6 @@ detect_delimiter <- function(path, data.files, os) {
 #'
 #' @description  
 #'     Detect and return field delimiters of input files (tables).
-#'
-#' @usage 
-#' detect_delimiter(
-#'   path, 
-#'   data.files, 
-#'   os
-#' )
 #' 
 #' @param path 
 #'     (character) Path to files.
@@ -606,8 +584,6 @@ detect_delimiter_method_2 <- function(path, data.files, os){
 #'     This function uses \code{Sys.info} to detect the user's operating system 
 #'     and outputs an abbreviated character string to be used as inputs to OS
 #'     specific function calls.
-#'
-#' @usage detect_os()
 #' 
 #' @return 
 #'     \item{win}{Windows OS}
@@ -760,8 +736,6 @@ get_attr_defs <- function(eml) {
 #'
 #' @description
 #'     Get EOL character of input file(s).
-#'
-#' @usage get_eol(path, file.name, os)
 #'
 #' @param path
 #'     (character) A path to the target file directory.
@@ -1439,8 +1413,6 @@ remove_empty_templates <- function(x) {
 #'     Create the URL suffix to the PASTA+ environment specified by the
 #'     environment argument.
 #'
-#' @usage url_env(environment)
-#'
 #' @param environment
 #'     (character) Data repository environment to perform the evaluation in.
 #'     Can be: 'development', 'staging', 'production'.
@@ -1472,8 +1444,6 @@ url_env <- function(environment){
 #' @description  
 #'     Identify whether input data file names exist in the specified directory.
 #'
-#' @usage validate_file_names(path, data.files)
-#' 
 #' @param path 
 #'     (character) A character string specifying a path to the dataset working 
 #'     directory.
@@ -1560,8 +1530,6 @@ validate_file_names <- function(path, data.files){
 #'     Use \code{dir.exists} to determine whether the input path is valid and 
 #'     returns an error message if not.
 #'
-#' @usage validate_path(path)
-#' 
 #' @param path 
 #'     A character string specifying a path to the dataset working directory.
 #' 
@@ -1630,9 +1598,6 @@ view_model_diagram <- function() {
 #'
 #' @description  
 #'     Resolve terms to a controlled vocabulary.
-#'
-#' @usage 
-#'     vocab_resolve_terms(x, cv, messages = FALSE, interactive = FALSE)
 #'
 #' @param x
 #'     (character) Term(s) to resolve to a controlled vocabulary. Can be a 
