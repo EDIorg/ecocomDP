@@ -20,6 +20,7 @@ r_packages:
   - EML
   - emld
   - geosphere
+  - ggplot2
   - httr
   - lubridate
   - magrittr
@@ -29,6 +30,9 @@ r_packages:
   - tidyr
   - tools
   - xml2
+  - ritis
+  - taxize
+  - worrms
   
 warnings_are_errors: false
 
