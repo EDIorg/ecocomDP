@@ -62,7 +62,7 @@ map_neon.ecocomdp.20166.001.001 <- function(
     
     # biomass_in <- all_tabs_in$alg_biomass
     
-    alg_biomass <- tibble::as_tibble(all_tabs_in$alg_biomass) %>%
+    alg_biomass <- tidyr::as_tibble(all_tabs_in$alg_biomass) %>%
       dplyr::mutate(estPerBottleSampleVolume = preservativeVolume + labSampleVolume) %>%
       dplyr::filter(analysisType == 'taxonomy')
     

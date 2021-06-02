@@ -1312,8 +1312,13 @@ EAL_make_eml <- function(
             EML::set_physical(
               paste0(data.path, "/", k))))
         physical$dataFormat$textFormat <- NULL
-        physical$dataFormat$externallyDefinedFormat$formatName <- mime::guess_type(
-          file = k, unknown = "Unknown", empty = "Unknown")
+        if (!requireNamespace("mime", quietly = TRUE)) {
+          warning("Package 'mime' is required for detecting the script mime type but is not installed", call. = FALSE)
+          physical$dataFormat$externallyDefinedFormat$formatName <- "Unknown"
+        } else {
+          physical$dataFormat$externallyDefinedFormat$formatName <- mime::guess_type(
+            file = k, unknown = "Unknown", empty = "Unknown")
+        }
         if (!is.null(other.entity.url)) {
           # other.entity.url isn't required for each data table, but must have a 
           # non-NULL entry in the other.entity.url if other data tables have a 

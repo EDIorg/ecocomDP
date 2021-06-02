@@ -1240,6 +1240,117 @@ read_eml <- function(package.id) {
 
 
 
+#' Read EML into an emld list object
+#'
+#' @description  
+#'     This function wraps \code{EML::read_eml()} with a layer of quality 
+#'     control ensuring the returned emld list object has the same structure 
+#'     as output by \code{EMLassemblyline::make_eml()} and can be used in 
+#'     EMLassemblyline workflows.
+#'
+#' @param path 
+#'     (character) Path to the metadata template directory and where 
+#'     annotations.txt will be written.
+#' @param eml
+#'     (file) An EML .xml file located at \code{path}.
+#'
+#' @return 
+#'     An emld list object as similarly created by \code{EML::read_eml()}.
+#'     
+#' @details
+#'     When representing EML in the emld list structure, nodes that have 
+#'     1 or more children are structured as a list of unnamed lists 
+#'     (e.g. \code{list(dataTable = list("dataTable1", "dataTable2"))}) and
+#'     this is the structure output by EMLassemblyline::make_eml(). However,
+#'     EML::read_eml() removes the unnamed list when the node has only 1 child
+#'     (e.g. \code{list(dataTable = "dataTable1")}), thereby breaking 
+#'     EMLassemblyline code using \code{lapply()} to parse such nodes. 
+#'     Currently this QC is selectively applied to annotatable nodes targeted
+#'     by \code{template_annotations()}:
+#'     
+#'     \itemize{
+#'       \item eml/dataset/dataTable
+#'       \item eml/dataset/dataTable/attributeList/attribute
+#'       \item eml/dataset/otherEntity
+#'       \item eml/dataset/creator
+#'       \item eml/dataset/contact
+#'       \item eml/dataset/associatedParty
+#'       \item eml/dataset/project/personnel
+#'       \item eml/dataset/project/relatedProject
+#'       \item eml/dataset/project/relatedProject/personnel
+#'     }
+#'     
+#'     Extending support to all nodes capable of having 1 or more children is
+#'     welcomed.
+#'     
+#' @examples 
+#' eml <- EMLassemblyline::read_eml(
+#'   path = system.file("/examples/eml", package = "EMLassemblyline"),
+#'   eml = "edi.260.3.xml"
+#' )
+#' 
+#' 
+EAL_read_eml <- function(path, eml) {
+  
+  # Create the emld list object
+  
+  eml <- EML::read_eml(paste0(path, "/", eml))
+  
+  # A helper function to wrap target nodes in list(). There are two 
+  # implementations, one for target nodes and a second for nested target nodes.
+  #
+  # Arguments:
+  # eml = emld list object
+  # path.parent = path of the parent node using the "$" subsetting character
+  # path.child = path of child node
+  
+  list_it <- function(eml, path.parent, path.child = NULL) {
+    if (is.null(path.child)) {
+      e <- eval(parse(text = path.parent))
+      if ((length(e) > 1) & (!is.null(names(e)))) {
+        eval(parse(text = paste0(path.parent, " <- list(e)")))
+      }
+    } else if (!is.null(path.child)) {
+      lapply(
+        seq_along(eval(parse(text = path.parent))),
+        function(k) {
+          if ((length(eval(parse(text = paste0(path.parent, "[[", k, "]]", path.child)))) > 1) & 
+              (!is.null(names(eval(parse(text = paste0(path.parent, "[[", k, "]]", path.child))))))) {
+            eval(
+              parse(
+                text = paste0(
+                  path.parent, "[[", k, "]]", path.child, 
+                  " <<- list(", 
+                  paste0(path.parent, "[[", k, "]]", path.child), ")")))
+          }
+        })
+    }
+    eml
+  }
+  
+  # Fix the emld list object
+  
+  eml <- list_it(eml, "eml$dataset$dataTable")
+  eml <- list_it(eml, "eml$dataset$otherEntity")
+  eml <- list_it(eml, "eml$dataset$creator")
+  eml <- list_it(eml, "eml$dataset$contact")
+  eml <- list_it(eml, "eml$dataset$associatedParty")
+  eml <- list_it(eml, "eml$dataset$project$personnel")
+  eml <- list_it(eml, "eml$dataset$project$relatedProject")
+  eml <- list_it(eml, "eml$dataset$project$relatedProject", "$personnel")
+  eml <- list_it(eml, "eml$dataset$dataTable", "$attributeList$attribute")
+  
+  eml
+  
+}
+
+
+
+
+
+
+
+
 #' Read the ecocomDP dataset_summary table (from EDI)
 #'
 #' @description  

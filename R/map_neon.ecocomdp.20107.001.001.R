@@ -68,7 +68,7 @@ map_neon.ecocomdp.20107.001.001 <- function(
   # join field data table with the pass tables from all_fish
   fsh_dat1 <- dplyr::left_join(x = all_fish$fsh_perPass, y = all_fish$fsh_fieldData, by = c('reachID', "siteID")) %>%
     dplyr::filter(is.na(samplingImpractical) | samplingImpractical == "") %>% #remove records where fish couldn't be collected, both na's and blank data
-    tibble::as_tibble()
+    tidyr::as_tibble()
   
   # get rid of dupe col names and .x suffix
   fsh_dat1 <- fsh_dat1[, !grepl('\\.y', names(fsh_dat1))]
@@ -77,7 +77,7 @@ map_neon.ecocomdp.20107.001.001 <- function(
   # add individual fish counts; perFish data = individual level per each specimen captured
   # this joins reach-level field data with individual fish measures
   fsh_dat_indiv <- dplyr::left_join(all_fish$fsh_perFish, fsh_dat1, by = "eventID") %>%
-    tibble::as_tibble()
+    tidyr::as_tibble()
   
   # get rid of dupe col names and .x suffix
   fsh_dat_indiv <- fsh_dat_indiv[, !grepl('\\.y', names(fsh_dat_indiv))]
@@ -92,7 +92,7 @@ map_neon.ecocomdp.20107.001.001 <- function(
   # add bulk fish counts; bulk count data = The number of fish counted during bulk processing in each pass
   # this will join all the reach-level field data with the species data with bulk counts
   fsh_dat_bulk <- dplyr::left_join(all_fish$fsh_bulkCount, fsh_dat1, by = "eventID") %>%
-    tibble::as_tibble()
+    tidyr::as_tibble()
   
   # get rid of dupe col names and .x suffix
   fsh_dat_bulk <- fsh_dat_bulk[, !grepl('\\.y', names(fsh_dat_bulk))]

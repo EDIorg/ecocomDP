@@ -100,7 +100,7 @@ map_neon.ecocomdp.10058.001.001 <- function(
                   subsubplot_id = substr(subplotID, 4, 4),
                   year = lubridate::year(lubridate::ymd(endDate))) %>%
     unique() %>%
-    tibble::as_tibble()
+    tidyr::as_tibble()
   
   
   data_plant <- dplyr::distinct(data_plant)

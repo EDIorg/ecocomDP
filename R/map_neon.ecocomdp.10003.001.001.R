@@ -32,8 +32,8 @@ map_neon.ecocomdp.10003.001.001 <- function(
   # allTabs_bird = neonUtilities::loadByProduct(dpID = neon.data.product.id, package = "expanded", ...)
   # saveRDS(allTabs_bird, file = "~/Documents/allTabs_bird.rds")
   # allTabs_bird = readRDS("~/Documents/allTabs_bird.rds")
-  allTabs_bird$brd_countdata <- tibble::as_tibble(allTabs_bird$brd_countdata)
-  allTabs_bird$brd_perpoint <- tibble::as_tibble(allTabs_bird$brd_perpoint)
+  allTabs_bird$brd_countdata <- tidyr::as_tibble(allTabs_bird$brd_countdata)
+  allTabs_bird$brd_perpoint <- tidyr::as_tibble(allTabs_bird$brd_perpoint)
   data_bird <- dplyr::left_join(allTabs_bird$brd_countdata,
                                dplyr::select(allTabs_bird$brd_perpoint, -uid,
                                              -startDate))

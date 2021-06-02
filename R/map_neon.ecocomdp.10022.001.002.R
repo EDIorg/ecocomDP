@@ -41,7 +41,7 @@ map_neon.ecocomdp.10022.001.002 <- function(
   # 1. Select the important variables and toss the rest.
   # 1. Calculate trappingDays as the length of time a pitfall trap was set
   
-  tidy_fielddata <- tibble::as_tibble(bycatch_raw$bet_fielddata) # get field data
+  tidy_fielddata <- tidyr::as_tibble(bycatch_raw$bet_fielddata) # get field data
   
   
   tidy_fielddata <- tidy_fielddata %>%
@@ -144,7 +144,7 @@ map_neon.ecocomdp.10022.001.002 <- function(
     dplyr::select(uid, sampleID, subsampleID, sampleType, taxonID, scientificName,
                   taxonRank, identificationReferences, individualCount,
                   nativeStatusCode, remarksSorting  = remarks) %>%
-    tibble::as_tibble()
+    tidyr::as_tibble()
   
   
   

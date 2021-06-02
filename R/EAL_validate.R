@@ -144,9 +144,6 @@ validate_taxonomic_coverage <- function(x) {
     x$template$taxonomic_coverage.txt$content$name_resolved[missing] <- 
       x$template$taxonomic_coverage.txt$content$name[missing]
     
-    # Column names are correct
-    x <- validate_taxonomic_coverage_column_names(x)
-    
     # authority_system is supported
     r <- validate_taxonomic_coverage_authority_system(x)
     optional_issues <- c(optional_issues, r)
@@ -191,46 +188,6 @@ validate_taxonomic_coverage <- function(x) {
   # Return
   list(issues = issues, x = x)
   
-}
-
-
-
-
-
-
-
-
-#' Check column names of taxonomic coverage template
-#'
-#' @param x 
-#'     (list) The data and metadata object returned by 
-#'     \code{template_arguments()}.
-#'
-#' @return
-#'     \item{error}{If column names are invalid}
-#'     \item{NULL}{If no issues were found}
-#'     
-#' @details Adds optional columns when missing so call to taxonomyCleanr::make_taxonomicCoverage() works.
-#'
-validate_taxonomic_coverage_column_names <- function(x) {
-  template <- data.table::fread(
-    system.file(
-      '/templates/taxonomic_coverage.txt',
-      package = 'EMLassemblyline'))
-  expected_colnames <- colnames(template)
-  found_colnames <- colnames(x$template$taxonomic_coverage.txt$content)
-  if (!all(expected_colnames %in% found_colnames)) {
-    stop(
-      "Missing columns in taxonomic coverage template:\n",
-      paste(
-        expected_colnames[!(expected_colnames %in% found_colnames)],
-        collapse = ", "),
-      call. = FALSE)
-  }
-  if (!("rank" %in% found_colnames)) {
-    x$template$taxonomic_coverage.txt$content$rank <- NA_character_
-  }
-  return(x)
 }
 
 
@@ -358,9 +315,7 @@ issues <- function() {
 
 read_template_attributes <- function() {
   data.table::fread(
-    system.file(
-      '/templates/template_characteristics.txt',
-      package = 'EMLassemblyline'), 
+    system.file('extdata', 'template_characteristics.txt', package = 'ecocomDP'), 
     fill = TRUE,
     blank.lines.skip = TRUE)
 }
@@ -470,7 +425,7 @@ annotate_eml <- function(
     # Read EML
     
     if (is.character(eml.in)) {
-      eml <- EMLassemblyline::read_eml(
+      eml <- EAL_read_eml(
         path = dirname(eml.in),
         eml = basename(eml.in))
     } else {

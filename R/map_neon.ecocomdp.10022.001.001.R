@@ -38,7 +38,7 @@ map_neon.ecocomdp.10022.001.001 <- function(
   ### Clean Up Sample Data ###
 
   # start with the fielddata table, which describes all sampling events
-  data_beetles <- tibble::as_tibble(beetles_raw$bet_fielddata) %>%
+  data_beetles <- tidyr::as_tibble(beetles_raw$bet_fielddata) %>%
     dplyr::filter(sampleCollected == "Y") %>% #there's an entry for every trap, whether or not they got samples, only want ones with samples
     dplyr::select(sampleID, domainID, siteID, plotID, namedLocation,
                   trapID, setDate, collectDate, eventID, trappingDays,

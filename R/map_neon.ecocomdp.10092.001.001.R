@@ -40,10 +40,10 @@ map_neon.ecocomdp.10092.001.001 <- function(
 
   
   # names(tickpathdat)
-  tick_path <- tibble::as_tibble(tickpathdat$tck_pathogen)
+  tick_path <- tidyr::as_tibble(tickpathdat$tck_pathogen)
   # names(tick_path)
   # table(tick_path$laboratoryName)
-  tick_pathqa <- tibble::as_tibble(tickpathdat$tck_pathogenqa)
+  tick_pathqa <- tidyr::as_tibble(tickpathdat$tck_pathogenqa)
   
   #### Raw dataset inspection ###
   ## Record original number of tests

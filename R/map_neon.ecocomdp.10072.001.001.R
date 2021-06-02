@@ -44,7 +44,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
                           # Since data collection usually takes place on several consecutive
                           # days within a given month, we consider each month to be a separate bout
                           bout = paste(year, month, sep = "_")) %>%
-    tibble::as_tibble() %>%
+    tidyr::as_tibble() %>%
     dplyr::group_by(nightuid) %>%
     dplyr::mutate(n_trap_nights_per_night_uid = length(unique(trapCoordinate))) %>%
     # dplyr::ungroup() %>%

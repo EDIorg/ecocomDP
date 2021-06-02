@@ -74,7 +74,7 @@ map_neon.ecocomdp.10093.001.001 <- function(
   ### replace "" with NA
   tck_tax_filtered <- dplyr::mutate_if(
     tck_taxonomyProcessed, .predicate = is.character, .funs = repl_na) %>% 
-    tibble::as_tibble() 
+    tidyr::as_tibble() 
   
   ### only retain lab records that have associated field data
   

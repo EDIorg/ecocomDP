@@ -33,10 +33,10 @@ map_neon.ecocomdp.20219.001.001 <- function(
   
 
   # download field data
-  zoo_fielddata <- tibble::as_tibble(allTabs_zoop$zoo_fieldData)
+  zoo_fielddata <- tidyr::as_tibble(allTabs_zoop$zoo_fieldData)
   
   # download zooplankton counts
-  zoo_taxonomyProcessed <- tibble::as_tibble(allTabs_zoop$zoo_taxonomyProcessed)
+  zoo_taxonomyProcessed <- tidyr::as_tibble(allTabs_zoop$zoo_taxonomyProcessed)
   
   # Location table
   zoo_location <- zoo_fielddata %>%
