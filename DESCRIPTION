@@ -1,7 +1,7 @@
 Package: ecocomDP
 Type: Package
-Title: The Ecological Community Design Pattern
-Description: A collection of functions for creating and using datasets in the Ecological Community Design Pattern (ecocomDP), a flexible and distributed data model for synthesis of community survey data.
+Title: A Dataset Design Pattern for Ecological Community Surveys
+Description: A tool for creating and using ecocomDP datasets.
 Version: 1.0.0
 Authors@R: 
     c(person(given = "Colin",
@@ -19,7 +19,7 @@ URL: http://github.com/EDIorg/ecocomDP
 BugReports: http://github.com/EDIorg/ecocomDP/issues
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 2.10)
+Depends: R (>= 3.3.0)
 Imports:
     data.table (>= 1.13.0),
     dplyr (>= 0.5.0),
