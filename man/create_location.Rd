@@ -18,7 +18,7 @@ create_location(
 
 \item{location_id}{(character) Column in \code{L0_flat} containing the identifier assigned to each unique location at the observation level.}
 
-\item{location_name}{(character) One or more columns in \code{L0_flat} of sampling locations ordered from high to low in terms of nesting (e.g. \code{location_name = c("region", "state", "county", "plot", "subplot")}).}
+\item{location_name}{(character) One or more columns in \code{L0_flat} of sampling locations ordered from high to low in terms of nesting (e.g. \code{location_name = c("plot", "subplot")}).}
 
 \item{latitude}{(character) An optional column in \code{L0_flat} containing the latitude in decimal degrees of \code{location_id}. Latitudes south of the equator are negative.}
 

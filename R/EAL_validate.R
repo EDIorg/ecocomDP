@@ -1,29 +1,29 @@
-#' Validate metadata template content
-#'
-#' @param fun.name
-#'     (character) Name calling function.
-#' @param x
-#'     (named list) The data and metadata object returned by \code{template_arguments()}.
-#'     
-#' @return 
-#' \item{template_issues}{Any issues found in the validation process and 
-#' returned as a character vector. This object can be saved for later use 
-#' and viewed in a human readable form with \code{issues()}}.
-#'     
-#' @details
-#'     Each template has a unique set of metadata providing valuable 
-#'     information about corresponding data objects. This function checks
-#'     for metadata content according to metadata best practices and the needs
-#'     of downstream processes in the EMLassemblyline. Each set of checks is 
-#'     applied within the scope of the calling function (i.e. \code{fun.name}),
-#'     which each has a unique set of needs and constraints. If the needs of 
-#'     down stream processes are not met, then the template content is modified 
-#'     and a message returned to the user.
-#'     
-#'     All issues are compiled into a single report and returned to the user 
-#'     with a warning. This approach of not "failing fast" allows the user to 
-#'     address several issues at once.
-#'
+# Validate metadata template content
+#
+# @param fun.name
+#     (character) Name calling function.
+# @param x
+#     (named list) The data and metadata object returned by \code{template_arguments()}.
+#     
+# @return 
+# \item{template_issues}{Any issues found in the validation process and 
+# returned as a character vector. This object can be saved for later use 
+# and viewed in a human readable form with \code{issues()}}.
+#     
+# @details
+#     Each template has a unique set of metadata providing valuable 
+#     information about corresponding data objects. This function checks
+#     for metadata content according to metadata best practices and the needs
+#     of downstream processes in the EMLassemblyline. Each set of checks is 
+#     applied within the scope of the calling function (i.e. \code{fun.name}),
+#     which each has a unique set of needs and constraints. If the needs of 
+#     down stream processes are not met, then the template content is modified 
+#     and a message returned to the user.
+#     
+#     All issues are compiled into a single report and returned to the user 
+#     with a warning. This approach of not "failing fast" allows the user to 
+#     address several issues at once.
+#
 validate_templates <- function(fun.name, x) {
   message("Checking inputs")
   attr_tmp <- read_template_attributes()
@@ -36,10 +36,10 @@ validate_templates <- function(fun.name, x) {
     issues <- c()
     
     # Annotations
-    validate_annotation(x)
-    r <- validate_annotation(x)
-    issues <- c(issues, r$issues)
-    x <- r$x
+    # validate_annotation(x)
+    # r <- validate_annotation(x)
+    # issues <- c(issues, r$issues)
+    # x <- r$x
     
     # Return
     if (!is.null(issues)) {
@@ -105,32 +105,31 @@ validate_templates <- function(fun.name, x) {
 
 
 
-#' Validate the taxonomic_coverage template
-#'
-#' @param x
-#'     (named list) The data and metadata object returned by 
-#'     \code{template_arguments()}.
-#'
-#' @return
-#'     \item{issues}{(character) Descriptions of issues found in the template 
-#'     grouped by "required" and "optional" criteria.}
-#'     \item{x}{(named list) If "required" issues are found, then the template 
-#'     is removed.}
-#'     
-#' @details 
-#'     Checks performed by this function:
-#'     \itemize{
-#'         \item{Template column names}
-#'         \item{Taxonomic authority}
-#'         \item{Complete entries}
-#'     }
-#'     
-#'     Manipulations performed by this function:
-#'     \itemize{
-#'         \item{Use raw names when a resolved name is missing. This ensures
-#'         the taxon is not ommitted from the taxonomic coverage metadata.}
-#'     }
-#'
+# Validate the taxonomic_coverage template
+#
+# @param x
+#     (named list) The data and metadata object returned by 
+#     \code{template_arguments()}.
+#
+# @return
+#     \item{issues}{(character) Descriptions of issues found in the template 
+#     grouped by "required" and "optional" criteria.}
+#     \item{x}{(named list) If "required" issues are found, then the template 
+#     is removed.}
+#     
+# @details 
+#     Checks performed by this function:
+#     \itemize{
+#         \item Template column names
+#         \item Taxonomic authority
+#         \item Complete entries
+#     }
+#     
+#     Manipulations performed by this function:
+#     \itemize{
+#         \item Use raw names when a resolved name is missing. This ensures the taxon is not ommitted from the taxonomic coverage metadata.
+#     }
+#
 validate_taxonomic_coverage <- function(x) {
   
   # Objects for catching required and optional issues
@@ -197,16 +196,16 @@ validate_taxonomic_coverage <- function(x) {
 
 
 
-#' Check authority_system values in the taxonomic coverage template
-#'
-#' @param x 
-#'     (list) The data and metadata object returned by 
-#'     \code{template_arguments()}.
-#'
-#' @return
-#'     \item{error}{If column names are invalid}
-#'     \item{NULL}{If no issues were found}
-#'
+# Check authority_system values in the taxonomic coverage template
+#
+# @param x 
+#     (list) The data and metadata object returned by 
+#     \code{template_arguments()}.
+#
+# @return
+#     \item{error}{If column names are invalid}
+#     \item{NULL}{If no issues were found}
+#
 validate_taxonomic_coverage_authority_system <- function(x) {
   authorities_supported <- c(
     'Catalogue of Life', 'ITIS', 'Integrated Taxonomic Information System',
@@ -236,16 +235,16 @@ validate_taxonomic_coverage_authority_system <- function(x) {
 
 
 
-#' Check completeness of the taxonomic coverage template
-#'
-#' @param x 
-#'     (list) The data and metadata object returned by 
-#'     \code{template_arguments()}.
-#'
-#' @return
-#'     \item{error}{If column names are invalid}
-#'     \item{NULL}{If no issues were found}
-#'
+# Check completeness of the taxonomic coverage template
+#
+# @param x 
+#     (list) The data and metadata object returned by 
+#     \code{template_arguments()}.
+#
+# @return
+#     \item{error}{If column names are invalid}
+#     \item{NULL}{If no issues were found}
+#
 validate_taxonomic_coverage_completeness <- function(x) {
   authorities <- x$template$taxonomic_coverage.txt$content$authority_system
   ids <- x$template$taxonomic_coverage.txt$content$authority_id
@@ -266,14 +265,15 @@ validate_taxonomic_coverage_completeness <- function(x) {
 
 
 
-#' View issues to function inputs
-#'
-#' @return
-#'     A message listing any issues found in EMLassemblyline function inputs (arguments and templates).
-#'     
-#' @details 
-#'     Validation functions \code{validate_arguments()} and \code{validate_templates()} return a list of issues to the global environment in \code{argument_issues} and \code{template_issues} list objects, respectively. The \code{view_issues()} function wraps these issues in \code{message()} to provide a human readable form.
-#'
+# View issues to function inputs
+#
+# @return
+#     A message listing any issues found in EMLassemblyline function inputs (arguments and templates).
+#     
+# @details 
+#     Validation functions \code{validate_arguments()} and \code{validate_templates()} return a list of issues to the global 
+#     environment in \code{argument_issues} and \code{template_issues} list objects, respectively. The \code{view_issues()} function wraps these issues in \code{message()} to provide a human readable form.
+#
 issues <- function() {
   
   arg <- exists(
@@ -337,31 +337,31 @@ read_template_attributes <- function() {
 
 
 
-#' Annotate an EML file (.xml) or an emld list object
-#'
-#' @param annotations
-#'     (character; data frame) Path or data frame of the annotations.txt 
-#'     template for annotating \code{eml.in}. Create annotations.txt with 
-#'     \code{template_annotations()}.
-#' @param eml.in
-#'     (EML; emld list) Path to, or emld list of, the EML file to be annotated. 
-#'     Accepted versions of the emld list object can be created by
-#'     \code{EMLassemblyline::read_eml()} or \code{make_eml()}.
-#' @param eml.out
-#'     (character) Path of the annotated EML file to be written.
-#'
-#' @return
-#'     (EML; emld list) If the input to \code{eml.in} is an EML file then the
-#'     output will be an EML file. The emld list object is always returned.
-#'     
-#' @note 
-#'     All annotated elements are assigned ids and their annotations are 
-#'     placed both immediately under the parent element (subject) when 
-#'     supported and within the /eml/annotations node through id+reference 
-#'     pairs. This redundant approach supports variation in where EML metadata 
-#'     consumers harvest this information and supports annotation of EML 
-#'     elements requiring id+references.
-#'
+# Annotate an EML file (.xml) or an emld list object
+#
+# @param annotations
+#     (character; data frame) Path or data frame of the annotations.txt 
+#     template for annotating \code{eml.in}. Create annotations.txt with 
+#     \code{template_annotations()}.
+# @param eml.in
+#     (EML; emld list) Path to, or emld list of, the EML file to be annotated. 
+#     Accepted versions of the emld list object can be created by
+#     \code{EMLassemblyline::read_eml()} or \code{make_eml()}.
+# @param eml.out
+#     (character) Path of the annotated EML file to be written.
+#
+# @return
+#     (EML; emld list) If the input to \code{eml.in} is an EML file then the
+#     output will be an EML file. The emld list object is always returned.
+#     
+# @note 
+#     All annotated elements are assigned ids and their annotations are 
+#     placed both immediately under the parent element (subject) when 
+#     supported and within the /eml/annotations node through id+reference 
+#     pairs. This redundant approach supports variation in where EML metadata 
+#     consumers harvest this information and supports annotation of EML 
+#     elements requiring id+references.
+#
 annotate_eml <- function(
   annotations = NULL, 
   eml.in = NULL, 
@@ -699,32 +699,32 @@ annotate_eml <- function(
 
 
 
-#' Annotate an EML element
-#' 
-#' This is a helper function for \code{annotate_eml()}.
-#'
-#' @param element 
-#'     (character) Element to be annotated
-#' @param eml 
-#'     (emld list) EML to be annotated
-#' @param anno
-#'     (data.frame) The annotations.txt template
-#' @param rp
-#'     (data.frame) The responsibleParty table
-#' 
-#'
-#' @return
-#' \item{eml}{emld list object being annotated}
-#' 
-#' @details 
-#' Match annotatable elements (subjects) to their annotations listed in
-#' the annotations.txt template. Target EML sub-trees where the subjects 
-#' occur, extract their values and, when not unique, their context, then 
-#' use these as keys to annotations.txt from which IDs and predicate + 
-#' object annotations are retrieved and assigned to the EML. Annotatable
-#' elements only supported through ID references are added to 
-#' /eml/dataset/annotations (e.g. ResponsibleParty).
-#' 
+# Annotate an EML element
+# 
+# This is a helper function for \code{annotate_eml()}.
+#
+# @param element 
+#     (character) Element to be annotated
+# @param eml 
+#     (emld list) EML to be annotated
+# @param anno
+#     (data.frame) The annotations.txt template
+# @param rp
+#     (data.frame) The responsibleParty table
+# 
+#
+# @return
+# \item{eml}{emld list object being annotated}
+# 
+# @details 
+# Match annotatable elements (subjects) to their annotations listed in
+# the annotations.txt template. Target EML sub-trees where the subjects 
+# occur, extract their values and, when not unique, their context, then 
+# use these as keys to annotations.txt from which IDs and predicate + 
+# object annotations are retrieved and assigned to the EML. Annotatable
+# elements only supported through ID references are added to 
+# /eml/dataset/annotations (e.g. ResponsibleParty).
+# 
 annotate_element <- function(element, eml, anno, rp) {
   
   if (element == "dataset") {
@@ -824,20 +824,20 @@ annotate_element <- function(element, eml, anno, rp) {
   
 }
 
-#' Assign ResponsibleParty IDs and append recurrences to the rp data frame
-#' 
-#' This is a helper function for \code{annotate_eml()}
-#'
-#' @param responsible.party
-#'     (emld list) A ResponsibleParty EML node in the emld list format.
-#' @param annotations.template
-#'     (data.frame) The annotations template created within 
-#'     \code{annotate_eml()}.
-#'
-#' @return
-#'     \item{responsible.party}{(emld list) Annotated responsible party node}
-#'     \item{rp}{(data.frame) the rp object}
-#' 
+# Assign ResponsibleParty IDs and append recurrences to the rp data frame
+# 
+# This is a helper function for \code{annotate_eml()}
+#
+# @param responsible.party
+#     (emld list) A ResponsibleParty EML node in the emld list format.
+# @param annotations.template
+#     (data.frame) The annotations template created within 
+#     \code{annotate_eml()}.
+#
+# @return
+#     \item{responsible.party}{(emld list) Annotated responsible party node}
+#     \item{rp}{(data.frame) the rp object}
+# 
 append_rp <- function(responsible.party, annotations.template) {
   
   subject <- paste(
@@ -889,23 +889,23 @@ append_rp <- function(responsible.party, annotations.template) {
 
 
 
-#' Update the rp object with ID information
-#' 
-#' This is a helper function for \code{annotate_eml()}
-#'
-#' @param responsible.party
-#'     (emld list) A ResponsibleParty EML node in the emld list format.
-#' @param anno
-#'     (data.frame) The annotations template created within 
-#'     \code{annotate_eml()}.
-#' @param rp
-#'     (data.frame) A growing set of responsible party metadata to be used
-#'     in \code{annotate_eml()}
-#'
-#' @return
-#'     \item{responsible.party}{(emld list) Annotated responsible party node}
-#'     \item{rp}{(data.frame) the rp object}
-#' 
+# Update the rp object with ID information
+# 
+# This is a helper function for \code{annotate_eml()}
+#
+# @param responsible.party
+#     (emld list) A ResponsibleParty EML node in the emld list format.
+# @param anno
+#     (data.frame) The annotations template created within 
+#     \code{annotate_eml()}.
+# @param rp
+#     (data.frame) A growing set of responsible party metadata to be used
+#     in \code{annotate_eml()}
+#
+# @return
+#     \item{responsible.party}{(emld list) Annotated responsible party node}
+#     \item{rp}{(data.frame) the rp object}
+# 
 assign_responsible_party_id <- function(responsible.party, anno, rp) {
   
   r <- lapply(

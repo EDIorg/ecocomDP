@@ -5,6 +5,7 @@ library(ecocomDP)
 # create_eml() ----------------------------------------------------------------
 
 testthat::test_that("Creates tables, meta, and valid EML", {
+  testthat::skip_on_cran()
   
   # Create directory for DwC-A outputs
   mypath <- paste0(tempdir(), "/data")

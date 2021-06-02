@@ -35,9 +35,7 @@ remotes::install_github("EDIorg/ecocomDP")
 
 ## Usage
 
-  - Create datasets
-  - Use datasets
-  - Convert ecocomDP datasets to another model
+See “Create”, “Use”, and “Convert” vignettes.
 
 ## Getting help
 

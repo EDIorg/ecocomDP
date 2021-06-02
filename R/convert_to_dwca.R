@@ -15,6 +15,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' # Create directory for DwC-A outputs
 #' mypath <- paste0(tempdir(), "/data")
 #' dir.create(mypath)
@@ -32,6 +33,7 @@
 #' 
 #' # Clean up
 #' unlink(mypath, recursive = TRUE)
+#' }
 #' 
 convert_to_dwca <- function(path, 
                           core_name, 
@@ -87,7 +89,7 @@ convert_to_dwca <- function(path,
   
   if (core_name == "event") {
     file.copy(
-      from = system.file("/dwca_event_core/meta.xml", package = "ecocomDP"),
+      from = system.file("extdata", "/dwca_event_core/meta.xml", package = "ecocomDP"),
       to = path)
   } else if (core_name == "occurrence") {
     # file.copy(
@@ -113,18 +115,18 @@ convert_to_dwca <- function(path,
 
 
 
-#' Creates DwC-A tables in event core 
-#'
-#' @param dt_obs (data.frame) Observation table
-#' @param dt_obs_ancil (data.frame) Observation ancillary table
-#' @param dt_loc_ancil (data.frame) Location ancillary table
-#' @param dt_loc (data.frame) Location table
-#' @param dt_tax (data.frame) Taxon table
-#' @param source_id (character) ID of an ecocomDP data package. Only EDI Data Repository package IDs are currently supported.
-#' @param derived_id (character) Identifier of the DwC-A dataset being created.
-#'
-#' @return (.csv) event, occurrence, measurementOrFact tables
-#'
+# Creates DwC-A tables in event core 
+#
+# @param dt_obs (data.frame) Observation table
+# @param dt_obs_ancil (data.frame) Observation ancillary table
+# @param dt_loc_ancil (data.frame) Location ancillary table
+# @param dt_loc (data.frame) Location table
+# @param dt_tax (data.frame) Taxon table
+# @param source_id (character) ID of an ecocomDP data package. Only EDI Data Repository package IDs are currently supported.
+# @param derived_id (character) Identifier of the DwC-A dataset being created.
+#
+# @return (.csv) event, occurrence, measurementOrFact tables
+#
 create_tables_dwca_event_core <- function(
   dt_obs,
   dt_obs_ancil,
@@ -271,57 +273,62 @@ create_tables_dwca_event_core <- function(
 
 
 
-#' Make EML metadata for a DWcA occurrence from an ecocomDP data package
-#'
-#' @param path 
-#'     (character) Path to the directory containing ecocomDP data tables, conversion scripts, and where EML metadata will be written. This \code{path}, when defined on a web server, also serves as the publicly accessible URL from which the data objects can be downloaded.
-#' @param core_name
-#'     (character) The Darwin Core central table of the package. Can be: "occurence" (occurrence core) or "event" (event core).
-#' @param source_id
-#'     (character) ID of an ecocomDP data package. Only EDI Data Repository package IDs are currently supported.
-#' @param derived_id (character) Identifier of the DwC-A dataset being created.
-#' @param repository (character) Data repository in which \code{package.id} resides and associated with \code{environment}. Currently supported repositories are: "EDI" (Environmental Data Initiative). Requests for support of other repositories can be made via \href{https://github.com/EDIorg/ecocomDP}{ecocomDP GitHub} issues. Default is "EDI".
-#' @param user.id
-#'     (character; optional) Repository user identifier. If more than one, then enter as a vector of character strings (e.g. \code{c("user_id_1", "user_id_2")}). \code{user.id} sets the /eml/access/principal element for all \code{user.domain} except "KNB", "ADC", and if \code{user.domain = NULL}.
-#' @param user.domain
-#'     (character; optional) Repository domain associated with \code{user.id}. Currently supported values are "EDI" (Environmental Data Initiative), "LTER" (Long-Term Ecological Research Network), "KNB" (The Knowledge Network for Biocomplexity), "ADC" (The Arctic Data Center). If you'd like your system supported please contact maintainers of the ecocomDP R package. If using more than one \code{user.domain}, then enter as a vector of character strings (e.g. \code{c("user_domain_1", "user_domain_2")}) in the same order as corresponding \code{user.id}. If \code{user.domain} is missing then a default value "unknown" is assigned. \code{user.domain} sets the EML header "system" attribute and for all \code{user.domain}, except "KNB" and "ADC", sets the /eml/access/principal element attributes and values.
-#' @param url
-#'     (character) URL to the publicly accessible directory containing DwC-A tables and meta.xml. This argument supports direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for automated revision and upload of ecocomDP data packages and derived products.
-#'
-#' @return 
-#'     An EML metadata record for the DWcA table defined by \code{data.table}.
-#'
-#' @details 
-#'     This function creates an EML record for an Darwin Core Archive record
-#'     (DwC-A) combining metadata from the parent data package and
-#'     boiler-plate metadata describing the DwC-A tables. Changes to the 
-#'     parent EML include:
-#'     \itemize{
-#'         \item \strong{<access>} Adds the \code{user.id} to the list of 
-#'         principals granted read and write access to the DwC-A data 
-#'         package this EML describes.
-#'         \item \strong{<title>} Appends "Darwin Core Archive: " to the title.
-#'         \item \strong{<pubDate>} Adds the date when this EML record is 
-#'         created.
-#'         \item \strong{<abstract>} Adds a note that this is a derived data 
-#'         package in a DwC-A format.
-#'         \item \strong{<keywordSet>} Essential Biodiversity Variables: 
-#'         "Population Abundance" and Darwin Core Terms: 
-#'         "BasisofRecord: HumanObservation", "Occurrence: OrganismQuantity",
-#'         "Taxon: ScientificName".
-#'         \item \strong{<intellectualRights>} Keeps intact the intellectual
-#'         rights license of the parent data package, or replaces it with
-#'         "CCO" (https://creativecommons.org/publicdomain/zero/1.0/legalcode).
-#'         \item \strong{<methodStep>} Adds a note that this data package was
-#'         created by methods within the ecocomDP R package and adds provenance 
-#'         metadata noting that this is a derived data and describing where 
-#'         the parent data package can be accessed.
-#'         \item \strong{<dataTables>} Replaces the parent data package data
-#'         tables metadata with boiler-plate metadata for the DwC-A tables.
-#'         \item \strong{<otherEntity>} Describes the meta.xml accompanying 
-#'         each DwC-A. Any other entities listed in the parent EML are removed.
-#'     }
-#'
+# Make EML metadata for a DWcA occurrence from an ecocomDP data package
+#
+# @param path 
+#     (character) Path to the directory containing ecocomDP data tables, conversion scripts, and where EML metadata will 
+#     be written. This \code{path}, when defined on a web server, also serves as the publicly accessible URL from which the 
+#     data objects can be downloaded.
+# @param core_name
+#     (character) The Darwin Core central table of the package. Can be: "occurence" (occurrence core) or "event" (event core).
+# @param source_id
+#     (character) ID of an ecocomDP data package. Only EDI Data Repository package IDs are currently supported.
+# @param derived_id (character) Identifier of the DwC-A dataset being created.
+# @param user.id
+#     (character; optional) Repository user identifier. If more than one, then enter as a vector of character strings 
+#     (e.g. \code{c("user_id_1", "user_id_2")}). \code{user.id} sets the /eml/access/principal element for all 
+#     \code{user.domain} except "KNB", "ADC", and if \code{user.domain = NULL}.
+# @param user.domain
+#     (character; optional) Repository domain associated with \code{user.id}. Currently 
+#     supported values are "EDI" (Environmental Data Initiative), "LTER" (Long-Term Ecological Research Network), 
+#     "KNB" (The Knowledge Network for Biocomplexity), "ADC" (The Arctic Data Center). If you'd like your system supported please
+#     contact maintainers of the ecocomDP R package. If using more than one \code{user.domain}, then enter as a vector 
+#     of character strings (e.g. \code{c("user_domain_1", "user_domain_2")}) in the same order as corresponding \code{user.id}. 
+#     If \code{user.domain} is missing then a default value "unknown" is assigned. \code{user.domain} sets the EML header 
+#     "system" attribute and for all \code{user.domain}, except "KNB" and "ADC", sets the /eml/access/principal element 
+#     attributes and values.
+# @param url
+#     (character) URL to the publicly accessible directory containing DwC-A tables and meta.xml. This argument supports 
+#     direct download of the data entities by a data repository and is used within the scope of the ecocomDP project for 
+#     automated revision and upload of ecocomDP data packages and derived products.
+#
+# @return 
+#     An EML metadata record for the DWcA table defined by \code{data.table}.
+#
+# @details 
+#     This function creates an EML record for an Darwin Core Archive record
+#     (DwC-A) combining metadata from the parent data package and
+#     boiler-plate metadata describing the DwC-A tables. Changes to the 
+#     parent EML include:
+#     \itemize{
+#         \item \strong{<access>} Adds the \code{user.id} to the list of principals granted read and write 
+#         access to the DwC-A data package this EML describes.
+#         \item \strong{<title>} Appends "Darwin Core Archive: " to the title.
+#         \item \strong{<pubDate>} Adds the date when this EML record is created.
+#         \item \strong{<abstract>} Adds a note that this is a derived data package in a DwC-A format.
+#         \item \strong{<keywordSet>} Essential Biodiversity Variables: "Population Abundance" and Darwin Core Terms: 
+#         "BasisofRecord: HumanObservation", "Occurrence: OrganismQuantity", "Taxon: ScientificName". 
+#         \item \strong{<intellectualRights>} Keeps intact the intellectual rights license of the parent data package, or 
+#         replaces it with "CCO" (https://creativecommons.org/publicdomain/zero/1.0/legalcode).
+#         \item \strong{<methodStep>} Adds a note that this data package was created by methods within the ecocomDP R package 
+#         and adds provenance metadata noting that this is a derived data and describing where the parent data package can 
+#         be accessed.
+#         \item \strong{<dataTables>} Replaces the parent data package data tables metadata with boiler-plate metadata for the 
+#         DwC-A tables.
+#         \item \strong{<otherEntity>} Describes the meta.xml accompanying each DwC-A. Any other entities listed in the parent 
+#         EML are removed.
+#     }
+#
 make_eml_dwca <- function(path, 
                           core_name, 
                           source_id, 
@@ -481,11 +488,11 @@ make_eml_dwca <- function(path,
   
   # Create list of inputs to EAL_make_eml()
   eal_inputs <- EAL_template_arguments(
-    path = system.file("/dwca_event_core", package = "ecocomDP"), 
+    path = system.file("extdata", "/dwca_event_core", package = "ecocomDP"), 
     data.path = path, 
     data.table = data.table,
     other.entity = "meta.xml")
-  eal_inputs$path <- system.file("/dwca_event_core", package = "ecocomDP")
+  eal_inputs$path <- system.file("extdata", "/dwca_event_core", package = "ecocomDP")
   eal_inputs$data.path <- path
   eal_inputs$eml.path <- path
   eal_inputs$dataset.title <- "placeholder"

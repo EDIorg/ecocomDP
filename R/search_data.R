@@ -31,6 +31,7 @@
 #' @export
 #' 
 #' @examples
+#' \dontrun{
 #' # Empty search returns all available datasets
 #' search_data()
 #' 
@@ -52,6 +53,7 @@
 #'   sd_years = c(.01, 100),
 #'   area = c(47.1, -86.7, 42.5, -92),
 #'   boolean = "OR")
+#' }
 #'
 search_data <- function(text, taxa, num_taxa, num_years, sd_years, 
                         area, boolean = "AND") {
@@ -369,20 +371,22 @@ search_data <- function(text, taxa, num_taxa, num_years, sd_years,
 
 
 
-#' Update NEON summary info
-#' 
-#' This temporarily accommodates NEON's plan for multiple L1 versions and will have to be refactored to support other data sources adopting this use case. A permanent solution is to refactor the \code{summarize_data_neon()} and \code{summarize_data_edi()} functions to return the exact objects of interest.
-#'
-#'
-#' @param d (list) EDI and NEON dataset summary object
-#'
-#' @return (list) \code{d} with added info
-#' 
-#' @details Joins /inst/L1_versions.txt (a file holding version info) with \code{d} and does a little reformatting.
-#'
+# Update NEON summary info
+# 
+# This temporarily accommodates NEON's plan for multiple L1 versions and will have to be refactored to 
+# support other data sources adopting this use case. A permanent solution is to refactor the \code{summarize_data_neon()} 
+# and \code{summarize_data_edi()} functions to return the exact objects of interest.
+#
+#
+# @param d (list) EDI and NEON dataset summary object
+#
+# @return (list) \code{d} with added info
+# 
+# @details Joins /inst/L1_versions.txt (a file holding version info) with \code{d} and does a little reformatting.
+#
 update_neon_summary_info <- function(d) {
   x <- data.table::fread(
-    system.file("/L1_versions.txt", package = "ecocomDP"))
+    system.file("extdata", "L1_versions.txt", package = "ecocomDP"))
   for (ind in seq_along(names(d))) {
     id <- names(d)[ind]
     if (stringr::str_detect(id, "^DP1")) {

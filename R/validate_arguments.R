@@ -1,18 +1,18 @@
-#' Validate arguments of ecocomDP functions
-#'
-#' @description
-#'     Validate input arguments to ecocomDP functions.
-#'
-#' @param fun.name
-#'     (character) Name of function from which \code{validate_arguments()} is
-#'     called.
-#' @param fun.args
-#'     (named list) Arguments passed to calling function and formatted as 
-#'     \code{as.list(environment())}.
-#'     
-#' @details
-#'     Validation checks are function specific.    
-#'
+# Validate arguments of ecocomDP functions
+#
+# @description
+#     Validate input arguments to ecocomDP functions.
+#
+# @param fun.name
+#     (character) Name of function from which \code{validate_arguments()} is
+#     called.
+# @param fun.args
+#     (named list) Arguments passed to calling function and formatted as 
+#     \code{as.list(environment())}.
+#     
+# @details
+#     Validation checks are function specific.    
+#
 validate_arguments <- function(fun.name, fun.args) {
   
   # Parameterize --------------------------------------------------------------
@@ -356,19 +356,19 @@ validate_arguments <- function(fun.name, fun.args) {
 
 
 
-#' Validate data package/product identifier
-#'
-#' @param id
-#'     (character) A data package/product identifier for an ecocomDP dataset.
-#'     
-#' @details 
-#'     If invalid (i.e. not listed in the return of \code{search_data()}), then
-#'     an error is returned.
-#' 
-#'     If the exact \code{id} is not indexed, but it is an EDI data package, 
-#'     then a set of logic determines if a newer version is indexed and 
-#'     available.
-#' 
+# Validate data package/product identifier
+#
+# @param id
+#     (character) A data package/product identifier for an ecocomDP dataset.
+#     
+# @details 
+#     If invalid (i.e. not listed in the return of \code{search_data()}), then
+#     an error is returned.
+# 
+#     If the exact \code{id} is not indexed, but it is an EDI data package, 
+#     then a set of logic determines if a newer version is indexed and 
+#     available.
+# 
 validate_id <- function(id) {
   search_index <- suppressMessages(search_data())
   if (!(id %in% search_index$id)) {
@@ -401,19 +401,19 @@ validate_id <- function(id) {
 
 
 
-#' Validate site name (for NEON data products only)
-#'
-#' @param site 
-#'     (character; NEON data only) A character vector of site codes to filter 
-#'     data on. Sites are listed in the "sites" column of the 
-#'     \code{search_data()} output.
-#' @param id
-#'     (character) A data package/product identifier.
-#'     
-#' @details 
-#'     If invalid (i.e. not listed in the return of \code{search_data()}), then
-#'     an error is returned.
-#' 
+# Validate site name (for NEON data products only)
+#
+# @param site 
+#     (character; NEON data only) A character vector of site codes to filter 
+#     data on. Sites are listed in the "sites" column of the 
+#     \code{search_data()} output.
+# @param id
+#     (character) A data package/product identifier.
+#     
+# @details 
+#     If invalid (i.e. not listed in the return of \code{search_data()}), then
+#     an error is returned.
+# 
 validate_site <- function(site, id) {
   search_index <- suppressMessages(search_data())
   available_sites <- unlist(
@@ -433,12 +433,12 @@ validate_site <- function(site, id) {
 
 
 
-#' Validate dataset structure
-#'
-#' @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
-#'
-#' @details Returns an error if \code{dataset} is malformed
-#'
+# Validate dataset structure
+#
+# @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
+#
+# @details Returns an error if \code{dataset} is malformed
+#
 validate_dataset_structure <- function(dataset) {
   criteria <- read_criteria()
   res <- c()

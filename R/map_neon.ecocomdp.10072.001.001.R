@@ -1,8 +1,8 @@
 ##############################################################################################
 ##############################################################################################
-#' @author Marta Jarzyna
+# @author Marta Jarzyna
 
-#' @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for SMALL_MAMMAL taxa from neon.data.product.id DP1.10072.001 from the NEON data portal and map to the ecocomDP format
+# @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for SMALL_MAMMAL taxa from neon.data.product.id DP1.10072.001 from the NEON data portal and map to the ecocomDP format
 
 ##############################################################################################
 # mapping function for SMALL_MAMMAL taxa
@@ -10,7 +10,6 @@ map_neon.ecocomdp.10072.001.001 <- function(
   neon.data.list,
   neon.data.product.id = "DP1.10072.001",
   ...){
-  
   # Authors: Marta Jarzyna, Eric Sokol
   
   ### This code downloads, unzips and restructures small mammal data (raw abundances) from NEON

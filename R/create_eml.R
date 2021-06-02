@@ -8,14 +8,14 @@
 #' @param is_about (named character) An optional argument for specifying dataset level annotations describing what this dataset "is about".
 #' @param contact (data.frame) Contact information for the person that created this ecocomDP dataset, containing these columns:
 #'    \itemize{
-#'        \item{givenName}
-#'        \item{surName}
-#'        \item{organizationName}
-#'        \item{electronicMailAddress}
+#'        \item givenName
+#'        \item surName
+#'        \item organizationName
+#'        \item electronicMailAddress
 #'    }
 #' @param user_id (character) Identifier of user associated with \code{user_domain}.
 #' @param user_domain (character) Domain (data repository) the \code{user_id} belongs to. Currently, EDI is supported.
-#' @param basis_of_record (character) An optional argument to facilitate creation of a Darwin Core record from this dataset using \code{convert_to_dwca()}. Use this to define the Darwin Core property \href{basisOfRecord}{https://dwc.tdwg.org/terms/#dwc:basisOfRecord} as \href{HumanObservation}{http://rs.tdwg.org/dwc/terms/HumanObservation} or \href{MachineObservation}{http://rs.tdwg.org/dwc/terms/MachineObservation}.
+#' @param basis_of_record (character) An optional argument to facilitate creation of a Darwin Core record from this dataset using \code{convert_to_dwca()}. Use this to define the Darwin Core property \href{https://dwc.tdwg.org/terms/#dwc:basisOfRecord}{basisOfRecord} as \href{http://rs.tdwg.org/dwc/terms/HumanObservation}{HumanObservation} or \href{http://rs.tdwg.org/dwc/terms/MachineObservation}{MachineObservation}.
 #' @param url (character) URL to the publicly accessible directory containing ecocomDP tables, conversion script, and EML metadata. This argument supports direct download of the data entities by a data repository and is used for automated revisioning and publication.
 #'
 #' @return An EML metadata file.
@@ -26,11 +26,9 @@
 #'         \item \strong{<title>} Adds a note that this is a derived data package in the ecocomDP format.
 #'         \item \strong{<pubDate>} Adds the date this EML was created.
 #'         \item \strong{<abstract>} Adds a note that this is a derived data package in the ecocomDP format.
-#'         \item \strong{<keywordSet} Adds the "ecocomDP" keyword to enable
-#'         search and discovery of all ecocomDP data packages in the data repository it is published, and 7 terms from the LTER Controlled vocabulary: "communities", "community composition", "community dynamics", "community patterns", "species composition", "species diversity", and "species richness". Darwin Core Terms listed under \code{basis_of_record} are listed and used by \code{convert_to_dwca()} to create a Darwin Core Archive of this ecocomDP data package.
-#'         \item \strong{<intellectualRights>} Keeps intact the original intellectual rights license \code{source_id} was released under, or uses "CCO" (https://creativecommons.org/publicdomain/zero/1.0/legalcode) if missing.
-#'         \item \strong{<taxonomicCoverage>} Appends to the taxonomic coverage 
-#'         element with data supplied in the ecocomDP taxon table.
+#'         \item \strong{<keywordSet} Adds the "ecocomDP" keyword to enable search and discovery of all ecocomDP data packages in the data repository it is published, and 7 terms from the LTER Controlled vocabulary: "communities", "community composition", "community dynamics", "community patterns", "species composition", "species diversity", and "species richness". Darwin Core Terms listed under \code{basis_of_record} are listed and used by \code{convert_to_dwca()} to create a Darwin Core Archive of this ecocomDP data package.
+#'         \item \strong{<intellectualRights>} Keeps intact the original intellectual rights license \code{source_id} was released under, or uses \href{https://creativecommons.org/publicdomain/zero/1.0/legalcode}{CCO} if missing.
+#'         \item \strong{<taxonomicCoverage>} Appends to the taxonomic coverage element with data supplied in the ecocomDP taxon table.
 #'         \item \strong{<contact>} Adds the ecocomDP creator as a point of contact.
 #'         \item \strong{<methodStep>} Adds a note that this data package was created by the \code{script}, and adds provenance metadata noting that this is a derived dataset and describes where the \code{source_id} can be accessed.
 #'         \item \strong{<dataTables>} Replaces the \code{source_id} table metadata with descriptions of the the ecocomDP tables.
@@ -38,11 +36,12 @@
 #'         \item \strong{<annotations>} Adds boilerplate annotations describing the ecocomDP at the dataset, entity, and entity attribute levels.
 #'     }
 #'     
-#'     Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. https://www.itis.gov/, http://www.marinespecies.org/, or https://gbif.org), will have their full taxonomic hierarchy expanded, including any common names for each level.
+#'     Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. \href{https://www.itis.gov/}{ITIS}, \href{http://www.marinespecies.org/}{WORMS}, or \href{https://gbif.org}{GBIF}), will have their full taxonomic hierarchy expanded, including any common names for each level.
 #'
 #' @export
 #' 
 #' @examples 
+#' \dontrun{
 #' # Create directory with ecocomDP tables for create_eml()
 #' mypath <- paste0(tempdir(), "/data")
 #' dir.create(mypath)
@@ -85,6 +84,7 @@
 #' 
 #' # Clean up
 #' unlink(mypath, recursive = TRUE)
+#' }
 #'
 create_eml <- function(path,
                      source_id, 
@@ -153,7 +153,7 @@ create_eml <- function(path,
   # EAL_make_eml()
   
   descriptions <- data.table::fread(
-    system.file("table_descriptions.txt", package = "ecocomDP"))
+    system.file("extdata", "table_descriptions.txt", package = "ecocomDP"))
   
   data.table.description <- descriptions$description[
     match(
@@ -218,12 +218,12 @@ create_eml <- function(path,
   # Create list of inputs to EAL_make_eml()
   
   eal_inputs <- EAL_template_arguments(
-    path = system.file("/ecocomDP", package = "ecocomDP"), 
+    path = system.file("extdata", "/ecocomDP", package = "ecocomDP"), 
     data.path = path, 
     data.table = data.table,
     other.entity = script)
   
-  eal_inputs$path <- system.file("/ecocomDP", package = "ecocomDP")
+  eal_inputs$path <- system.file("extdata", "/ecocomDP", package = "ecocomDP")
   eal_inputs$data.path <- path
   eal_inputs$eml.path <- path
   eal_inputs$dataset.title <- "placeholder"

@@ -1,8 +1,8 @@
 ##############################################################################################
 ##############################################################################################
-#' @author Natalie Robinson \email{nrobinson@battelleecology.org}
+# @author Natalie Robinson \email{nrobinson@battelleecology.org}
 
-#' @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for MOSQUITO from neon.data.product.id DP1.10043.001 from the NEON data portal and map to the ecocomDP 
+# @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for MOSQUITO from neon.data.product.id DP1.10043.001 from the NEON data portal and map to the ecocomDP 
 
 ##############################################################################################
 # mapping function for MOSQUITO
@@ -10,7 +10,6 @@ map_neon.ecocomdp.10043.001.001 <- function(
   neon.data.list,
   neon.data.product.id = "DP1.10043.001",
   ...){
-  
   #NEON target taxon group is MOSQUITO
   neon_method_id <- "neon.ecocomdp.10043.001.001"
   

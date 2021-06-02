@@ -1,54 +1,46 @@
 # general wrapper function for mapping NEON data products to ecocomDP
-##############################################################################################
-#' @title Map NEON data products to ecocomDP
-
-#' @author Eric R Sokol \email{esokol@battelleecology.org}
-#' @author Ruvi Jaimes
-#' 
-#' @description
-#' Pull files from the NEON API by data product, merge data for each table, and convert to ecocomDP format. Please see neonUtilities::loadByProduct for more information. 
-#'
-#' @param id (character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search_data()} output. e.g., \code{neon.ecocomdp.20166.001.001} is the \code{id} for "ALGAE Periphyton, seston, and phytoplankton collection" converted to the ecocomDP format from the NEON source data product DP1.20166.001. 
-#' @param neon.data.save.dir (character) Directory to save NEON source data that has been downloaded via \code{neonUtilities::loadByProduct()}
-#' @param neon.data.read.path (character) Path to read in an RDS file of 'stacked NEON data' from \code{neonUtilities::loadByProduct()}
-#' @param neon.data.list (list) A list of stacked NEON data tables to be mapped to ecocomDP. Must match the chosen mapping method in 'id'
-#' @param ... Additional arguments passed to neonUtilities::loadByProduct(). 
-#' @param site Either the string 'all', meaning all available sites, or a character vector of 4-letter NEON site codes, e.g. c('ONAQ','RMNP'). Defaults to all.
-#' @param startdate Either NA, meaning all available dates, or a character vector in the form YYYY-MM, e.g. 2017-01. Defaults to NA.
-#' @param enddate Either NA, meaning all available dates, or a character vector in the form YYYY-MM, e.g. 2017-01. Defaults to NA.
-#' @param check.size T or F, should the user approve the total file size before downloading? Defaults to T. When working in batch mode, or other non-interactive workflow, use check.size=F.
-#' @param nCores The number of cores to parallelize the stacking procedure. By default it is set to a single core.
-#' @param forceParallel If the data volume to be processed does not meet minimum requirements to run in parallel, this overrides. Set to FALSE as default.
-#' @param token User specific API token (generated within neon.datascience user accounts)
-
-#' @details All available data meeting the query criteria will be downloaded. Most data products are collected at only a subset of sites, and dates of collection vary. Consult the NEON data portal for sampling details.
-#' Dates are specified only to the month because NEON data are provided in monthly packages. Any month included in the search criteria will be included in the download. Start and end date are inclusive.
-
-#' @return Returns a named list, including: 
-#' \item{metadata}{A list of information about the NEON data product returned by neonUtilities::getProductInfo.}
-#' \item{tables}{A list of data.frames following the ecocomDP format.}
-#'     \item{tables$location}{A table, which has the lat long for each NEON site (\code{location_id}) included in the data set}
-#'     \item{tables$taxon}{A table, which describes each \code{taxon_id} that appears in the data set}
-#'     \item{tables$observation}{A table, with a record for each \code{observation_id} that appears in the data set}
-
-
-#' @examples
-#' \dontrun{
-#' # Retrieve and map NEON ALGAE data to ecocomDP format
-#' my_result <- map_neon_data_to_ecocomDP(
-#'   id = "neon.ecocomdp.20166.001.001",
-#'   site = c("MAYF", "PRIN"),
-#'   startdate = "2016-1",
-#'   enddate = "2018-11",
-#'   check.size = FALSE)
-#' }
-#' 
-#' \dontrun{
-#' }
-
-#' @references
-#' License: GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007
-#' 
+# #############################################################################################
+# @title Map NEON data products to ecocomDP
+# @author Eric R Sokol \email{esokol@battelleecology.org}
+# @author Ruvi Jaimes
+# 
+# @description
+# Pull files from the NEON API by data product, merge data for each table, and convert to ecocomDP format. 
+# Please see neonUtilities::loadByProduct for more information. 
+#
+# @param id (character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search_data()} output. 
+# e.g., \code{neon.ecocomdp.20166.001.001} is the \code{id} for "ALGAE Periphyton, seston, and phytoplankton collection" 
+# converted to the ecocomDP format from the NEON source data product DP1.20166.001. 
+# @param neon.data.save.dir (character) Directory to save NEON source data that has been downloaded via \code{neonUtilities::loadByProduct()}
+# @param neon.data.read.path (character) Path to read in an RDS file of 'stacked NEON data' from \code{neonUtilities::loadByProduct()}
+# @param neon.data.list (list) A list of stacked NEON data tables to be mapped to ecocomDP. Must match the chosen mapping method in 'id'
+# @param ... Additional arguments passed to neonUtilities::loadByProduct(). 
+# @details All available data meeting the query criteria will be downloaded. Most data products are collected at only a subset of sites, and 
+# dates of collection vary. Consult the NEON data portal for sampling details.
+# Dates are specified only to the month because NEON data are provided in monthly packages. Any month included in the search criteria will be included
+#  in the download. Start and end date are inclusive.
+# @return Returns a named list, including: 
+# \item{metadata}{A list of information about the NEON data product returned by neonUtilities::getProductInfo.}
+# \item{tables}{A list of data.frames following the ecocomDP format.}
+#     \item{tables$location}{A table, which has the lat long for each NEON site (\code{location_id}) included in the data set}
+#     \item{tables$taxon}{A table, which describes each \code{taxon_id} that appears in the data set}
+#     \item{tables$observation}{A table, with a record for each \code{observation_id} that appears in the data set}
+# @examples
+# \dontrun{
+# # Retrieve and map NEON ALGAE data to ecocomDP format
+# my_result <- map_neon_data_to_ecocomDP(
+#   id = "neon.ecocomdp.20166.001.001",
+#   site = c("MAYF", "PRIN"),
+#   startdate = "2016-1",
+#   enddate = "2018-11",
+#   check.size = FALSE)
+# }
+# 
+# \dontrun{
+# }
+# @references
+# License: GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007
+# 
 
 
 # changelog and author contributions / copyrights
@@ -62,6 +54,7 @@ map_neon_data_to_ecocomDP <- function(
   neon.data.list = NULL,
   ... #arguments set to neonUtilities::loadByProduct
 ){
+  # . <- NULL
   
   # get NEON DPID
   neon.data.product.id <- id %>% 

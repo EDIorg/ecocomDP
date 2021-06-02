@@ -1,8 +1,8 @@
 ##############################################################################################
 ##############################################################################################
-#' @author Daijiang Li
+# @author Daijiang Li
 
-#' @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for BIRD taxa from neon.data.product.id DP1.10003.001 from the NEON data portal and map to the ecocomDP format
+# @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for BIRD taxa from neon.data.product.id DP1.10003.001 from the NEON data portal and map to the ecocomDP format
 
 ##############################################################################################
 # mapping function for BIRD

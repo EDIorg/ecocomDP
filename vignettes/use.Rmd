@@ -24,39 +24,88 @@ Find datasets of interest by searching on one or more query parameters.
 
 All available datasets are returned with an empty call to `search_data()`:
 
-```{r}
+```{r eval=FALSE}
 search_data()
+#> # A tibble: 82 x 11
+#>   source id     title  description abstract  years sampling_interv~ sites url   
+#>   <chr>  <chr>  <chr>  <chr>       <chr>     <chr> <chr>            <chr> <chr> 
+#> 1 EDI    edi.3~ Fores~ <NA>        "This da~ 8     0.01             <NA>  https~
+#> 2 EDI    edi.2~ Zoopl~ <NA>        "This da~ 9     0.19             <NA>  https~
+#> 3 EDI    edi.3~ Long ~ <NA>        "This da~ 21    0.02             <NA>  https~
+#> 4 EDI    edi.3~ Dune ~ <NA>        "This da~ 7     0.15             <NA>  https~
+#> # ... with 78 more rows, and 2 more variables: source_id <chr>,
+#> #   source_id_url <chr>
 ```
 
 The "taxa" parameter enables searching on any taxonomic rank value. Find datasets about insects:
 
-```{r}
+```{r eval=FALSE}
 search_data(taxa = "Insecta")
+#> # A tibble: 13 x 11
+#>   source id     title  description abstract  years sampling_interv~ sites url   
+#>   <chr>  <chr>  <chr>  <chr>       <chr>     <chr> <chr>            <chr> <chr> 
+#> 1 EDI    edi.2~ Moss ~ <NA>        "This da~ 23    821.61           <NA>  https~
+#> 2 EDI    edi.2~ Bonan~ <NA>        "This da~ 38    0.41             <NA>  https~
+#> 3 EDI    edi.3~ Aphid~ <NA>        "This da~ 4     0                <NA>  https~
+#> 4 EDI    edi.3~ CGR02~ <NA>        "This da~ 30    0.06             <NA>  https~
+#> # ... with 9 more rows, and 2 more variables: source_id <chr>,
+#> #   source_id_url <chr>
 ```
 
 The "num_years" parameter lets you find datasets within a range of sampling years. Datasets with 20 to 40 years of sampling:
 
-```{r}
+```{r eval=FALSE}
 search_data(num_years = c(20, 40))
+#> # A tibble: 22 x 11
+#>   source id     title  description abstract  years sampling_interv~ sites url   
+#>   <chr>  <chr>  <chr>  <lgl>       <chr>     <int>            <dbl> <chr> <chr> 
+#> 1 EDI    edi.3~ Long ~ NA          "This da~    21             0.02 <NA>  https~
+#> 2 EDI    edi.2~ Moss ~ NA          "This da~    23           822.   <NA>  https~
+#> 3 EDI    edi.3~ Annua~ NA          "This da~    20             0    <NA>  https~
+#> 4 EDI    edi.3~ SGS-L~ NA          "This da~    26             0.05 <NA>  https~
+#> # ... with 18 more rows, and 2 more variables: source_id <chr>,
+#> #   source_id_url <chr>
+
 ```
 
 The "area" parameter facilitates searches by geographic regions. Datasets originating from the Northeast United States:
 
-```{r}
+```{r eval=FALSE}
 search_data(area = c(47, -70, 38, -90))
+#> # A tibble: 55 x 11
+#>   source id     title  description abstract  years sampling_interv~ sites url   
+#>   <chr>  <chr>  <chr>  <chr>       <chr>     <chr> <chr>            <chr> <chr> 
+#> 1 EDI    edi.3~ Fores~ <NA>        "This da~ 8     0.01             <NA>  https~
+#> 2 EDI    edi.3~ Long ~ <NA>        "This da~ 21    0.02             <NA>  https~
+#> 3 EDI    edi.3~ Dune ~ <NA>        "This da~ 7     0.15             <NA>  https~
+#> 4 EDI    edi.3~ SGS-L~ <NA>        "This da~ 7     0                <NA>  https~
+#> # ... with 51 more rows, and 2 more variables: source_id <chr>,
+#> #   source_id_url <chr>
 ```
 
 Combine query parameters to narrow results:
 
-```{r}
+```{r eval=FALSE}
 search_data(taxa = "Insecta", num_years = c(20, 100), area = c(47, -70, 38, -90))
+#> # A tibble: 4 x 11
+#>   source id     title  description abstract  years sampling_interv~ sites url   
+#>   <chr>  <chr>  <chr>  <lgl>       <chr>     <int>            <dbl> <chr> <chr> 
+#> 1 EDI    edi.3~ CGR02~ NA          "This da~    30             0.06 <NA>  https~
+#> 2 EDI    edi.2~ North~ NA          "This da~    36            10.5  <NA>  https~
+#> 3 EDI    edi.2~ North~ NA          "This da~    35            10.8  <NA>  https~
+#> 4 EDI    edi.2~ North~ NA          "This da~    36            10.5  <NA>  https~
+#> # ... with 2 more variables: source_id <chr>, source_id_url <chr>
 ```
 
 Assign results to a variable and learn more:
 
-```{r}
+```{r eval=FALSE}
 r <- search_data(taxa = "Insecta", num_years = c(20, 100), area = c(47, -70, 38, -90))
 r$title
+#> [1] "CGR02 Sweep Sampling of Grasshoppers on Konza Prairie LTER watersheds (Reformatted to ecocomDP Design Pattern)"         
+#> [2] "North Temperate Lakes LTER: Pelagic Macroinvertebrate Summary 1983 - current (Reformatted to ecocomDP Design Pattern)"  
+#> [3] "North Temperate Lakes LTER: Benthic Macroinvertebrates 1981 - current (Reformatted to ecocomDP Design Pattern)"         
+#> [4] "North Temperate Lakes LTER: Pelagic Macroinvertebrate Abundance 1983 - current (Reformatted to ecocomDP Design Pattern)"
 ```
 
 See `?search_data` for additional query parameters.

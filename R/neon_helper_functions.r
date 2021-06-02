@@ -8,9 +8,8 @@
 # not to be exported
 #########################################
 make_neon_location_table <- function(loc_info, loc_col_names){
-
   neon_site_list <- data.table::fread(
-    system.file("/extdata/neon-field-sites.csv", package = "ecocomDP"))
+    system.file("extdata", "neon-field-sites.csv", package = "ecocomDP"))
   
    
   #populate location_id
@@ -83,7 +82,6 @@ make_neon_location_table <- function(loc_info, loc_col_names){
 # helper function to make neon ancillary location tables
 #########################################
 make_neon_ancillary_location_table <- function(loc_info, loc_col_names, ancillary_var_names = NULL){
-  
   # make ancillary table that indicates the location type 
   table_location_ancillary <- loc_info %>% 
     dplyr::select_at(dplyr::vars(loc_col_names)) %>%
@@ -122,7 +120,6 @@ make_neon_ancillary_location_table <- function(loc_info, loc_col_names, ancillar
 make_neon_ancillary_observation_table <- function(
   obs_wide, #must have "observation_id" field
   ancillary_var_names = NULL){
-  
   # convert cols that are not char or numeric to char
   obs_wide <- as.data.frame(obs_wide)
   cols_2_change <- which(

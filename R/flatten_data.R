@@ -191,12 +191,13 @@ flatten_data <- function(tables) {
 
 
 
-#' Flatten ancillary table
-#'
-#' @param ancillary_table (data.frame) Ancillary table to flatten. Can be: observation_ancillary, location_ancillary, or taxon_ancillary.
-#'
-#' @return (data.frame) A flattened version of \code{ancillary_table} with units added following the unit_<variable_name> convention, and sorted so the unit immediately follows its corresponding variable_name.
-#' 
+# Flatten ancillary table
+#
+# @param ancillary_table (data.frame) Ancillary table to flatten. Can be: observation_ancillary, location_ancillary, or taxon_ancillary.
+#
+# @return (data.frame) A flattened version of \code{ancillary_table} with units added following the unit_<variable_name> 
+# convention, and sorted so the unit immediately follows its corresponding variable_name.
+# 
 flatten_ancillary <- function(ancillary_table) {
   # Spread on variable_name and value, then add units later
   fkey <- stringr::str_subset(colnames(ancillary_table), "(?<!ancillary_)id") # Use regexpr to select id column to later join on
@@ -240,12 +241,12 @@ flatten_ancillary <- function(ancillary_table) {
 
 
 
-#' Determine if a col is all NAs
-#'
-#' @param x A vector of values
-#'
-#' @return (logical) TRUE if not all NAs, otherwise FALSE
-#' 
+# Determine if a col is all NAs
+#
+# @param x A vector of values
+#
+# @return (logical) TRUE if not all NAs, otherwise FALSE
+# 
 not_all_NAs <- function(x) {
   !all(is.na(x))
 }
@@ -257,14 +258,16 @@ not_all_NAs <- function(x) {
 
 
 
-#' Helper to handle duplicates
-#'
-#' @param x A vector of values
-#'
-#' @return A vector of values, averaged or concatenated
-#' 
-#' @details Helper function to handle duplicates within the observation_ancillary table. Modifications to the ecocomDP model and corresponding validation checks prohibit duplicates within ancillary tables, but this function handles instances where a user flattens data that could not otherwise be flattened.
-#'
+# Helper to handle duplicates
+#
+# @param x A vector of values
+#
+# @return A vector of values, averaged or concatenated
+# 
+# @details Helper function to handle duplicates within the observation_ancillary table. Modifications to the 
+# ecocomDP model and corresponding validation checks prohibit duplicates within ancillary tables, but this function handles 
+# instances where a user flattens data that could not otherwise be flattened.
+#
 dup_fxn <- function(x){
   x <- unlist(x)
   if(class(x) == "numeric"){
@@ -282,12 +285,13 @@ dup_fxn <- function(x){
 
 
 
-#' Coerce columns of flatten_data()'s "all_merged" to correct classes
-#'
-#' @param x (data.frame) The all_merged object
-#'
-#' @return (data.frame) \code{x} with column classes coerced to ecocomDP specifications or numeric if not an ecocomDP column and if no NAs are generated.
-#' 
+# Coerce columns of flatten_data()'s "all_merged" to correct classes
+#
+# @param x (data.frame) The all_merged object
+#
+# @return (data.frame) \code{x} with column classes coerced to ecocomDP specifications or 
+# numeric if not an ecocomDP column and if no NAs are generated.
+# 
 coerce_all_merged <- function(x) {
   # Coerce column classes. Often a numeric type has been stored as character in the long L1 tables. But some columns (primarily ids) should remain character
   crit <- read_criteria() %>% 

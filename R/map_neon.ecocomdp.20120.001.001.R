@@ -1,7 +1,7 @@
 ##############################################################################################
-#' @author Stephanie Parker \email{sparker@battelleecology.org}
+# @author Stephanie Parker \email{sparker@battelleecology.org}
 
-#' @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for MACROINVERTEBRATE from neon.data.product.id DP1.20120.001 from the NEON data portal and map to the ecocomDP format
+# @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for MACROINVERTEBRATE from neon.data.product.id DP1.20120.001 from the NEON data portal and map to the ecocomDP format
 
 # changelog and author contributions / copyrights
 #   Eric R Sokol & Ruvi Jaimes (2020-06-08)
@@ -14,12 +14,9 @@ map_neon.ecocomdp.20120.001.001 <- function(
   neon.data.list,
   neon.data.product.id ="DP1.20120.001",
   ...){
-  
   #NEON target taxon group is MACROINVERTEBRATE
   neon_method_id <- "neon.ecocomdp.20120.001.001"
  
-  
-  
   # make sure neon.data.list matches the method
   if(!any(grepl(
     neon.data.product.id %>% gsub("^DP1\\.","",.) %>% gsub("\\.001$","",.), 

@@ -19,7 +19,7 @@
 #' @return
 #'     (list) with the structure:
 #'     \itemize{
-#'       \item{id - Dataset identifier}
+#'       \item id - Dataset identifier
 #'         \itemize{
 #'           \item metadata - List of info about the dataset. NOTE: This object is underdevelopment and content may change in future releases.
 #'           \item tables - List of dataset tables as data.frames.
@@ -37,7 +37,9 @@
 #'     
 #'     Validation happens each time files are read, from source APIs or local environments.
 #'     
-#'     Details for \code{read_data()} function regarding NEON data: Using this function to read data with an \code{id} that begins with "neon.ecocomdp" will result in a query to download NEON data from the NEON Data Portal API using \code{neonUtilities::loadByProduct()}. If a query includes provisional data (or if you are not sure if the query includes provisional data), we recommend saving a copy of the data in the original format provided by NEON in addition to the derived ecocomDP data package. To do this, provide a directory path using the \code{neon.data.read.path} argument. For example, the query \code{my_ecocomdp_data <- read_data(id = "neon.ecocomdp.10022.001.001", neon.data.save.dir = "my_neon_data")} will download the data for NEON Data Product ID DP1.10022.001 (ground beetles in pitfall traps) and convert it to the ecocomDP data model. In doing so, a copy of the original NEON download will be saved in the directory "my_ neon_data with the filename "DP1.10022.001_<timestamp>.RDS" and the derived data package in the ecocomDP format will be stored in your R environment in an object named "my_ecocomdp_data". Further, if you wish to reload a previously downloaded NEON dataset into the ecocomDP format, you can do so using \code{my_ecocomdp_data <- read_data(id = "neon.ecocomdp.10022.001.001", neon.data.read.path = "my_neon_data/DP1.10022.001_<timestamp>.RDS")}
+#'     Details for \code{read_data()} function regarding NEON data: Using this function to read data with an \code{id} that begins with "neon.ecocomdp" will result in a query to download NEON data from the NEON Data Portal API using \code{neonUtilities::loadByProduct()}. If a query includes provisional data (or if you are not sure if the query includes provisional data), we recommend saving a copy of the data in the original format provided by NEON in addition to the derived ecocomDP data package. To do this, provide a directory path using the \code{neon.data.read.path} argument. For example, the query \code{my_ecocomdp_data <- read_data(id = "neon.ecocomdp.10022.001.001", neon.data.save.dir = "my_neon_data")} will download the data for NEON Data Product ID DP1.10022.001 (ground beetles in pitfall traps) and convert it to the ecocomDP data model. In doing so, a copy of the original NEON download will be saved in the directory "my_ neon_data with the filename 
+#'     "DP1.10022.001_<timestamp>.RDS" and the derived data package in the ecocomDP format will be stored in your R environment in an object named "my_ecocomdp_data". Further, if you wish to reload a previously downloaded NEON dataset into the ecocomDP format, you can do so using \code{my_ecocomdp_data <- read_data(id = "neon.ecocomdp.10022.001.001", neon.data.read.path = 
+#'     "my_neon_data/DP1.10022.001_<timestamp>.RDS")}
 #'     
 #'     Provisional NEON data. Despite NEON's controlled data entry, at times, errors are found in published data; for example, an analytical lab may adjust its calibration curve and re-calculate past analyses, or field scientists may discover a past misidentification. In these cases, Level 0 data are edited and the data are re-processed to Level 1 and re-published. Published data files include a time stamp in the file name; a new time stamp indicates data have been re-published and may contain differences from previously published data. Data are subject to re-processing at any time during an initial provisional period; data releases are never re-processed. All records downloaded from the NEON API will have a "release" field. For any provisional record, the value of this field will be "PROVISIONAL", otherwise, this field will have a value indicating the version of the release to which the record belongs. More details can be found at https://www.neonscience.org/data-samples/data-management/data-revisions-releases.
 #'     
@@ -158,7 +160,11 @@ read_data <- function(id = NULL, parse_datetime = TRUE,
             }
             if ((y == "observation_ancillary") & ("event_id" %in% tblnms)) { # Warn if legacy data linking observation_ancillary through the event_id
               warning("This dataset conforms to an older version of the ecocomDP model in which the observation_ancillary table is linked through the event_id. No validation checks will be applied to the observation_ancillary table.", call. = FALSE)
-              assign("event_id", value = d[[x]]$tables[[y]]$event_id, env = parent.env(environment()))
+              
+              a <- environment()
+              b <- parent.env(env = a)
+              assign("event_id", value = d[[x]]$tables[[y]]$event_id, envir = b)
+              
             }
             use_i <- setdiff(nms, tblnms)
             if (length(use_i) > 0) {
@@ -173,8 +179,12 @@ read_data <- function(id = NULL, parse_datetime = TRUE,
               }
             }
           })
-        if (exists("event_id")) {
-          assign("event_id", value = event_id, env = parent.env(environment()))
+        if ((exists("event_id") && !is.null(event_id))) {
+          
+          a <- environment()
+          b <- parent.env(env = a)
+          assign("event_id", value = event_id, envir = b)
+          
         }
       }))
 
@@ -273,7 +283,7 @@ read_data <- function(id = NULL, parse_datetime = TRUE,
   
   # Support legacy versions ---------------------------------------------------
   
-  if (exists("event_id")) {
+  if (exists("event_id") && !is.null(event_id)) {
     d[[1]]$tables$observation_ancillary$observation_id <- as.character(event_id)
     nms <- colnames(d[[1]]$tables$observation_ancillary)
     nms[nms == "observation_id"] <- "event_id"
@@ -295,16 +305,17 @@ read_data <- function(id = NULL, parse_datetime = TRUE,
 
 
 
-#' Read an ecocomDP dataset from EDI
-#'
-#' @param id
-#'     (character) Data package identifier with revision number
-#' @param parse_datetime
-#'     (logical) Attempt to parse datetime character strings through an algorithm that looks at the EML formatString value and calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. Failed attempts will return a warning.
-#'
-#' @return
-#'     (list) Named list of data tables
-#'     
+# Read an ecocomDP dataset from EDI
+#
+# @param id
+#     (character) Data package identifier with revision number
+# @param parse_datetime
+#     (logical) Attempt to parse datetime character strings through an algorithm that looks at the EML formatString value and 
+#     calls \code{lubridate::parse_date_time()} with the appropriate \code{orders}. Failed attempts will return a warning.
+#
+# @return
+#     (list) Named list of data tables
+#     
 read_data_edi <- function(id, parse_datetime = TRUE) {
   
   message("Reading ", id)
@@ -399,18 +410,18 @@ read_data_edi <- function(id, parse_datetime = TRUE) {
 
 
 
-#' Read ecocomDP from files TO BE USED IN CREATION PROCESS PRIOR TO ARCHIVING
-#'
-#' @param data.path 
-#'     (character) The path to the directory containing ecocomDP tables. 
-#'     Duplicate file names are not allowed.
-#'
-#' @return
-#'     (list) A named list of \code{id}, each including: 
-#'     \item{metadata}{A list of information about the data.}
-#'     \item{tables}{A list of tbl_df, tbl, data.frames following the ecocomDP format 
-#'     (\url{https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md})}
-#' 
+# Read ecocomDP from files TO BE USED IN CREATION PROCESS PRIOR TO ARCHIVING
+#
+# @param data.path 
+#     (character) The path to the directory containing ecocomDP tables. 
+#     Duplicate file names are not allowed.
+#
+# @return
+#     (list) A named list of \code{id}, each including: 
+#     \item{metadata}{A list of information about the data.}
+#     \item{tables}{A list of tbl_df, tbl, data.frames following the ecocomDP format 
+#     (\url{https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md})}
+# 
 read_from_files <- function(data.path) {
   attr_tbl <- read_criteria()
   attr_tbl <- attr_tbl[!is.na(attr_tbl$column), ]
@@ -468,12 +479,12 @@ read_from_files <- function(data.path) {
 
 
 
-#' Read L1 tables in path
-#'
-#' @param paths (character) One or more paths to a directories
-#'
-#' @return (list) The L1 dataset object
-#' 
+# Read L1 tables in path
+#
+# @param paths (character) One or more paths to a directories
+#
+# @return (list) The L1 dataset object
+# 
 read_dir <- function(paths) {
   attr_tbl <- read_criteria()
   d <- lapply(

@@ -1,8 +1,8 @@
 ##############################################################################################
 ##############################################################################################
-#' @author Lara Janson
+# @author Lara Janson
 
-#' @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for ZOOPLANKTON taxa from neon.data.product.id DP1.20219.001 from the NEON data portal and map to the ecocomDP format
+# @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for ZOOPLANKTON taxa from neon.data.product.id DP1.20219.001 from the NEON data portal and map to the ecocomDP format
 
 ##############################################################################################
 # mapping function for ZOOPLANKTON taxa
@@ -10,7 +10,6 @@ map_neon.ecocomdp.20219.001.001 <- function(
   neon.data.list,
   neon.data.product.id = "DP1.20219.001",
   ...){
-  
   # authors: Lara Janson, Stephanie Parker, Eric Sokol
   
   #NEON target taxon group is ZOOPLANKTON

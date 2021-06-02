@@ -232,12 +232,15 @@ testthat::test_that("read_data()", {
   expect_error(
     validate_arguments("read_data", as.list(list(id = 1))), 
     regexp = "Input 'id' should be character.")
-  expect_error(                                                             # exists
-    validate_arguments("read_data", as.list(list(id = "edi.x.x"))), 
-    regexp = "Invalid identifier 'edi.x.x' cannot be read.")
-  expect_warning(                                                           # warns if newer revision
-    validate_arguments("read_data", as.list(list(id = "edi.124.3"))), 
-    regexp = "A newer version of 'edi.124.3' is available.")
+  testthat::test_that("valid id", {
+    testthat::skip_on_cran()
+    expect_error(                                                             # exists
+      validate_arguments("read_data", as.list(list(id = "edi.x.x"))), 
+      regexp = "Invalid identifier 'edi.x.x' cannot be read.")
+    expect_warning(                                                           # warns if newer revision
+      validate_arguments("read_data", as.list(list(id = "edi.124.3"))), 
+      regexp = "A newer version of 'edi.124.3' is available.")
+  })
   # path
   expect_null(validate_arguments("read_data", as.list(list(path = tempdir())))) # exists
   expect_error(
@@ -256,13 +259,16 @@ testthat::test_that("read_data()", {
     validate_arguments("read_data", as.list(list(unique_keys = "TRUE"))),
     regexp = "Input 'unique_keys' should be logical.")
   # site
-  expect_null(                                                                 # site exists for id
-    validate_arguments("read_data", as.list(list(id = "neon.ecocomdp.20120.001.001",
-                                               site = c("ARIK")))))
-  expect_warning(
-    validate_arguments("read_data", as.list(list(id = "neon.ecocomdp.20120.001.001",
-                                                 site = c("ARIK", "not an id")))),
-    regexp = "Sites not available in neon.ecocomdp.20120.001.001: not an id")
+  testthat::test_that("Valid site", {
+    testthat::skip_on_cran()
+    expect_null(                                                                 # site exists for id
+      validate_arguments("read_data", as.list(list(id = "neon.ecocomdp.20120.001.001",
+                                                   site = c("ARIK")))))
+    expect_warning(
+      validate_arguments("read_data", as.list(list(id = "neon.ecocomdp.20120.001.001",
+                                                   site = c("ARIK", "not an id")))),
+      regexp = "Sites not available in neon.ecocomdp.20120.001.001: not an id")
+  })
   # startdate
   expect_null(                                                                 # has YYYY-MM format and MM is 1-12
     validate_arguments("read_data", as.list(list(startdate = "2020-12"))))

@@ -1,23 +1,23 @@
-#' Get taxonomic authority
-#'
-#' @description
-#'     Use fuzzy searching in the Global Names Resolver to correct spelling
-#'     and locate appropriate authorities.
-#'
-#' @param taxon
-#'     A character string representation of the taxon to search on.
-#' @param data.source
-#'     A numeric ID corresponding to the data source (i.e. taxonomic authority)
-#'     you'd like to query. Run `view_authorities` to get valid data source
-#'     options and ID's.
-#'
-#' @return
-#'     \itemize{
-#'         \item{resolved_name} Resolved taxon name.
-#'         \item{authority} Name of the authority searched.
-#'         \item{score} Relative match score provided by the authority.
-#'     }
-#'
+# Get taxonomic authority
+#
+# @description
+#     Use fuzzy searching in the Global Names Resolver to correct spelling
+#     and locate appropriate authorities.
+#
+# @param taxon
+#     A character string representation of the taxon to search on.
+# @param data.source
+#     A numeric ID corresponding to the data source (i.e. taxonomic authority)
+#     you'd like to query. Run `view_authorities` to get valid data source
+#     options and ID's.
+#
+# @return
+#     \itemize{
+#         \item resolved_name - Resolved taxon name.
+#         \item authority - Name of the authority searched.
+#         \item score - Relative match score provided by the authority.
+#     }
+#
 get_authority <- function(taxon, data.source){
   
   # Resolve taxa to authority -------------------------------------------------
@@ -81,32 +81,35 @@ get_authority <- function(taxon, data.source){
 
 
 
-#' Get the taxonomic classification hierarchy for taxa resolved to supported authorities
-#'
-#' @param taxa.clean
-#'     (character) Taxa names
-#' @param authority
-#'     (character) Authority \code{taxa.clean} have been resolved to, otherwise \code{NA}. Supported authorities include: "ITIS", "WORMS", "GBIF".
-#' @param authority.id
-#'     (character) ID of \code{taxa.clean} within the \code{authority}, otherwise \code{NA}
-#' @param rank
-#'     (character) Rank (e.g. "Genus", "Species") of \code{taxa.clean}, otherwise \code{NA}. This is useful when \code{taxa.clean} can't be resolved to an \code{authority} and the rank must be manually defined.
-#' @param path
-#'     (character) Path of the directory containing taxa_map.csv.
-#'
-#' @return
-#'     (list) For \code{taxa.clean} resolved to a supported authority, each item in the list is a classification hierarchy (also a list), including one or more common names (only when \code{authority} is ITIS or WORMS) and authority IDs for each rank-value pair. For \code{taxa.clean} not resolved to a supported authority, each item is listed as defined in the \code{taxa.clean}, \code{authority}, and \code{authority.id} arguments.
-#'
-#' @details
-#'     Only taxa resolved to supported authorities can be expanded into a full taxonomic classification with common names. Taxa resolved to unsupported authorities, or not resolved at all, will be listed as is defined in the \code{taxa.clean}, \code{authority}, and \code{authority.id} arguments.
-#'
-#'     Supported authorities are recognized by a controlled set of representations.
-#'     \itemize{
-#'     \item{ITIS can be: "ITIS", "itis", "Integrated Taxonomic Information System", or "https://www.itis.gov/".}
-#'     \item{WORMS can be: "WORMS", "worms", "World Register of Marine Species", or "http://www.marinespecies.org/".}
-#'     \item{GBIF can be: "GBIF", "gbif", "GBIF Backbone Taxonomy", or "https://gbif.org".}
-#'     }
-#'
+# Get the taxonomic classification hierarchy for taxa resolved to supported authorities
+#
+# @param taxa.clean
+#     (character) Taxa names
+# @param authority
+#     (character) Authority \code{taxa.clean} have been resolved to, otherwise \code{NA}. Supported authorities include: "ITIS", "WORMS", "GBIF".
+# @param authority.id
+#     (character) ID of \code{taxa.clean} within the \code{authority}, otherwise \code{NA}
+# @param rank
+#     (character) Rank (e.g. "Genus", "Species") of \code{taxa.clean}, otherwise \code{NA}. This is useful when \code{taxa.clean} can't be resolved to an \code{authority} and the rank must be manually defined.
+# @param path
+#     (character) Path of the directory containing taxa_map.csv.
+#
+# @return
+#     (list) For \code{taxa.clean} resolved to a supported authority, each item in the list is a classification hierarchy (also a list), including one or more common names 
+#     (only when \code{authority} is ITIS or WORMS) and authority IDs for each rank-value pair. For \code{taxa.clean} not resolved to a supported authority, each item is listed as defined in
+#      the \code{taxa.clean}, \code{authority}, and \code{authority.id} arguments.
+#
+# @details
+#     Only taxa resolved to supported authorities can be expanded into a full taxonomic classification with common names. Taxa resolved to unsupported authorities, or not resolved at all, will be listed as 
+#     is defined in the \code{taxa.clean}, \code{authority}, and \code{authority.id} arguments.
+#
+#     Supported authorities are recognized by a controlled set of representations.
+#     \itemize{
+#     \item ITIS can be: "ITIS", "itis", "Integrated Taxonomic Information System", or "https://www.itis.gov/".
+#     \item WORMS can be: "WORMS", "worms", "World Register of Marine Species", or "http://www.marinespecies.org/".
+#     \item GBIF can be: "GBIF", "gbif", "GBIF Backbone Taxonomy", or "https://gbif.org".
+#     }
+#
 get_classification <- function(taxa.clean,
                                authority = NA,
                                authority.id = NA,
@@ -336,22 +339,22 @@ get_classification <- function(taxa.clean,
 
 
 
-#' Get taxonomic identifiers
-#'
-#' @description
-#'     Get a taxonomic identifier for a taxon name and corresponding authority.
-#'
-#' @param taxon
-#'     A character string specifying taxon to get the ID for.
-#' @param authority
-#'     A character string specifying the authority from which to get the ID.
-#'
-#' @return
-#'     \itemize{
-#'         \item{taxon_id} An authority ID for the taxon.
-#'         \item{rank} The taxonomic rank of the taxon.
-#'     }
-#'
+# Get taxonomic identifiers
+#
+# @description
+#     Get a taxonomic identifier for a taxon name and corresponding authority.
+#
+# @param taxon
+#     A character string specifying taxon to get the ID for.
+# @param authority
+#     A character string specifying the authority from which to get the ID.
+#
+# @return
+#     \itemize{
+#         \item taxon_id - An authority ID for the taxon.
+#         \item rank - The taxonomic rank of the taxon.
+#     }
+#
 get_id <- function(taxon, authority){
   
   taxon_id <- NA_character_
@@ -508,22 +511,22 @@ get_id <- function(taxon, authority){
 
 
 
-#' Get taxonomic identifiers
-#'
-#' @description
-#'     Get a taxonomic identifier for a taxon name and corresponding authority.
-#'
-#' @param taxon
-#'     A character string specifying taxon to get the ID for.
-#' @param authority
-#'     A character string specifying the authority from which to get the ID.
-#'
-#' @return
-#'     \itemize{
-#'         \item{taxon_id} An authority ID for the taxon.
-#'         \item{rank} The taxonomic rank of the taxon.
-#'     }
-#'
+# Get taxonomic identifiers
+#
+# @description
+#     Get a taxonomic identifier for a taxon name and corresponding authority.
+#
+# @param taxon
+#     A character string specifying taxon to get the ID for.
+# @param authority
+#     A character string specifying the authority from which to get the ID.
+#
+# @return
+#     \itemize{
+#         \item taxon_id - An authority ID for the taxon.
+#         \item rank - The taxonomic rank of the taxon.
+#     }
+#
 get_id_common <- function(taxon, authority){
   
   taxon_id <- NA_character_
@@ -692,12 +695,12 @@ get_id_common <- function(taxon, authority){
 
 
 
-#' Load and fix GNR Datasources
-#'
-#' @return (data.frame) GNR datasources from \code{taxize::gnr_datasources()}
-#'
-#' @details This fixes bugs in taxize which otherwise produce inconsistent datasource names (e.g. "Integrated Taxonomic Information SystemITIS" rather than expected "ITIS")
-#'
+# Load and fix GNR Datasources
+#
+# @return (data.frame) GNR datasources from \code{taxize::gnr_datasources()}
+#
+# @details This fixes bugs in taxize which otherwise produce inconsistent datasource names (e.g. "Integrated Taxonomic Information SystemITIS" rather than expected "ITIS")
+#
 load_gnr_datasources <- function() {
   gnr_list <- as.data.frame(taxize::gnr_datasources())
   gnr_list$title[gnr_list$id == "3"] <- "ITIS"
@@ -711,29 +714,32 @@ load_gnr_datasources <- function() {
 
 
 
-#' Make taxonomicCoverage EML node
-#'
-#' @param taxa.clean
-#'     (character) Taxa names as they appear in your dataset
-#' @param authority
-#'     (character) Authority \code{taxa.clean} have been resolved to. Supported authorities include: "ITIS", "WORMS", "GBIF". For unsupported authorities, list the home page URL. For unresolved taxa use \code{NA}.
-#' @param authority.id
-#'     (character) ID of \code{taxa.clean} within the \code{authority}, otherwise \code{NA}
-#' @param rank
-#'     (character) Rank (e.g. "Genus", "Species") of \code{taxa.clean}, otherwise \code{NA}. This is useful when \code{taxa.clean} can't be resolved to an \code{authority} and the rank must be manually defined.
-#' @param path
-#'     (character) Path of the directory to which taxonomicCoverage.xml will be written. Can also be the path of the directory containing taxa_map.csv, if using as inputs to this function.
-#' @param write.file
-#'     (logical) Whether taxonomicCoverage.xml should be written to file. Default is \code{TRUE}.
-#'
-#' @return
-#' \item{emld list}{The taxonomicClassification EML node for use in constructing EML metadata with the EML R library.}
-#' \item{taxonomicCoverage.xml}{If \code{write.file = TRUE}.}
-#'
-#' @details This function uses \code{get_classification()} to expand taxa, resolved to supported authorities, into full taxonomic classification. Each level of classification is accompanied by an annotation (listing the \code{authority} and \code{authority.id}) and common names (only when \code{authority} is ITIS or WORMS). Taxa resolved to unsupported authorities, or not resolved at all, will be listed as is defined in the \code{taxa.clean}, \code{authority}, and \code{authority.id} arguments.
-#'
-#' @note The name of this function is a bit misleading. The return value is actually a list of taxonomicClassification nodes, which occur immediately below taxonomicCoverage (i.e. ../taxonomicCoverage/taxonomicClassification).
-#'
+# Make taxonomicCoverage EML node
+#
+# @param taxa.clean
+#     (character) Taxa names as they appear in your dataset
+# @param authority
+#     (character) Authority \code{taxa.clean} have been resolved to. Supported authorities include: "ITIS", "WORMS", "GBIF". For unsupported authorities, list the home page URL. For unresolved taxa use \code{NA}.
+# @param authority.id
+#     (character) ID of \code{taxa.clean} within the \code{authority}, otherwise \code{NA}
+# @param rank
+#     (character) Rank (e.g. "Genus", "Species") of \code{taxa.clean}, otherwise \code{NA}. This is useful when \code{taxa.clean} can't be resolved to an \code{authority} and the rank must be manually defined.
+# @param path
+#     (character) Path of the directory to which taxonomicCoverage.xml will be written. Can also be the path of the directory containing taxa_map.csv, if using as inputs to this function.
+# @param write.file
+#     (logical) Whether taxonomicCoverage.xml should be written to file. Default is \code{TRUE}.
+#
+# @return
+# \item{emld list}{The taxonomicClassification EML node for use in constructing EML metadata with the EML R library.}
+# \item{taxonomicCoverage.xml}{If \code{write.file = TRUE}.}
+#
+# @details This function uses \code{get_classification()} to expand taxa, resolved to supported authorities, into full taxonomic classification. Each level of classification is
+#  accompanied by an annotation (listing the \code{authority} and \code{authority.id}) and common names (only when \code{authority} is ITIS or WORMS). Taxa resolved to unsupported authorities, or not resolved at 
+#  all, will be listed as is defined in the \code{taxa.clean}, \code{authority}, and \code{authority.id} arguments.
+#
+# @note The name of this function is a bit misleading. The return value is actually a list of taxonomicClassification nodes, which occur immediately below taxonomicCoverage 
+# (i.e. ../taxonomicCoverage/taxonomicClassification).
+#
 make_taxonomicCoverage <- function(
   taxa.clean,
   authority = NA,
@@ -763,18 +769,6 @@ make_taxonomicCoverage <- function(
   }
   
   # Load data -----------------------------------------------------------------
-  
-  # Load data from taxa_map.csv (if it exists).
-  if (!missing(path)) {
-    if (file.exists(paste0(path, '/taxa_map.csv'))) {
-      taxa_map <- read_taxa_map(path)
-      taxa_map$taxa_clean[is.na(taxa_map$taxa_clean)] <-
-        taxa_map$taxa_raw[is.na(taxa_map$taxa_clean)]
-      taxa.clean <- taxa_map$taxa_clean
-      authority <- taxa_map$authority
-      authority.id <- taxa_map$authority_id
-    }
-  }
   
   # Remove any blank or missing taxa otherwise get_classification() will throw
   # errors
@@ -826,29 +820,28 @@ make_taxonomicCoverage <- function(
 
 
 
-#' Optimize match
-#'
-#' @description
-#'     Optimize the taxon match to an authority based on completeness of
-#'     returned information. A complete return contains both an authority
-#'     name and an authority ID for a taxon.
-#'
-#' @param x
-#'     (character) A character string specifying the taxon.
-#' @param data.sources
-#'     (numeric) A numeric vector of values specifying the authorities to search across.
-#'     Run `view_authorities` to get valid data source options and ID's.
-#'
-#' @return
-#'     \itemize{
-#'         \item{taxa_clean} Resolved name for input taxon.
-#'         \item{rank} Rank of the input taxon.
-#'         \item{authority} Best authority match for input taxon.
-#'         \item{authority_id} Corresponding authority ID for the input taxon.
-#'         \item{score} Authority match score for input taxon.
-#'
-#'     }
-#'
+# Optimize match
+#
+# @description
+#     Optimize the taxon match to an authority based on completeness of
+#     returned information. A complete return contains both an authority
+#     name and an authority ID for a taxon.
+#
+# @param x
+#     (character) A character string specifying the taxon.
+# @param data.sources
+#     (numeric) A numeric vector of values specifying the authorities to search across.
+#     Run `view_authorities` to get valid data source options and ID's.
+#
+# @return
+#     \itemize{
+#         \item taxa_clean - Resolved name for input taxon.
+#         \item rank - Rank of the input taxon.
+#         \item authority - Best authority match for input taxon.
+#         \item authority_id - Corresponding authority ID for the input taxon.
+#         \item score - Authority match score for input taxon.
+#     }
+#
 optimize_match <- function(x, data.sources){
   
   output <- data.frame(
@@ -948,29 +941,29 @@ optimize_match <- function(x, data.sources){
 
 
 
-#' Optimize match common
-#'
-#' @description
-#'     Optimize the common taxon match to an authority based on completeness of
-#'     returned information. A complete return contains both an authority
-#'     name and an authority ID for a taxon.
-#'
-#' @param x
-#'     (character) A character string specifying the taxon.
-#' @param data.sources
-#'     (Numeric) A numeric vector of values specifying the authorities to search across.
-#'     Run `view_authorities` to get valid data source options and ID's.
-#'
-#' @return
-#'     \itemize{
-#'         \item{taxa_clean} Resolved name for input taxon.
-#'         \item{rank} Rank of the input taxon.
-#'         \item{authority} Best authority match for input taxon.
-#'         \item{authority_id} Corresponding authority ID for the input taxon.
-#'         \item{score} Authority match score for input taxon.
-#'
-#'     }
-#'
+# Optimize match common
+#
+# @description
+#     Optimize the common taxon match to an authority based on completeness of
+#     returned information. A complete return contains both an authority
+#     name and an authority ID for a taxon.
+#
+# @param x
+#     (character) A character string specifying the taxon.
+# @param data.sources
+#     (Numeric) A numeric vector of values specifying the authorities to search across.
+#     Run `view_authorities` to get valid data source options and ID's.
+#
+# @return
+#     \itemize{
+#         \item taxa_clean - Resolved name for input taxon.
+#         \item rank - Rank of the input taxon.
+#         \item authority - Best authority match for input taxon.
+#         \item authority_id - Corresponding authority ID for the input taxon.
+#         \item score - Authority match score for input taxon.
+#
+#     }
+#
 optimize_match_common <- function(x, data.sources){
   
   output <- data.frame(
@@ -1051,30 +1044,30 @@ optimize_match_common <- function(x, data.sources){
 
 
 
-#' Resolve common names to an authority
-#'
-#' @description
-#'     Resolve taxa to preferred authorities and get associated IDs.
-#'
-#' @param x
-#'     (character) A vector of taxa names.
-#' @param data.sources
-#'     (numeric) An ordered vector of authority IDs to be queried (
-#'     \code{view_taxa_authorities()} lists currently supported authorities).
-#'     Taxa are resolved to authorities in the order listed. If an authority
-#'     and ID match cannot be made, then the next will be queried.
-#' @param path
-#'     (character) Path to directory containing taxa_map.csv. This tracks
-#'     provenance throughout the data cleaning process. Create this file with
-#'     \code{create_taxa_map()}.
-#'
-#' @return
-#'     (data frame; taxa_map.csv) If using \code{x}, then a data frame
-#'     containing the input taxa, accepted taxa name, rank, authority,
-#'     authority ID, and score are returned. If using \code{path}, then an
-#'     updated version of taxa_map.csv will be returned to \code{path} and
-#'     a data frame of taxa_map.csv to the R environment.
-#'
+# Resolve common names to an authority
+#
+# @description
+#     Resolve taxa to preferred authorities and get associated IDs.
+#
+# @param x
+#     (character) A vector of taxa names.
+# @param data.sources
+#     (numeric) An ordered vector of authority IDs to be queried (
+#     \code{view_taxa_authorities()} lists currently supported authorities).
+#     Taxa are resolved to authorities in the order listed. If an authority
+#     and ID match cannot be made, then the next will be queried.
+# @param path
+#     (character) Path to directory containing taxa_map.csv. This tracks
+#     provenance throughout the data cleaning process. Create this file with
+#     \code{create_taxa_map()}.
+#
+# @return
+#     (data frame; taxa_map.csv) If using \code{x}, then a data frame
+#     containing the input taxa, accepted taxa name, rank, authority,
+#     authority ID, and score are returned. If using \code{path}, then an
+#     updated version of taxa_map.csv will be returned to \code{path} and
+#     a data frame of taxa_map.csv to the R environment.
+#
 resolve_comm_taxa <- function(x = NULL, data.sources, path = NULL){
   
   # Check arguments ---------------------------------------------------------
@@ -1107,12 +1100,6 @@ resolve_comm_taxa <- function(x = NULL, data.sources, path = NULL){
   use_i <- as.character(data.sources) %in% as.character(authorities$id)
   if (sum(use_i) != length(use_i)){
     stop('Input argument "data.sources" contains unsupported data source IDs!')
-  }
-  
-  # Read taxa_map.csv -------------------------------------------------------
-  
-  if (!is.null(path)) {
-    taxa_map <- read_taxa_map(path)
   }
   
   # Create taxa list ----------------------------------------------------------
@@ -1188,19 +1175,6 @@ resolve_comm_taxa <- function(x = NULL, data.sources, path = NULL){
     
   }
   
-  # Document provenance -----------------------------------------------------
-  
-  if (!is.null(path)){
-    lib_path <- dirname(
-      system.file('/taxa_map_resolve_sci_taxa/taxa_map.csv',
-                  package = 'taxonomyCleanr'))
-    if (!missing(path)){
-      if (path != lib_path){
-        write_taxa_map(x = taxa_map, path = path)
-      }
-    }
-  }
-  
   # Return --------------------------------------------------------------------
   
   taxa_map
@@ -1215,41 +1189,35 @@ resolve_comm_taxa <- function(x = NULL, data.sources, path = NULL){
 
 
 
-#' Resolve scientific names to an authority
-#'
-#' @description
-#'     Resolve taxa to preferred authorities and get associated IDs.
-#'
-#' @param x
-#'     (character) A vector of taxa names.
-#' @param data.sources
-#'     (numeric) An ordered vector of authority IDs to be queried (
-#'     \code{view_taxa_authorities()} lists currently supported authorities).
-#'     Taxa are resolved to authorities in the order listed. If an authority
-#'     and ID match cannot be made, then the next will be queried.
-#' @param path
-#'     (character) Path to directory containing taxa_map.csv. This tracks
-#'     provenance throughout the data cleaning process. Create this file with
-#'     \code{create_taxa_map()}.
-#'
-#' @return
-#'     (data frame; taxa_map.csv) If using \code{x}, then a data frame
-#'     containing the input taxa, accepted taxa name, rank, authority,
-#'     authority ID, and score are returned. If using \code{path}, then an
-#'     updated version of taxa_map.csv will be returned to \code{path} and
-#'     a data frame of taxa_map.csv to the R environment.
-#'
+# Resolve scientific names to an authority
+#
+# @description
+#     Resolve taxa to preferred authorities and get associated IDs.
+#
+# @param x
+#     (character) A vector of taxa names.
+# @param data.sources
+#     (numeric) An ordered vector of authority IDs to be queried (
+#     \code{view_taxa_authorities()} lists currently supported authorities).
+#     Taxa are resolved to authorities in the order listed. If an authority
+#     and ID match cannot be made, then the next will be queried.
+# @param path
+#     (character) Path to directory containing taxa_map.csv. This tracks
+#     provenance throughout the data cleaning process. Create this file with
+#     \code{create_taxa_map()}.
+#
+# @return
+#     (data frame; taxa_map.csv) If using \code{x}, then a data frame
+#     containing the input taxa, accepted taxa name, rank, authority,
+#     authority ID, and score are returned. If using \code{path}, then an
+#     updated version of taxa_map.csv will be returned to \code{path} and
+#     a data frame of taxa_map.csv to the R environment.
+#
 resolve_sci_taxa <- function(x = NULL, data.sources, path = NULL){
   
   # Validate arguments --------------------------------------------------------
   
   validate_arguments("resolve_sci_taxa", as.list(environment()))
-  
-  # Read taxa_map.csv -------------------------------------------------------
-  
-  if (!is.null(path)){
-    taxa_map <- read_taxa_map(path)
-  }
   
   # Create taxa list ----------------------------------------------------------
   
@@ -1324,19 +1292,6 @@ resolve_sci_taxa <- function(x = NULL, data.sources, path = NULL){
     
   }
   
-  # Document provenance -----------------------------------------------------
-  
-  if (!is.null(path)) {
-    lib_path <- dirname(
-      system.file('/taxa_map_resolve_sci_taxa/taxa_map.csv',
-                  package = 'taxonomyCleanr'))
-    if (!missing(path)){
-      if (path != lib_path){
-        write_taxa_map(x = taxa_map, path = path)
-      }
-    }
-  }
-  
   # Return --------------------------------------------------------------------
   
   taxa_map
@@ -1351,17 +1306,17 @@ resolve_sci_taxa <- function(x = NULL, data.sources, path = NULL){
 
 
 
-#' Create the taxonomicCoverage EML node
-#'
-#' @param sci_names
-#'     (list) Object returned by \code{get_classification()}.
-#'
-#' @return
-#' \item{list}{If \code{write.file = FALSE} an emld list object is returned
-#' for use with the EML R Package.}
-#' \item{.xml file}{If \code{write.file = TRUE} a .xml file is written to
-#' \code{path}}.
-#'
+# Create the taxonomicCoverage EML node
+#
+# @param sci_names
+#     (list) Object returned by \code{get_classification()}.
+#
+# @return
+# \item{list}{If \code{write.file = FALSE} an emld list object is returned
+# for use with the EML R Package.}
+# \item{.xml file}{If \code{write.file = TRUE} a .xml file is written to
+# \code{path}}.
+#
 set_taxonomic_coverage <- function(sci_names) {
   
   pop <- function(taxa) {
@@ -1398,19 +1353,19 @@ set_taxonomic_coverage <- function(sci_names) {
 
 
 
-#' View taxonomic authorities
-#'
-#' @description
-#'     List taxonomic authorities supported by taxonomic funcs.
-#'
-#' @details
-#'     View taxonomic authorities supported by `resolve_taxa` and
-#'     `resolve_common`.
-#'
-#' @return
-#'     (data frame) Taxonomic authorities and corresponding identifiers
-#'     supported by `resolve_taxa` and `resolve_common`.
-#'
+# View taxonomic authorities
+#
+# @description
+#     List taxonomic authorities supported by taxonomic funcs.
+#
+# @details
+#     View taxonomic authorities supported by `resolve_taxa` and
+#     `resolve_common`.
+#
+# @return
+#     (data frame) Taxonomic authorities and corresponding identifiers
+#     supported by `resolve_taxa` and `resolve_common`.
+#
 view_taxa_authorities <- function(){
   
   suggs <- c("ritis", "taxize", "worrms") # suggested packages

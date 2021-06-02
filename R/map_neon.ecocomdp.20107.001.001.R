@@ -1,8 +1,8 @@
 ##############################################################################################
 ##############################################################################################
-#' @author Thilina Surasinghe \email{tsurasinghe@bridgew.edu}
+# @author Thilina Surasinghe \email{tsurasinghe@bridgew.edu}
 
-#' @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for FISH taxa from neon.data.product.id DP1.20107.001 from the NEON data portal and map to the ecocomDP format
+# @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for FISH taxa from neon.data.product.id DP1.20107.001 from the NEON data portal and map to the ecocomDP format
 
 ##############################################################################################
 # mapping function for FISH
@@ -11,9 +11,6 @@ map_neon.ecocomdp.20107.001.001 <- function(
   neon.data.product.id = "DP1.20107.001",
   ...){
   # Authors: Stephanie Parker, Thilina Surasinghe (sparker@battelleecology.org, tsurasinghe@bridgew.edu), Eric Sokol (esokol@battelleecology.org)
-  
-  
-  
 
   #NEON target taxon group is FISH
   neon_method_id <- "neon.ecocomdp.20107.001.001"

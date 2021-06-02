@@ -5,6 +5,8 @@ library(ecocomDP)
 # Reads from source APIs ------------------------------------------------------
 
 testthat::test_that("Reads from source APIs", {
+  testthat::skip_on_cran()
+  
   criteria <- read_criteria()
   # From EDI
   id <- "edi.193.3"

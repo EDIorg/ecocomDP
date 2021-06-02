@@ -10,19 +10,19 @@
 #' @details 
 #'    Validation checks:
 #'    \itemize{
-#'        \item{File names - File names are the ecocomDP table names.}
-#'        \item{Table presence - Required tables are present.}
-#'        \item{Column names - Column names of all tables match the model.}
-#'        \item{Column presence - Required columns are present.}
-#'        \item{Column classes - Column classes match the model specification.}
-#'        \item{Datetime format - Date and time formats follow the model specification.}
-#'        \item{Primary keys - Primary keys of tables are unique.}
-#'        \item{Composite keys - Composite keys (unique constraints) of each table are unique.}
-#'        \item{Referential integrity - Foreign keys have a corresponding primary key.}
-#'        \item{Coordinate format - Values are in decimal degree format.}
-#'        \item{Coordinate range - Values are within -90 to 90 and -180 to 180.}
-#'        \item{Elevation - Values are less than Mount Everest (8848 m) and greater than Mariana Trench (-10984 m).}
-#'        \item{Variable mapping - variable_name is in table_name.}
+#'        \item File names - File names are the ecocomDP table names.
+#'        \item Table presence - Required tables are present.
+#'        \item Column names - Column names of all tables match the model.
+#'        \item Column presence - Required columns are present.
+#'        \item Column classes - Column classes match the model specification.
+#'        \item Datetime format - Date and time formats follow the model specification.
+#'        \item Primary keys - Primary keys of tables are unique.
+#'        \item Composite keys - Composite keys (unique constraints) of each table are unique.
+#'        \item Referential integrity - Foreign keys have a corresponding primary key.
+#'        \item Coordinate format - Values are in decimal degree format.
+#'        \item Coordinate range - Values are within -90 to 90 and -180 to 180.
+#'        \item Elevation - Values are less than Mount Everest (8848 m) and greater than Mariana Trench (-10984 m).
+#'        \item Variable mapping - variable_name is in table_name.
 #'    }
 #'    
 #' @export
@@ -133,21 +133,21 @@ validate_data <- function(
 
 
 
-#' Check for file name errors
-#' 
-#' @description
-#'     This function ensures that ecocomDP file names follow the naming 
-#'     convention (i.e. \emph{studyName_ecocomDPTableName.ext}, e.g. 
-#'     \emph{gleon_chloride_observation.csv}).
-#' 
-#' @param data.path
-#'     (character) Path to the directory containing ecocomDP tables.
-#' 
-#' @return
-#'     (character) If table names are valid, then the corresponding table names 
-#'     are returned. If table names are invalid, then an error message is
-#'     returned.
-#'     
+# Check for file name errors
+# 
+# @description
+#     This function ensures that ecocomDP file names follow the naming 
+#     convention (i.e. \emph{studyName_ecocomDPTableName.ext}, e.g. 
+#     \emph{gleon_chloride_observation.csv}).
+# 
+# @param data.path
+#     (character) Path to the directory containing ecocomDP tables.
+# 
+# @return
+#     (character) If table names are valid, then the corresponding table names 
+#     are returned. If table names are invalid, then an error message is
+#     returned.
+#     
 validate_table_names <- function(data.path = NULL) {
   
   message(  "File names")
@@ -194,16 +194,16 @@ validate_table_names <- function(data.path = NULL) {
 
 
 
-#' Check for required tables
-#' 
-#' @param data.list
-#'     (list of data frames) A named list of data frames, each of which is an 
-#'     ecocomDP table.
-#'
-#' @return 
-#'     (character) If required tables are missing, then the missing table names
-#'     are returned, otherwise NULL is returned.
-#'         
+# Check for required tables
+# 
+# @param data.list
+#     (list of data frames) A named list of data frames, each of which is an 
+#     ecocomDP table.
+#
+# @return 
+#     (character) If required tables are missing, then the missing table names
+#     are returned, otherwise NULL is returned.
+#         
 validate_table_presence <- function(data.list) {
   
   message("  Required tables")
@@ -232,16 +232,16 @@ validate_table_presence <- function(data.list) {
 
 
 
-#' Check for invalid column names
-#' 
-#' @param data.list
-#'     (list of data frames) A named list of data frames, each of which is an 
-#'     ecocomDP table.
-#'
-#' @return 
-#'     (character) If column names outside of the allowed set are found, then 
-#'     invalid column names are returned, otherwise NULL is returned.
-#'
+# Check for invalid column names
+# 
+# @param data.list
+#     (list of data frames) A named list of data frames, each of which is an 
+#     ecocomDP table.
+#
+# @return 
+#     (character) If column names outside of the allowed set are found, then 
+#     invalid column names are returned, otherwise NULL is returned.
+#
 validate_column_names <- function(data.list) {
 
   message('  Column names')
@@ -282,16 +282,16 @@ validate_column_names <- function(data.list) {
 
 
 
-#' Check for required columns
-#' 
-#' @param data.list
-#'     (list of data frames) A named list of data frames, each of which is an 
-#'     ecocomDP table.
-#'
-#' @return 
-#'     (character) If required column names are absent, then missing columns
-#'     are returned, otherwise NULL is returned.
-#'
+# Check for required columns
+# 
+# @param data.list
+#     (list of data frames) A named list of data frames, each of which is an 
+#     ecocomDP table.
+#
+# @return 
+#     (character) If required column names are absent, then missing columns
+#     are returned, otherwise NULL is returned.
+#
 validate_column_presence <- function(data.list){
   
   message('  Required columns')
@@ -332,16 +332,16 @@ validate_column_presence <- function(data.list){
 
 
 
-#' Check for valid date and time formats
-#' 
-#' @param data.list
-#'     (list of data frames) A named list of data frames, each of which is an 
-#'     ecocomDP table.
-#'
-#' @return 
-#'     (character) If date and time data are not formatted to specification, 
-#'     then rows of invalid formats are returned, otherwise NULL is returned.
-#'
+# Check for valid date and time formats
+# 
+# @param data.list
+#     (list of data frames) A named list of data frames, each of which is an 
+#     ecocomDP table.
+#
+# @return 
+#     (character) If date and time data are not formatted to specification, 
+#     then rows of invalid formats are returned, otherwise NULL is returned.
+#
 validate_datetime <- function(data.list) {
   message('  Datetime formats')
   # Parameterize
@@ -399,17 +399,17 @@ validate_datetime <- function(data.list) {
 
 
 
-#' Check for valid column classes
-#'
-#' @param data.list
-#'     (list of data frames) A named list of data frames, each of which is an 
-#'     ecocomDP table.
-#'
-#' @return 
-#'     (character) If column classes do not follow specification, then the 
-#'     offending column and detected class are returned, otherwise NULL is 
-#'     returned.
-#'
+# Check for valid column classes
+#
+# @param data.list
+#     (list of data frames) A named list of data frames, each of which is an 
+#     ecocomDP table.
+#
+# @return 
+#     (character) If column classes do not follow specification, then the 
+#     offending column and detected class are returned, otherwise NULL is 
+#     returned.
+#
 validate_column_classes <- function(data.list) {
   
   message("  Column classes")
@@ -468,16 +468,16 @@ validate_column_classes <- function(data.list) {
 
 
 
-#' Check primary keys
-#' 
-#' @param data.list
-#'     (list of data frames) A named list of data frames, each of which is an 
-#'     ecocomDP table.
-#'
-#' @return 
-#'     (character) If primary keys are not unique, then row numbers of 
-#'     duplicate keys are returned, otherwise NULL is returned.
-#'
+# Check primary keys
+# 
+# @param data.list
+#     (list of data frames) A named list of data frames, each of which is an 
+#     ecocomDP table.
+#
+# @return 
+#     (character) If primary keys are not unique, then row numbers of 
+#     duplicate keys are returned, otherwise NULL is returned.
+#
 validate_primary_keys <- function(data.list) {
 
   message("  Primary keys")
@@ -516,16 +516,16 @@ validate_primary_keys <- function(data.list) {
 
 
 
-#' Check composite column uniqueness
-#' 
-#' @param data.list
-#'     (list of data frames) A named list of data frames, each of which is an 
-#'     ecocomDP table.
-#'
-#' @return 
-#'     (character) If composite keys are not unique, then rows numbers of 
-#'     duplicate keys are returned, otherwise NULL is returned.
-#'
+# Check composite column uniqueness
+# 
+# @param data.list
+#     (list of data frames) A named list of data frames, each of which is an 
+#     ecocomDP table.
+#
+# @return 
+#     (character) If composite keys are not unique, then rows numbers of 
+#     duplicate keys are returned, otherwise NULL is returned.
+#
 validate_composite_keys <- function(data.list) {
   
   message("  Composite keys")
@@ -570,16 +570,16 @@ validate_composite_keys <- function(data.list) {
 
 
 
-#' Check referential integrity
-#' 
-#' @param data.list
-#'     (list of data frames) A named list of data frames, each of which is an 
-#'     ecocomDP table.
-#'
-#' @return 
-#'     (character) If foreign keys do not match primary keys, then unmatched 
-#'     foreign keys are returned, otherwise NULL is returned.
-#'
+# Check referential integrity
+# 
+# @param data.list
+#     (list of data frames) A named list of data frames, each of which is an 
+#     ecocomDP table.
+#
+# @return 
+#     (character) If foreign keys do not match primary keys, then unmatched 
+#     foreign keys are returned, otherwise NULL is returned.
+#
 validate_referential_integrity <- function(data.list) {
 
   message("  Referential integrity")
@@ -636,16 +636,16 @@ validate_referential_integrity <- function(data.list) {
 
 
 
-#' Check latitude and longitude format
-#' 
-#' @param data.list
-#'     (list of data frames) A named list of data frames, each of which is an 
-#'     ecocomDP table.
-#'
-#' @return 
-#'     (character) If latitude and longitude values in the location table are 
-#'     not in decimal degree format, then a message is returned.
-#'
+# Check latitude and longitude format
+# 
+# @param data.list
+#     (list of data frames) A named list of data frames, each of which is an 
+#     ecocomDP table.
+#
+# @return 
+#     (character) If latitude and longitude values in the location table are 
+#     not in decimal degree format, then a message is returned.
+#
 validate_latitude_longitude_format <- function(data.list) {
   
   message("  Latitude and longitude format")
@@ -675,17 +675,17 @@ validate_latitude_longitude_format <- function(data.list) {
 
 
 
-#' Check latitude and longitude range
-#' 
-#' @param data.list
-#'     (list of data frames) A named list of data frames, each of which is an 
-#'     ecocomDP table.
-#'
-#' @return 
-#'     (character) If latitude and longitude values in the location table are 
-#'     outside of the expected ranges -90 to 90 and -180 to 180 respectively,
-#'     then a message is returned.
-#'
+# Check latitude and longitude range
+# 
+# @param data.list
+#     (list of data frames) A named list of data frames, each of which is an 
+#     ecocomDP table.
+#
+# @return 
+#     (character) If latitude and longitude values in the location table are 
+#     outside of the expected ranges -90 to 90 and -180 to 180 respectively,
+#     then a message is returned.
+#
 validate_latitude_longitude_range <- function(data.list) {
   
   message("  Latitude and longitude range")
@@ -730,16 +730,16 @@ validate_latitude_longitude_range <- function(data.list) {
 
 
 
-#' Check elevation
-#' 
-#' @param data.list
-#'     (list of data frames) A named list of data frames, each of which is an 
-#'     ecocomDP table.
-#'
-#' @return 
-#'     (character) If elevation values are greater than Mount Everest (8848 m) 
-#'     or are less than the Mariana Trench (-10984 m), then a message is returned.
-#'
+# Check elevation
+# 
+# @param data.list
+#     (list of data frames) A named list of data frames, each of which is an 
+#     ecocomDP table.
+#
+# @return 
+#     (character) If elevation values are greater than Mount Everest (8848 m) 
+#     or are less than the Mariana Trench (-10984 m), then a message is returned.
+#
 validate_elevation <- function(data.list) {
   
   message("  Elevation")
@@ -773,15 +773,15 @@ validate_elevation <- function(data.list) {
 
 
 
-#' Check variable_mapping
-#' 
-#' @param data.list
-#'     (list of data frames) A named list of data frames, each of which is an 
-#'     ecocomDP table.
-#'
-#' @return 
-#'     (character) If variable_name is not in table_name, then a message is returned.
-#'
+# Check variable_mapping
+# 
+# @param data.list
+#     (list of data frames) A named list of data frames, each of which is an 
+#     ecocomDP table.
+#
+# @return 
+#     (character) If variable_name is not in table_name, then a message is returned.
+#
 validate_variable_mapping <- function(data.list) {
   if ("variable_mapping" %in% names(data.list)) {
     message("  variable_mapping")

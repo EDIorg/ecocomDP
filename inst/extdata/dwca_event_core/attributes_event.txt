@@ -1,0 +1,9 @@
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
+id	Row identifier	character			NA	Missing value
+eventID	An identifier for the set of information associated with an Event (something that occurs at a place and time). May be a global unique identifier or an identifier specific to the data set.	character			NA	Missing value
+datasetName	The name identifying the data set from which the record was derived.	character			NA	Missing value
+samplingProtocol	"The name of, reference to, or description of the method or protocol used during an Event."	character			NA	Missing value
+eventDate	"The date-time or interval during which an Event occurred. For occurrences, this is the date-time when the event was recorded. Not suitable for a time in a geological context."	Date			NA	Missing value
+decimalLatitude	"The geographic latitude (in decimal degrees, using the spatial reference system given in geodeticDatum) of the geographic center of a Location. Positive values are north of the Equator, negative values are south of it. Legal values lie between -90 and 90, inclusive."	numeric	degree		NA	Missing value
+decimalLongitude	"The geographic longitude (in decimal degrees, using the spatial reference system given in geodeticDatum) of the geographic center of a Location. Positive values are east of the Greenwich Meridian, negative values are west of it. Legal values lie between -180 and 180, inclusive."	numeric	degree		NA	Missing value
+georeferenceRemarks	"Notes or comments about the spatial description determination, explaining assumptions made in addition or opposition to the those formalized in the method referred to in georeferenceProtocol."	character			NA	Missing value

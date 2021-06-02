@@ -332,15 +332,15 @@ plot_taxa_shared_sites <- function(observation, id) {
 
 
 
-#' Format dataset for community plotting functions
-#'
-#' @param observation (tbl_df, tbl, data.frame) The observation table of ecocomDP
-#' @param id (character) Identifier of dataset to be used in plot subtitles.
-#' 
-#' @details Downstream plotting functions are based on \href{https://github.com/sokole/ltermetacommunities/tree/master/Group2-explore-data}{LTER Metacommunities code} and use their intermediate data input format.
-#'
-#' @return (tbl_df, tbl, data.frame) Tabular data of \code{id} in a format compatible with plotting functions
-#' 
+# Format dataset for community plotting functions
+#
+# @param observation (tbl_df, tbl, data.frame) The observation table of ecocomDP
+# @param id (character) Identifier of dataset to be used in plot subtitles.
+# 
+# @details Downstream plotting functions are based on \href{https://github.com/sokole/ltermetacommunities/tree/master/Group2-explore-data}{LTER Metacommunities code} and use their intermediate data input format.
+#
+# @return (tbl_df, tbl, data.frame) Tabular data of \code{id} in a format compatible with plotting functions
+# 
 format_for_comm_plots <- function(observation, id) {
   id <- id
   # Constraints

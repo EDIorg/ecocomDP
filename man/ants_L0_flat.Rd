@@ -26,7 +26,7 @@ A data frame with 2931 rows and 45 variables:
   \item{seed.disperser}{whether or not a seed dispersing species}
   \item{slavemaker.sp}{whether or not a slavemaking species}
   \item{behavior}{classifications based on behavioral interactions with other ants}
-  \item{biogeographi.affinity}{biogeographic affinity based on available occurrence records}
+  \item{biogeographic.affinity}{biogeographic affinity based on available occurrence records}
   \item{source}{where trait information was found. Full citations for literature are as follows: Del Toro, I., R.R. Silva, and A.M. Ellison. 2015. Predicated impacts of climatic change on ant functional diversity and distributions in eastern North American forests. Diversity and Distributions 21:781-791; Ellison, A.M., N.J. Gotelli, G. Alpert, and E.J. Farnsworth. 2012. A field guide to the ants of New England. Yale University Press, New Haven, Connecticut, USA.}
   \item{unit_hl}{units for "hl" variable}
   \item{unit_rel}{units for "rel" variable}
@@ -44,7 +44,7 @@ A data frame with 2931 rows and 45 variables:
   \item{taxon_id}{the taxon id}
   \item{taxon_rank}{the taxon rank}
   \item{authority_system}{the authority system taxon_name was resolved to}
-  \item{authority_system_id}{the id of taxon_name in authority_system}
+  \item{authority_taxon_id}{the id of taxon_name in authority_system}
   \item{package_id}{the identifier of this ecocomDP dataset}
   \item{original_package_id}{the identifier of the source dataset}
   \item{length_of_survey_years}{number of years the survey has been ongoing}

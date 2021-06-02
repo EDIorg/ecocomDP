@@ -36,8 +36,8 @@ reference:
   - title: Helpers
     desc: Misc. functions
     contents:
-    - view_model_diagram
-    - view_model_descriptions
+    - view_diagram
+    - view_descriptions
     - calc_geo_extent_bounding_box_m2
     - calc_length_of_survey_years
     - calc_number_of_years_sampled

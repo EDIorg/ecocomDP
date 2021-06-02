@@ -2,7 +2,7 @@
 #'
 #' @param L0_flat (tbl_df, tbl, data.frame) The fully joined source L0 dataset, in "flat" format (see details).
 #' @param location_id (character) Column in \code{L0_flat} containing the identifier assigned to each unique location at the observation level.
-#' @param location_name (character) One or more columns in \code{L0_flat} of sampling locations ordered from high to low in terms of nesting (e.g. \code{location_name = c("region", "state", "county", "plot", "subplot")}).
+#' @param location_name (character) One or more columns in \code{L0_flat} of sampling locations ordered from high to low in terms of nesting (e.g. \code{location_name = c("plot", "subplot")}).
 #' @param latitude (character) An optional column in \code{L0_flat} containing the latitude in decimal degrees of \code{location_id}. Latitudes south of the equator are negative.
 #' @param longitude (character) An optional column in \code{L0_flat} containing the longitude in decimal degrees of \code{location_id}. Longitudes west of the prime meridian are negative.
 #' @param elevation (character) An optional column in \code{L0_flat} containing the elevation in meters relative to sea level of \code{location_id}. Above sea level is positive. Below sea level is negative.

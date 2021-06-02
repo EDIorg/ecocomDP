@@ -1,7 +1,7 @@
 Package: ecocomDP
 Type: Package
 Title: A Dataset Design Pattern for Ecological Community Surveys
-Description: A tool for creating and using ecocomDP datasets.
+Description: ecocomDP is a dataset design pattern for harmonizing ecological community surveys in a research question agnostic format, from source datasets published across multiple repositories, and with methods that keep the derived datasets up-to-date as the underlying sources change. This R package is a tool for creating and using ecocomDP datasets.
 Version: 1.0.0
 Authors@R: 
     c(person(given = "Colin",
@@ -15,8 +15,8 @@ Authors@R:
              email = "esokol@battelleecology.org", 
              comment = c(ORCID = "0000-0001-5923-0917")))
 License: MIT + file LICENSE
-URL: http://github.com/EDIorg/ecocomDP
-BugReports: http://github.com/EDIorg/ecocomDP/issues
+URL: https://github.com/EDIorg/ecocomDP
+BugReports: https://github.com/EDIorg/ecocomDP/issues
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.3.0)

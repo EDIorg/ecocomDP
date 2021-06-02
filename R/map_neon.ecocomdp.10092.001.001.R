@@ -1,9 +1,9 @@
 ##############################################################################################
 ##############################################################################################
-#' @author Melissa Chen
-#' @author Matt Bitters
+# @author Melissa Chen
+# @author Matt Bitters
 
-#' @describeIn map_neon_data_to_ecocomDP This method will retrieve positivity data for TICK_PATHOGEN taxa from neon.data.product.id DP1.10092.001 from the NEON data portal and map to the ecocomDP format
+# @describeIn map_neon_data_to_ecocomDP This method will retrieve positivity data for TICK_PATHOGEN taxa from neon.data.product.id DP1.10092.001 from the NEON data portal and map to the ecocomDP format
 
 ##############################################################################################
 # mapping function for TICK_PATHOGEN taxa

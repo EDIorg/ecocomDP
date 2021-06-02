@@ -48,6 +48,7 @@ Currently, to accommodate multiple L1 versions of NEON data products, search res
 This function may not work between 01:00 - 03:00 UTC on Wednesdays due to regular maintenance of the EDI Data Repository.
 }
 \examples{
+\dontrun{
 # Empty search returns all available datasets
 search_data()
 
@@ -69,5 +70,6 @@ search_data(
   sd_years = c(.01, 100),
   area = c(47.1, -86.7, 42.5, -92),
   boolean = "OR")
+}
 
 }

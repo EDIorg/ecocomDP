@@ -1,46 +1,46 @@
-#' Create a list of EML func inputs
-#'
-#' @description  
-#'     Initialize the full list of possible inputs to \code{make_eml()}
-#'     functions (i.e. function arguments, metadata templates, and data 
-#'     objects). This enables bridging of upstream metadata and data sources 
-#'     (e.g. metabases, databases, Excel files, web forms, etc.).
-#'
-#' @param path 
-#'     (character) Path to the directory containing \code{make_eml()} 
-#'     metadata templates.
-#' @param data.path
-#'     (character) Path to the directory containing \code{data.table} and 
-#'     \code{other.entity} data objects.
-#' @param data.table
-#'     (character) File names of data tables. If more than one, then supply as 
-#'     a vector (e.g. \code{data.table = c('decomp.csv', 'nitrogen.csv')}).
-#' @param other.entity
-#'     (character) File names of other entity data objects. If more than one, 
-#'     then supply as a vector (e.g. 
-#'     \code{other.entity = c('ancillary_data.zip', 'processing_and_analysis.R')}).
-#' @param sep
-#'     (character) Data table field delimiter. Use this if this function fails
-#'     to read your \code{data.table}.
-#' @param empty
-#'     (logical) Initialize the output with a set of empty metadata templates?
-#'     This option is useful when wanting to transfer metadata directly into
-#'     the template files without having to call the templating functions.
-#'     
-#' @details 
-#'     Character encoding in tabular metadata templates is converted to UTF-8 
-#'     via \code{enc2utf8()}. Characters in TextType metadata templates are not
-#'     yet converted. Note: This may lead to an inaccuracy and disconnect 
-#'     between values in the data objects and what is reported in the EML (e.g.
-#'     a categorical variable listed in the EML may not be the same as it's 
-#'     corresponding value in the data object). To reduce the chance of this,
-#'     warnings are issued if the input data object from which the metadata was
-#'     extracted is not UTF-8 encoded.
-#'
-#' @return 
-#'     (named list) A list of all \code{make_eml()} arguments, specified 
-#'     metadata templates and data objects.
-#'     
+# Create a list of EML func inputs
+#
+# @description  
+#     Initialize the full list of possible inputs to \code{make_eml()}
+#     functions (i.e. function arguments, metadata templates, and data 
+#     objects). This enables bridging of upstream metadata and data sources 
+#     (e.g. metabases, databases, Excel files, web forms, etc.).
+#
+# @param path 
+#     (character) Path to the directory containing \code{make_eml()} 
+#     metadata templates.
+# @param data.path
+#     (character) Path to the directory containing \code{data.table} and 
+#     \code{other.entity} data objects.
+# @param data.table
+#     (character) File names of data tables. If more than one, then supply as 
+#     a vector (e.g. \code{data.table = c('decomp.csv', 'nitrogen.csv')}).
+# @param other.entity
+#     (character) File names of other entity data objects. If more than one, 
+#     then supply as a vector (e.g. 
+#     \code{other.entity = c('ancillary_data.zip', 'processing_and_analysis.R')}).
+# @param sep
+#     (character) Data table field delimiter. Use this if this function fails
+#     to read your \code{data.table}.
+# @param empty
+#     (logical) Initialize the output with a set of empty metadata templates?
+#     This option is useful when wanting to transfer metadata directly into
+#     the template files without having to call the templating functions.
+#     
+# @details 
+#     Character encoding in tabular metadata templates is converted to UTF-8 
+#     via \code{enc2utf8()}. Characters in TextType metadata templates are not
+#     yet converted. Note: This may lead to an inaccuracy and disconnect 
+#     between values in the data objects and what is reported in the EML (e.g.
+#     a categorical variable listed in the EML may not be the same as it's 
+#     corresponding value in the data object). To reduce the chance of this,
+#     warnings are issued if the input data object from which the metadata was
+#     extracted is not UTF-8 encoded.
+#
+# @return 
+#     (named list) A list of all \code{make_eml()} arguments, specified 
+#     metadata templates and data objects.
+#     
 EAL_template_arguments <- function(
   path = NULL, 
   data.path = NULL, 
@@ -61,13 +61,14 @@ EAL_template_arguments <- function(
   # be read.
   
   if (isTRUE(empty)) {
-    path <- system.file("/eal_templates", package = "ecocomDP")
+    path <- system.file("extdata", "/eal_templates", package = "ecocomDP")
   }
   
   # Get attributes of template files and arguments
   
   attr_arg <- data.table::fread(
     file = system.file(
+      "extdata",
       '/eal_templates/arguments.txt',
       package = 'ecocomDP'),
     fill = TRUE,
@@ -384,14 +385,14 @@ EAL_template_arguments <- function(
 
 # Helper functions ------------------------------------------------------------
 
-#' Convert to docbook
-#' 
-#' This function is not exported from the EML R Package but useful here
-#'
-#' @param file
-#'     (character) Full path to file to be read into docbook
-#' @return
-#'     (xml) Docbook XML R object
+# Convert to docbook
+# 
+# This function is not exported from the EML R Package but useful here
+#
+# @param file
+#     (character) Full path to file to be read into docbook
+# @return
+#     (xml) Docbook XML R object
 to_docbook <- function(file = NULL) {
   if (!tools::file_ext(file) %in% c("xml", "dbk", "db")) {
     ## Not xml yet, so use pandoc to generate docbook
@@ -440,7 +441,8 @@ to_docbook <- function(file = NULL) {
 read_template_attributes <- function() {
   data.table::fread(
     system.file(
-      '/template_characteristics.txt',
+      "extdata",
+      'template_characteristics.txt',
       package = 'ecocomDP'), 
     fill = TRUE,
     blank.lines.skip = TRUE)

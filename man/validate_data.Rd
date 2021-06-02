@@ -20,19 +20,19 @@ Validate a dataset against the ecocomDP model
 \details{
 Validation checks:
    \itemize{
-       \item{File names - File names are the ecocomDP table names.}
-       \item{Table presence - Required tables are present.}
-       \item{Column names - Column names of all tables match the model.}
-       \item{Column presence - Required columns are present.}
-       \item{Column classes - Column classes match the model specification.}
-       \item{Datetime format - Date and time formats follow the model specification.}
-       \item{Primary keys - Primary keys of tables are unique.}
-       \item{Composite keys - Composite keys (unique constraints) of each table are unique.}
-       \item{Referential integrity - Foreign keys have a corresponding primary key.}
-       \item{Coordinate format - Values are in decimal degree format.}
-       \item{Coordinate range - Values are within -90 to 90 and -180 to 180.}
-       \item{Elevation - Values are less than Mount Everest (8848 m) and greater than Mariana Trench (-10984 m).}
-       \item{Variable mapping - variable_name is in table_name.}
+       \item File names - File names are the ecocomDP table names.
+       \item Table presence - Required tables are present.
+       \item Column names - Column names of all tables match the model.
+       \item Column presence - Required columns are present.
+       \item Column classes - Column classes match the model specification.
+       \item Datetime format - Date and time formats follow the model specification.
+       \item Primary keys - Primary keys of tables are unique.
+       \item Composite keys - Composite keys (unique constraints) of each table are unique.
+       \item Referential integrity - Foreign keys have a corresponding primary key.
+       \item Coordinate format - Values are in decimal degree format.
+       \item Coordinate range - Values are within -90 to 90 and -180 to 180.
+       \item Elevation - Values are less than Mount Everest (8848 m) and greater than Mariana Trench (-10984 m).
+       \item Variable mapping - variable_name is in table_name.
    }
 }
 \note{

@@ -1,21 +1,21 @@
-#' Get provenance metadata
-#'
-#' @description
-#'     Add Provenance Metadata from Level-1 metadata in PASTA to an XML 
-#'     document containing a single methods element in the request message 
-#'     body.
-#'
-#' @param package.id
-#'     (character) Package identifier composed of scope, identifier, and
-#'     revision (e.g. 'edi.101.1').
-#' @param environment
-#'     (character) Data repository environment to create the package in.
-#'     Can be: 'development', 'staging', 'production'.
-#'
-#' @return
-#'     ("xml_document" "xml_node") EML metadata.
-#'     
-#'
+# Get provenance metadata
+#
+# @description
+#     Add Provenance Metadata from Level-1 metadata in PASTA to an XML 
+#     document containing a single methods element in the request message 
+#     body.
+#
+# @param package.id
+#     (character) Package identifier composed of scope, identifier, and
+#     revision (e.g. 'edi.101.1').
+# @param environment
+#     (character) Data repository environment to create the package in.
+#     Can be: 'development', 'staging', 'production'.
+#
+# @return
+#     ("xml_document" "xml_node") EML metadata.
+#     
+#
 api_get_provenance_metadata <- function(package.id, environment = 'production'){
   
   message(paste('Retrieving provenance metadata for ', package.id))
@@ -47,28 +47,28 @@ api_get_provenance_metadata <- function(package.id, environment = 'production'){
 
 
 
-#' List data package revisions
-#'
-#' @description
-#'     List Data Package Revisions operation, specifying the scope and 
-#'     identifier values to match in the URI. The request may be filtered by 
-#'     applying the modifiers “oldest” or “newest” to the “filter” query 
-#'     parameter.
-#'
-#' @param scope
-#'     (character) Data package scope (e.g. 'edi', 'knb-lter-bnz').
-#' @param identifier
-#'     (character) Data package identifier (e.g. '100', '275').
-#' @param filter
-#'     (character) Filter to data packages, can be 'oldest' or 'newest'.
-#' @param environment
-#'     (character) Data repository environment to create the package in.
-#'     Can be: 'development', 'staging', 'production'.
-#'
-#' @return
-#'     (character) Vector of revisions, if more than one exists, otherwise a 
-#'     single revision number.
-#'
+# List data package revisions
+#
+# @description
+#     List Data Package Revisions operation, specifying the scope and 
+#     identifier values to match in the URI. The request may be filtered by 
+#     applying the modifiers “oldest” or “newest” to the “filter” query 
+#     parameter.
+#
+# @param scope
+#     (character) Data package scope (e.g. 'edi', 'knb-lter-bnz').
+# @param identifier
+#     (character) Data package identifier (e.g. '100', '275').
+# @param filter
+#     (character) Filter to data packages, can be 'oldest' or 'newest'.
+# @param environment
+#     (character) Data repository environment to create the package in.
+#     Can be: 'development', 'staging', 'production'.
+#
+# @return
+#     (character) Vector of revisions, if more than one exists, otherwise a 
+#     single revision number.
+#
 api_list_data_package_revisions <- function(scope, identifier, filter = NULL, environment = 'production'){
   
   message(paste('Retrieving data package revisions for', 
@@ -155,26 +155,26 @@ api_list_data_package_revisions <- function(scope, identifier, filter = NULL, en
 
 
 
-#' Read data entity name
-#'
-#' @description
-#'     Read Data Entity Name operation, specifying the scope, identifier, 
-#'     revision, and entity identifier of the data entity whose name is 
-#'     to be read in the URI.
-#'
-#' @param package.id
-#'     (character) Package identifier composed of scope, identifier, and
-#'     revision (e.g. 'edi.101.1').
-#' @param identifier
-#'     (character) Data entity identifier (e.g. 
-#'     5c224a0e74547b14006272064dc869b1)
-#' @param environment
-#'     (character) Data repository environment to create the package in.
-#'     Can be: 'development', 'staging', 'production'.
-#'
-#' @return
-#'     (character) Data entity name
-#'
+# Read data entity name
+#
+# @description
+#     Read Data Entity Name operation, specifying the scope, identifier, 
+#     revision, and entity identifier of the data entity whose name is 
+#     to be read in the URI.
+#
+# @param package.id
+#     (character) Package identifier composed of scope, identifier, and
+#     revision (e.g. 'edi.101.1').
+# @param identifier
+#     (character) Data entity identifier (e.g. 
+#     5c224a0e74547b14006272064dc869b1)
+# @param environment
+#     (character) Data repository environment to create the package in.
+#     Can be: 'development', 'staging', 'production'.
+#
+# @return
+#     (character) Data entity name
+#
 api_read_data_entity_name <- function(package.id, identifier, environment = 'production'){
   
   message(paste('Retrieving name of', package.id, identifier))
@@ -218,24 +218,24 @@ api_read_data_entity_name <- function(package.id, identifier, environment = 'pro
 
 
 
-#' Read data package
-#'
-#' @description
-#'     Read Data Package operation, specifying the scope, identifier, and 
-#'     revision of the data package to be read in the URI, returning a resource 
-#'     map with reference URLs to each of the metadata, data, and quality 
-#'     report resources that comprise the data package.
-#'
-#' @param package.id
-#'     (character) Package identifier composed of scope, identifier, and
-#'     revision (e.g. 'edi.101.1').
-#' @param environment
-#'     (character) Data repository environment to create the package in.
-#'     Can be: 'development', 'staging', 'production'.
-#'
-#' @return
-#'     (character) Reference URLs.
-#'     
+# Read data package
+#
+# @description
+#     Read Data Package operation, specifying the scope, identifier, and 
+#     revision of the data package to be read in the URI, returning a resource 
+#     map with reference URLs to each of the metadata, data, and quality 
+#     report resources that comprise the data package.
+#
+# @param package.id
+#     (character) Package identifier composed of scope, identifier, and
+#     revision (e.g. 'edi.101.1').
+# @param environment
+#     (character) Data repository environment to create the package in.
+#     Can be: 'development', 'staging', 'production'.
+#
+# @return
+#     (character) Reference URLs.
+#     
 api_read_data_package <- function(package.id, environment = 'production'){
   
   message(paste('Retrieving resource map for', package.id))
@@ -277,22 +277,22 @@ api_read_data_package <- function(package.id, environment = 'production'){
 
 
 
-#' Read data package DOI
-#'
-#' @description
-#'     Read Data Package DOI operation, specifying the scope, identifier, 
-#'     and revision of the data package DOI to be read in the URI.
-#'
-#' @param package.id
-#'     (character) Package identifier composed of scope, identifier, and
-#'     revision (e.g. 'edi.101.1').
-#' @param environment
-#'     (character) Data repository environment to create the package in.
-#'     Can be: 'development', 'staging', 'production'.
-#'
-#' @return
-#'     (character) The canonical Digital Object Identifier.
-#'
+# Read data package DOI
+#
+# @description
+#     Read Data Package DOI operation, specifying the scope, identifier, 
+#     and revision of the data package DOI to be read in the URI.
+#
+# @param package.id
+#     (character) Package identifier composed of scope, identifier, and
+#     revision (e.g. 'edi.101.1').
+# @param environment
+#     (character) Data repository environment to create the package in.
+#     Can be: 'development', 'staging', 'production'.
+#
+# @return
+#     (character) The canonical Digital Object Identifier.
+#
 api_read_data_package_doi <- function(package.id, environment = 'production'){
   
   message(paste('Retrieving DOI for', package.id))
@@ -324,23 +324,23 @@ api_read_data_package_doi <- function(package.id, environment = 'production'){
 
 
 
-#' Read metadata
-#'
-#' @description
-#'     Read Metadata (EML) operation, specifying the scope, identifier, and 
-#'     revision of the EML document to be read in the URI.
-#'
-#' @param package.id
-#'     (character) Package identifier composed of scope, identifier, and
-#'     revision (e.g. 'edi.101.1').
-#' @param environment
-#'     (character) Data repository environment to create the package in.
-#'     Can be: 'development', 'staging', 'production'.
-#'
-#' @return
-#'     ('xml_document' 'xml_node') EML metadata.
-#'     
-#'
+# Read metadata
+#
+# @description
+#     Read Metadata (EML) operation, specifying the scope, identifier, and 
+#     revision of the EML document to be read in the URI.
+#
+# @param package.id
+#     (character) Package identifier composed of scope, identifier, and
+#     revision (e.g. 'edi.101.1').
+# @param environment
+#     (character) Data repository environment to create the package in.
+#     Can be: 'development', 'staging', 'production'.
+#
+# @return
+#     ('xml_document' 'xml_node') EML metadata.
+#     
+#
 api_read_metadata <- function(package.id, environment = 'production'){
   
   message(paste('Retrieving EML for data package', package.id))
@@ -373,12 +373,12 @@ api_read_metadata <- function(package.id, environment = 'production'){
 
 
 
-#' Convert \code{character(0)} to \code{""}
-#'
-#' @param txt (character) Character string
-#'
-#' @return (character) Return \code{txt} if not empty else ""
-#'
+# Convert \code{character(0)} to \code{""}
+#
+# @param txt (character) Character string
+#
+# @return (character) Return \code{txt} if not empty else ""
+#
 cnvmt <- function(txt) {
   if (length(txt) == 0) {
     return("")
@@ -394,17 +394,18 @@ cnvmt <- function(txt) {
 
 
 
-#' Coerce table classes to ecocomDP specifications
-#'
-#' @param tbl (data.frame) Table to coerce
-#' @param name (character) Table name
-#' @param cls (character) Class of L0_flat input.
-#'
-#' @return \code{tbl} with column classes coerced to ecocomDP model specifications and of the input type specified by \code{cls}.
-#' 
-#' @details Datetime columns are not coerced. These are unchanged from the input class.
-#' 
+# Coerce table classes to ecocomDP specifications
+#
+# @param tbl (data.frame) Table to coerce
+# @param name (character) Table name
+# @param cls (character) Class of L0_flat input.
+#
+# @return \code{tbl} with column classes coerced to ecocomDP model specifications and of the input type specified by \code{cls}.
+# 
+# @details Datetime columns are not coerced. These are unchanged from the input class.
+# 
 coerce_table_classes <- function(tbl, name, cls) {
+  
   crit <- read_criteria() %>% 
     dplyr::filter(table == name) %>% 
     dplyr::select(column, class) %>% 
@@ -432,16 +433,17 @@ coerce_table_classes <- function(tbl, name, cls) {
 
 
 
-#' Detect field delimiter of file
-#'
-#' @param path (character) Path in which \code{data.files} are found
-#' @param data.files (character) File names
-#' @param os (character) Return from \code{detect_os()}.
-#'
-#' @details Parses the verbose return from \code{data.table::fread()} to get the delimiter value. If this fails, then a secondary function is called utilizing the suggested \code{reader} package. If this secondary approach fails, then a default "," is returned.
-#'
-#' @return (character) Field delimiter of \code{data.files}
-#'
+# Detect field delimiter of file
+#
+# @param path (character) Path in which \code{data.files} are found
+# @param data.files (character) File names
+# @param os (character) Return from \code{detect_os()}.
+#
+# @details Parses the verbose return from \code{data.table::fread()} to 
+# get the delimiter value. If this fails, then a secondary function is called utilizing the suggested \code{reader} package. If this secondary approach fails, then a default "," is returned.
+#
+# @return (character) Field delimiter of \code{data.files}
+#
 detect_delimiter <- function(path, data.files, os) {
   f <- paste0(path, "/", data.files)
   msg <- utils::capture.output(data.table::fread(f, verbose = TRUE) %>% {NULL}) # primary method
@@ -472,26 +474,26 @@ detect_delimiter <- function(path, data.files, os) {
 
 
 
-#' Get field delimiters of input files (method 2)
-#'
-#' @description  
-#'     Detect and return field delimiters of input files (tables).
-#' 
-#' @param path 
-#'     (character) Path to files.
-#' @param data.files
-#'     (character) File names.
-#' @param os
-#'     (character) Operating system. Valid options are returned from  
-#'     \code{EDIutils::detect_os}.
-#' 
-#' @return 
-#'     (character) Field delimiters of input files.
-#'     \item{"\\t"}{tab}
-#'     \item{","}{comma}
-#'     \item{";"}{semi-colon}
-#'     \item{"|"}{pipe}
-#'
+# Get field delimiters of input files (method 2)
+#
+# @description  
+#     Detect and return field delimiters of input files (tables).
+# 
+# @param path 
+#     (character) Path to files.
+# @param data.files
+#     (character) File names.
+# @param os
+#     (character) Operating system. Valid options are returned from  
+#     \code{EDIutils::detect_os}.
+# 
+# @return 
+#     (character) Field delimiters of input files.
+#     \item{"\\t"}{tab}
+#     \item{","}{comma}
+#     \item{";"}{semi-colon}
+#     \item{"|"}{pipe}
+#
 detect_delimiter_method_2 <- function(path, data.files, os){
   
   # Check for suggested package
@@ -578,17 +580,17 @@ detect_delimiter_method_2 <- function(path, data.files, os){
 
 
 
-#' Detect operating system
-#'
-#' @description  
-#'     This function uses \code{Sys.info} to detect the user's operating system 
-#'     and outputs an abbreviated character string to be used as inputs to OS
-#'     specific function calls.
-#' 
-#' @return 
-#'     \item{win}{Windows OS}
-#'     \item{mac}{Mac OS}
-#'
+# Detect operating system
+#
+# @description  
+#     This function uses \code{Sys.info} to detect the user's operating system 
+#     and outputs an abbreviated character string to be used as inputs to OS
+#     specific function calls.
+# 
+# @return 
+#     \item{win}{Windows OS}
+#     \item{mac}{Mac OS}
+#
 detect_os <- function(){
   sysinfo <- Sys.info()['sysname']
   if (sysinfo == 'Darwin'){
@@ -608,18 +610,18 @@ detect_os <- function(){
 
 
 
-#' Unnest nested sites in the location table
-#'
-#' @param dt_loc 
-#'     (data.frame) The location table
-#' @return
-#'     (data.frame) With columns location_id, site_name, latitude, longitude, 
-#'     elevation.
-#' @details 
-#'     Dereferences each of the parent_id, creates a site name that includes
-#'     the site names of each parent, and adds the lowest latitude, longitude 
-#'     and elevation available in the table.
-#' 
+# Unnest nested sites in the location table
+#
+# @param dt_loc 
+#     (data.frame) The location table
+# @return
+#     (data.frame) With columns location_id, site_name, latitude, longitude, 
+#     elevation.
+# @details 
+#     Dereferences each of the parent_id, creates a site name that includes
+#     the site names of each parent, and adds the lowest latitude, longitude 
+#     and elevation available in the table.
+# 
 flatten_location <- function(dt_loc) {
   
   # Expand location table
@@ -702,14 +704,14 @@ flatten_location <- function(dt_loc) {
 
 
 
-#' Get attribute definitions from EML
-#'
-#' @param eml (xml_document, xml_node) EML metadata
-#'
-#' @return (named list) Definitions
-#' 
-#' @note Duplicate names are dropped.
-#' 
+# Get attribute definitions from EML
+#
+# @param eml (xml_document, xml_node) EML metadata
+#
+# @return (named list) Definitions
+# 
+# @note Duplicate names are dropped.
+# 
 get_attr_defs <- function(eml) {
   nodes <- attrs <- xml2::xml_find_all(eml, ".//dataTable")
   nmes <- xml2::xml_text(xml2::xml_find_all(nodes, ".//attribute/attributeName"))
@@ -732,22 +734,22 @@ get_attr_defs <- function(eml) {
 
 
 
-#' Get end of line (EOL) character
-#'
-#' @description
-#'     Get EOL character of input file(s).
-#'
-#' @param path
-#'     (character) A path to the target file directory.
-#' @param file.name
-#'     (character) The target file name.
-#' @param os
-#'     (character) The operating system in which this function is called
-#'     called. Valid options are generated from \code{detect_os}.
-#'
-#' @return
-#'     A character string representation of the EOL character.
-#'
+# Get end of line (EOL) character
+#
+# @description
+#     Get EOL character of input file(s).
+#
+# @param path
+#     (character) A path to the target file directory.
+# @param file.name
+#     (character) The target file name.
+# @param os
+#     (character) The operating system in which this function is called
+#     called. Valid options are generated from \code{detect_os}.
+#
+# @return
+#     A character string representation of the EOL character.
+#
 get_eol <- function(path, file.name, os){
   
   # Validate file.name
@@ -816,12 +818,12 @@ get_eol <- function(path, file.name, os){
 
 
 
-#' Does dataset ID belong to EDI?
-#'
-#' @param id (character) Dataset identifier 
-#'
-#' @return (logical) TRUE if is an EDI identifier, otherwise FALSE
-#'
+# Does dataset ID belong to EDI?
+#
+# @param id (character) Dataset identifier 
+#
+# @return (logical) TRUE if is an EDI identifier, otherwise FALSE
+#
 is_edi <- function(id) {
   res <- stringr::str_detect(
     string = id, 
@@ -837,12 +839,12 @@ is_edi <- function(id) {
 
 
 
-#' Does dataset ID belong to NEON?
-#'
-#' @param id (character) Dataset identifier 
-#'
-#' @return (logical) TRUE if is a NEON identifier, otherwise FALSE
-#'
+# Does dataset ID belong to NEON?
+#
+# @param id (character) Dataset identifier 
+#
+# @return (logical) TRUE if is a NEON identifier, otherwise FALSE
+#
 is_neon <- function(id) {
   res <- stringr::str_detect(string = id, pattern = "^neon\\.")
   return(res)
@@ -855,14 +857,14 @@ is_neon <- function(id) {
 
 
 
-#' Is provenance node?
-#'
-#' @param nodeset (xml_nodeset) methods nodeset at \code{/eml:eml/dataset/methods/methodStep}
-#' 
-#' @details Looks for provenance in \code{./dataSource}
-#' 
-#' @return (logical) TRUE if nodeset has provenance
-#' 
+# Is provenance node?
+#
+# @param nodeset (xml_nodeset) methods nodeset at \code{/eml:eml/dataset/methods/methodStep}
+# 
+# @details Looks for provenance in \code{./dataSource}
+# 
+# @return (logical) TRUE if nodeset has provenance
+# 
 is_prov <- function(nodeset) {  
   dasource <- xml2::xml_find_all(nodeset, "./dataSource")
   res <- !is_empty_nodeset(dasource)
@@ -876,18 +878,18 @@ is_prov <- function(nodeset) {
 
 
 
-#' Parse datetime
-#'
-#' @param tbl (character) Table name \code{vals} come from. This is used in warning messages.
-#' @param vals (character) Vector of datetimes
-#' @param frmt (character) Datetime format string
-#' 
-#' @details A wrapper to to \code{lubridate::ymd()}, \code{lubridate::ymd_h()}, \code{lubridate::ymd_hm()}, and \code{lubridate::ymd_hms()}.
-#' 
-#' @note No attempt at using the time zone component is made
-#' 
-#' @return (POSIXct POSIXt) Datetimes parsed
-#' 
+# Parse datetime
+#
+# @param tbl (character) Table name \code{vals} come from. This is used in warning messages.
+# @param vals (character) Vector of datetimes
+# @param frmt (character) Datetime format string
+# 
+# @details A wrapper to to \code{lubridate::ymd()}, \code{lubridate::ymd_h()}, \code{lubridate::ymd_hm()}, and \code{lubridate::ymd_hms()}.
+# 
+# @note No attempt at using the time zone component is made
+# 
+# @return (POSIXct POSIXt) Datetimes parsed
+# 
 parse_datetime <- function(tbl, vals, frmt) {
   vals <- as.character(vals)
   na_i <- sum(is.na(vals))
@@ -953,8 +955,8 @@ parse_delim <- function(x){
 
 
 
-#' Is the EDI Data Repository accessible?
-#'
+# Is the EDI Data Repository accessible?
+#
 ping_edi <- function() {
   r <- httr::GET(url = "https://pasta.lternet.edu/package/eml/edi/759") # Warn if EDI is down
   if (httr::status_code(r) != 200) {
@@ -996,14 +998,14 @@ NULL
 
 
 
-#' Get previous data package version
-#'
-#' @param package.id (character) Data package identifier
-#'
-#' @return (character) Previous data package version
-#' 
-#' @details Supports repository specific methods.
-#' 
+# Get previous data package version
+#
+# @param package.id (character) Data package identifier
+#
+# @return (character) Previous data package version
+# 
+# @details Supports repository specific methods.
+# 
 get_previous_version <- function(package.id) {
   
   # Load Global Environment config
@@ -1050,15 +1052,15 @@ get_previous_version <- function(package.id) {
 
 
 
-#' Increment data package version number
-#'
-#' @param package.id (character) Data package identifier
-#'
-#' @return (character) Package identifier with version number incremented by 1.
-#' 
-#' @details Supports repository specific methods.
-#'
-#' 
+# Increment data package version number
+#
+# @param package.id (character) Data package identifier
+#
+# @return (character) Package identifier with version number incremented by 1.
+# 
+# @details Supports repository specific methods.
+#
+# 
 increment_package_version <- function(package.id) {
   
   # Load Global Environment config
@@ -1088,12 +1090,12 @@ increment_package_version <- function(package.id) {
 
 
 
-#' Is empty nodeset?
-#'
-#' @param nodeset (xml_nodeset) Any nodeset returned by the xml2 library
-#' 
-#' @return (logical) TRUE if nodeset length = 0
-#' 
+# Is empty nodeset?
+#
+# @param nodeset (xml_nodeset) Any nodeset returned by the xml2 library
+# 
+# @return (logical) TRUE if nodeset length = 0
+# 
 is_empty_nodeset <- function(nodeset) {
   res <- length(nodeset) == 0
   return(res)
@@ -1106,19 +1108,19 @@ is_empty_nodeset <- function(nodeset) {
 
 
 
-#' Join observation, location, and taxon tables in a wide format
-#'
-#' @param dt_obs
-#'     (data.frame) The observation table
-#' @param dt_loc 
-#'     (data.frame) The location table
-#' @param dt_tax 
-#'     (data.frame) The taxon table
-#' @return
-#'     (data.frame) Joined observation, location, and taxon tables in a wide 
-#'     format, where the location table has been unnested for latitude, 
-#'     longitude, and site names.
-#' 
+# Join observation, location, and taxon tables in a wide format
+#
+# @param dt_obs
+#     (data.frame) The observation table
+# @param dt_loc 
+#     (data.frame) The location table
+# @param dt_tax 
+#     (data.frame) The taxon table
+# @return
+#     (data.frame) Joined observation, location, and taxon tables in a wide 
+#     format, where the location table has been unnested for latitude, 
+#     longitude, and site names.
+# 
 join_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
   
   # Flatten location
@@ -1146,10 +1148,10 @@ join_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
 
 
 
-#' Read ecocomDP criteria
-#'
-#' @return (data.frame) ecocomDP criteria
-#' 
+# Read ecocomDP criteria
+#
+# @return (data.frame) ecocomDP criteria
+# 
 read_criteria <- function() {
   res <- data.table::fread(
     system.file('extdata', 'validation_criteria.txt', package = 'ecocomDP'))
@@ -1164,14 +1166,14 @@ read_criteria <- function() {
 
 
 
-#' Read EML metadata from a data repository
-#' 
-#' @description A wrapper function to repository specific read methods (the repository arg drives the logic).
-#' 
-#' @param package.id (character) Data package identifier
-#'
-#' @return (xml_document, xml_node) EML metadata
-#' 
+# Read EML metadata from a data repository
+# 
+# @description A wrapper function to repository specific read methods (the repository arg drives the logic).
+# 
+# @param package.id (character) Data package identifier
+#
+# @return (xml_document, xml_node) EML metadata
+# 
 read_eml <- function(package.id) {
   
   # Load Global Environment config
@@ -1205,50 +1207,50 @@ read_eml <- function(package.id) {
 
 
 
-#' Read EML into an emld list object
-#'
-#' @description  
-#'     This function wraps \code{EML::read_eml()} with a layer of quality 
-#'     control ensuring the returned emld list object has the same structure 
-#'     as output by \code{EMLassemblyline::make_eml()} and can be used in 
-#'     EMLassemblyline workflows.
-#'
-#' @param path 
-#'     (character) Path to the metadata template directory and where 
-#'     annotations.txt will be written.
-#' @param eml
-#'     (file) An EML .xml file located at \code{path}.
-#'
-#' @return 
-#'     An emld list object as similarly created by \code{EML::read_eml()}.
-#'     
-#' @details
-#'     When representing EML in the emld list structure, nodes that have 
-#'     1 or more children are structured as a list of unnamed lists 
-#'     (e.g. \code{list(dataTable = list("dataTable1", "dataTable2"))}) and
-#'     this is the structure output by EMLassemblyline::make_eml(). However,
-#'     EML::read_eml() removes the unnamed list when the node has only 1 child
-#'     (e.g. \code{list(dataTable = "dataTable1")}), thereby breaking 
-#'     EMLassemblyline code using \code{lapply()} to parse such nodes. 
-#'     Currently this QC is selectively applied to annotatable nodes targeted
-#'     by \code{template_annotations()}:
-#'     
-#'     \itemize{
-#'       \item eml/dataset/dataTable
-#'       \item eml/dataset/dataTable/attributeList/attribute
-#'       \item eml/dataset/otherEntity
-#'       \item eml/dataset/creator
-#'       \item eml/dataset/contact
-#'       \item eml/dataset/associatedParty
-#'       \item eml/dataset/project/personnel
-#'       \item eml/dataset/project/relatedProject
-#'       \item eml/dataset/project/relatedProject/personnel
-#'     }
-#'     
-#'     Extending support to all nodes capable of having 1 or more children is
-#'     welcomed.
-#' 
-#' 
+# Read EML into an emld list object
+#
+# @description  
+#     This function wraps \code{EML::read_eml()} with a layer of quality 
+#     control ensuring the returned emld list object has the same structure 
+#     as output by \code{EMLassemblyline::make_eml()} and can be used in 
+#     EMLassemblyline workflows.
+#
+# @param path 
+#     (character) Path to the metadata template directory and where 
+#     annotations.txt will be written.
+# @param eml
+#     (file) An EML .xml file located at \code{path}.
+#
+# @return 
+#     An emld list object as similarly created by \code{EML::read_eml()}.
+#     
+# @details
+#     When representing EML in the emld list structure, nodes that have 
+#     1 or more children are structured as a list of unnamed lists 
+#     (e.g. \code{list(dataTable = list("dataTable1", "dataTable2"))}) and
+#     this is the structure output by EMLassemblyline::make_eml(). However,
+#     EML::read_eml() removes the unnamed list when the node has only 1 child
+#     (e.g. \code{list(dataTable = "dataTable1")}), thereby breaking 
+#     EMLassemblyline code using \code{lapply()} to parse such nodes. 
+#     Currently this QC is selectively applied to annotatable nodes targeted
+#     by \code{template_annotations()}:
+#     
+#     \itemize{
+#       \item eml/dataset/dataTable
+#       \item eml/dataset/dataTable/attributeList/attribute
+#       \item eml/dataset/otherEntity
+#       \item eml/dataset/creator
+#       \item eml/dataset/contact
+#       \item eml/dataset/associatedParty
+#       \item eml/dataset/project/personnel
+#       \item eml/dataset/project/relatedProject
+#       \item eml/dataset/project/relatedProject/personnel
+#     }
+#     
+#     Extending support to all nodes capable of having 1 or more children is
+#     welcomed.
+# 
+# 
 EAL_read_eml <- function(path, eml) {
   
   # Create the emld list object
@@ -1310,19 +1312,19 @@ EAL_read_eml <- function(path, eml) {
 
 
 
-#' Read the ecocomDP dataset_summary table (from EDI)
-#'
-#' @description  
-#'     Use this function to read the dataset_summary table of an ecocomDP data 
-#'     package from the EDI Data Repository.
-#' 
-#' @param package.id
-#'     (character) Data package identifier of an ecocomDP dataset in the EDI
-#'     data repository.
-#'     
-#' @return 
-#'     (tibble) The dataset_summary table
-#'         
+# Read the ecocomDP dataset_summary table (from EDI)
+#
+# @description  
+#     Use this function to read the dataset_summary table of an ecocomDP data 
+#     package from the EDI Data Repository.
+# 
+# @param package.id
+#     (character) Data package identifier of an ecocomDP dataset in the EDI
+#     data repository.
+#     
+# @return 
+#     (tibble) The dataset_summary table
+#         
 read_table_dataset_summary <- function(package.id){
   
   message("Reading dataset_summary table for ", package.id)
@@ -1407,16 +1409,16 @@ remove_empty_templates <- function(x) {
 
 
 
-#' Make URL for PASTA+ environment
-#'
-#' @description
-#'     Create the URL suffix to the PASTA+ environment specified by the
-#'     environment argument.
-#'
-#' @param environment
-#'     (character) Data repository environment to perform the evaluation in.
-#'     Can be: 'development', 'staging', 'production'.
-#'
+# Make URL for PASTA+ environment
+#
+# @description
+#     Create the URL suffix to the PASTA+ environment specified by the
+#     environment argument.
+#
+# @param environment
+#     (character) Data repository environment to perform the evaluation in.
+#     Can be: 'development', 'staging', 'production'.
+#
 url_env <- function(environment){
   
   environment <- tolower(environment)
@@ -1439,24 +1441,24 @@ url_env <- function(environment){
 
 
 
-#' Validate file names
-#'
-#' @description  
-#'     Identify whether input data file names exist in the specified directory.
-#'
-#' @param path 
-#'     (character) A character string specifying a path to the dataset working 
-#'     directory.
-#' @param data.files
-#'     A list of character strings specifying the names of the data files of 
-#'     your dataset.
-#' 
-#' @return 
-#'     A warning message if the data files don't exist at path, and which of
-#'     the input data files are missing.
-#'     
-#'     The full names of files listed in the data.files argument.
-#'
+# Validate file names
+#
+# @description  
+#     Identify whether input data file names exist in the specified directory.
+#
+# @param path 
+#     (character) A character string specifying a path to the dataset working 
+#     directory.
+# @param data.files
+#     A list of character strings specifying the names of the data files of 
+#     your dataset.
+# 
+# @return 
+#     A warning message if the data files don't exist at path, and which of
+#     the input data files are missing.
+#     
+#     The full names of files listed in the data.files argument.
+#
 validate_file_names <- function(path, data.files){
   
   # Validate file presence
@@ -1524,18 +1526,18 @@ validate_file_names <- function(path, data.files){
 
 
 
-#' Validate path
-#'
-#' @description  
-#'     Use \code{dir.exists} to determine whether the input path is valid and 
-#'     returns an error message if not.
-#'
-#' @param path 
-#'     A character string specifying a path to the dataset working directory.
-#' 
-#' @return 
-#'     A warning message if the path leads to a non-existant directory.
-#'
+# Validate path
+#
+# @description  
+#     Use \code{dir.exists} to determine whether the input path is valid and 
+#     returns an error message if not.
+#
+# @param path 
+#     A character string specifying a path to the dataset working directory.
+# 
+# @return 
+#     A warning message if the path leads to a non-existant directory.
+#
 validate_path <- function(path){
   
   # Validate path
@@ -1560,10 +1562,10 @@ validate_path <- function(path){
 #'
 #' @examples
 #' \dontrun{
-#' view_model_descriptions()
+#' view_descriptions()
 #' }
 #' 
-view_model_descriptions <- function() {
+view_descriptions <- function() {
   utils::browseURL("https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_description.md")
 }
 
@@ -1580,10 +1582,10 @@ view_model_descriptions <- function() {
 #'
 #' @examples
 #' \dontrun{
-#' view_model_diagram()
+#' view_diagram()
 #' }
 #' 
-view_model_diagram <- function() {
+view_diagram <- function() {
   utils::browseURL("https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md")
 }
 
@@ -1594,29 +1596,191 @@ view_model_diagram <- function() {
 
 
 
-#' Resolve terms to a controlled vocabulary
-#'
-#' @description  
-#'     Resolve terms to a controlled vocabulary.
-#'
-#' @param x
-#'     (character) Term(s) to resolve to a controlled vocabulary. Can be a 
-#'     vector of terms.
-#' @param cv
-#'     (character) A controlled vocabulary to search. Valid options are:
-#'     \itemize{
-#'         \item{lter} - The LTER Controlled Vocabulary (http://vocab.lternet.edu/vocab/vocab/index.php)
-#'     }
-#' @param messages 
-#'     (logical) Display diagnostic messages, e.g. alternative spelling options.
-#' @param interactive 
-#'     (logical) Query user to select from alternative terms and returns back
-#'     selection.
-#'
-#' @return 
-#'     (character) Controlled vocabulary names corresponding to successfully
-#'     resolved terms.
-#'
+# Search for an LTER Controlled Vocabulary term
+#
+# @param x 
+#     (character) A term to search for.
+# @param messages 
+#     (logical) Display diagnostic messages, e.g. alternative spelling options.
+# @param interactive 
+#     (logical) Query user to select from alternative terms and returns back
+#     selection.
+#
+# @return 
+#     Logical value (TRUE/FALSE) indicating whether the searched term could
+#     be found. 
+#     
+#     If messages = TRUE, then alternative spellings and near misses 
+#     are displayed. 
+#     
+#     If interactive mode = TRUE, then a user selected term is returned.
+#
+vocab_lter_term <- function(x, messages = FALSE, interactive = FALSE){
+  
+  # The LTER controlled vocabulary produces different results for a standard
+  # search and fuzzy (similar) search. Both searches are run and results 
+  # combined, then direct matches sought and if not found then all results
+  # are presented as near misses.
+  
+  # Check arguments -----------------------------------------------------------
+  
+  if (is.character(x) != T){
+    stop('Input argument "x" is not of class "character"!')
+  }
+  if (length(x) != 1){
+    stop('Input argument "x" has a length > 1! Only single terms are allowed.')
+  }
+  if (!missing(messages) & isTRUE(messages) & !missing(interactive) & isTRUE(interactive)){
+    stop('Both arguments "messages" & "interactive" can not be used at the same time. Please select one or the other.')
+  }
+  
+  # Construct the query and search --------------------------------------------
+  
+  term <- stringr::str_replace_all(
+    string = x, 
+    pattern = ' ', 
+    replacement = '+'
+  )
+  
+  # Standard search
+  
+  search_output <- xml2::read_xml(
+    paste0(
+      'http://vocab.lternet.edu/vocab/vocab/services.php/?task=search&arg=',
+      term
+    )
+  )
+  
+  # Fuzzy search
+  
+  fuzzy_output <- xml2::read_xml(
+    paste0(
+      'http://vocab.lternet.edu/vocab/vocab/services.php/?task=fetchSimilar&arg=',
+      term
+    )
+  )
+  
+  # Parse the responses and combine -------------------------------------------
+  
+  
+  
+  term_list <- c()
+  
+  # Get standard terms
+  
+  if (length(xml2::xml_find_all(search_output, './/result')) != 0){
+    nodeset <- xml2::xml_find_all(search_output, './/result/term/string')
+    node_terms <- xml2::xml_text(nodeset)
+    term_list <- c(term_list, node_terms)
+  }
+  
+  # Get fuzzy terms
+  
+  if (length(xml2::xml_find_all(fuzzy_output, './/result')) != 0){
+    nodeset <- xml2::xml_find_all(fuzzy_output, './/result/string')
+    node_terms <- xml2::xml_text(nodeset)
+    term_list <- c(term_list, node_terms)
+  }
+  
+  # Remove duplicates
+  
+  term_list <- unique(term_list)
+  
+  # Is the search term listed? ------------------------------------------------
+  
+  if (sum(term_list == x) == 1){
+    term_found <- T
+  } else {
+    term_found <- F
+  }
+  
+  # Report near misses --------------------------------------------------------
+  
+  if (!missing(messages) & isTRUE(messages) & (!isTRUE(term_found)) & (length(term_list) != 0)){
+    
+    msg <- message(
+      paste0(
+        'The term "',
+        x,
+        '" could not be found in the LTER Controlled Vocabulary. Possible alternatives:',
+        '\n',
+        paste0(
+          term_list, 
+          collapse = '\n'
+        ),
+        '\n'
+      )
+    )
+    
+  }
+  
+  # Interactive mode ----------------------------------------------------------
+  
+  if (!missing(interactive) & isTRUE(interactive) & (!isTRUE(term_found)) & (length(term_list) != 0)){
+    
+    msg <- message(
+      paste0(
+        'The term "',
+        x,
+        '" could not be found in the LTER Controlled Vocabulary. Possible alternatives:',
+        '\n'
+      )
+    )
+    
+    term_list <- c(term_list, 'NONE OF THE ABOVE')
+    
+    print.data.frame(as.data.frame(term_list))
+    answer <- readline('Enter the row number of the term you would like to use: ')
+    alternative_term <- as.character(term_list[as.numeric(answer)])
+    message(paste0('You selected ... ', alternative_term, '\n'))
+    
+  }
+  
+  # Output results ------------------------------------------------------------
+  
+  if (!missing(interactive) & isTRUE(interactive) & (!isTRUE(term_found)) & (length(term_list) != 0)){
+    
+    alternative_term
+    
+  } else {
+    
+    term_found
+    
+  }
+  
+}
+
+
+
+
+
+
+
+
+
+# Resolve terms to a controlled vocabulary
+#
+# @description  
+#     Resolve terms to a controlled vocabulary.
+#
+# @param x
+#     (character) Term(s) to resolve to a controlled vocabulary. Can be a 
+#     vector of terms.
+# @param cv
+#     (character) A controlled vocabulary to search. Valid options are:
+#     \itemize{
+#         \item lter - The LTER Controlled Vocabulary (http://vocab.lternet.edu/vocab/vocab/index.php)
+#     }
+# @param messages 
+#     (logical) Display diagnostic messages, e.g. alternative spelling options.
+# @param interactive 
+#     (logical) Query user to select from alternative terms and returns back
+#     selection.
+#
+# @return 
+#     (character) Controlled vocabulary names corresponding to successfully
+#     resolved terms.
+#
 vocab_resolve_terms <- function(x, cv, messages = FALSE, interactive = FALSE){
   
   # Check arguments
@@ -1813,15 +1977,15 @@ write_tables <- function(
 
 
 
-#' Get XML values
-#'
-#' @param nodeset (xml_node/xml_nodeset) Nodeset
-#' @param xpath (character) xpath
-#' 
-#' @return (character) Value of \code{xpath} within \code{nodeset}. Returns "" if returned character string has length = 1.
-#' 
-#' @details Simplifies code by wrapping \code{cnvmt(xml2::xml_text(xml2::xml_find_all(...), trim = T))}
-#' 
+# Get XML values
+#
+# @param nodeset (xml_node/xml_nodeset) Nodeset
+# @param xpath (character) xpath
+# 
+# @return (character) Value of \code{xpath} within \code{nodeset}. Returns "" if returned character string has length = 1.
+# 
+# @details Simplifies code by wrapping \code{cnvmt(xml2::xml_text(xml2::xml_find_all(...), trim = T))}
+# 
 xml_val <- function(nodeset, xpath) {
   res <- cnvmt(
     xml2::xml_text(

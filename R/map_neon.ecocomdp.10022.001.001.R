@@ -1,7 +1,7 @@
 ##############################################################################################
-#' @author Kari Norman \email{kari.norman@berkeley.edu}
+# @author Kari Norman \email{kari.norman@berkeley.edu}
 
-#' @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for BEETLE from neon.data.product.id DP1.10022.001 from the NEON data portal and map to the ecocomDP 
+# @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for BEETLE from neon.data.product.id DP1.10022.001 from the NEON data portal and map to the ecocomDP 
 #' 
 ##############################################################################################
 
@@ -10,7 +10,6 @@ map_neon.ecocomdp.10022.001.001 <- function(
   neon.data.list,
   neon.data.product.id = "DP1.10022.001",
   ...){
-
   #NEON target taxon group is BEETLES
   neon_method_id <- "neon.ecocomdp.10022.001.001"
   

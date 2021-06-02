@@ -1,8 +1,8 @@
 ##############################################################################################
 ##############################################################################################
-#' @author Michael Just
+# @author Michael Just
 
-#' @describeIn map_neon_data_to_ecocomDP This method will retrieve percent cover data for PLANT taxa from neon.data.product.id DP1.10058.001 from the NEON data portal and map to the ecocomDP format
+# @describeIn map_neon_data_to_ecocomDP This method will retrieve percent cover data for PLANT taxa from neon.data.product.id DP1.10058.001 from the NEON data portal and map to the ecocomDP format
 
 ##############################################################################################
 
@@ -13,7 +13,6 @@ map_neon.ecocomdp.10058.001.001 <- function(
   neon.data.list,
   neon.data.product.id = "DP1.10058.001",
   ...){
-  
   #NEON target taxon group is PLANT
   neon_method_id <- "neon.ecocomdp.10058.001.001"
   

@@ -5,6 +5,7 @@ library(ecocomDP)
 # create_eml() ----------------------------------------------------------------
 
 testthat::test_that("Creates valid EML", {
+  testthat::skip_on_cran()
   
   # Create directory with ecocomDP tables for create_eml()
   mypath <- paste0(tempdir(), "/data")
