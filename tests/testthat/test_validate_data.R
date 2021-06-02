@@ -307,7 +307,7 @@ testthat::test_that("validate_referential_integrity()", {
         (criteria$table == table) & 
           !is.na(criteria$column) & 
           (criteria$primary_key == TRUE)]
-      primary_key_data <- na.omit(d[[table]][[primary_key]])
+      primary_key_data <- stats::na.omit(d[[table]][[primary_key]])
       foreign_key_table <- criteria$table[
         !is.na(criteria$column) & 
           (criteria$column == primary_key)]

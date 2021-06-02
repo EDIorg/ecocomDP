@@ -598,7 +598,7 @@ validate_referential_integrity <- function(data.list) {
           (criteria$table == x) & 
             !is.na(criteria$column) & 
             (criteria$primary_key == TRUE)]
-        primary_key_data <- na.omit(data.list[[x]][[primary_key]])
+        primary_key_data <- stats::na.omit(data.list[[x]][[primary_key]])
         foreign_key_table <- criteria$table[
           !is.na(criteria$column) & 
             (criteria$column == primary_key)]
@@ -606,13 +606,13 @@ validate_referential_integrity <- function(data.list) {
           foreign_key_table,
           function(k) {
             if (k == "location") {
-              foreign_key_data <- na.omit(data.list[[k]][["parent_location_id"]])
+              foreign_key_data <- stats::na.omit(data.list[[k]][["parent_location_id"]])
               use_i <- foreign_key_data %in% primary_key_data
               if (length(use_i) == 0) {
                 use_i <- TRUE # This is an exception for parent_location_id
               }
             } else {
-              foreign_key_data <- na.omit(data.list[[k]][[primary_key]])
+              foreign_key_data <- stats::na.omit(data.list[[k]][[primary_key]])
               use_i <- foreign_key_data %in% primary_key_data
             }
             if (!all(use_i)) {
@@ -698,7 +698,7 @@ validate_latitude_longitude_range <- function(data.list) {
           as.numeric(data.list$location[[colname]]))
         if (colname == "latitude") {
           use_i <- (values >= -90) & (values <= 90)
-          use_i <- na.omit(seq(length(use_i))[!use_i])
+          use_i <- stats::na.omit(seq(length(use_i))[!use_i])
           if (length(use_i) > 0) {
             return(
               paste0(
@@ -708,7 +708,7 @@ validate_latitude_longitude_range <- function(data.list) {
           }
         } else if (colname == "longitude") {
           use_i <- (values >= -180) & (values <= 180)
-          use_i <- na.omit(seq(length(use_i))[!use_i])
+          use_i <- stats::na.omit(seq(length(use_i))[!use_i])
           if (length(use_i) > 0) {
             return(
               paste0(
@@ -751,7 +751,7 @@ validate_elevation <- function(data.list) {
         values <- suppressWarnings(
           as.numeric(data.list$location[[colname]]))
         use_i <- (values <= 8848) & (values >= -10984)
-        use_i <- na.omit(seq(length(use_i))[!use_i])
+        use_i <- stats::na.omit(seq(length(use_i))[!use_i])
         if (length(use_i) > 0) {
           return(
             paste0(

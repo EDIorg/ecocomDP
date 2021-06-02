@@ -22,7 +22,7 @@ testthat::test_that("Standard L1 column inputs", {
     } else {
       expect_true(all(c("tbl_df", "tbl", "data.frame") %in% class(res)))
     }
-    crit_cols <- na.omit(crit$column[crit$table == "location_ancillary"])
+    crit_cols <- stats::na.omit(crit$column[crit$table == "location_ancillary"])
     expect_true(all(crit_cols %in% colnames(res)))
     # Is not empty
     expect_true(nrow(res) != 0)

@@ -99,7 +99,7 @@ api_list_data_package_revisions <- function(scope, identifier, filter = NULL, en
       encoding = 'UTF-8'
     )
     
-    output <- read.csv(
+    output <- utils::read.csv(
       text = c(
         'revision',
         r
@@ -206,7 +206,7 @@ api_read_data_entity_name <- function(package.id, identifier, environment = 'pro
   )
   
   output <- as.character(
-    read.csv(
+    utils::read.csv(
       text = c(
         'identifier',
         r
@@ -268,7 +268,7 @@ api_read_data_package <- function(package.id, environment = 'production'){
   )
   
   output <- as.character(
-    read.csv(
+    utils::read.csv(
       text = c(
         'identifier',
         r
@@ -423,7 +423,7 @@ coerce_table_classes <- function(tbl, name, cls) {
   crit <- read_criteria() %>% 
     dplyr::filter(table == name) %>% 
     dplyr::select(column, class) %>% 
-    na.omit()
+    stats::na.omit()
   for (col in colnames(tbl)) {
     colclass <- crit$class[crit$column == col]
     if (colclass == "character") {
@@ -459,7 +459,7 @@ coerce_table_classes <- function(tbl, name, cls) {
 #'
 detect_delimiter <- function(path, data.files, os) {
   f <- paste0(path, "/", data.files)
-  msg <- capture.output(data.table::fread(f, verbose = TRUE) %>% {NULL}) # primary method
+  msg <- utils::capture.output(data.table::fread(f, verbose = TRUE) %>% {NULL}) # primary method
   seps <- stringr::str_extract_all(msg, "(?<=(sep=')).+(?='[:blank:])")
   sep <- unique(unlist(seps))
   if (length(sep) == 1) {
@@ -1596,7 +1596,7 @@ validate_path <- function(path){
 #' }
 #' 
 view_model_descriptions <- function() {
-  browseURL("https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_description.md")
+  utils::browseURL("https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_description.md")
 }
 
 
@@ -1616,7 +1616,7 @@ view_model_descriptions <- function() {
 #' }
 #' 
 view_model_diagram <- function() {
-  browseURL("https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md")
+  utils::browseURL("https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md")
 }
 
 

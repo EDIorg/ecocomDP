@@ -120,7 +120,7 @@ create_ants_L0_flat <- function(path = NULL,
   
   # Add summary information about this dataset
   
-  dates <- flat$date %>% na.omit() %>% sort()
+  dates <- flat$date %>% stats::na.omit() %>% sort()
   
   length_of_survey <-  ecocomDP::calc_length_of_survey_years(dates)
   years_sampled <- ecocomDP::calc_number_of_years_sampled(dates)

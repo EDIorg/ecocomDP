@@ -128,8 +128,6 @@ convert_to_dwca <- function(path,
 #' @return
 #'     three tables, event, occurrence, measurementOrFact
 #'
-#' @examples
-#' 
 create_tables_dwca_event_core <- function(
   dt_obs,
   dt_obs_ancil,
@@ -326,11 +324,6 @@ create_tables_dwca_event_core <- function(
 #'         \item \strong{<otherEntity>} Describes the meta.xml accompanying 
 #'         each DwC-A. Any other entities listed in the parent EML are removed.
 #'     }
-#' 
-#' @examples 
-#' \dontrun{
-#' 
-#' }
 #'
 make_eml_dwca <- function(path, 
                           core_name, 
@@ -547,7 +540,7 @@ make_eml_dwca <- function(path,
   
   eal_inputs$x$template$annotations.txt$content <- 
     eal_inputs$x$template$annotations.txt$content[
-      complete.cases(eal_inputs$x$template$annotations.txt$content), ]
+      stats::complete.cases(eal_inputs$x$template$annotations.txt$content), ]
   
   # Create child EML
   eml_L2 <- suppressWarnings(

@@ -44,7 +44,7 @@ validate_arguments <- function(fun.name, fun.args) {
   if (stringr::str_detect(fun.name, "^create_")) {
     
     flat <- fun.args$L0_flat
-    cols <- fun.args[names(fun.args) %in% na.omit(criteria$column)] # Col args can be assigned any value, so we need a map
+    cols <- fun.args[names(fun.args) %in% stats::na.omit(criteria$column)] # Col args can be assigned any value, so we need a map
     
     # Table specific checks
     if (fun.name == "create_observation") {

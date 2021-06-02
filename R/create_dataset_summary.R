@@ -134,7 +134,7 @@ calc_length_of_survey_years <- function(dates) {
 #' @export
 #' 
 calc_number_of_years_sampled <- function(dates) {
-  years_sampled <- na.omit(unique(lubridate::year(dates)))
+  years_sampled <- stats::na.omit(unique(lubridate::year(dates)))
   res <- length(years_sampled)
   return(res)
 }
@@ -155,6 +155,6 @@ calc_number_of_years_sampled <- function(dates) {
 #' @export
 #' 
 calc_std_dev_interval_betw_years <- function(dates) {
-  res <- round(sd(diff(unique(lubridate::date(dates)))/365), 2)
+  res <- round(stats::sd(diff(unique(lubridate::date(dates)))/365), 2)
   return(res)
 }

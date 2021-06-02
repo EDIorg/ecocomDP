@@ -72,12 +72,12 @@
 #' }
 #' 
 #' # Save a list of datasets for reading
-#' datasets <- c(ants_L1, ants_L1, ants_L1)   # 3 of the same, with different names
+#' datasets <- c(ants_L1, ants_L1, ants_L1)  # 3 of the same, w/different names
 #' names(datasets) <- c("ds1", "ds2", "ds3")
-#' mypath <- paste0(tempdir(), "/data")       # A place for saving
+#' mypath <- paste0(tempdir(), "/data")      # A place for saving
 #' dir.create(mypath)
-#' save_data(datasets, mypath)                # Save as .rds
-#' save_data(datasets, mypath, type = ".csv") # Save as .csv
+#' save_data(datasets, mypath)               # Save as .rds
+#' save_data(datasets, mypath, type = ".csv")# Save as .csv
 #' 
 #' # Read from local .rds
 #' datasets <- read_data(from = paste0(mypath, "/datasets.rds"))
@@ -85,7 +85,9 @@
 #' # Read from local .csv
 #' datasets <- read_data(from = mypath)
 #' 
-#' # A dataset is returned as a list of metadata, tables, and validation issues (if there are any). The dataset ID is assigned to the top level for reference.
+#' # A dataset is returned as a list of metadata, tables, and validation issues
+#' # (if there are any). The dataset ID is assigned to the top level for 
+#' # reference.
 #' str(datasets[1])
 #' 
 #' # Clean up

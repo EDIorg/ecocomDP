@@ -419,7 +419,7 @@ annotate_eml <- function(
     
     anno <- x$template$annotations.txt$content
     anno[anno == ""] <- NA_character_
-    anno <- anno[complete.cases(anno), ]
+    anno <- anno[stats::complete.cases(anno), ]
     
     # ResponsibleParty elements often recur throughout an EML record, each of 
     # which requires a unique ID. To facilitate expansion of ResponsibleParty

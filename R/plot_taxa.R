@@ -272,7 +272,7 @@ plot_taxa_sample_time <- function(observation, id, alpha = 1) {
 plot_taxa_shared_sites <- function(observation, id) {
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                  # intermediate format for plotting
-  heat_pal_spectral <- colorRampPalette(rev( RColorBrewer::brewer.pal(11, "Spectral")))
+  heat_pal_spectral <- grDevices::colorRampPalette(rev( RColorBrewer::brewer.pal(11, "Spectral")))
   # Count taxa shared between sites in a site by taxa matrix
   shared.species <- function(comm) {
     sites <- comm[, 1]

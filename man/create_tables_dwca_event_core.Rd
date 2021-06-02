@@ -36,6 +36,3 @@ three tables, event, occurrence, measurementOrFact
 \description{
 Creates DwC-A tables in event core
 }
-\examples{
-
-}

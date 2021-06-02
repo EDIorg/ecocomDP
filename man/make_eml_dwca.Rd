@@ -68,9 +68,3 @@ This function creates an EML record for an Darwin Core Archive record
         each DwC-A. Any other entities listed in the parent EML are removed.
     }
 }
-\examples{
-\dontrun{
-
-}
-
-}

@@ -449,7 +449,7 @@ create_eml <- function(path,
   }
   
   annotations[annotations == ""] <- NA_character_
-  annotations <- annotations[complete.cases(annotations), ]
+  annotations <- annotations[stats::complete.cases(annotations), ]
   
   eal_inputs$x$template$annotations.txt$content <- annotations
   

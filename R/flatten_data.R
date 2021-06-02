@@ -212,7 +212,7 @@ flatten_ancillary <- function(ancillary_table) {
     unts_df <- ancillary_table %>% # Get units
       dplyr::select(variable_name, unit) %>%
       dplyr::distinct() %>%
-      na.omit() %>% 
+      stats::na.omit() %>% 
       tidyr::pivot_wider(names_from = variable_name, values_from = unit)
     # Rename for sorting
     colnames(unts_df) <- paste0(colnames(unts_df), "_unit")

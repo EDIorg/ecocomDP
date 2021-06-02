@@ -188,7 +188,7 @@ create_ecocomDP <- function(path,
   
   # Add columns for the dataset_summary table ---------------------------------
   
-  dates <- flat$date %>% na.omit() %>% sort()
+  dates <- flat$date %>% stats::na.omit() %>% sort()
   
   # Use the calc_*() helper functions for consistency
   

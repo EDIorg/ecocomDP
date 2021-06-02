@@ -99,7 +99,7 @@ map_neon_data_to_ecocomDP <- function(
       
       data_access_method_described <- paste0(
         "original NEON data accessed using neonUtilities v", 
-        packageVersion("neonUtilities"))
+        utils::packageVersion("neonUtilities"))
     }
   }else{
     data_access_method_described <- paste0(

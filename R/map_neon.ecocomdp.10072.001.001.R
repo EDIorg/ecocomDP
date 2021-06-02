@@ -136,7 +136,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
   # get SMALL_MAMMAL taxon table from NEON
   neon_taxon_table <- neonUtilities::getTaxonTable(
     taxonType = "SMALL_MAMMAL", token = my_token) %>%
-    dplyr::filter(taxonID %in% unique(na.omit(data_small_mammal$taxonID)))
+    dplyr::filter(taxonID %in% unique(stats::na.omit(data_small_mammal$taxonID)))
   
   table_taxon <- neon_taxon_table %>%
     dplyr::select(taxonID, taxonRank, scientificName, nameAccordingToID) %>%

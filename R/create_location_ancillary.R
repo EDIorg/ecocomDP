@@ -41,7 +41,7 @@ create_location_ancillary <- function(L0_flat,
     dplyr::arrange(location_id)
   # add units
   if (!is.null(unit)) {
-    unit_map <- L0_flat %>% dplyr::select(dplyr::all_of(unit)) %>% na.omit()
+    unit_map <- L0_flat %>% dplyr::select(dplyr::all_of(unit)) %>% stats::na.omit()
     unit_map <- data.frame(variable_name = colnames(unit_map),
                            unit = as.character(unique.data.frame(unit_map)),
                            stringsAsFactors = FALSE)
