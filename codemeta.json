@@ -5,12 +5,12 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "ecocomDP",
-  "description": "A collection of functions to translate your data to the Ecological \n    Community Data Pattern (ecocomDP), make EML for the ecocomDP, and \n    synthesize data in the ecocomDP format.",
-  "name": "ecocomDP: Create and Use the Ecological Community Data Pattern",
-  "codeRepository": "http://github.com/EDIorg/ecocomDP",
-  "issueTracker": "http://github.com/EDIorg/ecocomDP/issues",
+  "description": "Tools to create, use, and convert 'ecocomDP' datasets. 'ecocomDP' is a dataset design pattern for harmonizing ecological community surveys in a research question agnostic format, from source datasets published across multiple repositories, and with methods that keep the derived datasets up-to-date as the underlying sources change.",
+  "name": "ecocomDP: Work with Datasets in the Ecological Community Design Pattern",
+  "codeRepository": "https://github.com/EDIorg/ecocomDP",
+  "issueTracker": "https://github.com/EDIorg/ecocomDP/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "0.0.0.9000",
+  "version": "1.0.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -57,19 +57,6 @@
   "softwareSuggestions": [
     {
       "@type": "SoftwareApplication",
-      "identifier": "ggplot2",
-      "name": "ggplot2",
-      "version": ">= 3.3.3",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=ggplot2"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "knitr",
       "name": "knitr",
       "provider": {
@@ -79,6 +66,19 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=knitr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "mime",
+      "name": "mime",
+      "version": ">= 0.9",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=mime"
     },
     {
       "@type": "SoftwareApplication",
@@ -150,7 +150,20 @@
       "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
-      "version": ">= 2.10"
+      "version": ">= 3.3.0"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "RColorBrewer",
+      "name": "RColorBrewer",
+      "version": ">= 1.1-2",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=RColorBrewer"
     },
     {
       "@type": "SoftwareApplication",
@@ -219,6 +232,19 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "ggplot2",
+      "name": "ggplot2",
+      "version": ">= 3.3.3",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ggplot2"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "httr",
       "name": "httr",
       "version": ">= 1.3.1",
@@ -270,6 +296,18 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "rlang",
+      "name": "rlang",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rlang"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "rmarkdown",
       "name": "rmarkdown",
       "provider": {
@@ -279,6 +317,11 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "stats",
+      "name": "stats"
     },
     {
       "@type": "SoftwareApplication",
@@ -313,6 +356,24 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "utils",
+      "name": "utils"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "uuid",
+      "name": "uuid",
+      "version": ">= 0.1-4",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=uuid"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "xml2",
       "name": "xml2",
       "version": ">= 1.3.0",
@@ -327,7 +388,6 @@
   ],
   "releaseNotes": "https://github.com/EDIorg/ecocomDP/blob/master/NEWS.md",
   "readme": "https://github.com/EDIorg/ecocomDP/blob/master/README.md",
-  "fileSize": "565.475KB",
   "contIntegration": [
     "https://travis-ci.org/EDIorg/ecocomDP",
     "https://codecov.io/github/EDIorg/ecocomDP?branch=master"
