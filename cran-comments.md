@@ -1,13 +1,14 @@
 ## Test environments
-
-* local OS X install, R 3.1.2
-* ubuntu 12.04 (on travis-ci), R 3.1.2
+* local Windows install, R 4.0.2
+* Ubuntu 16.04.6 (on Travis-CI), (devel and R 4.0.2)
 * win-builder (devel and release)
+* macOS 10.13.6 High Sierra (on R-hub), R 4.1.0
+* Fedora Linux, clang, gfortran (on R-hub), devel
 
 ## R CMD check results
+0 errors | 0 warnings | 1 notes
 
-0 errors | 0 warnings | 0 notes
+* New submission
 
 ## Downstream dependencies
-
 There are currently no downstream dependencies for this package

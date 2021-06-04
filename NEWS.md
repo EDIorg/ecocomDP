@@ -1,3 +1,3 @@
-# ecocomDP 0.0.0.9000
+# ecocomDP 1.0.0
 
-* Preparing package for CRAN
+* CRAN Release
