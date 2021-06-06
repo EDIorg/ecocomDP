@@ -1,3 +1,8 @@
+## Resubmission
+This is a resubmission. In this version I have:
+* Converted the DESCRIPTION title to title case.
+* Removed empty lines from the LICENSE file.
+
 ## Test environments
 * local Windows install, R 4.0.2
 * Ubuntu 16.04.6 (on Travis-CI), (devel and R 4.0.2)
