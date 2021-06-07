@@ -4,6 +4,8 @@
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' 
+#' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
+#' 
 #' @import dplyr
 #' @import ggplot2
 #' @import tidyr
@@ -65,6 +67,8 @@ plot_taxa_accum_sites <- function(observation, id, alpha = 1) {
 #' @param observation (tbl_df, tbl, data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
+#' 
+#' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -143,6 +147,8 @@ plot_taxa_accum_time <- function(observation, id, alpha = 1) {
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' 
+#' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
+#' 
 #' @import dplyr
 #' @import ggplot2
 #' @import tidyr
@@ -207,6 +213,8 @@ plot_taxa_diversity <- function(observation, id, alpha = 1) {
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' 
+#' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
+#' 
 #' @import dplyr
 #' @import ggplot2
 #' @import tidyr
@@ -256,6 +264,8 @@ plot_taxa_sample_time <- function(observation, id, alpha = 1) {
 #' 
 #' @param observation (tbl_df, tbl, data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' 
+#' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
 #' 
 #' @import dplyr
 #' @import ggplot2

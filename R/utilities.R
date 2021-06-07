@@ -975,24 +975,6 @@ ping_edi <- function() {
 
 
 
-#' Pipe operator
-#'
-#' See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
-#'
-#' @name %>%
-#' @rdname pipe
-#' @keywords internal
-#' @export
-#' @importFrom magrittr %>%
-#' @usage lhs \%>\% rhs
-NULL
-
-
-
-
-
-
-
 
 
 
@@ -1557,6 +1539,8 @@ validate_path <- function(path){
 
 
 #' View descriptions and requirements of ecocomDP tables
+#' 
+#' @return (NULL) Opens a webpage, in your default browser, with a list of descriptions and requirements of the ecocomDP tables
 #'
 #' @export
 #'
@@ -1577,6 +1561,8 @@ view_descriptions <- function() {
 
 
 #' View diagram of ecocomDP tables and relationships
+#' 
+#' @return (NULL) Opens a webpage, in your default browser, with a diagram keys and linkages among ecocomDP tables
 #'
 #' @export
 #'

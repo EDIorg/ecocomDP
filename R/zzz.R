@@ -1,5 +1,7 @@
 .onLoad <- function(libname = find.package("ecocomDP"), pkgname = "ecocomDP") {
   
+  #' @importFrom magrittr "%>%"
+  
   # CRAN Note avoidance
   if(getRversion() >= "2.15.1") 
     utils::globalVariables(

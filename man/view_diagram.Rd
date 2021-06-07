@@ -6,6 +6,9 @@
 \usage{
 view_diagram()
 }
+\value{
+(NULL) Opens a webpage, in your default browser, with a diagram keys and linkages among ecocomDP tables
+}
 \description{
 View diagram of ecocomDP tables and relationships
 }

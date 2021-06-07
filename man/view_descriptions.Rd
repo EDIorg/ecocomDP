@@ -6,6 +6,9 @@
 \usage{
 view_descriptions()
 }
+\value{
+(NULL) Opens a webpage, in your default browser, with a list of descriptions and requirements of the ecocomDP tables
+}
 \description{
 View descriptions and requirements of ecocomDP tables
 }

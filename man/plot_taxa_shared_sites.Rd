@@ -11,6 +11,9 @@ plot_taxa_shared_sites(observation, id)
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}
 }
+\value{
+(gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
+}
 \description{
 Plot number of unique taxa shared across sites
 }

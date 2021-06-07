@@ -13,6 +13,9 @@ plot_taxa_accum_time(observation, id, alpha = 1)
 
 \item{alpha}{(numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.}
 }
+\value{
+(gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
+}
 \description{
 Plot taxa accumulation through time
 }
