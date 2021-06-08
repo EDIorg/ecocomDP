@@ -1545,7 +1545,7 @@ validate_path <- function(path){
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' view_descriptions()
 #' }
 #' 
@@ -1567,7 +1567,7 @@ view_descriptions <- function() {
 #' @export
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' view_diagram()
 #' }
 #' 

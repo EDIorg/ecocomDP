@@ -31,7 +31,7 @@
 #' @export
 #' 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Empty search returns all available datasets
 #' search_data()
 #' 

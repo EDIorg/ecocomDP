@@ -39,7 +39,7 @@ Convert an ecocomDP dataset to a Darwin Core Archive dataset
 Reads in an ecocomDP dataset from a supported repository and converts it to a DwC-A package.
 }
 \examples{
-\dontrun{
+\donttest{
 # Create directory for DwC-A outputs
 mypath <- paste0(tempdir(), "/data")
 dir.create(mypath)

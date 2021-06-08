@@ -48,7 +48,7 @@ Currently, to accommodate multiple L1 versions of NEON data products, search res
 This function may not work between 01:00 - 03:00 UTC on Wednesdays due to regular maintenance of the EDI Data Repository.
 }
 \examples{
-\dontrun{
+\donttest{
 # Empty search returns all available datasets
 search_data()
 

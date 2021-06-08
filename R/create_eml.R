@@ -41,7 +41,7 @@
 #' @export
 #' 
 #' @examples 
-#' \dontrun{
+#' \donttest{
 #' # Create directory with ecocomDP tables for create_eml()
 #' mypath <- paste0(tempdir(), "/data")
 #' dir.create(mypath)
