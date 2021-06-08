@@ -467,108 +467,32 @@ annotate_eml <- function(
       } else if (element == "dataTable") {
         
         if (!is.null(eml$dataset$dataTable)) {
-          lapply(
-            seq_along(eml$dataset$dataTable),
-            function(k) {
-              sub_i <- eml$dataset$dataTable[[k]]$physical$objectName
-              if (sub_i != "") {
-                eml$dataset$dataTable[[k]]$id <<- unique(anno$id[anno$subject == sub_i])
-                eml$dataset$dataTable[[k]]$annotation <<- anno_ls[anno$subject == sub_i]
-              }
-              lapply(
-                seq_along(eml$dataset$dataTable[[k]]$attributeList$attribute), 
-                function(m) {
-                  sub_i <- eml$dataset$dataTable[[k]]$attributeList$attribute[[m]]$attributeName
-                  con_i <- eml$dataset$dataTable[[k]]$physical$objectName
-                  use_i <- (anno$subject == sub_i) & (anno$context == con_i)
-                  eml$dataset$dataTable[[k]]$attributeList$attribute[[m]]$id <<- unique(anno$id[use_i])
-                  eml$dataset$dataTable[[k]]$attributeList$attribute[[m]]$annotation <<- anno_ls[use_i]
-                })
-            })
+          for (k in seq_along(eml$dataset$dataTable)) {
+            sub_i <- eml$dataset$dataTable[[k]]$physical$objectName
+            if (sub_i != "") {
+              eml$dataset$dataTable[[k]]$id <- unique(anno$id[anno$subject == sub_i])
+              eml$dataset$dataTable[[k]]$annotation <- anno_ls[anno$subject == sub_i]
+            }
+            for (m in seq_along(eml$dataset$dataTable[[k]]$attributeList$attribute)) {
+              sub_i <- eml$dataset$dataTable[[k]]$attributeList$attribute[[m]]$attributeName
+              con_i <- eml$dataset$dataTable[[k]]$physical$objectName
+              use_i <- (anno$subject == sub_i) & (anno$context == con_i)
+              eml$dataset$dataTable[[k]]$attributeList$attribute[[m]]$id <- unique(anno$id[use_i])
+              eml$dataset$dataTable[[k]]$attributeList$attribute[[m]]$annotation <- anno_ls[use_i]
+            }
+          }
         }
         
       } else if (element == "otherEntity") {
         
         if (!is.null(eml$dataset$otherEntity)) {
-          lapply(
-            seq_along(eml$dataset$otherEntity),
-            function(k) {
-              sub_i <- eml$dataset$otherEntity[[k]]$physical$objectName
-              if (sub_i != "") {
-                eml$dataset$otherEntity[[k]]$id <<- unique(anno$id[anno$subject == sub_i])
-                eml$dataset$otherEntity[[k]]$annotation <<- anno_ls[anno$subject == sub_i]
-              }
-              k
-            })
-        }
-        
-      } else if (element == "ResponsibleParty") {
-        
-        # A helper function for assigning ResponsibleParty IDs and appending
-        # recurrences in the rp data frame.
-        
-        append_rp <- function(n) {
-          sub_i <- paste(
-            c(unlist(n$individualName$givenName), n$individualName$surName),
-            collapse = " ")
-          if ((sub_i != "") & any(anno$subject == sub_i)) {
-            n$id <- paste0(
-              unique(anno$id[anno$subject == sub_i]),
-              " ",
-              uuid::UUIDgenerate(use.time = TRUE))
-            rp <<- rbind(
-              rp,
-              suppressWarnings(
-                data.frame(
-                  id = n$id,
-                  anno[
-                    anno$subject == sub_i,
-                    c("element", "context", "subject", "predicate_label",
-                      "predicate_uri", "object_label", "object_uri")
-                    ])))
+          for (k in seq_along(eml$dataset$otherEntity)) {
+            sub_i <- eml$dataset$otherEntity[[k]]$physical$objectName
+            if (sub_i != "") {
+              eml$dataset$otherEntity[[k]]$id <- unique(anno$id[anno$subject == sub_i])
+              eml$dataset$otherEntity[[k]]$annotation <- anno_ls[anno$subject == sub_i]
+            }
           }
-          n
-        }
-        
-        if (!is.null(eml$dataset$creator)) {
-          eml$dataset$creator <- lapply(
-            eml$dataset$creator,
-            function(k) {
-              append_rp(k)
-            })
-        }
-        
-        if (!is.null(eml$dataset$contact)) {
-          eml$dataset$contact <- lapply(
-            eml$dataset$contact,
-            function(k) {
-              append_rp(k)
-            })
-        }
-        
-        if (!is.null(eml$dataset$associatedParty)) {
-          eml$dataset$associatedParty <- lapply(
-            eml$dataset$associatedParty,
-            function(k) {
-              append_rp(k)
-            })
-        }
-        
-        if (!is.null(eml$dataset$project$personnel)) {
-          eml$dataset$project$personnel <- lapply(
-            list(eml$dataset$project$personnel),
-            function(k) {
-              append_rp(k)
-            })
-        }
-        
-        if (!is.null(eml$dataset$project$relatedProject)) {
-          eml$dataset$project$relatedProject <- lapply(
-            eml$dataset$project$relatedProject,
-            function(k) {
-              k$personnel <- append_rp(k$personnel)
-              k
-            })
         }
         
       }
@@ -738,39 +662,32 @@ annotate_element <- function(element, eml, anno, rp) {
   } else if (element == "dataTable") {
     
     if (!is.null(eml$dataset$dataTable)) {
-      lapply(
-        seq_along(eml$dataset$dataTable),
-        function(k) {
-          sub_i <- eml$dataset$dataTable[[k]]$physical$objectName
-          if (sub_i != "") {
-            eml$dataset$dataTable[[k]]$id <<- unique(anno$id[anno$subject == sub_i])
-            eml$dataset$dataTable[[k]]$annotation <<- anno_ls[anno$subject == sub_i]
-          }
-          lapply(
-            seq_along(eml$dataset$dataTable[[k]]$attributeList$attribute), 
-            function(m) {
-              sub_i <- eml$dataset$dataTable[[k]]$attributeList$attribute[[m]]$attributeName
-              con_i <- eml$dataset$dataTable[[k]]$physical$objectName
-              use_i <- (anno$subject == sub_i) & (anno$context == con_i)
-              eml$dataset$dataTable[[k]]$attributeList$attribute[[m]]$id <<- unique(anno$id[use_i])
-              eml$dataset$dataTable[[k]]$attributeList$attribute[[m]]$annotation <<- anno_ls[use_i]
-            })
-        })
+      for (k in seq_along(eml$dataset$dataTable)) {
+        sub_i <- eml$dataset$dataTable[[k]]$physical$objectName
+        if (sub_i != "") {
+          eml$dataset$dataTable[[k]]$id <- unique(anno$id[anno$subject == sub_i])
+          eml$dataset$dataTable[[k]]$annotation <- anno_ls[anno$subject == sub_i]
+        }
+        for (m in seq_along(eml$dataset$dataTable[[k]]$attributeList$attribute)) {
+          sub_i <- eml$dataset$dataTable[[k]]$attributeList$attribute[[m]]$attributeName
+          con_i <- eml$dataset$dataTable[[k]]$physical$objectName
+          use_i <- (anno$subject == sub_i) & (anno$context == con_i)
+          eml$dataset$dataTable[[k]]$attributeList$attribute[[m]]$id <- unique(anno$id[use_i])
+          eml$dataset$dataTable[[k]]$attributeList$attribute[[m]]$annotation <- anno_ls[use_i]
+        }
+      }
     }
     
   } else if (element == "otherEntity") {
     
     if (!is.null(eml$dataset$otherEntity)) {
-      lapply(
-        seq_along(eml$dataset$otherEntity),
-        function(k) {
-          sub_i <- eml$dataset$otherEntity[[k]]$physical$objectName
-          if (sub_i != "") {
-            eml$dataset$otherEntity[[k]]$id <<- unique(anno$id[anno$subject == sub_i])
-            eml$dataset$otherEntity[[k]]$annotation <<- anno_ls[anno$subject == sub_i]
-          }
-          k
-        })
+      for (k in seq_along(eml$dataset$otherEntity)) {
+        sub_i <- eml$dataset$otherEntity[[k]]$physical$objectName
+        if (sub_i != "") {
+          eml$dataset$otherEntity[[k]]$id <- unique(anno$id[anno$subject == sub_i])
+          eml$dataset$otherEntity[[k]]$annotation <- anno_ls[anno$subject == sub_i]
+        }
+      }
     }
     
   } else if (element == "ResponsibleParty") {

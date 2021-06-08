@@ -942,38 +942,36 @@ EAL_make_eml <- function(
     # Parse internal sources
     if (nrow(internal_sources) != 0) {
       data_package_identifiers <- unique(internal_sources$dataPackageID)
-      o <- lapply(
-        data_package_identifiers,
-        function(k) {
-          message("      <methodStep> (provenance metadata)")
-          r <- httr::GET(
-            paste0(
-              url_env("production"),
-              ".lternet.edu/package/provenance/eml/",
-              stringr::str_replace_all(k, '\\.', '/')))
-          if (r$status_code == 200) {
-            prov <- httr::content(r, encoding = 'UTF-8')
-            # Remove IDs from creator and contact to preempt ID + reference
-            # errors
-            xml2::xml_set_attr(
-              xml2::xml_find_all(prov, './/dataSource/creator'),
-              'id', NULL)
-            xml2::xml_set_attr(
-              xml2::xml_find_all(prov, './/dataSource/contact'),
-              'id', NULL)
-            # Write .xml to tempdir() and read back in as an emld list object
-            # to be added to the dataset emld list under construction here
-            xml2::write_xml(prov, paste0(tempdir(), "/provenance_metadata.xml"))
-            prov <- EML::read_eml(paste0(tempdir(), "/provenance_metadata.xml"))
-            prov$`@context` <- NULL
-            prov$`@type` <- NULL
-            eml$dataset$methods$methodStep[[
-              length(eml$dataset$methods$methodStep)+1]] <<- prov
-            suppressMessages(file.remove(paste0(tempdir(), "/provenance_metadata.xml")))
-          } else {
-            message("Unable to get provenance metadata.")
-          }
-        })
+      for (k in data_package_identifiers) {
+        message("      <methodStep> (provenance metadata)")
+        r <- httr::GET(
+          paste0(
+            url_env("production"),
+            ".lternet.edu/package/provenance/eml/",
+            stringr::str_replace_all(k, '\\.', '/')))
+        if (r$status_code == 200) {
+          prov <- httr::content(r, encoding = 'UTF-8')
+          # Remove IDs from creator and contact to preempt ID + reference
+          # errors
+          xml2::xml_set_attr(
+            xml2::xml_find_all(prov, './/dataSource/creator'),
+            'id', NULL)
+          xml2::xml_set_attr(
+            xml2::xml_find_all(prov, './/dataSource/contact'),
+            'id', NULL)
+          # Write .xml to tempdir() and read back in as an emld list object
+          # to be added to the dataset emld list under construction here
+          xml2::write_xml(prov, paste0(tempdir(), "/provenance_metadata.xml"))
+          prov <- EML::read_eml(paste0(tempdir(), "/provenance_metadata.xml"))
+          prov$`@context` <- NULL
+          prov$`@type` <- NULL
+          eml$dataset$methods$methodStep[[
+            length(eml$dataset$methods$methodStep)+1]] <- prov
+          suppressMessages(file.remove(paste0(tempdir(), "/provenance_metadata.xml")))
+        } else {
+          message("Unable to get provenance metadata.")
+        }
+      }
     }
     
     # Identify external sources
@@ -1070,25 +1068,22 @@ EAL_make_eml <- function(
   if (!is.null(x$template$personnel.txt)) {
     use_i <- x$template$personnel.txt$content$role == "pi"
     if (any(use_i)){
-      invisible(
-        lapply(
-          which(use_i),
-          function(k) {
-            if (k == min(which(use_i))) {
-              message("    <project>")
-              eml$dataset$project <<- list(
-                title = x$template$personnel.txt$content$projectTitle[k],
-                personnel = set_person(info_row = k, person_role = "pi"),
-                funding = x$template$personnel.txt$content$funding[k])
-            } else {
-              message("      <relatedProject>")
-              eml$dataset$project$relatedProject[[
-                length(eml$dataset$project$relatedProject)+1]] <<- list(
-                  title = x$template$personnel.txt$content$projectTitle[k],
-                  personnel = set_person(info_row = k, person_role = "pi"),
-                  funding = x$template$personnel.txt$content$funding[k])
-            }
-          }))
+      for (k in which(use_i)) {
+        if (k == min(which(use_i))) {
+          message("    <project>")
+          eml$dataset$project <- list(
+            title = x$template$personnel.txt$content$projectTitle[k],
+            personnel = set_person(info_row = k, person_role = "pi"),
+            funding = x$template$personnel.txt$content$funding[k])
+        } else {
+          message("      <relatedProject>")
+          eml$dataset$project$relatedProject[[
+            length(eml$dataset$project$relatedProject)+1]] <- list(
+              title = x$template$personnel.txt$content$projectTitle[k],
+              personnel = set_person(info_row = k, person_role = "pi"),
+              funding = x$template$personnel.txt$content$funding[k])
+        }
+      }
     }
   }
   
@@ -1375,14 +1370,11 @@ EAL_make_eml <- function(
     # replacement of "&" by "&amp;" resulting in "&amp;gt;" etc. The below code
     # block patches this issue.
     txt <- readLines(paste0(eml.path, "/", package.id, ".xml"), encoding = "UTF-8")
-    invisible(
-      lapply(
-        seq_along(txt),
-        function(x) {
-          txt[x] <<- stringr::str_replace_all(txt[x], "&amp;gt;", "&gt;")
-          txt[x] <<- stringr::str_replace_all(txt[x], "&amp;lt;", "&lt;")
-          txt[x] <<- stringr::str_replace_all(txt[x], "&amp;amp;", "&amp;")
-        }))
+    for (x in seq_along(txt)) {
+      txt[x] <- stringr::str_replace_all(txt[x], "&amp;gt;", "&gt;")
+      txt[x] <- stringr::str_replace_all(txt[x], "&amp;lt;", "&lt;")
+      txt[x] <- stringr::str_replace_all(txt[x], "&amp;amp;", "&amp;")
+    }
     writeLines(txt, paste0(eml.path, "/", package.id, ".xml"), useBytes = T)
   }
   

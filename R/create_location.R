@@ -84,24 +84,21 @@ create_location <- function(L0_flat,
       return(res)
     })
   
-  # Add look up parent_location_id for each level of location_name
-  invisible(
-    lapply(
-      seq_along(location_name),
-      function(i) {
-        if (i != 1) {
-          map <- loc_wide %>% # map location_name at this level to location_name one level up)
-            dplyr::select(c(location_name[i-1], location_name[i])) 
-          for (r in seq(nrow(res[[i]]))) {
-            locname <- res[[i]]$location_name[r]
-            parent_location_name <- map[[location_name[i-1]]][
-              map[[location_name[i]]] == locname]
-            parent_location_id <- res[[i-1]]$location_id[
-              res[[i-1]]$location_name == unique(parent_location_name)]
-            res[[i]]$parent_location_id[r] <<- parent_location_id
-          }
-        }
-      }))
+  # Add parent_location_id for each level of location_name
+  for (i in seq_along(location_name)) {
+    if (i != 1) {
+      map <- loc_wide %>% # map location_name at this level to location_name one level up)
+        dplyr::select(c(location_name[i-1], location_name[i]))
+      for (r in seq(nrow(res[[i]]))) {
+        locname <- res[[i]]$location_name[r]
+        parent_location_name <- map[[location_name[i-1]]][
+          map[[location_name[i]]] == locname]
+        parent_location_id <- res[[i-1]]$location_id[
+          res[[i-1]]$location_name == unique(parent_location_name)]
+        res[[i]]$parent_location_id[r] <- parent_location_id
+      }
+    }
+  }
   
   # combine data frames
   res <- dplyr::bind_rows(res)

@@ -1236,7 +1236,6 @@ read_eml <- function(package.id) {
 EAL_read_eml <- function(path, eml) {
   
   # Create the emld list object
-  
   eml <- EML::read_eml(paste0(path, "/", eml))
   
   # A helper function to wrap target nodes in list(). There are two 
@@ -1246,7 +1245,6 @@ EAL_read_eml <- function(path, eml) {
   # eml = emld list object
   # path.parent = path of the parent node using the "$" subsetting character
   # path.child = path of child node
-  
   list_it <- function(eml, path.parent, path.child = NULL) {
     if (is.null(path.child)) {
       e <- eval(parse(text = path.parent))
@@ -1254,25 +1252,20 @@ EAL_read_eml <- function(path, eml) {
         eval(parse(text = paste0(path.parent, " <- list(e)")))
       }
     } else if (!is.null(path.child)) {
-      lapply(
-        seq_along(eval(parse(text = path.parent))),
-        function(k) {
-          if ((length(eval(parse(text = paste0(path.parent, "[[", k, "]]", path.child)))) > 1) & 
-              (!is.null(names(eval(parse(text = paste0(path.parent, "[[", k, "]]", path.child))))))) {
-            eval(
-              parse(
-                text = paste0(
-                  path.parent, "[[", k, "]]", path.child, 
-                  " <<- list(", 
-                  paste0(path.parent, "[[", k, "]]", path.child), ")")))
-          }
-        })
+      for (k in seq_along(eval(parse(text = path.parent)))) {
+        if ((length(eval(parse(text = paste0(path.parent, "[[", k, "]]", path.child)))) > 1) &
+            (!is.null(names(eval(parse(text = paste0(path.parent, "[[", k, "]]", path.child))))))) {
+          strng <- paste0(path.parent, "[[", k, "]]",
+                          path.child, " <- list(",
+                          paste0(path.parent, "[[", k, "]]", path.child), ")")
+          eval(parse(text = strng))
+        }
+      }
     }
     eml
   }
   
   # Fix the emld list object
-  
   eml <- list_it(eml, "eml$dataset$dataTable")
   eml <- list_it(eml, "eml$dataset$otherEntity")
   eml <- list_it(eml, "eml$dataset$creator")

@@ -144,83 +144,60 @@ read_data <- function(id = NULL, parse_datetime = TRUE,
   # Modify --------------------------------------------------------------------
   
   # Add missing columns
-
-  invisible(
-    lapply(
-      names(d),
-      function(x) {
-        lapply(
-          names(d[[x]]$tables),
-          function(y) {
-            nms <- attr_tbl$column[attr_tbl$table == y]
-            tblnms <- names(d[[x]]$tables[[y]])
-            if ("observation_datetime" %in% tblnms) { # accommodate legacy data by converting observation_datetime to datetime
-              tblnms[tblnms == "observation_datetime"] <- "datetime"
-              names(d[[x]]$tables[[y]]) <<- tblnms
-            }
-            if ((y == "observation_ancillary") & ("event_id" %in% tblnms)) { # Warn if legacy data linking observation_ancillary through the event_id
-              warning("This dataset conforms to an older version of the ecocomDP model in which the observation_ancillary table is linked through the event_id. No validation checks will be applied to the observation_ancillary table.", call. = FALSE)
-              
-              a <- environment()
-              b <- parent.env(env = a)
-              assign("event_id", value = d[[x]]$tables[[y]]$event_id, envir = b)
-              
-            }
-            use_i <- setdiff(nms, tblnms)
-            if (length(use_i) > 0) {
-              d[[x]]$tables[[y]][use_i] <<- NA
-              # There seems to be an incompatibility in the handling of 
-              # ..nms between Mac and Windows Os
-              msg <- try(
-                d[[x]]$tables[[y]] <<- d[[x]]$tables[[y]][ , ..nms], 
-                silent = TRUE)
-              if (attr(msg, "class") == "try-error") {
-                d[[x]]$tables[[y]] <<- d[[x]]$tables[[y]][ , nms]
-              }
-            }
-          })
-        if ((exists("event_id") && !is.null(event_id))) {
-          
-          a <- environment()
-          b <- parent.env(env = a)
-          assign("event_id", value = event_id, envir = b)
-          
+  
+  for (x in names(d)) {
+    for (y in names(d[[x]]$tables)) {
+      nms <- attr_tbl$column[attr_tbl$table == y]
+      tblnms <- names(d[[x]]$tables[[y]])
+      if ("observation_datetime" %in% tblnms) { # accommodate legacy data by converting observation_datetime to datetime
+        tblnms[tblnms == "observation_datetime"] <- "datetime"
+        names(d[[x]]$tables[[y]]) <- tblnms
+      }
+      if ((y == "observation_ancillary") & ("event_id" %in% tblnms)) { # Warn if legacy data linking observation_ancillary through the event_id
+        warning("This dataset conforms to an older version of the ecocomDP model in which the observation_ancillary table is linked through the event_id. No validation checks will be applied to the observation_ancillary table.", call. = FALSE)
+        event_id <- d[[x]]$tables[[y]]$event_id
+      }
+      use_i <- setdiff(nms, tblnms)
+      if (length(use_i) > 0) {
+        d[[x]]$tables[[y]][use_i] <- NA
+        # There seems to be an incompatibility in the handling of 
+        # ..nms between Mac and Windows Os
+        msg <- try(
+          d[[x]]$tables[[y]] <- d[[x]]$tables[[y]][ , ..nms], 
+          silent = TRUE)
+        if (attr(msg, "class") == "try-error") {
+          d[[x]]$tables[[y]] <- d[[x]]$tables[[y]][ , nms]
         }
-      }))
+      }
+    }
+  }
 
   # Coerce column classes to ecocomDP specifications. NOTE: This same 
   # process is applied to read_from_files(). Any update here should be
   # duplicated there. A function is not used in order to minimize data object
   # copies.
-
-  invisible(
-    lapply(
-      names(d),
-      function(x){
-        lapply(
-          names(d[[x]]$tables),
-          function(y) {
-            lapply(
-              names(d[[x]]$tables[[y]]),
-              function(z) {
-                detected <- class(d[[x]]$tables[[y]][[z]])
-                expected <- attr_tbl$class[(attr_tbl$table == y) & (attr_tbl$column == z)]
-                if (isTRUE(parse_datetime) & (expected == "Date") & is.character(detected)) { # NAs should be datetime for consistency
-                  d[[x]]$tables[[y]][[z]] <<- lubridate::as_date(d[[x]]$tables[[y]][[z]])
-                }
-                if (any(detected %in% c("POSIXct", "POSIXt", "Date", "IDate"))) {
-                  detected <- "Date" # so downstream logic doesn't throw length() > 1 warnings
-                }
-                if (detected != expected) {
-                  if (expected == 'character'){
-                    d[[x]]$tables[[y]][[z]] <<- as.character(d[[x]]$tables[[y]][[z]])
-                  } else if (expected == 'numeric'){
-                    d[[x]]$tables[[y]][[z]] <<- as.numeric(d[[x]]$tables[[y]][[z]])
-                  }
-                }
-              })
-          })
-      }))
+  
+  for (x in names(d)) {
+    for (y in names(d[[x]]$tables)) {
+      for (z in names(d[[x]]$tables[[y]])) {
+        detected <- class(d[[x]]$tables[[y]][[z]])
+        expected <- attr_tbl$class[(attr_tbl$table == y) & (attr_tbl$column == z)]
+        if (isTRUE(parse_datetime) & (expected == "Date") & is.character(detected)) { # NAs should be datetime for consistency
+          d[[x]]$tables[[y]][[z]] <- lubridate::as_date(d[[x]]$tables[[y]][[z]])
+        }
+        if (any(detected %in% c("POSIXct", "POSIXt", "Date", "IDate"))) {
+          detected <- "Date" # so downstream logic doesn't throw length() > 1 warnings
+        }
+        if (detected != expected) {
+          if (expected == 'character'){
+            d[[x]]$tables[[y]][[z]] <- as.character(d[[x]]$tables[[y]][[z]])
+          } else if (expected == 'numeric'){
+            d[[x]]$tables[[y]][[z]] <- as.numeric(d[[x]]$tables[[y]][[z]])
+          }
+        }
+      }
+    }
+  }
   
   # Append package_id to primary keys to ensure referential integrity (except
   # package_id, appending package_id to package_id changes the field definition
@@ -228,34 +205,25 @@ read_data <- function(id = NULL, parse_datetime = TRUE,
   # duplicated).
   
   if (isTRUE(unique_keys)) {
-    
-    invisible(
-      lapply(
-        names(d),
-        function(x){
-          lapply(
-            names(d[[x]]$tables),
-            function(y) {
-              lapply(
-                names(d[[x]]$tables[[y]]),
-                function(z) {
-                  if (stringr::str_detect(z, "_id")) {
-                    if (!(z %in% c("package_id", "original_package_id", 
-                                   "mapped_id", "authority_taxon_id", 
-                                   "parent_location_id"))) {
-                      d[[x]]$tables[[y]][[z]] <<- paste0(
-                        d[[x]]$tables[[y]][[z]], "_", x)
-                    } else if (z == "parent_location_id") {
-                      use_i <- is.na(d[[x]]$tables[[y]][[z]])
-                      d[[x]]$tables[[y]][[z]] <<- paste0(
-                        d[[x]]$tables[[y]][[z]], "_", x)
-                      d[[x]]$tables[[y]][[z]][use_i] <<- NA_character_
-                    }
-                  }
-                })
-            })
-        }))
-    
+    for (x in names(d)) {
+      for (y in names(d[[x]]$tables)) {
+        for (z in names(d[[x]]$tables[[y]])) {
+          if (stringr::str_detect(z, "_id")) {
+            if (!(z %in% c("package_id", "original_package_id", 
+                           "mapped_id", "authority_taxon_id", 
+                           "parent_location_id"))) {
+              d[[x]]$tables[[y]][[z]] <- paste0(
+                d[[x]]$tables[[y]][[z]], "_", x)
+            } else if (z == "parent_location_id") {
+              use_i <- is.na(d[[x]]$tables[[y]][[z]])
+              d[[x]]$tables[[y]][[z]] <- paste0(
+                d[[x]]$tables[[y]][[z]], "_", x)
+              d[[x]]$tables[[y]][[z]][use_i] <- NA_character_
+            }
+          }
+        }
+      }
+    }
   }
   
   # Return datetimes as character
@@ -350,27 +318,22 @@ read_data_edi <- function(id, parse_datetime = TRUE) {
   eml <- suppressMessages(
     api_read_metadata(id, environment = config.environment))
   
-  invisible(
-    lapply(
-      names(tbl_attrs),
-      function(x) {
-        tblnames <- xml2::xml_text(xml2::xml_find_all(eml, './/dataset/dataTable/physical/objectName'))
-        use_i <- stringr::str_detect(tblnames, paste0(x, '\\.[:alnum:]*$'))
-        if (any(use_i)) {
-          lapply(
-            names(xpath),
-            function(k){
-              nodeset <- xml2::xml_find_all(eml, ".//dataset/dataTable")[use_i]
-              val <- xml2::xml_text(xml2::xml_find_all(nodeset, xpath[[k]]))
-              if (length(val) == 0) {
-                val <- NA
-              }
-              tbl_attrs[[x]][[k]] <<- val
-            })
-        } else {
-          tbl_attrs[[x]] <<- NULL
+  for (x in names(tbl_attrs)) {
+    tblnames <- xml2::xml_text(xml2::xml_find_all(eml, './/dataset/dataTable/physical/objectName'))
+    use_i <- stringr::str_detect(tblnames, paste0(x, '\\.[:alnum:]*$'))
+    if (any(use_i)) {
+      for (k in names(xpath)) {
+        nodeset <- xml2::xml_find_all(eml, ".//dataset/dataTable")[use_i]
+        val <- xml2::xml_text(xml2::xml_find_all(nodeset, xpath[[k]]))
+        if (length(val) == 0) {
+          val <- NA
         }
-      }))
+        tbl_attrs[[x]][[k]] <- val
+      }
+    } else {
+      tbl_attrs[[x]] <- NULL
+    }
+  }
   
   # Read tables
   output <- lapply(
