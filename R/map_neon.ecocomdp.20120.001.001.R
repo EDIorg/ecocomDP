@@ -1,15 +1,9 @@
 ##############################################################################################
-# @author Stephanie Parker \email{sparker@battelleecology.org}
 
 # @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for MACROINVERTEBRATE from neon.data.product.id DP1.20120.001 from the NEON data portal and map to the ecocomDP format
 
-# changelog and author contributions / copyrights
-#   Eric R Sokol & Ruvi Jaimes (2020-06-08)
-#     original creation
 ##############################################################################################
 
-##### my version ----
-# updated by Eric on 6/9/2020 ~5:10pm
 map_neon.ecocomdp.20120.001.001 <- function(
   neon.data.list,
   neon.data.product.id ="DP1.20120.001",

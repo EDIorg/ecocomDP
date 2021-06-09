@@ -1,7 +1,5 @@
 ##############################################################################################
 ##############################################################################################
-# @author Melissa Chen
-# @author Matt Bitters
 
 # @describeIn map_neon_data_to_ecocomDP This method will retrieve positivity data for TICK_PATHOGEN taxa from neon.data.product.id DP1.10092.001 from the NEON data portal and map to the ecocomDP format
 
@@ -13,9 +11,6 @@ map_neon.ecocomdp.10092.001.001 <- function(
   ...){
   
   # Download and clean tick pathogen data
-  # Authors: Melissa Chen, Wynne Moss, Brendan Hobart, Matt Bitters
-  # Date: 7/1/2020
-  # updated by Eric Sokol for ecocomDP formatting 01 Mar 2021
   
   #NEON target taxon group is SMALL_MAMMALS
   neon_method_id <- "neon.ecocomdp.10092.001.001"

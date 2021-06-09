@@ -1,6 +1,5 @@
 ##############################################################################################
 ##############################################################################################
-# @author Daijiang Li
 
 # @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for BIRD taxa from neon.data.product.id DP1.10003.001 from the NEON data portal and map to the ecocomDP format
 
@@ -10,7 +9,6 @@ map_neon.ecocomdp.10003.001.001 <- function(
   neon.data.list,
   neon.data.product.id = "DP1.10003.001",
   ...){
-  # Authors: Daijiang Li, Eric Sokol
   
   #NEON target taxon group is BIRD
   neon_method_id <- "neon.ecocomdp.10003.001.001"

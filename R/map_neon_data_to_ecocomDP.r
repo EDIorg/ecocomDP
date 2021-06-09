@@ -1,8 +1,6 @@
 # general wrapper function for mapping NEON data products to ecocomDP
 # #############################################################################################
 # @title Map NEON data products to ecocomDP
-# @author Eric R Sokol \email{esokol@battelleecology.org}
-# @author Ruvi Jaimes
 # 
 # @description
 # Pull files from the NEON API by data product, merge data for each table, and convert to ecocomDP format. 
@@ -39,13 +37,8 @@
 # \dontrun{
 # }
 # @references
-# License: GNU AFFERO GENERAL PUBLIC LICENSE Version 3, 19 November 2007
 # 
 
-
-# changelog and author contributions / copyrights
-#   Eric R Sokol (2020-04-17)
-#     original creation
 ##############################################################################################
 map_neon_data_to_ecocomDP <- function(
   id,

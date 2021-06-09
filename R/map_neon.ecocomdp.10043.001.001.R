@@ -1,6 +1,5 @@
 ##############################################################################################
 ##############################################################################################
-# @author Natalie Robinson \email{nrobinson@battelleecology.org}
 
 # @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for MOSQUITO from neon.data.product.id DP1.10043.001 from the NEON data portal and map to the ecocomDP 
 

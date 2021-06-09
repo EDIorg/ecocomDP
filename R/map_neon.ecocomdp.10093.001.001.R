@@ -1,7 +1,5 @@
 ##############################################################################################
 ##############################################################################################
-# @author Wynne Moss
-# @author Brendan Hobart
 
 # @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for TICK taxa from neon.data.product.id DP1.10093.001 from the NEON data portal and map to the ecocomDP format
 
@@ -13,10 +11,6 @@ map_neon.ecocomdp.10093.001.001 <- function(
   ...){
   
   # Download and clean tick data
-  # Authors: Wynne Moss, Melissa Chen, Brendan Hobart, Matt Bitters
-  # Date: 7/8/2020
-  # updated by Eric Sokol for ecocomDP formatting 21 Feb 2021
-  
   
   #NEON target taxon group is SMALL_MAMMALS
   neon_method_id <- "neon.ecocomdp.10093.001.001"

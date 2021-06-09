@@ -1,10 +1,5 @@
 ##############################################################################################
 # @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for ALGAE from neon.data.product.id DP1.20166.001 (Periphyton, seston, and phytoplankton collection) from the NEON data portal and map to the ecocomDP format
-#' 
-
-# changelog and author contributions / copyrights
-#   Eric R Sokol (2020-04-17)
-#     original creation
 ##############################################################################################
 map_neon.ecocomdp.20166.001.001 <- function(
   neon.data.list,

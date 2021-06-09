@@ -1,6 +1,5 @@
 ##############################################################################################
 ##############################################################################################
-# @author Matt Helmus \email{mrhelmus@temple.edu}
 
 # @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for HERPTILE taxa from neon.data.product.id DP1.10022.001 from the NEON data portal and map to the ecocomDP format
 
@@ -10,9 +9,6 @@ map_neon.ecocomdp.10022.001.002 <- function(
   neon.data.list,
   neon.data.product.id = "DP1.10022.001",
   ...){
-  # authors: Matt Helmus (mrhelmus@temple.edu) repurposed Kari Norman's beetle code
-  # updated by Eric Sokol (esokol@battelleecology.org) to comform to ecocomDP
-  
   
   #NEON target taxon group is HERPS
   neon_method_id <- "neon.ecocomdp.10022.001.002"

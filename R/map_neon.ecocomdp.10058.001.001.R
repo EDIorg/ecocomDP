@@ -1,12 +1,9 @@
 ##############################################################################################
 ##############################################################################################
-# @author Michael Just
 
 # @describeIn map_neon_data_to_ecocomDP This method will retrieve percent cover data for PLANT taxa from neon.data.product.id DP1.10058.001 from the NEON data portal and map to the ecocomDP format
 
 ##############################################################################################
-
-# Authors: Daijiang Li; Michael Just; Eric Sokol
 
 # mapping function for PLANT taxa
 map_neon.ecocomdp.10058.001.001 <- function(

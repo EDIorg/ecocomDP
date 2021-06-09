@@ -1,8 +1,7 @@
 ##############################################################################################
-# @author Kari Norman \email{kari.norman@berkeley.edu}
 
 # @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for BEETLE from neon.data.product.id DP1.10022.001 from the NEON data portal and map to the ecocomDP 
-#' 
+#
 ##############################################################################################
 
 
