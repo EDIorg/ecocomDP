@@ -46,18 +46,18 @@
 #' @export
 #' 
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' # Read from EDI
 #' dataset <- read_data("edi.193.4")
 #' # str(dataset)
 #' }
 #' 
-#' \donttest{
+#' \dontrun{
 #' # Read from NEON (full dataset)
 #' dataset <- read_data("neon.ecocomdp.20120.001.001")
 #' }
 #' 
-#' \donttest{
+#' \dontrun{
 #' # Read from NEON with filters (partial dataset)
 #' dataset <- read_data(
 #'   id = "neon.ecocomdp.20120.001.001", 
@@ -67,7 +67,7 @@
 #'   check.size = FALSE)
 #' }
 #' 
-#' \donttest{
+#' \dontrun{
 #' # Read with datetimes as character
 #' dataset <- read_data("edi.193.4", parse_datetime = FALSE)
 #' is.character(dataset$edi.193.4$tables$observation$datetime)
