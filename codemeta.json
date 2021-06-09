@@ -14,10 +14,9 @@
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "4.0.2",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.0.2 (2020-06-22)",
+  "runtimePlatform": "R version 4.0.3 (2020-10-10)",
   "author": [
     {
       "@type": "Person",
@@ -34,7 +33,83 @@
       "@id": "https://orcid.org/0000-0001-5923-0917"
     }
   ],
-  "contributor": {},
+  "contributor": [
+    {
+      "@type": "Person",
+      "givenName": "Matt",
+      "familyName": "Bitters"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Melissa",
+      "familyName": "Chen"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Savannah",
+      "familyName": "Gonzales"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Matt",
+      "familyName": "Helmus"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Brendan",
+      "familyName": "Hobart"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Ruvi",
+      "familyName": "Jaimes"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Lara",
+      "familyName": "Janson"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Marta",
+      "familyName": "Jarzyna"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Michael",
+      "familyName": "Just"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Daijiang",
+      "familyName": "Li"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Wynne",
+      "familyName": "Moss"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Kari",
+      "familyName": "Norman"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Stephanie",
+      "familyName": "Parker"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Natalie",
+      "familyName": "Robinson"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Thilina",
+      "familyName": "Surasinghe"
+    }
+  ],
   "copyrightHolder": [
     {
       "@type": "Person",
@@ -387,9 +462,6 @@
     }
   ],
   "releaseNotes": "https://github.com/EDIorg/ecocomDP/blob/master/NEWS.md",
-  "readme": "https://github.com/EDIorg/ecocomDP/blob/master/README.md",
-  "contIntegration": [
-    "https://travis-ci.org/EDIorg/ecocomDP",
-    "https://codecov.io/github/EDIorg/ecocomDP?branch=master"
-  ]
+  "contIntegration": ["https://travis-ci.org/EDIorg/ecocomDP", "https://codecov.io/github/EDIorg/ecocomDP?branch=master"],
+  "fileSize": "930.56KB"
 }
