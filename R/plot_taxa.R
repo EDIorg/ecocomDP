@@ -45,14 +45,16 @@ plot_taxa_accum_sites <- function(observation, id, alpha = 1) {
   comm.dat <- ds$dslong %>% arrange(SITE_ID)                              # order by site
   no.taxa.space <- calc_cuml_taxa_space(comm.dat)
   no.taxa.space$no.site <- as.numeric(rownames(no.taxa.space))
+  
+  
   # Plot
-  ggplot(data = no.taxa.space, aes(x = no.site, y = no.taxa)) + 
-    geom_point() +
-    geom_line() +
-    labs(title = "Taxa accumulation by site accumulation", subtitle = ds$id) +
-    xlab("Cumulative number of sites") +
-    ylab(paste0("Cumulative number of taxa")) +
-    theme_bw()
+  ggplot2::ggplot(data = no.taxa.space, ggplot2::aes(x = no.site, y = no.taxa)) + 
+    ggplot2::geom_point() +
+    ggplot2::geom_line() +
+    ggplot2::labs(title = "Taxa accumulation by site accumulation", subtitle = ds$id) +
+    ggplot2::xlab("Cumulative number of sites") +
+    ggplot2::ylab(paste0("Cumulative number of taxa")) +
+    ggplot2::theme_bw()
 }
 
 
@@ -106,8 +108,9 @@ plot_taxa_accum_time <- function(observation, id, alpha = 1) {
     cuml.no.taxa$no.taxa <- unlist(lapply(cuml.taxa, function(x){length(x)}))
     return(cuml.no.taxa)
   }
-  cuml.taxa.all.sites <- cuml.taxa.fun(ex = ds$dslong)   # taxa accumulation across all sites pooled together
-  comm.dat <- ds$dslong %>% arrange(SITE_ID)             # order by site
+  cuml.taxa.all.sites <- cuml.taxa.fun(
+    ex = ds$dslong %>% dplyr::arrange(DATE))   # taxa accumulation across all sites pooled together
+  comm.dat <- ds$dslong %>% dplyr::arrange(SITE_ID)             # order by site
   X <- split(comm.dat, as.factor(comm.dat$SITE_ID))   # cumulative number of taxa for each site
   out <- lapply(X, cuml.taxa.fun)
   out[names(out) %in% "lo_2_115"]                     # list to dataframe
@@ -118,20 +121,34 @@ plot_taxa_accum_time <- function(observation, id, alpha = 1) {
       tbl_df() %>%
       separate(rnames, c("SITE_ID", "todrop"), sep = "\\.") %>%
       select(-todrop))
+  
   # Plot
-  ggplot() +
-    geom_point(data = cuml.taxa.by.site, aes(x = year, y = no.taxa, color = SITE_ID), alpha = alpha) +
-    geom_line(data = cuml.taxa.by.site, aes(x = year, y = no.taxa, color = SITE_ID), alpha = alpha) +
-    geom_point(data = cuml.taxa.all.sites, aes(x = year, y = no.taxa, fill = "")) +
-    geom_line(data = cuml.taxa.all.sites, aes(x = year, y = no.taxa)) +
-    labs(title = "Accumulation of taxa through time", subtitle = ds$id) +
-    xlab("Year") +
-    ylab(paste0("Cumulative number of taxa")) +
-    scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") + 
-    guides(color = guide_legend(title = "Site", label.theme = element_text(size = 6)),
-           fill = guide_legend(title = "All sites")) +
-    ylim(c(0, max(cuml.taxa.all.sites$no.taxa))) +
-    theme_bw()
+  ggplot2::ggplot() +
+    ggplot2::geom_point(
+      data = cuml.taxa.by.site, 
+      ggplot2::aes(x = year, y = no.taxa, color = SITE_ID), 
+      alpha = alpha) +
+    ggplot2::geom_line(
+      data = cuml.taxa.by.site, 
+      ggplot2::aes(x = year, y = no.taxa, color = SITE_ID), 
+      alpha = alpha) +
+    ggplot2::geom_point(
+      data = cuml.taxa.all.sites, 
+      ggplot2::aes(x = year, y = no.taxa, fill = "")) +
+    ggplot2::geom_line(
+      data = cuml.taxa.all.sites, 
+      ggplot2::aes(x = year, y = no.taxa)) +
+    ggplot2::labs(title = "Accumulation of taxa through time", subtitle = ds$id) +
+    ggplot2::xlab("Year") +
+    ggplot2::ylab(paste0("Cumulative number of taxa")) +
+    ggplot2::scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") + 
+    ggplot2::guides(
+      color = ggplot2::guide_legend(
+        title = "Site", 
+        label.theme = ggplot2::element_text(size = 6)),
+      fill = ggplot2::guide_legend(title = "All sites")) +
+    ggplot2::ylim(c(0, max(cuml.taxa.all.sites$no.taxa))) +
+    ggplot2::theme_bw()
 }
 
 
@@ -184,20 +201,20 @@ plot_taxa_diversity <- function(observation, id, alpha = 1) {
   }
   ntaxa <- calc_ntaxa(ds$dslong)
   # Plot
-  ggplot() +
-    geom_point(data = ntaxa$ntaxa, aes(x = DATE, y = ntaxa, group = SITE_ID, color = SITE_ID), alpha = alpha) +
-    geom_line(data = ntaxa$ntaxa, aes(x = DATE, y = ntaxa, group = SITE_ID, color = SITE_ID), alpha = alpha) +
-    geom_point(data = ntaxa$total_ntaxa, aes(x = DATE, y = ntaxa, fill = ""), color="black") +
-    geom_line(data = ntaxa$total_ntaxa, aes(x = DATE, y = ntaxa, group = 1), color="black") +
-    labs(title = "Diversity through time", subtitle = ds$id) +
-    xlab("Year") +
-    ylab(paste0("Number of taxa observed")) +
-    scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") +
-    guides(
-      color = guide_legend(title = "Site", label.theme = element_text(size = 6)),
-      fill = guide_legend(title = "All sites")) +
-    ylim(c(0, max(ntaxa$total_ntaxa$ntaxa))) +
-    theme_bw()
+  ggplot2::ggplot() +
+    ggplot2::geom_point(data = ntaxa$ntaxa, ggplot2::aes(x = DATE, y = ntaxa, group = SITE_ID, color = SITE_ID), alpha = alpha) +
+    ggplot2::geom_line(data = ntaxa$ntaxa, ggplot2::aes(x = DATE, y = ntaxa, group = SITE_ID, color = SITE_ID), alpha = alpha) +
+    ggplot2::geom_point(data = ntaxa$total_ntaxa, ggplot2::aes(x = DATE, y = ntaxa, fill = ""), color="black") +
+    ggplot2::geom_line(data = ntaxa$total_ntaxa, ggplot2::aes(x = DATE, y = ntaxa, group = 1), color="black") +
+    ggplot2::labs(title = "Diversity through time", subtitle = ds$id) +
+    ggplot2::xlab("Year") +
+    ggplot2::ylab(paste0("Number of taxa observed")) +
+    ggplot2::scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") +
+    ggplot2::guides(
+      color = ggplot2::guide_legend(title = "Site", label.theme = ggplot2::element_text(size = 6)),
+      fill = ggplot2::guide_legend(title = "All sites")) +
+    ggplot2::ylim(c(0, max(ntaxa$total_ntaxa$ntaxa))) +
+    ggplot2::theme_bw()
 }
 
 
@@ -240,17 +257,17 @@ plot_taxa_sample_time <- function(observation, id, alpha = 1) {
     txty <- 4
   }
   # Plot
-  ggplot() +
-    geom_point(data = ds$dslong, aes(x = DATE, y = SITE_ID), alpha = alpha) +
-    theme_bw() +
-    labs(title = "Sample times", subtitle = ds$id) +
-    xlab("Year") +
-    ylab("Site") +
-    scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") +
-    theme_bw() +
-    theme(
-      axis.text.y.left = element_text(size = txty),
-      plot.margin = margin(0.1, 0.25, 0.1, 0.1, "in"))
+  ggplot2::ggplot() +
+    ggplot2::geom_point(data = ds$dslong, ggplot2::aes(x = DATE, y = SITE_ID), alpha = alpha) +
+    ggplot2::theme_bw() +
+    ggplot2::labs(title = "Sample times", subtitle = ds$id) +
+    ggplot2::xlab("Year") +
+    ggplot2::ylab("Site") +
+    ggplot2::scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") +
+    ggplot2::theme_bw() +
+    ggplot2::theme(
+      axis.text.y.left = ggplot2::element_text(size = txty),
+      plot.margin = ggplot2::margin(0.1, 0.25, 0.1, 0.1, "in"))
 }
 
 
@@ -298,9 +315,9 @@ plot_taxa_shared_sites <- function(observation, id) {
   }
   # aggregate years by cumulative abundances
   comm.cumul <- ds$dswide %>% 
-    group_by(SITE_ID) %>% 
-    select(-OBSERVATION_TYPE, -DATE) %>%
-    summarise_all(sum, na.rm = TRUE)
+    dplyr::group_by(SITE_ID) %>% 
+    dplyr::select(-OBSERVATION_TYPE, -DATE) %>%
+    dplyr::summarise_all(sum, na.rm = TRUE)
   # Convert sum abundance to presence absence
   vals <- comm.cumul %>% dplyr::select(-SITE_ID)
   vals[vals > 0] <- 1
@@ -316,21 +333,21 @@ plot_taxa_shared_sites <- function(observation, id) {
     txty <- 4
   }
   # Plot
-  p <- ggplot(shared.taxa, aes(x = site1, y = site2, fill = shared)) +
-    geom_raster() +
-    scale_fill_gradientn(colours = heat_pal_spectral(100), name = paste0("Taxa shared")) + 
-    theme_bw() +
-    labs(title = "Number of taxa shared across sites", subtitle = ds$id) +
-    xlab("Site") +
-    ylab("Site") +
-    theme(
+  p <- ggplot2::ggplot(shared.taxa, ggplot2::aes(x = site1, y = site2, fill = shared)) +
+    ggplot2::geom_raster() +
+    ggplot2::scale_fill_gradientn(colours = heat_pal_spectral(100), name = paste0("Taxa shared")) + 
+    ggplot2::theme_bw() +
+    ggplot2::labs(title = "Number of taxa shared across sites", subtitle = ds$id) +
+    ggplot2::xlab("Site") +
+    ggplot2::ylab("Site") +
+    ggplot2::theme(
       aspect.ratio = 1, 
-      axis.text.x.bottom = element_text(size = txty, angle = 90, hjust = 1, vjust = 0.5),
-      axis.text.y.left = element_text(size = txty))
+      axis.text.x.bottom = ggplot2::element_text(size = txty, angle = 90, hjust = 1, vjust = 0.5),
+      axis.text.y.left = ggplot2::element_text(size = txty))
   if (is.null(txty)) {
-    p <- p + annotate("text", x = shared.taxa$site1, y = shared.taxa$site2, label = shared.taxa$shared)
+    p <- p + ggplot2::annotate("text", x = shared.taxa$site1, y = shared.taxa$site2, label = shared.taxa$shared)
   } else {
-    p <- p + annotate("text", x = shared.taxa$site1, y = shared.taxa$site2, label = shared.taxa$shared, size = txty)
+    p <- p + ggplot2::annotate("text", x = shared.taxa$site1, y = shared.taxa$site2, label = shared.taxa$shared, size = txty)
   }
   p
 }
