@@ -13,7 +13,7 @@ view_diagram()
 View diagram of ecocomDP tables and relationships
 }
 \examples{
-\donttest{
+\dontrun{
 view_diagram()
 }
 

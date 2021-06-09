@@ -13,7 +13,7 @@ view_descriptions()
 View descriptions and requirements of ecocomDP tables
 }
 \examples{
-\donttest{
+\dontrun{
 view_descriptions()
 }
 

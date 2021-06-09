@@ -73,7 +73,7 @@ This function creates an EML record for an ecocomDP by combining metadata from \
     Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. \href{https://www.itis.gov/}{ITIS}, \href{http://www.marinespecies.org/}{WORMS}, or \href{https://gbif.org}{GBIF}), will have their full taxonomic hierarchy expanded, including any common names for each level.
 }
 \examples{
-\donttest{
+\dontrun{
 # Create directory with ecocomDP tables for create_eml()
 mypath <- paste0(tempdir(), "/data")
 dir.create(mypath)
