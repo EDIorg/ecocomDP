@@ -455,7 +455,6 @@ format_for_comm_plots <- function(observation, id) {
 plot_taxa_rank <- function(observation, taxon, id, alpha = 1) {
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting   # not sure if this is needed/compatible for plots using taxon table
-  # Calculate cumulative number of taxa 
   taxon %>%
   ggplot2::ggplot(aes(taxon_rank)) + 
     ggplot2::labs(title = "Taxa rank frequencies", subtitle = ds$id) +
@@ -463,4 +462,63 @@ plot_taxa_rank <- function(observation, taxon, id, alpha = 1) {
     ggplot2::ylab(paste0("Number of taxa")) +
     geom_bar() +
     theme(axis.text.x = element_text(angle = 45, hjust=1))
+}
+
+
+
+
+
+
+
+#' Plot taxa  by site
+#'
+#' @param tables (list of tbl_df, tbl, data.frame) A named list of ecocomDP tables.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
+#' 
+#' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
+#' 
+#' @import dplyr
+#' @import ggplot2
+#' @import tidyr
+#' 
+#' @export
+#' 
+#' @examples
+#' tables <- ants_L1[[1]]$tables
+#' id <- names(ants_L1)
+#' 
+#' plot_taxa_sample_time(observation, id)
+#' 
+plot_taxa_rank_by_site <- function(tables, id, alpha = 1) {
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  ds <- format_for_comm_plots(tables$observation, id)                    # intermediate format for plotting 
+  
+  flat <- flatten_data(tables) 
+  flat$unit %>% unique()
+  flat %>%
+    group_by(event_id, taxon_id) %>%
+    summarize(n_obs = length(event_id)) %>%
+    dplyr::filter(n_obs > 1)
+  summed <- flat %>%
+    group_by(event_id, taxon_id) %>%
+    summarize(value = sum(value, na.rm = FALSE))
+  cleaned <- flat %>%
+    dplyr::select(
+      event_id, location_id, datetime,
+      taxon_id, taxon_rank, taxon_name) %>%
+    distinct() %>%
+    right_join(inv_summed)
+  
+  cleaned %>%
+    group_by(location_id, taxon_rank) %>%
+    summarize(n_taxa = taxon_id %>%
+                unique() %>% length()) %>%
+    ggplot2::ggplot(aes(n_taxa, taxon_rank)) + 
+    facet_wrap(~location_id) +
+    ggplot2::labs(title = "Taxa rank frequencies by site", subtitle = ds$id) +
+    ggplot2::xlab("Number of taxa") +
+    ggplot2::ylab(paste0("Taxon rank")) +
+    geom_col()
+  
 }
