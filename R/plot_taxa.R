@@ -450,7 +450,7 @@ format_for_comm_plots <- function(observation, id) {
 #' taxon <- ants_L1[[1]]$tables$taxon
 #' id <- names(ants_L1)
 #' 
-#' plot_taxa_sample_time(observation, id)
+#' plot_taxa_rank(observation, taxon, id)
 #' 
 plot_taxa_rank <- function(observation, taxon, id, alpha = 1) {
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
@@ -488,7 +488,7 @@ plot_taxa_rank <- function(observation, taxon, id, alpha = 1) {
 #' tables <- ants_L1[[1]]$tables
 #' id <- names(ants_L1)
 #' 
-#' plot_taxa_sample_time(observation, id)
+#' plot_taxa_rank_by_site(tables, id)
 #' 
 plot_taxa_rank_by_site <- function(tables, id, alpha = 1) {
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
@@ -508,7 +508,7 @@ plot_taxa_rank_by_site <- function(tables, id, alpha = 1) {
       event_id, location_id, datetime,
       taxon_id, taxon_rank, taxon_name) %>%
     distinct() %>%
-    right_join(inv_summed)
+    right_join(summed)
   
   cleaned %>%
     group_by(location_id, taxon_rank) %>%
@@ -522,3 +522,74 @@ plot_taxa_rank_by_site <- function(tables, id, alpha = 1) {
     geom_col()
   
 }
+
+
+
+
+
+
+
+#' Plot stacked taxa by site
+#'
+#' @param tables (list of tbl_df, tbl, data.frame) A named list of ecocomDP tables.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' @param rank (string) The rank of taxa to plot. Defaults to NA
+#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
+#' 
+#' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
+#' 
+#' @import dplyr
+#' @import ggplot2
+#' @import tidyr
+#' 
+#' @export
+#' 
+#' @examples
+#' tables <- ants_L1[[1]]$tables
+#' id <- names(ants_L1)
+#' rank <- "order"
+#' 
+#' plot_stacked_taxa_by_site(tables, id, rank)
+#' 
+plot_stacked_taxa_by_site <- function(tables, id, rank=NA, alpha = 1) {
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  ds <- format_for_comm_plots(tables$observation, id)                    # intermediate format for plotting
+  
+  flat <- flatten_data(tables) 
+  flat$unit %>% unique()
+  flat %>%
+    group_by(event_id, taxon_id) %>%
+    summarize(n_obs = length(event_id)) %>%
+    dplyr::filter(n_obs > 1)
+  summed <- flat %>%
+    group_by(event_id, taxon_id) %>%
+    summarize(value = sum(value, na.rm = FALSE))
+  cleaned <- flat %>%
+    dplyr::select(
+      event_id, location_id, datetime,
+      taxon_id, taxon_rank, taxon_name) %>%
+    distinct() %>%
+    right_join(summed)
+  
+#  by_rank <- cleaned %>%
+    ifelse(!is.na(rank),
+            by_rank <- cleaned %>% filter(taxon_rank==rank) %>%
+              group_by(event_id, location_id, datetime, taxon_id, taxon_rank, taxon_name, value) %>%
+              summarize(counts = sum(value, na.rm=TRUE)),
+            by_rank <- cleaned %>% group_by(event_id, location_id, datetime, taxon_id, taxon_rank, taxon_name, value) %>%
+              summarize(counts = sum(value, na.rm=TRUE)))
+  
+  by_rank %>%
+    group_by(taxon_name, location_id) %>%
+    summarize(
+      occurrence = (counts > 0) %>% sum()) %>%
+    #filter(occurrence > 25)) %>%               # create if/else statement for cutoff
+    ggplot(aes(
+      x = reorder(taxon_name, -occurrence),
+      y = occurrence,
+      color = location_id,
+      fill = location_id)) +
+    geom_col() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+}
+
