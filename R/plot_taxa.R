@@ -456,7 +456,7 @@ plot_taxa_rank <- function(observation, taxon, id, alpha = 1) {
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting   # not sure if this is needed/compatible for plots using taxon table
   taxon %>%
-  ggplot2::ggplot(aes(taxon_rank)) + 
+    ggplot2::ggplot(aes(taxon_rank)) + 
     ggplot2::labs(title = "Taxa rank frequencies", subtitle = ds$id) +
     ggplot2::xlab("Taxon rank") +
     ggplot2::ylab(paste0("Number of taxa")) +
@@ -571,25 +571,28 @@ plot_stacked_taxa_by_site <- function(tables, id, rank=NA, alpha = 1) {
     distinct() %>%
     right_join(summed)
   
-#  by_rank <- cleaned %>%
-    ifelse(!is.na(rank),
-            by_rank <- cleaned %>% filter(taxon_rank==rank) %>%
-              group_by(event_id, location_id, datetime, taxon_id, taxon_rank, taxon_name, value) %>%
-              summarize(counts = sum(value, na.rm=TRUE)),
-            by_rank <- cleaned %>% group_by(event_id, location_id, datetime, taxon_id, taxon_rank, taxon_name, value) %>%
-              summarize(counts = sum(value, na.rm=TRUE)))
+  ifelse(!is.na(rank),
+         by_rank <- cleaned %>% filter(taxon_rank==rank) %>%
+           group_by(event_id, location_id, datetime, taxon_id, taxon_rank, taxon_name, value) %>%
+           summarize(counts = sum(value, na.rm=TRUE)),
+         by_rank <- cleaned %>% group_by(event_id, location_id, datetime, taxon_id, taxon_rank, taxon_name, value) %>%
+           summarize(counts = sum(value, na.rm=TRUE)))
   
   by_rank %>%
     group_by(taxon_name, location_id) %>%
     summarize(
       occurrence = (counts > 0) %>% sum()) %>%
-    #filter(occurrence > 25)) %>%               # create if/else statement for cutoff
-    ggplot(aes(
+    #filter(occurrence > 25) %>%               # create if/else statement for cutoff
+    ggplot2::ggplot(aes(
       x = reorder(taxon_name, -occurrence),
       y = occurrence,
       color = location_id,
       fill = location_id)) +
+    ggplot2::labs(title = "Taxa frequencies by site", subtitle = ds$id) + # add ifelse(!is.na(rank), title += by rank,NA)
+    ggplot2::xlab("Taxa name") +
+    ggplot2::ylab(paste0("Number of taxa")) +
     geom_col() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 }
 
