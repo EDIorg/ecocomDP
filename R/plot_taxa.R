@@ -422,3 +422,45 @@ format_for_comm_plots <- function(observation, id) {
     dswide = dswide)
   return(res)
 }
+
+
+
+
+
+
+
+
+#' Plot taxa ranks
+#'
+#' @param observation (tbl_df, tbl, data.frame) The observation table.
+#' @param taxon (tbl_df, tbl, data.frame) The taxon table.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
+#' 
+#' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
+#' 
+#' @import dplyr
+#' @import ggplot2
+#' @import tidyr
+#' 
+#' @export
+#' 
+#' @examples
+#' observation <- ants_L1[[1]]$tables$observation
+#' taxon <- ants_L1[[1]]$tables$taxon
+#' id <- names(ants_L1)
+#' 
+#' plot_taxa_sample_time(observation, id)
+#' 
+plot_taxa_rank <- function(observation, taxon, id, alpha = 1) {
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting   # not sure if this is needed/compatible for plots using taxon table
+  # Calculate cumulative number of taxa 
+  taxon %>%
+  ggplot2::ggplot(aes(taxon_rank)) + 
+    ggplot2::labs(title = "Taxa rank frequencies", subtitle = ds$id) +
+    ggplot2::xlab("Taxon rank") +
+    ggplot2::ylab(paste0("Number of taxa")) +
+    geom_bar() +
+    theme(axis.text.x = element_text(angle = 45, hjust=1))
+}
