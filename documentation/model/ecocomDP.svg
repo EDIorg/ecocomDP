@@ -1027,12 +1027,12 @@
        x="452.698">variable_mapping_id</text>
     <polygon
        transform="matrix(1.1236732,0,0,0.95450879,194.15127,623.59801)"
-       style="fill:#f4f7da;stroke:none"
+       style="fill:#ffffff;stroke:none"
        id="polygon4430a"
        points="228.5,-152.2 322.5,-152.2 322.5,-133.2 228.5,-133.2 228.5,-133.2 " />
     <polygon
        transform="matrix(1.1250554,0,0,0.95045181,193.87025,623.01908)"
-       style="fill:url(#diagonalHatch);stroke:#000000"
+       style="fill:none;stroke:#000000"
        id="polygon4432a"
        points="322.5,-152.2 322.5,-133.2 228.5,-133.2 228.5,-133.2 228.5,-152.2 " />
     <!-- <rect x="0" y="0" width="100%" height="100%" fill="url(#diagonalHatch)"/> -->
@@ -1045,12 +1045,12 @@
        x="452.70569">table_name</text>
     <polygon
        transform="matrix(1.1182024,0,0,0.95450879,195.40135,623.59801)"
-       style="fill:#f4f7da;stroke:none"
+       style="fill:#ffffff;stroke:none"
        id="polygon4436a"
        points="228.5,-114.2 228.5,-133.2 322.5,-133.2 322.5,-114.2 228.5,-114.2 " />
     <polygon
        transform="matrix(1.1249539,0,0,0.95045424,193.89344,623.09646)"
-       style="fill:url(#diagonalHatch);stroke:#000000"
+       style="fill:none;stroke:#000000"
        id="polygon4438a"
        points="228.5,-133.2 322.5,-133.2 322.5,-114.2 228.5,-114.2 228.5,-114.2 " />
     <text
