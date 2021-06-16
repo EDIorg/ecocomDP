@@ -320,11 +320,11 @@ create_eml <- function(path,
       has_varname <- "variable_name" %in% colnames(eal_inputs$x$data.table[[tbl]]$content)
       if (has_varname) {
         univars <- unique(eal_inputs$x$data.table[[tbl]]$content$variable_name)
-        unidefs <- unname(defs[names(defs) %in% univars])
+        unidefs <- defs[names(defs) %in% univars]
         catvars_template <- data.frame(
           attributeName = "variable_name",
-          code = univars,
-          definition = unidefs,
+          code = names(unidefs),
+          definition = unname(unidefs),
           stringsAsFactors = FALSE)
         return(list(content = catvars_template))
       }

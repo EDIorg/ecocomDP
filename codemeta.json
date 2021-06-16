@@ -10,13 +10,14 @@
   "codeRepository": "https://github.com/EDIorg/ecocomDP",
   "issueTracker": "https://github.com/EDIorg/ecocomDP/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.0.0",
+  "version": "1.0.0.9001",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
+    "version": "4.0.2",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.0.3 (2020-10-10)",
+  "runtimePlatform": "R version 4.0.2 (2020-06-22)",
   "author": [
     {
       "@type": "Person",
@@ -462,6 +463,15 @@
     }
   ],
   "releaseNotes": "https://github.com/EDIorg/ecocomDP/blob/master/NEWS.md",
-  "contIntegration": ["https://travis-ci.org/EDIorg/ecocomDP", "https://codecov.io/github/EDIorg/ecocomDP?branch=master"],
-  "fileSize": "930.56KB"
+  "contIntegration": [
+    "https://travis-ci.org/EDIorg/ecocomDP",
+    "https://codecov.io/github/EDIorg/ecocomDP?branch=master"
+  ],
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
+  "readme": "https://github.com/EDIorg/ecocomDP/blob/master/README.md"
 }

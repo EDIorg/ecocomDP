@@ -16,8 +16,6 @@ testthat::test_that("Creates valid EML", {
   do.call(write_tables, inpts)
   file.copy(system.file("extdata", "create_ecocomDP.R", package = "ecocomDP"), mypath)
   
-  dir(mypath)
-  
   # Describe, with annotations, what the source L0 dataset "is about"
   dataset_annotations <- c(
     `species abundance` = "http://purl.dataone.org/odo/ECSO_00001688",
