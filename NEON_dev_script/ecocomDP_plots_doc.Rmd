@@ -1,0 +1,117 @@
+---
+title: "Data visualization using ecocomDP"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## Preparing and loading data
+
+```{r libraries, message=FALSE}
+library(tidyverse)
+library(neonUtilities)
+devtools::load_all("C:/Users/savan/Documents/GitHub/savannahrayegonzales/ecocomDP")
+#library(ecocomDP)
+```
+
+
+Link to NEON token tutorial: https://www.neonscience.org/resources/learning-hub/tutorials/neon-api-tokens-tutorial 
+
+```{r token}
+NEON_TOKEN = Sys.getenv('NEON_TOKEN')
+```
+
+
+Load data using ecocomDP package and (optional) NEON token
+
+```{r load data, message=FALSE}
+inv <- ecocomDP::read_data(
+  id = "neon.ecocomdp.20120.001.001",
+  site = c('ARIK','MAYF'),
+  startdate = "2017-06",
+  enddate = "2020-03",
+  token = NEON_TOKEN, #optional argument
+  check.size = FALSE)
+```
+
+
+
+## Plotting
+
+
+Graph frequencies of each taxon rank. Produces a bar graph displaying which rank is most common.
+
+```{r taxa rank, fig.cap="Over both sites, the taxon rank genus is most commonly recorded."}
+ecocomDP::plot_taxa_rank(inv[[1]]$tables$observation,
+               inv[[1]]$tables$taxon,
+               inv[[1]]$tables$observation$location_id)
+```
+
+
+Same as above, but separate into bar graphs for each site.
+
+```{r taxon rank by site, message=FALSE, fig.cap="The taxon rank genus is most commonly recorded at both sites individually."}
+ecocomDP::plot_taxa_rank_by_site(inv[[1]]$tables,
+                       inv[[1]]$tables$observation$location_id)
+```
+
+
+Stacked taxa by site, with argument rank="order" The frequencies for each observation when taxon_rank=order is plotted. This doesn't include more specific ranks (ex: doesn't include the order when the observation's taxon_rank=species, despite that species belonging to the same order).
+
+```{r stacked taxa by rank (order) by site, message=FALSE, fig.cap="Collembola sp. is the most commonly recorded order at both at the first site (ARIK) and overall. Plecoptera is the most commonly recorded order at the second site (MAYF)."}
+ecocomDP::plot_stacked_taxa_by_site(inv[[1]]$tables,
+                          inv[[1]]$tables$observation$location_id,
+                          "order")
+```
+
+One way to improve this plot is by ordering the bars' sum from greatest to least, rather than only ordering the red bars from the first site.
+
+Similar to figure above, but given the argument rank="family"
+```{r stacked taxa by rank (family) by site, message=FALSE, fig.cap="Most commonly recorded families at both sites"}
+ecocomDP::plot_stacked_taxa_by_site(inv[[1]]$tables,
+                          inv[[1]]$tables$observation$location_id,
+                          "family")
+
+```
+
+
+Faceted densities plot, shows averages of each taxa from a specified rank. Only includes when taxon_rank=order, not any more specific ranks.
+``` {r faceted densities plot, message=FALSE, fig.cap="Shows the averages of each order of taxa."}
+ecocomDP::plot_faceted_densities(inv[[1]]$tables,
+                       inv[[1]]$tables$observation$location_id,
+                       "order")
+```
+Need to include what the specified rank is in the final plot - either on x-axis label or in title.
+
+
+## Existing plotting functions in the ecocomDP package
+
+Explain arguments for each of these 4 functions.
+```{r alpha diversity, message=FALSE, warning=FALSE}
+ecocomDP::plot_taxa_diversity(inv[[1]]$tables$observation, inv[[1]]$tables$observation$taxon_id)
+```
+
+Different sites and times in the data set.
+```{r samples over time, message=FALSE, warning=FALSE}
+ecocomDP::plot_taxa_sample_time(inv[[1]]$tables$observation, inv[[1]]$tables$observation$taxon_id)
+```
+One way to potentially improve this plot is by making each dot size bigger when more observations are present at a particular site and time.
+
+Number of taxa counted as the number of sites increases. This example only includes 2 sites, so looks correct, only 2 data points.
+```{r taxa over sites, message=FALSE, warning=FALSE}
+ecocomDP::plot_taxa_accum_sites(inv[[1]]$tables$observation, inv[[1]]$tables$observation$location_id)
+```
+
+Number of taxa counts at each site over time. The curves for the two sites appear correct, but the curve representing all sites does not look like what is expected; the black line should show the summation of both sites.
+```{r taxa over time, message=FALSE, warning=FALSE}
+ecocomDP::plot_taxa_accum_time(inv[[1]]$tables$observation, inv[[1]]$tables$observation$location_id)
+```
+
+Matrix-like plot representing the taxa shared between all sites.
+```{r taxa shared sites, message=FALSE, warning=FALSE}
+ecocomDP::plot_taxa_shared_sites(inv[[1]]$tables$observation, inv[[1]]$tables$observation$location_id)
+```
