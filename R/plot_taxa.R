@@ -533,10 +533,11 @@ plot_taxa_rank_by_site <- function(tables, id, alpha = 1) {
 #'
 #' @param tables (list of tbl_df, tbl, data.frame) A named list of ecocomDP tables.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
-#' @param rank (string) The rank of taxa to plot. Defaults to NA
+#' @param rank (string) The rank of taxa to plot. Defaults to NA.
+#' @param cutoff (numeric) Defaults to 0.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' 
-#' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
+#' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device.
 #' 
 #' @import dplyr
 #' @import ggplot2
@@ -551,7 +552,7 @@ plot_taxa_rank_by_site <- function(tables, id, alpha = 1) {
 #' 
 #' plot_stacked_taxa_by_site(tables, id, rank)
 #' 
-plot_stacked_taxa_by_site <- function(tables, id, rank=NA, alpha = 1) {
+plot_stacked_taxa_by_site <- function(tables, id, cutoff=0, rank=NA, alpha = 1) {
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(tables$observation, id)                    # intermediate format for plotting
   
@@ -582,7 +583,7 @@ plot_stacked_taxa_by_site <- function(tables, id, rank=NA, alpha = 1) {
     group_by(taxon_name, location_id) %>%
     summarize(
       occurrence = (counts > 0) %>% sum()) %>%
-    #filter(occurrence > 25) %>%               # create if/else statement for cutoff
+    filter(occurrence > cutoff) %>%               # create if/else statement for cutoff
     ggplot2::ggplot(aes(
       x = reorder(taxon_name, -occurrence),
       y = occurrence,
@@ -678,7 +679,8 @@ plot_faceted_densities <- function(tables, id, rank=NA, alpha=1) {
 #' @import dplyr
 #' @import ggplot2
 #' @import tidyr
-#' @import maps
+#' @import usmap
+#' @import ggrepel
 #' 
 #' @export
 #' 
@@ -703,37 +705,24 @@ plot_sites <- function(tables, id, alpha=1, labels=TRUE) {
     summarize(value = sum(value, na.rm = FALSE))
   cleaned <- flat %>%
     dplyr::select(
-      longitude, latitude) %>%
+      longitude, latitude, location_id) %>%
     distinct()
   
+  library(usmap)
+  library(ggrepel)
   
   transformed_cleaned <- usmap_transform(cleaned)
   
   plot_usmap() + geom_point(
     data = transformed_cleaned,
     aes(x = longitude.1, y = latitude.1, size = 20),
-    color = "red", alpha = alpha) + 
+    color = "red", alpha = alpha) +
+    geom_text_repel(data=transformed_cleaned,
+              aes(x=longitude.1, y=latitude.1, label=location_id),
+              size=3) +
     ggplot2::labs(title = "Site Locations on US Map", subtitle = ds$id) +
     ggplot2::xlab("Longitude") +
     ggplot2::ylab(paste0("Latitude")) +
     theme(legend.position = "none")
-  
-  # plot_usmap(labels=labels) + geom_point(
-  #   data = cleaned,
-  #   aes(x = longitude, y = latitude, size = 20),
-  #   color = "red", alpha = 0.5) + 
-  #   ggplot2::labs(title = "Site Locations on US Map", subtitle = ds$id) +
-  #   ggplot2::xlab("Longitude") +
-  #   ggplot2::ylab(paste0("Latitude")) +
-  #   theme(legend.position = "none")
-  
-  # USA <- map_data("world") %>% filter(region=="USA")
-  # 
-  # data <- world.cities %>% filter(country.etc=="USA")
-  # 
-  # ggplot() +
-  #   geom_polygon(data = USA, aes(x=long, y = lat, group = group), fill="grey", alpha=0.3) +
-  #   geom_point(data=cleaned, aes(x=long, y=lat)) +
-  #   theme_void() + xlim(-250,50) + ylim(20,80) + coord_map()
   
 }
