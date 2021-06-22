@@ -671,12 +671,14 @@ plot_faceted_densities <- function(tables, id, rank=NA, alpha=1) {
 #' @param tables (list of tbl_df, tbl, data.frame) A named list of ecocomDP tables.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
+#' @param labels (boolean) Argument to show labels of each US state. Default is TRUE.
 #' 
 #' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
 #' 
 #' @import dplyr
 #' @import ggplot2
 #' @import tidyr
+#' @import maps
 #' 
 #' @export
 #' 
@@ -686,7 +688,7 @@ plot_faceted_densities <- function(tables, id, rank=NA, alpha=1) {
 #' 
 #' plot_sites(tables, id, rank)
 #' 
-plot_sites <- function(tables, id, alpha=1) {
+plot_sites <- function(tables, id, alpha=1, labels=TRUE) {
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(tables$observation, id)                    # intermediate format for plotting
   
@@ -701,12 +703,37 @@ plot_sites <- function(tables, id, alpha=1) {
     summarize(value = sum(value, na.rm = FALSE))
   cleaned <- flat %>%
     dplyr::select(
-      latitude, longitude) %>%
+      longitude, latitude) %>%
     distinct()
   
-  plot_usmap(labels=TRUE) + geom_point(
-    data = cleaned,
-    aes(x = longitude, y = latitude),
-    color = "red", alpha = alpha
-  )
+  
+  transformed_cleaned <- usmap_transform(cleaned)
+  
+  plot_usmap() + geom_point(
+    data = transformed_cleaned,
+    aes(x = longitude.1, y = latitude.1, size = 20),
+    color = "red", alpha = alpha) + 
+    ggplot2::labs(title = "Site Locations on US Map", subtitle = ds$id) +
+    ggplot2::xlab("Longitude") +
+    ggplot2::ylab(paste0("Latitude")) +
+    theme(legend.position = "none")
+  
+  # plot_usmap(labels=labels) + geom_point(
+  #   data = cleaned,
+  #   aes(x = longitude, y = latitude, size = 20),
+  #   color = "red", alpha = 0.5) + 
+  #   ggplot2::labs(title = "Site Locations on US Map", subtitle = ds$id) +
+  #   ggplot2::xlab("Longitude") +
+  #   ggplot2::ylab(paste0("Latitude")) +
+  #   theme(legend.position = "none")
+  
+  # USA <- map_data("world") %>% filter(region=="USA")
+  # 
+  # data <- world.cities %>% filter(country.etc=="USA")
+  # 
+  # ggplot() +
+  #   geom_polygon(data = USA, aes(x=long, y = lat, group = group), fill="grey", alpha=0.3) +
+  #   geom_point(data=cleaned, aes(x=long, y=lat)) +
+  #   theme_void() + xlim(-250,50) + ylim(20,80) + coord_map()
+  
 }
