@@ -3,6 +3,7 @@
 * Fix alignment of categorical variable names and definitions in `create_eml()`.
 * Fix assignment of self referencing ids in `create_location()`.
 * Fix methods in `calc_number_of_years_sampled()` and `calc_length_of_survey_years()`.
+* Fix numeric type detection in `create_eml()`.
 
 # ecocomDP 1.0.0
 
