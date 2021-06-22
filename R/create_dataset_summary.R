@@ -135,7 +135,7 @@ calc_length_of_survey_years <- function(dates) {
 #' 
 calc_number_of_years_sampled <- function(dates) {
   years_sampled <- stats::na.omit(unique(lubridate::year(dates)))
-  res <- length(years_sampled)
+  res <- length(years_sampled) - 1
   return(res)
 }
 
