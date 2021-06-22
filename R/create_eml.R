@@ -340,13 +340,27 @@ create_eml <- function(path,
     names(eal_inputs$x$data.table),
     "taxon\\.[:alpha:]*$")
   taxon <- eal_inputs$x$data.table[[f]]$content
+
+  # Handle exceptions
+  if (!is.null(taxon$authority_system)) { # Default to taxonRankValue if missing authority cols
+    authsys <- taxon$authority_system
+  } else {
+    authsys <- NA_character_
+  }
+  if (!is.null(taxon$authority_taxon_id)) {
+    authid <- taxon$authority_taxon_id
+  } else {
+    authid <- NA_character_
+  }
+  authsys <- ifelse(is.na(authid), NA_character_, authsys) # Default to taxonRankValue if missing any required authority values
+  authid <- ifelse(is.na(authsys), NA_character_, authid)
   
   taxonomic_coverage <- data.frame(
     name = taxon$taxon_name,
     name_type = "scientific",
     name_resolved = taxon$taxon_name,
-    authority_system = ifelse(!is.null(taxon$authority_system), taxon$authority_system, NA_character_),
-    authority_id = ifelse(!is.null(taxon$authority_taxon_id), taxon$authority_taxon_id, NA_character_),
+    authority_system = authsys,
+    authority_id = authid,
     stringsAsFactors = FALSE)
   
   eal_inputs$x$template$taxonomic_coverage.txt$content <- taxonomic_coverage

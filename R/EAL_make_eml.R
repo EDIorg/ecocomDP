@@ -872,6 +872,7 @@ EAL_make_eml <- function(
     if (!requireNamespace("worrms", quietly = TRUE)) {
       warning("Package 'worrms' is required for taxonomic rank expansion but is not installed", call. = FALSE)
     }
+    
     # Expand taxonomic ranks and create taxonomic coverage
     tc <- try(
       suppressMessages(
@@ -879,7 +880,6 @@ EAL_make_eml <- function(
           taxa.clean = x$template$taxonomic_coverage.txt$content$name_resolved,
           authority = x$template$taxonomic_coverage.txt$content$authority_system,
           authority.id = x$template$taxonomic_coverage.txt$content$authority_id,
-          rank = x$template$taxonomic_coverage.txt$content$rank,
           write.file = F)),
       silent = T)
     if (class(tc) != "try-error") {
