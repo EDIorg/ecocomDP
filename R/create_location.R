@@ -46,7 +46,7 @@ create_location <- function(L0_flat,
     dplyr::select(all_of(c(location_id, latitude, longitude, elevation, location_name))) %>%
     dplyr::distinct()
   
-  # Add any missing columns to loc_wide because downstream depend on them
+  # Add missing cols to loc_wide - Some downstream processes require them
   if (is.null(latitude)) {
     loc_wide$latitude <- NA
   }
@@ -57,52 +57,57 @@ create_location <- function(L0_flat,
     loc_wide$elevation <- NA
   }
   
-  # create list of data frames for each level of location_name
-  res <- lapply(
-    seq_along(location_name),
-    function(i) {
-      if (i != length(location_name)) {         # not lowest level
-        res <- data.frame(
-          location_id = NA_character_,
-          location_name = as.character(unique(loc_wide[[location_name[i]]])),
-          latitude = NA,
-          longitude = NA,
-          elevation = NA,
-          parent_location_id = NA_character_,
-          stringsAsFactors = FALSE)
-        res$location_id <- paste0(letters[i], seq(nrow(res))) # add unique location_id (safe assumption?)
-      } else if (i == length(location_name)) {   # is lowest level
-        res <- data.frame(
-          location_id = as.character(loc_wide$location_id),
-          location_name = as.character(loc_wide[[location_name[i]]]),
-          latitude = loc_wide$latitude,
-          longitude = loc_wide$longitude,
-          elevation = loc_wide$elevation,
-          parent_location_id = NA_character_,
-          stringsAsFactors = FALSE)
-      }
-      return(res)
-    })
-  
-  # Add parent_location_id for each level of location_name
+  # Assign ids to higher levels - Ensures referential integrity of self 
+  # referencing ids
   for (i in seq_along(location_name)) {
-    if (i != 1) {
-      map <- loc_wide %>% # map location_name at this level to location_name one level up)
-        dplyr::select(c(location_name[i-1], location_name[i]))
-      for (r in seq(nrow(res[[i]]))) {
-        locname <- res[[i]]$location_name[r]
-        parent_location_name <- map[[location_name[i-1]]][
-          map[[location_name[i]]] == locname]
-        parent_location_id <- res[[i-1]]$location_id[
-          res[[i-1]]$location_name == unique(parent_location_name)]
-        res[[i]]$parent_location_id[r] <- parent_location_id
-      }
+    current <- location_name[i]                    # Current level
+    lowest <- location_name[length(location_name)] # Lowest level
+    if (current != lowest) {                       
+      ids <- loc_wide %>%
+        dplyr::group_by(dplyr::across(location_name[i])) %>% 
+        dplyr::group_indices() %>% 
+        paste0(letters[i], .)
+      loc_wide[[paste0(location_name[i], "_id")]] <- ids
     }
   }
   
-  # combine data frames
+  # Parse each level into it's own data frame - Easier to deal with one at a 
+  # time than all at once
+  res <- lapply(
+    seq_along(location_name),
+    function(i) {
+      current <- location_name[i]                    # Current level
+      lowest <- location_name[length(location_name)] # Lowest level (the level of observation)
+      # Select data frame for level
+      if (current != lowest) {
+        cols2select <- c(paste0(current, "_id"), current, "latitude", "longitude",  "elevation")
+      } else {
+        cols2select <- c("location_id", current, "latitude", "longitude", "elevation")
+      }
+      res <- loc_wide %>% dplyr::select(dplyr::any_of(cols2select))
+      # Add parent ids
+      if (i != 1) {
+        parent <- location_name[i-1]
+        res[["parent_location_id"]] <- loc_wide[[paste0(parent, "_id")]]
+      } else {
+        res$parent_location_id <- NA_character_
+      }
+      # Apply standard col names
+      res <- res %>% dplyr::rename(location_name = current)
+      if (paste0(current, "_id") %in% colnames(res)) {
+        res <- res %>% dplyr::rename(location_id = paste0(current, "_id"))
+      }
+      # Arrange ids and return unique
+      res <- res %>%
+        dplyr::arrange(location_id) %>%
+        unique.data.frame()
+      return(res)
+    })
+  
+  # Coerce data frame classes into a consistent type so they can be combined
+  res <- lapply(res, coerce_table_classes, name = "location", cls = class(L0_flat))
+  # Combine data frames into the location table
   res <- dplyr::bind_rows(res)
-  # coerce classes
-  res <- coerce_table_classes(res, "location", class(L0_flat))
+  
   return(res)
 }
