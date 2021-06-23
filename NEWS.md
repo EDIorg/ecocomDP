@@ -6,6 +6,7 @@
 * Fix numeric type detection in `create_eml()`.
 * Fix taxonomic hierarchy expander in `create_eml()`.
 * Fix empty annotation defaults in `create_eml()`.
+* Fix basisOfRecord reference in `convert_to_dwca()`.
 
 # ecocomDP 1.0.0
 

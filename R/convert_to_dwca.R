@@ -231,7 +231,7 @@ create_tables_dwca_event_core <- function(
     id = seq(nrow(obs_loc_tax)),
     eventID = obs_loc_tax$dc_event_id,
     occurrenceID = obs_loc_tax$dc_occurrence_id,
-    basisOfRecord = "humanObservation",#obs_loc_tax$dc_basisofrecord,
+    basisOfRecord = obs_loc_tax$dc_basisofrecord,
     scientificName = obs_loc_tax$taxon_name,
     taxonID = obs_loc_tax$authority_taxon_id,
     nameAccordingTo = obs_loc_tax$authority_system,
