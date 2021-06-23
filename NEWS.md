@@ -5,6 +5,7 @@
 * Fix methods in `calc_number_of_years_sampled()` and `calc_length_of_survey_years()`.
 * Fix numeric type detection in `create_eml()`.
 * Fix taxonomic hierarchy expander in `create_eml()`.
+* Fix empty annotation defaults in `create_eml()`.
 
 # ecocomDP 1.0.0
 

@@ -437,6 +437,18 @@ create_eml <- function(path,
         file_name <- stringr::str_subset(
           names(eal_inputs$x$data.table),
           paste0(table, "\\.[:alpha:]*$"))
+        
+        if (!is.null(variable_mapping_subset$mapped_label)) { # Handle missing columns
+          objlbl <- variable_mapping_subset$mapped_label
+        } else {
+          objlbl <- ""
+        }
+        if (!is.null(variable_mapping_subset$mapped_id)) {
+          objuri <- variable_mapping_subset$mapped_id
+        } else {
+          objuri <- ""
+        }
+        
         annotation <- data.frame(
           id = paste0("/", file_name, "/variable_name"),
           element = "/dataTable/attribute",
@@ -444,8 +456,8 @@ create_eml <- function(path,
           subject = "variable_name",
           predicate_label = "is about",
           predicate_uri = "http://purl.obolibrary.org/obo/IAO_0000136",
-          object_label = ifelse(!is.null(variable_mapping_subset$mapped_label), variable_mapping_subset$mapped_label, ""),
-          object_uri = ifelse(!is.null(variable_mapping_subset$mapped_id), variable_mapping_subset$mapped_id, ""),
+          object_label = objlbl,
+          object_uri = objuri,
           stringsAsFactors = FALSE)
         # Remove duplicate annotations or the variable_name attribute (a column
         # containing multiple variables as apart of a "long" table) will have 
