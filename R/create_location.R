@@ -61,13 +61,14 @@ create_location <- function(L0_flat,
   # referencing ids
   for (i in seq_along(location_name)) {
     current <- location_name[i]                    # Current level
+    current_and_higher <- location_name[1:i]       # Current level and higher levels
     lowest <- location_name[length(location_name)] # Lowest level
-    if (current != lowest) {                       
+    if (current != lowest) {
       ids <- loc_wide %>%
-        dplyr::group_by(dplyr::across(location_name[i])) %>% 
+        dplyr::group_by(dplyr::across(current_and_higher)) %>% 
         dplyr::group_indices() %>% 
         paste0(letters[i], .)
-      loc_wide[[paste0(location_name[i], "_id")]] <- ids
+      loc_wide[[paste0(current, "_id")]] <- ids
     }
   }
   
@@ -97,10 +98,10 @@ create_location <- function(L0_flat,
       if (paste0(current, "_id") %in% colnames(res)) {
         res <- res %>% dplyr::rename(location_id = paste0(current, "_id"))
       }
-      # Arrange ids and return unique
-      res <- res %>%
-        dplyr::arrange(location_id) %>%
-        unique.data.frame()
+      # Only need unique rows
+      res <- unique.data.frame(res)
+      # Sort for human readability
+      res <- sort_by_alphanumeric(x = res, col = "location_id")
       return(res)
     })
   
@@ -110,4 +111,33 @@ create_location <- function(L0_flat,
   res <- dplyr::bind_rows(res)
   
   return(res)
+}
+
+
+
+
+
+
+
+
+# Sort table by alphanumeric values
+#
+# @param x (tbl_df, tbl, data.frame) A table
+# @param col (character) Column containing alphanumeric values to sort on
+# 
+# @details Parses \code{col} values into alpha and numeric components and sorts first on alpha and second on numeric.
+#
+# @return (tbl_df, tbl, data.frame) \code{x} sorted by values in \code{col}.
+# 
+sort_by_alphanumeric <- function(x, col) {
+  # Parse ids into alpha and numbr cols
+  x$alpha <- stringr::str_remove_all(x[[col]], "[:digit:]*")
+  x$numbr <- as.numeric(stringr::str_remove_all(x[[col]], "[:alpha:]"))
+  # Sort on alpha then on numbr
+  x <- dplyr::group_by(x, alpha, numbr)
+  x <- dplyr::arrange(x, .by_group = TRUE)
+  # Remove alpha and numbr cols
+  x <- dplyr::ungroup(x)
+  x <- dplyr::select(x, -alpha, -numbr)
+  return(x)
 }

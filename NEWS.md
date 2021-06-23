@@ -1,5 +1,9 @@
 # ecocomDP (development version)
 
+## Enhancements
+* Implement a more human readable row sorting based on location_id values in `create_location()`.
+
+## Fixes
 * Fix alignment of categorical variable names and definitions in `create_eml()`.
 * Fix assignment of self referencing ids in `create_location()`.
 * Fix methods in `calc_number_of_years_sampled()` and `calc_length_of_survey_years()`.
