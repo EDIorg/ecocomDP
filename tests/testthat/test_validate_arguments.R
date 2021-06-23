@@ -18,7 +18,7 @@ testthat::test_that("convert_to_dwca()", {
 # create_eml() ----------------------------------------------------------------
 
 testthat::test_that("create_eml()", {
-  # basis_of_record
+  # basis_of_record (supported types)
   expect_null(
     validate_arguments("create_eml", 
                        as.list(list(basis_of_record = "HumanObservation"))))
@@ -29,6 +29,11 @@ testthat::test_that("create_eml()", {
     validate_arguments("create_eml", 
                        as.list(list(basis_of_record = "not_an_option"))),
     regexp = "Invalid input to 'basis_of_record'")
+  # basis_of_record (only one is allowed)
+  expect_error(
+    validate_arguments("create_eml", 
+                       as.list(list(basis_of_record = c("HumanObservation", "MachineObservation")))),
+    regexp = "Only one basis_of_record is allowed.")
 })
 
 # create_tables() -------------------------------------------------------------

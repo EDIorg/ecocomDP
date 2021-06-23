@@ -33,6 +33,9 @@ validate_arguments <- function(fun.name, fun.args) {
   # create_eml() --------------------------------------------------------------
   
   if (fun.name == "create_eml") {
+    if (length(fun.args$basis_of_record) > 1) {
+      stop("Only one basis_of_record is allowed.", call. = FALSE)
+    }
     if ((fun.args$basis_of_record != "HumanObservation") &
         (fun.args$basis_of_record != "MachineObservation")) {
       stop("Invalid input to 'basis_of_record'. Must be 'HumanObservation' or 'MachineObservation'.", call. = FALSE)

@@ -7,6 +7,7 @@
 * Fix taxonomic hierarchy expander in `create_eml()`.
 * Fix empty annotation defaults in `create_eml()`.
 * Fix basisOfRecord reference in `convert_to_dwca()`.
+* Allow only one basisOfRecord `create_eml()`.
 
 # ecocomDP 1.0.0
 
