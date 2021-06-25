@@ -630,17 +630,16 @@ create_eml <- function(path,
   
   # Parse components to be reordered and combined for the L1
   methods_L1 <- eml_L1$dataset$methods$methodStep
-  
   # Get provenance metadata
   r <- suppressMessages(
     api_get_provenance_metadata(
       package.id = source_id,
       environment = environment))
+  xml2::xml_set_attrs(xml2::xml_find_all(r, ".//*[@id]"), c(id = NULL)) # Remove attributes to prevent id clashing and schema invalidation
   r <- EML::read_eml(r)
   provenance_L1 <- list(
     dataSource = r$dataSource,
     description = r$description)
-
   # Combine L1 methods, L0 methods, and L0 provenance
   eml_L0$dataset$methods$methodStep <- c(
     list(methods_L1),

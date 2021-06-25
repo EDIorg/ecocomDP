@@ -12,6 +12,7 @@
 * Fix empty annotation defaults in `create_eml()`.
 * Fix basisOfRecord reference in `convert_to_dwca()`.
 * Allow only one basisOfRecord `create_eml()`.
+* Remove XML attributes to prevent id clashing and schema invalidation when constructing provenance nodes in `create_eml()`.
 
 # ecocomDP 1.0.0
 
