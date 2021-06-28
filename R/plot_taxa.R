@@ -669,7 +669,7 @@ plot_faceted_densities <- function(tables, id, rank=NA, alpha=1) {
 
 #' Plot sites on US map
 #'
-#' @param tables (list of tbl_df, tbl, data.frame) A named list of ecocomDP tables.
+#' @param flat_tables (list of tbl_df, tbl, data.frame) A flat table, the result of flatten_data() applied to the list of ecocomDP tables.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' @param labels (boolean) Argument to show labels of each US state. Default is TRUE.
@@ -685,27 +685,18 @@ plot_faceted_densities <- function(tables, id, rank=NA, alpha=1) {
 #' @export
 #' 
 #' @examples
-#' tables <- ants_L1[[1]]$tables
+#' flat_table <- flatten_data(ants_L1[[1]]$tables)
 #' id <- names(ants_L1)
 #' 
-#' plot_sites(tables, id, rank)
+#' plot_sites(flat_table, id)
 #' 
-plot_sites <- function(tables, id, alpha=1, labels=TRUE) {
+plot_sites <- function(flat_table, id, alpha=1, labels=TRUE) {
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
-  ds <- format_for_comm_plots(tables$observation, id)                    # intermediate format for plotting
-  
-  flat <- flatten_data(tables) 
-  flat$unit %>% unique()
-  flat %>%
-    group_by(event_id, taxon_id) %>%
-    summarize(n_obs = length(event_id)) %>%
-    dplyr::filter(n_obs > 1)
-  summed <- flat %>%
-    group_by(event_id, taxon_id) %>%
-    summarize(value = sum(value, na.rm = FALSE))
-  cleaned <- flat %>%
+  # ds <- format_for_comm_plots(tables$observation, id)                    # intermediate format for plotting
+ 
+  cleaned <- flat_table %>%
     dplyr::select(
-      longitude, latitude, location_id) %>%
+      longitude, latitude, location_name, package_id) %>%
     distinct()
   
   library(usmap)
@@ -718,9 +709,11 @@ plot_sites <- function(tables, id, alpha=1, labels=TRUE) {
     aes(x = longitude.1, y = latitude.1, size = 20),
     color = "red", alpha = alpha) +
     geom_text_repel(data=transformed_cleaned,
-              aes(x=longitude.1, y=latitude.1, label=location_id),
-              size=3) +
-    ggplot2::labs(title = "Site Locations on US Map", subtitle = ds$id) +
+              aes(x=longitude.1, y=latitude.1, label=location_name),
+              size=3, max.overlaps = Inf) +
+    ggplot2::labs(title = "Site Locations on US Map"
+                  #, subtitle = ds$id
+                  ) +
     ggplot2::xlab("Longitude") +
     ggplot2::ylab(paste0("Latitude")) +
     theme(legend.position = "none")
