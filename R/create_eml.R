@@ -87,16 +87,16 @@
 #' }
 #'
 create_eml <- function(path,
-                     source_id, 
-                     derived_id, 
-                     script,
-                     script_description,
-                     is_about = NULL,
-                     contact,
-                     user_id, 
-                     user_domain,
-                     basis_of_record = NULL,
-                     url = NULL) {
+                       source_id, 
+                       derived_id, 
+                       script,
+                       script_description,
+                       is_about = NULL,
+                       contact,
+                       user_id, 
+                       user_domain,
+                       basis_of_record = NULL,
+                       url = NULL) {
   
   message("Creating EML for derived data package (" , derived_id, ")")
   

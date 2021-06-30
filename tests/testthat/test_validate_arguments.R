@@ -18,22 +18,91 @@ testthat::test_that("convert_to_dwca()", {
 # create_eml() ----------------------------------------------------------------
 
 testthat::test_that("create_eml()", {
+  
+  # parameterize
+  testdir <- paste0(tempdir(), "/testing")
+  dir.create(testdir)
+  file.copy(system.file("extdata", "create_ecocomDP.R", package = "ecocomDP"), testdir)
+  
   # basis_of_record (supported types)
   expect_null(
     validate_arguments("create_eml", 
-                       as.list(list(basis_of_record = "HumanObservation"))))
+                       as.list(list(path = testdir,
+                                    basis_of_record = "HumanObservation",
+                                    script = "create_ecocomDP.R",
+                                    script_description = "A description."))))
   expect_null(
     validate_arguments("create_eml", 
-                       as.list(list(basis_of_record = "MachineObservation"))))
+                       as.list(list(path = testdir,
+                                    basis_of_record = "MachineObservation",
+                                    script = "create_ecocomDP.R",
+                                    script_description = "A description."))))
   expect_error(
     validate_arguments("create_eml", 
-                       as.list(list(basis_of_record = "not_an_option"))),
+                       as.list(list(path = testdir,
+                                    basis_of_record = "not_an_option",
+                                    script = "create_ecocomDP.R",
+                                    script_description = "A description."))),
     regexp = "Invalid input to 'basis_of_record'")
+  
   # basis_of_record (only one is allowed)
   expect_error(
     validate_arguments("create_eml", 
                        as.list(list(basis_of_record = c("HumanObservation", "MachineObservation")))),
     regexp = "Only one basis_of_record is allowed.")
+  
+  # script (Input arg 'script' and 'script_description' is missing)
+  expect_error(
+    validate_arguments("create_eml", as.list(list(path = "test"))),
+    regexp = "Input \'script\' is missing.")
+  expect_error(
+    validate_arguments("create_eml", 
+                       as.list(
+                         list(path = testdir,
+                              script = "create_ecocomDP.R"))),
+    regexp = "Input \'script_description\' is missing.")
+  
+  # script (Only one is allowed)
+  expect_error(
+    validate_arguments("create_eml", 
+                       as.list(
+                         list(script = c("create_ecocomDP.R", "another.R"),
+                              script_description = "A description."))),
+    regexp = "Only one \'script\' is allowed.")
+  
+  # script (Can be found in path)
+  expect_error(
+    validate_arguments("create_eml", 
+                       as.list(
+                         list(path = testdir,
+                              script = "not_in_path.R",
+                              script_description = "A description."))),
+    regexp = "The \'script\' not_in_path.R cannot be found")
+  
+  # script (Has name 'create_ecocomDP.R')
+  file.rename(
+    paste0(testdir, "/create_ecocomDP.R"),
+    paste0(testdir, "/create_ecocom.R"))
+  expect_error(
+    validate_arguments("create_eml", 
+                       as.list(
+                         list(path = testdir,
+                              script = "create_ecocom.R",
+                              script_description = "A description."))),
+    regexp = "The \'script\' must have the name:")
+  file.rename(
+    paste0(testdir, "/create_ecocom.R"),
+    paste0(testdir, "/create_ecocomDP.R"))
+  
+  # script (When sourced has 'create_ecocomDP()' and expected arguments)
+  expect_null(
+    validate_arguments("create_eml", 
+                       as.list(
+                         list(path = testdir,
+                              script = "create_ecocomDP.R",
+                              script_description = "A description."))))
+  # Clean up
+  unlink(testdir, recursive = TRUE)
 })
 
 # create_tables() -------------------------------------------------------------

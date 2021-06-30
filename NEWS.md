@@ -2,6 +2,7 @@
 
 ## Enhancements
 * Implement a more human readable row sorting based on location_id values in `create_location()`.
+* Check create_ecocomDP.R for expected function and associated arguments in `create_eml()`.
 
 ## Fixes
 * Fix alignment of categorical variable names and definitions in `create_eml()`.

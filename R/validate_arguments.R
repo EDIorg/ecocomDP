@@ -33,13 +33,61 @@ validate_arguments <- function(fun.name, fun.args) {
   # create_eml() --------------------------------------------------------------
   
   if (fun.name == "create_eml") {
-    if (length(fun.args$basis_of_record) > 1) {
-      stop("Only one basis_of_record is allowed.", call. = FALSE)
+    
+    # Basis of record
+    if (!is.null(fun.args$basis_of_record)) {
+      if (length(fun.args$basis_of_record) > 1) {
+        stop("Only one basis_of_record is allowed.", call. = FALSE)
+      }
+      if ((fun.args$basis_of_record != "HumanObservation") &
+          (fun.args$basis_of_record != "MachineObservation")) {
+        stop("Invalid input to 'basis_of_record'. Must be 'HumanObservation' or 'MachineObservation'.", call. = FALSE)
+      }
     }
-    if ((fun.args$basis_of_record != "HumanObservation") &
-        (fun.args$basis_of_record != "MachineObservation")) {
-      stop("Invalid input to 'basis_of_record'. Must be 'HumanObservation' or 'MachineObservation'.", call. = FALSE)
+    
+    # create_ecocomDP.R - A standard script format facilitates maintenance
+    if (is.null(fun.args$script)) {
+      # Warning Input argument 'script' is missing
+      stop("Input 'script' is missing.", call. = FALSE)
+    } else {
+      if (is.null(fun.args$script_description)) {
+        stop("Input 'script_description' is missing.", call. = FALSE)
+      }
     }
+    if (!is.null(fun.args$script)) {
+      # Only one script is allowed
+      if (length(fun.args$script) != 1) {
+        stop("Only one 'script' is allowed.", call. = FALSE)
+      }
+      # Can be found in path
+      if (!(fun.args$script %in% dir(fun.args$path))) {
+        stop(paste0("The 'script' ", fun.args$script, " cannot be found ",
+                    "at 'path'."),
+             call. = FALSE)
+      }
+      # Has name 'create_ecocomDP.R'
+      if (fun.args$script != "create_ecocomDP.R") {
+        stop("The 'script' must have the name: 'create_ecocomDP.R'.", call. = FALSE)
+      }
+      # When sourced has 'create_ecocomDP()' and recommended arguments
+      suppressWarnings(
+        source(file = paste0(fun.args$path, "/create_ecocomDP.R"), 
+               local = TRUE))
+      if (!("create_ecocomDP" %in% ls())) {
+        stop("The script 'create_ecocomDP.R' does not contain the function ",
+             "create_ecocomDP().", call. = FALSE)
+      } else {
+        expected_args <- c("path", "source_id", "derived_id", "url")
+        missing_args <- !(expected_args %in% names(formals("create_ecocomDP")))
+        if (any(missing_args)) {
+          stop("The function create_ecocomDP() in the 'script' ", 
+               fun.args$script, " is missing these arguments: ",
+               paste(expected_args[missing_args], collapse = ", "), 
+               call. = FALSE)
+        }
+      }
+    }
+    
   }
   
   # create_tables() -----------------------------------------------------------
