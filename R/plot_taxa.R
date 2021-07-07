@@ -578,6 +578,9 @@ plot_stacked_taxa_by_site <- function(tables, id, cutoff=0, rank=NA, alpha = 1) 
            summarize(counts = sum(value, na.rm=TRUE)),
          by_rank <- cleaned %>% group_by(event_id, location_id, datetime, taxon_id, taxon_rank, taxon_name, value) %>%
            summarize(counts = sum(value, na.rm=TRUE)))
+  ifelse(!is.na(rank),
+         title <- paste("Taxa frequencies by site: cutoff =", cutoff, ", taxon rank =", rank),
+         title <- paste("Taxa frequencies by site: cutoff =", cutoff))
   
   by_rank %>%
     group_by(taxon_name, location_id) %>%
@@ -589,7 +592,7 @@ plot_stacked_taxa_by_site <- function(tables, id, cutoff=0, rank=NA, alpha = 1) 
       y = occurrence,
       color = location_id,
       fill = location_id)) +
-    ggplot2::labs(title = "Taxa frequencies by site", subtitle = ds$id) + # add ifelse(!is.na(rank), title += by rank,NA)
+    ggplot2::labs(title = title, subtitle = ds$id) +
     ggplot2::xlab("Taxa name") +
     ggplot2::ylab(paste0("Number of taxa")) +
     geom_col() +
@@ -651,6 +654,9 @@ plot_faceted_densities <- function(tables, id, rank=NA, alpha=1) {
            summarize(counts = sum(value, na.rm=TRUE)),
          by_rank <- cleaned %>% group_by(event_id, location_id, datetime, taxon_id, taxon_rank, taxon_name, value) %>%
            summarize(counts = sum(value, na.rm=TRUE)))
+  ifelse(!is.na(rank),
+         title <- paste("Faceted densities: taxon rank =",rank),
+         title <- "Faceted densities")
   
   by_rank %>%
     ggplot2::ggplot(aes(
@@ -658,7 +664,7 @@ plot_faceted_densities <- function(tables, id, rank=NA, alpha=1) {
       y = log10(counts),
       color = location_id,
       fill = location_id)) +
-    ggplot2::labs(title = "Faceted densities", subtitle = ds$id) +
+    ggplot2::labs(title = title, subtitle = ds$id) +
     ggplot2::xlab("Taxa name") +
     ggplot2::ylab(paste0("log10(counts)")) +
     geom_boxplot(alpha = 0.5) + # alpha = transparency
@@ -704,7 +710,7 @@ plot_sites <- function(flat_table, id, alpha=1, labels=TRUE) {
   
   transformed_cleaned <- usmap_transform(cleaned)
   
-  plot_usmap() + geom_point(
+  plot_usmap(color = "grey") + geom_point(
     data = transformed_cleaned,
     aes(x = longitude.1, y = latitude.1, size = 20),
     color = "red", alpha = alpha) +
