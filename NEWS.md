@@ -12,6 +12,7 @@
 * Fix taxonomic hierarchy expander in `create_eml()`.
 * Fix empty annotation defaults in `create_eml()`.
 * Fix basisOfRecord reference in `convert_to_dwca()`.
+* Fix handling of datetimes with YYYY format in `read_data()`.
 * Allow only one basisOfRecord `create_eml()`.
 * Remove XML attributes to prevent id clashing and schema invalidation when constructing provenance nodes in `create_eml()`.
 * Remove all L0 data entities from the L1 EML, these should not be inherited by the L1 in `create_eml()`.

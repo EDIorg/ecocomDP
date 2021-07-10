@@ -293,23 +293,10 @@ create_eml <- function(path,
       
       datetime <- eal_inputs$x$data.table[[data_table]]$content[[date_column]]
       
-      na_coerced <- suppressWarnings(
-        c(
-          sum(is.na(lubridate::parse_date_time(datetime, "ymdHMS"))),
-          sum(is.na(lubridate::parse_date_time(datetime, "ymdHM"))),
-          sum(is.na(lubridate::parse_date_time(datetime, "ymdH"))),
-          sum(is.na(lubridate::parse_date_time(datetime, "ymd")))))
-      
-      
-      if ((length(unique(na_coerced)) == 1) & (i != "attributes_observation.txt")) { # Default to observation table's datetime format specifier if no date time in ancillary tables
+      datetime_format <- parse_datetime_frmt_from_vals(datetime)
+      if ((is.null(datetime_format)) & (i != "attributes_observation.txt")) { # Default to observation table's datetime format specifier if no date time in ancillary tables. This prevents an EML schema validation error, where datetime attributes must have a format specified
         use_i <- eal_inputs$x$template[["attributes_observation.txt"]]$content$dateTimeFormatString != ""
         datetime_format <- eal_inputs$x$template[["attributes_observation.txt"]]$content$dateTimeFormatString[use_i]
-      } else {
-        datetime_format <- c(
-          "YYYY-MM-DD hh:mm:ss",
-          "YYYY-MM-DD hh:mm",
-          "YYYY-MM-DD hh",
-          "YYYY-MM-DD")[which(na_coerced == min(na_coerced))[1]]
       }
       
       eal_inputs$x$template[[i]]$content$dateTimeFormatString[

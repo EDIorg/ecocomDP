@@ -45,9 +45,9 @@ testthat::test_that("Reads from source APIs", {
     for (i in names(d[[1]]$tables)) {                                                 # tables are data.frames
       expect_true(class(d[[1]]$tables[[i]]) == "data.frame")
     }
-    expect_equal(                                                                     # datetimes are parsed
-      class(d[[1]]$tables$observation$datetime),
-      "Date")
+    expect_true(                                                                     # datetimes are parsed
+      all(
+        class(d[[1]]$tables$observation$datetime) %in% c("POSIXct", "POSIXt")))
     expect_equal(
       class(d[[1]]$tables$location_ancillary$datetime),
       "Date")

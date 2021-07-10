@@ -208,6 +208,38 @@ create_tables_dwca_event_core <- function(
   # datasetName 
   dc_dataset_name <- "Dataset name"
   
+  # Handle YYYY datetime exception --------------------------------------------
+  
+  # datetime format - For parsing datetimes of L1
+  if (environment == "production") {
+    url_parent <- paste0(
+      "https://pasta.lternet.edu/package/metadata/eml/",
+      stringr::str_replace_all(source_id, "\\.", "/"))
+  } else if (environment == "staging") {
+    url_parent <- paste0(
+      "https://pasta-s.lternet.edu/package/metadata/eml/",
+      stringr::str_replace_all(source_id, "\\.", "/"))
+  }
+  xml_L1 <- suppressMessages(read_eml(source_id))
+  data_table_nodes_parent <- xml2::xml_find_all(
+    xml_L1,
+    ".//dataTable")
+  observation_table_node_parent <- data_table_nodes_parent[
+    stringr::str_detect(
+      xml2::xml_text(
+        xml2::xml_find_all(
+          xml_L1, 
+          ".//physical/objectName")), 
+      "observation\\..*$")]
+  format_string <- xml2::xml_text(
+    xml2::xml_find_all(
+      observation_table_node_parent, 
+      ".//formatString"))
+  
+  if (format_string == "YYYY") {
+    obs_loc_tax$datetime <- as.character(lubridate::year(obs_loc_tax$datetime))
+  }
+  
   # Create event --------------------------------------------------------------
   
   event_table <- data.frame(

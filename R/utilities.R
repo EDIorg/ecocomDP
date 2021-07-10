@@ -878,7 +878,50 @@ is_prov <- function(nodeset) {
 
 
 
-# Parse datetime
+# Parse datetime format from values
+#
+# @param vals (character) Vector of datetimes
+# 
+# @details Only works for \code{vals} of the format "YYYY-MM-DD hh:mm:ss" and subsets thereof. Values in other formats will return errant formats (e.g. "07/20/2021" returns "YYYY-MM-DD hh").
+# 
+# @return (character) Datetime format string of \code{vals}
+# 
+parse_datetime_frmt_from_vals <- function(vals) {
+  # Modify inputs for processing
+  vals <- as.character(vals)
+  # Best match has the fewest coercions
+  na_start <- sum(is.na(vals))
+  na_end <- suppressWarnings(
+    c(sum(is.na(lubridate::parse_date_time(vals, "ymdHMS"))),
+      sum(is.na(lubridate::parse_date_time(vals, "ymdHM"))),
+      sum(is.na(lubridate::parse_date_time(vals, "ymdH"))),
+      sum(is.na(lubridate::parse_date_time(vals, "ymd"))),
+      sum(is.na(lubridate::parse_date_time(vals, "y")))))
+  na_coerced <- na_end - na_start
+  if (var(na_coerced) == 0) {    # When format of vals are NA or unsupported
+    frmt <- NULL
+  } else {                       # When format of vals are supported
+    best_match <- which(na_coerced == min(na_coerced))[1]
+    frmt <- c("YYYY-MM-DD hh:mm:ss",
+              "YYYY-MM-DD hh:mm",
+              "YYYY-MM-DD hh",
+              "YYYY-MM-DD",
+              "YYYY")[best_match]
+    if (min(na_coerced) != 0) {  # When the best match doesn't represent all vals
+      warning("The best match '", frmt, "' may not describe all datetimes")
+    }
+  }
+  return(frmt)
+}
+
+
+
+
+
+
+
+
+# Parse datetime when format string is known
 #
 # @param tbl (character) Table name \code{vals} come from. This is used in warning messages.
 # @param vals (character) Vector of datetimes
@@ -886,32 +929,41 @@ is_prov <- function(nodeset) {
 # 
 # @details A wrapper to to \code{lubridate::ymd()}, \code{lubridate::ymd_h()}, \code{lubridate::ymd_hm()}, and \code{lubridate::ymd_hms()}.
 # 
-# @note No attempt at using the time zone component is made
+# @note No attempt is made at using the time zone component of \code{frmt}. Years (\code{frmt = "YYYY"}) are parsed to dates (\code{frmt = "YYYY-MM-DD"}) and a warning is raised.
 # 
 # @return (POSIXct POSIXt) Datetimes parsed
 # 
-parse_datetime <- function(tbl, vals, frmt) {
+parse_datetime_from_frmt <- function(tbl, vals, frmt) {
+  # Modify inputs for processing below
   vals <- as.character(vals)
   na_i <- sum(is.na(vals))
   vals <- stringr::str_remove_all(vals, "(Z|z).+$")
-  res <- "ymd"
-  t <- unlist(stringr::str_split(frmt, "T|[:blank:]"))[2] # time format
-  if (!is.na(t)) {                                        # build time component of lubridate func call
-    if (stringr::str_detect(tolower(t), "hh")) {
-      res <- paste0(res, "_h")
+  # Parse datetimes using lubridate
+  if (frmt == "YYYY") {
+    res <- "y"
+    parsed <- lubridate::parse_date_time(vals, res)
+    warning("Input datetimes have format 'YYYY' but are being returned as 'YYYY-MM-DD'.", call. = FALSE)
+  } else {
+    res <- "ymd"
+    t <- unlist(stringr::str_split(frmt, "T|[:blank:]"))[2] # time format
+    if (!is.na(t)) {                                        # build time component of lubridate func call
+      if (stringr::str_detect(tolower(t), "hh")) {
+        res <- paste0(res, "_h")
+      }
+      if (stringr::str_detect(tolower(t), "mm")) {
+        res <- paste0(res, "m")
+      }
+      if (stringr::str_detect(tolower(t), "ss")) {
+        res <- paste0(res, "s")
+      }
     }
-    if (stringr::str_detect(tolower(t), "mm")) {
-      res <- paste0(res, "m")
-    }
-    if (stringr::str_detect(tolower(t), "ss")) {
-      res <- paste0(res, "s")
-    }
+    parsed <- suppressWarnings(
+      eval(parse(text = paste0("lubridate::", res, "(vals)"))))
   }
-  parsed <- suppressWarnings(
-    eval(parse(text = paste0("lubridate::", res, "(vals)"))))
+  # Warn user of parsing issues
   na_f <- sum(is.na(parsed))
   if (na_f > na_i) {
-    warning((na_f - na_i), " ", tbl, " datetime strings failed to parse. Use parse_datetime = 'FALSE' to get datetimes as character strings for manual processing.", call. = FALSE)
+    warning((na_f - na_i), " ", tbl, " datetime strings failed to parse. Use parse_datetime = 'FALSE' to get datetimes as character strings for manual processing.")
   }
   return(parsed)
 }

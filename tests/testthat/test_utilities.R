@@ -24,6 +24,78 @@ testthat::test_that("Identify source from id string", {
   expect_false(is_neon("ecocomdp.20166.001.001"))
 })
 
+# parse_datetime_frmt_from_vals() ---------------------------------------------
+
+testthat::test_that("parse_datetime_frmt_from_vals()", {
+  expect_equal(
+    parse_datetime_frmt_from_vals(vals = "2021-07-11 13:20:00"),
+    "YYYY-MM-DD hh:mm:ss")
+  expect_equal(
+    parse_datetime_frmt_from_vals(vals = "2021-07-11 13:20"),
+    "YYYY-MM-DD hh:mm")
+  expect_equal(
+    parse_datetime_frmt_from_vals(vals = "2021-07-11 13"),
+    "YYYY-MM-DD hh")
+  expect_equal(
+    parse_datetime_frmt_from_vals(vals = "2021-07-11"),
+    "YYYY-MM-DD")
+  expect_equal(
+    parse_datetime_frmt_from_vals(vals = "2021"),
+    "YYYY")
+  expect_null(
+    parse_datetime_frmt_from_vals(vals = NA))
+  expect_null(
+    parse_datetime_frmt_from_vals(vals = NA_character_))
+  suppressWarnings(
+    expect_equal(
+      parse_datetime_frmt_from_vals(vals = c("2021-07-11", "2021", NA_character_)),
+      "YYYY-MM-DD"))
+  expect_warning(
+    parse_datetime_frmt_from_vals(vals = c("2021-07-11", "2021", NA_character_)),
+    regexp = "The best match .+ may not describe all datetimes")
+})
+
+# parse_datetime_from_frmt() --------------------------------------------------
+
+testthat::test_that("parse_datetime_from_frmt()", {
+  mytbl <- "observation"
+  expect_equal(
+    parse_datetime_from_frmt(tbl = mytbl,
+                             vals = "2021-07-11 13:20:00",
+                             frmt = "YYYY-MM-DD hh:mm:ss"),
+    lubridate::ymd_hms("2021-07-11 13:20:00"))
+  expect_equal(
+    parse_datetime_from_frmt(tbl = mytbl,
+                             vals = "2021-07-11 13:20",
+                             frmt = "YYYY-MM-DD hh:mm"),
+    lubridate::ymd_hm("2021-07-11 13:20"))
+  expect_equal(
+    parse_datetime_from_frmt(tbl = mytbl,
+                             vals = "2021-07-11 13",
+                             frmt = "YYYY-MM-DD hh"),
+    lubridate::ymd_h("2021-07-11 13"))
+  expect_equal(
+    parse_datetime_from_frmt(tbl = mytbl,
+                             vals = "2021-07-11",
+                             frmt = "YYYY-MM-DD"),
+    lubridate::ymd("2021-07-11"))
+  expect_equal(
+    suppressWarnings(parse_datetime_from_frmt(tbl = mytbl,
+                                              vals = "2021",
+                                              frmt = "YYYY")),
+    lubridate::ymd_h("2021-01-01 00"))
+  expect_warning(
+    parse_datetime_from_frmt(tbl = mytbl,
+                             vals = "2021",
+                             frmt = "YYYY"),
+    regexp = "Input datetimes have format \'YYYY\' but are being returned as \'YYYY-MM-DD\'.")
+  expect_warning(
+    parse_datetime_from_frmt(tbl = mytbl,
+                             vals = c("2021-07-11", "2021-07-11 13:20"),
+                             frmt = "YYYY-MM-DD"),
+    regexp = "1 observation datetime strings failed to parse")
+})
+
 # write_tables() --------------------------------------------------------------
 
 testthat::test_that("write_tables()", {
