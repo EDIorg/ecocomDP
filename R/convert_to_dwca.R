@@ -705,6 +705,7 @@ make_eml_dwca <- function(path,
     api_get_provenance_metadata(
       package.id = source_id,
       environment = environment))
+  xml2::xml_set_attrs(xml2::xml_find_all(provenance_L1, ".//*[@id]"), c(id = NULL)) # Remove attributes to prevent id clashing
   provenance_L1 <- EML::read_eml(provenance_L1)
   provenance_L1 <- list(
     dataSource = provenance_L1$dataSource,
