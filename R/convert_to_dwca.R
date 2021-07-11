@@ -710,14 +710,10 @@ make_eml_dwca <- function(path,
     dataSource = provenance_L1$dataSource,
     description = provenance_L1$description)
   
-  L0_para <- xml2::xml_text(
-    xml2::xml_find_all(xml_L0, ".//methods//para"))
-  eml_L1$dataset$methods <- NULL
-  
   # Combine L2 methods, L0 methods, and L1 provenance
   eml_L1$dataset$methods$methodStep <- c(
     list(methods_L2),
-    list(list(description = list(para = L0_para))), # should be a methodStep - $description$para
+    list(eml_L0$data$methods$methodStep),
     list(provenance_L1))
   
   # Update <dataTable> --------------------------------------------------------
