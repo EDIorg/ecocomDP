@@ -45,3 +45,17 @@ testthat::test_that("sort_by_alphanumeric()", {
     res$location_id, 
     c("1", "2", "3", "", "a1", "a2", "a3", "1b", "2b", "3b", "c1", "c137"))
 })
+
+# suffix_colname_to_vals() ----------------------------------------------------
+
+testthat::test_that("suffix_colname_to_vals()", {
+  df <- data.frame(block = c(1, 2, 3), 
+                   plot = c("a", "b", "c"), 
+                   stringsAsFactors = FALSE)
+  res <- suffix_colname_to_vals(tbl = df, cols = c("block", "plot"))
+  expect_equal(
+    res,
+    data.frame(block = c("block__1", "block__2", "block__3"), 
+               plot = c("plot__a", "plot__b", "plot__c"), 
+               stringsAsFactors = FALSE))
+})

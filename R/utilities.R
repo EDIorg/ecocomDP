@@ -622,7 +622,7 @@ detect_os <- function(){
 #     the site names of each parent, and adds the lowest latitude, longitude 
 #     and elevation available in the table.
 # 
-flatten_location <- function(dt_loc) {
+flatten_location_dwca <- function(dt_loc) {
   
   # Expand location table
   
@@ -1159,7 +1159,7 @@ join_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
   
   # Flatten location
   
-  dt_loc_expanded <- flatten_location(dt_loc)
+  dt_loc_expanded <- flatten_location_dwca(dt_loc)
   
   # Left join
   # Left join observation, location (expanded), and taxon tables

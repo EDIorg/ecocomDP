@@ -123,13 +123,6 @@ create_ecocomDP <- function(path,
   
   flat$event_id <- flat %>% group_by(date, plot, block) %>% group_indices()
   
-  # Because a location's context (i.e. plot and block) will be lost when these 
-  # columns are  converted into the location table, we should combine the 
-  # context and values into a single value to preserve meaning.
-  
-  flat$plot <- paste0("plot_", flat$plot)
-  flat$block <- paste0("block_", flat$block)
-  
   # Add columns for the location table ----------------------------------------
   
   # Ideally, the source dataset would include latitude, longitude, and 

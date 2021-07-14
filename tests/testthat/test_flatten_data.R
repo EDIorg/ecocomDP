@@ -2,10 +2,8 @@ context("flatten_data()")
 
 library(ecocomDP)
 
-# Compare L0 flat and L1 flat - The column names and values of the L0 flat and L1 flattened tables should match, with a few exceptions:
-# 1.) Locations - All locations above the level at which observations were made were lost during flattening. This information cannot be retrieved without implementing a convention to use during the L0 to L1 conversion process. 
-# 2.) Relatedly, the L0 column listing location names, at the observation level, is now "location_name".
-# 3.) Primary keys, row identifiers, of the ancillary tables are now present.
+# Compare L0 flat and L1 flat - The column names and values of the L0 flat and L1 flattened tables should match, with an exception:
+# 1.) Primary keys, row identifiers, of the ancillary tables are now present.
 
 # Column presence -------------------------------------------------------------
 
@@ -24,9 +22,7 @@ testthat::test_that("Column presence", {
     L1_flat <- ecocomDP::flatten_data(ants_L1[[1]]$tables)
     # Adjust L0 flat to our expectations
     L0_flat <- L0_flat %>% 
-      dplyr::select(-block) %>%           # A higher level location lost when flattened
-      dplyr::select(-author) %>%           # Columns of NA are dropped when flattened
-      dplyr::rename(location_name = plot) # Becomes "location_name" when flattened
+      dplyr::select(-author)           # Columns of NA are dropped when flattened
     # TEST: All L0 flat columns (with above exceptions) should be in L1 flat
     cols_missing_from_L1 <- base::setdiff(colnames(L0_flat), colnames(L1_flat))
     expect_true(length(cols_missing_from_L1) == 0)
@@ -53,9 +49,7 @@ testthat::test_that("Column classes", {
     L1_flat <- ecocomDP::flatten_data(ants_L1[[1]]$tables)
     # Adjust L0 flat to our expectations
     L0_flat <- L0_flat %>% 
-      dplyr::select(-block) %>%           # A higher level location lost when flattened
-      dplyr::select(-author) %>%           # Columns of NA are dropped when flattened
-      dplyr::rename(location_name = plot) # Becomes "location_name" when flattened
+      dplyr::select(-author)           # Columns of NA are dropped when flattened
     # TEST: flatten_data() applies a set of "smart" class coercions to return numeric values stored in the L1 as character back to their original numeric class. The following code tests that column classifications in L1 should be "similar" to those in L0.
     L0_classes <- unlist(lapply(L0_flat, class))
     L1_classes <- unlist(lapply(L1_flat, class))
@@ -65,8 +59,8 @@ testthat::test_that("Column classes", {
     L0_classes[stringr::str_detect(L0_classes, "integer")] <- "numeric"     # integer ~= numeric
     L1_classes[stringr::str_detect(L1_classes, "integer")] <- "numeric"
     # TEST: Compare col classes
-    for (i in seq(L1_classes)) {
-      col <- L1_classes[i]
+    for (c in seq(L1_classes)) {
+      col <- L1_classes[c]
       if (names(col) %in% names(L0_classes)) {
         use_i <- names(L0_classes) %in% names(col)
         if (any(use_i)) {
@@ -125,4 +119,66 @@ testthat::test_that("Non-required columns", {
                  c("location_ancillary_id", "taxon_ancillary_id", "observation_ancillary_id", 
                    "variable_mapping_id", "table_name"))
   }
+})
+
+# flatten_location() ----------------------------------------------------------
+# location_name values are parsed into the original L0 column representation
+
+testthat::test_that("flatten_location(): No nesting", {
+  
+  loc <- tidyr::as_tibble(  # A table demonstrating this use case
+    data.frame(
+      location_id = c("H1"),
+      location_name = c("Highest__1"),
+      latitude = 45,
+      longitude = 123,
+      elevation = 200,
+      parent_location_id = NA_character_,
+      stringsAsFactors = FALSE))
+  
+  for (i in c("df", "tbbl")) {
+    # Parameterize
+    if (i == "df") { # test w/data.frame
+      loc <- as.data.frame(loc)
+    }
+    # Parameterize
+    res <- flatten_location(loc)
+    loc_flat <- res$location_flat
+    # TEST: Original columns of data are returned
+    expect_true(all(c("Highest") %in% colnames(loc_flat))) # column names
+    expect_equal(loc_flat$Highest, "1")                    # values
+  }
+})
+
+testthat::test_that("flatten_location(): 3 nested sites", {
+  
+  loc <- tidyr::as_tibble(  # A table demonstrating this use case
+    data.frame(
+      location_id = c("H1", "M2", "L3"),
+      location_name = c("Highest__1", "Middle__2", "Lowest__3"),
+      latitude = c(NA, NA, 45),
+      longitude = c(NA, NA, 123),
+      elevation = c(NA, NA, 200),
+      parent_location_id = c(NA_character_, "H1", "M2"),
+      stringsAsFactors = FALSE))
+  
+  for (i in c("df", "tbbl")) {
+    # Parameterize
+    if (i == "df") { # test w/data.frame
+      loc <- as.data.frame(loc)
+    }
+    # Parameterize
+    res <- flatten_location(loc)
+    loc_flat <- res$location_flat
+    # TEST: Original columns of data are returned
+    expect_true(all(c("Highest", "Middle", "Lowest") %in% colnames(loc_flat))) # column names
+    expect_equal(loc_flat$Highest, "1")                                        # values
+    expect_equal(loc_flat$Middle, "2")
+    expect_equal(loc_flat$Lowest, "3")
+    # TEST: Original columns are returned in the order of nesting
+    expect_equal(which(colnames(loc_flat) %in% "Highest"), 2)
+    expect_equal(which(colnames(loc_flat) %in% "Middle"), 3)
+    expect_equal(which(colnames(loc_flat) %in% "Lowest"), 4)
+  }
+  
 })

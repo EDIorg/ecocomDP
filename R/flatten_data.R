@@ -41,11 +41,14 @@ flatten_data <- function(tables) {
     }
   }
   
-  # Merge location data and using "NEON location type" from location ancillary data
+  # Merge location data using one of two approaches:
+  # 1.) "NEON location type" from location ancillary data
+  # 2.) Find unique marker injected by create_location() to parse column names from values
   if("location" %in% names(tables)) {
     last_col <- ncol(all_merged) # Index of last column for sorting
     if (("location_ancillary" %in% names(tables)) & 
         ("NEON location type" %in% tables$location_ancillary$variable_name)) {
+      # Approach 1: Used by NEON
       # merge location and location_ancillary
       location <- tables$location %>%
         dplyr::select_if(not_all_NAs) %>%
@@ -95,7 +98,9 @@ flatten_data <- function(tables) {
           by = "location_id",
           suffix = c("", "_location"))
     } else {
-      #otherwise, just merge location table with all_merged
+      # Approach 2: Used by everyone else (i.e. non-NEON)
+      res_flatloc <- flatten_location(location = tables$location)
+      tables$location <- res_flatloc$location_flat
       all_merged <- all_merged %>%
         dplyr::left_join(
           tables$location %>%
@@ -164,7 +169,8 @@ flatten_data <- function(tables) {
   }
   
   # Coerce columns to correct classes
-  all_merged <- coerce_all_merged(all_merged)
+  all_merged <- coerce_all_merged(x = all_merged, 
+                                  locnames = res_flatloc$locnames)
   
   # Coerce table class
   cls <- class(tables$observation)
@@ -208,7 +214,7 @@ flatten_ancillary <- function(ancillary_table) {
     tidyr::pivot_wider(names_from = variable_name, 
                        values_from = value)
   # Add units
-  unts <- ancillary_table$unit
+  unts <- suppressWarnings(ancillary_table$unit)
   if (!is.null(unts) & not_all_NAs(unts)) {
     unts_df <- ancillary_table %>% # Get units
       dplyr::select(variable_name, unit) %>%
@@ -288,11 +294,11 @@ dup_fxn <- function(x){
 # Coerce columns of flatten_data()'s "all_merged" to correct classes
 #
 # @param x (data.frame) The all_merged object
+# @param locnames (character) Names of location columns
 #
-# @return (data.frame) \code{x} with column classes coerced to ecocomDP specifications or 
-# numeric if not an ecocomDP column and if no NAs are generated.
+# @return (data.frame) \code{x} with column classes coerced to ecocomDP specifications, location names coerced to character, or numeric if not an ecocomDP column and if no NAs are generated. 
 # 
-coerce_all_merged <- function(x) {
+coerce_all_merged <- function(x, locnames) {
   # Coerce column classes. Often a numeric type has been stored as character in the long L1 tables. But some columns (primarily ids) should remain character
   crit <- read_criteria() %>% 
     dplyr::select(column, class) %>% 
@@ -310,6 +316,8 @@ coerce_all_merged <- function(x) {
       }
     } else if (col %in% "datetime") {                                   # is ecocomDP datetime col
       # Do nothing, because datetimes are unambiguous
+    } else if (col %in% locnames) {                                     # is a location name col
+      x[[col]] <- as.character(x[[col]])
     } else {                                                            # is likely a variable
       x[[col]] <- tryCatch(
         as.numeric(x[[col]]), 
@@ -317,4 +325,113 @@ coerce_all_merged <- function(x) {
     }
   }
   return(x)
+}
+
+
+
+
+
+
+
+
+# Flatten the location table
+#
+# @param location (tbl_df, tbl, data.frame) The location table
+#
+# @return A list of:
+# location_flat: (tbl_df, tbl, data.frame) A flattened version of \code{location} with nested levels unpacked and latitude, longitude, and elevation only returned for the level of observation.
+# locnames: (character) So coerce_all_merged() knows which to coerce to "character" class
+#
+flatten_location <- function(location) {
+  
+  # An empty object for collecting the order of nested locations
+  nesting_order <- c()
+  
+  # If no location_name, then remove location_ids of parents and return location_new
+  if (!"location_name" %in% colnames(location)) {
+    res <- list(location_flat = location,
+                locnames = nesting_order)
+    return(res)
+  }
+  
+  # Add "location_type"
+  location_ancillary <- location %>% 
+    dplyr::mutate(location_type = stringr::str_remove_all(location_name, "__.*")) %>% 
+    dplyr::select(location_id, location_type)
+  location <- location %>% dplyr::left_join(location_ancillary, by = "location_id")
+  
+  # extract a list of the location types
+  location_type_list <- location$location_type %>% unique()
+  # location_type_list <- location$location_type %>% unique()
+  
+  # identify ultimate parents... i.e., records with no parents
+  location_parent <- location %>% 
+    dplyr::filter(is.na(parent_location_id)) %>%
+    dplyr::select(location_id, location_type)
+  nesting_order <- c(nesting_order, unique(location_parent$location_type))
+  
+  # identify all records that have parents
+  location_child <- location %>% 
+    dplyr::filter(!is.na(parent_location_id))
+  
+  # loop through from ultimate parents down, joining with child records, until there are no more children
+  if (nrow(location_child) > 0) { # Has children
+    while(nrow(location_child) > 0){
+      # inner join parents to children
+      location_new <- location_child %>% 
+        dplyr::inner_join(
+          location_parent %>% 
+            dplyr::rename(location_type_parent = location_type),
+          by = c("parent_location_id" = "location_id"))
+      nesting_order <- c(nesting_order, unique(location_new$location_type))
+      # rename parent location id column by location type ... location name
+      new_parent_location_id_name <- location_new$location_type_parent[1]
+      names(location_new)[names(location_new)=="parent_location_id"] <- new_parent_location_id_name
+      location_new <- location_new %>% 
+        dplyr::select(-location_type_parent)
+      # see if there are any children left that have not been joined to parents
+      location_child <- location_child %>%
+        dplyr::filter(!location_id %in% location_new$location_id)
+      # if there are still children, re-assign parent table
+      if (nrow(location_child) > 0){
+        location_parent <- location_new[,names(location_new) %in% 
+                                          c("location_id", "location_type", location_type_list)]
+      }else{
+        # otherwise, clean up new location table and return as output
+        location_new <- location_new %>% 
+          dplyr::select(-location_type)
+      }
+    }
+  } else {                       # Has no children
+    location_new <- location %>% 
+      dplyr::select(-c(parent_location_id, location_type))
+  }
+  
+  # Get original column name containing observation level locations and then use it to rename the location_name column, otherwise value matching can't be done in the next sequence of steps (below).
+  new_name <- unique(stringr::str_remove(location_new$location_name, "__.*"))
+  location_new$location_name <- stringr::str_extract(location_new$location_name, "(?<=__).*")
+  cnames <- colnames(location_new)
+  cnames[cnames == "location_name"] <- new_name
+  colnames(location_new) <- cnames
+  
+  # Return values, not IDs
+  # Iterate across unique location_id of input location table
+  for (i in seq_along(location$location_id)) {
+    # Extract value (i.e. get content in location_name after "__")
+    val <- stringr::str_extract(location$location_name[i], "(?<=__).*")
+    # Get location_type (which is the column name containing the location_id value to replace)
+    loctype <- location$location_type[i]
+    # Use location_type to index column and use location_id to index value, then replace with value 
+    use_i <- location_new[[loctype]] == location$location_id[i]
+    location_new[[loctype]][use_i] <- val
+  }
+  
+  # Reorder location columns in terms of nesting (from high to low) for user understanding
+  col_order <- c("location_id", nesting_order, "latitude", "longitude", "elevation")
+  location_new <- dplyr::relocate(location_new, col_order)
+  
+  # Return location_colnames so coerce_all_merged() knows which to coerce to "character" class
+  res <- list(location_flat = location_new,
+              locnames = nesting_order)
+  return(res)
 }

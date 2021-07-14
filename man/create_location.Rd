@@ -18,7 +18,7 @@ create_location(
 
 \item{location_id}{(character) Column in \code{L0_flat} containing the identifier assigned to each unique location at the observation level.}
 
-\item{location_name}{(character) One or more columns in \code{L0_flat} of sampling locations ordered from high to low in terms of nesting (e.g. \code{location_name = c("plot", "subplot")}).}
+\item{location_name}{(character) One or more columns in \code{L0_flat} of sampling locations ordered from high to low in terms of nesting, where the lowest is the level of observation (e.g. \code{location_name = c("plot", "subplot")}).}
 
 \item{latitude}{(character) An optional column in \code{L0_flat} containing the latitude in decimal degrees of \code{location_id}. Latitudes south of the equator are negative.}
 
@@ -35,10 +35,9 @@ Create the location table
 \details{
 This function collects specified columns from \code{L0_flat}, creates data frames for each \code{location_name}, assigns \code{latitude}, \code{longitude}, and \code{elevation} to the lowest nesting level (i.e. the observation level) returning \code{NA} for higher levels (these will have to be filled manually afterwards), and determines the relationships between location_id and parent_location_id from \code{L0_flat} and \code{location_name}.
 
+To prevent the listing of duplicate location_name values, and to enable the return of \code{location_name} columns by \code{flatten_data()}, location_name values are suffixed with the column they came from according to: \code{paste0(<column name>, "__", <column value>)}. Example: A column named "plot" with values "1", "2", "3", in \code{L0_flat} would be listed in the resulting location table under the location_name column as "1", "2", "3" and therefore no way to discern these values correspond with "plot". Applying the above listed solution returns "plot__1", "plot__2", "plot__3" in the location table and returns the column "plot" with values c("1", "2", "3") by \code{flatten_data()}.
+
 "flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" an L1 ecocomDP dataset can be consistently spread due to the frequent occurrence of L0 source datasets with > 1 core observation variable.
-}
-\note{
-Values in \code{location_name} columns of \code{L0_flat} should be modified to provide both context and value before running this function. Not doing so may result in ambiguous location_name values in the resulting location table. Example: A column named "plot" with values "1", "2", "3", in \code{L0_flat} will be listed in the resulting location_name column as values "1", "2", "3" and there will be no way to discern these values correspond with "plot". A general fix is to modify values in the \code{location_name} columns of \code{L0_flat} with \code{paste0(<column name>, "_", <column value>)}, which will return both the column context and value in the location_name column of the location table as  "plot_1", "plot_2", "plot_3".
 
 Additionally, latitude, longitude, and elevation of sites nested above the observation level will have to be manually added after the location table is returned.
 }

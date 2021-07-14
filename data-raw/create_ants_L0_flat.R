@@ -1,28 +1,34 @@
 # This function creates the example dataset "ants_L0_flat" from:
 # https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-hfr&identifier=118&revision=32
 
+# Libraries used by this function
+
 library(ecocomDP)
-library(EDIutils)       # remotes::install_github("EDIorg/EDIutils")
-library(taxonomyCleanr) # remotes::install_github("EDIorg/taxonomyCleanr")
 library(xml2)
 library(magrittr)
 library(data.table)
 library(lubridate)
 library(tidyr)
+library(dplyr)
+library(EDIutils)       # remotes::install_github("EDIorg/EDIutils")
+library(taxonomyCleanr) # remotes::install_github("EDIorg/taxonomyCleanr")
 library(usethis)
 
 create_ants_L0_flat <- function(path = NULL, 
-                                package.id.L0 = "knb-lter-hfr.118.32", 
-                                package.id.L1 = "edi.193.4", 
-                                environment = "production",
+                                source_id = "knb-lter-hfr.118.32", 
+                                derived_id = "edi.193.4", 
                                 url = NULL) {
   
-  # Read source metadata and data ---------------------------------------------
-  # The source dataset is about the changing community composition and functional traits of ant species in response to the invasive hemlock woolly adelgid. Observations are made across habitat types within the Harvard Experimental Forest. The dataset consists of 2 tables, a primary table (hf118-01-ants.csv) containing abundances at sites through time, and an ancillary table listing physical and functional traits of observed species (hf118-02-functional-traits.csv).
+  # Read source dataset -------------------------------------------------------
+  # The source dataset is about ant communities and their functional traits 
+  # changing in response to an invasive species. Observations are made across 
+  # habitat types within the Harvard Experimental Forest. The dataset consists 
+  # of a primary table listing abundances at sites through time, and an 
+  # ancillary table listing physical and functional traits of observed species.
   
-  # Read EML metadata and data tables directly from the EDI Data Repository
+  # Read the source dataset from EDI
   
-  eml <- EDIutils::api_read_metadata(package.id.L0, environment)
+  eml <- EDIutils::api_read_metadata(source_id)
   data <- EDIutils::read_tables(
     eml = eml, 
     strip.white = TRUE,
@@ -35,16 +41,24 @@ create_ants_L0_flat <- function(path = NULL,
   
   ants$date <- lubridate::ymd(ants$date)
   
-  # Create flat version of source dataset -------------------------------------
-  # Joining all source data and relevant metadata into a flat master table both simplifies parsing into ecocomDP tables and maintains referential integrity among data elements.
+  # Join and flatten the source dataset ---------------------------------------
+  # Joining all source data and relevant metadata into one big flat table 
+  # simplifies parsing into ecocomDP tables and facilitates referential 
+  # integrity in the process.
   
-  # Remove duplicate data from the ancillary table and join on species codes once the column names match
+  # Remove duplicate data from the ancillary table and join on species "code"
   
   traits <- traits %>% dplyr::select(-genus, -species)
   traits <- traits %>% dplyr::rename(code = species.code)
   wide <- dplyr::left_join(ants, traits, by = "code")
   
-  # Make "flat" the flattest version ecocomDP datasets can return to. This is the input form the create_*() funcs operate on.
+  # Convert wide format to "flat" format. This is the wide form but gathered on 
+  # core observation variables, which are often > 1 in source datasets. This 
+  # "flat" table is the "widest" ecocomDP datasets can be consistently returned 
+  # to by the ecocomDP::flatten_data() function, and is the input format 
+  # required by the "create table" helpers we'll meet shortly. This dataset 
+  # only has one core observation variable, "abundance", so gathering really 
+  # only entials a change of column names. 
   
   wide <- wide %>% dplyr::rename(value_abundance = abundance)
   flat <- tidyr::pivot_longer(
@@ -53,28 +67,38 @@ create_ants_L0_flat <- function(path = NULL,
     names_to = c(".value", "variable_name"), 
     names_sep = '\\_')
   
-  # Sorting and arranging rows of this flat table according to sampling date and location at this point will result in a nice human readable dataset. This is merely cosmetic and completely optional.
+  # TIP: Sorting and arranging rows by sample date and location will result in 
+  # a nice chronological dataset for human browsing, which is merely cosmetic 
+  # and completely optional.
   
   flat <- flat %>% dplyr::arrange(date, plot, block)
   
-  # Each row of the flat table represents an observation of taxa abundance and should therefore be assigned a unique ID.
+  # We're now in a good place to begin adding columns of the ecocomDP tables 
+  # we can create from this source dataset. We'll begin with the observation 
+  # table.
+  
+  # Add columns for the observation table -------------------------------------
+  
+  # Each row of the flattened source dataset represents an observation of taxa 
+  # abundance and should have a unique ID for reference
   
   flat$observation_id <- seq(nrow(flat))
   
-  # Observations are made in plots, which are nested in blocks. Each unique combination of these locations creates a location ID.
+  # Observations are made in plots, which are nested in blocks. Unique 
+  # combinations of these form a location
   
   flat$location_id <- flat %>% group_by(plot, block) %>% group_indices()
   
-  # Each unique combination of location and date form a sampling event
+  # Each combination of location and date form a sampling event
   
   flat$event_id <- flat %>% group_by(date, plot, block) %>% group_indices()
   
-  # Because the context (i.e. plot and block) will be lost when values are converted into the long (attribute-value) location table of ecocomDP, we should combine the context and values to preserve meaning.
+  # Add columns for the location table ----------------------------------------
   
-  flat$plot <- paste0("plot_", flat$plot)
-  flat$block <- paste0("block_", flat$block)
-  
-  # Ideally, the source dataset would include latitude, longitude, and elevation for each location_id, but all we have are coordinates for the area encompassing all sampling locations. The best option here is to use the middle of the bounding box and elevations.
+  # Ideally, the source dataset would include latitude, longitude, and 
+  # elevation for each location_id, but all we have are coordinates for the 
+  # area encompassing all sampling locations. The best we can do here is use 
+  # the middle of the bounding box and mean of the bounding elevations.
   
   geocov <- xml2::xml_find_all(eml, ".//geographicCoverage")
   north <- xml2::xml_double(
@@ -94,7 +118,10 @@ create_ants_L0_flat <- function(path = NULL,
   flat$longitude <- mean(c(east, west))
   flat$elevation <- mean(c(elev_max, elev_min))
   
-  # Taxonomic entities of this dataset are comprised of unique genus and species pairs.
+  # Add columns for the taxon table -------------------------------------------
+  
+  # Taxonomic entities of this dataset are comprised of unique genus and 
+  # species pairs
   
   flat <- flat %>% 
     dplyr::mutate(taxon_name = trimws(paste(genus, species))) %>% 
@@ -102,7 +129,11 @@ create_ants_L0_flat <- function(path = NULL,
   
   flat$taxon_id <- flat %>% group_by(taxon_name) %>% group_indices()
   
-  # While not required, resolving taxonomic entities to an authority system greatly improves the discoverability and interoperability of the derived ecocomDP dataset. We can resolve taxa by send taxon_name values to taxonomyCleanr for direct matches against the Integrated Taxonomic Information System (ITIS; https://www.itis.gov/).
+  # While not required, resolving taxonomic entities to an authority system 
+  # improves the discoverability and interoperability of the ecocomDP dataset. 
+  # We can resolve taxa by sending names through taxonomyCleanr for direct 
+  # matches against the Integrated Taxonomic Information System 
+  # (ITIS; https://www.itis.gov/).
   
   taxa_resolved <- taxonomyCleanr::resolve_sci_taxa(
     x = unique(flat$taxon_name),
@@ -118,34 +149,39 @@ create_ants_L0_flat <- function(path = NULL,
   
   flat <- dplyr::left_join(flat, taxa_resolved, by = "taxon_name")
   
-  # Add summary information about this dataset
+  # Add columns for the dataset_summary table ---------------------------------
   
   dates <- flat$date %>% stats::na.omit() %>% sort()
   
-  length_of_survey <-  ecocomDP::calc_length_of_survey_years(dates)
-  years_sampled <- ecocomDP::calc_number_of_years_sampled(dates)
-  std_dev_betw_years <- ecocomDP::calc_std_dev_interval_betw_years(dates)
-  number_of_taxa <- length(unique(flat$taxon_name))
-  bounding_box_m2 <- ecocomDP::calc_geo_extent_bounding_box_m2(west, east, north, south)
+  # Use the calc_*() helper functions for consistency
   
-  flat$package_id <- package.id.L1
-  flat$original_package_id <- package.id.L0
-  flat$length_of_survey_years <- length_of_survey
-  flat$number_of_years_sampled <- years_sampled
-  flat$std_dev_interval_betw_years <- std_dev_betw_years
-  flat$max_num_taxa <- number_of_taxa
-  flat$geo_extent_bounding_box_m2 <- bounding_box_m2
+  flat$package_id <- derived_id
+  flat$original_package_id <- source_id
+  flat$length_of_survey_years <- ecocomDP::calc_length_of_survey_years(dates)
+  flat$number_of_years_sampled <- ecocomDP::calc_number_of_years_sampled(dates)
+  flat$std_dev_interval_betw_years <- 
+    ecocomDP::calc_std_dev_interval_betw_years(dates)
+  flat$max_num_taxa <- length(unique(flat$taxon_name))
+  flat$geo_extent_bounding_box_m2 <- 
+    ecocomDP::calc_geo_extent_bounding_box_m2(west, east, north, south)
   
-  # Rename columns of the source dataset to match the ecocomDP model, and remove any remaining columns of redundant information that should not be included in the derived ecocomDP dataset.
+  # Odds and ends -------------------------------------------------------------
   
-  flat <- flat %>% dplyr::rename(datetime = date) %>% dplyr::select(-year, -code)
+  # Rename source columns with an ecocomDP equivalent (date to datetime) and 
+  # remove columns of redundant information  (year can be recalculated from 
+  # datetime and code was a key that no longer has use).
   
-  # Some columns are not required, but we'll include them for the sake of completenesss
+  flat <- flat %>% 
+    dplyr::rename(datetime = date) %>% 
+    dplyr::select(-year, -code)
+  
+  # Some columns are not required, but we'll include them for the sake of 
+  # completenesss
   
   flat$author <- NA_character_
   
   # Save to /data
-  ants_L0_flat <- flat
+  ants_L0_flat <- tidyr::as_tibble(flat)
   usethis::use_data(ants_L0_flat, overwrite = TRUE)
   
 }
