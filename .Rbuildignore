@@ -16,3 +16,6 @@
 ^documentation$
 ^LICENSE\.md$
 ^CRAN-RELEASE$
+^model$
+^queue$
+^postgreSQL$

@@ -1,0 +1,9 @@
+variable_mapping
+observation
+taxon_ancillary
+observation_ancillary
+location_ancillary
+location
+dataset_summary
+taxon
+event
