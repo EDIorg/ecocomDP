@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.9001</span>
       </span>
     </div>
 
@@ -96,6 +96,9 @@
     </li>
     <li>
       <a href="../articles/convert.html">Convert</a>
+    </li>
+    <li>
+      <a href="../articles/shared_practices.html">Shared Practices</a>
     </li>
   </ul>
 </li>
@@ -192,21 +195,21 @@
   unit <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"unit_hl"</span>, <span class='st'>"unit_rel"</span>, <span class='st'>"unit_rll"</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='va'>taxon_ancillary</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 742 x 7</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 742 x 7</span>
 #&gt;    taxon_ancillary_id taxon_id datetime variable_name    value    unit    author
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>            </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> 
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> 1                  1        </span><span style='color: #BB0000;'>NA</span><span>       subfamily        Myrmici… </span><span style='color: #BB0000;'>NA</span><span>      </span><span style='color: #BB0000;'>NA</span><span>    
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> 2                  1        </span><span style='color: #BB0000;'>NA</span><span>       hl               1.1582   millim… </span><span style='color: #BB0000;'>NA</span><span>    
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> 3                  1        </span><span style='color: #BB0000;'>NA</span><span>       rel              0.17268… millim… </span><span style='color: #BB0000;'>NA</span><span>    
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> 4                  1        </span><span style='color: #BB0000;'>NA</span><span>       rll              1.32377… millim… </span><span style='color: #BB0000;'>NA</span><span>    
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> 5                  1        </span><span style='color: #BB0000;'>NA</span><span>       colony.size      Medium   </span><span style='color: #BB0000;'>NA</span><span>      </span><span style='color: #BB0000;'>NA</span><span>    
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> 6                  1        </span><span style='color: #BB0000;'>NA</span><span>       feeding.prefere… Granivo… </span><span style='color: #BB0000;'>NA</span><span>      </span><span style='color: #BB0000;'>NA</span><span>    
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> 7                  1        </span><span style='color: #BB0000;'>NA</span><span>       nest.substrate   Wood     </span><span style='color: #BB0000;'>NA</span><span>      </span><span style='color: #BB0000;'>NA</span><span>    
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> 8                  1        </span><span style='color: #BB0000;'>NA</span><span>       primary.habitat  Open     </span><span style='color: #BB0000;'>NA</span><span>      </span><span style='color: #BB0000;'>NA</span><span>    
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> 9                  1        </span><span style='color: #BB0000;'>NA</span><span>       secondary.habit… Wet      </span><span style='color: #BB0000;'>NA</span><span>      </span><span style='color: #BB0000;'>NA</span><span>    
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> 10                 1        </span><span style='color: #BB0000;'>NA</span><span>       seed.disperser   Y        </span><span style='color: #BB0000;'>NA</span><span>      </span><span style='color: #BB0000;'>NA</span><span>    
-#&gt; </span><span style='color: #949494;'># … with 732 more rows</span><span></div><div class='input'>
-</div></span></pre>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> 
+#&gt; <span style='color: #BCBCBC;'> 1</span> 1                  1        <span style='color: #BB0000;'>NA</span>       subfamily        Myrmici~ <span style='color: #BB0000;'>NA</span>      <span style='color: #BB0000;'>NA</span>    
+#&gt; <span style='color: #BCBCBC;'> 2</span> 2                  1        <span style='color: #BB0000;'>NA</span>       hl               1.1582   millim~ <span style='color: #BB0000;'>NA</span>    
+#&gt; <span style='color: #BCBCBC;'> 3</span> 3                  1        <span style='color: #BB0000;'>NA</span>       rel              0.17268~ millim~ <span style='color: #BB0000;'>NA</span>    
+#&gt; <span style='color: #BCBCBC;'> 4</span> 4                  1        <span style='color: #BB0000;'>NA</span>       rll              1.32377~ millim~ <span style='color: #BB0000;'>NA</span>    
+#&gt; <span style='color: #BCBCBC;'> 5</span> 5                  1        <span style='color: #BB0000;'>NA</span>       colony.size      Medium   <span style='color: #BB0000;'>NA</span>      <span style='color: #BB0000;'>NA</span>    
+#&gt; <span style='color: #BCBCBC;'> 6</span> 6                  1        <span style='color: #BB0000;'>NA</span>       feeding.prefere~ Granivo~ <span style='color: #BB0000;'>NA</span>      <span style='color: #BB0000;'>NA</span>    
+#&gt; <span style='color: #BCBCBC;'> 7</span> 7                  1        <span style='color: #BB0000;'>NA</span>       nest.substrate   Wood     <span style='color: #BB0000;'>NA</span>      <span style='color: #BB0000;'>NA</span>    
+#&gt; <span style='color: #BCBCBC;'> 8</span> 8                  1        <span style='color: #BB0000;'>NA</span>       primary.habitat  Open     <span style='color: #BB0000;'>NA</span>      <span style='color: #BB0000;'>NA</span>    
+#&gt; <span style='color: #BCBCBC;'> 9</span> 9                  1        <span style='color: #BB0000;'>NA</span>       secondary.habit~ Wet      <span style='color: #BB0000;'>NA</span>      <span style='color: #BB0000;'>NA</span>    
+#&gt; <span style='color: #BCBCBC;'>10</span> 10                 1        <span style='color: #BB0000;'>NA</span>       seed.disperser   Y        <span style='color: #BB0000;'>NA</span>      <span style='color: #BB0000;'>NA</span>    
+#&gt; <span style='color: #949494;'># ... with 732 more rows</span></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

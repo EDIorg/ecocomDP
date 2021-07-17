@@ -96,6 +96,9 @@
     <li>
       <a href="../articles/convert.html">Convert</a>
     </li>
+    <li>
+      <a href="../articles/shared_practices.html">Shared Practices</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -130,9 +133,34 @@
 <h1 class="page-header" data-toc-text="development version">
 <a href="#ecocomdp-development-version" class="anchor"></a>ecocomDP (development version)<small> Unreleased </small>
 </h1>
+<div id="enhancements" class="section level2">
+<h2 class="hasAnchor">
+<a href="#enhancements" class="anchor"></a>Enhancements</h2>
+<ul>
+<li>Implement a more human readable row sorting based on location_id values in <code><a href="../reference/create_location.html">create_location()</a></code>.</li>
+<li>Check create_ecocomDP.R for expected function and associated arguments in <code><a href="../reference/create_eml.html">create_eml()</a></code>.</li>
+<li>Enable full return of L0 location columns in <code><a href="../reference/flatten_data.html">flatten_data()</a></code>.</li>
+<li>Add Shared Practices vignette.</li>
+</ul>
+</div>
+<div id="fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#fixes" class="anchor"></a>Fixes</h2>
 <ul>
 <li>Fix alignment of categorical variable names and definitions in <code><a href="../reference/create_eml.html">create_eml()</a></code>.</li>
+<li>Fix assignment of self referencing ids in <code><a href="../reference/create_location.html">create_location()</a></code>.</li>
+<li>Fix methods in <code><a href="../reference/calc_number_of_years_sampled.html">calc_number_of_years_sampled()</a></code> and <code><a href="../reference/calc_length_of_survey_years.html">calc_length_of_survey_years()</a></code>.</li>
+<li>Fix numeric type detection in <code><a href="../reference/create_eml.html">create_eml()</a></code>.</li>
+<li>Fix taxonomic hierarchy expander in <code><a href="../reference/create_eml.html">create_eml()</a></code>.</li>
+<li>Fix empty annotation defaults in <code><a href="../reference/create_eml.html">create_eml()</a></code>.</li>
+<li>Fix basisOfRecord reference in <code><a href="../reference/convert_to_dwca.html">convert_to_dwca()</a></code>.</li>
+<li>Fix handling of datetimes with YYYY format in <code><a href="../reference/read_data.html">read_data()</a></code>.</li>
+<li>Allow only one basisOfRecord <code><a href="../reference/create_eml.html">create_eml()</a></code>.</li>
+<li>Remove XML attributes to prevent id clashing and schema invalidation when constructing provenance nodes in <code><a href="../reference/create_eml.html">create_eml()</a></code> and <code><a href="../reference/convert_to_dwca.html">convert_to_dwca()</a></code>.</li>
+<li>Remove all L0 data entities from the L1 EML, these should not be inherited by the L1 in <code><a href="../reference/create_eml.html">create_eml()</a></code>.</li>
+<li>Incorporate L0 methods markdown blocks in <code><a href="../reference/convert_to_dwca.html">convert_to_dwca()</a></code>.</li>
 </ul>
+</div>
 </div>
     <div id="ecocomdp-100" class="section level1">
 <h1 class="page-header" data-toc-text="1.0.0">

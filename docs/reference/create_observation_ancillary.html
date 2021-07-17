@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.9001</span>
       </span>
     </div>
 
@@ -96,6 +96,9 @@
     </li>
     <li>
       <a href="../articles/convert.html">Convert</a>
+    </li>
+    <li>
+      <a href="../articles/shared_practices.html">Shared Practices</a>
     </li>
   </ul>
 </li>
@@ -177,21 +180,21 @@
   variable_name <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"trap.type"</span>, <span class='st'>"trap.num"</span>, <span class='st'>"moose.cage"</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='va'>observation_ancillary</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 8,793 x 5</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 8,793 x 5</span>
 #&gt;    observation_ancillary_id observation_id variable_name value      unit 
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>                    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> 1                        1              trap.type     bait       </span><span style='color: #BB0000;'>NA</span><span>   
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> 2                        1              trap.num      1 hour     </span><span style='color: #BB0000;'>NA</span><span>   
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> 3                        1              moose.cage    </span><span style='color: #BB0000;'>NA</span><span>         </span><span style='color: #BB0000;'>NA</span><span>   
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> 4                        2              trap.type     bait       </span><span style='color: #BB0000;'>NA</span><span>   
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> 5                        2              trap.num      1 hour     </span><span style='color: #BB0000;'>NA</span><span>   
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> 6                        2              moose.cage    </span><span style='color: #BB0000;'>NA</span><span>         </span><span style='color: #BB0000;'>NA</span><span>   
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> 7                        3              trap.type     bait       </span><span style='color: #BB0000;'>NA</span><span>   
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> 8                        3              trap.num      15 minutes </span><span style='color: #BB0000;'>NA</span><span>   
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> 9                        3              moose.cage    </span><span style='color: #BB0000;'>NA</span><span>         </span><span style='color: #BB0000;'>NA</span><span>   
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> 10                       4              trap.type     bait       </span><span style='color: #BB0000;'>NA</span><span>   
-#&gt; </span><span style='color: #949494;'># … with 8,783 more rows</span><span></div><div class='input'>
-</div></span></pre>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span> 1                        1              trap.type     bait       <span style='color: #BB0000;'>NA</span>   
+#&gt; <span style='color: #BCBCBC;'> 2</span> 2                        1              trap.num      1 hour     <span style='color: #BB0000;'>NA</span>   
+#&gt; <span style='color: #BCBCBC;'> 3</span> 3                        1              moose.cage    <span style='color: #BB0000;'>NA</span>         <span style='color: #BB0000;'>NA</span>   
+#&gt; <span style='color: #BCBCBC;'> 4</span> 4                        2              trap.type     bait       <span style='color: #BB0000;'>NA</span>   
+#&gt; <span style='color: #BCBCBC;'> 5</span> 5                        2              trap.num      1 hour     <span style='color: #BB0000;'>NA</span>   
+#&gt; <span style='color: #BCBCBC;'> 6</span> 6                        2              moose.cage    <span style='color: #BB0000;'>NA</span>         <span style='color: #BB0000;'>NA</span>   
+#&gt; <span style='color: #BCBCBC;'> 7</span> 7                        3              trap.type     bait       <span style='color: #BB0000;'>NA</span>   
+#&gt; <span style='color: #BCBCBC;'> 8</span> 8                        3              trap.num      15 minutes <span style='color: #BB0000;'>NA</span>   
+#&gt; <span style='color: #BCBCBC;'> 9</span> 9                        3              moose.cage    <span style='color: #BB0000;'>NA</span>         <span style='color: #BB0000;'>NA</span>   
+#&gt; <span style='color: #BCBCBC;'>10</span> 10                       4              trap.type     bait       <span style='color: #BB0000;'>NA</span>   
+#&gt; <span style='color: #949494;'># ... with 8,783 more rows</span></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

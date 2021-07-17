@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.9001</span>
       </span>
     </div>
 
@@ -56,6 +56,9 @@
     <li>
       <a href="../articles/convert.html">Convert</a>
     </li>
+    <li>
+      <a href="../articles/shared_practices.html">Shared Practices</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -79,7 +82,7 @@
 
       
 
-      </header><script src="use_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Use</h1>
@@ -94,7 +97,8 @@
     
 <p>A set of “use” functions help you search, read, save, plot, and flatten ecocomDP datasets.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EDIorg/ecocomDP">ecocomDP</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EDIorg/ecocomDP">ecocomDP</a></span><span class="op">)</span>
+<span class="co">#&gt; Warning: package 'ecocomDP' was built under R version 4.0.5</span></code></pre></div>
 <div id="search" class="section level2">
 <h2 class="hasAnchor">
 <a href="#search" class="anchor"></a>Search</h2>
@@ -255,20 +259,20 @@
 <span class="co">#&gt;   ..$ metadata         :List of 1</span>
 <span class="co">#&gt;   .. ..$ url: chr "https://portal.edirepository.org/nis/mapbrowse?packageid=edi.193.4"</span>
 <span class="co">#&gt;   ..$ tables           :List of 8</span>
-<span class="co">#&gt;   .. ..$ location             : tbl_df [10 × 6] (S3: tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   .. ..$ location             : tibble [10 x 6] (S3: tbl_df/tbl/data.frame)</span>
 <span class="co">#&gt;   .. .. ..$ location_id       : chr [1:10] "a1" "a2" "1" "2" ...</span>
 <span class="co">#&gt;   .. .. ..$ location_name     : chr [1:10] "block_Valley" "block_Ridge" "plot_1" "plot_2" ...</span>
 <span class="co">#&gt;   .. .. ..$ latitude          : num [1:10] NA NA 42.5 42.5 42.5 ...</span>
 <span class="co">#&gt;   .. .. ..$ longitude         : num [1:10] NA NA -72.2 -72.2 -72.2 ...</span>
 <span class="co">#&gt;   .. .. ..$ elevation         : num [1:10] NA NA 220 220 220 220 220 220 220 220</span>
 <span class="co">#&gt;   .. .. ..$ parent_location_id: chr [1:10] NA NA "a1" "a1" ...</span>
-<span class="co">#&gt;   .. ..$ taxon                : tbl_df [53 × 5] (S3: tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   .. ..$ taxon                : tibble [53 x 5] (S3: tbl_df/tbl/data.frame)</span>
 <span class="co">#&gt;   .. .. ..$ taxon_id          : chr [1:53] "1" "2" "3" "4" ...</span>
 <span class="co">#&gt;   .. .. ..$ taxon_rank        : chr [1:53] "Species" "Species" "Species" "Species" ...</span>
 <span class="co">#&gt;   .. .. ..$ taxon_name        : chr [1:53] "Aphaenogaster fulva" "Aphaenogaster picea" "Camponotus chromaiodes" "Camponotus herculeanus" ...</span>
 <span class="co">#&gt;   .. .. ..$ authority_system  : chr [1:53] "ITIS" "ITIS" "ITIS" "ITIS" ...</span>
 <span class="co">#&gt;   .. .. ..$ authority_taxon_id: chr [1:53] "578383" "578440" "575766" "575995" ...</span>
-<span class="co">#&gt;   .. ..$ observation          : tbl_df [2,931 × 9] (S3: tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   .. ..$ observation          : tibble [2,931 x 9] (S3: tbl_df/tbl/data.frame)</span>
 <span class="co">#&gt;   .. .. ..$ observation_id: chr [1:2931] "1" "2" "3" "4" ...</span>
 <span class="co">#&gt;   .. .. ..$ event_id      : chr [1:2931] "1" "1" "1" "1" ...</span>
 <span class="co">#&gt;   .. .. ..$ package_id    : chr [1:2931] "edi.193.4" "edi.193.4" "edi.193.4" "edi.193.4" ...</span>
@@ -278,14 +282,14 @@
 <span class="co">#&gt;   .. .. ..$ variable_name : chr [1:2931] "abundance" "abundance" "abundance" "abundance" ...</span>
 <span class="co">#&gt;   .. .. ..$ value         : num [1:2931] 2 1 2 1 1 1 1 1 1 1 ...</span>
 <span class="co">#&gt;   .. .. ..$ unit          : chr [1:2931] "number" "number" "number" "number" ...</span>
-<span class="co">#&gt;   .. ..$ location_ancillary   : tbl_df [8 × 6] (S3: tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   .. ..$ location_ancillary   : tibble [8 x 6] (S3: tbl_df/tbl/data.frame)</span>
 <span class="co">#&gt;   .. .. ..$ location_ancillary_id: chr [1:8] "1" "2" "3" "4" ...</span>
 <span class="co">#&gt;   .. .. ..$ location_id          : chr [1:8] "1" "2" "3" "4" ...</span>
 <span class="co">#&gt;   .. .. ..$ datetime             : Date[1:8], format: NA ...</span>
 <span class="co">#&gt;   .. .. ..$ variable_name        : chr [1:8] "treatment" "treatment" "treatment" "treatment" ...</span>
 <span class="co">#&gt;   .. .. ..$ value                : chr [1:8] "Girdled" "Logged" "HemlockControl" "Logged" ...</span>
 <span class="co">#&gt;   .. .. ..$ unit                 : chr [1:8] NA NA NA NA ...</span>
-<span class="co">#&gt;   .. ..$ taxon_ancillary      : tbl_df [742 × 7] (S3: tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   .. ..$ taxon_ancillary      : tibble [742 x 7] (S3: tbl_df/tbl/data.frame)</span>
 <span class="co">#&gt;   .. .. ..$ taxon_ancillary_id: chr [1:742] "1" "2" "3" "4" ...</span>
 <span class="co">#&gt;   .. .. ..$ taxon_id          : chr [1:742] "1" "1" "1" "1" ...</span>
 <span class="co">#&gt;   .. .. ..$ datetime          : Date[1:742], format: NA ...</span>
@@ -293,13 +297,13 @@
 <span class="co">#&gt;   .. .. ..$ value             : chr [1:742] "Myrmicinae" "1.1582" "0.172681748" "1.323778277" ...</span>
 <span class="co">#&gt;   .. .. ..$ unit              : chr [1:742] NA "millimeter" "millimeter" "millimeter" ...</span>
 <span class="co">#&gt;   .. .. ..$ author            : chr [1:742] NA NA NA NA ...</span>
-<span class="co">#&gt;   .. ..$ observation_ancillary: tbl_df [8,793 × 5] (S3: tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   .. ..$ observation_ancillary: tibble [8,793 x 5] (S3: tbl_df/tbl/data.frame)</span>
 <span class="co">#&gt;   .. .. ..$ observation_ancillary_id: chr [1:8793] "1" "2" "3" "4" ...</span>
 <span class="co">#&gt;   .. .. ..$ observation_id          : chr [1:8793] "1" "1" "1" "2" ...</span>
 <span class="co">#&gt;   .. .. ..$ variable_name           : chr [1:8793] "trap.type" "trap.num" "moose.cage" "trap.type" ...</span>
 <span class="co">#&gt;   .. .. ..$ value                   : chr [1:8793] "bait" "1 hour" NA "bait" ...</span>
 <span class="co">#&gt;   .. .. ..$ unit                    : chr [1:8793] NA NA NA NA ...</span>
-<span class="co">#&gt;   .. ..$ dataset_summary      : tbl_df [1 × 7] (S3: tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   .. ..$ dataset_summary      : tibble [1 x 7] (S3: tbl_df/tbl/data.frame)</span>
 <span class="co">#&gt;   .. .. ..$ package_id                 : chr "edi.193.4"</span>
 <span class="co">#&gt;   .. .. ..$ original_package_id        : chr "knb-lter-hfr.118.32"</span>
 <span class="co">#&gt;   .. .. ..$ length_of_survey_years     : num 15</span>
@@ -307,7 +311,7 @@
 <span class="co">#&gt;   .. .. ..$ std_dev_interval_betw_years: num 0.67</span>
 <span class="co">#&gt;   .. .. ..$ max_num_taxa               : num 53</span>
 <span class="co">#&gt;   .. .. ..$ geo_extent_bounding_box_m2 : num 913451</span>
-<span class="co">#&gt;   .. ..$ variable_mapping     : tbl_df [19 × 6] (S3: tbl_df/tbl/data.frame)</span>
+<span class="co">#&gt;   .. ..$ variable_mapping     : tibble [19 x 6] (S3: tbl_df/tbl/data.frame)</span>
 <span class="co">#&gt;   .. .. ..$ variable_mapping_id: chr [1:19] "1" "2" "3" "4" ...</span>
 <span class="co">#&gt;   .. .. ..$ table_name         : chr [1:19] "observation" "observation_ancillary" "observation_ancillary" "observation_ancillary" ...</span>
 <span class="co">#&gt;   .. .. ..$ variable_name      : chr [1:19] "abundance" "trap.type" "trap.num" "moose.cage" ...</span>
@@ -421,7 +425,7 @@
 <span class="co">#&gt; 2 2              1        2003-06-01 abundance         1 number bait     </span>
 <span class="co">#&gt; 3 3              1        2003-06-01 abundance         2 number bait     </span>
 <span class="co">#&gt; 4 4              1        2003-06-01 abundance         1 number bait     </span>
-<span class="co">#&gt; # … with 2,927 more rows, and 37 more variables: trap.num &lt;chr&gt;,</span>
+<span class="co">#&gt; # ... with 2,927 more rows, and 37 more variables: trap.num &lt;chr&gt;,</span>
 <span class="co">#&gt; #   moose.cage &lt;chr&gt;, location_id &lt;chr&gt;, location_name &lt;chr&gt;, latitude &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   longitude &lt;dbl&gt;, elevation &lt;dbl&gt;, treatment &lt;chr&gt;, taxon_id &lt;chr&gt;,</span>
 <span class="co">#&gt; #   taxon_rank &lt;chr&gt;, taxon_name &lt;chr&gt;, authority_system &lt;chr&gt;,</span>

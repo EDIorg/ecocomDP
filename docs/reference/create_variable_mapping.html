@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.9001</span>
       </span>
     </div>
 
@@ -96,6 +96,9 @@
     </li>
     <li>
       <a href="../articles/convert.html">Convert</a>
+    </li>
+    <li>
+      <a href="../articles/shared_practices.html">Shared Practices</a>
     </li>
   </ul>
 </li>
@@ -213,30 +216,30 @@
   taxon_ancillary <span class='op'>=</span> <span class='va'>taxon_ancillary</span><span class='op'>)</span>
 
 <span class='va'>variable_mapping</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 19 x 6</span><span>
-#&gt;    variable_mapping_… table_name       variable_name     mapped_system mapped_id
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>              </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>            </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>             </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> 1                  observation      abundance         </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> 2                  observation_anc… trap.type         </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> 3                  observation_anc… trap.num          </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> 4                  observation_anc… moose.cage        </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> 5                  location_ancill… treatment         </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> 6                  taxon_ancillary  subfamily         </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> 7                  taxon_ancillary  hl                </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> 8                  taxon_ancillary  rel               </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> 9                  taxon_ancillary  rll               </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> 10                 taxon_ancillary  colony.size       </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'>11</span><span> 11                 taxon_ancillary  feeding.preferen… </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'>12</span><span> 12                 taxon_ancillary  nest.substrate    </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'>13</span><span> 13                 taxon_ancillary  primary.habitat   </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'>14</span><span> 14                 taxon_ancillary  secondary.habitat </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'>15</span><span> 15                 taxon_ancillary  seed.disperser    </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'>16</span><span> 16                 taxon_ancillary  slavemaker.sp     </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'>17</span><span> 17                 taxon_ancillary  behavior          </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'>18</span><span> 18                 taxon_ancillary  biogeographic.af… </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #BCBCBC;'>19</span><span> 19                 taxon_ancillary  source            </span><span style='color: #BB0000;'>NA</span><span>            </span><span style='color: #BB0000;'>NA</span><span>       
-#&gt; </span><span style='color: #949494;'># … with 1 more variable: mapped_label &lt;chr&gt;</span><span></div><div class='input'>
-</div></span></pre>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 19 x 6</span>
+#&gt;    variable_mapping_~ table_name       variable_name     mapped_system mapped_id
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>             <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    
+#&gt; <span style='color: #BCBCBC;'> 1</span> 1                  observation      abundance         <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'> 2</span> 2                  observation_anc~ trap.type         <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'> 3</span> 3                  observation_anc~ trap.num          <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'> 4</span> 4                  observation_anc~ moose.cage        <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'> 5</span> 5                  location_ancill~ treatment         <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'> 6</span> 6                  taxon_ancillary  subfamily         <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'> 7</span> 7                  taxon_ancillary  hl                <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'> 8</span> 8                  taxon_ancillary  rel               <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'> 9</span> 9                  taxon_ancillary  rll               <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'>10</span> 10                 taxon_ancillary  colony.size       <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'>11</span> 11                 taxon_ancillary  feeding.preferen~ <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'>12</span> 12                 taxon_ancillary  nest.substrate    <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'>13</span> 13                 taxon_ancillary  primary.habitat   <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'>14</span> 14                 taxon_ancillary  secondary.habitat <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'>15</span> 15                 taxon_ancillary  seed.disperser    <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'>16</span> 16                 taxon_ancillary  slavemaker.sp     <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'>17</span> 17                 taxon_ancillary  behavior          <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'>18</span> 18                 taxon_ancillary  biogeographic.af~ <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #BCBCBC;'>19</span> 19                 taxon_ancillary  source            <span style='color: #BB0000;'>NA</span>            <span style='color: #BB0000;'>NA</span>       
+#&gt; <span style='color: #949494;'># ... with 1 more variable: mapped_label &lt;chr&gt;</span></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

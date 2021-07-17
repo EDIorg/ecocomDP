@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.9001</span>
       </span>
     </div>
 
@@ -96,6 +96,9 @@
     </li>
     <li>
       <a href="../articles/convert.html">Convert</a>
+    </li>
+    <li>
+      <a href="../articles/shared_practices.html">Shared Practices</a>
     </li>
   </ul>
 </li>
@@ -159,32 +162,32 @@
 <span class='va'>flat</span> <span class='op'>&lt;-</span> <span class='fu'>flatten_data</span><span class='op'>(</span><span class='va'>dataset</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>)</span>
 
 <span class='va'>flat</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2,931 x 44</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2,931 x 44</span>
 #&gt;    observation_id event_id datetime   variable_name value unit   trap.type
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;date&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>         </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> 1              1        2003-06-01 abundance         2 number bait     
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> 2              1        2003-06-01 abundance         1 number bait     
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> 3              1        2003-06-01 abundance         2 number bait     
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> 4              1        2003-06-01 abundance         1 number bait     
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> 5              1        2003-06-01 abundance         1 number hand     
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> 6              1        2003-06-01 abundance         1 number hand     
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> 7              1        2003-06-01 abundance         1 number litter   
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> 8              1        2003-06-01 abundance         1 number litter   
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> 9              1        2003-06-01 abundance         1 number pitfall  
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> 10             1        2003-06-01 abundance         1 number pitfall  
-#&gt; </span><span style='color: #949494;'># … with 2,921 more rows, and 37 more variables: trap.num &lt;chr&gt;,</span><span>
-#&gt; </span><span style='color: #949494;'>#   moose.cage &lt;chr&gt;, location_id &lt;chr&gt;, location_name &lt;chr&gt;, latitude &lt;dbl&gt;,</span><span>
-#&gt; </span><span style='color: #949494;'>#   longitude &lt;dbl&gt;, elevation &lt;dbl&gt;, treatment &lt;chr&gt;, taxon_id &lt;chr&gt;,</span><span>
-#&gt; </span><span style='color: #949494;'>#   taxon_rank &lt;chr&gt;, taxon_name &lt;chr&gt;, authority_system &lt;chr&gt;,</span><span>
-#&gt; </span><span style='color: #949494;'>#   authority_taxon_id &lt;chr&gt;, behavior &lt;chr&gt;, biogeographic.affinity &lt;chr&gt;,</span><span>
-#&gt; </span><span style='color: #949494;'>#   colony.size &lt;chr&gt;, feeding.preference &lt;chr&gt;, hl &lt;dbl&gt;, unit_hl &lt;chr&gt;,</span><span>
-#&gt; </span><span style='color: #949494;'>#   nest.substrate &lt;chr&gt;, primary.habitat &lt;chr&gt;, rel &lt;dbl&gt;, unit_rel &lt;chr&gt;,</span><span>
-#&gt; </span><span style='color: #949494;'>#   rll &lt;dbl&gt;, unit_rll &lt;chr&gt;, secondary.habitat &lt;chr&gt;, seed.disperser &lt;chr&gt;,</span><span>
-#&gt; </span><span style='color: #949494;'>#   slavemaker.sp &lt;chr&gt;, source &lt;chr&gt;, subfamily &lt;chr&gt;, package_id &lt;chr&gt;,</span><span>
-#&gt; </span><span style='color: #949494;'>#   original_package_id &lt;chr&gt;, length_of_survey_years &lt;dbl&gt;,</span><span>
-#&gt; </span><span style='color: #949494;'>#   number_of_years_sampled &lt;dbl&gt;, std_dev_interval_betw_years &lt;dbl&gt;,</span><span>
-#&gt; </span><span style='color: #949494;'>#   max_num_taxa &lt;dbl&gt;, geo_extent_bounding_box_m2 &lt;dbl&gt;</span><span></div><div class='input'>
-</div></span></pre>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    
+#&gt; <span style='color: #BCBCBC;'> 1</span> 1              1        2003-06-01 abundance         2 number bait     
+#&gt; <span style='color: #BCBCBC;'> 2</span> 2              1        2003-06-01 abundance         1 number bait     
+#&gt; <span style='color: #BCBCBC;'> 3</span> 3              1        2003-06-01 abundance         2 number bait     
+#&gt; <span style='color: #BCBCBC;'> 4</span> 4              1        2003-06-01 abundance         1 number bait     
+#&gt; <span style='color: #BCBCBC;'> 5</span> 5              1        2003-06-01 abundance         1 number hand     
+#&gt; <span style='color: #BCBCBC;'> 6</span> 6              1        2003-06-01 abundance         1 number hand     
+#&gt; <span style='color: #BCBCBC;'> 7</span> 7              1        2003-06-01 abundance         1 number litter   
+#&gt; <span style='color: #BCBCBC;'> 8</span> 8              1        2003-06-01 abundance         1 number litter   
+#&gt; <span style='color: #BCBCBC;'> 9</span> 9              1        2003-06-01 abundance         1 number pitfall  
+#&gt; <span style='color: #BCBCBC;'>10</span> 10             1        2003-06-01 abundance         1 number pitfall  
+#&gt; <span style='color: #949494;'># ... with 2,921 more rows, and 37 more variables: trap.num &lt;chr&gt;,</span>
+#&gt; <span style='color: #949494;'>#   moose.cage &lt;chr&gt;, location_id &lt;chr&gt;, location_name &lt;chr&gt;, latitude &lt;dbl&gt;,</span>
+#&gt; <span style='color: #949494;'>#   longitude &lt;dbl&gt;, elevation &lt;dbl&gt;, treatment &lt;chr&gt;, taxon_id &lt;chr&gt;,</span>
+#&gt; <span style='color: #949494;'>#   taxon_rank &lt;chr&gt;, taxon_name &lt;chr&gt;, authority_system &lt;chr&gt;,</span>
+#&gt; <span style='color: #949494;'>#   authority_taxon_id &lt;chr&gt;, behavior &lt;chr&gt;, biogeographic.affinity &lt;chr&gt;,</span>
+#&gt; <span style='color: #949494;'>#   colony.size &lt;chr&gt;, feeding.preference &lt;chr&gt;, hl &lt;dbl&gt;, unit_hl &lt;chr&gt;,</span>
+#&gt; <span style='color: #949494;'>#   nest.substrate &lt;chr&gt;, primary.habitat &lt;chr&gt;, rel &lt;dbl&gt;, unit_rel &lt;chr&gt;,</span>
+#&gt; <span style='color: #949494;'>#   rll &lt;dbl&gt;, unit_rll &lt;chr&gt;, secondary.habitat &lt;chr&gt;, seed.disperser &lt;chr&gt;,</span>
+#&gt; <span style='color: #949494;'>#   slavemaker.sp &lt;chr&gt;, source &lt;chr&gt;, subfamily &lt;chr&gt;, package_id &lt;chr&gt;,</span>
+#&gt; <span style='color: #949494;'>#   original_package_id &lt;chr&gt;, length_of_survey_years &lt;dbl&gt;,</span>
+#&gt; <span style='color: #949494;'>#   number_of_years_sampled &lt;dbl&gt;, std_dev_interval_betw_years &lt;dbl&gt;,</span>
+#&gt; <span style='color: #949494;'>#   max_num_taxa &lt;dbl&gt;, geo_extent_bounding_box_m2 &lt;dbl&gt;</span></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

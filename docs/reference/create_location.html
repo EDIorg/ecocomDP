@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.9001</span>
       </span>
     </div>
 
@@ -96,6 +96,9 @@
     </li>
     <li>
       <a href="../articles/convert.html">Convert</a>
+    </li>
+    <li>
+      <a href="../articles/shared_practices.html">Shared Practices</a>
     </li>
   </ul>
 </li>
@@ -154,7 +157,7 @@
     </tr>
     <tr>
       <th>location_name</th>
-      <td><p>(character) One or more columns in <code>L0_flat</code> of sampling locations ordered from high to low in terms of nesting (e.g. <code>location_name = c("plot", "subplot")</code>).</p></td>
+      <td><p>(character) One or more columns in <code>L0_flat</code> of sampling locations ordered from high to low in terms of nesting, where the lowest is the level of observation (e.g. <code>location_name = c("plot", "subplot")</code>).</p></td>
     </tr>
     <tr>
       <th>latitude</th>
@@ -176,10 +179,8 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>This function collects specified columns from <code>L0_flat</code>, creates data frames for each <code>location_name</code>, assigns <code>latitude</code>, <code>longitude</code>, and <code>elevation</code> to the lowest nesting level (i.e. the observation level) returning <code>NA</code> for higher levels (these will have to be filled manually afterwards), and determines the relationships between location_id and parent_location_id from <code>L0_flat</code> and <code>location_name</code>.</p>
+<p>To prevent the listing of duplicate location_name values, and to enable the return of <code>location_name</code> columns by <code><a href='flatten_data.html'>flatten_data()</a></code>, location_name values are suffixed with the column they came from according to: <code>paste0(&lt;column name&gt;, "__", &lt;column value&gt;)</code>. Example: A column named "plot" with values "1", "2", "3", in <code>L0_flat</code> would be listed in the resulting location table under the location_name column as "1", "2", "3" and therefore no way to discern these values correspond with "plot". Applying the above listed solution returns "plot__1", "plot__2", "plot__3" in the location table and returns the column "plot" with values c("1", "2", "3") by <code><a href='flatten_data.html'>flatten_data()</a></code>.</p>
 <p>"flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" an L1 ecocomDP dataset can be consistently spread due to the frequent occurrence of L0 source datasets with &gt; 1 core observation variable.</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>Values in <code>location_name</code> columns of <code>L0_flat</code> should be modified to provide both context and value before running this function. Not doing so may result in ambiguous location_name values in the resulting location table. Example: A column named "plot" with values "1", "2", "3", in <code>L0_flat</code> will be listed in the resulting location_name column as values "1", "2", "3" and there will be no way to discern these values correspond with "plot". A general fix is to modify values in the <code>location_name</code> columns of <code>L0_flat</code> with <code>paste0(&lt;column name&gt;, "_", &lt;column value&gt;)</code>, which will return both the column context and value in the location_name column of the location table as  "plot_1", "plot_2", "plot_3".</p>
 <p>Additionally, latitude, longitude, and elevation of sites nested above the observation level will have to be manually added after the location table is returned.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -194,20 +195,20 @@
   elevation <span class='op'>=</span> <span class='st'>"elevation"</span><span class='op'>)</span>
 
 <span class='va'>location</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 10 x 6</span><span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 10 x 6</span>
 #&gt;    location_id location_name latitude longitude elevation parent_location_id
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>       </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>            </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>             
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span> a1          block_Valley      </span><span style='color: #BB0000;'>NA</span><span>        </span><span style='color: #BB0000;'>NA</span><span>          </span><span style='color: #BB0000;'>NA</span><span> </span><span style='color: #BB0000;'>NA</span><span>                
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span> a2          block_Ridge       </span><span style='color: #BB0000;'>NA</span><span>        </span><span style='color: #BB0000;'>NA</span><span>          </span><span style='color: #BB0000;'>NA</span><span> </span><span style='color: #BB0000;'>NA</span><span>                
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span> 1           plot_1            42.5     -</span><span style='color: #BB0000;'>72.2</span><span>       220 a1                
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span> 2           plot_2            42.5     -</span><span style='color: #BB0000;'>72.2</span><span>       220 a1                
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span> 3           plot_3            42.5     -</span><span style='color: #BB0000;'>72.2</span><span>       220 a1                
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span> 4           plot_4            42.5     -</span><span style='color: #BB0000;'>72.2</span><span>       220 a2                
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span> 5           plot_5            42.5     -</span><span style='color: #BB0000;'>72.2</span><span>       220 a2                
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span> 6           plot_6            42.5     -</span><span style='color: #BB0000;'>72.2</span><span>       220 a2                
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span> 7           plot_7            42.5     -</span><span style='color: #BB0000;'>72.2</span><span>       220 a2                
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span> 8           plot_8            42.5     -</span><span style='color: #BB0000;'>72.2</span><span>       220 a1                </div><div class='input'>
-</div></span></pre>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>            <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>             
+#&gt; <span style='color: #BCBCBC;'> 1</span> a1          block_Valley      <span style='color: #BB0000;'>NA</span>        <span style='color: #BB0000;'>NA</span>          <span style='color: #BB0000;'>NA</span> <span style='color: #BB0000;'>NA</span>                
+#&gt; <span style='color: #BCBCBC;'> 2</span> a2          block_Ridge       <span style='color: #BB0000;'>NA</span>        <span style='color: #BB0000;'>NA</span>          <span style='color: #BB0000;'>NA</span> <span style='color: #BB0000;'>NA</span>                
+#&gt; <span style='color: #BCBCBC;'> 3</span> 1           plot_1            42.5     -<span style='color: #BB0000;'>72.2</span>       220 a1                
+#&gt; <span style='color: #BCBCBC;'> 4</span> 2           plot_2            42.5     -<span style='color: #BB0000;'>72.2</span>       220 a1                
+#&gt; <span style='color: #BCBCBC;'> 5</span> 3           plot_3            42.5     -<span style='color: #BB0000;'>72.2</span>       220 a1                
+#&gt; <span style='color: #BCBCBC;'> 6</span> 4           plot_4            42.5     -<span style='color: #BB0000;'>72.2</span>       220 a2                
+#&gt; <span style='color: #BCBCBC;'> 7</span> 5           plot_5            42.5     -<span style='color: #BB0000;'>72.2</span>       220 a2                
+#&gt; <span style='color: #BCBCBC;'> 8</span> 6           plot_6            42.5     -<span style='color: #BB0000;'>72.2</span>       220 a2                
+#&gt; <span style='color: #BCBCBC;'> 9</span> 7           plot_7            42.5     -<span style='color: #BB0000;'>72.2</span>       220 a2                
+#&gt; <span style='color: #BCBCBC;'>10</span> 8           plot_8            42.5     -<span style='color: #BB0000;'>72.2</span>       220 a1                </div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

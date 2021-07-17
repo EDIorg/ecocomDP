@@ -39,8 +39,13 @@ remotes::install_github("EDIorg/ecocomDP")
     datasets](https://ediorg.github.io/ecocomDP/articles/create.html)
   - [Use ecocomDP
     datasets](https://ediorg.github.io/ecocomDP/articles/use.html)
-  - [Convert ecocomDP datasets to another data
-    model](https://ediorg.github.io/ecocomDP/articles/convert.html)
+  - [Convert ecocomDP datasets to another model
+    format](https://ediorg.github.io/ecocomDP/articles/convert.html)
+
+## Guidance
+
+  - [Shared
+    Practices](https://ediorg.github.io/ecocomDP/articles/shared_practices.html)
 
 ## Getting help
 
