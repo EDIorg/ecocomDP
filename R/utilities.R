@@ -1,3 +1,35 @@
+# Add units to create_*() functions
+#
+# @param L0_flat (tbl_df, tbl, data.frame) The fully joined source L0 dataset, in "flat" format (see details).
+# @param res (tbl_df, tbl, data.frame) Intermediary result in create_*()
+# @param unit (character) Unit column input to create_*()
+#
+# @return (tbl_df, tbl, data.frame) \code{res} with an added unit column for the variables listed under variable_name
+#
+add_units <- function(L0_flat, res, unit) {
+  if (!is.null(unit)) {
+    unit_map <- L0_flat %>% dplyr::select(dplyr::all_of(unit)) %>% unique() # Unique unit values
+    unit_map <- as.data.frame(lapply(unit_map, na.omit))                    # Remove NA
+    
+    unit_map <- data.frame(variable_name = colnames(unit_map),
+                           unit = as.character(unit_map[1, ]),              # Should only be one
+                           stringsAsFactors = FALSE)
+    unit_map$variable_name <- stringr::str_remove_all(unit_map$variable_name, 
+                                                      "unit_")
+    res <- dplyr::left_join(res, unit_map, by = "variable_name")
+  } else if (is.null(unit)) {
+    res$unit <- NA_character_
+  }
+  return(res)
+}
+
+
+
+
+
+
+
+
 # Get provenance metadata
 #
 # @description

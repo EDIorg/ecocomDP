@@ -47,21 +47,10 @@ create_taxon_ancillary <- function(L0_flat,
     tidyr::pivot_longer(variable_name, names_to = "variable_name", values_to = "value") %>%
     dplyr::arrange(taxon_id)
   # add units
-  if (!is.null(unit)) {
-    unit_map <- L0_flat %>% dplyr::select(dplyr::all_of(unit)) %>% stats::na.omit()
-    unit_map <- data.frame(variable_name = colnames(unit_map),
-                           unit = as.character(unique.data.frame(unit_map)),
-                           stringsAsFactors = FALSE)
-    unit_map$variable_name <- stringr::str_remove_all(unit_map$variable_name, 
-                                                      "unit_")
-    res <- dplyr::left_join(res, unit_map, by = "variable_name")
-  }
+  res <- add_units(L0_flat, res, unit)
   # add missing cols
   if (is.null(datetime)) {
     res$datetime <- NA_character_
-  }
-  if (is.null(unit)) {
-    res$unit <- NA_character_
   }
   if (is.null(author)) {
     res$author <- NA_character_
