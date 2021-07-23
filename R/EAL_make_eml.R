@@ -366,7 +366,7 @@ EAL_make_eml <- function(
   }
   
   # taxonomic_coverage.txt
-  # - Convert "" to NA as expected by make_taxonomicCoverage()
+  # - Convert "" to NA as expected by txcl_make_taxonomicCoverage()
   # - Add unresolved names to the name_resolved field so they will be listed in 
   # the output EML (with a rank value of "unknown").
   
@@ -876,7 +876,7 @@ EAL_make_eml <- function(
     # Expand taxonomic ranks and create taxonomic coverage
     tc <- try(
       suppressMessages(
-        make_taxonomicCoverage(
+        txcl_make_taxonomicCoverage(
           taxa.clean = x$template$taxonomic_coverage.txt$content$name_resolved,
           authority = x$template$taxonomic_coverage.txt$content$authority_system,
           authority.id = x$template$taxonomic_coverage.txt$content$authority_id,

@@ -18,11 +18,11 @@
 #         \item score - Relative match score provided by the authority.
 #     }
 #
-get_authority <- function(taxon, data.source){
+txcl_get_authority <- function(taxon, data.source){
   
   # Resolve taxa to authority -------------------------------------------------
   
-  gnr_list <- load_gnr_datasources()
+  gnr_list <- txcl_load_gnr_datasources()
   use_i <- gnr_list[ , 'id'] == data.source
   
   message(
@@ -110,7 +110,7 @@ get_authority <- function(taxon, data.source){
 #     \item GBIF can be: "GBIF", "gbif", "GBIF Backbone Taxonomy", or "https://gbif.org".
 #     }
 #
-get_classification <- function(taxa.clean,
+txcl_get_classification <- function(taxa.clean,
                                authority = NA,
                                authority.id = NA,
                                rank = NA,
@@ -173,7 +173,6 @@ get_classification <- function(taxa.clean,
   if (nrow(supported) != 0) {
     
     message("Retrieving classifications")
-    
     classifications <- suppressMessages(
       unname(
         mapply(
@@ -201,7 +200,7 @@ get_classification <- function(taxa.clean,
     
     # Get all common names and restructure for annotation. Add the authority
     # system identifier and common names (there may be more than one) to each
-    # name + rank pair. This will be used by make_taxonomicCoverage() to
+    # name + rank pair. This will be used by txcl_make_taxonomicCoverage() to
     # annotate the output EML metadata.
     
     output_supported <- mapply(
@@ -286,7 +285,7 @@ get_classification <- function(taxa.clean,
     
     # List names and ranks "as is" and restructure for annotation. Add the
     # authority system identifier to each name + rank pair. This will be used
-    # by make_taxonomicCoverage() to annotate the output EML metadata.
+    # by txcl_make_taxonomicCoverage() to annotate the output EML metadata.
     
     output_unsupported <- mapply(
       FUN = function(classification, authority) {
@@ -355,7 +354,7 @@ get_classification <- function(taxa.clean,
 #         \item rank - The taxonomic rank of the taxon.
 #     }
 #
-get_id <- function(taxon, authority){
+txcl_get_id <- function(taxon, authority){
   
   taxon_id <- NA_character_
   taxon_rank <- NA_character_
@@ -527,7 +526,7 @@ get_id <- function(taxon, authority){
 #         \item rank - The taxonomic rank of the taxon.
 #     }
 #
-get_id_common <- function(taxon, authority){
+txcl_get_id_common <- function(taxon, authority){
   
   taxon_id <- NA_character_
   taxon_rank <- NA_character_
@@ -536,7 +535,7 @@ get_id_common <- function(taxon, authority){
   
   # Match authority -----------------------------------------------------------
   
-  gnr_list <- load_gnr_datasources()
+  gnr_list <- txcl_load_gnr_datasources()
   use_i <- authority == gnr_list[ , 'id']
   authority <- gnr_list[use_i, 'title']
   
@@ -701,7 +700,7 @@ get_id_common <- function(taxon, authority){
 #
 # @details This fixes bugs in taxize which otherwise produce inconsistent datasource names (e.g. "Integrated Taxonomic Information SystemITIS" rather than expected "ITIS")
 #
-load_gnr_datasources <- function() {
+txcl_load_gnr_datasources <- function() {
   gnr_list <- as.data.frame(taxize::gnr_datasources())
   gnr_list$title[gnr_list$id == "3"] <- "ITIS"
   return(gnr_list)
@@ -733,14 +732,14 @@ load_gnr_datasources <- function() {
 # \item{emld list}{The taxonomicClassification EML node for use in constructing EML metadata with the EML R library.}
 # \item{taxonomicCoverage.xml}{If \code{write.file = TRUE}.}
 #
-# @details This function uses \code{get_classification()} to expand taxa, resolved to supported authorities, into full taxonomic classification. Each level of classification is
+# @details This function uses \code{txcl_get_classification()} to expand taxa, resolved to supported authorities, into full taxonomic classification. Each level of classification is
 #  accompanied by an annotation (listing the \code{authority} and \code{authority.id}) and common names (only when \code{authority} is ITIS or WORMS). Taxa resolved to unsupported authorities, or not resolved at 
 #  all, will be listed as is defined in the \code{taxa.clean}, \code{authority}, and \code{authority.id} arguments.
 #
 # @note The name of this function is a bit misleading. The return value is actually a list of taxonomicClassification nodes, which occur immediately below taxonomicCoverage 
 # (i.e. ../taxonomicCoverage/taxonomicClassification).
 #
-make_taxonomicCoverage <- function(
+txcl_make_taxonomicCoverage <- function(
   taxa.clean,
   authority = NA,
   authority.id = NA,
@@ -770,7 +769,7 @@ make_taxonomicCoverage <- function(
   
   # Load data -----------------------------------------------------------------
   
-  # Remove any blank or missing taxa otherwise get_classification() will throw
+  # Remove any blank or missing taxa otherwise txcl_get_classification() will throw
   # errors
   missing_names <- is.na(taxa.clean) | taxa.clean == ""
   taxa.clean <- taxa.clean[!missing_names]
@@ -784,8 +783,7 @@ make_taxonomicCoverage <- function(
   # EML::set_taxonomicCoverage().
   
   # Retrieve taxonomic hierarchy and common names when possible
-  
-  classifications <- get_classification(
+  classifications <- txcl_get_classification(
     taxa.clean = taxa.clean,
     authority = authority,
     authority.id = authority.id,
@@ -794,7 +792,7 @@ make_taxonomicCoverage <- function(
   
   # Recursively convert classifications into the nested structure expected by
   # EML::write_eml().
-  taxonomic_coverage <- set_taxonomic_coverage(classifications)
+  taxonomic_coverage <- txcl_set_taxonomic_coverage(classifications)
   
   # Write to file -------------------------------------------------------------
   
@@ -842,7 +840,7 @@ make_taxonomicCoverage <- function(
 #         \item score - Authority match score for input taxon.
 #     }
 #
-optimize_match <- function(x, data.sources){
+txcl_optimize_match <- function(x, data.sources){
   
   output <- data.frame(
     taxa_clean = rep(NA_character_, length(data.sources)),
@@ -859,7 +857,7 @@ optimize_match <- function(x, data.sources){
     # Resolve name, authority, and score
     
     out_auth <- try(
-      get_authority(
+      txcl_get_authority(
         taxon = x,
         data.source = as.character(data.sources[j])),
       silent = TRUE)
@@ -870,7 +868,7 @@ optimize_match <- function(x, data.sources){
       if (!is.na(out_auth['resolved_name']) & !is.na(out_auth['authority'])) {
         out_id <- try(
           suppressWarnings(
-            get_id(
+            txcl_get_id(
               taxon = out_auth['resolved_name'],
               authority = out_auth['authority'])),
           silent = TRUE)
@@ -964,7 +962,7 @@ optimize_match <- function(x, data.sources){
 #
 #     }
 #
-optimize_match_common <- function(x, data.sources){
+txcl_optimize_match_common <- function(x, data.sources){
   
   output <- data.frame(
     taxa_clean = rep(NA_character_, length(data.sources)),
@@ -981,7 +979,7 @@ optimize_match_common <- function(x, data.sources){
     
     out_id <- try(
       suppressWarnings(
-        get_id_common(
+        txcl_get_id_common(
           taxon = x,
           authority = data.sources[j])),
       silent = TRUE)
@@ -1068,7 +1066,7 @@ optimize_match_common <- function(x, data.sources){
 #     updated version of taxa_map.csv will be returned to \code{path} and
 #     a data frame of taxa_map.csv to the R environment.
 #
-resolve_comm_taxa <- function(x = NULL, data.sources, path = NULL){
+txcl_resolve_comm_taxa <- function(x = NULL, data.sources, path = NULL){
   
   # Check arguments ---------------------------------------------------------
   
@@ -1134,7 +1132,7 @@ resolve_comm_taxa <- function(x = NULL, data.sources, path = NULL){
   
   r <- lapply(
     unique(taxa_list$taxa),
-    optimize_match_common,
+    txcl_optimize_match_common,
     data.sources = data.sources)
   
   # Update taxa_map.csv -------------------------------------------------------
@@ -1213,11 +1211,11 @@ resolve_comm_taxa <- function(x = NULL, data.sources, path = NULL){
 #     updated version of taxa_map.csv will be returned to \code{path} and
 #     a data frame of taxa_map.csv to the R environment.
 #
-resolve_sci_taxa <- function(x = NULL, data.sources, path = NULL){
+txcl_resolve_sci_taxa <- function(x = NULL, data.sources, path = NULL){
   
   # Validate arguments --------------------------------------------------------
   
-  validate_arguments("resolve_sci_taxa", as.list(environment()))
+  validate_arguments("txcl_resolve_sci_taxa", as.list(environment()))
   
   # Create taxa list ----------------------------------------------------------
   
@@ -1249,7 +1247,7 @@ resolve_sci_taxa <- function(x = NULL, data.sources, path = NULL){
   
   r <- lapply(
     unique(taxa_list$taxa),
-    optimize_match,
+    txcl_optimize_match,
     data.sources = data.sources)
   
   # Update taxa_map.csv -----------------------------------------------------
@@ -1309,7 +1307,7 @@ resolve_sci_taxa <- function(x = NULL, data.sources, path = NULL){
 # Create the taxonomicCoverage EML node
 #
 # @param sci_names
-#     (list) Object returned by \code{get_classification()}.
+#     (list) Object returned by \code{txcl_get_classification()}.
 #
 # @return
 # \item{list}{If \code{write.file = FALSE} an emld list object is returned
@@ -1317,7 +1315,7 @@ resolve_sci_taxa <- function(x = NULL, data.sources, path = NULL){
 # \item{.xml file}{If \code{write.file = TRUE} a .xml file is written to
 # \code{path}}.
 #
-set_taxonomic_coverage <- function(sci_names) {
+txcl_set_taxonomic_coverage <- function(sci_names) {
   
   pop <- function(taxa) {
     if (length(taxa) > 1) {
@@ -1379,7 +1377,7 @@ view_taxa_authorities <- function(){
   
   # Get GNR datasources -----------------------------------------------------
   
-  gnr_list <- load_gnr_datasources()
+  gnr_list <- txcl_load_gnr_datasources()
   
   # Mark supported databases ------------------------------------------------
   
