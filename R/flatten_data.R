@@ -121,12 +121,21 @@ flatten_data <- function(tables) {
                     location_id %in% all_merged$location_id)
     if (nrow(location_ancillary) > 0) {
       location_ancillary_wide <- flatten_ancillary(location_ancillary)
-      all_merged <- all_merged %>%
-        dplyr::left_join(
-          location_ancillary_wide %>%
-            dplyr::select_if(not_all_NAs),
-          by = "location_id",
-          suffix = c("", "_location_ancillary"))
+      if ("datetime" %in% colnames(location_ancillary_wide)) { # Join with datetime if present
+        all_merged <- all_merged %>%
+          dplyr::left_join(
+            location_ancillary_wide %>%
+              dplyr::select_if(not_all_NAs),
+            by = c("location_id", "datetime"),
+            suffix = c("", "_location_ancillary"))
+      } else {
+        all_merged <- all_merged %>%
+          dplyr::left_join(
+            location_ancillary_wide %>%
+              dplyr::select_if(not_all_NAs),
+            by = "location_id",
+            suffix = c("", "_location_ancillary"))
+      }
     }
   }
   
@@ -209,6 +218,10 @@ flatten_ancillary <- function(ancillary_table) {
   fkey <- stringr::str_subset(colnames(ancillary_table), "(?<!ancillary_)id") # Use regexpr to select id column to later join on
   auth <- ifelse("author" %in% colnames(ancillary_table), "author", list(NULL))
   vars <- c(fkey, "variable_name", "value", unlist(auth))
+  # Add datetime to list of vars if present
+  if (!is.null(ancillary_table$datetime) & not_all_NAs(ancillary_table$datetime)) {
+    vars <- c(vars, "datetime")
+  }
   df <- ancillary_table %>% 
     dplyr::select(vars) %>%
     tidyr::pivot_wider(names_from = variable_name, 
