@@ -605,9 +605,9 @@ create_eml <- function(path,
   
   # Combine taxonomic coverage of L0 and L1. While this may provide redundant 
   # information, there isn't any harm in this.
-
+  
   eml_L0$dataset$coverage$taxonomicCoverage$taxonomicClassification <- c(
-    eml_L0$dataset$coverage$taxonomicCoverage$taxonomicClassification,
+    list(eml_L0$dataset$coverage$taxonomicCoverage$taxonomicClassification),
     eml_L1$dataset$coverage$taxonomicCoverage$taxonomicClassification)
   
   # Update <contact> ----------------------------------------------------------
