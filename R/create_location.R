@@ -101,8 +101,6 @@ create_location <- function(L0_flat,
       if (paste0(current, "_id") %in% colnames(res)) {
         res <- res %>% dplyr::rename(location_id = paste0(current, "_id"))
       }
-      # Only need unique rows
-      res <- unique.data.frame(res)
       # Sort for human readability
       res <- sort_by_alphanumeric(x = res, col = "location_id")
       # Only the level of observation gets latitude, longitude, and elevation values
@@ -111,6 +109,8 @@ create_location <- function(L0_flat,
         res$longitude <- NA
         res$elevation <- NA
       }
+      # Only need unique rows
+      res <- unique.data.frame(res)
       return(res)
     })
   # Coerce data frame classes into a consistent type so they can be combined
