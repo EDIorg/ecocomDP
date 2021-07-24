@@ -16,17 +16,36 @@ make_neon_location_table <- function(loc_info, loc_col_names){
   if("namedLocation" %in% names(loc_info)) loc_info <- loc_info %>%
       dplyr::mutate(location_id = namedLocation)
   
-  # make location table
-  table_location <- suppressMessages(
-      ecocomDP::create_location_deprecated(
-        L0_flat = loc_info,
-        location_id = "location_id",
-        latitude = "decimalLatitude",
-        longitude = "decimalLongitude",
-        elevation = "elevation",
-        location_name = loc_col_names))
   
+  # # make location table
+  table_location <- suppressMessages(
+    ecocomDP:::create_location_deprecated(
+      L0_flat = loc_info,
+      location_id = "location_id",
+      location_name = loc_col_names)) %>%
+    dplyr::select(-c(
+       .data$latitude,
+       .data$longitude,
+       .data$elevation))
+  
+  # get spatial data for lowest resolution location_id
+  spatial_data <- loc_info %>%
+    dplyr::select(
+      .data$location_id,
+      .data$decimalLatitude,
+      .data$decimalLongitude,
+      .data$elevation) %>% 
+    dplyr::rename(
+      latitude = .data$decimalLatitude,
+      longitude = .data$decimalLongitude)
+  
+  # merge spatial data into table_location
+  table_location <- table_location %>%
+    dplyr::left_join(spatial_data, by = "location_id")
+  
+
   # code to handle updated create_location (updated 18 Sep 2020 in create_location branch)
+  # this code no longer necessary as of 23 July 2021, but leaving in just in case
   if(class(table_location) == "list" &&
      "location" %in% names(table_location)){
     
@@ -39,6 +58,8 @@ make_neon_location_table <- function(loc_info, loc_col_names){
           dplyr::last()) 
   }
   
+
+    
   # replace parent_id with parent_name
   table_location$parent_location_id <- table_location$location_name[
     match(table_location$parent_location_id, table_location$location_id)]
@@ -74,6 +95,7 @@ make_neon_location_table <- function(loc_info, loc_col_names){
     }
   }
   
+
   return(table_location)
 }
 
