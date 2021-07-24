@@ -317,12 +317,22 @@ create_eml <- function(path,
       if (has_varname) {
         univars <- unique(eal_inputs$x$data.table[[tbl]]$content$variable_name)
         unidefs <- defs[names(defs) %in% univars]
-        catvars_template <- data.frame(
-          attributeName = "variable_name",
-          code = names(unidefs),
-          definition = unname(unidefs),
-          stringsAsFactors = FALSE)
-        return(list(content = catvars_template))
+        if (length(unidefs) == 0) { # FIXME sometimes there's no match, but could use variable_mapping vals if exists
+          unidefs <- rep("NA", length(univars))
+          catvars_template <- data.frame(
+            attributeName = "variable_name",
+            code = univars,
+            definition = unname(unidefs),
+            stringsAsFactors = FALSE)
+          return(list(content = catvars_template))
+        } else {
+          catvars_template <- data.frame(
+            attributeName = "variable_name",
+            code = names(unidefs),
+            definition = unname(unidefs),
+            stringsAsFactors = FALSE)
+          return(list(content = catvars_template))
+        }
       }
     })
   names(r) <- paste0("catvars_", tools::file_path_sans_ext(names(eal_inputs$x$data.table)), ".txt")
