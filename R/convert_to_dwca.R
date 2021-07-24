@@ -402,12 +402,8 @@ make_eml_dwca <- function(path,
   
   # The child data package should not exist since it's being created here, but
   # could in a non-production environment
-  child_data_package_exists <- suppressWarnings(
-    !stringr::str_detect(
-      suppressMessages(
-        api_read_metadata(derived_id, environment)), 
-      "Unable to access metadata for packageId:"))
-  if (child_data_package_exists) {
+  child_data_package_exists <- api_read_metadata(derived_id, environment)
+  if ("xml_document" %in% class(child_data_package_exists)) {
     warning(
       "The L2 data package '", derived_id, "' already exists.",
       call. = FALSE)
