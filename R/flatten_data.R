@@ -178,8 +178,10 @@ flatten_data <- function(tables) {
   }
   
   # Coerce columns to correct classes
-  all_merged <- coerce_all_merged(x = all_merged, 
-                                  locnames = res_flatloc$locnames)
+  if (exists("res_flatloc")) {
+    all_merged <- coerce_all_merged(x = all_merged, 
+                                    locnames = res_flatloc$locnames)
+  }
   
   # Coerce table class
   cls <- class(tables$observation)
