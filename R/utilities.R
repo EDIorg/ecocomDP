@@ -9,7 +9,7 @@
 add_units <- function(L0_flat, res, unit) {
   if (!is.null(unit)) {
     unit_map <- L0_flat %>% dplyr::select(dplyr::all_of(unit)) %>% unique() # Unique unit values
-    unit_map <- as.data.frame(lapply(unit_map, na.omit))                    # Remove NA
+    unit_map <- as.data.frame(lapply(unit_map, stats::na.omit))                    # Remove NA
     
     unit_map <- data.frame(variable_name = colnames(unit_map),
                            unit = as.character(unit_map[1, ]),              # Should only be one
@@ -930,7 +930,7 @@ parse_datetime_frmt_from_vals <- function(vals) {
       sum(is.na(lubridate::parse_date_time(vals, "ymd"))),
       sum(is.na(lubridate::parse_date_time(vals, "y")))))
   na_coerced <- na_end - na_start
-  if (var(na_coerced) == 0) {    # When format of vals are NA or unsupported
+  if (stats::var(na_coerced) == 0) {    # When format of vals are NA or unsupported
     frmt <- NULL
   } else {                       # When format of vals are supported
     best_match <- which(na_coerced == min(na_coerced))[1]

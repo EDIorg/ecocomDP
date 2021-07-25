@@ -91,7 +91,7 @@ testthat::test_that("Reads from local .csv directories", {
   save_data(d, tempdir(), type = ".csv")
   d <- read_data(from = tempdir())            # Has expected structure
   expect_true(is.list(d))                                                             # obj is a list
-  expect_true(all(names(d) %in% ids))                                                 # 1st level name is id
+  expect_true(all(ids %in% names(d)))                                                 # 1st level name is id
   for (i in names(d)) {
     expect_true(all(names(d[[i]]) %in% c("metadata", "tables", "validation_issues"))) # 2nd level has 3 values
     for (j in names(d[[i]])) {                                                        # 2nd level objs are lists

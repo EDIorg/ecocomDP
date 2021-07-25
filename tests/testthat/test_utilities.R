@@ -101,6 +101,7 @@ testthat::test_that("parse_datetime_from_frmt()", {
 testthat::test_that("write_tables()", {
   # Parameterize
   mypath <- paste0(tempdir(), "/data")
+  unlink(mypath, recursive = TRUE)
   dir.create(mypath)
   flat <- ants_L0_flat
   observation <- create_observation(

@@ -30,7 +30,7 @@
         "n_trap_nights_per_bout_per_plot", "n_trap_nights_per_night_uid",
         "nameAccordingToID", "namedLocation", "nativeStatusCode", "nativeStatusCode.x",
         "nativeStatusCode.y", "neon_sample_id", "netDeploymentTime", "netEndTime",
-        "netSetTime", "nightuid", "nlcdClass", "no.site", "no.taxa", "number_of_fish",
+        "netSetTime", "nightuid", "nlcdClass", "no.site", "no.taxa", "number_of_fish", "numbr",
         "nymphCount", "object_label", "object_uri", "observation_ancillary_id",
         "observation_id", "occurrence", "package_id", "parentSampleID",
         "parent_location_id", "percentCover", "plotID", "plotType", "ponarDepth",

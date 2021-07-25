@@ -19,7 +19,7 @@ make_neon_location_table <- function(loc_info, loc_col_names){
   
   # # make location table
   table_location <- suppressMessages(
-    ecocomDP:::create_location_deprecated(
+    create_location_deprecated(
       L0_flat = loc_info,
       location_id = "location_id",
       location_name = loc_col_names)) %>%

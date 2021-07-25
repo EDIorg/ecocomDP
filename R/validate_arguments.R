@@ -69,23 +69,8 @@ validate_arguments <- function(fun.name, fun.args) {
       if (fun.args$script != "create_ecocomDP.R") {
         stop("The 'script' must have the name: 'create_ecocomDP.R'.", call. = FALSE)
       }
-      # When sourced has 'create_ecocomDP()' and recommended arguments
-      suppressWarnings(
-        source(file = paste0(fun.args$path, "/create_ecocomDP.R"), 
-               local = TRUE))
-      if (!("create_ecocomDP" %in% ls())) {
-        stop("The script 'create_ecocomDP.R' does not contain the function ",
-             "create_ecocomDP().", call. = FALSE)
-      } else {
-        expected_args <- c("path", "source_id", "derived_id", "url")
-        missing_args <- !(expected_args %in% names(formals("create_ecocomDP")))
-        if (any(missing_args)) {
-          stop("The function create_ecocomDP() in the 'script' ", 
-               fun.args$script, " is missing these arguments: ",
-               paste(expected_args[missing_args], collapse = ", "), 
-               call. = FALSE)
-        }
-      }
+      # Has func 'create_ecocomDP()' including recommended arguments
+      check_script(path = paste0(fun.args$path, "/create_ecocomDP.R"))
     }
     
   }
@@ -501,5 +486,42 @@ validate_dataset_structure <- function(dataset) {
   if (!all(res)) {
     stop("Input 'dataset' has invalid structure. See return from read_data() ",
          "for more details.", call. = F)
+  }
+}
+
+
+
+
+
+
+
+
+# Check for expected func names and arguments in create_ecocomDP.R
+#
+# @param path (character) Full path, including file extension, to create_ecocomDP.R
+#
+# @return Errors if expected content is missing
+# 
+check_script <- function(path) {
+  # Get script header
+  funclines <- paste(readLines(path, warn = FALSE), 
+                     collapse = " ")
+  func_header <- stringr::str_extract(
+    funclines, 
+    "create_ecocomDP[:space:]*<-[:space:]*function\\({1}([^\\)]+)(?=\\))")
+  # Test: Has expected func name
+  if (!stringr::str_detect(func_header, "create_ecocomDP")) {
+    stop("The script 'create_ecocomDP.R' does not contain the function ",
+         "create_ecocomDP().", call. = FALSE)
+  }
+  # Test: Has expected arguments
+  expected_args <- c("path", "source_id", "derived_id", "url")
+  found_args <- unlist(stringr::str_extract_all(func_header, "path|source_id|derived_id|url"))
+  missing_args <- !(expected_args %in% found_args)
+  if (any(missing_args)) {
+    stop("The function create_ecocomDP() in the 'script' create_ecocomDP.R", 
+         " is missing these arguments: ",
+         paste(expected_args[missing_args], collapse = ", "), 
+         call. = FALSE)
   }
 }
