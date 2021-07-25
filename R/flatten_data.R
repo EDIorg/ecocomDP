@@ -21,16 +21,19 @@ flatten_data <- function(tables) {
   
   validate_arguments(fun.name = "flatten_data", fun.args = as.list(environment()))
   
-  # Start with observation
+  # Start w/observation -------------------------------------------------------
+  
   all_merged <- tables$observation %>%
     dplyr::select_if(not_all_NAs)
   
-  # Merge observation_ancillary
+  # Merge observation_ancillary -----------------------------------------------
+  
   if ("observation_ancillary" %in% names(tables)) {
     #handle missing observation_id or case where all observation_id is na
     if (!"observation_id" %in% names(tables$observation_ancillary) || 
-        all(is.na(tables$observation_ancillary$observation_id)) ) {
-      warning("'observation_id' is missing from the observation_ancillary table")
+        all(is.na(tables$observation_ancillary$observation_id))) {
+      warning("'observation_id' is missing from the observation_ancillary ",
+              "table. Cannot join observation_ancillary to observation.")
     }else{
       #the expected case:
       observation_ancillary_wide <- flatten_ancillary(tables$observation_ancillary)
@@ -40,6 +43,8 @@ flatten_data <- function(tables) {
                          suffix = c("", "_observation_ancillary"))
     }
   }
+  
+  # Merge location ------------------------------------------------------------
   
   # Merge location data using one of two approaches:
   # 1.) "NEON location type" from location ancillary data
@@ -114,7 +119,9 @@ flatten_data <- function(tables) {
       relocate(location_id, .after = last_col)
   }
   
-  # Merge location_ancillary data only for bottom level when locations are nested
+  # Merge location_ancillary --------------------------------------------------
+  
+  # ... data only for bottom level when locations are nested
   if ("location_ancillary" %in% names(tables)) {
     location_ancillary <- tables$location_ancillary %>%
       dplyr::filter(variable_name != "NEON location type",
@@ -139,7 +146,8 @@ flatten_data <- function(tables) {
     }
   }
   
-  # Merge taxon table
+  # Merge taxon ---------------------------------------------------------------
+  
   if ("taxon" %in% names(tables)) {
     last_col <- ncol(all_merged) # Index of last column for sorting
     all_merged <- all_merged %>%
@@ -153,7 +161,8 @@ flatten_data <- function(tables) {
       relocate(taxon_id, .after = last_col)
   }
   
-  # Merge taxon_ancillary
+  # Merge taxon_ancillary -----------------------------------------------------
+  
   if ("taxon_ancillary" %in% names(tables)) {
     taxon_ancillary_wide <- flatten_ancillary(tables$taxon_ancillary)
     all_merged <- all_merged %>%
@@ -164,7 +173,8 @@ flatten_data <- function(tables) {
         suffix = c("", "_taxon_ancillary"))
   }
   
-  # Merge dataset_summary
+  # Merge dataset_summary -----------------------------------------------------
+  
   if ("dataset_summary" %in% names(tables)) {
     last_col <- ncol(all_merged) # Index of last column for sorting
     all_merged <- all_merged %>%
@@ -177,13 +187,15 @@ flatten_data <- function(tables) {
       relocate(package_id, .after = last_col)
   }
   
-  # Coerce columns to correct classes
+  # Coerce columns to correct classes -----------------------------------------
+  
   if (exists("res_flatloc")) {
     all_merged <- coerce_all_merged(x = all_merged, 
                                     locnames = res_flatloc$locnames)
   }
   
-  # Coerce table class
+  # Coerce table class --------------------------------------------------------
+  
   cls <- class(tables$observation)
   if (all(c("tbl_df", "tbl", "data.frame") %in% cls)) {
     all_merged <- tidyr::as_tibble(all_merged)
@@ -191,7 +203,8 @@ flatten_data <- function(tables) {
     all_merged <- as.data.frame(all_merged)
   }
   
-  # Remove any unwanted columns
+  # Remove any unwanted columns -----------------------------------------------
+  
   vars <- "parent_location_id"
   all_merged <- all_merged %>% dplyr::select(-dplyr::any_of(vars))
   
@@ -364,6 +377,18 @@ flatten_location <- function(location) {
   
   # If no location_name, then remove location_ids of parents and return location_new
   if (!"location_name" %in% colnames(location)) {
+    res <- list(location_flat = location,
+                locnames = nesting_order)
+    return(res)
+  }
+  
+  # FIXME Exception for legacy data - Remove this once all L1 have been updated
+  if (!any(stringr::str_detect(location$location_name, "__.*"))) {
+    last_child <- location$location_id[nrow(location)]
+    ultimate_child_id <- stringr::str_extract(last_child, "lo_[:digit:]*(?=_)")
+    is_ultimate_child <- stringr::str_detect(location$location_id, ultimate_child_id)
+    location <- location[is_ultimate_child, ]
+    location <- dplyr::select(location, -parent_location_id)
     res <- list(location_flat = location,
                 locnames = nesting_order)
     return(res)
