@@ -5,6 +5,7 @@
 * Check create_ecocomDP.R for expected function and associated arguments in `create_eml()`.
 * Enable full return of L0 location columns in `flatten_data()`.
 * Add Shared Practices vignette.
+* Link to ecocomDP article.
 
 ## Fixes
 * Fix alignment of categorical variable names and definitions in `create_eml()`.

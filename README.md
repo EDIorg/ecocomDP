@@ -16,7 +16,8 @@ Tools to create, use, and convert ‘ecocomDP’ datasets. ‘ecocomDP’ is a
 dataset design pattern for harmonizing ecological community surveys in a
 research question agnostic format, from source datasets published across
 multiple repositories, and with methods that keep the derived datasets
-up-to-date as the underlying sources change.
+up-to-date as the underlying sources change. Described in O’Brien et
+al. (2021), <https://doi.org/10.1016/j.ecoinf.2021.101374>.
 
 ## Installation
 
