@@ -477,13 +477,13 @@ create_ecocomDP <- function(path,
 mypath <- paste0(tempdir(), "/edi_193")
 dir.create(mypath)
 
-# Create ecocomDP dataset "edi.193.4" from source dataset "knb-lter-hfr.118.32"
+# Create ecocomDP dataset "edi.193.5" from source dataset "knb-lter-hfr.118.33"
 
 create_ecocomDP(
   path = mypath, 
-  source_id = "knb-lter-hfr.118.32", 
-  derived_id = "edi.193.4")
-#> Retrieving EML for data package knb-lter-hfr.118.32
+  source_id = "knb-lter-hfr.118.33", 
+  derived_id = "edi.193.5")
+#> Retrieving EML for data package knb-lter-hfr.118.33
 #>  [0%] Downloaded 0 bytes...
 #>  [0%] Downloaded 0 bytes...
 #>
@@ -565,9 +565,9 @@ create_ecocomDP(
 #>   Elevation
 #>   variable_mapping
 #>
-#> Creating EML for derived data package (edi.193.4)
-#> Reading EML of L0 data package knb-lter-hfr.118.32
-#> Creating EML of L1 data package edi.193.4
+#> Creating EML for derived data package (edi.193.5)
+#> Reading EML of L0 data package knb-lter-hfr.118.33
+#> Creating EML of L1 data package edi.193.5
 #> Updating:
 #> <eml>
 #>   <dataset>
@@ -591,7 +591,7 @@ create_ecocomDP(
 dir(mypath)
 #>  [1] "create_ecocomDP.R"        
 #>  [2] "dataset_summary.csv"      
-#>  [3] "edi.193.4.xml"            
+#>  [3] "edi.193.5.xml"            
 #>  [4] "location.csv"             
 #>  [5] "location_ancillary.csv"   
 #>  [6] "observation.csv"          

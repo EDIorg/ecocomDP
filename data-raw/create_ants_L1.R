@@ -3,7 +3,7 @@
 library(ecocomDP)
 
 # Read from EDI data repository
-ants_L1 <- read_data(id = "edi.193.4")
+ants_L1 <- read_data(id = "edi.193.5")
 
 # Return as tibble
 ants_L1$edi.193.4$tables <- lapply(ants_L1$edi.193.4$tables, tidyr::as_tibble)

@@ -1,5 +1,5 @@
 # This function creates the example dataset "ants_L0_flat" from:
-# https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-hfr&identifier=118&revision=32
+# https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-hfr&identifier=118&revision=33
 
 # Libraries used by this function
 
@@ -15,8 +15,8 @@ library(taxonomyCleanr) # remotes::install_github("EDIorg/taxonomyCleanr")
 library(usethis)
 
 create_ants_L0_flat <- function(path = NULL, 
-                                source_id = "knb-lter-hfr.118.32", 
-                                derived_id = "edi.193.4", 
+                                source_id = "knb-lter-hfr.118.33", 
+                                derived_id = "edi.193.5", 
                                 url = NULL) {
   
   # Read source dataset -------------------------------------------------------
