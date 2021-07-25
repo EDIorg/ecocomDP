@@ -139,8 +139,8 @@ create_location <- function(L0_flat,
 # 
 sort_by_alphanumeric <- function(x, col) {
   # Parse ids into alpha and numbr cols
-  x$alpha <- stringr::str_remove_all(x[[col]], "[:digit:]*")
-  x$numbr <- as.numeric(stringr::str_remove_all(x[[col]], "[:alpha:]"))
+  x$alpha <- stringr::str_remove_all(x[[col]], "[^[:alpha:]]")
+  x$numbr <- as.numeric(stringr::str_remove_all(x[[col]], "[^[:digit:]]"))
   # Sort on alpha then on numbr
   x <- dplyr::group_by(x, alpha, numbr)
   x <- dplyr::arrange(x, .by_group = TRUE)
