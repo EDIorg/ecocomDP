@@ -577,10 +577,16 @@ create_eml <- function(path,
   # Add ecocomDP specific keywords to the L0 keywords
   
   message("    <keywordSet>")
-  
-  eml_L0$dataset$keywordSet <- c(
-    eml_L0$dataset$keywordSet,
-    eml_L1$dataset$keywordSet)
+  # Two options for combining keyword sets, because of variation in the return 
+  # from EML::read_eml() (i.e. lists nodes when length > 1, and unlists when 
+  # length = 1).
+  if (!is.null(names(eml_L0$dataset$keywordSet))) {
+    eml_L0$dataset$keywordSet <- c(list(eml_L0$dataset$keywordSet),
+                                   eml_L1$dataset$keywordSet)
+  } else {
+    eml_L0$dataset$keywordSet <- c(eml_L0$dataset$keywordSet,
+                                   eml_L1$dataset$keywordSet)
+  }
   
   # Add Darwin Core basisOfRecord
   if (!is.null(basis_of_record)) {
@@ -606,9 +612,19 @@ create_eml <- function(path,
   # Combine taxonomic coverage of L0 and L1. While this may provide redundant 
   # information, there isn't any harm in this.
   
-  eml_L0$dataset$coverage$taxonomicCoverage$taxonomicClassification <- c(
-    list(eml_L0$dataset$coverage$taxonomicCoverage$taxonomicClassification),
-    eml_L1$dataset$coverage$taxonomicCoverage$taxonomicClassification)
+  # Two options for combining taxonomic classifications, because of variation 
+  # in the return from EML::read_eml() (i.e. lists nodes when length > 1, and 
+  # unlists when length = 1).
+  
+  if (!is.null(names(eml_L0$dataset$coverage$taxonomicCoverage$taxonomicClassification))) {
+    eml_L0$dataset$coverage$taxonomicCoverage$taxonomicClassification <- c(
+      list(eml_L0$dataset$coverage$taxonomicCoverage$taxonomicClassification),
+      eml_L1$dataset$coverage$taxonomicCoverage$taxonomicClassification)
+  } else {
+    eml_L0$dataset$coverage$taxonomicCoverage$taxonomicClassification <- c(
+      eml_L0$dataset$coverage$taxonomicCoverage$taxonomicClassification,
+      eml_L1$dataset$coverage$taxonomicCoverage$taxonomicClassification)
+  }
   
   # Update <contact> ----------------------------------------------------------
   
