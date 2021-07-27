@@ -5,9 +5,8 @@
 
 <!-- badges: start -->
 
-[![Travis-CI Build
-Status](https://travis-ci.com/EDIorg/ecocomDP.svg?branch=master)](https://travis-ci.org/EDIorg/ecocomDP)
-[![codecov.io](https://codecov.io/github/EDIorg/ecocomDP/coverage.svg?branch=master)](https://codecov.io/github/EDIorg/ecocomDP?branch=master)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/ecocomDP)](https://cran.r-project.org/package=ecocomDP)
 <!-- badges: end -->
 
 ## Overview
