@@ -21,8 +21,8 @@ testthat::test_that("Column presence", {
     crit <- read_criteria()
     L1_flat <- ecocomDP::flatten_data(ants_L1[[1]]$tables)
     # Adjust L0 flat to our expectations
-    L0_flat <- L0_flat %>% 
-      dplyr::select(-author)           # Columns of NA are dropped when flattened
+    L0_flat <- L0_flat %>% dplyr::select(-author) # Columns of NA are dropped when flattened
+    L0_flat$location_name <- NA_character_        # Add exception
     # TEST: All L0 flat columns (with above exceptions) should be in L1 flat
     cols_missing_from_L1 <- base::setdiff(colnames(L0_flat), colnames(L1_flat))
     expect_true(length(cols_missing_from_L1) == 0)
@@ -176,9 +176,9 @@ testthat::test_that("flatten_location(): 3 nested sites", {
     expect_equal(loc_flat$Middle, "2")
     expect_equal(loc_flat$Lowest, "3")
     # TEST: Original columns are returned in the order of nesting
-    expect_equal(which(colnames(loc_flat) %in% "Highest"), 2)
-    expect_equal(which(colnames(loc_flat) %in% "Middle"), 3)
-    expect_equal(which(colnames(loc_flat) %in% "Lowest"), 4)
+    expect_equal(which(colnames(loc_flat) %in% "Highest"), 3)
+    expect_equal(which(colnames(loc_flat) %in% "Middle"), 4)
+    expect_equal(which(colnames(loc_flat) %in% "Lowest"), 5)
   }
   
 })

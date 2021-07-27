@@ -448,7 +448,9 @@ flatten_location <- function(location) {
   }
   
   # Get original column name containing observation level locations and then use it to rename the location_name column, otherwise value matching can't be done in the next sequence of steps (below).
+  
   new_name <- unique(stringr::str_remove(location_new$location_name, "__.*"))
+  L1_location_name <- location_new$location_name
   location_new$location_name <- stringr::str_extract(location_new$location_name, "(?<=__).*")
   cnames <- colnames(location_new)
   cnames[cnames == "location_name"] <- new_name
@@ -466,8 +468,12 @@ flatten_location <- function(location) {
     location_new[[loctype]][use_i] <- val
   }
   
+  # Add location_name back in, because it represents the spatial level of observation, because
+  # it is returned for flattened NEON datasets, and because it may facilitate future interoperability.
+  location_new$location_name <- L1_location_name
+  
   # Reorder location columns in terms of nesting (from high to low) for user understanding
-  col_order <- c("location_id", nesting_order, "latitude", "longitude", "elevation")
+  col_order <- c("location_id", "location_name", nesting_order, "latitude", "longitude", "elevation")
   location_new <- dplyr::relocate(location_new, col_order)
   
   # Return location_colnames so coerce_all_merged() knows which to coerce to "character" class
