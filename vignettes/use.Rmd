@@ -19,7 +19,7 @@ library(ecocomDP)
 ```
 
 ```{r include=FALSE}
-devtools::load_all(".")
+library(ecocomDP)
 ```
 
 ## Search
