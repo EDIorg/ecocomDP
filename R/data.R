@@ -1,6 +1,6 @@
-#' Joined and flat version of EDI data package knb-lter-hfr.118.32
+#' Joined and flat version of EDI data package knb-lter-hfr.118.33
 #'
-#' A fully joined and flat version of EDI data package knb-lter-hfr.118.32 (Ant Assemblages in Hemlock Removal Experiment at Harvard Forest since 2003) with all relevant ecocomDP L1 identifiers and content added. Use this dataset as an input to the \code{L0_flat} argument of the "create" functions.
+#' A fully joined and flat version of EDI data package knb-lter-hfr.118.33 (Ant Assemblages in Hemlock Removal Experiment at Harvard Forest since 2003) with all relevant ecocomDP L1 identifiers and content added. Use this dataset as an input to the \code{L0_flat} argument of the "create" functions.
 #'
 #' @format A data frame with 2931 rows and 45 variables:
 #' \describe{
@@ -49,9 +49,8 @@
 #'   \item{std_dev_interval_betw_years}{the standard deviation between surveys in years}
 #'   \item{max_num_taxa}{number of unique taxa in this dataset}
 #'   \item{geo_extent_bounding_box_m2}{the study area in meters squared}
-#'   \item{author}{person associated with identifying taxon_name}
 #' }
-#' @source \url{https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-hfr&identifier=118&revision=32}
+#' @source \url{https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-hfr&identifier=118&revision=33}
 "ants_L0_flat"
 
 
@@ -61,18 +60,18 @@
 
 
 
-#' The ecocomDP version of EDI data package knb-lter-hfr.118.32
+#' The ecocomDP version of EDI data package knb-lter-hfr.118.33
 #'
-#' The the ecocomDP (L1) formatted version of EDI data package knb-lter-hfr.118.32 (Ant Assemblages in Hemlock Removal Experiment at Harvard Forest since 2003) read from the EDI API with \code{read_data(id = "edi.194.4")}. Use this dataset as an input to data "use" functions.
+#' The the ecocomDP (L1) formatted version of EDI data package knb-lter-hfr.118.33 (Ant Assemblages in Hemlock Removal Experiment at Harvard Forest since 2003) read from the EDI API with \code{read_data(id = "edi.193.5")}. Use this dataset as an input to data "use" functions.
 #'
 #' @format A list of:
 #' \describe{
-#'   \item{edi.193.4}{The dataset identifier}
+#'   \item{edi.193.5}{The dataset identifier}
 #'     \describe{
 #'       \item{metadata}{See source url for metadata}
 #'       \item{tables}{A list of data frames, each an ecocomDP table}
 #'       \item{validation_issues}{Is NULL because there are no validation issues for this dataset}
 #'   }
 #' }
-#' @source \url{https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=193&revision=4}
+#' @source \url{https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=193&revision=5}
 "ants_L1"

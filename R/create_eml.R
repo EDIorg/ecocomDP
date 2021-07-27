@@ -45,7 +45,7 @@
 #' # Create directory with ecocomDP tables for create_eml()
 #' mypath <- paste0(tempdir(), "/data")
 #' dir.create(mypath)
-#' inpts <- c(ants_L1$edi.193.4$tables, path = mypath)
+#' inpts <- c(ants_L1$edi.193.5$tables, path = mypath)
 #' do.call(write_tables, inpts)
 #' file.copy(system.file("extdata", "create_ecocomDP.R", package = "ecocomDP"), mypath)
 #' 
@@ -69,8 +69,8 @@
 #' # Create EML
 #' eml <- create_eml(
 #'   path = mypath,
-#'   source_id = "knb-lter-hfr.118.32",
-#'   derived_id = "edi.193.4",
+#'   source_id = "knb-lter-hfr.118.33",
+#'   derived_id = "edi.193.5",
 #'   is_about = dataset_annotations,
 #'   script = "create_ecocomDP.R",
 #'   script_description = "A function for converting knb-lter-hrf.118 to ecocomDP",

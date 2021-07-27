@@ -56,9 +56,6 @@
     <li>
       <a href="../articles/convert.html">Convert</a>
     </li>
-    <li>
-      <a href="../articles/shared_practices.html">Shared Practices</a>
-    </li>
   </ul>
 </li>
 <li>
@@ -99,8 +96,7 @@
 <p>Below is an example function that reads a source dataset from the Environmental Data Initiative (EDI) repository and converts it into an ecocomDP dataset, which in turn is archived in EDI. For an example of creating an ecocomDP dataset on-demand (i.e. not archived), see the map_neon_data_to_ecocomDP.R source code.</p>
 <p>Use <code><a href="../reference/view_diagram.html">view_diagram()</a></code> and <code><a href="../reference/view_descriptions.html">view_descriptions()</a></code> for an overview of ecocomDP table relationships and requirements.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EDIorg/ecocomDP">ecocomDP</a></span><span class="op">)</span>
-<span class="co">#&gt; Warning: package 'ecocomDP' was built under R version 4.0.5</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EDIorg/ecocomDP">ecocomDP</a></span><span class="op">)</span></code></pre></div>
 <div id="for-archive-in-a-data-repository" class="section level2">
 <h2 class="hasAnchor">
 <a href="#for-archive-in-a-data-repository" class="anchor"></a>For archive in a data repository</h2>
@@ -160,6 +156,7 @@
                             <span class="va">url</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span>
   
   <span class="co"># Read source dataset -------------------------------------------------------</span>
+  
   <span class="co"># The source dataset is about ant communities and their functional traits </span>
   <span class="co"># changing in response to an invasive species. Observations are made across </span>
   <span class="co"># habitat types within the Harvard Experimental Forest. The dataset consists </span>
@@ -178,19 +175,19 @@
   
   <span class="va">ants</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">`hf118-01-ants.csv`</span>
   <span class="va">traits</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">`hf118-02-functional-traits.csv`</span>
+  <span class="va">ants</span><span class="op">$</span><span class="va">date</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span><span class="op">(</span><span class="va">ants</span><span class="op">$</span><span class="va">date</span><span class="op">)</span>
   
-  <span class="va">ants</span><span class="op">$</span><span class="va">date</span> <span class="op">&lt;-</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/ymd.html">ymd</a></span><span class="op">(</span><span class="va">ants</span><span class="op">$</span><span class="va">date</span><span class="op">)</span>
-
   <span class="co"># Join and flatten the source dataset ---------------------------------------</span>
+  
   <span class="co"># Joining all source data and relevant metadata into one big flat table </span>
   <span class="co"># simplifies parsing into ecocomDP tables and facilitates referential </span>
   <span class="co"># integrity in the process.</span>
   
   <span class="co"># Remove duplicate data from the ancillary table and join on species "code"</span>
   
-  <span class="va">traits</span> <span class="op">&lt;-</span> <span class="va">traits</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">genus</span>, <span class="op">-</span><span class="va">species</span><span class="op">)</span>
-  <span class="va">traits</span> <span class="op">&lt;-</span> <span class="va">traits</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>code <span class="op">=</span> <span class="va">species.code</span><span class="op">)</span>
-  <span class="va">wide</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">ants</span>, <span class="va">traits</span>, by <span class="op">=</span> <span class="st">"code"</span><span class="op">)</span>
+  <span class="va">traits</span> <span class="op">&lt;-</span> <span class="va">traits</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">genus</span>, <span class="op">-</span><span class="va">species</span><span class="op">)</span>
+  <span class="va">traits</span> <span class="op">&lt;-</span> <span class="va">traits</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>code <span class="op">=</span> <span class="va">species.code</span><span class="op">)</span>
+  <span class="va">wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">ants</span>, <span class="va">traits</span>, by <span class="op">=</span> <span class="st">"code"</span><span class="op">)</span>
   
   <span class="co"># Convert wide format to "flat" format. This is the wide form but gathered on </span>
   <span class="co"># core observation variables, which are often &gt; 1 in source datasets. This </span>
@@ -198,20 +195,14 @@
   <span class="co"># to by the ecocomDP::flatten_data() function, and is the input format </span>
   <span class="co"># required by the "create table" helpers we'll meet shortly. This dataset </span>
   <span class="co"># only has one core observation variable, "abundance", so gathering really </span>
-  <span class="co"># only entials a change of column names. </span>
+  <span class="co"># only entails a change of column names.</span>
   
-  <span class="va">wide</span> <span class="op">&lt;-</span> <span class="va">wide</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>value_abundance <span class="op">=</span> <span class="va">abundance</span><span class="op">)</span>
-  <span class="va">flat</span> <span class="op">&lt;-</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span>
+  <span class="va">wide</span> <span class="op">&lt;-</span> <span class="va">wide</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>value_abundance <span class="op">=</span> <span class="va">abundance</span><span class="op">)</span>
+  <span class="va">flat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span>
     <span class="va">wide</span>,
     cols <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">matches</a></span><span class="op">(</span><span class="st">"abundance"</span><span class="op">)</span>, 
     names_to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">".value"</span>, <span class="st">"variable_name"</span><span class="op">)</span>, 
     names_sep <span class="op">=</span> <span class="st">'\\_'</span><span class="op">)</span>
-  
-  <span class="co"># TIP: Sorting and arranging rows by sample date and location will result in </span>
-  <span class="co"># a nice chronological dataset for human browsing, which is merely cosmetic </span>
-  <span class="co"># and completely optional.</span>
-  
-  <span class="va">flat</span> <span class="op">&lt;-</span> <span class="va">flat</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">plot</span>, <span class="va">block</span><span class="op">)</span>
   
   <span class="co"># We're now in a good place to begin adding columns of the ecocomDP tables </span>
   <span class="co"># we can create from this source dataset. We'll begin with the observation </span>
@@ -219,19 +210,23 @@
   
   <span class="co"># Add columns for the observation table -------------------------------------</span>
   
-  <span class="co"># Each row of the flattened source dataset represents an observation of taxa </span>
-  <span class="co"># abundance and should have a unique ID for reference</span>
+  <span class="co"># The frequency and timing of surveys (events) varied throughout the history </span>
+  <span class="co"># of this dataset and are uniquely identifiable by grouping sample dates by </span>
+  <span class="co"># year and month.</span>
   
-  <span class="va">flat</span><span class="op">$</span><span class="va">observation_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">flat</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">flat</span><span class="op">$</span><span class="va">event_id</span> <span class="op">&lt;-</span> <span class="va">flat</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span>month <span class="op">=</span> <span class="fu"><a href="http://lubridate.tidyverse.org/reference/round_date.html">floor_date</a></span><span class="op">(</span><span class="va">flat</span><span class="op">$</span><span class="va">date</span>, <span class="st">"month"</span><span class="op">)</span>,
+                                     <span class="va">year</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_data.html">group_indices</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="va">flat</span> <span class="op">&lt;-</span> <span class="va">flat</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">event_id</span><span class="op">)</span>
   
   <span class="co"># Observations are made in plots, which are nested in blocks. Unique </span>
   <span class="co"># combinations of these form a location</span>
   
   <span class="va">flat</span><span class="op">$</span><span class="va">location_id</span> <span class="op">&lt;-</span> <span class="va">flat</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">plot</span>, <span class="va">block</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_data.html">group_indices</a></span><span class="op">(</span><span class="op">)</span>
   
-  <span class="co"># Each combination of location and date form a sampling event</span>
+  <span class="co"># Each row of the flattened source dataset represents an observation of taxa </span>
+  <span class="co"># abundance and should have a unique ID for reference</span>
   
-  <span class="va">flat</span><span class="op">$</span><span class="va">event_id</span> <span class="op">&lt;-</span> <span class="va">flat</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">date</span>, <span class="va">plot</span>, <span class="va">block</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_data.html">group_indices</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="va">flat</span><span class="op">$</span><span class="va">observation_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">flat</span><span class="op">)</span><span class="op">)</span>
   
   <span class="co"># Add columns for the location table ----------------------------------------</span>
   
@@ -240,19 +235,13 @@
   <span class="co"># area encompassing all sampling locations. The best we can do here is use </span>
   <span class="co"># the middle of the bounding box and mean of the bounding elevations.</span>
   
-  <span class="va">geocov</span> <span class="op">&lt;-</span> <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_find_all.html">xml_find_all</a></span><span class="op">(</span><span class="va">eml</span>, <span class="st">".//geographicCoverage"</span><span class="op">)</span>
-  <span class="va">north</span> <span class="op">&lt;-</span> <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_text.html">xml_double</a></span><span class="op">(</span>
-    <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_find_all.html">xml_find_all</a></span><span class="op">(</span><span class="va">geocov</span>, <span class="st">'.//northBoundingCoordinate'</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">east</span> <span class="op">&lt;-</span> <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_text.html">xml_double</a></span><span class="op">(</span>
-    <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_find_all.html">xml_find_all</a></span><span class="op">(</span><span class="va">geocov</span>, <span class="st">'.//eastBoundingCoordinate'</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">south</span> <span class="op">&lt;-</span> <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_text.html">xml_double</a></span><span class="op">(</span>
-    <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_find_all.html">xml_find_all</a></span><span class="op">(</span><span class="va">geocov</span>, <span class="st">'.//southBoundingCoordinate'</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">west</span> <span class="op">&lt;-</span> <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_text.html">xml_double</a></span><span class="op">(</span>
-    <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_find_all.html">xml_find_all</a></span><span class="op">(</span><span class="va">geocov</span>, <span class="st">'.//westBoundingCoordinate'</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">elev_max</span> <span class="op">&lt;-</span> <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_text.html">xml_double</a></span><span class="op">(</span>
-    <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_find_all.html">xml_find_all</a></span><span class="op">(</span><span class="va">geocov</span>, <span class="st">'.//altitudeMaximum'</span><span class="op">)</span><span class="op">)</span>
-  <span class="va">elev_min</span> <span class="op">&lt;-</span> <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_text.html">xml_double</a></span><span class="op">(</span>
-    <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_find_all.html">xml_find_all</a></span><span class="op">(</span><span class="va">geocov</span>, <span class="st">'.//altitudeMinimum'</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">geocov</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://xml2.r-lib.org/reference/xml_find_all.html">xml_find_all</a></span><span class="op">(</span><span class="va">eml</span>, <span class="st">".//geographicCoverage"</span><span class="op">)</span>
+  <span class="va">north</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://xml2.r-lib.org/reference/xml_text.html">xml_double</a></span><span class="op">(</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_find_all.html">xml_find_all</a></span><span class="op">(</span><span class="va">geocov</span>, <span class="st">'.//northBoundingCoordinate'</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">east</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://xml2.r-lib.org/reference/xml_text.html">xml_double</a></span><span class="op">(</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_find_all.html">xml_find_all</a></span><span class="op">(</span><span class="va">geocov</span>, <span class="st">'.//eastBoundingCoordinate'</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">south</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://xml2.r-lib.org/reference/xml_text.html">xml_double</a></span><span class="op">(</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_find_all.html">xml_find_all</a></span><span class="op">(</span><span class="va">geocov</span>, <span class="st">'.//southBoundingCoordinate'</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">west</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://xml2.r-lib.org/reference/xml_text.html">xml_double</a></span><span class="op">(</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_find_all.html">xml_find_all</a></span><span class="op">(</span><span class="va">geocov</span>, <span class="st">'.//westBoundingCoordinate'</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">elev_max</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://xml2.r-lib.org/reference/xml_text.html">xml_double</a></span><span class="op">(</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_find_all.html">xml_find_all</a></span><span class="op">(</span><span class="va">geocov</span>, <span class="st">'.//altitudeMaximum'</span><span class="op">)</span><span class="op">)</span>
+  <span class="va">elev_min</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://xml2.r-lib.org/reference/xml_text.html">xml_double</a></span><span class="op">(</span><span class="fu"><a href="http://xml2.r-lib.org/reference/xml_find_all.html">xml_find_all</a></span><span class="op">(</span><span class="va">geocov</span>, <span class="st">'.//altitudeMinimum'</span><span class="op">)</span><span class="op">)</span>
   
   <span class="va">flat</span><span class="op">$</span><span class="va">latitude</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">north</span>, <span class="va">south</span><span class="op">)</span><span class="op">)</span>
   <span class="va">flat</span><span class="op">$</span><span class="va">longitude</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">east</span>, <span class="va">west</span><span class="op">)</span><span class="op">)</span>
@@ -264,8 +253,8 @@
   <span class="co"># species pairs</span>
   
   <span class="va">flat</span> <span class="op">&lt;-</span> <span class="va">flat</span> <span class="op">%&gt;%</span> 
-    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>taxon_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/trimws.html">trimws</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">genus</span>, <span class="va">species</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">genus</span>, <span class="op">-</span><span class="va">species</span><span class="op">)</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>taxon_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/trimws.html">trimws</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">genus</span>, <span class="va">species</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">genus</span>, <span class="op">-</span><span class="va">species</span><span class="op">)</span>
   
   <span class="va">flat</span><span class="op">$</span><span class="va">taxon_id</span> <span class="op">&lt;-</span> <span class="va">flat</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">taxon_name</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_data.html">group_indices</a></span><span class="op">(</span><span class="op">)</span>
   
@@ -278,20 +267,19 @@
   <span class="va">taxa_resolved</span> <span class="op">&lt;-</span> <span class="fu">taxonomyCleanr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/taxonomyCleanr/man/resolve_sci_taxa.html">resolve_sci_taxa</a></span><span class="op">(</span>
     x <span class="op">=</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/duplicated.html">unique</a></span><span class="op">(</span><span class="va">flat</span><span class="op">$</span><span class="va">taxon_name</span><span class="op">)</span>,
     data.sources <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-
+  
   <span class="va">taxa_resolved</span> <span class="op">&lt;-</span> <span class="va">taxa_resolved</span> <span class="op">%&gt;%</span>
-    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">taxa</span>, <span class="va">rank</span>, <span class="va">authority</span>, <span class="va">authority_id</span><span class="op">)</span> <span class="op">%&gt;%</span>
-    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>
-      taxon_rank <span class="op">=</span> <span class="va">rank</span>,
-      taxon_name <span class="op">=</span> <span class="va">taxa</span>,
-      authority_system <span class="op">=</span> <span class="va">authority</span>,
-      authority_taxon_id <span class="op">=</span> <span class="va">authority_id</span><span class="op">)</span>
-
-  <span class="va">flat</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">flat</span>, <span class="va">taxa_resolved</span>, by <span class="op">=</span> <span class="st">"taxon_name"</span><span class="op">)</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">taxa</span>, <span class="va">rank</span>, <span class="va">authority</span>, <span class="va">authority_id</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>taxon_rank <span class="op">=</span> <span class="va">rank</span>,
+           taxon_name <span class="op">=</span> <span class="va">taxa</span>,
+           authority_system <span class="op">=</span> <span class="va">authority</span>,
+           authority_taxon_id <span class="op">=</span> <span class="va">authority_id</span><span class="op">)</span>
+  
+  <span class="va">flat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">flat</span>, <span class="va">taxa_resolved</span>, by <span class="op">=</span> <span class="st">"taxon_name"</span><span class="op">)</span>
   
   <span class="co"># Add columns for the dataset_summary table ---------------------------------</span>
   
-  <span class="va">dates</span> <span class="op">&lt;-</span> <span class="va">flat</span><span class="op">$</span><span class="va">date</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/na.omit.data.table.html">na.omit</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="va">dates</span> <span class="op">&lt;-</span> <span class="va">flat</span><span class="op">$</span><span class="va">date</span> <span class="op">%&gt;%</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html">na.omit</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="op">)</span>
   
   <span class="co"># Use the calc_*() helper functions for consistency</span>
   
@@ -311,14 +299,7 @@
   <span class="co"># remove columns of redundant information  (year can be recalculated from </span>
   <span class="co"># datetime and code was a key that no longer has use).</span>
   
-  <span class="va">flat</span> <span class="op">&lt;-</span> <span class="va">flat</span> <span class="op">%&gt;%</span> 
-    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>datetime <span class="op">=</span> <span class="va">date</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">year</span>, <span class="op">-</span><span class="va">code</span><span class="op">)</span>
-  
-  <span class="co"># Some columns are not required, but we'll include them for the sake of </span>
-  <span class="co"># completenesss</span>
-  
-  <span class="va">flat</span><span class="op">$</span><span class="va">author</span> <span class="op">&lt;-</span> <span class="cn">NA_character_</span>
+  <span class="va">flat</span> <span class="op">&lt;-</span> <span class="va">flat</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>datetime <span class="op">=</span> <span class="va">date</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">year</span>, <span class="op">-</span><span class="va">code</span><span class="op">)</span>
   
   <span class="co"># The hard work is done! The flat table contains all the source data and </span>
   <span class="co"># more! We can now use the "create" functions to parse this table into the </span>
@@ -508,13 +489,18 @@
   <span class="co"># Convert "dataset level keywords" listed in the source to "dataset level </span>
   <span class="co"># annotations" in the derived. The predicate "is about" is used, which </span>
   <span class="co"># results in an annotation that reads "This dataset is about 'species </span>
-  <span class="co"># abundance'", "This dataset is about 'Population', etc.</span>
+  <span class="co"># abundance'", "This dataset is about 'Population'", etc. All source datasets</span>
+  <span class="co"># involving a human induced manipulative experiment, not a natural </span>
+  <span class="co"># disturbance/experiment, should include the "Manipulative experiment" </span>
+  <span class="co"># annotation below to enable searching on this term.</span>
   
   <span class="va">dataset_annotations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
     `species abundance` <span class="op">=</span> 
       <span class="st">"http://purl.dataone.org/odo/ECSO_00001688"</span>,
     Population <span class="op">=</span> 
       <span class="st">"http://purl.dataone.org/odo/ECSO_00000311"</span>,
+    `Manipulative experiment` <span class="op">=</span> 
+      <span class="st">"http://purl.dataone.org/odo/ECSO_00000506"</span>,
     `level of ecological disturbance` <span class="op">=</span> 
       <span class="st">"http://purl.dataone.org/odo/ECSO_00002588"</span>,
     `type of ecological disturbance` <span class="op">=</span> 
@@ -556,13 +542,13 @@
 <span class="va">mypath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"/edi_193"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="va">mypath</span><span class="op">)</span>
 
-<span class="co"># Create ecocomDP dataset "edi.193.4" from source dataset "knb-lter-hfr.118.32"</span>
+<span class="co"># Create ecocomDP dataset "edi.193.5" from source dataset "knb-lter-hfr.118.33"</span>
 
 <span class="fu">create_ecocomDP</span><span class="op">(</span>
   path <span class="op">=</span> <span class="va">mypath</span>, 
-  source_id <span class="op">=</span> <span class="st">"knb-lter-hfr.118.32"</span>, 
-  derived_id <span class="op">=</span> <span class="st">"edi.193.4"</span><span class="op">)</span>
-<span class="co">#&gt; Retrieving EML for data package knb-lter-hfr.118.32</span>
+  source_id <span class="op">=</span> <span class="st">"knb-lter-hfr.118.33"</span>, 
+  derived_id <span class="op">=</span> <span class="st">"edi.193.5"</span><span class="op">)</span>
+<span class="co">#&gt; Retrieving EML for data package knb-lter-hfr.118.33</span>
 <span class="co">#&gt;  [0%] Downloaded 0 bytes...</span>
 <span class="co">#&gt;  [0%] Downloaded 0 bytes...</span>
 <span class="co">#&gt;</span>
@@ -644,9 +630,9 @@
 <span class="co">#&gt;   Elevation</span>
 <span class="co">#&gt;   variable_mapping</span>
 <span class="co">#&gt;</span>
-<span class="co">#&gt; Creating EML for derived data package (edi.193.4)</span>
-<span class="co">#&gt; Reading EML of L0 data package knb-lter-hfr.118.32</span>
-<span class="co">#&gt; Creating EML of L1 data package edi.193.4</span>
+<span class="co">#&gt; Creating EML for derived data package (edi.193.5)</span>
+<span class="co">#&gt; Reading EML of L0 data package knb-lter-hfr.118.33</span>
+<span class="co">#&gt; Creating EML of L1 data package edi.193.5</span>
 <span class="co">#&gt; Updating:</span>
 <span class="co">#&gt; &lt;eml&gt;</span>
 <span class="co">#&gt;   &lt;dataset&gt;</span>
@@ -670,7 +656,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">dir</a></span><span class="op">(</span><span class="va">mypath</span><span class="op">)</span>
 <span class="co">#&gt;  [1] "create_ecocomDP.R"        </span>
 <span class="co">#&gt;  [2] "dataset_summary.csv"      </span>
-<span class="co">#&gt;  [3] "edi.193.4.xml"            </span>
+<span class="co">#&gt;  [3] "edi.193.5.xml"            </span>
 <span class="co">#&gt;  [4] "location.csv"             </span>
 <span class="co">#&gt;  [5] "location_ancillary.csv"   </span>
 <span class="co">#&gt;  [6] "observation.csv"          </span>
@@ -693,7 +679,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Colin Smith, Eric Sokol.</p>
+  <p>Developed by Colin Smith, Eric Sokol, Margaret O'Brien.</p>
 </div>
 
 <div class="pkgdown">

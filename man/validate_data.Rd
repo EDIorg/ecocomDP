@@ -44,14 +44,14 @@ mydir <- paste0(tempdir(), "/dataset")
 dir.create(mydir)
 write_tables(
   path = mydir,
-  observation = ants_L1$edi.193.4$tables$observation, 
-  observation_ancillary = ants_L1$edi.193.4$tables$observation_ancillary,
-  location = ants_L1$edi.193.4$tables$location,
-  location_ancillary = ants_L1$edi.193.4$tables$location_ancillary,
-  taxon = ants_L1$edi.193.4$tables$taxon,
-  taxon_ancillary = ants_L1$edi.193.4$tables$taxon_ancillary,
-  dataset_summary = ants_L1$edi.193.4$tables$dataset_summary,
-  variable_mapping = ants_L1$edi.193.4$tables$variable_mapping)
+  observation = ants_L1$edi.193.5$tables$observation, 
+  observation_ancillary = ants_L1$edi.193.5$tables$observation_ancillary,
+  location = ants_L1$edi.193.5$tables$location,
+  location_ancillary = ants_L1$edi.193.5$tables$location_ancillary,
+  taxon = ants_L1$edi.193.5$tables$taxon,
+  taxon_ancillary = ants_L1$edi.193.5$tables$taxon_ancillary,
+  dataset_summary = ants_L1$edi.193.5$tables$dataset_summary,
+  variable_mapping = ants_L1$edi.193.5$tables$variable_mapping)
 
 # Validate
 validate_data(path = mydir)

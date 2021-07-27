@@ -48,8 +48,8 @@ dir.create(mypath)
 convert_to_dwca(
   path = mypath, 
   core_name = "event", 
-  source_id = "edi.193.4", 
-  derived_id = "edi.834.1", 
+  source_id = "edi.193.5", 
+  derived_id = "edi.834.2", 
   user_id = "ecocomdp",
   user_domain = "EDI")
 

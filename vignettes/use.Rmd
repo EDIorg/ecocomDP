@@ -14,8 +14,12 @@ options(tibble.print_min = 4L, tibble.print_max = 4L)
 
 A set of "use" functions help you search, read, save, plot, and flatten ecocomDP datasets.
 
-```{r setup}
+```{r, eval=FALSE, setup}
 library(ecocomDP)
+```
+
+```{r include=FALSE}
+devtools::load_all(".")
 ```
 
 ## Search
@@ -197,7 +201,7 @@ dataset_2 <- read_data(
 
 A dataset is returned as a list of metadata, tables, and validation issues (if there are any). The dataset ID is assigned to the top level for reference.
 
-```{r include=FALSE}
+```{r}
 dataset_1 <- ants_L1
 ```
 

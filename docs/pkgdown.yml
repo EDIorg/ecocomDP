@@ -4,7 +4,6 @@ pkgdown_sha: ~
 articles:
   convert: convert.html
   create: create.html
-  shared_practices: shared_practices.html
   use: use.html
-last_built: 2021-07-17T14:56Z
+last_built: 2021-07-27T05:04Z
 

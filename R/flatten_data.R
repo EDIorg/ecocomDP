@@ -234,7 +234,7 @@ flatten_ancillary <- function(ancillary_table) {
   auth <- ifelse("author" %in% colnames(ancillary_table), "author", list(NULL))
   vars <- c(fkey, "variable_name", "value", unlist(auth))
   # Add datetime to list of vars if present
-  if (!is.null(ancillary_table$datetime) & not_all_NAs(ancillary_table$datetime)) {
+  if (!is.null(ancillary_table[["datetime"]]) & not_all_NAs(ancillary_table[["datetime"]])) {
     vars <- c(vars, "datetime")
   }
   df <- ancillary_table %>% 

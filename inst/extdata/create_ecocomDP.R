@@ -50,6 +50,7 @@ create_ecocomDP <- function(path,
                             url = NULL) {
   
   # Read source dataset -------------------------------------------------------
+  
   # The source dataset is about ant communities and their functional traits 
   # changing in response to an invasive species. Observations are made across 
   # habitat types within the Harvard Experimental Forest. The dataset consists 
@@ -71,6 +72,7 @@ create_ecocomDP <- function(path,
   ants$date <- ymd(ants$date)
   
   # Join and flatten the source dataset ---------------------------------------
+  
   # Joining all source data and relevant metadata into one big flat table 
   # simplifies parsing into ecocomDP tables and facilitates referential 
   # integrity in the process.
@@ -102,9 +104,12 @@ create_ecocomDP <- function(path,
   
   # Add columns for the observation table -------------------------------------
   
-  # Each combination of location and date form a sampling event
+  # The frequency and timing of surveys (events) varied throughout the history 
+  # of this dataset and are uniquely identifiable by grouping sample dates by 
+  # year and month.
   
-  flat$event_id <- flat %>% group_by(date, block, plot) %>% group_indices()
+  flat$event_id <- flat %>% group_by(month = floor_date(flat$date, "month"),
+                                     year) %>% group_indices()
   flat <- flat %>% arrange(event_id)
   
   # Observations are made in plots, which are nested in blocks. Unique 
@@ -189,11 +194,6 @@ create_ecocomDP <- function(path,
   # datetime and code was a key that no longer has use).
   
   flat <- flat %>% rename(datetime = date) %>% select(-year, -code)
-  
-  # Some columns are not required, but we'll include them for the sake of 
-  # completenesss
-  
-  flat$author <- NA_character_
   
   # The hard work is done! The flat table contains all the source data and 
   # more! We can now use the "create" functions to parse this table into the 

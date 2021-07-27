@@ -87,7 +87,7 @@ This function may not work between 01:00 - 03:00 UTC on Wednesdays due to regula
 \examples{
 \dontrun{
 # Read from EDI
-dataset <- read_data("edi.193.4")
+dataset <- read_data("edi.193.5")
 # str(dataset)
 }
 
@@ -108,14 +108,14 @@ dataset <- read_data(
 
 \dontrun{
 # Read with datetimes as character
-dataset <- read_data("edi.193.4", parse_datetime = FALSE)
-is.character(dataset$edi.193.4$tables$observation$datetime)
+dataset <- read_data("edi.193.5", parse_datetime = FALSE)
+is.character(dataset$edi.193.5$tables$observation$datetime)
 }
 
 # Save a list of datasets for reading
 datasets <- c(ants_L1, ants_L1, ants_L1)  # 3 of the same, w/different names
 names(datasets) <- c("ds1", "ds2", "ds3")
-mypath <- paste0(tempdir(), "/data")      # A place for saving
+mypath <- paste0(tempdir(), "/datasets")      # A place for saving
 dir.create(mypath)
 save_data(datasets, mypath)               # Save as .rds
 save_data(datasets, mypath, type = ".csv")# Save as .csv

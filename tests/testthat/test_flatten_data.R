@@ -21,7 +21,6 @@ testthat::test_that("Column presence", {
     crit <- read_criteria()
     L1_flat <- ecocomDP::flatten_data(ants_L1[[1]]$tables)
     # Adjust L0 flat to our expectations
-    L0_flat <- L0_flat %>% dplyr::select(-author) # Columns of NA are dropped when flattened
     L0_flat$location_name <- NA_character_        # Add exception
     # TEST: All L0 flat columns (with above exceptions) should be in L1 flat
     cols_missing_from_L1 <- base::setdiff(colnames(L0_flat), colnames(L1_flat))
@@ -47,9 +46,6 @@ testthat::test_that("Column classes", {
     }
     crit <- read_criteria()
     L1_flat <- ecocomDP::flatten_data(ants_L1[[1]]$tables)
-    # Adjust L0 flat to our expectations
-    L0_flat <- L0_flat %>% 
-      dplyr::select(-author)           # Columns of NA are dropped when flattened
     # TEST: flatten_data() applies a set of "smart" class coercions to return numeric values stored in the L1 as character back to their original numeric class. The following code tests that column classifications in L1 should be "similar" to those in L0.
     L0_classes <- unlist(lapply(L0_flat, class))
     L1_classes <- unlist(lapply(L1_flat, class))

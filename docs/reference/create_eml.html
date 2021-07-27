@@ -97,9 +97,6 @@
     <li>
       <a href="../articles/convert.html">Convert</a>
     </li>
-    <li>
-      <a href="../articles/shared_practices.html">Shared Practices</a>
-    </li>
   </ul>
 </li>
 <li>
@@ -230,7 +227,7 @@
 <span class='co'># Create directory with ecocomDP tables for create_eml()</span>
 <span class='va'>mypath</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"/data"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='op'>(</span><span class='va'>mypath</span><span class='op'>)</span>
-<span class='va'>inpts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.4</span><span class='op'>$</span><span class='va'>tables</span>, path <span class='op'>=</span> <span class='va'>mypath</span><span class='op'>)</span>
+<span class='va'>inpts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.5</span><span class='op'>$</span><span class='va'>tables</span>, path <span class='op'>=</span> <span class='va'>mypath</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span><span class='op'>(</span><span class='va'>write_tables</span>, <span class='va'>inpts</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/files.html'>file.copy</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"create_ecocomDP.R"</span>, package <span class='op'>=</span> <span class='st'>"ecocomDP"</span><span class='op'>)</span>, <span class='va'>mypath</span><span class='op'>)</span>
 
@@ -254,8 +251,8 @@
 <span class='co'># Create EML</span>
 <span class='va'>eml</span> <span class='op'>&lt;-</span> <span class='fu'>create_eml</span><span class='op'>(</span>
   path <span class='op'>=</span> <span class='va'>mypath</span>,
-  source_id <span class='op'>=</span> <span class='st'>"knb-lter-hfr.118.32"</span>,
-  derived_id <span class='op'>=</span> <span class='st'>"edi.193.4"</span>,
+  source_id <span class='op'>=</span> <span class='st'>"knb-lter-hfr.118.33"</span>,
+  derived_id <span class='op'>=</span> <span class='st'>"edi.193.5"</span>,
   is_about <span class='op'>=</span> <span class='va'>dataset_annotations</span>,
   script <span class='op'>=</span> <span class='st'>"create_ecocomDP.R"</span>,
   script_description <span class='op'>=</span> <span class='st'>"A function for converting knb-lter-hrf.118 to ecocomDP"</span>,
@@ -283,7 +280,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Colin Smith, Eric Sokol.</p>
+  <p>Developed by Colin Smith, Eric Sokol, Margaret O'Brien.</p>
 </div>
 
 <div class="pkgdown">

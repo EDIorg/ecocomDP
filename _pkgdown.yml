@@ -63,8 +63,6 @@ navbar:
         href: articles/use.html
       - text: Convert
         href: articles/convert.html
-      - text: Shared Practices
-        href: articles/shared_practices.html        
     - text: News
       href: news/index.html
       

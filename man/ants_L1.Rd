@@ -3,11 +3,11 @@
 \docType{data}
 \name{ants_L1}
 \alias{ants_L1}
-\title{The ecocomDP version of EDI data package knb-lter-hfr.118.32}
+\title{The ecocomDP version of EDI data package knb-lter-hfr.118.33}
 \format{
 A list of:
 \describe{
-  \item{edi.193.4}{The dataset identifier}
+  \item{edi.193.5}{The dataset identifier}
     \describe{
       \item{metadata}{See source url for metadata}
       \item{tables}{A list of data frames, each an ecocomDP table}
@@ -16,12 +16,12 @@ A list of:
 }
 }
 \source{
-\url{https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=193&revision=4}
+\url{https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=193&revision=5}
 }
 \usage{
 ants_L1
 }
 \description{
-The the ecocomDP (L1) formatted version of EDI data package knb-lter-hfr.118.32 (Ant Assemblages in Hemlock Removal Experiment at Harvard Forest since 2003) read from the EDI API with \code{read_data(id = "edi.194.4")}. Use this dataset as an input to data "use" functions.
+The the ecocomDP (L1) formatted version of EDI data package knb-lter-hfr.118.33 (Ant Assemblages in Hemlock Removal Experiment at Harvard Forest since 2003) read from the EDI API with \code{read_data(id = "edi.193.5")}. Use this dataset as an input to data "use" functions.
 }
 \keyword{datasets}

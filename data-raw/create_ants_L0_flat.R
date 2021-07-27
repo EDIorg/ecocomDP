@@ -20,6 +20,7 @@ create_ants_L0_flat <- function(path = NULL,
                                 url = NULL) {
   
   # Read source dataset -------------------------------------------------------
+  
   # The source dataset is about ant communities and their functional traits 
   # changing in response to an invasive species. Observations are made across 
   # habitat types within the Harvard Experimental Forest. The dataset consists 
@@ -38,19 +39,19 @@ create_ants_L0_flat <- function(path = NULL,
   
   ants <- data$`hf118-01-ants.csv`
   traits <- data$`hf118-02-functional-traits.csv`
-  
-  ants$date <- lubridate::ymd(ants$date)
+  ants$date <- ymd(ants$date)
   
   # Join and flatten the source dataset ---------------------------------------
+  
   # Joining all source data and relevant metadata into one big flat table 
   # simplifies parsing into ecocomDP tables and facilitates referential 
   # integrity in the process.
   
   # Remove duplicate data from the ancillary table and join on species "code"
   
-  traits <- traits %>% dplyr::select(-genus, -species)
-  traits <- traits %>% dplyr::rename(code = species.code)
-  wide <- dplyr::left_join(ants, traits, by = "code")
+  traits <- traits %>% select(-genus, -species)
+  traits <- traits %>% rename(code = species.code)
+  wide <- left_join(ants, traits, by = "code")
   
   # Convert wide format to "flat" format. This is the wide form but gathered on 
   # core observation variables, which are often > 1 in source datasets. This 
@@ -58,20 +59,14 @@ create_ants_L0_flat <- function(path = NULL,
   # to by the ecocomDP::flatten_data() function, and is the input format 
   # required by the "create table" helpers we'll meet shortly. This dataset 
   # only has one core observation variable, "abundance", so gathering really 
-  # only entials a change of column names. 
+  # only entails a change of column names.
   
-  wide <- wide %>% dplyr::rename(value_abundance = abundance)
-  flat <- tidyr::pivot_longer(
+  wide <- wide %>% rename(value_abundance = abundance)
+  flat <- pivot_longer(
     wide,
     cols = matches("abundance"), 
     names_to = c(".value", "variable_name"), 
     names_sep = '\\_')
-  
-  # TIP: Sorting and arranging rows by sample date and location will result in 
-  # a nice chronological dataset for human browsing, which is merely cosmetic 
-  # and completely optional.
-  
-  flat <- flat %>% dplyr::arrange(date, plot, block)
   
   # We're now in a good place to begin adding columns of the ecocomDP tables 
   # we can create from this source dataset. We'll begin with the observation 
@@ -79,19 +74,23 @@ create_ants_L0_flat <- function(path = NULL,
   
   # Add columns for the observation table -------------------------------------
   
-  # Each row of the flattened source dataset represents an observation of taxa 
-  # abundance and should have a unique ID for reference
+  # The frequency and timing of surveys (events) varied throughout the history 
+  # of this dataset and are uniquely identifiable by grouping sample dates by 
+  # year and month.
   
-  flat$observation_id <- seq(nrow(flat))
+  flat$event_id <- flat %>% group_by(month = floor_date(flat$date, "month"),
+                                     year) %>% group_indices()
+  flat <- flat %>% arrange(event_id)
   
   # Observations are made in plots, which are nested in blocks. Unique 
   # combinations of these form a location
   
   flat$location_id <- flat %>% group_by(plot, block) %>% group_indices()
   
-  # Each combination of location and date form a sampling event
+  # Each row of the flattened source dataset represents an observation of taxa 
+  # abundance and should have a unique ID for reference
   
-  flat$event_id <- flat %>% group_by(date, plot, block) %>% group_indices()
+  flat$observation_id <- seq(nrow(flat))
   
   # Add columns for the location table ----------------------------------------
   
@@ -100,19 +99,13 @@ create_ants_L0_flat <- function(path = NULL,
   # area encompassing all sampling locations. The best we can do here is use 
   # the middle of the bounding box and mean of the bounding elevations.
   
-  geocov <- xml2::xml_find_all(eml, ".//geographicCoverage")
-  north <- xml2::xml_double(
-    xml2::xml_find_all(geocov, './/northBoundingCoordinate'))
-  east <- xml2::xml_double(
-    xml2::xml_find_all(geocov, './/eastBoundingCoordinate'))
-  south <- xml2::xml_double(
-    xml2::xml_find_all(geocov, './/southBoundingCoordinate'))
-  west <- xml2::xml_double(
-    xml2::xml_find_all(geocov, './/westBoundingCoordinate'))
-  elev_max <- xml2::xml_double(
-    xml2::xml_find_all(geocov, './/altitudeMaximum'))
-  elev_min <- xml2::xml_double(
-    xml2::xml_find_all(geocov, './/altitudeMinimum'))
+  geocov <- xml_find_all(eml, ".//geographicCoverage")
+  north <- xml_double(xml_find_all(geocov, './/northBoundingCoordinate'))
+  east <- xml_double(xml_find_all(geocov, './/eastBoundingCoordinate'))
+  south <- xml_double(xml_find_all(geocov, './/southBoundingCoordinate'))
+  west <- xml_double(xml_find_all(geocov, './/westBoundingCoordinate'))
+  elev_max <- xml_double(xml_find_all(geocov, './/altitudeMaximum'))
+  elev_min <- xml_double(xml_find_all(geocov, './/altitudeMinimum'))
   
   flat$latitude <- mean(c(north, south))
   flat$longitude <- mean(c(east, west))
@@ -124,8 +117,8 @@ create_ants_L0_flat <- function(path = NULL,
   # species pairs
   
   flat <- flat %>% 
-    dplyr::mutate(taxon_name = trimws(paste(genus, species))) %>% 
-    dplyr::select(-genus, -species)
+    mutate(taxon_name = trimws(paste(genus, species))) %>% 
+    select(-genus, -species)
   
   flat$taxon_id <- flat %>% group_by(taxon_name) %>% group_indices()
   
@@ -140,14 +133,13 @@ create_ants_L0_flat <- function(path = NULL,
     data.sources = 3)
   
   taxa_resolved <- taxa_resolved %>%
-    dplyr::select(taxa, rank, authority, authority_id) %>%
-    dplyr::rename(
-      taxon_rank = rank,
-      taxon_name = taxa,
-      authority_system = authority,
-      authority_taxon_id = authority_id)
+    select(taxa, rank, authority, authority_id) %>%
+    rename(taxon_rank = rank,
+           taxon_name = taxa,
+           authority_system = authority,
+           authority_taxon_id = authority_id)
   
-  flat <- dplyr::left_join(flat, taxa_resolved, by = "taxon_name")
+  flat <- left_join(flat, taxa_resolved, by = "taxon_name")
   
   # Add columns for the dataset_summary table ---------------------------------
   
@@ -171,14 +163,11 @@ create_ants_L0_flat <- function(path = NULL,
   # remove columns of redundant information  (year can be recalculated from 
   # datetime and code was a key that no longer has use).
   
-  flat <- flat %>% 
-    dplyr::rename(datetime = date) %>% 
-    dplyr::select(-year, -code)
+  flat <- flat %>% rename(datetime = date) %>% select(-year, -code)
   
-  # Some columns are not required, but we'll include them for the sake of 
-  # completenesss
-  
-  flat$author <- NA_character_
+  # The hard work is done! The flat table contains all the source data and 
+  # more! We can now use the "create" functions to parse this table into the 
+  # ecocomDP tables.
   
   # Save to /data
   ants_L0_flat <- tidyr::as_tibble(flat)

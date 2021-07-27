@@ -97,9 +97,6 @@
     <li>
       <a href="../articles/convert.html">Convert</a>
     </li>
-    <li>
-      <a href="../articles/shared_practices.html">Shared Practices</a>
-    </li>
   </ul>
 </li>
 <li>
@@ -181,14 +178,14 @@
 <span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='op'>(</span><span class='va'>mydir</span><span class='op'>)</span>
 <span class='fu'><a href='write_tables.html'>write_tables</a></span><span class='op'>(</span>
   path <span class='op'>=</span> <span class='va'>mydir</span>,
-  observation <span class='op'>=</span> <span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.4</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>observation</span>, 
-  observation_ancillary <span class='op'>=</span> <span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.4</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>observation_ancillary</span>,
-  location <span class='op'>=</span> <span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.4</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>location</span>,
-  location_ancillary <span class='op'>=</span> <span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.4</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>location_ancillary</span>,
-  taxon <span class='op'>=</span> <span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.4</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>taxon</span>,
-  taxon_ancillary <span class='op'>=</span> <span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.4</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>taxon_ancillary</span>,
-  dataset_summary <span class='op'>=</span> <span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.4</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>dataset_summary</span>,
-  variable_mapping <span class='op'>=</span> <span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.4</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>variable_mapping</span><span class='op'>)</span>
+  observation <span class='op'>=</span> <span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.5</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>observation</span>, 
+  observation_ancillary <span class='op'>=</span> <span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.5</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>observation_ancillary</span>,
+  location <span class='op'>=</span> <span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.5</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>location</span>,
+  location_ancillary <span class='op'>=</span> <span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.5</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>location_ancillary</span>,
+  taxon <span class='op'>=</span> <span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.5</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>taxon</span>,
+  taxon_ancillary <span class='op'>=</span> <span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.5</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>taxon_ancillary</span>,
+  dataset_summary <span class='op'>=</span> <span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.5</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>dataset_summary</span>,
+  variable_mapping <span class='op'>=</span> <span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.5</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>variable_mapping</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Writing tables to file:</span></div><div class='output co'>#&gt; <span class='message'>  observation</span></div><div class='output co'>#&gt; <span class='message'>  location</span></div><div class='output co'>#&gt; <span class='message'>  taxon</span></div><div class='output co'>#&gt; <span class='message'>  dataset_summary</span></div><div class='output co'>#&gt; <span class='message'>  observation_ancillary</span></div><div class='output co'>#&gt; <span class='message'>  location_ancillary</span></div><div class='output co'>#&gt; <span class='message'>  taxon_ancillary</span></div><div class='output co'>#&gt; <span class='message'>  variable_mapping</span></div><div class='input'>
 <span class='co'># Validate</span>
 <span class='fu'>validate_data</span><span class='op'>(</span>path <span class='op'>=</span> <span class='va'>mydir</span><span class='op'>)</span>
@@ -208,7 +205,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Colin Smith, Eric Sokol.</p>
+  <p>Developed by Colin Smith, Eric Sokol, Margaret O'Brien.</p>
 </div>
 
 <div class="pkgdown">
