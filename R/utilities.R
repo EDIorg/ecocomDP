@@ -1627,7 +1627,7 @@ validate_path <- function(path){
 #' }
 #' 
 view_descriptions <- function() {
-  utils::browseURL("https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_description.md")
+  utils::browseURL("https://github.com/EDIorg/ecocomDP/blob/master/model/table_description.md")
 }
 
 
@@ -1649,7 +1649,7 @@ view_descriptions <- function() {
 #' }
 #' 
 view_diagram <- function() {
-  utils::browseURL("https://github.com/EDIorg/ecocomDP/blob/master/documentation/model/table_visualization.md")
+  utils::browseURL("https://github.com/EDIorg/ecocomDP/blob/master/model/table_visualization.md")
 }
 
 
