@@ -1,4 +1,4 @@
-# ecocomDP 1.1.0.9000 (development version)
+# ecocomDP 1.1.0
 
 ## Enhancements
 * Link to ecocomDP article.
