@@ -19,6 +19,8 @@ Flatten an ecocomDP dataset
 "flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" an L1 ecocomDP dataset can be consistently spread due to the frequent occurrence of L0 source datasets with > 1 core observation variable.
 }
 \note{
+Warnings/Errors from \code{flatten_data()} can most often be fixed by addressing any validation issues reported by \code{read_data()} (e.g. non-unique composite keys).
+
 Ancillary identifiers are dropped from the returned object.
 }
 \examples{
