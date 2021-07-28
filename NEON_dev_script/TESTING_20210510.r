@@ -16,10 +16,12 @@ my_result_read_data[[1]]$validation_issues
 my_result_read_data[[1]]$metadata$data_package_info
 
 tab_flat <- my_result_read_data[[1]]$tables %>% 
-  ecocomDP::flatten_data() %>% 
+  flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
+plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
+
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum())
@@ -51,6 +53,7 @@ tab_flat <- my_result_read_data[[1]]$tables %>%
   as.data.frame()
 
 View(tab_flat)
+plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -81,6 +84,7 @@ tab_flat <- my_result_read_data[[1]]$tables %>%
   as.data.frame()
 
 View(tab_flat)
+plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -108,6 +112,8 @@ tab_flat <- my_result_read_data[[1]]$tables %>%
   as.data.frame()
 
 View(tab_flat)
+plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
+
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -136,6 +142,7 @@ tab_flat <- my_result_read_data[[1]]$tables %>%
   as.data.frame()
 
 View(tab_flat)
+plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -163,6 +170,7 @@ tab_flat <- my_result_read_data[[1]]$tables %>%
   as.data.frame()
 
 View(tab_flat)
+plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -192,6 +200,7 @@ tab_flat <- my_result_read_data[[1]]$tables %>%
   as.data.frame()
 
 View(tab_flat)
+plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -221,6 +230,7 @@ tab_flat <- my_result_read_data[[1]]$tables %>%
   as.data.frame()
 
 View(tab_flat)
+plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -249,6 +259,7 @@ tab_flat <- my_result_read_data[[1]]$tables %>%
   as.data.frame()
 
 View(tab_flat)
+plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -278,6 +289,7 @@ tab_flat <- my_result_read_data[[1]]$tables %>%
   as.data.frame()
 
 View(tab_flat)
+plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -307,6 +319,7 @@ tab_flat <- my_result_read_data[[1]]$tables %>%
   as.data.frame()
 
 View(tab_flat)
+plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -337,6 +350,7 @@ tab_flat <- my_result_read_data[[1]]$tables %>%
   as.data.frame()
 
 View(tab_flat)
+plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
