@@ -422,3 +422,306 @@ format_for_comm_plots <- function(observation, id) {
     dswide = dswide)
   return(res)
 }
+
+
+
+
+
+
+
+
+#' Plot taxa ranks
+#'
+#' @param observation (tbl_df, tbl, data.frame) The observation table.
+#' @param taxon (tbl_df, tbl, data.frame) The taxon table.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
+#' 
+#' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
+#' 
+#' @import dplyr
+#' @import ggplot2
+#' @import tidyr
+#' 
+#' @export
+#' 
+#' @examples
+#' observation <- ants_L1[[1]]$tables$observation
+#' taxon <- ants_L1[[1]]$tables$taxon
+#' id <- names(ants_L1)
+#' 
+#' plot_taxa_rank(observation, taxon, id)
+#' 
+plot_taxa_rank <- function(observation, taxon, id, alpha = 1) {
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting   # not sure if this is needed/compatible for plots using taxon table
+  taxon %>%
+    ggplot2::ggplot(aes(taxon_rank)) + 
+    ggplot2::labs(title = "Taxa rank frequencies", subtitle = ds$id) +
+    ggplot2::xlab("Taxon rank") +
+    ggplot2::ylab(paste0("Number of taxa")) +
+    geom_bar() +
+    theme(axis.text.x = element_text(angle = 45, hjust=1))
+}
+
+
+
+
+
+
+
+#' Plot taxa by site
+#'
+#' @param tables (list of tbl_df, tbl, data.frame) A named list of ecocomDP tables.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
+#' 
+#' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
+#' 
+#' @import dplyr
+#' @import ggplot2
+#' @import tidyr
+#' 
+#' @export
+#' 
+#' @examples
+#' tables <- ants_L1[[1]]$tables
+#' id <- names(ants_L1)
+#' 
+#' plot_taxa_rank_by_site(tables, id)
+#' 
+plot_taxa_rank_by_site <- function(tables, id, alpha = 1) {
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  ds <- format_for_comm_plots(tables$observation, id)                    # intermediate format for plotting 
+  
+  flat <- flatten_data(tables) 
+  flat$unit %>% unique()
+  flat %>%
+    group_by(event_id, taxon_id) %>%
+    summarize(n_obs = length(event_id)) %>%
+    dplyr::filter(n_obs > 1)
+  summed <- flat %>%
+    group_by(event_id, taxon_id) %>%
+    summarize(value = sum(value, na.rm = FALSE))
+  cleaned <- flat %>%
+    dplyr::select(
+      event_id, location_id, datetime,
+      taxon_id, taxon_rank, taxon_name) %>%
+    distinct() %>%
+    right_join(summed)
+  
+  cleaned %>%
+    group_by(location_id, taxon_rank) %>%
+    summarize(n_taxa = taxon_id %>%
+                unique() %>% length()) %>%
+    ggplot2::ggplot(aes(n_taxa, taxon_rank)) + 
+    facet_wrap(~location_id) +
+    ggplot2::labs(title = "Taxa rank frequencies by site", subtitle = ds$id) +
+    ggplot2::xlab("Number of taxa") +
+    ggplot2::ylab(paste0("Taxon rank")) +
+    geom_col()
+  
+}
+
+
+
+
+
+
+
+#' Plot stacked taxa by site
+#'
+#' @param tables (list of tbl_df, tbl, data.frame) A named list of ecocomDP tables.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' @param rank (string) The rank of taxa to plot. Defaults to NA.
+#' @param cutoff (numeric) Defaults to 0.
+#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
+#' 
+#' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device.
+#' 
+#' @import dplyr
+#' @import ggplot2
+#' @import tidyr
+#' 
+#' @export
+#' 
+#' @examples
+#' tables <- ants_L1[[1]]$tables
+#' id <- names(ants_L1)
+#' rank <- "species"
+#' 
+#' plot_stacked_taxa_by_site(tables, id, rank)
+#' 
+plot_stacked_taxa_by_site <- function(tables, id, cutoff=0, rank=NA, alpha = 1) {
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  ds <- format_for_comm_plots(tables$observation, id)                    # intermediate format for plotting
+  
+  flat <- flatten_data(tables) 
+  flat$unit %>% unique()
+  flat %>%
+    group_by(event_id, taxon_id) %>%
+    summarize(n_obs = length(event_id)) %>%
+    dplyr::filter(n_obs > 1)
+  summed <- flat %>%
+    group_by(event_id, taxon_id) %>%
+    summarize(value = sum(value, na.rm = FALSE))
+  cleaned <- flat %>%
+    dplyr::select(
+      event_id, location_id, datetime,
+      taxon_id, taxon_rank, taxon_name) %>%
+    distinct() %>%
+    right_join(summed)
+  
+  ifelse(!is.na(rank),
+         by_rank <- cleaned %>% filter(taxon_rank==rank) %>%
+           group_by(event_id, location_id, datetime, taxon_id, taxon_rank, taxon_name, value) %>%
+           summarize(counts = sum(value, na.rm=TRUE)),
+         by_rank <- cleaned %>% group_by(event_id, location_id, datetime, taxon_id, taxon_rank, taxon_name, value) %>%
+           summarize(counts = sum(value, na.rm=TRUE)))
+  ifelse(!is.na(rank),
+         title <- paste("Taxa frequencies by site: cutoff =", cutoff, ", taxon rank =", rank),
+         title <- paste("Taxa frequencies by site: cutoff =", cutoff))
+  
+  by_rank %>%
+    group_by(taxon_name, location_id) %>%
+    summarize(
+      occurrence = (counts > 0) %>% sum()) %>%
+    filter(occurrence > cutoff) %>%               # create if/else statement for cutoff
+    ggplot2::ggplot(aes(
+      x = reorder(taxon_name, -occurrence),
+      y = occurrence,
+      color = location_id,
+      fill = location_id)) +
+    ggplot2::labs(title = title, subtitle = ds$id) +
+    ggplot2::xlab("Taxa name") +
+    ggplot2::ylab(paste0("Number of taxa")) +
+    geom_col() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+}
+
+
+
+
+
+
+#' Faceted densities plot
+#'
+#' @param tables (list of tbl_df, tbl, data.frame) A named list of ecocomDP tables.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' @param rank (string) The rank of taxa to plot. Defaults to NA
+#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
+#' 
+#' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
+#' 
+#' @import dplyr
+#' @import ggplot2
+#' @import tidyr
+#' 
+#' @export
+#' 
+#' @examples
+#' tables <- ants_L1[[1]]$tables
+#' id <- names(ants_L1)
+#' rank <- "species"
+#' 
+#' plot_stacked_taxa_by_site(tables, id, rank)
+#' 
+
+#Faceted densities plot, shows averages of each taxa.
+plot_faceted_densities <- function(tables, id, rank=NA, alpha=1) {
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  ds <- format_for_comm_plots(tables$observation, id)                    # intermediate format for plotting
+  
+  flat <- flatten_data(tables) 
+  flat$unit %>% unique()
+  flat %>%
+    group_by(event_id, taxon_id) %>%
+    summarize(n_obs = length(event_id)) %>%
+    dplyr::filter(n_obs > 1)
+  summed <- flat %>%
+    group_by(event_id, taxon_id) %>%
+    summarize(value = sum(value, na.rm = FALSE))
+  cleaned <- flat %>%
+    dplyr::select(
+      event_id, location_id, datetime,
+      taxon_id, taxon_rank, taxon_name) %>%
+    distinct() %>%
+    right_join(summed)
+  
+  ifelse(!is.na(rank),
+         by_rank <- cleaned %>% filter(taxon_rank==rank) %>%
+           group_by(event_id, location_id, datetime, taxon_id, taxon_rank, taxon_name, value) %>%
+           summarize(counts = sum(value, na.rm=TRUE)),
+         by_rank <- cleaned %>% group_by(event_id, location_id, datetime, taxon_id, taxon_rank, taxon_name, value) %>%
+           summarize(counts = sum(value, na.rm=TRUE)))
+  ifelse(!is.na(rank),
+         title <- paste("Faceted densities: taxon rank =",rank),
+         title <- "Faceted densities")
+  
+  by_rank %>%
+    ggplot2::ggplot(aes(
+      x = reorder(taxon_name, -counts),
+      y = log10(counts),
+      color = location_id,
+      fill = location_id)) +
+    ggplot2::labs(title = title, subtitle = ds$id) +
+    ggplot2::xlab("Taxa name") +
+    ggplot2::ylab(paste0("log10(counts)")) +
+    geom_boxplot(alpha = 0.5) + # alpha = transparency
+    facet_grid(location_id ~ .) +
+    theme(axis.text.x = element_text(angle = 45, hjust=1))
+}
+
+
+#' Plot sites on US map
+#'
+#' @param flat_tables (list of tbl_df, tbl, data.frame) A flat table, the result of flatten_data() applied to the list of ecocomDP tables.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
+#' @param labels (boolean) Argument to show labels of each US state. Default is TRUE.
+#' 
+#' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
+#' 
+#' @import dplyr
+#' @import ggplot2
+#' @import tidyr
+#' @import usmap
+#' @import ggrepel
+#' 
+#' @export
+#' 
+#' @examples
+#' flat_table <- flatten_data(ants_L1[[1]]$tables)
+#' id <- names(ants_L1)
+#' 
+#' plot_sites(flat_table, id)
+#' 
+plot_sites <- function(flat_table, id, alpha=1, labels=TRUE) {
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  # ds <- format_for_comm_plots(tables$observation, id)                    # intermediate format for plotting
+ 
+  cleaned <- flat_table %>%
+    dplyr::select(
+      longitude, latitude, location_name, package_id) %>%
+    distinct()
+  
+  library(usmap)
+  library(ggrepel)
+  
+  transformed_cleaned <- usmap_transform(cleaned)
+  
+  plot_usmap(color = "grey") + geom_point(
+    data = transformed_cleaned,
+    aes(x = longitude.1, y = latitude.1, size = 20),
+    color = "red", alpha = alpha) +
+    geom_text_repel(data=transformed_cleaned,
+              aes(x=longitude.1, y=latitude.1, label=location_name),
+              size=3, max.overlaps = Inf) +
+    ggplot2::labs(title = "Site Locations on US Map"
+                  #, subtitle = ds$id
+                  ) +
+    ggplot2::xlab("Longitude") +
+    ggplot2::ylab(paste0("Latitude")) +
+    theme(legend.position = "none")
+  
+}
