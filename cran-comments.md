@@ -3,6 +3,7 @@ This release implements a few enhancements and fixes a few bugs
 
 ## Test environments
 * local Windows install, R 4.1.0
+* x86_64-w64-mingw32 (64-bit), (win-builder), R-dev
 * Windows Server 2008 R2 SP1, 32/64 bit (R-hub), R 4.1.0, R-devel
 * macOS 10.13.6 High Sierra, (R-hub), R 4.1.0
 * Debian Linux, GCC (on R-hub), R 4.1.0
