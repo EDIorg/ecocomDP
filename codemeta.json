@@ -14,10 +14,9 @@
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "4.0.2",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.0.2 (2020-06-22)",
+  "runtimePlatform": "R version 4.1.0 (2021-05-18)",
   "author": [
     {
       "@type": "Person",
@@ -192,7 +191,7 @@
       "@type": "SoftwareApplication",
       "identifier": "taxize",
       "name": "taxize",
-      "version": ">= 0.9.99",
+      "version": "<= 0.9.99",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -232,7 +231,7 @@
       "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
-      "version": ">= 3.3.0"
+      "version": ">= 3.4.0"
     },
     {
       "@type": "SoftwareApplication",
@@ -264,7 +263,7 @@
       "@type": "SoftwareApplication",
       "identifier": "dplyr",
       "name": "dplyr",
-      "version": ">= 0.5.0",
+      "version": ">= 0.7.1",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -469,10 +468,6 @@
     }
   ],
   "releaseNotes": "https://github.com/EDIorg/ecocomDP/blob/master/NEWS.md",
-  "contIntegration": [
-    "https://travis-ci.org/EDIorg/ecocomDP",
-    "https://codecov.io/github/EDIorg/ecocomDP?branch=master"
-  ],
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -480,5 +475,6 @@
     "url": "https://cran.r-project.org"
   },
   "readme": "https://github.com/EDIorg/ecocomDP/blob/master/README.md",
-  "relatedLink": "https://CRAN.R-project.org/package=ecocomDP"
+  "relatedLink": "https://CRAN.R-project.org/package=ecocomDP",
+  "fileSize": "984.127KB"
 }
