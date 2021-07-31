@@ -35,11 +35,11 @@ remotes::install_github("EDIorg/ecocomDP", ref = "development")
 
 ## Usage
 
-  - [Create ecocomDP
+-   [Create ecocomDP
     datasets](https://ediorg.github.io/ecocomDP/articles/create.html)
-  - [Use ecocomDP
+-   [Use ecocomDP
     datasets](https://ediorg.github.io/ecocomDP/articles/use.html)
-  - [Convert ecocomDP datasets to another model
+-   [Convert ecocomDP datasets to another model
     format](https://ediorg.github.io/ecocomDP/articles/convert.html)
 
 ## Getting help
@@ -50,11 +50,11 @@ filing bug reports, please include a minimal reproducible example.
 
 ## Contributing
 
-Community contributions are welcome\! Please reference our [contributing
+Community contributions are welcome! Please reference our [contributing
 guidelines](https://github.com/EDIorg/ecocomDP/blob/master/CONTRIBUTING.md)
 for details.
 
------
+------------------------------------------------------------------------
 
 Please note that this project is released with a [Contributor Code of
 Conduct](https://github.com/EDIorg/ecocomDP/blob/master/CODE_OF_CONDUCT.md).

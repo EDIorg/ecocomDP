@@ -1,5 +1,5 @@
 ## Revision
-This release fixes a few bugs and implements a few enhancements
+This release implements a few enhancements and fixes a few bugs
 
 ## Test environments
 * local Windows install, R 4.1.0
