@@ -1,19 +1,21 @@
-## Resubmission
-This is a resubmission. In this version I have:
-* Converted the DESCRIPTION title to title case.
-* Removed empty lines from the LICENSE file.
+## Revision
+This release implements a few enhancements and fixes a few bugs
 
 ## Test environments
-* local Windows install, R 4.0.2
-* Ubuntu 16.04.6 (on Travis-CI), (devel and R 4.0.2)
-* win-builder (devel and release)
-* macOS 10.13.6 High Sierra (on R-hub), R 4.1.0
-* Fedora Linux, clang, gfortran (on R-hub), devel
+* local Windows install, R 4.1.0
+* x86_64-w64-mingw32 (64-bit), (win-builder), R-dev
+* Windows Server 2008 R2 SP1, 32/64 bit (R-hub), R 4.1.0, R-devel
+* macOS 10.13.6 High Sierra, (R-hub), R 4.1.0
+* Debian Linux, GCC (on R-hub), R 4.1.0
+* Fedora Linux, clang, gfortran (R-hub), R-devel
 
 ## R CMD check results
-0 errors | 0 warnings | 1 notes
+0 ERROR | 0 WARNINGS | 1 NOTE
 
-* New submission
+NOTE: "Possibly mis-spelled words in DESCRIPTION: al (4:371) et (4:368)"
+RESPONSE: These are not mis-spelled words.
 
 ## Downstream dependencies
 There are currently no downstream dependencies for this package
+
+Cheers!

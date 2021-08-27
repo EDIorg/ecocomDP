@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -151,7 +151,8 @@
     <p>"flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" an L1 ecocomDP dataset can be consistently spread due to the frequent occurrence of L0 source datasets with &gt; 1 core observation variable.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>Ancillary identifiers are dropped from the returned object.</p>
+    <p>Warnings/Errors from <code>flatten_data()</code> can most often be fixed by addressing any validation issues reported by <code><a href='read_data.html'>read_data()</a></code> (e.g. non-unique composite keys).</p>
+<p>Ancillary identifiers are dropped from the returned object.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>dataset</span> <span class='op'>&lt;-</span> <span class='va'>ants_L1</span>
@@ -178,13 +179,7 @@
 #&gt; <span style='color: #949494;'>#   treatment &lt;chr&gt;, taxon_id &lt;chr&gt;, taxon_rank &lt;chr&gt;, taxon_name &lt;chr&gt;,</span>
 #&gt; <span style='color: #949494;'>#   authority_system &lt;chr&gt;, authority_taxon_id &lt;chr&gt;, behavior &lt;chr&gt;,</span>
 #&gt; <span style='color: #949494;'>#   biogeographic.affinity &lt;chr&gt;, colony.size &lt;chr&gt;, feeding.preference &lt;chr&gt;,</span>
-#&gt; <span style='color: #949494;'>#   hl &lt;dbl&gt;, unit_hl &lt;chr&gt;, nest.substrate &lt;chr&gt;, primary.habitat &lt;chr&gt;,</span>
-#&gt; <span style='color: #949494;'>#   rel &lt;dbl&gt;, unit_rel &lt;chr&gt;, rll &lt;dbl&gt;, unit_rll &lt;chr&gt;,</span>
-#&gt; <span style='color: #949494;'>#   secondary.habitat &lt;chr&gt;, seed.disperser &lt;chr&gt;, slavemaker.sp &lt;chr&gt;,</span>
-#&gt; <span style='color: #949494;'>#   source &lt;chr&gt;, subfamily &lt;chr&gt;, package_id &lt;chr&gt;, original_package_id &lt;chr&gt;,</span>
-#&gt; <span style='color: #949494;'>#   length_of_survey_years &lt;dbl&gt;, number_of_years_sampled &lt;dbl&gt;,</span>
-#&gt; <span style='color: #949494;'>#   std_dev_interval_betw_years &lt;dbl&gt;, max_num_taxa &lt;dbl&gt;,</span>
-#&gt; <span style='color: #949494;'>#   geo_extent_bounding_box_m2 &lt;dbl&gt;</span></div><div class='input'>
+#&gt; <span style='color: #949494;'>#   hl &lt;dbl&gt;, unit_hl &lt;chr&gt;, nest.substrate &lt;chr&gt;, primary.habitat &lt;chr&gt;, ...</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
