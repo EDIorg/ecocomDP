@@ -33,13 +33,29 @@ except:
 	print(usage)
 	sys.exit(2)
 
+# 0c. build strings using the pkg id
+[scope, docid, rev] = input_pkg_id.split(".")
+
+# pkg URL
+# filename for eml file to be renamed
+# filename for output zip
+
+# pkg URL:
+# create archive, poll pasta to confirm it is ready.
+url = url_head + "/" +  scope + "/" + docid + "/" + rev
+
+# EML filename to be renamed
+eml_filename = scope + "." + docid + "." + rev + ".xml"
+
+# output zip filename
+output_zip = "dwca_" + scope + "." + docid + "." + rev + ".zip"
+
 # 1. download package
 # create archive, poll pasta to confirm it is ready.
 
-# build URL:
-[scope, docid, rev] = input_pkg_id.split(".")
-url = url_head + "/" +  scope + "/" + docid + "/" + rev
 print(url)
+print(eml_filename)
+print(output_zip)
 
 post = requests.post(url)
 status1 = post.status_code
