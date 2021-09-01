@@ -6,16 +6,41 @@
 # 1. rename the EML file; 
 # 2. rezip and deposit [somewhere]
 
-# 0. imports
+# 00. imports
+import sys, getopt
 import requests
 import time
 import zipfile
 import os
 
+
+# global vars
+usage = './pasta2gbif.ph input_pkg_id'
+url_head = 'https://pasta-s.lternet.edu/package/archive/eml'
+
+
+# 0. process args
+# print ('Number of arguments:', len(sys.argv), 'arguments.')
+# print ('Argument List:', str(sys.argv) )
+
+input_pkg_id = ''
+outputfile = ''
+
+try:
+	input_pkg_id = sys.argv[1]
+	print(input_pkg_id)
+except:
+	print(usage)
+	sys.exit(2)
+
 # 1. download package
 # create archive, poll pasta to confirm it is ready.
 
-url = 'https://pasta-s.lternet.edu/package/archive/eml/edi/92/3'
+# build URL:
+[scope, docid, rev] = input_pkg_id.split(".")
+url = url_head + "/" +  scope + "/" + docid + "/" + rev
+print(url)
+
 post = requests.post(url)
 status1 = post.status_code
 print(status1)
