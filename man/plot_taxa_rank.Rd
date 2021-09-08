@@ -4,12 +4,21 @@
 \alias{plot_taxa_rank}
 \title{Plot taxa ranks}
 \usage{
-plot_taxa_rank(observation, taxon, id, alpha = 1)
+plot_taxa_rank(
+  dataset = NULL,
+  facet_var = NA_character_,
+  taxon = NULL,
+  observation = NULL,
+  id = NA_character_,
+  alpha = 1
+)
 }
 \arguments{
-\item{observation}{(tbl_df, tbl, data.frame) The observation table.}
+\item{dataset}{(list) An ecocomDP formatted dataset}
 
 \item{taxon}{(tbl_df, tbl, data.frame) The taxon table.}
+
+\item{observation}{(tbl_df, tbl, data.frame) The observation table.}
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}
 

@@ -98,7 +98,9 @@ Suggests:
     ritis (>= 1.0.0),
     taxize (<= 0.9.99),
     testthat,
-    worrms (>= 0.4.2)
+    worrms (>= 0.4.2),
+    usmap,
+    ggrepel
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1
 Language: en-US

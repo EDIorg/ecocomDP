@@ -4,9 +4,11 @@
 \alias{plot_taxa_shared_sites}
 \title{Plot number of unique taxa shared across sites}
 \usage{
-plot_taxa_shared_sites(observation, id)
+plot_taxa_shared_sites(dataset = NULL, observation = NULL, id = NA_character_)
 }
 \arguments{
+\item{dataset}{(list) An ecocomDP formatted dataset}
+
 \item{observation}{(tbl_df, tbl, data.frame) The observation table.}
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}

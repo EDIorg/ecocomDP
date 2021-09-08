@@ -4,9 +4,16 @@
 \alias{plot_taxa_accum_sites}
 \title{Plot taxa accumulation by site accumulation}
 \usage{
-plot_taxa_accum_sites(observation, id, alpha = 1)
+plot_taxa_accum_sites(
+  dataset = NULL,
+  observation = NULL,
+  id = NA_character_,
+  alpha = 1
+)
 }
 \arguments{
+\item{dataset}{(list) An ecocomDP formatted dataset}
+
 \item{observation}{(tbl_df, tbl, data.frame) The observation table.}
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}
@@ -20,9 +27,11 @@ plot_taxa_accum_sites(observation, id, alpha = 1)
 Plot taxa accumulation by site accumulation
 }
 \examples{
-observation <- ants_L1[[1]]$tables$observation
-id <- names(ants_L1)
+plot_taxa_accum_sites(
+  observation = ants_L1[[1]]$tables$observation,
+  id = names(ants_L1))
 
-plot_taxa_accum_sites(observation, id)
+plot_taxa_accum_sites(
+  dataset = ants_L1)
 
 }

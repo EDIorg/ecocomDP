@@ -4,9 +4,16 @@
 \alias{plot_taxa_accum_time}
 \title{Plot taxa accumulation through time}
 \usage{
-plot_taxa_accum_time(observation, id, alpha = 1)
+plot_taxa_accum_time(
+  dataset = NULL,
+  observation = NULL,
+  id = NA_character_,
+  alpha = 1
+)
 }
 \arguments{
+\item{dataset}{(list) An ecocomDP formatted dataset}
+
 \item{observation}{(tbl_df, tbl, data.frame) The observation table.}
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}
@@ -20,9 +27,11 @@ plot_taxa_accum_time(observation, id, alpha = 1)
 Plot taxa accumulation through time
 }
 \examples{
-observation <- ants_L1[[1]]$tables$observation
-id <- names(ants_L1)
+plot_taxa_accum_time(
+  observation = ants_L1[[1]]$tables$observation,
+  id = names(ants_L1))
 
-plot_taxa_accum_time(observation, id)
-
+plot_taxa_accum_time(
+  dataset = ants_L1)
+  
 }

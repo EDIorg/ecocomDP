@@ -1,5 +1,6 @@
 #' Plot taxa accumulation by site accumulation
 #'
+#' @param dataset (list) An ecocomDP formatted dataset
 #' @param observation (tbl_df, tbl, data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
@@ -13,14 +14,29 @@
 #' @export
 #' 
 #' @examples
-#' observation <- ants_L1[[1]]$tables$observation
-#' id <- names(ants_L1)
+#' plot_taxa_accum_sites(
+#'   observation = ants_L1[[1]]$tables$observation,
+#'   id = names(ants_L1))
 #' 
-#' plot_taxa_accum_sites(observation, id)
-#' 
-plot_taxa_accum_sites <- function(observation, id, alpha = 1) {
+#' plot_taxa_accum_sites(
+#'   dataset = ants_L1)
+#'
+plot_taxa_accum_sites <- function(
+  dataset = NULL,
+  observation = NULL, 
+  id = NA_character_, 
+  alpha = 1){
+  
+  
+
+  if(is.na(id)) id <- names(dataset)
+  if(is.null(observation)) observation <- dataset[[id]]$tables$observation
+  
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
+  
+  
+  
   # Calculate cumulative number of taxa
   calc_cuml_taxa_space <- function(ex) {
     taxa.s.list <- list()
@@ -66,6 +82,7 @@ plot_taxa_accum_sites <- function(observation, id, alpha = 1) {
 
 #' Plot taxa accumulation through time
 #'
+#' @param dataset (list) An ecocomDP formatted dataset
 #' @param observation (tbl_df, tbl, data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
@@ -79,12 +96,22 @@ plot_taxa_accum_sites <- function(observation, id, alpha = 1) {
 #' @export
 #' 
 #' @examples
-#' observation <- ants_L1[[1]]$tables$observation
-#' id <- names(ants_L1)
+#' plot_taxa_accum_time(
+#'   observation = ants_L1[[1]]$tables$observation,
+#'   id = names(ants_L1))
 #' 
-#' plot_taxa_accum_time(observation, id)
-#' 
-plot_taxa_accum_time <- function(observation, id, alpha = 1) {
+#' plot_taxa_accum_time(
+#'   dataset = ants_L1)
+#'   
+plot_taxa_accum_time <- function(
+  dataset = NULL,
+  observation = NULL, 
+  id = NA_character_, 
+  alpha = 1){
+  
+  if(is.na(id)) id <- names(dataset)
+  if(is.null(observation)) observation <- dataset[[id]]$tables$observation
+  
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
   # Calculate cumulative number of taxa 
@@ -154,12 +181,9 @@ plot_taxa_accum_time <- function(observation, id, alpha = 1) {
 
 
 
-
-
-
-
 #' Plot diversity (taxa richness) through time
 #'
+#' @param dataset (list) An ecocomDP formatted dataset
 #' @param observation (tbl_df, tbl, data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
@@ -176,9 +200,16 @@ plot_taxa_accum_time <- function(observation, id, alpha = 1) {
 #' observation <- ants_L1[[1]]$tables$observation
 #' id <- names(ants_L1)
 #' 
-#' plot_taxa_diversity(observation, id)
+#' plot_taxa_richness(observation, id)
 #' 
-plot_taxa_diversity <- function(observation, id, alpha = 1) {
+plot_taxa_richness <- function(
+  dataset = NULL,
+  observation = NULL, 
+  id = NA_character_,   alpha = 1){
+  
+  if(is.na(id)) id <- names(dataset)
+  if(is.null(observation)) observation <- dataset[[id]]$tables$observation
+  
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
   # Calculate num unique taxa at each site through time and num unique taxa among all sites through time
@@ -206,9 +237,9 @@ plot_taxa_diversity <- function(observation, id, alpha = 1) {
     ggplot2::geom_line(data = ntaxa$ntaxa, ggplot2::aes(x = DATE, y = ntaxa, group = SITE_ID, color = SITE_ID), alpha = alpha) +
     ggplot2::geom_point(data = ntaxa$total_ntaxa, ggplot2::aes(x = DATE, y = ntaxa, fill = ""), color="black") +
     ggplot2::geom_line(data = ntaxa$total_ntaxa, ggplot2::aes(x = DATE, y = ntaxa, group = 1), color="black") +
-    ggplot2::labs(title = "Diversity through time", subtitle = ds$id) +
+    ggplot2::labs(title = "Richness through time", subtitle = ds$id) +
     ggplot2::xlab("Year") +
-    ggplot2::ylab(paste0("Number of taxa observed")) +
+    ggplot2::ylab(paste0("Richness")) +
     ggplot2::scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") +
     ggplot2::guides(
       color = ggplot2::guide_legend(title = "Site", label.theme = ggplot2::element_text(size = 6)),
@@ -226,6 +257,7 @@ plot_taxa_diversity <- function(observation, id, alpha = 1) {
 
 #' Plot dates and times samples were taken
 #'
+#' @param dataset (list) An ecocomDP formatted dataset
 #' @param observation (tbl_df, tbl, data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
@@ -242,13 +274,32 @@ plot_taxa_diversity <- function(observation, id, alpha = 1) {
 #' observation <- ants_L1[[1]]$tables$observation
 #' id <- names(ants_L1)
 #' 
-#' plot_taxa_sample_time(observation, id)
+#' plot_sample_space_time(observation, id)
 #' 
-plot_taxa_sample_time <- function(observation, id, alpha = 1) {
+plot_sample_space_time <- function(
+  dataset = NULL,
+  observation = NULL, 
+  id = NA_character_, 
+  alpha = 1){
+  
+  if(is.na(id)) id <- names(dataset)
+  if(is.null(observation)) observation <- dataset[[id]]$tables$observation
+  
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
-  ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
+
+  
+  # summarize data for plot
+  obs_summary <- observation %>%
+    # truncate time and just use dates
+    dplyr::mutate(datetime = .data$datetime %>% lubridate::as_date() %>% lubridate::ymd()) %>%
+    dplyr::select(.data$event_id, .data$location_id, .data$datetime) %>%
+    dplyr::group_by(.data$location_id, .data$datetime) %>%
+    dplyr::summarize(
+      `Sampling\nevents` = .data$event_id %>% unique %>% length)
+  
+  
   # Scale font size
-  uniy <- length(unique(ds$dslong$SITE_ID))
+  uniy <- length(unique(obs_summary$location_id))
   if (uniy < 30) {
     txty <- NULL
   } else if (uniy < 60) {
@@ -256,18 +307,29 @@ plot_taxa_sample_time <- function(observation, id, alpha = 1) {
   } else if (uniy >= 60) {
     txty <- 4
   }
+  
+ 
   # Plot
   ggplot2::ggplot() +
-    ggplot2::geom_point(data = ds$dslong, ggplot2::aes(x = DATE, y = SITE_ID), alpha = alpha) +
+    ggplot2::geom_point(
+      data = obs_summary, 
+      ggplot2::aes(x = datetime, y = location_id, size = .data$`Sampling\nevents`), 
+      alpha = alpha) +
     ggplot2::theme_bw() +
-    ggplot2::labs(title = "Sample times", subtitle = ds$id) +
-    ggplot2::xlab("Year") +
+    ggplot2::labs(title = "Sample times by location", subtitle = id) +
+    ggplot2::xlab("Date") +
     ggplot2::ylab("Site") +
-    ggplot2::scale_x_date(date_labels = "%Y", date_breaks = "1 year", date_minor_breaks = "1 month") +
+    ggplot2::scale_x_date(
+      date_labels = "%Y",
+      date_breaks = "1 year",
+      date_minor_breaks = "1 month"
+      ) +
     ggplot2::theme_bw() +
     ggplot2::theme(
       axis.text.y.left = ggplot2::element_text(size = txty),
-      plot.margin = ggplot2::margin(0.1, 0.25, 0.1, 0.1, "in"))
+      plot.margin = ggplot2::margin(0.1, 0.25, 0.1, 0.1, "in"),
+      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+  
 }
 
 
@@ -279,6 +341,7 @@ plot_taxa_sample_time <- function(observation, id, alpha = 1) {
 
 #' Plot number of unique taxa shared across sites
 #' 
+#' @param dataset (list) An ecocomDP formatted dataset
 #' @param observation (tbl_df, tbl, data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' 
@@ -296,7 +359,14 @@ plot_taxa_sample_time <- function(observation, id, alpha = 1) {
 #' 
 #' plot_taxa_shared_sites(observation, id)
 #' 
-plot_taxa_shared_sites <- function(observation, id) {
+plot_taxa_shared_sites <- function(
+  dataset = NULL,
+  observation = NULL, 
+  id = NA_character_){
+  
+  if(is.na(id)) id <- names(dataset)
+  if(is.null(observation)) observation <- dataset[[id]]$tables$observation
+  
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                  # intermediate format for plotting
   heat_pal_spectral <- grDevices::colorRampPalette(rev( RColorBrewer::brewer.pal(11, "Spectral")))
@@ -432,6 +502,7 @@ format_for_comm_plots <- function(observation, id) {
 
 #' Plot taxa ranks
 #'
+#' @param dataset (list) An ecocomDP formatted dataset
 #' @param observation (tbl_df, tbl, data.frame) The observation table.
 #' @param taxon (tbl_df, tbl, data.frame) The taxon table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
@@ -452,76 +523,54 @@ format_for_comm_plots <- function(observation, id) {
 #' 
 #' plot_taxa_rank(observation, taxon, id)
 #' 
-plot_taxa_rank <- function(observation, taxon, id, alpha = 1) {
+plot_taxa_rank <- function(
+  dataset = NULL,
+  facet_var = NA_character_, #e.g., "location_id", "taxon_id" must be a column name in observation or taxon table
+  taxon = NULL, 
+  observation = NULL, 
+  id = NA_character_, 
+  alpha = 1){
+  
+  if(is.na(id)) id <- names(dataset)
+  if(is.null(observation)) observation <- dataset[[id]]$tables$observation
+  if(is.null(taxon)) taxon <- dataset[[id]]$tables$taxon
+  
+  
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
-  ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting   # not sure if this is needed/compatible for plots using taxon table
-  taxon %>%
-    ggplot2::ggplot(aes(taxon_rank)) + 
-    ggplot2::labs(title = "Taxa rank frequencies", subtitle = ds$id) +
-    ggplot2::xlab("Taxon rank") +
-    ggplot2::ylab(paste0("Number of taxa")) +
-    geom_bar() +
-    theme(axis.text.x = element_text(angle = 45, hjust=1))
+  # ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting   # not sure if this is needed/compatible for plots using taxon table
+  
+
+  data_long <- observation %>%
+    left_join(taxon, by = "taxon_id")
+  
+
+  if(is.na(facet_var)){
+    data_long %>%
+      ggplot2::ggplot(
+        ggplot2::aes(taxon_rank)) + 
+      ggplot2::labs(title = "Taxa rank frequencies in the observation table", subtitle = id) +
+      ggplot2::xlab("Taxon rank") +
+      ggplot2::ylab(paste0("Number of occurrences")) +
+      ggplot2::geom_bar() +
+      ggplot2::theme(
+        axis.text.x = ggplot2::element_text(angle = 45, hjust=1))
+  }else{
+    data_long %>%
+      ggplot2::ggplot(
+        ggplot2::aes(taxon_rank)) + 
+      ggplot2::labs(title = "Taxa rank frequencies in the observation table", subtitle = id) +
+      ggplot2::xlab("Taxon rank") +
+      ggplot2::ylab(paste0("Number of occurrences")) +
+      ggplot2::geom_bar() +
+      facet_wrap(~as.factor(.data[[facet_var]])) +
+      ggplot2::theme(
+        axis.text.x = ggplot2::element_text(angle = 45, hjust=1))
+  }
+
 }
 
 
 
-
-
-
-
-#' Plot taxa by site
-#'
-#' @param tables (list of tbl_df, tbl, data.frame) A named list of ecocomDP tables.
-#' @param id (character) Identifier of dataset to be used in plot subtitles.
-#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
-#' 
-#' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
-#' 
-#' @import dplyr
-#' @import ggplot2
-#' @import tidyr
-#' 
-#' @export
-#' 
-#' @examples
-#' tables <- ants_L1[[1]]$tables
-#' id <- names(ants_L1)
-#' 
-#' plot_taxa_rank_by_site(tables, id)
-#' 
-plot_taxa_rank_by_site <- function(tables, id, alpha = 1) {
-  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
-  ds <- format_for_comm_plots(tables$observation, id)                    # intermediate format for plotting 
-  
-  flat <- flatten_data(tables) 
-  flat$unit %>% unique()
-  flat %>%
-    group_by(event_id, taxon_id) %>%
-    summarize(n_obs = length(event_id)) %>%
-    dplyr::filter(n_obs > 1)
-  summed <- flat %>%
-    group_by(event_id, taxon_id) %>%
-    summarize(value = sum(value, na.rm = FALSE))
-  cleaned <- flat %>%
-    dplyr::select(
-      event_id, location_id, datetime,
-      taxon_id, taxon_rank, taxon_name) %>%
-    distinct() %>%
-    right_join(summed)
-  
-  cleaned %>%
-    group_by(location_id, taxon_rank) %>%
-    summarize(n_taxa = taxon_id %>%
-                unique() %>% length()) %>%
-    ggplot2::ggplot(aes(n_taxa, taxon_rank)) + 
-    facet_wrap(~location_id) +
-    ggplot2::labs(title = "Taxa rank frequencies by site", subtitle = ds$id) +
-    ggplot2::xlab("Number of taxa") +
-    ggplot2::ylab(paste0("Taxon rank")) +
-    geom_col()
-  
-}
 
 
 
@@ -531,7 +580,7 @@ plot_taxa_rank_by_site <- function(tables, id, alpha = 1) {
 
 #' Plot stacked taxa by site
 #'
-#' @param tables (list of tbl_df, tbl, data.frame) A named list of ecocomDP tables.
+#' @param dataset (list) An ecocomDP formatted dataset
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param rank (string) The rank of taxa to plot. Defaults to NA.
 #' @param cutoff (numeric) Defaults to 0.
@@ -552,11 +601,17 @@ plot_taxa_rank_by_site <- function(tables, id, alpha = 1) {
 #' 
 #' plot_stacked_taxa_by_site(tables, id, rank)
 #' 
-plot_stacked_taxa_by_site <- function(tables, id, cutoff=0, rank=NA, alpha = 1) {
-  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
-  ds <- format_for_comm_plots(tables$observation, id)                    # intermediate format for plotting
+plot_taxa_occurrence_frequency <- function(
+  dataset = NULL, 
+  cutoff = 0, 
+  rank = NA_character_,
+  color_var = NA_character_, #e.g., "location_id"
+  facet_var = NA_character_, #e.g., "location_id"
+  alpha = 1){
   
-  flat <- flatten_data(tables) 
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  
+  flat <- flatten_data(dataset[[1]]$tables) 
   flat$unit %>% unique()
   flat %>%
     group_by(event_id, taxon_id) %>%
@@ -592,9 +647,9 @@ plot_stacked_taxa_by_site <- function(tables, id, cutoff=0, rank=NA, alpha = 1) 
       y = occurrence,
       color = location_id,
       fill = location_id)) +
-    ggplot2::labs(title = title, subtitle = ds$id) +
-    ggplot2::xlab("Taxa name") +
-    ggplot2::ylab(paste0("Number of taxa")) +
+    ggplot2::labs(title = title, subtitle = id) +
+    ggplot2::xlab("Taxon name") +
+    ggplot2::ylab(paste0("No. occurrences")) +
     geom_col() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
 }
@@ -702,26 +757,31 @@ plot_sites <- function(flat_table, id, alpha=1, labels=TRUE) {
  
   cleaned <- flat_table %>%
     dplyr::select(
-      longitude, latitude, location_name, package_id) %>%
-    distinct()
+      .data$longitude, 
+      .data$latitude, 
+      .data$location_name,
+      .data$package_id) %>%
+    dplyr::distinct()
   
-  library(usmap)
-  library(ggrepel)
+  # library(usmap)
+  # library(ggrepel)
   
-  transformed_cleaned <- usmap_transform(cleaned)
+  transformed_cleaned <- usmap::usmap_transform(cleaned)
   
-  plot_usmap(color = "grey") + geom_point(
-    data = transformed_cleaned,
-    aes(x = longitude.1, y = latitude.1, size = 20),
-    color = "red", alpha = alpha) +
-    geom_text_repel(data=transformed_cleaned,
-              aes(x=longitude.1, y=latitude.1, label=location_name),
-              size=3, max.overlaps = Inf) +
+  usmap::plot_usmap(color = "grey") + 
+    ggplot2::geom_point(
+      data = transformed_cleaned,
+      ggplot2::aes(x = longitude.1, y = latitude.1, size = 20),
+      color = "red", alpha = alpha) +
+    ggrepel::geom_text_repel(
+      data = transformed_cleaned,
+      aes(x = longitude.1, y = latitude.1, label = location_name),
+      size = 3, max.overlaps = Inf) +
     ggplot2::labs(title = "Site Locations on US Map"
                   #, subtitle = ds$id
-                  ) +
+    ) +
     ggplot2::xlab("Longitude") +
     ggplot2::ylab(paste0("Latitude")) +
-    theme(legend.position = "none")
+    ggplot2::theme(legend.position = "none")
   
 }
