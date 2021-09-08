@@ -4,16 +4,22 @@
 \alias{plot_sites}
 \title{Plot sites on US map}
 \usage{
-plot_sites(flat_table, id, alpha = 1, labels = TRUE)
+plot_sites(
+  dataset = NULL,
+  flat_table = NULL,
+  id = NA_character_,
+  observation = NULL,
+  location = NULL,
+  alpha = 1,
+  labels = TRUE
+)
 }
 \arguments{
-\item{id}{(character) Identifier of dataset to be used in plot subtitles.}
+\item{dataset}{(list) An ecocomDP formatted dataset}
 
 \item{alpha}{(numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.}
 
 \item{labels}{(boolean) Argument to show labels of each US state. Default is TRUE.}
-
-\item{flat_tables}{(list of tbl_df, tbl, data.frame) A flat table, the result of flatten_data() applied to the list of ecocomDP tables.}
 }
 \value{
 (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device

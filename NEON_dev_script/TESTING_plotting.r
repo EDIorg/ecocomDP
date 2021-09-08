@@ -147,3 +147,46 @@ plot_stacked_taxa_by_site(
   tables = my_dataset[[1]]$tables, 
   id = names(my_dataset), 
   rank = "species")
+
+
+
+
+# plot map of sites
+plot_sites(
+  dataset = ants_L1)
+
+plot_sites(
+  flat_table = ants_L1[[1]]$tables %>% flatten_data())
+
+plot_sites(
+  dataset = ants_L1,
+  location = ants_L1[[1]]$tables$location)
+
+plot_sites(
+  location = ants_L1[[1]]$tables$location,
+  observation = ants_L1[[1]]$tables$observation,
+  id = names(ants_L1))
+
+
+
+plot_sites(
+  dataset = my_dataset)
+
+plot_sites(
+  flat_table = my_dataset %>% flatten_data())
+
+plot_sites(
+  dataset = my_dataset,
+  location = my_dataset[[1]]$tables$location)
+
+plot_sites(
+  location = my_dataset[[1]]$tables$location,
+  observation = my_dataset[[1]]$tables$observation,
+  id = names(my_dataset))
+
+
+my_dataset[[1]]$tables %>% flatten_data()
+my_dataset %>% flatten_data()
+
+# fails as expected with error message
+list(a = c(1:5)) %>% flatten_data()

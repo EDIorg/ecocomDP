@@ -730,8 +730,7 @@ plot_faceted_densities <- function(tables, id, rank=NA, alpha=1) {
 
 #' Plot sites on US map
 #'
-#' @param flat_tables (list of tbl_df, tbl, data.frame) A flat table, the result of flatten_data() applied to the list of ecocomDP tables.
-#' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' @param dataset (list) An ecocomDP formatted dataset
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' @param labels (boolean) Argument to show labels of each US state. Default is TRUE.
 #' 
@@ -751,10 +750,40 @@ plot_faceted_densities <- function(tables, id, rank=NA, alpha=1) {
 #' 
 #' plot_sites(flat_table, id)
 #' 
-plot_sites <- function(flat_table, id, alpha=1, labels=TRUE) {
-  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
-  # ds <- format_for_comm_plots(tables$observation, id)                    # intermediate format for plotting
- 
+plot_sites <- function(
+  dataset = NULL,
+  flat_table = NULL,
+  id = NA_character_,
+  observation = NULL,
+  location = NULL,
+  alpha = 1,
+  labels = TRUE){
+  
+  if(is.na(id) && !is.null(dataset)) id <- names(dataset)
+  
+  if(is.null(flat_table)){
+    # default to tables that are provided, otherwise, use what's 
+    # available in the dataset. 
+    if(is.null(observation)) observation <- dataset[[id]]$tables$observation
+    if(is.null(location)) location <- dataset[[id]]$tables$location
+    
+    validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+    
+    if(!grepl("(?i)neon",id)){
+      #non-neon locations need flattening
+      flat_location <- (ecocomDP::flatten_location(location))$location_flat
+    }else if(grepl("(?i)neon",id)){
+      flat_location <- location
+    }
+    
+    # join tables
+    # thils filters out locations that are not in the observation table
+    flat_table <- observation %>%
+      dplyr::left_join(flat_location, by = "location_id")
+    # flat_table <- ecocomDP::flatten_data(dataset[[1]]$tables)
+  }
+  
+  
   cleaned <- flat_table %>%
     dplyr::select(
       .data$longitude, 
@@ -782,6 +811,7 @@ plot_sites <- function(flat_table, id, alpha=1, labels=TRUE) {
     ) +
     ggplot2::xlab("Longitude") +
     ggplot2::ylab(paste0("Latitude")) +
+    ggplot2::labs(title = "Map of sites", subtitle = id) +
     ggplot2::theme(legend.position = "none")
   
 }

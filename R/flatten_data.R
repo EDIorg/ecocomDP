@@ -1,6 +1,6 @@
 #' Flatten an ecocomDP dataset
 #' 
-#' @param tables (list of tbl_df, tbl, data.frame) A named list of ecocomDP tables.
+#' @param tables (list of tbl_df, tbl, data.frame) A named list of ecocomDP tables or an ecocomDP formatted dataset.
 #'
 #' @return (tbl_df, tbl, data.frame) A single flat table created by joining and spreading all \code{tables}, except the observation table. See details for more information on this "flat" format.
 #' 
@@ -15,14 +15,27 @@
 #'
 #' @examples 
 #' dataset <- ants_L1
-#' 
 #' flat <- flatten_data(dataset[[1]]$tables)
-#' 
 #' flat
 #' 
-flatten_data <- function(tables) {
+#' flat <- flatten_data(ants_L1)
+#' flat
+
+flatten_data <- function(tables){
+  
+  # if dataset is passed to the function, extract the tables
+  if(!all(c("location","observation","taxon") %in% names(tables))){
+    if("tables" %in% names(tables[[1]])){
+      tables <- tables[[1]]$tables
+    }else{
+      stop("please provide an ecocomDP formatted data set or list of ecocomDP tables")
+    }
+  }
+  
   
   validate_arguments(fun.name = "flatten_data", fun.args = as.list(environment()))
+
+  
   
   # Start w/observation -------------------------------------------------------
   
