@@ -190,3 +190,11 @@ my_dataset %>% flatten_data()
 
 # fails as expected with error message
 list(a = c(1:5)) %>% flatten_data()
+
+
+dataset <- ants_L1
+flat <- flatten_data(dataset[[1]]$tables)
+flat
+
+flat <- flatten_data(ants_L1)
+flat
