@@ -760,6 +760,7 @@ plot_sites <- function(
   labels = TRUE){
   
   if(is.na(id) && !is.null(dataset)) id <- names(dataset)
+  if(is.na(id) && !is.null(flat_table)) id <- flat_table$package_id[1] 
   
   if(is.null(flat_table)){
     # default to tables that are provided, otherwise, use what's 
