@@ -6,6 +6,7 @@
 \usage{
 plot_taxa_accum_sites(
   dataset = NULL,
+  flat_table = NULL,
   observation = NULL,
   id = NA_character_,
   alpha = 1

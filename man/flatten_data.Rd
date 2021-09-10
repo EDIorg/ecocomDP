@@ -2,12 +2,20 @@
 % Please edit documentation in R/flatten_data.R
 \name{flatten_data}
 \alias{flatten_data}
+\alias{flatten_dataset}
+\alias{flatten_tables}
 \title{Flatten an ecocomDP dataset}
 \usage{
-flatten_data(tables)
+flatten_data(tables = NULL, dataset = NULL)
+
+flatten_dataset(dataset)
+
+flatten_tables(tables)
 }
 \arguments{
 \item{tables}{(list of tbl_df, tbl, data.frame) A named list of ecocomDP tables or an ecocomDP formatted dataset.}
+
+\item{dataset}{(list) An ecocomDP formatted dataset}
 }
 \value{
 (tbl_df, tbl, data.frame) A single flat table created by joining and spreading all \code{tables}, except the observation table. See details for more information on this "flat" format.
@@ -18,16 +26,29 @@ Flatten an ecocomDP dataset
 \details{
 "flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" an L1 ecocomDP dataset can be consistently spread due to the frequent occurrence of L0 source datasets with > 1 core observation variable.
 }
+\section{Functions}{
+\itemize{
+\item \code{flatten_dataset}: Flatten an ecocomDP formatted dataset
+
+\item \code{flatten_tables}: Flatten a list of ecocomDP tables
+}}
+
 \note{
 Warnings/Errors from \code{flatten_data()} can most often be fixed by addressing any validation issues reported by \code{read_data()} (e.g. non-unique composite keys).
 
 Ancillary identifiers are dropped from the returned object.
 }
 \examples{
-dataset <- ants_L1
-flat <- flatten_data(dataset[[1]]$tables)
+flat <- flatten_data(tables = ants_L1[[1]]$tables)
 flat
 
-flat <- flatten_data(ants_L1)
+flat <- flatten_data(dataset = ants_L1)
 flat
+
+flat <- flatten_dataset(ants_L1)
+flat
+
+flat <- flatten_tables(ants_L1[[1]]$tables)
+flat
+
 }

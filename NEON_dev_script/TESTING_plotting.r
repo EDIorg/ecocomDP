@@ -28,14 +28,16 @@ my_dataset <- read_data(
 # accum by site
 
 plot_taxa_accum_sites(
-  dataset = my_dataset
-  # observation = NULL, 
-  # id = NA_character_, 
-  # alpha = 1
-  )
+  dataset = my_dataset)
 
+plot_taxa_accum_sites(
+  flat_table = my_dataset %>% flatten_data())
 
+plot_taxa_accum_sites(
+  dataset = ants_L1)
 
+plot_taxa_accum_sites(
+  flat_table = ants_L1 %>% flatten_data())
 
 
 
@@ -156,7 +158,7 @@ plot_sites(
   dataset = ants_L1)
 
 plot_sites(
-  flat_table = ants_L1[[1]]$tables %>% flatten_data())
+  flat_table = ants_L1[[1]]$tables %>% flatten_tables())
 
 plot_sites(
   dataset = ants_L1,
@@ -192,9 +194,14 @@ my_dataset %>% flatten_data()
 list(a = c(1:5)) %>% flatten_data()
 
 
-dataset <- ants_L1
-flat <- flatten_data(dataset[[1]]$tables)
+flat <- flatten_data(tables = dataset[[1]]$tables)
 flat
 
-flat <- flatten_data(ants_L1)
+flat <- flatten_data(dataset = ants_L1)
+flat
+
+flat <- flatten_dataset(ants_L1)
+flat
+
+flat <- flatten_tables(ants_L1[[1]]$tables)
 flat

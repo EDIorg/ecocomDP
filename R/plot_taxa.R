@@ -23,14 +23,32 @@
 #'
 plot_taxa_accum_sites <- function(
   dataset = NULL,
+  flat_table = NULL,
   observation = NULL, 
   id = NA_character_, 
   alpha = 1){
   
   
 
-  if(is.na(id)) id <- names(dataset)
-  if(is.null(observation)) observation <- dataset[[id]]$tables$observation
+  if(is.na(id) && !is.null(dataset)) id <- names(dataset)
+  if(is.na(id) && !is.null(flat_table)) id <- flat_table$package_id[1] 
+  
+  if(is.null(observation) && !is.null(dataset)){
+    observation <- dataset[[id]]$tables$observation
+  }else if(is.null(observation) && !is.null(flat_table)){
+    observation <- flat_table %>%
+      dplyr::select(
+        .data$observation_id,
+        .data$event_id,
+        .data$package_id,
+        .data$location_id,
+        .data$datetime,
+        .data$taxon_id,
+        .data$variable_name,
+        .data$value,
+        .data$unit) %>% 
+      dplyr::distinct()
+  }
   
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
