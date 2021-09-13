@@ -6,21 +6,29 @@
 \usage{
 plot_taxa_rank(
   dataset = NULL,
-  facet_var = NA_character_,
+  flat_data = NULL,
   taxon = NULL,
   observation = NULL,
   id = NA_character_,
+  facet_var = NA_character_,
+  facet_scales = "free",
   alpha = 1
 )
 }
 \arguments{
 \item{dataset}{(list) An ecocomDP formatted dataset}
 
+\item{flat_data}{(tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.}
+
 \item{taxon}{(tbl_df, tbl, data.frame) The taxon table.}
 
 \item{observation}{(tbl_df, tbl, data.frame) The observation table.}
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}
+
+\item{facet_var}{(character) Name of column to use for faceting.}
+
+\item{facet_scales}{(character) Should scales be free ("free", default value), fixed ("fixed"), or free in one dimension ("free_x", "free_y")?}
 
 \item{alpha}{(numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.}
 }
@@ -31,10 +39,37 @@ plot_taxa_rank(
 Plot taxa ranks
 }
 \examples{
-observation <- ants_L1[[1]]$tables$observation
-taxon <- ants_L1[[1]]$tables$taxon
-id <- names(ants_L1)
+# plot ecocomDP formatted dataset
+plot_taxa_rank(
+  dataset = ants_L1)
 
-plot_taxa_rank(observation, taxon, id)
+plot_taxa_rank(
+  dataset = ants_L1,
+  facet_var = "location_id")
+
+# plot flattened ecocomDP dataset
+plot_taxa_rank(
+  flat_data = flatten_dataset(ants_L1),
+  facet_var = "location_id")
+
+# plot ecocomDP observation table
+plot_taxa_rank(
+  observation = ants_L1[[1]]$tables$observation,
+  taxon = ants_L1[[1]]$tables$taxon,
+  facet_var = "location_id")
+
+# tidy syntax, filter data by date
+ants_L1 \%>\% 
+  flatten_dataset() \%>\% 
+  dplyr::filter(
+    lubridate::as_date(datetime) > "2003-07-01") \%>\%
+  plot_taxa_rank(flat_data = .)
+
+# tidy syntax, filter data by site ID
+ants_L1 \%>\% 
+  flatten_dataset() \%>\% 
+  dplyr::filter(
+    as.numeric(location_id) > 4) \%>\%
+  plot_taxa_rank(flat_data = .)
 
 }

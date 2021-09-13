@@ -6,8 +6,8 @@
 \usage{
 plot_taxa_accum_sites(
   dataset = NULL,
-  flat_table = NULL,
   observation = NULL,
+  flat_data = NULL,
   id = NA_character_,
   alpha = 1
 )
@@ -16,6 +16,8 @@ plot_taxa_accum_sites(
 \item{dataset}{(list) An ecocomDP formatted dataset}
 
 \item{observation}{(tbl_df, tbl, data.frame) The observation table.}
+
+\item{flat_data}{(tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.}
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}
 
@@ -28,11 +30,26 @@ plot_taxa_accum_sites(
 Plot taxa accumulation by site accumulation
 }
 \examples{
-plot_taxa_accum_sites(
-  observation = ants_L1[[1]]$tables$observation,
-  id = names(ants_L1))
-
+# plot ecocomDP dataset
 plot_taxa_accum_sites(
   dataset = ants_L1)
+
+# plot flattened ecocomDP data
+plot_taxa_accum_sites(
+  flat_data =  flatten_dataset(ants_L1))
+
+# plot an ecocomDP observation table
+plot_taxa_accum_sites(
+  observation = ants_L1[[1]]$tables$observation)
+
+# tidy syntax
+ants_L1 \%>\% plot_taxa_accum_sites()
+
+# tidy syntax, filter data by date
+ants_L1 \%>\% 
+  flatten_dataset() \%>\% 
+  dplyr::filter(
+    lubridate::as_date(datetime) > "2003-07-01") \%>\%
+  plot_taxa_accum_sites(flat_data = .)
 
 }

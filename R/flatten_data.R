@@ -21,7 +21,6 @@
 #' flat <- flatten_data(dataset = ants_L1)
 #' flat
 #' 
-
 flatten_data <- function(
   tables = NULL, 
   dataset = NULL){

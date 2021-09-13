@@ -6,7 +6,7 @@
 \usage{
 plot_sites(
   dataset = NULL,
-  flat_table = NULL,
+  flat_data = NULL,
   id = NA_character_,
   observation = NULL,
   location = NULL,
@@ -16,6 +16,8 @@ plot_sites(
 }
 \arguments{
 \item{dataset}{(list) An ecocomDP formatted dataset}
+
+\item{flat_data}{(tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.}
 
 \item{alpha}{(numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.}
 
@@ -28,9 +30,14 @@ plot_sites(
 Plot sites on US map
 }
 \examples{
-flat_table <- flatten_data(ants_L1[[1]]$tables)
-id <- names(ants_L1)
+plot_sites(
+  dataset = ants_L1)
 
-plot_sites(flat_table, id)
+plot_sites(
+  flat_data = flatten_dataset(ants_L1))
+
+plot_sites(
+  observation = ants_L1[[1]]$tables$observation,
+  location = ants_L1[[1]]$tables$location)
 
 }

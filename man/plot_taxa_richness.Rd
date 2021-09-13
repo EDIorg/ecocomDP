@@ -6,13 +6,17 @@
 \usage{
 plot_taxa_richness(
   dataset = NULL,
+  flat_data = NULL,
   observation = NULL,
   id = NA_character_,
+  time_window_size = "day",
   alpha = 1
 )
 }
 \arguments{
 \item{dataset}{(list) An ecocomDP formatted dataset}
+
+\item{flat_data}{(tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.}
 
 \item{observation}{(tbl_df, tbl, data.frame) The observation table.}
 
@@ -27,9 +31,48 @@ plot_taxa_richness(
 Plot diversity (taxa richness) through time
 }
 \examples{
-observation <- ants_L1[[1]]$tables$observation
-id <- names(ants_L1)
+# plot richness through time for ecocomDP formatted dataset by 
+# observation date
+plot_taxa_richness(
+  dataset = ants_L1)
 
-plot_taxa_richness(observation, id)
+# plot richness through time for ecocomDP formatted dataset by 
+# aggregating observations within a year
+plot_taxa_richness(
+  dataset = ants_L1,
+  time_window_size = "year")
+
+# plot richness through time for ecocomDP observation table
+plot_taxa_richness(
+  observation = ants_L1[[1]]$tables$observation)
+
+# plot richness through time for flattened ecocomDP dataset 
+plot_taxa_richness(
+  flat_data = flatten_dataset(ants_L1))
+
+
+# Using Tidy syntax:
+# plot ecocomDP formatted dataset richness through time by 
+# observation date
+ants_L1 \%>\% plot_taxa_richness()
+
+ants_L1 \%>\% plot_taxa_richness(time_window_size = "day")
+
+# plot ecocomDP formatted dataset richness through time 
+# aggregating observations within a month
+ants_L1 \%>\% plot_taxa_richness(time_window_size = "month")
+
+# plot ecocomDP formatted dataset richness through time 
+# aggregating observations within a year
+ants_L1 \%>\% plot_taxa_richness(time_window_size = "year")
+
+# tidy syntax, filter data by date
+ants_L1 \%>\% 
+  flatten_dataset() \%>\% 
+  dplyr::filter(
+    lubridate::as_date(datetime) > "2007-01-01") \%>\%
+  plot_taxa_richness(
+    flat_data = .,
+    time_window_size = "year")
 
 }

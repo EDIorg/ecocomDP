@@ -6,6 +6,7 @@
 \usage{
 plot_sample_space_time(
   dataset = NULL,
+  flat_data = NULL,
   observation = NULL,
   id = NA_character_,
   alpha = 1
@@ -13,6 +14,8 @@ plot_sample_space_time(
 }
 \arguments{
 \item{dataset}{(list) An ecocomDP formatted dataset}
+
+\item{flat_data}{(tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.}
 
 \item{observation}{(tbl_df, tbl, data.frame) The observation table.}
 
@@ -27,9 +30,30 @@ plot_sample_space_time(
 Plot dates and times samples were taken
 }
 \examples{
-observation <- ants_L1[[1]]$tables$observation
-id <- names(ants_L1)
+# plot ecocomDP formatted dataset
+plot_sample_space_time(
+  dataset = ants_L1)
 
-plot_sample_space_time(observation, id)
+# plot flattened ecocomDP dataset
+plot_sample_space_time(
+  flat_data = flatten_dataset(ants_L1))
+
+# plot ecocomDP observation table
+plot_sample_space_time(
+  observation = ants_L1[[1]]$tables$observation)
+
+# tidy syntax, filter data by date
+ants_L1 \%>\% 
+  flatten_dataset() \%>\% 
+  dplyr::filter(
+    lubridate::as_date(datetime) > "2003-07-01") \%>\%
+  plot_sample_space_time(flat_data = .)
+
+# tidy syntax, filter data by site ID
+ants_L1 \%>\% 
+  flatten_dataset() \%>\% 
+  dplyr::filter(
+    as.numeric(location_id) > 4) \%>\%
+  plot_sample_space_time(flat_data = .)
 
 }
