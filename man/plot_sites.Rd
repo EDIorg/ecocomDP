@@ -19,6 +19,12 @@ plot_sites(
 
 \item{flat_data}{(tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.}
 
+\item{id}{(character) Identifier of dataset to be used in plot subtitles.}
+
+\item{observation}{(tbl_df, tbl, data.frame) The observation table.}
+
+\item{location}{(tbl_df, tbl, data.frame) The location table.}
+
 \item{alpha}{(numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.}
 
 \item{labels}{(boolean) Argument to show labels of each US state. Default is TRUE.}
@@ -30,6 +36,7 @@ plot_sites(
 Plot sites on US map
 }
 \examples{
+\dontrun{
 plot_sites(
   dataset = ants_L1)
 
@@ -39,5 +46,5 @@ plot_sites(
 plot_sites(
   observation = ants_L1[[1]]$tables$observation,
   location = ants_L1[[1]]$tables$location)
-
+}
 }

@@ -42,6 +42,7 @@ plot_taxa_occurrence_frequency(
 Plot stacked taxa by site
 }
 \examples{
+\dontrun{
 # plot ecocomDP formatted dataset
 plot_taxa_occurrence_frequency(
   dataset = ants_L1)
@@ -74,5 +75,5 @@ ants_L1 \%>\%
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") \%>\%
   plot_taxa_occurrence_frequency(flat_data = .)
-
+}
 }

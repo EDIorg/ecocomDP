@@ -30,6 +30,7 @@ plot_sample_space_time(
 Plot dates and times samples were taken
 }
 \examples{
+\dontrun{
 # plot ecocomDP formatted dataset
 plot_sample_space_time(
   dataset = ants_L1)
@@ -55,5 +56,5 @@ ants_L1 \%>\%
   dplyr::filter(
     as.numeric(location_id) > 4) \%>\%
   plot_sample_space_time(flat_data = .)
-
+}
 }

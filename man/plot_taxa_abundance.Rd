@@ -45,6 +45,7 @@ plot_taxa_abundance(
 Plot abundances by event_id
 }
 \examples{
+\dontrun{
 # plot ecocomDP formatted dataset
 plot_taxa_abundance(
   dataset = ants_L1)
@@ -81,5 +82,5 @@ ants_L1 \%>\%
     lubridate::as_date(datetime) > "2003-07-01") \%>\%
   plot_taxa_abundance(flat_data = .,
                       trans = "log1p")
-
+}
 }

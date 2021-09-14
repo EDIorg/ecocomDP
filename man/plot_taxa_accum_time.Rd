@@ -30,6 +30,7 @@ plot_taxa_accum_time(
 Plot taxa accumulation through time
 }
 \examples{
+\dontrun{
 # plot ecocomDP formatted dataset
 plot_taxa_accum_time(
   dataset = ants_L1)
@@ -48,5 +49,5 @@ ants_L1 \%>\%
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") \%>\%
   plot_taxa_accum_time(flat_data = .)
-  
+}
 }

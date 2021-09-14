@@ -78,7 +78,7 @@ flatten_tables <- function(tables){
               "table. Cannot join observation_ancillary to observation.")
     }else{
       #the expected case:
-      observation_ancillary_wide <- flatten_ancillary(tables$observation_ancillary)
+      observation_ancillary_wide <- ecocomDP:::flatten_ancillary(tables$observation_ancillary)
       all_merged <- all_merged %>%
         dplyr::left_join(observation_ancillary_wide, 
                          by = "observation_id",
@@ -146,7 +146,7 @@ flatten_tables <- function(tables){
           suffix = c("", "_location"))
     } else {
       # Approach 2: Used by everyone else (i.e. non-NEON)
-      res_flatloc <- flatten_location(location = tables$location)
+      res_flatloc <- ecocomDP:::flatten_location(location = tables$location)
       tables$location <- res_flatloc$location_flat
       all_merged <- all_merged %>%
         dplyr::left_join(
@@ -169,7 +169,7 @@ flatten_tables <- function(tables){
       dplyr::filter(variable_name != "NEON location type",
                     location_id %in% all_merged$location_id)
     if (nrow(location_ancillary) > 0) {
-      location_ancillary_wide <- flatten_ancillary(location_ancillary)
+      location_ancillary_wide <- ecocomDP:::flatten_ancillary(location_ancillary)
       if ("datetime" %in% colnames(location_ancillary_wide)) { # Join with datetime if present
         all_merged <- all_merged %>%
           dplyr::left_join(
@@ -206,7 +206,7 @@ flatten_tables <- function(tables){
   # Merge taxon_ancillary -----------------------------------------------------
   
   if ("taxon_ancillary" %in% names(tables)) {
-    taxon_ancillary_wide <- flatten_ancillary(tables$taxon_ancillary)
+    taxon_ancillary_wide <- ecocomDP:::flatten_ancillary(tables$taxon_ancillary)
     all_merged <- all_merged %>%
       dplyr::left_join(
         taxon_ancillary_wide %>%

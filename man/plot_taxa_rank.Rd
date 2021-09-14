@@ -39,6 +39,7 @@ plot_taxa_rank(
 Plot taxa ranks
 }
 \examples{
+\dontrun{
 # plot ecocomDP formatted dataset
 plot_taxa_rank(
   dataset = ants_L1)
@@ -71,5 +72,5 @@ ants_L1 \%>\%
   dplyr::filter(
     as.numeric(location_id) > 4) \%>\%
   plot_taxa_rank(flat_data = .)
-
+}
 }

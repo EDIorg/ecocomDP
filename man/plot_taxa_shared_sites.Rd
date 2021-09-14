@@ -27,6 +27,7 @@ plot_taxa_shared_sites(
 Plot number of unique taxa shared across sites
 }
 \examples{
+\dontrun{
 # plot ecocomDP formatted dataset
 plot_taxa_shared_sites(
   dataset = ants_L1)
@@ -52,5 +53,5 @@ ants_L1 \%>\%
   dplyr::filter(
     as.numeric(location_id) > 4) \%>\%
   plot_taxa_shared_sites(flat_data = .)
-
+}
 }

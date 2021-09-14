@@ -15,6 +15,7 @@
 #' @export
 #' 
 #' @examples
+#' \dontrun{
 #' # plot ecocomDP dataset
 #' plot_taxa_accum_sites(
 #'   dataset = ants_L1)
@@ -36,7 +37,7 @@
 #'   dplyr::filter(
 #'     lubridate::as_date(datetime) > "2003-07-01") %>%
 #'   plot_taxa_accum_sites(flat_data = .)
-#' 
+#' }
 plot_taxa_accum_sites <- function(
   dataset = NULL,
   observation = NULL, 
@@ -126,6 +127,7 @@ plot_taxa_accum_sites <- function(
 #' @export
 #' 
 #' @examples
+#' \dontrun{
 #' # plot ecocomDP formatted dataset
 #' plot_taxa_accum_time(
 #'   dataset = ants_L1)
@@ -144,7 +146,7 @@ plot_taxa_accum_sites <- function(
 #'   dplyr::filter(
 #'     lubridate::as_date(datetime) > "2003-07-01") %>%
 #'   plot_taxa_accum_time(flat_data = .)
-#'   
+#' }
 plot_taxa_accum_time <- function(
   dataset = NULL,
   flat_data = NULL,
@@ -248,6 +250,7 @@ plot_taxa_accum_time <- function(
 #' @param flat_data (tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.
 #' @param observation (tbl_df, tbl, data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' @param time_window_size (character) Define the time window over which to aggregate observations for calculating richness
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' 
 #' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
@@ -259,6 +262,7 @@ plot_taxa_accum_time <- function(
 #' @export
 #' 
 #' @examples
+#' \dontrun{
 #' # plot richness through time for ecocomDP formatted dataset by 
 #' # observation date
 #' plot_taxa_richness(
@@ -302,7 +306,7 @@ plot_taxa_accum_time <- function(
 #'   plot_taxa_richness(
 #'     flat_data = .,
 #'     time_window_size = "year")
-#'
+#' }
 plot_taxa_richness <- function(
   dataset = NULL,
   flat_data = NULL,
@@ -466,6 +470,7 @@ plot_taxa_richness <- function(
 #' @export
 #' 
 #' @examples
+#' \dontrun{
 #' # plot ecocomDP formatted dataset
 #' plot_sample_space_time(
 #'   dataset = ants_L1)
@@ -491,7 +496,7 @@ plot_taxa_richness <- function(
 #'   dplyr::filter(
 #'     as.numeric(location_id) > 4) %>%
 #'   plot_sample_space_time(flat_data = .)
-#'
+#' }
 plot_sample_space_time <- function(
   dataset = NULL,
   flat_data = NULL,
@@ -585,6 +590,7 @@ plot_sample_space_time <- function(
 #' @export
 #' 
 #' @examples
+#' \dontrun{
 #' # plot ecocomDP formatted dataset
 #' plot_taxa_shared_sites(
 #'   dataset = ants_L1)
@@ -610,7 +616,7 @@ plot_sample_space_time <- function(
 #'   dplyr::filter(
 #'     as.numeric(location_id) > 4) %>%
 #'   plot_taxa_shared_sites(flat_data = .)
-#'
+#' }
 plot_taxa_shared_sites <- function(
   dataset = NULL,
   flat_data = NULL,
@@ -780,6 +786,7 @@ format_for_comm_plots <- function(observation, id) {
 #' @export
 #' 
 #' @examples
+#' \dontrun{
 #' # plot ecocomDP formatted dataset
 #' plot_taxa_rank(
 #'   dataset = ants_L1)
@@ -812,7 +819,7 @@ format_for_comm_plots <- function(observation, id) {
 #'   dplyr::filter(
 #'     as.numeric(location_id) > 4) %>%
 #'   plot_taxa_rank(flat_data = .)
-#'
+#' }
 plot_taxa_rank <- function(
   dataset = NULL,
   flat_data = NULL,
@@ -895,6 +902,7 @@ plot_taxa_rank <- function(
 #' @export
 #' 
 #' @examples
+#' \dontrun{
 #' # plot ecocomDP formatted dataset
 #' plot_taxa_occurrence_frequency(
 #'   dataset = ants_L1)
@@ -927,7 +935,7 @@ plot_taxa_rank <- function(
 #'   dplyr::filter(
 #'     lubridate::as_date(datetime) > "2003-07-01") %>%
 #'   plot_taxa_occurrence_frequency(flat_data = .)
-#' 
+#' }
 plot_taxa_occurrence_frequency <- function(
   dataset = NULL, 
   flat_data = NULL,
@@ -970,7 +978,7 @@ plot_taxa_occurrence_frequency <- function(
     dplyr::filter(.data$taxon_rank == rank)
   
   col_select_list <- c("event_id","taxon_name","occurrence",
-                       color_var, facet_var) %>% na.omit()
+                       color_var, facet_var) %>% stats::na.omit()
   
   data_working <- data_working[,col_select_list] %>% 
     dplyr::distinct()
@@ -999,7 +1007,7 @@ plot_taxa_occurrence_frequency <- function(
     p <- data_occurrence %>%
       ggplot2::ggplot(
         ggplot2::aes(
-          x = reorder(.data$taxon_name, -.data$n_occurrences),
+          x = stats::reorder(.data$taxon_name, -.data$n_occurrences),
           y = .data$n_occurrences,
           color = .data[[color_var]],
           fill = .data[[color_var]]))
@@ -1007,7 +1015,7 @@ plot_taxa_occurrence_frequency <- function(
     p <- data_occurrence %>%
       ggplot2::ggplot(
         ggplot2::aes(
-          x = reorder(.data$taxon_name, -.data$n_occurrences),
+          x = stats::reorder(.data$taxon_name, -.data$n_occurrences),
           y = .data$n_occurrences))
   }
 
@@ -1061,6 +1069,7 @@ plot_taxa_occurrence_frequency <- function(
 #' @export
 #' 
 #' @examples
+#' \dontrun{
 #' # plot ecocomDP formatted dataset
 #' plot_taxa_abundance(
 #'   dataset = ants_L1)
@@ -1097,7 +1106,7 @@ plot_taxa_occurrence_frequency <- function(
 #'     lubridate::as_date(datetime) > "2003-07-01") %>%
 #'   plot_taxa_abundance(flat_data = .,
 #'                       trans = "log1p")
-#'
+#' }
 plot_taxa_abundance <- function(
   dataset = NULL, 
   flat_data = NULL,
@@ -1154,7 +1163,7 @@ plot_taxa_abundance <- function(
     p <- flat_data %>%
       ggplot2::ggplot(
         ggplot2::aes(
-          x = reorder(.data$taxon_name, -.data$value),
+          x = stats::reorder(.data$taxon_name, -.data$value),
           y = .data$value,
           color = .data[[color_var]],
           fill = .data[[color_var]]))
@@ -1162,7 +1171,7 @@ plot_taxa_abundance <- function(
     p <- flat_data %>%
       ggplot2::ggplot(
         ggplot2::aes(
-          x = reorder(.data$taxon_name, -.data$value),
+          x = stats::reorder(.data$taxon_name, -.data$value),
           y = .data$value))
   }
   
@@ -1204,20 +1213,19 @@ plot_taxa_abundance <- function(
 #'
 #' @param dataset (list) An ecocomDP formatted dataset
 #' @param flat_data (tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.
+#' @param observation (tbl_df, tbl, data.frame) The observation table.
+#' @param location (tbl_df, tbl, data.frame) The location table.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' @param labels (boolean) Argument to show labels of each US state. Default is TRUE.
 #' 
 #' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
 #' 
-#' @import dplyr
-#' @import ggplot2
-#' @import tidyr
-#' @import usmap
-#' @import ggrepel
 #' 
 #' @export
 #' 
 #' @examples
+#' \dontrun{
 #' plot_sites(
 #'   dataset = ants_L1)
 #' 
@@ -1227,7 +1235,7 @@ plot_taxa_abundance <- function(
 #' plot_sites(
 #'   observation = ants_L1[[1]]$tables$observation,
 #'   location = ants_L1[[1]]$tables$location)
-#'
+#' }
 plot_sites <- function(
   dataset = NULL,
   flat_data = NULL,
@@ -1236,6 +1244,12 @@ plot_sites <- function(
   location = NULL,
   alpha = 1,
   labels = TRUE){
+  
+  # check for suggested packages that are required for this function to work
+  if(!"ggrepel" %in% base::rownames(utils::installed.packages())) stop("Please install 'ggrepel' to use this function")
+  if(!"usmap" %in% base::rownames(utils::installed.packages())) stop("Please install 'usmap' to use this function")
+  if(!"maptools" %in% base::rownames(utils::installed.packages())) stop("Please install 'maptools' to use this function")
+  if(!"rgdal" %in% base::rownames(utils::installed.packages())) stop("Please install 'rgdal' to use this function")
   
   if(is.na(id) && !is.null(dataset)) id <- names(dataset)
   if(is.na(id) && !is.null(flat_data)) id <- flat_data$package_id[1] 
@@ -1251,7 +1265,7 @@ plot_sites <- function(
     
     if(!grepl("(?i)neon",id)){
       #non-neon locations need flattening
-      flat_location <- (ecocomDP::flatten_location(location))$location_flat
+      flat_location <- (ecocomDP:::flatten_location(location))$location_flat
     }else if(grepl("(?i)neon",id)){
       flat_location <- location
     }
@@ -1277,11 +1291,11 @@ plot_sites <- function(
   usmap::plot_usmap(color = "grey") + 
     ggplot2::geom_point(
       data = transformed_cleaned,
-      ggplot2::aes(x = longitude.1, y = latitude.1, size = 20),
+      ggplot2::aes(x = .data$longitude.1, y = .data$latitude.1, size = 20),
       color = "red", alpha = alpha) +
     ggrepel::geom_text_repel(
       data = transformed_cleaned,
-      aes(x = longitude.1, y = latitude.1, label = location_name),
+      aes(x = .data$longitude.1, y = .data$latitude.1, label = .data$location_name),
       size = 3, max.overlaps = Inf) +
     ggplot2::xlab("Longitude") +
     ggplot2::ylab(paste0("Latitude")) +
