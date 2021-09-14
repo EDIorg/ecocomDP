@@ -26,9 +26,9 @@ flatten_data <- function(
   dataset = NULL){
   
   if(!is.null(tables)){
-    return(ecocomDP::flatten_tables(tables))
+    return(flatten_tables(tables))
   }else if(!is.null(dataset)){
-    return(ecocomDP::flatten_dataset(dataset))
+    return(flatten_dataset(dataset))
   }else{
     stop("please provide data to flatten")
   }
@@ -46,7 +46,7 @@ flatten_data <- function(
 #' @export
 #' 
 flatten_dataset <- function(dataset){
- return(ecocomDP::flatten_tables(dataset[[1]]$tables))
+ return(flatten_tables(dataset[[1]]$tables))
 }
 
 
@@ -78,7 +78,7 @@ flatten_tables <- function(tables){
               "table. Cannot join observation_ancillary to observation.")
     }else{
       #the expected case:
-      observation_ancillary_wide <- ecocomDP:::flatten_ancillary(tables$observation_ancillary)
+      observation_ancillary_wide <- flatten_ancillary(tables$observation_ancillary)
       all_merged <- all_merged %>%
         dplyr::left_join(observation_ancillary_wide, 
                          by = "observation_id",
@@ -146,7 +146,7 @@ flatten_tables <- function(tables){
           suffix = c("", "_location"))
     } else {
       # Approach 2: Used by everyone else (i.e. non-NEON)
-      res_flatloc <- ecocomDP:::flatten_location(location = tables$location)
+      res_flatloc <- flatten_location(location = tables$location)
       tables$location <- res_flatloc$location_flat
       all_merged <- all_merged %>%
         dplyr::left_join(
@@ -169,7 +169,7 @@ flatten_tables <- function(tables){
       dplyr::filter(variable_name != "NEON location type",
                     location_id %in% all_merged$location_id)
     if (nrow(location_ancillary) > 0) {
-      location_ancillary_wide <- ecocomDP:::flatten_ancillary(location_ancillary)
+      location_ancillary_wide <- flatten_ancillary(location_ancillary)
       if ("datetime" %in% colnames(location_ancillary_wide)) { # Join with datetime if present
         all_merged <- all_merged %>%
           dplyr::left_join(
@@ -206,7 +206,7 @@ flatten_tables <- function(tables){
   # Merge taxon_ancillary -----------------------------------------------------
   
   if ("taxon_ancillary" %in% names(tables)) {
-    taxon_ancillary_wide <- ecocomDP:::flatten_ancillary(tables$taxon_ancillary)
+    taxon_ancillary_wide <- flatten_ancillary(tables$taxon_ancillary)
     all_merged <- all_merged %>%
       dplyr::left_join(
         taxon_ancillary_wide %>%
@@ -269,7 +269,8 @@ flatten_tables <- function(tables){
 #
 # @return (data.frame) A flattened version of \code{ancillary_table} with units added following the unit_<variable_name> 
 # convention, and sorted so the unit immediately follows its corresponding variable_name.
-# 
+#'
+#' @noRd
 flatten_ancillary <- function(ancillary_table) {
   # Spread on variable_name and value, then add units later
   fkey <- stringr::str_subset(colnames(ancillary_table), "(?<!ancillary_)id") # Use regexpr to select id column to later join on
@@ -411,7 +412,8 @@ coerce_all_merged <- function(x, locnames) {
 # @return A list of:
 # location_flat: (tbl_df, tbl, data.frame) A flattened version of \code{location} with nested levels unpacked and latitude, longitude, and elevation only returned for the level of observation.
 # locnames: (character) So coerce_all_merged() knows which to coerce to "character" class
-#
+#'
+#' @noRd
 flatten_location <- function(location) {
   
   # An empty object for collecting the order of nested locations

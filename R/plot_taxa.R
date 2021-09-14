@@ -950,7 +950,7 @@ plot_taxa_occurrence_frequency <- function(
   # validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   
   if(!is.null(dataset)){
-    flat_data <- ecocomDP::flatten_dataset(dataset) 
+    flat_data <- flatten_dataset(dataset) 
     if(is.na(id)) id <- names(dataset)
   }
   
@@ -1120,7 +1120,7 @@ plot_taxa_abundance <- function(
   alpha = 1) {
   
   if(!is.null(dataset)){
-    flat_data <- ecocomDP::flatten_dataset(dataset) 
+    flat_data <- flatten_dataset(dataset) 
     if(is.na(id)) id <- names(dataset)
   }
   
@@ -1265,7 +1265,7 @@ plot_sites <- function(
     
     if(!grepl("(?i)neon",id)){
       #non-neon locations need flattening
-      flat_location <- (ecocomDP:::flatten_location(location))$location_flat
+      flat_location <- (flatten_location(location))$location_flat
     }else if(grepl("(?i)neon",id)){
       flat_location <- location
     }
