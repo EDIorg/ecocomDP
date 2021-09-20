@@ -23,6 +23,7 @@
 #'        \item Coordinate range - Values are within -90 to 90 and -180 to 180.
 #'        \item Elevation - Values are less than Mount Everest (8848 m) and greater than Mariana Trench (-10984 m).
 #'        \item Variable mapping - variable_name is in table_name.
+#'        \item Mapped_id - values in mapped_id are valid URIs
 #'    }
 #'    
 #' @export
@@ -97,6 +98,7 @@ validate_data <- function(
     validate_latitude_longitude_range(d)
   issues_validate_elevation <- validate_elevation(d)
   issues_validate_variable_mapping <- validate_variable_mapping(d)
+  issues_validate_mapped_id <- validate_mapped_id(d)
   
   # Report validation issues
   
@@ -115,7 +117,8 @@ validate_data <- function(
       issues_validate_latitude_longitude_format,
       issues_validate_latitude_longitude_range,
       issues_validate_elevation,
-      issues_validate_variable_mapping))
+      issues_validate_variable_mapping,
+      issues_validate_mapped_id))
   
   if (length(validation_issues) != 0) {
     warning("  Validation issues found for ", id, call. = FALSE)
@@ -806,5 +809,35 @@ validate_variable_mapping <- function(data.list) {
 
 
 
-
+# Check mapped_id
+# 
+# @param data.list
+#     (list of data frames) A named list of data frames, each of which is an 
+#     ecocomDP table.
+#
+# @return 
+#     (character) If mapped_id does not resolve with a status of 200, then a message is returned.
+#
+validate_mapped_id <- function(data.list) {
+  
+  if ("variable_mapping" %in% names(data.list)) {
+    message("  mapped_id")
+    if (!curl::has_internet()) return("Variable mapping. Mapped_ids can not be validated offline")
+    
+    output <- lapply(
+      unique(data.list$variable_mapping$mapped_id),
+      function(m_id) {
+        m_id <- trimws(m_id)
+        i <- try(httr::GET(m_id)$status, silent = T)
+        if (i != 200 & !is.na(m_id)) {
+          paste(m_id)
+        }
+      })
+    return(if (!is.null(unlist(output))) {
+      paste0("Variable mapping. The variable_mapping table has these ",
+                 "mapped_id values that don't resolve: ",
+                 paste(unlist(output), collapse = ", "))
+      })
+  }
+}
 

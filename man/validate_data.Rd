@@ -33,6 +33,7 @@ Validation checks:
        \item Coordinate range - Values are within -90 to 90 and -180 to 180.
        \item Elevation - Values are less than Mount Everest (8848 m) and greater than Mariana Trench (-10984 m).
        \item Variable mapping - variable_name is in table_name.
+       \item Mapped_id - values in mapped_id are valid URIs
    }
 }
 \note{
