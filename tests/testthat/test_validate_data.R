@@ -456,6 +456,38 @@ testthat::test_that("validate_variable_mapping()", {
   }
 })
 
+
+# validate_mapped_id() --------------------------------------------------------
+
+testthat::test_that("validate_mapped_id()", {
+  
+  testthat::skip_on_cran()
+  
+  for (i in c("df", "tbbl")) {
+    # Parameterize
+    test_data <- ants_L1
+    if (i == "df") { # test w/data.frame
+      for (tbl in names(test_data[[1]]$tables)) {
+        test_data[[1]]$tables[[tbl]] <- as.data.frame(test_data[[1]]$tables[[tbl]])
+      }
+    }
+    d <- test_data[[1]]$tables
+    # Valid mapped_id results in message.
+    expect_null(validate_mapped_id(d))
+    # Invalid mapped_id results in character string
+    d$variable_mapping$mapped_id[7:10] <- c(
+      "shttp://rs.tdwg.org/dwc/terms/measurementType",
+      "http://rs.tdwg.org/dwc/terms/measurementTyp",
+      "measurementType",
+      "purl.dataone.org/odo/ECS_00002736")
+    expect_true(stringr::str_detect(
+      validate_mapped_id(d),
+      paste0(
+        "Variable mapping. The variable_mapping table has these mapped_id ",
+        "values that don't resolve: .+")))
+  }
+})
+
 # validate_data() ---------------------------------------------------------
 
 testthat::test_that("validate_data", {
