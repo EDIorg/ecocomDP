@@ -23,9 +23,32 @@ my_dataset <- read_data(
   check.size = FALSE)
 
 
+# detecting data types
+ecocomDP:::detect_data_type(ants_L1)
+ecocomDP:::detect_data_type(ants_L1[[1]])
+ecocomDP:::detect_data_type(ants_L1[[1]]$tables)
+ecocomDP:::detect_data_type(ants_L1[[1]]$tables$observation)
 
+ecocomDP:::detect_data_type(my_dataset)
+ecocomDP:::detect_data_type(my_dataset[[1]])
+ecocomDP:::detect_data_type(my_dataset[[1]]$tables)
+ecocomDP:::detect_data_type(my_dataset[[1]]$tables$observation)
 
+# error out with informative message
+ecocomDP:::detect_data_type(ants_L1[[1]]$metadata)
+ecocomDP:::detect_data_type(my_dataset[[1]]$metadata)
 
+# test new flatten with autodetect
+flat <- flatten_data(ants_L1)
+flat <- flatten_data(ants_L1[[1]])
+flat <- flatten_data(ants_L1[[1]]$tables)
+flat <- flatten_data(my_dataset)
+flat <- flatten_data(my_dataset[[1]])
+flat <- flatten_data(my_dataset[[1]]$tables)
+
+# should error with message
+flat <- flatten_data(ants_L1[[1]]$validation_issues)
+flat <- flatten_data(my_dataset[[1]]$validation_issues)
 
 
 #########################################################
@@ -440,7 +463,7 @@ plot_taxa_occurrence_frequency(
   facet_var = "location_id",
   color = "location_id",
   rank = "species",
-  cutoff = 15)
+  cutoff = 5)
 
 plot_taxa_occurrence_frequency(
   dataset = my_dataset,

@@ -1,7 +1,42 @@
+#' determine data type
+#' 
+#' @param data (list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset (list), or a list of ecocomDP tables, a single flat ecocomDP table, or a single flat table created by joinng and spreading ecocomDP tables. 
+#' 
+#' @return (character) A character string indicating data type. One of: 'list_of_tables', 'datset_old', 
+#' 'dataset', or 'flat_table'
+#' 
+#' @details Internal function for detecting datatype. Not exported
+detect_data_type <- function(data){
+  
+  table_names <- c(
+    "location",
+    "location_ancillary",
+    "taxon",
+    "observation",
+    "observation_ancillary",
+    "dataset_summary")
+  
+  if((class(data)=="list") && any(table_names %in% names(data))){
+    return("list_of_tables")
+    
+  }else if((class(data)=="list") && (length(data)==1) && ("tables" %in% names(data[[1]]))){
+    return("dataset_old")
+    
+  }else if((class(data)=="list") && ("tables" %in% names(data))){
+    return("dataset")
+    
+  }else if(any(class(data) %in% c("data.frame", "tbl_df", "tbl"))){
+    return("flat_table")
+  }else{
+    stop("Not a recognizable data type")
+  }
+}
+
+
+
 #' Flatten an ecocomDP dataset
 #' 
-#' @param tables (list of tbl_df, tbl, data.frame) A named list of ecocomDP tables or an ecocomDP formatted dataset.
-#' @param dataset (list) An ecocomDP formatted dataset
+#' @param data (list) An ecocomDP formatted dataset or a named list of ecocomDP tables.
 #'
 #' @return (tbl_df, tbl, data.frame) A single flat table created by joining and spreading all \code{tables}, except the observation table. See details for more information on this "flat" format.
 #' 
@@ -15,49 +50,32 @@
 #' @export
 #'
 #' @examples 
-#' flat <- flatten_data(tables = ants_L1[[1]]$tables)
-#' flat
-#' 
-#' flat <- flatten_data(dataset = ants_L1)
+#' flat <- flatten_data(ants_L1)
 #' flat
 #' 
 flatten_data <- function(
-  tables = NULL, 
-  dataset = NULL){
+  data){
   
-  if(!is.null(tables)){
-    return(flatten_tables(tables))
-  }else if(!is.null(dataset)){
-    return(flatten_dataset(dataset))
+  
+  
+  if(detect_data_type(data) == "list_of_tables"){
+    return(flatten_tables(data))
+    
+  }else if(detect_data_type(data) == "dataset_old"){
+    return(flatten_tables(data[[1]]$tables))
+  
+  }else if(detect_data_type(data) == "dataset"){
+    return(flatten_tables(data$tables))
+    
   }else{
-    stop("please provide data to flatten")
+    stop("please provide a valid ecocomDP dataset or list of tables to flatten")
   }
   
 }
 
 
 
-#' @describeIn flatten_data Flatten an ecocomDP formatted dataset
-#' 
-#' @examples 
-#' flat <- flatten_dataset(ants_L1)
-#' flat
-#' 
-#' @export
-#' 
-flatten_dataset <- function(dataset){
- return(flatten_tables(dataset[[1]]$tables))
-}
-
-
-
 #' @describeIn flatten_data Flatten a list of ecocomDP tables
-#' 
-#' @examples
-#' flat <- flatten_tables(ants_L1[[1]]$tables)
-#' flat
-#' 
-#' @export
 #' 
 flatten_tables <- function(tables){
   

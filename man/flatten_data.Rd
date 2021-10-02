@@ -2,20 +2,15 @@
 % Please edit documentation in R/flatten_data.R
 \name{flatten_data}
 \alias{flatten_data}
-\alias{flatten_dataset}
 \alias{flatten_tables}
 \title{Flatten an ecocomDP dataset}
 \usage{
-flatten_data(tables = NULL, dataset = NULL)
-
-flatten_dataset(dataset)
+flatten_data(data)
 
 flatten_tables(tables)
 }
 \arguments{
-\item{tables}{(list of tbl_df, tbl, data.frame) A named list of ecocomDP tables or an ecocomDP formatted dataset.}
-
-\item{dataset}{(list) An ecocomDP formatted dataset}
+\item{data}{(list) An ecocomDP formatted dataset or a named list of ecocomDP tables.}
 }
 \value{
 (tbl_df, tbl, data.frame) A single flat table created by joining and spreading all \code{tables}, except the observation table. See details for more information on this "flat" format.
@@ -28,8 +23,6 @@ Flatten an ecocomDP dataset
 }
 \section{Functions}{
 \itemize{
-\item \code{flatten_dataset}: Flatten an ecocomDP formatted dataset
-
 \item \code{flatten_tables}: Flatten a list of ecocomDP tables
 }}
 
@@ -39,16 +32,7 @@ Warnings/Errors from \code{flatten_data()} can most often be fixed by addressing
 Ancillary identifiers are dropped from the returned object.
 }
 \examples{
-flat <- flatten_data(tables = ants_L1[[1]]$tables)
-flat
-
-flat <- flatten_data(dataset = ants_L1)
-flat
-
-flat <- flatten_dataset(ants_L1)
-flat
-
-flat <- flatten_tables(ants_L1[[1]]$tables)
+flat <- flatten_data(ants_L1)
 flat
 
 }
