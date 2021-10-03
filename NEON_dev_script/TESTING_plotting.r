@@ -55,35 +55,33 @@ flat <- flatten_data(my_dataset[[1]]$validation_issues)
 ###########################################################
 # accum by site
 
-plot_taxa_accum_sites(
-  dataset = my_dataset)
+plot_taxa_accum_sites(my_dataset)
 
 plot_taxa_accum_sites(
-  flat_data = my_dataset %>% flatten_dataset())
+  data = my_dataset %>% flatten_data())
+
 
 
 ###########################################################
 # plot ecocomDP dataset
-plot_taxa_accum_sites(
-  dataset = ants_L1)
+plot_taxa_accum_sites(ants_L1)
 
 # plot flattened ecocomDP data
-plot_taxa_accum_sites(
-  flat_data =  flatten_dataset(ants_L1))
+plot_taxa_accum_sites(flatten_data(ants_L1))
 
 # plot an ecocomDP observation table
 plot_taxa_accum_sites(
-  observation = ants_L1[[1]]$tables$observation)
+  data = ants_L1[[1]]$tables$observation)
 
 # tidy syntax
 ants_L1 %>% plot_taxa_accum_sites()
 
 # tidy syntax, filter data by date
 ants_L1 %>% 
-  flatten_dataset() %>% 
+  flatten_data() %>% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") %>%
-  plot_taxa_accum_sites(flat_data = .)
+  plot_taxa_accum_sites()
 ###########################################################
 ###########################################################
 
@@ -103,36 +101,36 @@ ants_L1 %>%
 
 # looks weird for SUGG for macroinvert dataset using both methods
 plot_taxa_accum_time(
-  dataset = my_dataset)
+  data = my_dataset)
 
 plot_taxa_accum_time(
-  observation = my_dataset[[1]]$tables$observation,
+  data = my_dataset[[1]]$tables$observation,
   id = names(my_dataset))
 
 plot_taxa_accum_time(
-  flat_data = my_dataset %>% flatten_dataset())
+  data = my_dataset %>% flatten_data())
 
 
 ###########################################################
 
 # plot ecocomDP formatted dataset
 plot_taxa_accum_time(
-  dataset = ants_L1)
+  data = ants_L1)
 
 # plot flattened ecocomDP dataset
 plot_taxa_accum_time(
-  flat_data = flatten_dataset(ants_L1))
+  data = flatten_data(ants_L1))
 
 # plot ecocomDP observation table
 plot_taxa_accum_time(
-  observation = ants_L1[[1]]$tables$observation)
+  data = ants_L1[[1]]$tables$observation)
 
 # tidy syntax, filter data by date
 ants_L1 %>% 
-  flatten_dataset() %>% 
+  flatten_data() %>% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") %>%
-  plot_taxa_accum_time(flat_data = .)
+  plot_taxa_accum_time()
 
 ###########################################################
 ###########################################################
@@ -152,95 +150,91 @@ ants_L1 %>%
 
 # this is also messed up for macroinverts -- COMO is weird
 # RENAME from "plot_taxa_diversity" to "plot_richness_time"
-plot_taxa_richness(
-  observation = my_dataset[[1]]$tables$observation,
+plot_taxa_diversity(
+  data = my_dataset[[1]]$tables$observation,
   id = names(my_dataset))
 
-plot_taxa_richness(
-  dataset = my_dataset)
+plot_taxa_diversity(
+  data = my_dataset)
 
-plot_taxa_richness(
-  dataset = my_dataset,
+plot_taxa_diversity(
+  data = my_dataset,
   time_window_size = "year")
 
-plot_taxa_richness(
-  dataset = my_dataset,
+plot_taxa_diversity(
+  data = my_dataset,
   time_window_size = "month")
 
-plot_taxa_richness(
-  dataset = my_dataset,
+plot_taxa_diversity(
+  data = my_dataset,
   time_window_size = "day")
 
-plot_taxa_richness(
-  observation = my_dataset %>% flatten_dataset(),
+plot_taxa_diversity(
+  data = my_dataset %>% flatten_data(),
   time_window_size = "year")
 
-plot_taxa_richness(
-  observation = my_dataset %>% flatten_dataset(),
+plot_taxa_diversity(
+  data = my_dataset %>% flatten_data(),
   time_window_size = "month")
 
-my_dataset %>% plot_taxa_richness()
+my_dataset %>% plot_taxa_diversity()
 
-my_dataset %>% flatten_dataset() %>% 
+my_dataset %>% flatten_data() %>% 
   dplyr::filter(grepl("^SUGG",location_id)) %>% 
-  plot_taxa_richness(observation = .)
+  plot_taxa_diversity()
 
-my_dataset %>% flatten_dataset() %>% 
+my_dataset %>% flatten_data() %>% 
   dplyr::filter(grepl("^SUGG",location_id)) %>% 
-  plot_taxa_richness(observation = ., time_window_size = "day")
+  plot_taxa_diversity(time_window_size = "day")
 
-my_dataset %>% flatten_dataset() %>% 
+my_dataset %>% flatten_data() %>% 
   dplyr::filter(grepl("^SUGG",location_id)) %>% 
-  plot_taxa_richness(observation = ., time_window_size = "month")
+  plot_taxa_diversity(time_window_size = "month")
 
-my_dataset %>% flatten_dataset() %>% 
+my_dataset %>% flatten_data() %>% 
   dplyr::filter(grepl("^SUGG",location_id)) %>% 
-  plot_taxa_richness(observation = ., time_window_size = "year")
+  plot_taxa_diversity(time_window_size = "year")
 
 ###########################################################
 
 # plot richness through time for ecocomDP formatted dataset by 
 # observation date
-plot_taxa_richness(
-  dataset = ants_L1)
+plot_taxa_diversity(ants_L1)
 
 # plot richness through time for ecocomDP formatted dataset by 
 # aggregating observations within a year
-plot_taxa_richness(
-  dataset = ants_L1,
+plot_taxa_diversity(
+  data = ants_L1,
   time_window_size = "year")
 
 # plot richness through time for ecocomDP observation table
-plot_taxa_richness(
-  observation = ants_L1[[1]]$tables$observation)
+plot_taxa_diversity(ants_L1[[1]]$tables$observation)
 
 # plot richness through time for flattened ecocomDP dataset 
-plot_taxa_richness(
-  flat_data = flatten_dataset(ants_L1))
+plot_taxa_diversity(flatten_data(ants_L1))
 
 
 # Using Tidy syntax:
 # plot ecocomDP formatted dataset richness through time by 
 # observation date
-ants_L1 %>% plot_taxa_richness()
+ants_L1 %>% plot_taxa_diversity()
 
-ants_L1 %>% plot_taxa_richness(time_window_size = "day")
+ants_L1 %>% plot_taxa_diversity(time_window_size = "day")
 
 # plot ecocomDP formatted dataset richness through time 
 # aggregating observations within a month
-ants_L1 %>% plot_taxa_richness(time_window_size = "month")
+ants_L1 %>% plot_taxa_diversity(time_window_size = "month")
 
 # plot ecocomDP formatted dataset richness through time 
 # aggregating observations within a year
-ants_L1 %>% plot_taxa_richness(time_window_size = "year")
+ants_L1 %>% plot_taxa_diversity(time_window_size = "year")
 
 # tidy syntax, filter data by date
 ants_L1 %>% 
-  flatten_dataset() %>% 
+  flatten_data() %>% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2007-01-01") %>%
-  plot_taxa_richness(
-    flat_data = .,
+  plot_taxa_diversity(
     time_window_size = "year")
 
 
@@ -262,58 +256,55 @@ ants_L1 %>%
 # sample coverage by site and time
 # RENAME 
 plot_sample_space_time(
-  observation = my_dataset[[1]]$tables$observation,
+  data = my_dataset[[1]]$tables$observation,
   id = names(my_dataset))
 
 plot_sample_space_time(
-  dataset = my_dataset)
+  data = my_dataset)
 
 plot_sample_space_time(
-  flat_data = my_dataset %>% flatten_dataset())
+  data = my_dataset %>% flatten_data())
 
 plot_sample_space_time(
-  observation = my_dataset[[1]]$tables$observation,
+  data = my_dataset[[1]]$tables$observation,
   id = names(my_dataset))
 
 plot_sample_space_time(
-  dataset = ants_L1)
+  data = ants_L1)
 
 my_dataset %>%
   plot_sample_space_time()
 
 # filter location id
 my_dataset %>% 
-  flatten_dataset() %>%
+  flatten_data() %>%
   dplyr::filter(grepl("SUGG",location_id)) %>%
-  plot_sample_space_time(flat_data = .)
+  plot_sample_space_time()
 
 ###########################################################
 
 # plot ecocomDP formatted dataset
-plot_sample_space_time(
-  dataset = ants_L1)
+plot_sample_space_time(ants_L1)
 
 # plot flattened ecocomDP dataset
-plot_sample_space_time(
-  flat_data = flatten_dataset(ants_L1))
+plot_sample_space_time(flatten_data(ants_L1))
 
 # plot ecocomDP observation table
-plot_sample_space_time(
-  observation = ants_L1[[1]]$tables$observation)
+plot_sample_space_time(ants_L1[[1]]$tables$observation)
 
 # tidy syntax, filter data by date
 ants_L1 %>% 
-  flatten_dataset() %>% 
+  flatten_data() %>% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") %>%
-  plot_sample_space_time(flat_data = .)
+  plot_sample_space_time()
 
 # tidy syntax, filter data by site ID
 ants_L1 %>% 
-  flatten_dataset() %>% 
+  flatten_data() %>% 
   dplyr::filter(
     as.numeric(location_id) > 4) %>%
-  plot_sample_space_time(flat_data = .)
+  plot_sample_space_time()
 
 ###########################################################
 ###########################################################
@@ -334,46 +325,43 @@ ants_L1 %>%
 # plot shared taxa across sites -- this seems to work fine
 
 plot_taxa_shared_sites(
-  observation = my_dataset[[1]]$tables$observation,
+  data = my_dataset[[1]]$tables$observation,
   id = names(my_dataset))
 
 plot_taxa_shared_sites(
-  dataset = my_dataset)
+  data = my_dataset)
 
 plot_taxa_shared_sites(
-  observation = ants_L1[[1]]$tables$observation,
+  data = ants_L1[[1]]$tables$observation,
   id = names(ants_L1))
 
 plot_taxa_shared_sites(
-  dataset = ants_L1)
+  data = ants_L1)
 
 ###########################################################
 
 # plot ecocomDP formatted dataset
-plot_taxa_shared_sites(
-  dataset = ants_L1)
+plot_taxa_shared_sites(ants_L1)
 
 # plot flattened ecocomDP dataset
-plot_taxa_shared_sites(
-  flat_data = flatten_dataset(ants_L1))
+plot_taxa_shared_sites(flatten_data(ants_L1))
 
 # plot ecocomDP observation table
-plot_taxa_shared_sites(
-  observation = ants_L1[[1]]$tables$observation)
+plot_taxa_shared_sites(ants_L1[[1]]$tables$observation)
 
 # tidy syntax, filter data by date
 ants_L1 %>% 
-  flatten_dataset() %>% 
+  flatten_data() %>% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") %>%
-  plot_taxa_shared_sites(flat_data = .)
+  plot_taxa_shared_sites()
 
 # tidy syntax, filter data by site ID
 ants_L1 %>% 
-  flatten_dataset() %>% 
+  flatten_data() %>% 
   dplyr::filter(
     as.numeric(location_id) > 4) %>%
-  plot_taxa_shared_sites(flat_data = .)
+  plot_taxa_shared_sites()
 
 ###########################################################
 
@@ -383,69 +371,63 @@ ants_L1 %>%
 ###########################################################
 # plot rank frequencies
 # this is in taxon table... should we make an option to plot frequencies in the actual data?
-plot_taxa_rank(
-  observation = my_dataset[[1]]$tables$observation,
-  taxon = my_dataset[[1]]$tables$taxon,
-  id = names(my_dataset))
 
 plot_taxa_rank(
-  dataset = my_dataset)
+  data = my_dataset)
 
 
 plot_taxa_rank(
-  facet_var = "location_id", #e.g., "location_id", "datetime" must be a column name in observation or taxon table
-  taxon = my_dataset[[1]]$tables$taxon, 
-  observation = my_dataset[[1]]$tables$observation, 
-  id = names(my_dataset))
-
-
-plot_taxa_rank(
-  dataset = my_dataset,
+  data = my_dataset,
   facet_var = "location_id") #e.g., "location_id", "datetime" must be a column name in observation or taxon table
 
 
 plot_taxa_rank(
-  dataset = my_dataset,
+  data = my_dataset,
   facet_var = "datetime") #e.g., "location_id", "datetime" must be a column name in observation or taxon table
 
 plot_taxa_rank(
-  dataset = ants_L1,
+  data = ants_L1,
   facet_var = "datetime") 
 
 ###########################################################
 
 # plot ecocomDP formatted dataset
-plot_taxa_rank(
-  dataset = ants_L1)
+plot_taxa_rank(ants_L1)
 
+# download and plot NEON macroinvertebrate data
+my_dataset <- read_data(
+  id = "neon.ecocomdp.20120.001.001",
+  site= c('COMO','LECO'), 
+  startdate = "2017-06",
+  enddate = "2019-09",
+  check.size = FALSE)
+
+plot_taxa_rank(my_dataset)
+
+# facet by location
 plot_taxa_rank(
-  dataset = ants_L1,
+  data = my_dataset,
   facet_var = "location_id")
 
 # plot flattened ecocomDP dataset
 plot_taxa_rank(
-  flat_data = flatten_dataset(ants_L1),
+  data = flatten_data(my_dataset),
   facet_var = "location_id")
 
-# plot ecocomDP observation table
-plot_taxa_rank(
-  observation = ants_L1[[1]]$tables$observation,
-  taxon = ants_L1[[1]]$tables$taxon,
-  facet_var = "location_id")
 
 # tidy syntax, filter data by date
-ants_L1 %>% 
-  flatten_dataset() %>% 
+my_dataset %>% 
+  flatten_data() %>% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") %>%
-  plot_taxa_rank(flat_data = .)
+  plot_taxa_rank()
 
 # tidy syntax, filter data by site ID
-ants_L1 %>% 
-  flatten_dataset() %>% 
+my_dataset %>% 
+  flatten_data() %>% 
   dplyr::filter(
-    as.numeric(location_id) > 4) %>%
-  plot_taxa_rank(flat_data = .)
+    grepl("COMO",location_id)) %>%
+  plot_taxa_rank()
 ###########################################################
 
 
@@ -459,65 +441,54 @@ ants_L1 %>%
 ###########################################################
 # Plot stacked taxa by site
 plot_taxa_occurrence_frequency(
-  dataset = my_dataset,
+  data = my_dataset,
   facet_var = "location_id",
   color = "location_id",
-  rank = "species",
-  cutoff = 5)
+  min_occurrence = 5)
 
 plot_taxa_occurrence_frequency(
-  dataset = my_dataset,
+  data = my_dataset,
   facet_var = "location_id",
-  cutoff = 20)
+  min_occurrence = 20)
 
 # different way sto make the same plot
 plot_taxa_occurrence_frequency(
-  dataset = my_dataset,
-  rank = "order")
+  data = my_dataset)
 
 plot_taxa_occurrence_frequency(
-  flat_data = my_dataset %>% flatten_dataset(),
-  rank = "order")
+  data = my_dataset %>% flatten_data())
 
 plot_taxa_occurrence_frequency(
-  flat_data = my_dataset[[1]]$tables %>% flatten_tables(),
-  rank = "order")
+  data = my_dataset[[1]]$tables %>% flatten_tables())
 
 ###########################################################
 
 # plot ecocomDP formatted dataset
-plot_taxa_occurrence_frequency(
-  dataset = ants_L1)
+plot_taxa_occurrence_frequency(ants_L1)
 
 # plot flattened ecocomDP dataset
-plot_taxa_occurrence_frequency(
-  flat_data = flatten_dataset(ants_L1))
+plot_taxa_occurrence_frequency(flatten_data(ants_L1))
 
 # facet by location color by taxon_rank
 plot_taxa_occurrence_frequency(
-  dataset = ants_L1,
+  data = ants_L1,
   facet_var = "location_id",
   color_var = "taxon_rank")
 
-# facet by location, only plot taxa of rank = "species"
-plot_taxa_occurrence_frequency(
-  dataset = ants_L1,
-  facet_var = "location_id",
-  rank = "Species", cutoff = 2)
-
 # color by location, only include taxa with > 10 occurrences
 plot_taxa_occurrence_frequency(
-  dataset = ants_L1,
+  data = ants_L1,
   color_var = "location_id",
-  cutoff = 5)
+  min_occurrence = 5)
 
 # tidy syntax, filter data by date
 ants_L1 %>% 
-  flatten_dataset() %>% 
+  flatten_data() %>% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") %>%
-  plot_taxa_occurrence_frequency(flat_data = .)
-
+  plot_taxa_occurrence_frequency()
+###########################################################
+###########################################################
 
 
 
@@ -530,46 +501,42 @@ ants_L1 %>%
 # boxplots
 
 # plot ecocomDP formatted dataset
-plot_taxa_abundance(
-  dataset = my_dataset)
+plot_taxa_abundance(my_dataset)
 
 # plot flattened ecocomDP dataset, log(x+1) transform abundances
-# rank = order
 plot_taxa_abundance(
-  flat_data = flatten_dataset(my_dataset),
-  rank = "order",
+  data = flatten_data(my_dataset),
   trans = "log1p")
 
 # facet by location color by taxon_rank, log 10 transformed
 plot_taxa_abundance(
-  dataset = my_dataset,
+  data = my_dataset,
   facet_var = "location_id",
   color_var = "taxon_rank",
   trans = "log10")
 
 # facet by location, only plot taxa of rank = "species"
 plot_taxa_abundance(
-  dataset = my_dataset,
+  data = my_dataset,
   facet_var = "location_id",
-  cutoff = 10,
-  rank = "species", 
+  min_abundance = 10,
   trans = "log1p")
 
 # color by location, only include taxa with > 10 occurrences
 plot_taxa_abundance(
-  dataset = my_dataset,
+  data = my_dataset,
   color_var = "location_id",
   trans = "log10")
 
 # tidy syntax, filter data by date
 my_dataset %>% 
-  flatten_dataset() %>% 
+  flatten_data() %>% 
   dplyr::filter(
     !grepl("^SUGG", location_id)) %>%
-  plot_taxa_abundance(flat_data = .,
-                      trans = "log1p",
-                      cutoff = 2,
-                      facet_var = "location_id")
+  plot_taxa_abundance(
+    trans = "log1p",
+    min_abundance = 2,
+    facet_var = "location_id")
 
 
 
@@ -577,46 +544,40 @@ my_dataset %>%
 ###########################################################
 
 # plot ecocomDP formatted dataset
-plot_taxa_abundance(
-  dataset = ants_L1)
+plot_taxa_abundance(ants_L1)
 
 # plot flattened ecocomDP dataset, log(x+1) transform abundances
 plot_taxa_abundance(
-  flat_data = flatten_dataset(ants_L1),
+  data = flatten_data(ants_L1),
   trans = "log1p")
 
 # facet by location color by taxon_rank, log 10 transformed
 plot_taxa_abundance(
-  dataset = ants_L1,
+  data = ants_L1,
   facet_var = "location_id",
   color_var = "taxon_rank",
   trans = "log10")
 
-# facet by location, only plot taxa of rank = "species"
+# facet by location, minimum abundance = 5
 plot_taxa_abundance(
-  dataset = ants_L1,
+  data = ants_L1,
   facet_var = "location_id",
-  rank = "Species", cutoff = 5,
+  min_abundance = 5,
   trans = "log1p")
 
 # color by location, only include taxa with > 10 occurrences
 plot_taxa_abundance(
-  dataset = ants_L1,
+  data = ants_L1,
   color_var = "location_id",
   trans = "log10")
 
 # tidy syntax, filter data by date
 ants_L1 %>% 
-  flatten_dataset() %>% 
+  flatten_data() %>% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") %>%
-  plot_taxa_abundance(flat_data = .,
-                      trans = "log1p")
-
-
-
-
-
+  plot_taxa_abundance(trans = "log1p",
+                      min_abundance = 10)
 
 
 
@@ -638,55 +599,23 @@ ants_L1 %>%
 
 ###########################################################
 ###########################################################
+
 # plot map of sites
-plot_sites(
-  dataset = ants_L1)
+plot_sites(ants_L1)
 
-plot_sites(
-  flat_data = flatten_dataset(ants_L1))
-
-plot_sites(
-  observation = ants_L1[[1]]$tables$observation,
-  location = ants_L1[[1]]$tables$location)
+plot_sites(flatten_data(ants_L1))
 
 
+# download and plot NEON macroinvertebrate data
+my_dataset <- read_data(
+  id = "neon.ecocomdp.20120.001.001",
+  site= c('COMO','LECO'), 
+  startdate = "2017-06",
+  enddate = "2019-09",
+  check.size = FALSE)
 
-
-plot_sites(
-  dataset = my_dataset)
-
-plot_sites(
-  flat_data = my_dataset %>% flatten_dataset())
-
-plot_sites(
-  dataset = my_dataset,
-  location = my_dataset[[1]]$tables$location)
-
-plot_sites(
-  location = my_dataset[[1]]$tables$location,
-  observation = my_dataset[[1]]$tables$observation,
-  id = names(my_dataset))
+plot_sites(my_dataset)
 
 
 
-######################################################
-# examples of flatten data
-my_dataset[[1]]$tables %>% flatten_data()
-my_dataset[[1]]$tables %>% flatten_data(tables = .)
-my_dataset %>% flatten_data(dataset = .)
 
-# fails as expected with error message
-list(a = c(1:5)) %>% flatten_data()
-
-# examples for fxn documentation
-flat <- flatten_data(tables = ants_L1[[1]]$tables)
-flat
-
-flat <- flatten_data(dataset = ants_L1)
-flat
-
-flat <- flatten_dataset(ants_L1)
-flat
-
-flat <- flatten_tables(ants_L1[[1]]$tables)
-flat

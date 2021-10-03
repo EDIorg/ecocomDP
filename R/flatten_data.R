@@ -75,7 +75,10 @@ flatten_data <- function(
 
 
 
-#' @describeIn flatten_data Flatten a list of ecocomDP tables
+#' internal function to flatten tables
+#' @param tables list of ecocomDP tables
+#' 
+#' @noRd
 #' 
 flatten_tables <- function(tables){
   

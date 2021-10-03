@@ -4,20 +4,10 @@
 \alias{plot_taxa_accum_time}
 \title{Plot taxa accumulation through time}
 \usage{
-plot_taxa_accum_time(
-  dataset = NULL,
-  flat_data = NULL,
-  observation = NULL,
-  id = NA_character_,
-  alpha = 1
-)
+plot_taxa_accum_time(data, id = NA_character_, alpha = 1)
 }
 \arguments{
-\item{dataset}{(list) An ecocomDP formatted dataset}
-
-\item{flat_data}{(tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.}
-
-\item{observation}{(tbl_df, tbl, data.frame) The observation table.}
+\item{data}{(list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, an ecocomDP observation table, or any table containing the columns present in an ecocomDP observation table.}
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}
 
@@ -32,22 +22,20 @@ Plot taxa accumulation through time
 \examples{
 \dontrun{
 # plot ecocomDP formatted dataset
-plot_taxa_accum_time(
-  dataset = ants_L1)
+plot_taxa_accum_time(ants_L1)
 
 # plot flattened ecocomDP dataset
-plot_taxa_accum_time(
-  flat_data = flatten_dataset(ants_L1))
+plot_taxa_accum_time(flatten_data(ants_L1))
 
 # plot ecocomDP observation table
-plot_taxa_accum_time(
-  observation = ants_L1[[1]]$tables$observation)
+plot_taxa_accum_time(ants_L1[[1]]$tables$observation)
 
 # tidy syntax, filter data by date
 ants_L1 \%>\% 
-  flatten_dataset() \%>\% 
+  flatten_data() \%>\% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") \%>\%
-  plot_taxa_accum_time(flat_data = .)
+  plot_taxa_accum_time()
 }
+
 }

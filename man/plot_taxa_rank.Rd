@@ -5,10 +5,7 @@
 \title{Plot taxa ranks}
 \usage{
 plot_taxa_rank(
-  dataset = NULL,
-  flat_data = NULL,
-  taxon = NULL,
-  observation = NULL,
+  data,
   id = NA_character_,
   facet_var = NA_character_,
   facet_scales = "free",
@@ -16,13 +13,7 @@ plot_taxa_rank(
 )
 }
 \arguments{
-\item{dataset}{(list) An ecocomDP formatted dataset}
-
-\item{flat_data}{(tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.}
-
-\item{taxon}{(tbl_df, tbl, data.frame) The taxon table.}
-
-\item{observation}{(tbl_df, tbl, data.frame) The observation table.}
+\item{data}{(list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, a flattened ecocomDP dataset, or any flat table containing the columns present in both the ecocomDP observation and taxon tables.}
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}
 
@@ -41,36 +32,42 @@ Plot taxa ranks
 \examples{
 \dontrun{
 # plot ecocomDP formatted dataset
-plot_taxa_rank(
-  dataset = ants_L1)
+plot_taxa_rank(ants_L1)
 
+# download and plot NEON macroinvertebrate data
+my_dataset <- read_data(
+  id = "neon.ecocomdp.20120.001.001",
+  site= c('COMO','LECO'), 
+  startdate = "2017-06",
+  enddate = "2019-09",
+  check.size = FALSE)
+
+plot_taxa_rank(my_dataset)
+
+# facet by location
 plot_taxa_rank(
-  dataset = ants_L1,
+  data = my_dataset,
   facet_var = "location_id")
 
 # plot flattened ecocomDP dataset
 plot_taxa_rank(
-  flat_data = flatten_dataset(ants_L1),
+  data = flatten_data(my_dataset),
   facet_var = "location_id")
 
-# plot ecocomDP observation table
-plot_taxa_rank(
-  observation = ants_L1[[1]]$tables$observation,
-  taxon = ants_L1[[1]]$tables$taxon,
-  facet_var = "location_id")
 
 # tidy syntax, filter data by date
-ants_L1 \%>\% 
-  flatten_dataset() \%>\% 
+my_dataset \%>\% 
+  flatten_data() \%>\% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") \%>\%
-  plot_taxa_rank(flat_data = .)
+  plot_taxa_rank()
 
 # tidy syntax, filter data by site ID
-ants_L1 \%>\% 
-  flatten_dataset() \%>\% 
+my_dataset \%>\% 
+  flatten_data() \%>\% 
   dplyr::filter(
-    as.numeric(location_id) > 4) \%>\%
-  plot_taxa_rank(flat_data = .)
+    grepl("COMO",location_id)) \%>\%
+  plot_taxa_rank()
 }
+
 }

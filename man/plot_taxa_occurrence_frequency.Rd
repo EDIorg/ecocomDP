@@ -5,11 +5,9 @@
 \title{Plot stacked taxa by site}
 \usage{
 plot_taxa_occurrence_frequency(
-  dataset = NULL,
-  flat_data = NULL,
+  data,
   id = NA_character_,
-  rank = NA_character_,
-  cutoff = 0,
+  min_occurrence = 0,
   facet_var = NA_character_,
   color_var = NA_character_,
   facet_scales = "free",
@@ -17,15 +15,11 @@ plot_taxa_occurrence_frequency(
 )
 }
 \arguments{
-\item{dataset}{(list) An ecocomDP formatted dataset}
-
-\item{flat_data}{(tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.}
+\item{data}{(list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, a flattened ecocomDP dataset, or any flat table containing the columns present in both the ecocomDP observation and taxon tables.}
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}
 
-\item{rank}{(string) The rank of taxa to plot. Defaults to NA, which will inlcude all ranks.}
-
-\item{cutoff}{(numeric) Minimum number of occurrences allowed for taxa included in the plot.}
+\item{min_occurrence}{(numeric) Minimum number of occurrences allowed for taxa included in the plot.}
 
 \item{facet_var}{(character) Name of column to use for faceting.}
 
@@ -44,36 +38,29 @@ Plot stacked taxa by site
 \examples{
 \dontrun{
 # plot ecocomDP formatted dataset
-plot_taxa_occurrence_frequency(
-  dataset = ants_L1)
+plot_taxa_occurrence_frequency(ants_L1)
 
 # plot flattened ecocomDP dataset
-plot_taxa_occurrence_frequency(
-  flat_data = flatten_dataset(ants_L1))
+plot_taxa_occurrence_frequency(flatten_data(ants_L1))
 
 # facet by location color by taxon_rank
 plot_taxa_occurrence_frequency(
-  dataset = ants_L1,
+  data = ants_L1,
   facet_var = "location_id",
   color_var = "taxon_rank")
 
-# facet by location, only plot taxa of rank = "species"
-plot_taxa_occurrence_frequency(
-  dataset = ants_L1,
-  facet_var = "location_id",
-  rank = "Species", cutoff = 2)
-
 # color by location, only include taxa with > 10 occurrences
 plot_taxa_occurrence_frequency(
-  dataset = ants_L1,
+  data = ants_L1,
   color_var = "location_id",
-  cutoff = 5)
+  min_occurrence = 5)
 
 # tidy syntax, filter data by date
 ants_L1 \%>\% 
-  flatten_dataset() \%>\% 
+  flatten_data() \%>\% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") \%>\%
-  plot_taxa_occurrence_frequency(flat_data = .)
+  plot_taxa_occurrence_frequency()
 }
+
 }

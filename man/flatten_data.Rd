@@ -2,12 +2,9 @@
 % Please edit documentation in R/flatten_data.R
 \name{flatten_data}
 \alias{flatten_data}
-\alias{flatten_tables}
 \title{Flatten an ecocomDP dataset}
 \usage{
 flatten_data(data)
-
-flatten_tables(tables)
 }
 \arguments{
 \item{data}{(list) An ecocomDP formatted dataset or a named list of ecocomDP tables.}
@@ -21,11 +18,6 @@ Flatten an ecocomDP dataset
 \details{
 "flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" an L1 ecocomDP dataset can be consistently spread due to the frequent occurrence of L0 source datasets with > 1 core observation variable.
 }
-\section{Functions}{
-\itemize{
-\item \code{flatten_tables}: Flatten a list of ecocomDP tables
-}}
-
 \note{
 Warnings/Errors from \code{flatten_data()} can most often be fixed by addressing any validation issues reported by \code{read_data()} (e.g. non-unique composite keys).
 

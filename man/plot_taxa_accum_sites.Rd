@@ -4,20 +4,10 @@
 \alias{plot_taxa_accum_sites}
 \title{Plot taxa accumulation by site accumulation}
 \usage{
-plot_taxa_accum_sites(
-  dataset = NULL,
-  observation = NULL,
-  flat_data = NULL,
-  id = NA_character_,
-  alpha = 1
-)
+plot_taxa_accum_sites(data, id = NA_character_, alpha = 1)
 }
 \arguments{
-\item{dataset}{(list) An ecocomDP formatted dataset}
-
-\item{observation}{(tbl_df, tbl, data.frame) The observation table.}
-
-\item{flat_data}{(tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.}
+\item{data}{(list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, an ecocomDP observation table, or any table containing the columns present in an ecocomDP observation table.}
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}
 
@@ -32,25 +22,24 @@ Plot taxa accumulation by site accumulation
 \examples{
 \dontrun{
 # plot ecocomDP dataset
-plot_taxa_accum_sites(
-  dataset = ants_L1)
+plot_taxa_accum_sites(ants_L1)
 
 # plot flattened ecocomDP data
-plot_taxa_accum_sites(
-  flat_data =  flatten_dataset(ants_L1))
+plot_taxa_accum_sites(flatten_data(ants_L1))
 
 # plot an ecocomDP observation table
 plot_taxa_accum_sites(
-  observation = ants_L1[[1]]$tables$observation)
+  data = ants_L1[[1]]$tables$observation)
 
 # tidy syntax
 ants_L1 \%>\% plot_taxa_accum_sites()
 
 # tidy syntax, filter data by date
 ants_L1 \%>\% 
-  flatten_dataset() \%>\% 
+  flatten_data() \%>\% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") \%>\%
-  plot_taxa_accum_sites(flat_data = .)
+  plot_taxa_accum_sites()
 }
+
 }

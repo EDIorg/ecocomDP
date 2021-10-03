@@ -5,11 +5,9 @@
 \title{Plot abundances by event_id}
 \usage{
 plot_taxa_abundance(
-  dataset = NULL,
-  flat_data = NULL,
+  data = NULL,
   id = NA_character_,
-  rank = NA_character_,
-  cutoff = 0,
+  min_abundance = 0,
   trans = "identity",
   facet_var = NA_character_,
   color_var = NA_character_,
@@ -18,15 +16,11 @@ plot_taxa_abundance(
 )
 }
 \arguments{
-\item{dataset}{(list) An ecocomDP formatted dataset}
-
-\item{flat_data}{(tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.}
+\item{data}{(list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, a flattened ecocomDP dataset, or any flat table containing the columns present in both the ecocomDP observation and taxon tables.}
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}
 
-\item{rank}{(string) The rank of taxa to plot. Defaults to NA, which will inlcude all ranks.}
-
-\item{cutoff}{(numeric) Minimum abundance allowed for taxa included in the plot.}
+\item{min_abundance}{(numeric) Minimum abundance allowed for observations of taxa included in the plot.}
 
 \item{trans}{(character, "identity" is default, "log1p" is x+1 transform) For continuous scales, the name of a transformation object or the object itself. Built-in transformations include "asn", "atanh", "boxcox", "date", "exp", "hms", "identity", "log", "log10", "log1p", "log2", "logit", "modulus", "probability", "probit", "pseudo_log", "reciprocal", "reverse", "sqrt" and "time".}
 
@@ -66,7 +60,7 @@ plot_taxa_abundance(
 plot_taxa_abundance(
   dataset = ants_L1,
   facet_var = "location_id",
-  rank = "Species", cutoff = 5,
+  rank = "Species", min_occurrence = 5,
   trans = "log1p")
 
 # color by location, only include taxa with > 10 occurrences

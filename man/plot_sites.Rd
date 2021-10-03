@@ -4,26 +4,12 @@
 \alias{plot_sites}
 \title{Plot sites on US map}
 \usage{
-plot_sites(
-  dataset = NULL,
-  flat_data = NULL,
-  id = NA_character_,
-  observation = NULL,
-  location = NULL,
-  alpha = 1,
-  labels = TRUE
-)
+plot_sites(data, id = NA_character_, alpha = 1, labels = TRUE)
 }
 \arguments{
-\item{dataset}{(list) An ecocomDP formatted dataset}
-
-\item{flat_data}{(tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.}
+\item{data}{(list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, a flattened ecocomDP dataset, or any flat table containing the columns present in both the ecocomDP observation and location tables.}
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}
-
-\item{observation}{(tbl_df, tbl, data.frame) The observation table.}
-
-\item{location}{(tbl_df, tbl, data.frame) The location table.}
 
 \item{alpha}{(numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.}
 
@@ -37,14 +23,21 @@ Plot sites on US map
 }
 \examples{
 \dontrun{
-plot_sites(
-  dataset = ants_L1)
+# plot map of sites
+plot_sites(ants_L1)
 
-plot_sites(
-  flat_data = flatten_dataset(ants_L1))
+plot_sites(flatten_data(ants_L1))
 
-plot_sites(
-  observation = ants_L1[[1]]$tables$observation,
-  location = ants_L1[[1]]$tables$location)
+
+# download and plot NEON macroinvertebrate data
+my_dataset <- read_data(
+  id = "neon.ecocomdp.20120.001.001",
+  site= c('COMO','LECO'), 
+  startdate = "2017-06",
+  enddate = "2019-09",
+  check.size = FALSE)
+
+plot_sites(my_dataset)
 }
+
 }

@@ -1,8 +1,6 @@
 #' Plot taxa accumulation by site accumulation
 #'
-#' @param dataset (list) An ecocomDP formatted dataset
-#' @param flat_data (tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.
-#' @param observation (tbl_df, tbl, data.frame) The observation table.
+#' @param data (list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, an ecocomDP observation table, or any table containing the columns present in an ecocomDP observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' 
@@ -17,50 +15,57 @@
 #' @examples
 #' \dontrun{
 #' # plot ecocomDP dataset
-#' plot_taxa_accum_sites(
-#'   dataset = ants_L1)
+#' plot_taxa_accum_sites(ants_L1)
 #' 
 #' # plot flattened ecocomDP data
-#' plot_taxa_accum_sites(
-#'   flat_data =  flatten_dataset(ants_L1))
+#' plot_taxa_accum_sites(flatten_data(ants_L1))
 #' 
 #' # plot an ecocomDP observation table
 #' plot_taxa_accum_sites(
-#'   observation = ants_L1[[1]]$tables$observation)
+#'   data = ants_L1[[1]]$tables$observation)
 #' 
 #' # tidy syntax
 #' ants_L1 %>% plot_taxa_accum_sites()
 #' 
 #' # tidy syntax, filter data by date
 #' ants_L1 %>% 
-#'   flatten_dataset() %>% 
+#'   flatten_data() %>% 
 #'   dplyr::filter(
 #'     lubridate::as_date(datetime) > "2003-07-01") %>%
-#'   plot_taxa_accum_sites(flat_data = .)
+#'   plot_taxa_accum_sites()
 #' }
+#' 
 plot_taxa_accum_sites <- function(
-  dataset = NULL,
-  observation = NULL, 
-  flat_data = NULL,
-  id = NA_character_, 
+  data,
+  id = NA_character_,
   alpha = 1){
   
+  # required col names in flat data
+  req_col_names <- c("observation_id","event_id","package_id","location_id",
+                     "datetime","taxon_id","variable_name","value","unit")
   
+  # detect data type, extract observation table
+  data_type <- detect_data_type(data)
+  
+  
+  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+    observation <- data %>% dplyr::distinct()
+    if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
+  
+  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+    stop("please provide a valid ecocomDP dataset or table that includes columns from an ecocomDP 'observation' table")
+  
+  }else if(data_type == "dataset_old"){
+    observation <- data[[1]]$tables$observation
+    if(is.na(id)) id <- names(data)
+  
+  }else if(data_type == "dataset"){
+    observation <- data$tables$observation
+    if(is.na(id)) id <- data$id
+  }
 
-  if(!is.null(flat_data)) observation <- flat_data[
-    c("observation_id","event_id","package_id","location_id",
-      "datetime","taxon_id","variable_name","value","unit")] %>%
-      dplyr::distinct()
   
-  if(is.na(id) && !is.null(dataset)) id <- names(dataset)
   
-  # when a flattened table is passed along to the fxn using the observation argument
-  # pull the id from the table
-  if(is.na(id) && !is.null(observation) && 
-     "package_id" %in% names(observation)) id <- observation$package_id[1] 
-  
-  if(is.null(observation) && !is.null(dataset)){
-    observation <- dataset[[id]]$tables$observation}
   
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)                    # intermediate format for plotting
@@ -112,9 +117,7 @@ plot_taxa_accum_sites <- function(
 
 #' Plot taxa accumulation through time
 #'
-#' @param dataset (list) An ecocomDP formatted dataset
-#' @param flat_data (tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.
-#' @param observation (tbl_df, tbl, data.frame) The observation table.
+#' @param data (list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, an ecocomDP observation table, or any table containing the columns present in an ecocomDP observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' 
@@ -129,44 +132,52 @@ plot_taxa_accum_sites <- function(
 #' @examples
 #' \dontrun{
 #' # plot ecocomDP formatted dataset
-#' plot_taxa_accum_time(
-#'   dataset = ants_L1)
+#' plot_taxa_accum_time(ants_L1)
 #' 
 #' # plot flattened ecocomDP dataset
-#' plot_taxa_accum_time(
-#'   flat_data = flatten_dataset(ants_L1))
+#' plot_taxa_accum_time(flatten_data(ants_L1))
 #' 
 #' # plot ecocomDP observation table
-#' plot_taxa_accum_time(
-#'   observation = ants_L1[[1]]$tables$observation)
+#' plot_taxa_accum_time(ants_L1[[1]]$tables$observation)
 #' 
 #' # tidy syntax, filter data by date
 #' ants_L1 %>% 
-#'   flatten_dataset() %>% 
+#'   flatten_data() %>% 
 #'   dplyr::filter(
 #'     lubridate::as_date(datetime) > "2003-07-01") %>%
-#'   plot_taxa_accum_time(flat_data = .)
+#'   plot_taxa_accum_time()
 #' }
+#' 
 plot_taxa_accum_time <- function(
-  dataset = NULL,
-  flat_data = NULL,
-  observation = NULL, 
+  data,
   id = NA_character_, 
   alpha = 1){
   
-  if(!is.null(flat_data)) observation <- flat_data[
-    c("observation_id","event_id","package_id","location_id",
-      "datetime","taxon_id","variable_name","value","unit")] %>%
-      dplyr::distinct()
+  # required col names in flat data
+  req_col_names <- c("observation_id","event_id","package_id","location_id",
+                     "datetime","taxon_id","variable_name","value","unit")
   
-  if(is.na(id) && !is.null(dataset)) id <- names(dataset)
+  # detect data type, extract observation table
+  data_type <- detect_data_type(data)
   
-  # when a flattened table is passed along to the fxn using the observation argument
-  # pull the id from the table
-  if(is.na(id) && !is.null(observation) && 
-     "package_id" %in% names(observation)) id <- observation$package_id[1] 
   
-  if(is.null(observation) && !is.null(dataset)) observation <- dataset[[id]]$tables$observation
+  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+    observation <- data %>% dplyr::distinct()
+    if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
+    
+  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+    stop("please provide a valid ecocomDP dataset or table that includes columns from an ecocomDP 'observation' table")
+    
+  }else if(data_type == "dataset_old"){
+    observation <- data[[1]]$tables$observation
+    if(is.na(id)) id <- names(data)
+    
+  }else if(data_type == "dataset"){
+    observation <- data$tables$observation
+    if(is.na(id)) id <- data$id
+  }
+  
+  
   
   
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
@@ -246,9 +257,7 @@ plot_taxa_accum_time <- function(
 
 #' Plot diversity (taxa richness) through time
 #'
-#' @param dataset (list) An ecocomDP formatted dataset
-#' @param flat_data (tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.
-#' @param observation (tbl_df, tbl, data.frame) The observation table.
+#' @param data (list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, an ecocomDP observation table, or any table containing the columns present in an ecocomDP observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param time_window_size (character) Define the time window over which to aggregate observations for calculating richness
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
@@ -265,69 +274,76 @@ plot_taxa_accum_time <- function(
 #' \dontrun{
 #' # plot richness through time for ecocomDP formatted dataset by 
 #' # observation date
-#' plot_taxa_richness(
-#'   dataset = ants_L1)
+#' plot_taxa_diversity(ants_L1)
 #' 
 #' # plot richness through time for ecocomDP formatted dataset by 
 #' # aggregating observations within a year
-#' plot_taxa_richness(
-#'   dataset = ants_L1,
+#' plot_taxa_diversity(
+#'   data = ants_L1,
 #'   time_window_size = "year")
 #' 
 #' # plot richness through time for ecocomDP observation table
-#' plot_taxa_richness(
-#'   observation = ants_L1[[1]]$tables$observation)
+#' plot_taxa_diversity(ants_L1[[1]]$tables$observation)
 #' 
 #' # plot richness through time for flattened ecocomDP dataset 
-#' plot_taxa_richness(
-#'   flat_data = flatten_dataset(ants_L1))
+#' plot_taxa_diversity(flatten_data(ants_L1))
 #' 
 #' 
 #' # Using Tidy syntax:
 #' # plot ecocomDP formatted dataset richness through time by 
 #' # observation date
-#' ants_L1 %>% plot_taxa_richness()
+#' ants_L1 %>% plot_taxa_diversity()
 #' 
-#' ants_L1 %>% plot_taxa_richness(time_window_size = "day")
+#' ants_L1 %>% plot_taxa_diversity(time_window_size = "day")
 #' 
 #' # plot ecocomDP formatted dataset richness through time 
 #' # aggregating observations within a month
-#' ants_L1 %>% plot_taxa_richness(time_window_size = "month")
+#' ants_L1 %>% plot_taxa_diversity(time_window_size = "month")
 #' 
 #' # plot ecocomDP formatted dataset richness through time 
 #' # aggregating observations within a year
-#' ants_L1 %>% plot_taxa_richness(time_window_size = "year")
+#' ants_L1 %>% plot_taxa_diversity(time_window_size = "year")
 #' 
 #' # tidy syntax, filter data by date
 #' ants_L1 %>% 
-#'   flatten_dataset() %>% 
+#'   flatten_data() %>% 
 #'   dplyr::filter(
 #'     lubridate::as_date(datetime) > "2007-01-01") %>%
-#'   plot_taxa_richness(
-#'     flat_data = .,
+#'   plot_taxa_diversity(
 #'     time_window_size = "year")
 #' }
-plot_taxa_richness <- function(
-  dataset = NULL,
-  flat_data = NULL,
-  observation = NULL, 
+#' 
+plot_taxa_diversity <- function(
+  data,
   id = NA_character_,
   time_window_size = "day", #day or year
   alpha = 1){
   
-  if(!is.null(flat_data)) observation <- flat_data[
-    c("observation_id","event_id","package_id","location_id",
-      "datetime","taxon_id","variable_name","value","unit")] %>%
-      dplyr::distinct()
+  # required col names in flat data
+  req_col_names <- c("observation_id","event_id","package_id","location_id",
+                     "datetime","taxon_id","variable_name","value","unit")
   
-  if(is.na(id) && !is.null(dataset)) id <- names(dataset)
+  # detect data type, extract observation table
+  data_type <- detect_data_type(data)
   
-  # when a flattened table is passed along to the fxn using the observation argument
-  # pull the id from the table
-  if(is.na(id) && !is.null(observation) && 
-     "package_id" %in% names(observation)) id <- observation$package_id[1] 
   
-  if(is.null(observation) && !is.null(dataset)) observation <- dataset[[id]]$tables$observation
+  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+    observation <- data %>% dplyr::distinct()
+    if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
+    
+  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+    stop("please provide a valid ecocomDP dataset or table that includes columns from an ecocomDP 'observation' table")
+    
+  }else if(data_type == "dataset_old"){
+    observation <- data[[1]]$tables$observation
+    if(is.na(id)) id <- names(data)
+    
+  }else if(data_type == "dataset"){
+    observation <- data$tables$observation
+    if(is.na(id)) id <- data$id
+  }
+  
+  
   
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   
@@ -453,11 +469,9 @@ plot_taxa_richness <- function(
 
 
 
-#' Plot dates and times samples were taken
+#' Plot dates and times samples were collected or observations were made
 #'
-#' @param dataset (list) An ecocomDP formatted dataset
-#' @param flat_data (tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.
-#' @param observation (tbl_df, tbl, data.frame) The observation table.
+#' @param data (list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, an ecocomDP observation table, or any table containing the columns present in an ecocomDP observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' 
@@ -472,51 +486,59 @@ plot_taxa_richness <- function(
 #' @examples
 #' \dontrun{
 #' # plot ecocomDP formatted dataset
-#' plot_sample_space_time(
-#'   dataset = ants_L1)
+#' plot_sample_space_time(ants_L1)
 #' 
 #' # plot flattened ecocomDP dataset
-#' plot_sample_space_time(
-#'   flat_data = flatten_dataset(ants_L1))
+#' plot_sample_space_time(flatten_data(ants_L1))
 #' 
 #' # plot ecocomDP observation table
-#' plot_sample_space_time(
-#'   observation = ants_L1[[1]]$tables$observation)
+#' plot_sample_space_time(ants_L1[[1]]$tables$observation)
 #' 
 #' # tidy syntax, filter data by date
 #' ants_L1 %>% 
-#'   flatten_dataset() %>% 
+#'   flatten_data() %>% 
 #'   dplyr::filter(
 #'     lubridate::as_date(datetime) > "2003-07-01") %>%
-#'   plot_sample_space_time(flat_data = .)
+#'   plot_sample_space_time()
 #' 
 #' # tidy syntax, filter data by site ID
 #' ants_L1 %>% 
-#'   flatten_dataset() %>% 
+#'   flatten_data() %>% 
 #'   dplyr::filter(
 #'     as.numeric(location_id) > 4) %>%
-#'   plot_sample_space_time(flat_data = .)
+#'   plot_sample_space_time()
 #' }
+#' 
 plot_sample_space_time <- function(
-  dataset = NULL,
-  flat_data = NULL,
-  observation = NULL, 
+  data,
   id = NA_character_, 
   alpha = 1){
   
-  if(!is.null(flat_data)) observation <- flat_data[
-    c("observation_id","event_id","package_id","location_id",
-      "datetime","taxon_id","variable_name","value","unit")] %>%
-      dplyr::distinct()
+  # required col names in flat data
+  req_col_names <- c("observation_id","event_id","package_id","location_id",
+                     "datetime","taxon_id","variable_name","value","unit")
   
-  if(is.na(id) && !is.null(dataset)) id <- names(dataset)
+  # detect data type, extract observation table
+  data_type <- detect_data_type(data)
   
-  # when a flattened table is passed along to the fxn using the observation argument
-  # pull the id from the table
-  if(is.na(id) && !is.null(observation) && 
-     "package_id" %in% names(observation)) id <- observation$package_id[1] 
   
-  if(is.null(observation) && !is.null(dataset)) observation <- dataset[[id]]$tables$observation
+  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+    observation <- data %>% dplyr::distinct()
+    if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
+    
+  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+    stop("please provide a valid ecocomDP dataset or table that includes columns from an ecocomDP 'observation' table")
+    
+  }else if(data_type == "dataset_old"){
+    observation <- data[[1]]$tables$observation
+    if(is.na(id)) id <- names(data)
+    
+  }else if(data_type == "dataset"){
+    observation <- data$tables$observation
+    if(is.na(id)) id <- data$id
+  }
+  
+  
 
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
 
@@ -576,9 +598,7 @@ plot_sample_space_time <- function(
 
 #' Plot number of unique taxa shared across sites
 #' 
-#' @param dataset (list) An ecocomDP formatted dataset
-#' @param flat_data (tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.
-#' @param observation (tbl_df, tbl, data.frame) The observation table.
+#' @param data (list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, an ecocomDP observation table, or any table containing the columns present in an ecocomDP observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' 
 #' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
@@ -592,47 +612,61 @@ plot_sample_space_time <- function(
 #' @examples
 #' \dontrun{
 #' # plot ecocomDP formatted dataset
-#' plot_taxa_shared_sites(
-#'   dataset = ants_L1)
+#' plot_taxa_shared_sites(ants_L1)
 #' 
 #' # plot flattened ecocomDP dataset
-#' plot_taxa_shared_sites(
-#'   flat_data = flatten_dataset(ants_L1))
+#' plot_taxa_shared_sites(flatten_data(ants_L1))
 #' 
 #' # plot ecocomDP observation table
-#' plot_taxa_shared_sites(
-#'   observation = ants_L1[[1]]$tables$observation)
+#' plot_taxa_shared_sites(ants_L1[[1]]$tables$observation)
 #' 
 #' # tidy syntax, filter data by date
 #' ants_L1 %>% 
-#'   flatten_dataset() %>% 
+#'   flatten_data() %>% 
 #'   dplyr::filter(
 #'     lubridate::as_date(datetime) > "2003-07-01") %>%
-#'   plot_taxa_shared_sites(flat_data = .)
+#'   plot_taxa_shared_sites()
 #' 
 #' # tidy syntax, filter data by site ID
 #' ants_L1 %>% 
-#'   flatten_dataset() %>% 
+#'   flatten_data() %>% 
 #'   dplyr::filter(
 #'     as.numeric(location_id) > 4) %>%
-#'   plot_taxa_shared_sites(flat_data = .)
+#'   plot_taxa_shared_sites()
 #' }
+#' 
 plot_taxa_shared_sites <- function(
-  dataset = NULL,
-  flat_data = NULL,
-  observation = NULL, 
+  data,
   id = NA_character_){
   
-  if(!is.null(flat_data)) observation <- flat_data[
-    c("observation_id","event_id","package_id","location_id",
-      "datetime","taxon_id","variable_name","value","unit")] %>%
-      dplyr::distinct()
+  # required col names in flat data
+  req_col_names <- c("observation_id","event_id","package_id","location_id",
+                     "datetime","taxon_id","variable_name","value","unit")
   
-  if(is.na(id) && !is.null(dataset)) id <- names(dataset)
+  # detect data type, extract observation table
+  data_type <- detect_data_type(data)
   
-  if(is.null(observation) && !is.null(dataset)) observation <- dataset[[id]]$tables$observation
+  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+    observation <- data %>% dplyr::distinct()
+    observation <- observation[,req_col_names]
+    if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
+    
+  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+    stop("please provide a valid ecocomDP dataset or table that includes columns from an ecocomDP 'observation' table")
+    
+  }else if(data_type == "dataset_old"){
+    observation <- data[[1]]$tables$observation
+    if(is.na(id)) id <- names(data)
+    
+  }else if(data_type == "dataset"){
+    observation <- data$tables$observation
+    if(is.na(id)) id <- data$id
+  }
+  
+  
   
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  
   
   ds <- format_for_comm_plots(observation, id)                  # intermediate format for plotting
   heat_pal_spectral <- grDevices::colorRampPalette(rev( RColorBrewer::brewer.pal(11, "Spectral")))
@@ -768,10 +802,7 @@ format_for_comm_plots <- function(observation, id) {
 
 #' Plot taxa ranks
 #'
-#' @param dataset (list) An ecocomDP formatted dataset
-#' @param flat_data (tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.
-#' @param observation (tbl_df, tbl, data.frame) The observation table.
-#' @param taxon (tbl_df, tbl, data.frame) The taxon table.
+#' @param data (list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, a flattened ecocomDP dataset, or any flat table containing the columns present in both the ecocomDP observation and taxon tables.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param facet_var (character) Name of column to use for faceting.
 #' @param facet_scales (character) Should scales be free ("free", default value), fixed ("fixed"), or free in one dimension ("free_x", "free_y")?
@@ -788,63 +819,75 @@ format_for_comm_plots <- function(observation, id) {
 #' @examples
 #' \dontrun{
 #' # plot ecocomDP formatted dataset
-#' plot_taxa_rank(
-#'   dataset = ants_L1)
+#' plot_taxa_rank(ants_L1)
 #' 
+#' # download and plot NEON macroinvertebrate data
+#' my_dataset <- read_data(
+#'   id = "neon.ecocomdp.20120.001.001",
+#'   site= c('COMO','LECO'), 
+#'   startdate = "2017-06",
+#'   enddate = "2019-09",
+#'   check.size = FALSE)
+#' 
+#' plot_taxa_rank(my_dataset)
+#' 
+#' # facet by location
 #' plot_taxa_rank(
-#'   dataset = ants_L1,
+#'   data = my_dataset,
 #'   facet_var = "location_id")
 #' 
 #' # plot flattened ecocomDP dataset
 #' plot_taxa_rank(
-#'   flat_data = flatten_dataset(ants_L1),
+#'   data = flatten_data(my_dataset),
 #'   facet_var = "location_id")
 #' 
-#' # plot ecocomDP observation table
-#' plot_taxa_rank(
-#'   observation = ants_L1[[1]]$tables$observation,
-#'   taxon = ants_L1[[1]]$tables$taxon,
-#'   facet_var = "location_id")
 #' 
 #' # tidy syntax, filter data by date
-#' ants_L1 %>% 
-#'   flatten_dataset() %>% 
+#' my_dataset %>% 
+#'   flatten_data() %>% 
 #'   dplyr::filter(
 #'     lubridate::as_date(datetime) > "2003-07-01") %>%
-#'   plot_taxa_rank(flat_data = .)
+#'   plot_taxa_rank()
 #' 
 #' # tidy syntax, filter data by site ID
-#' ants_L1 %>% 
-#'   flatten_dataset() %>% 
+#' my_dataset %>% 
+#'   flatten_data() %>% 
 #'   dplyr::filter(
-#'     as.numeric(location_id) > 4) %>%
-#'   plot_taxa_rank(flat_data = .)
+#'     grepl("COMO",location_id)) %>%
+#'   plot_taxa_rank()
 #' }
+#' 
 plot_taxa_rank <- function(
-  dataset = NULL,
-  flat_data = NULL,
-  taxon = NULL, 
-  observation = NULL, 
+  data,
   id = NA_character_, 
   facet_var = NA_character_, #e.g., "location_id", "taxon_id" must be a column name in observation or taxon table
   facet_scales = "free", #Should scales be fixed ("fixed", the default), free ("free"), or free in one dimension ("free_x", "free_y")?
   alpha = 1){
   
 
-  if(!is.null(flat_data)){
-    data_long <- flat_data
-    id <- flat_data$package_id[1]
+  # required col names in flat data
+  req_col_names <- c("observation_id","event_id","package_id","location_id",
+                     "datetime","taxon_id","variable_name","value",
+                     "taxon_rank")
+  
+  # detect data type, extract observation table
+  data_type <- detect_data_type(data)
+  
+  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+    data_long <- data %>% dplyr::distinct()
+    data_long <- data_long[,req_col_names]
+    if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
     
-  }else{
+  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+    stop("please provide a valid ecocomDP dataset or a table that includes the columns present in the ecocomDP 'observation' and 'taxon' tables")
     
-    if(!is.null(dataset)){
-      if(is.na(id)) id <- names(dataset)
-      if(is.null(observation)) observation <- dataset[[1]]$tables$observation
-      if(is.null(taxon)) taxon <- dataset[[1]]$tables$taxon
-    }
+  }else if(data_type == "dataset_old"){
+    data_long <- flatten_data(data)
+    if(is.na(id)) id <- names(data)
     
-    data_long <- observation %>%
-      left_join(taxon, by = "taxon_id")
+  }else if(data_type == "dataset"){
+    data_long <- flatten_data(data)
+    if(is.na(id)) id <- data$id
   }
   
 
@@ -883,11 +926,9 @@ plot_taxa_rank <- function(
 
 #' Plot stacked taxa by site
 #'
-#' @param dataset (list) An ecocomDP formatted dataset
-#' @param flat_data (tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.
+#' @param data (list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, a flattened ecocomDP dataset, or any flat table containing the columns present in both the ecocomDP observation and taxon tables.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
-#' @param rank (string) The rank of taxa to plot. Defaults to NA, which will inlcude all ranks.
-#' @param cutoff (numeric) Minimum number of occurrences allowed for taxa included in the plot.
+#' @param min_occurrence (numeric) Minimum number of occurrences allowed for taxa included in the plot.
 #' @param facet_var (character) Name of column to use for faceting.
 #' @param facet_scales (character) Should scales be free ("free", default value), fixed ("fixed"), or free in one dimension ("free_x", "free_y")?
 #' @param color_var (character) Name of column to use for plot colors.
@@ -904,78 +945,86 @@ plot_taxa_rank <- function(
 #' @examples
 #' \dontrun{
 #' # plot ecocomDP formatted dataset
-#' plot_taxa_occurrence_frequency(
-#'   dataset = ants_L1)
+#' plot_taxa_occurrence_frequency(ants_L1)
 #' 
 #' # plot flattened ecocomDP dataset
-#' plot_taxa_occurrence_frequency(
-#'   flat_data = flatten_dataset(ants_L1))
+#' plot_taxa_occurrence_frequency(flatten_data(ants_L1))
 #' 
 #' # facet by location color by taxon_rank
 #' plot_taxa_occurrence_frequency(
-#'   dataset = ants_L1,
+#'   data = ants_L1,
 #'   facet_var = "location_id",
 #'   color_var = "taxon_rank")
 #' 
-#' # facet by location, only plot taxa of rank = "species"
-#' plot_taxa_occurrence_frequency(
-#'   dataset = ants_L1,
-#'   facet_var = "location_id",
-#'   rank = "Species", cutoff = 2)
-#' 
 #' # color by location, only include taxa with > 10 occurrences
 #' plot_taxa_occurrence_frequency(
-#'   dataset = ants_L1,
+#'   data = ants_L1,
 #'   color_var = "location_id",
-#'   cutoff = 5)
+#'   min_occurrence = 5)
 #' 
 #' # tidy syntax, filter data by date
 #' ants_L1 %>% 
-#'   flatten_dataset() %>% 
+#'   flatten_data() %>% 
 #'   dplyr::filter(
 #'     lubridate::as_date(datetime) > "2003-07-01") %>%
-#'   plot_taxa_occurrence_frequency(flat_data = .)
+#'   plot_taxa_occurrence_frequency()
 #' }
+#' 
 plot_taxa_occurrence_frequency <- function(
-  dataset = NULL, 
-  flat_data = NULL,
+  data, 
   id = NA_character_,
-  rank = NA_character_,
-  cutoff = 0, 
+  min_occurrence = 0, 
   facet_var = NA_character_, #e.g., "location_id"
   color_var = NA_character_, #e.g., "location_id"
   facet_scales = "free", #Should scales be fixed ("fixed", the default), free ("free"), or free in one dimension ("free_x", "free_y")?
   alpha = 1){
   
-  # validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+
+  # required col names in flat data
+  req_col_names <- c("observation_id","event_id","package_id","location_id",
+                     "datetime","taxon_id","variable_name","value",
+                     "taxon_name")
   
-  if(!is.null(dataset)){
-    flat_data <- flatten_dataset(dataset) 
-    if(is.na(id)) id <- names(dataset)
+  # detect data type, extract observation table
+  data_type <- detect_data_type(data)
+  
+  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+    data_long <- data %>% dplyr::distinct()
+    # data_long <- data_long[,req_col_names]
+    if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
+    
+  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+    stop("please provide a valid ecocomDP dataset or a table that includes the columns present in the ecocomDP 'observation' and 'taxon' tables")
+    
+  }else if(data_type == "dataset_old"){
+    data_long <- flatten_data(data)
+    if(is.na(id)) id <- names(data)
+    
+  }else if(data_type == "dataset"){
+    data_long <- flatten_data(data)
+    if(is.na(id)) id <- data$id
   }
   
-  if(!is.null(flat_data)){
-    if(is.na(id)) id <- flat_data$package_id[1]
-  }
+  
   
   # plot title and subtitle text
   plot_title = "Taxa occurrence frequencies"
   
   plot_subtitle <- paste0("data package id: ",id)
-  if(!is.na(cutoff) && cutoff > 0) plot_subtitle <- paste0(plot_subtitle,
-                                             "\ntaxa with >= ", cutoff, " occurrences")
-  if(!is.na(rank)) plot_subtitle <- paste0(plot_subtitle,
-                                           "\ntaxon rank: ", rank)
-  
+  if(!is.na(min_occurrence) && min_occurrence > 0) plot_subtitle <- paste0(plot_subtitle,
+                                             "\ntaxa with >= ", min_occurrence, " occurrences")
+  # if(!is.na(rank)) plot_subtitle <- paste0(plot_subtitle,
+  #                                          "\ntaxon rank: ", rank)
+  # 
   
   # make plot data
-  data_working <- flat_data %>%
+  data_working <- data_long %>%
     dplyr::filter(.data$value > 0) %>%
     dplyr::mutate(occurrence = 1)
     
   
-  if(!is.na(rank)) data_working <- data_working %>%
-    dplyr::filter(.data$taxon_rank == rank)
+  # if(!is.na(rank)) data_working <- data_working %>%
+  #   dplyr::filter(.data$taxon_rank == rank)
   
   col_select_list <- c("event_id","taxon_name","occurrence",
                        color_var, facet_var) %>% stats::na.omit()
@@ -989,7 +1038,7 @@ plot_taxa_occurrence_frequency <- function(
         -c(.data$event_id, .data$occurrence))) %>%
     dplyr::summarize(
         n_occurrences = length(.data$occurrence)) %>%
-    dplyr::filter(.data$n_occurrences >= cutoff)
+    dplyr::filter(.data$n_occurrences >= min_occurrence)
   
 
   # Scale font size
@@ -1049,11 +1098,9 @@ plot_taxa_occurrence_frequency <- function(
 
 #' Plot abundances by event_id
 #'
-#' @param dataset (list) An ecocomDP formatted dataset
-#' @param flat_data (tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.
+#' @param data (list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, a flattened ecocomDP dataset, or any flat table containing the columns present in both the ecocomDP observation and taxon tables.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
-#' @param rank (string) The rank of taxa to plot. Defaults to NA, which will inlcude all ranks.
-#' @param cutoff (numeric) Minimum abundance allowed for taxa included in the plot.
+#' @param min_abundance (numeric) Minimum abundance allowed for observations of taxa included in the plot.
 #' @param trans (character, "identity" is default, "log1p" is x+1 transform) For continuous scales, the name of a transformation object or the object itself. Built-in transformations include "asn", "atanh", "boxcox", "date", "exp", "hms", "identity", "log", "log10", "log1p", "log2", "logit", "modulus", "probability", "probit", "pseudo_log", "reciprocal", "reverse", "sqrt" and "time".
 #' @param facet_var (character) Name of column to use for faceting.
 #' @param facet_scales (character) Should scales be free ("free", default value), fixed ("fixed"), or free in one dimension ("free_x", "free_y")?
@@ -1090,7 +1137,7 @@ plot_taxa_occurrence_frequency <- function(
 #' plot_taxa_abundance(
 #'   dataset = ants_L1,
 #'   facet_var = "location_id",
-#'   rank = "Species", cutoff = 5,
+#'   rank = "Species", min_occurrence = 5,
 #'   trans = "log1p")
 #' 
 #' # color by location, only include taxa with > 10 occurrences
@@ -1108,43 +1155,51 @@ plot_taxa_occurrence_frequency <- function(
 #'                       trans = "log1p")
 #' }
 plot_taxa_abundance <- function(
-  dataset = NULL, 
-  flat_data = NULL,
+  data = NULL, 
   id = NA_character_,
-  rank = NA_character_,
-  cutoff = 0, 
+  min_abundance = 0, 
   trans = "identity",
   facet_var = NA_character_, #e.g., "location_id"
   color_var = NA_character_, #e.g., "location_id"
   facet_scales = "free", #Should scales be fixed ("fixed", the default), free ("free"), or free in one dimension ("free_x", "free_y")?
   alpha = 1) {
   
-  if(!is.null(dataset)){
-    flat_data <- flatten_dataset(dataset) 
-    if(is.na(id)) id <- names(dataset)
+  # required col names in flat data
+  req_col_names <- c("observation_id","event_id","package_id","location_id",
+                     "datetime","taxon_id","variable_name","value",
+                     "taxon_name")
+  
+  # detect data type, extract observation table
+  data_type <- detect_data_type(data)
+  
+  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+    flat_data <- data %>% dplyr::distinct()
+    if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
+    
+  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+    stop("please provide a valid ecocomDP dataset or a table that includes the columns present in the ecocomDP 'observation' and 'taxon' tables")
+    
+  }else if(data_type == "dataset_old"){
+    flat_data <- flatten_data(data)
+    if(is.na(id)) id <- names(data)
+    
+  }else if(data_type == "dataset"){
+    flat_data <- flatten_data(data)
+    if(is.na(id)) id <- data$id
   }
   
-  if(!is.null(flat_data)){
-    if(is.na(id)) id <- flat_data$package_id[1]
-  }
   
   
-  # filter data if filters are provided
-  if(!is.na(rank)) flat_data <- flat_data %>%
-      dplyr::filter(.data$taxon_rank == rank)
-  
-  if(cutoff > 0) flat_data <- flat_data %>%
-      dplyr::filter(.data$value >= cutoff)
+  if(min_abundance > 0) flat_data <- flat_data %>%
+      dplyr::filter(.data$value >= min_abundance)
   
   
   # plot title and subtitle text
   plot_title = "Taxa abundances per 'event_id'"
   
   plot_subtitle <- paste0("data package id: ",id)
-  if(!is.na(cutoff) && cutoff > 0) plot_subtitle <- paste0(plot_subtitle,
-                                                           "\nabundance >= ", cutoff)
-  if(!is.na(rank)) plot_subtitle <- paste0(plot_subtitle,
-                                           "\ntaxon rank: ", rank)
+  if(!is.na(min_abundance) && min_abundance > 0) plot_subtitle <- paste0(plot_subtitle,
+                                                           "\nabundance >= ", min_abundance)
   
   
   # Scale font size
@@ -1211,10 +1266,7 @@ plot_taxa_abundance <- function(
 
 #' Plot sites on US map
 #'
-#' @param dataset (list) An ecocomDP formatted dataset
-#' @param flat_data (tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.
-#' @param observation (tbl_df, tbl, data.frame) The observation table.
-#' @param location (tbl_df, tbl, data.frame) The location table.
+#' @param data (list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, a flattened ecocomDP dataset, or any flat table containing the columns present in both the ecocomDP observation and location tables.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' @param labels (boolean) Argument to show labels of each US state. Default is TRUE.
@@ -1226,22 +1278,26 @@ plot_taxa_abundance <- function(
 #' 
 #' @examples
 #' \dontrun{
-#' plot_sites(
-#'   dataset = ants_L1)
+#' # plot map of sites
+#' plot_sites(ants_L1)
 #' 
-#' plot_sites(
-#'   flat_data = flatten_dataset(ants_L1))
+#' plot_sites(flatten_data(ants_L1))
 #' 
-#' plot_sites(
-#'   observation = ants_L1[[1]]$tables$observation,
-#'   location = ants_L1[[1]]$tables$location)
+#' 
+#' # download and plot NEON macroinvertebrate data
+#' my_dataset <- read_data(
+#'   id = "neon.ecocomdp.20120.001.001",
+#'   site= c('COMO','LECO'), 
+#'   startdate = "2017-06",
+#'   enddate = "2019-09",
+#'   check.size = FALSE)
+#' 
+#' plot_sites(my_dataset)
 #' }
+#' 
 plot_sites <- function(
-  dataset = NULL,
-  flat_data = NULL,
+  data,
   id = NA_character_,
-  observation = NULL,
-  location = NULL,
   alpha = 1,
   labels = TRUE){
   
@@ -1251,31 +1307,33 @@ plot_sites <- function(
   if(!"maptools" %in% base::rownames(utils::installed.packages())) stop("Please install 'maptools' to use this function")
   if(!"rgdal" %in% base::rownames(utils::installed.packages())) stop("Please install 'rgdal' to use this function")
   
-  if(is.na(id) && !is.null(dataset)) id <- names(dataset)
-  if(is.na(id) && !is.null(flat_data)) id <- flat_data$package_id[1] 
-  if(is.na(id) && !is.null(observation)) id <- observation$package_id[1] 
   
-  if(is.null(flat_data)){
-    # default to tables that are provided, otherwise, use what's 
-    # available in the dataset. 
-    if(is.null(observation)) observation <- dataset[[id]]$tables$observation
-    if(is.null(location)) location <- dataset[[id]]$tables$location
+  
+  # required col names in flat data
+  req_col_names <- c("observation_id","event_id","package_id","location_id",
+                     "datetime","taxon_id","variable_name","value",
+                     "location_id","location_name","longitude","latitude")
+  
+  # detect data type, extract observation table
+  data_type <- detect_data_type(data)
+  
+  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+    flat_data <- data %>% dplyr::distinct()
+    if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
     
-    validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+    stop("please provide a valid ecocomDP dataset or a table that includes the columns present in the ecocomDP 'observation' and 'taxon' tables")
     
-    if(!grepl("(?i)neon",id)){
-      #non-neon locations need flattening
-      flat_location <- (flatten_location(location))$location_flat
-    }else if(grepl("(?i)neon",id)){
-      flat_location <- location
-    }
+  }else if(data_type == "dataset_old"){
+    flat_data <- flatten_data(data)
+    if(is.na(id)) id <- names(data)
     
-    # join tables
-    # thils filters out locations that are not in the observation table
-    flat_data <- observation %>%
-      dplyr::left_join(flat_location, by = "location_id")
-    # flat_data <- ecocomDP::flatten_data(dataset[[1]]$tables)
+  }else if(data_type == "dataset"){
+    flat_data <- flatten_data(data)
+    if(is.na(id)) id <- data$id
   }
+  
+  
   
   
   cleaned <- flat_data %>%

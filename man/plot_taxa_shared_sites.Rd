@@ -4,19 +4,10 @@
 \alias{plot_taxa_shared_sites}
 \title{Plot number of unique taxa shared across sites}
 \usage{
-plot_taxa_shared_sites(
-  dataset = NULL,
-  flat_data = NULL,
-  observation = NULL,
-  id = NA_character_
-)
+plot_taxa_shared_sites(data, id = NA_character_)
 }
 \arguments{
-\item{dataset}{(list) An ecocomDP formatted dataset}
-
-\item{flat_data}{(tbl_df, tbl, data.frame) A flat data.frame created from an \code{ecocomDP} formatted dataset using \code{ecocomDP::flatten_data}.}
-
-\item{observation}{(tbl_df, tbl, data.frame) The observation table.}
+\item{data}{(list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, an ecocomDP observation table, or any table containing the columns present in an ecocomDP observation table.}
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles.}
 }
@@ -29,29 +20,27 @@ Plot number of unique taxa shared across sites
 \examples{
 \dontrun{
 # plot ecocomDP formatted dataset
-plot_taxa_shared_sites(
-  dataset = ants_L1)
+plot_taxa_shared_sites(ants_L1)
 
 # plot flattened ecocomDP dataset
-plot_taxa_shared_sites(
-  flat_data = flatten_dataset(ants_L1))
+plot_taxa_shared_sites(flatten_data(ants_L1))
 
 # plot ecocomDP observation table
-plot_taxa_shared_sites(
-  observation = ants_L1[[1]]$tables$observation)
+plot_taxa_shared_sites(ants_L1[[1]]$tables$observation)
 
 # tidy syntax, filter data by date
 ants_L1 \%>\% 
-  flatten_dataset() \%>\% 
+  flatten_data() \%>\% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") \%>\%
-  plot_taxa_shared_sites(flat_data = .)
+  plot_taxa_shared_sites()
 
 # tidy syntax, filter data by site ID
 ants_L1 \%>\% 
-  flatten_dataset() \%>\% 
+  flatten_data() \%>\% 
   dplyr::filter(
     as.numeric(location_id) > 4) \%>\%
-  plot_taxa_shared_sites(flat_data = .)
+  plot_taxa_shared_sites()
 }
+
 }
