@@ -90,8 +90,7 @@ Imports:
     tools,
     utils,
     uuid (>= 0.1-4),
-    xml2 (>= 1.3.0),
-    curl
+    xml2 (>= 1.3.0)
 Suggests:
     knitr,
     mime (>= 0.9),

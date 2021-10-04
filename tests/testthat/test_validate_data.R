@@ -463,8 +463,6 @@ testthat::test_that("validate_mapped_id()", {
   
   testthat::skip_on_cran()
   
-  testthat::skip_if_not(curl::has_internet(), "No internet connection")
-  
   for (i in c("df", "tbbl")) {
     # Parameterize
     test_data <- ants_L1

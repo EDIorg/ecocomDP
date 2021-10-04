@@ -822,7 +822,6 @@ validate_mapped_id <- function(data.list) {
   
   if ("variable_mapping" %in% names(data.list)) {
     message("  mapped_id")
-    if (!curl::has_internet()) return("Variable mapping. Mapped_ids can not be validated offline")
     
     output <- lapply(
       unique(data.list$variable_mapping$mapped_id),
@@ -833,11 +832,14 @@ validate_mapped_id <- function(data.list) {
           paste(m_id)
         }
       })
-    return(if (!is.null(unlist(output))) {
+    
+    output <- if (!is.null(unlist(output))) {
       paste0("Variable mapping. The variable_mapping table has these ",
-                 "mapped_id values that don't resolve: ",
-                 paste(unlist(output), collapse = ", "))
-      })
+             "mapped_id values that don't resolve: ",
+             paste(unlist(output), collapse = ", "))
+    }
+    
+    return(output)
   }
 }
 
