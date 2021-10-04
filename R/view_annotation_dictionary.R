@@ -3,9 +3,6 @@
 #' @description  
 #'     View the collection of dataset- and attribute-level annotations
 #'     from existing ecocomDP datasets.
-#'
-#' @usage 
-#'     view_annotation_dictionary()
 #'     
 #' @details
 #'     Use the search field to find the annotation terms and URIs.
@@ -16,10 +13,6 @@
 view_annotation_dictionary <- function(){
   
   ping_edi() # Warn if EDI is down
-  
-  # Prepare summary data ------------------------------------------------------
-  # Combine summaries of EDI and NEON data. These are created by 
-  # summarize_data_edi() and summarize_data_neon() respectively.
   
   # Download this object once per session and save to tempdir() for future calls
   if ("annotation_dictionary_table.rda" %in% dir(tempdir())) {
