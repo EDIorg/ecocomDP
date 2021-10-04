@@ -62,7 +62,11 @@ Authors@R:
              role = c("ctb")),
       person(given = "Thilina",
              family = "Surasinghe", 
-             role = c("ctb"))
+             role = c("ctb")),
+      person(given = "Kyle",
+             family = "Zollo-Venecek", 
+             role = c("ctb"),
+             comment = c(ORCID = "0000-0002-1615-590X"))
              )
 License: MIT + file LICENSE
 URL: https://github.com/EDIorg/ecocomDP
