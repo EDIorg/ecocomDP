@@ -662,10 +662,16 @@ create_eml <- function(path,
   provenance_L1 <- list(
     dataSource = r$dataSource,
     description = r$description)
+  # Remove any provenance nodes from the L0 metadata, otherwise they will be
+  # transferred to the L1 metadata, which would be an inaccurate representation
+  # of the provenance chain.
+  method_steps <- xml2::xml_find_all(xml_L0, "./dataset/methods/methodStep")
+  prov <- unlist(lapply(method_steps, is_prov))
+  eml_L0$dataset$methods$methodStep <- eml_L0$dataset$methods$methodStep[!prov]
   # Combine L1 methods, L0 methods, and L0 provenance
   eml_L0$dataset$methods$methodStep <- c(
     list(methods_L1),
-    list(eml_L0$data$methods$methodStep),
+    list(eml_L0$dataset$methods$methodStep),
     list(provenance_L1))
   
   # Update <dataTable> --------------------------------------------------------
