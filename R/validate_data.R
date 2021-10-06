@@ -64,7 +64,6 @@ validate_data <- function(
   # Read data
   if (!is.null(path)) {
     d <- read_data(from = path)
-    invisible(validate_table_names(data.path = path))
   } else {
     d <- dataset
   }
@@ -127,67 +126,6 @@ validate_data <- function(
   validation_issues
   
 }
-
-
-
-
-
-
-
-
-
-# Check for file name errors
-# 
-# @description
-#     This function ensures that ecocomDP file names follow the naming 
-#     convention (i.e. \emph{studyName_ecocomDPTableName.ext}, e.g. 
-#     \emph{gleon_chloride_observation.csv}).
-# 
-# @param data.path
-#     (character) Path to the directory containing ecocomDP tables.
-# 
-# @return
-#     (character) If table names are valid, then the corresponding table names 
-#     are returned. If table names are invalid, then an error message is
-#     returned.
-#     
-validate_table_names <- function(data.path = NULL) {
-  
-  message(  "File names")
-  
-  # Validate inputs
-  
-  validate_path(data.path)
-  
-  # Parameterize
-  
-  criteria <- read_criteria()
-  
-  # Validate
-  
-  table_names <- unique(criteria$table)
-  table_names_regexpr <- paste0("_", table_names, "\\b")
-  
-  msg <- list()
-  tables <- list.files(data.path)[attr(regexpr(paste(table_names_regexpr, 
-                                         collapse = "|"), 
-                                   list.files(data.path)),
-                           "match.length")
-                      != -1]
-  study_names <- unique(gsub(paste(table_names_regexpr, 
-                                   collapse = "|"), 
-                             "", tables))
-  study_names <- stringr::str_replace(study_names, "\\.[:alnum:]*$", replacement = "")
-  if (length(study_names) > 1){
-    stop(
-      "File names. More than one study name found. Unique study ",
-      "names: ", paste(study_names, collapse = ", "), call. = F)
-  } else {
-    tables
-  }
-
-}
-
 
 
 

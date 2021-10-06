@@ -13,49 +13,6 @@ test_data <- ants_L1
 # Load validation criteria for tables and columns
 criteria <- read_criteria()
 
-# validate_table_names() ------------------------------------------------------
-
-# TODO: This test fails devtools::check() but passes devtools::test()
-# testthat::test_that("validate_table_names()", {
-#   
-#   file.copy(
-#     system.file("/data", package = "ecocomDP"),
-#     tempdir(),
-#     recursive = TRUE)
-#   
-#   # Valid tables result in a corresponding list of table names
-#   
-#   r <- validate_table_names(paste0(tempdir(), "/data"))
-#   
-#   expect_equal(
-#     r, 
-#     dir(
-#       system.file("/data", package = "ecocomDP"), 
-#       pattern = "Ant_Assemblages_"))
-#   
-#   # More than one study name results in a character string
-#   
-#   file.rename(
-#     from = paste0(
-#       tempdir(), 
-#       "/data/Ant_Assemblages_in_Hemlock_Removal_Experiment_dataset_summary.csv"),
-#     to = paste0(
-#       tempdir(), 
-#       "/data/Ant_Assemblages_dataset_summary.csv"))
-#   
-#   expect_error(
-#     validate_table_names(paste0(tempdir(), "/data")),
-#     regexp = "File names. More than one study name found. Unique study")
-#   
-#   # Clean up
-#   
-#   unlink(
-#     paste0(tempdir(), "/data"), 
-#     recursive = TRUE, 
-#     force = TRUE)
-#   
-# })
-
 # validate_table_presence() ---------------------------------------------------
 
 testthat::test_that("validate_table_presence()", {
