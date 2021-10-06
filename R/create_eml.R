@@ -208,7 +208,7 @@ create_eml <- function(path,
   eml_L0 <- EML::read_eml(url_parent)
   xml_L0 <- suppressMessages(read_eml(source_id))
   
-  # Remove L0 data entities. These should not be inherited by the L1.
+  # Remove L0 elements that should not be inherited by the L1
   
   eml_L0$dataset$dataTable <- NULL
   eml_L0$dataset$spatialRaster <- NULL
@@ -216,6 +216,8 @@ create_eml <- function(path,
   eml_L0$dataset$storedProcedure <- NULL
   eml_L0$dataset$view <- NULL
   eml_L0$dataset$otherEntity <- NULL
+  
+  eml_L0$additionalMetadata <- NULL
   
   # Create L1 EML -------------------------------------------------------------
   
