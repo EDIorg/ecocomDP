@@ -747,6 +747,7 @@ txcl_make_taxonomicCoverage <- function(
   taxa.clean <- taxa.clean[!missing_names]
   authority <- authority[!missing_names]
   authority.id <- authority.id[!missing_names]
+  rank <- rank[!missing_names]
   
   # Create taxonomicCoverage --------------------------------------------------
   
