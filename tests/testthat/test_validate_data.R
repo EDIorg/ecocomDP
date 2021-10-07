@@ -429,14 +429,11 @@ testthat::test_that("validate_mapped_id()", {
       }
     }
     d <- test_data[[1]]$tables
+    d$variable_mapping <- d$variable_mapping[1, ]
     # Valid mapped_id results in message.
     expect_null(validate_mapped_id(d))
     # Invalid mapped_id results in character string
-    d$variable_mapping$mapped_id[7:10] <- c(
-      "shttp://rs.tdwg.org/dwc/terms/measurementType",
-      "http://rs.tdwg.org/dwc/terms/measurementTyp",
-      "measurementType",
-      "purl.dataone.org/odo/ECS_00002736")
+    d$variable_mapping$mapped_id <- "shttp://rs.tdwg.org/dwc/terms/measurementType"
     expect_true(stringr::str_detect(
       validate_mapped_id(d),
       paste0(
@@ -450,7 +447,7 @@ testthat::test_that("validate_mapped_id()", {
 testthat::test_that("validate_data", {
   for (i in c("df", "tbbl")) {
     # Parameterize
-    test_data <- ants_L1
+    test_data <- trim_data_for_test(ants_L1)
     if (i == "df") { # test w/data.frame
       for (tbl in names(test_data[[1]]$tables)) {
         test_data[[1]]$tables[[tbl]] <- as.data.frame(test_data[[1]]$tables[[tbl]])

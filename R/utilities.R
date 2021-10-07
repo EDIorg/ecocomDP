@@ -1500,6 +1500,26 @@ url_env <- function(environment){
 
 
 
+# Trim data object for faster tests
+#
+# @param dataset (list) Data list object returned by \code{read_data()}
+#
+# @return (list of data frames) \code{data.list} with some content removed. 
+#
+trim_data_for_test <- function(dataset) {
+  # Remove variable_mapping so validate_mapped_id() doesn't overload target 
+  # APIs
+  dataset[[1]]$tables$variable_mapping <- NULL
+  return(dataset)
+}
+
+
+
+
+
+
+
+
 # Validate file names
 #
 # @description  

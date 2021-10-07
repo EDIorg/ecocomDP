@@ -60,7 +60,7 @@ testthat::test_that("Reads from source APIs", {
 testthat::test_that("Reads from local .rds", {
   criteria <- read_criteria()
   # From .rds
-  d <- ants_L1
+  d <- trim_data_for_test(ants_L1)
   id <- names(d)
   save_data(d, tempdir())
   d <- read_data(from = paste0(tempdir(), "/d.rds"))                                  # Has expected structure
@@ -82,7 +82,7 @@ testthat::test_that("Reads from local .rds", {
 testthat::test_that("Reads from local .csv directories", {
   criteria <- read_criteria()
   # From .csv
-  d <- ants_L1                                                         # create example datasets
+  d <- trim_data_for_test(ants_L1)                                                         # create example datasets
   d <- c(d, d, d)
   ids <- c("edi.193.3", "edi.262.1", "edi.359.1")
   names(d) <- ids
@@ -116,7 +116,7 @@ testthat::test_that("Reads tables with valid names in path", {
   unlink(mypath, recursive = TRUE, force = TRUE)
   dir.create(mypath)
   crit <- read_criteria()
-  d <- ants_L1
+  d <- trim_data_for_test(ants_L1)
   # Set up test files
   save_data(d, mypath, type = ".csv")
   readpath <- paste0(mypath, "/", names(d))
@@ -136,7 +136,7 @@ testthat::test_that("Ignores tables with invalid names in path", {
   unlink(mypath, recursive = TRUE, force = TRUE)
   dir.create(mypath)
   crit <- read_criteria()
-  d <- ants_L1
+  d <- trim_data_for_test(ants_L1)
   # Set up test files
   tblnms <- names(d[[1]]$tables)
   tblnms[c(1,2)] <- c("1", "2") 
@@ -156,7 +156,7 @@ testthat::test_that("Ignores tables with invalid names in path", {
 
 testthat::test_that("Has datetime parsing option", {
   criteria <- read_criteria()
-  d <- ants_L1
+  d <- trim_data_for_test(ants_L1)
   id <- names(d)
   save_data(d, tempdir())
   d <- suppressWarnings(
