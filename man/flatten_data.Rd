@@ -4,10 +4,10 @@
 \alias{flatten_data}
 \title{Flatten an ecocomDP dataset}
 \usage{
-flatten_data(tables)
+flatten_data(data)
 }
 \arguments{
-\item{tables}{(list of tbl_df, tbl, data.frame) A named list of ecocomDP tables.}
+\item{data}{(list) An ecocomDP formatted dataset or a named list of ecocomDP tables.}
 }
 \value{
 (tbl_df, tbl, data.frame) A single flat table created by joining and spreading all \code{tables}, except the observation table. See details for more information on this "flat" format.
@@ -24,10 +24,7 @@ Warnings/Errors from \code{flatten_data()} can most often be fixed by addressing
 Ancillary identifiers are dropped from the returned object.
 }
 \examples{
-dataset <- ants_L1
-
-flat <- flatten_data(dataset[[1]]$tables)
-
+flat <- flatten_data(ants_L1)
 flat
 
 }

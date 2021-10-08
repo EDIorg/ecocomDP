@@ -1,6 +1,55 @@
+#' determine data type
+#' 
+#' @param data (list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset (list), or a list of ecocomDP tables, a single flat ecocomDP table, or a single flat table created by joinng and spreading ecocomDP tables. 
+#' 
+#' @return (character) A character string indicating data type. One of: 'list_of_tables', 'datset_old', 
+#' 'dataset', or 'flat_table'
+#' 
+#' @details Internal function for detecting datatype. Not exported
+detect_data_type <- function(data){
+  
+  table_names <- c(
+    "location",
+    "location_ancillary",
+    "taxon",
+    "observation",
+    "observation_ancillary",
+    "dataset_summary",
+    "variable_mapping")
+  
+  if((class(data)=="list") && any(table_names %in% names(data))){
+    return("list_of_tables")
+    
+  }else if((class(data)=="list") && (length(data) == 1) && ("tables" %in% names(data[[1]]))){
+    return("dataset_old")
+    
+  }else if((class(data)=="list") && (length(data) > 1) && #is a list
+           all(data %>% lapply(class) == "list") && #one level down is a list
+           all((data %>% lapply(function(x)unlist(lapply(x,class)))) == "list") && #two levels down is a list
+           length(data) == (data %>% lapply(length) %>% unlist() %>% sum()) && #length of second level is only 1 in each list
+           "tables" %in% (data %>% lapply(function(x)unlist(lapply(x, names))) %>% unlist())){ #tables exist two levels down
+    return("list_of_datasets_old")
+    
+  }else if((class(data)=="list") && ("tables" %in% names(data))){
+    return("dataset")
+    
+  }else if((class(data)=="list") && (length(data) > 1) &&
+           "tables" %in% (data %>% lapply(names) %>% unlist())){ 
+    return("list_of_datasets")
+    
+  }else if(any(class(data) %in% c("data.frame", "tbl_df", "tbl"))){
+    return("flat_table")
+    
+  }else{
+    stop("Not a recognizable data type")
+  }
+}
+
+
+
 #' Flatten an ecocomDP dataset
 #' 
-#' @param tables (list of tbl_df, tbl, data.frame) A named list of ecocomDP tables.
+#' @param data (list) An ecocomDP formatted dataset or a named list of ecocomDP tables.
 #'
 #' @return (tbl_df, tbl, data.frame) A single flat table created by joining and spreading all \code{tables}, except the observation table. See details for more information on this "flat" format.
 #' 
@@ -14,16 +63,40 @@
 #' @export
 #'
 #' @examples 
-#' dataset <- ants_L1
-#' 
-#' flat <- flatten_data(dataset[[1]]$tables)
-#' 
+#' flat <- flatten_data(ants_L1)
 #' flat
 #' 
-flatten_data <- function(tables) {
+flatten_data <- function(
+  data){
+  
+  
+  
+  if(detect_data_type(data) == "list_of_tables"){
+    return(flatten_tables(data))
+    
+  }else if(detect_data_type(data) == "dataset_old"){
+    return(flatten_tables(data[[1]]$tables))
+  
+  }else if(detect_data_type(data) == "dataset"){
+    return(flatten_tables(data$tables))
+    
+  }else{
+    stop("please provide a valid ecocomDP dataset or list of tables to flatten")
+  }
+  
+}
+
+
+
+#' internal function to flatten tables
+#' @param tables list of ecocomDP tables
+#' 
+#' @noRd
+#' 
+flatten_tables <- function(tables){
   
   validate_arguments(fun.name = "flatten_data", fun.args = as.list(environment()))
-  
+
   # Start w/observation -------------------------------------------------------
   
   all_merged <- tables$observation %>%
@@ -230,7 +303,8 @@ flatten_data <- function(tables) {
 #
 # @return (data.frame) A flattened version of \code{ancillary_table} with units added following the unit_<variable_name> 
 # convention, and sorted so the unit immediately follows its corresponding variable_name.
-# 
+#'
+#' @noRd
 flatten_ancillary <- function(ancillary_table) {
   # Spread on variable_name and value, then add units later
   fkey <- stringr::str_subset(colnames(ancillary_table), "(?<!ancillary_)id") # Use regexpr to select id column to later join on
@@ -372,7 +446,8 @@ coerce_all_merged <- function(x, locnames) {
 # @return A list of:
 # location_flat: (tbl_df, tbl, data.frame) A flattened version of \code{location} with nested levels unpacked and latitude, longitude, and elevation only returned for the level of observation.
 # locnames: (character) So coerce_all_merged() knows which to coerce to "character" class
-#
+#'
+#' @noRd
 flatten_location <- function(location) {
   
   # An empty object for collecting the order of nested locations
