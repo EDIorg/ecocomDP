@@ -99,7 +99,6 @@ Suggests:
     taxize (<= 0.9.99),
     testthat,
     worrms (>= 0.4.2),
-    scales,
     ggrepel,
     usmap,
     maptools,

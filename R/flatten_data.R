@@ -14,19 +14,32 @@ detect_data_type <- function(data){
     "taxon",
     "observation",
     "observation_ancillary",
-    "dataset_summary")
+    "dataset_summary",
+    "variable_mapping")
   
   if((class(data)=="list") && any(table_names %in% names(data))){
     return("list_of_tables")
     
-  }else if((class(data)=="list") && (length(data)==1) && ("tables" %in% names(data[[1]]))){
+  }else if((class(data)=="list") && (length(data) == 1) && ("tables" %in% names(data[[1]]))){
     return("dataset_old")
+    
+  }else if((class(data)=="list") && (length(data) > 1) && #is a list
+           all(data %>% lapply(class) == "list") && #one level down is a list
+           all((data %>% lapply(function(x)unlist(lapply(x,class)))) == "list") && #two levels down is a list
+           length(data) == (data %>% lapply(length) %>% unlist() %>% sum()) && #length of second level is only 1 in each list
+           "tables" %in% (data %>% lapply(function(x)unlist(lapply(x, names))) %>% unlist())){ #tables exist two levels down
+    return("list_of_datasets_old")
     
   }else if((class(data)=="list") && ("tables" %in% names(data))){
     return("dataset")
     
+  }else if((class(data)=="list") && (length(data) > 1) &&
+           "tables" %in% (data %>% lapply(names) %>% unlist())){ 
+    return("list_of_datasets")
+    
   }else if(any(class(data) %in% c("data.frame", "tbl_df", "tbl"))){
     return("flat_table")
+    
   }else{
     stop("Not a recognizable data type")
   }

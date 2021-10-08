@@ -62,6 +62,8 @@ plot_taxa_accum_sites <- function(
   }else if(data_type == "dataset"){
     observation <- data$tables$observation
     if(is.na(id)) id <- data$id
+  }else{
+    stop("No plotting method currently implemented for this data format")
   }
 
   
@@ -175,6 +177,9 @@ plot_taxa_accum_time <- function(
   }else if(data_type == "dataset"){
     observation <- data$tables$observation
     if(is.na(id)) id <- data$id
+    
+  }else{
+    stop("No plotting method currently implemented for this data format")
   }
   
   
@@ -341,6 +346,9 @@ plot_taxa_diversity <- function(
   }else if(data_type == "dataset"){
     observation <- data$tables$observation
     if(is.na(id)) id <- data$id
+    
+  }else{
+    stop("No plotting method currently implemented for this data format")
   }
   
   
@@ -536,6 +544,9 @@ plot_sample_space_time <- function(
   }else if(data_type == "dataset"){
     observation <- data$tables$observation
     if(is.na(id)) id <- data$id
+    
+  }else{
+    stop("No plotting method currently implemented for this data format")
   }
   
   
@@ -591,7 +602,27 @@ plot_sample_space_time <- function(
 
 
 
-
+#' DEPRECATED. This is the alias for the previous name for plot_sample_space_time
+#' @export
+#' 
+#' @param observation (tbl_df, tbl, data.frame) The observation table.
+#' @param id (character) Identifier of dataset to be used in plot subtitles.
+#' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
+#' 
+#' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
+#' 
+#' @examples 
+#' \dontrun{
+#' # plot ecocomDP formatted dataset
+#' plot_taxa_sample_time(ants_L1[[1]]$tables$observation)
+#' }
+plot_taxa_sample_time <- function(observation, id = NA_character_, alpha = 1){
+  .Deprecated("plot_sample_space_time")
+  
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  
+  return(plot_sample_space_time(data = observation, id=id, alpha=alpha))
+}
 
 
 
@@ -661,6 +692,9 @@ plot_taxa_shared_sites <- function(
   }else if(data_type == "dataset"){
     observation <- data$tables$observation
     if(is.na(id)) id <- data$id
+    
+  }else{
+    stop("No plotting method currently implemented for this data format")
   }
   
   
@@ -888,6 +922,9 @@ plot_taxa_rank <- function(
   }else if(data_type == "dataset"){
     data_long <- flatten_data(data)
     if(is.na(id)) id <- data$id
+    
+  }else{
+    stop("No plotting method currently implemented for this data format")
   }
   
 
@@ -1003,6 +1040,9 @@ plot_taxa_occurrence_frequency <- function(
   }else if(data_type == "dataset"){
     data_long <- flatten_data(data)
     if(is.na(id)) id <- data$id
+    
+  }else{
+    stop("No plotting method currently implemented for this data format")
   }
   
   
@@ -1186,6 +1226,9 @@ plot_taxa_abundance <- function(
   }else if(data_type == "dataset"){
     flat_data <- flatten_data(data)
     if(is.na(id)) id <- data$id
+    
+  }else{
+    stop("No plotting method currently implemented for this data format")
   }
   
   
@@ -1331,6 +1374,9 @@ plot_sites <- function(
   }else if(data_type == "dataset"){
     flat_data <- flatten_data(data)
     if(is.na(id)) id <- data$id
+    
+  }else{
+    stop("No plotting method currently implemented for this data format")
   }
   
   

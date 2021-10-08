@@ -28,15 +28,23 @@ ecocomDP:::detect_data_type(ants_L1)
 ecocomDP:::detect_data_type(ants_L1[[1]])
 ecocomDP:::detect_data_type(ants_L1[[1]]$tables)
 ecocomDP:::detect_data_type(ants_L1[[1]]$tables$observation)
+ecocomDP:::detect_data_type(list(a = ants_L1, b = ants_L1))
+ecocomDP:::detect_data_type(list(a = ants_L1[[1]], b = ants_L1[[1]]))
 
 ecocomDP:::detect_data_type(my_dataset)
 ecocomDP:::detect_data_type(my_dataset[[1]])
 ecocomDP:::detect_data_type(my_dataset[[1]]$tables)
 ecocomDP:::detect_data_type(my_dataset[[1]]$tables$observation)
+ecocomDP:::detect_data_type(list(a = my_dataset, b = my_dataset))
+ecocomDP:::detect_data_type(list(a = my_dataset[[1]], b = my_dataset[[1]]))
 
 # error out with informative message
 ecocomDP:::detect_data_type(ants_L1[[1]]$metadata)
 ecocomDP:::detect_data_type(my_dataset[[1]]$metadata)
+ecocomDP:::detect_data_type(list(a="a"))
+
+# this detects "list_of_datasets" -- might want to improve logic in the future?
+ecocomDP:::detect_data_type(list(a = ants_L1[[1]], b = ants_L1))
 
 # test new flatten with autodetect
 flat <- flatten_data(ants_L1)
