@@ -1345,10 +1345,14 @@ plot_sites <- function(
   labels = TRUE){
   
   # check for suggested packages that are required for this function to work
-  if(!"ggrepel" %in% base::rownames(utils::installed.packages())) stop("Please install 'ggrepel' to use this function")
-  if(!"usmap" %in% base::rownames(utils::installed.packages())) stop("Please install 'usmap' to use this function")
-  if(!"maptools" %in% base::rownames(utils::installed.packages())) stop("Please install 'maptools' to use this function")
-  if(!"rgdal" %in% base::rownames(utils::installed.packages())) stop("Please install 'rgdal' to use this function")
+  suggs <- c("ggrepel", "usmap", "maptools", "rgdal")
+  suggsmissing <- !unlist(lapply(suggs, requireNamespace, quietly = TRUE))
+  if (any(suggsmissing)) {
+    stop("Packages ", paste(suggs, collapse = ", "), " are required for ",
+         "running plot_sites(). Packages ", 
+         paste(suggs[suggsmissing], collapse = ", "), " are not installed.", 
+         call. = FALSE)
+  }
   
   
   
