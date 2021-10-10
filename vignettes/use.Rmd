@@ -330,12 +330,12 @@ plot_taxa_shared_sites(dataset_1)
 plot_taxa_rank(data = dataset_1, 
                facet_var = "location_id")
 
-plot_taxa_occurrence_frequency(
+plot_taxa_occur_freq(
   data = dataset_1,
   facet_var = "location_id",
   color_var = "taxon_rank")
 
-plot_taxa_abundance(
+plot_taxa_abund(
   data = dataset_1,
   facet_var = "location_id",
   color_var = "taxon_rank",

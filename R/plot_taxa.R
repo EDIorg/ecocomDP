@@ -982,19 +982,19 @@ plot_taxa_rank <- function(
 #' @examples
 #' \dontrun{
 #' # plot ecocomDP formatted dataset
-#' plot_taxa_occurrence_frequency(ants_L1)
+#' plot_taxa_occur_freq(ants_L1)
 #' 
 #' # plot flattened ecocomDP dataset
-#' plot_taxa_occurrence_frequency(flatten_data(ants_L1))
+#' plot_taxa_occur_freq(flatten_data(ants_L1))
 #' 
 #' # facet by location color by taxon_rank
-#' plot_taxa_occurrence_frequency(
+#' plot_taxa_occur_freq(
 #'   data = ants_L1,
 #'   facet_var = "location_id",
 #'   color_var = "taxon_rank")
 #' 
 #' # color by location, only include taxa with > 10 occurrences
-#' plot_taxa_occurrence_frequency(
+#' plot_taxa_occur_freq(
 #'   data = ants_L1,
 #'   color_var = "location_id",
 #'   min_occurrence = 5)
@@ -1004,10 +1004,10 @@ plot_taxa_rank <- function(
 #'   flatten_data() %>% 
 #'   dplyr::filter(
 #'     lubridate::as_date(datetime) > "2003-07-01") %>%
-#'   plot_taxa_occurrence_frequency()
+#'   plot_taxa_occur_freq()
 #' }
 #' 
-plot_taxa_occurrence_frequency <- function(
+plot_taxa_occur_freq <- function(
   data, 
   id = NA_character_,
   min_occurrence = 0, 
@@ -1158,30 +1158,30 @@ plot_taxa_occurrence_frequency <- function(
 #' @examples
 #' \dontrun{
 #' # plot ecocomDP formatted dataset
-#' plot_taxa_abundance(
+#' plot_taxa_abund(
 #'   dataset = ants_L1)
 #' 
 #' # plot flattened ecocomDP dataset, log(x+1) transform abundances
-#' plot_taxa_abundance(
+#' plot_taxa_abund(
 #'   flat_data = flatten_dataset(ants_L1),
 #'   trans = "log1p")
 #' 
 #' # facet by location color by taxon_rank, log 10 transformed
-#' plot_taxa_abundance(
+#' plot_taxa_abund(
 #'   dataset = ants_L1,
 #'   facet_var = "location_id",
 #'   color_var = "taxon_rank",
 #'   trans = "log10")
 #' 
 #' # facet by location, only plot taxa of rank = "species"
-#' plot_taxa_abundance(
+#' plot_taxa_abund(
 #'   dataset = ants_L1,
 #'   facet_var = "location_id",
 #'   rank = "Species", min_occurrence = 5,
 #'   trans = "log1p")
 #' 
 #' # color by location, only include taxa with > 10 occurrences
-#' plot_taxa_abundance(
+#' plot_taxa_abund(
 #'   dataset = ants_L1,
 #'   color_var = "location_id",
 #'   trans = "log10")
@@ -1191,10 +1191,10 @@ plot_taxa_occurrence_frequency <- function(
 #'   flatten_dataset() %>% 
 #'   dplyr::filter(
 #'     lubridate::as_date(datetime) > "2003-07-01") %>%
-#'   plot_taxa_abundance(flat_data = .,
+#'   plot_taxa_abund(flat_data = .,
 #'                       trans = "log1p")
 #' }
-plot_taxa_abundance <- function(
+plot_taxa_abund <- function(
   data = NULL, 
   id = NA_character_,
   min_abundance = 0, 

@@ -448,43 +448,43 @@ my_dataset %>%
 ###########################################################
 ###########################################################
 # Plot stacked taxa by site
-plot_taxa_occurrence_frequency(
+plot_taxa_occur_freq(
   data = my_dataset,
   facet_var = "location_id",
   color = "location_id",
   min_occurrence = 5)
 
-plot_taxa_occurrence_frequency(
+plot_taxa_occur_freq(
   data = my_dataset,
   facet_var = "location_id",
   min_occurrence = 20)
 
 # different way sto make the same plot
-plot_taxa_occurrence_frequency(
+plot_taxa_occur_freq(
   data = my_dataset)
 
-plot_taxa_occurrence_frequency(
+plot_taxa_occur_freq(
   data = my_dataset %>% flatten_data())
 
-plot_taxa_occurrence_frequency(
+plot_taxa_occur_freq(
   data = my_dataset[[1]]$tables %>% flatten_tables())
 
 ###########################################################
 
 # plot ecocomDP formatted dataset
-plot_taxa_occurrence_frequency(ants_L1)
+plot_taxa_occur_freq(ants_L1)
 
 # plot flattened ecocomDP dataset
-plot_taxa_occurrence_frequency(flatten_data(ants_L1))
+plot_taxa_occur_freq(flatten_data(ants_L1))
 
 # facet by location color by taxon_rank
-plot_taxa_occurrence_frequency(
+plot_taxa_occur_freq(
   data = ants_L1,
   facet_var = "location_id",
   color_var = "taxon_rank")
 
 # color by location, only include taxa with > 10 occurrences
-plot_taxa_occurrence_frequency(
+plot_taxa_occur_freq(
   data = ants_L1,
   color_var = "location_id",
   min_occurrence = 5)
@@ -494,7 +494,7 @@ ants_L1 %>%
   flatten_data() %>% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") %>%
-  plot_taxa_occurrence_frequency()
+  plot_taxa_occur_freq()
 ###########################################################
 ###########################################################
 
@@ -509,29 +509,29 @@ ants_L1 %>%
 # boxplots
 
 # plot ecocomDP formatted dataset
-plot_taxa_abundance(my_dataset)
+plot_taxa_abund(my_dataset)
 
 # plot flattened ecocomDP dataset, log(x+1) transform abundances
-plot_taxa_abundance(
+plot_taxa_abund(
   data = flatten_data(my_dataset),
   trans = "log1p")
 
 # facet by location color by taxon_rank, log 10 transformed
-plot_taxa_abundance(
+plot_taxa_abund(
   data = my_dataset,
   facet_var = "location_id",
   color_var = "taxon_rank",
   trans = "log10")
 
 # facet by location, only plot taxa of rank = "species"
-plot_taxa_abundance(
+plot_taxa_abund(
   data = my_dataset,
   facet_var = "location_id",
   min_abundance = 10,
   trans = "log1p")
 
 # color by location, only include taxa with > 10 occurrences
-plot_taxa_abundance(
+plot_taxa_abund(
   data = my_dataset,
   color_var = "location_id",
   trans = "log10")
@@ -541,7 +541,7 @@ my_dataset %>%
   flatten_data() %>% 
   dplyr::filter(
     !grepl("^SUGG", location_id)) %>%
-  plot_taxa_abundance(
+  plot_taxa_abund(
     trans = "log1p",
     min_abundance = 2,
     facet_var = "location_id")
@@ -552,29 +552,29 @@ my_dataset %>%
 ###########################################################
 
 # plot ecocomDP formatted dataset
-plot_taxa_abundance(ants_L1)
+plot_taxa_abund(ants_L1)
 
 # plot flattened ecocomDP dataset, log(x+1) transform abundances
-plot_taxa_abundance(
+plot_taxa_abund(
   data = flatten_data(ants_L1),
   trans = "log1p")
 
 # facet by location color by taxon_rank, log 10 transformed
-plot_taxa_abundance(
+plot_taxa_abund(
   data = ants_L1,
   facet_var = "location_id",
   color_var = "taxon_rank",
   trans = "log10")
 
 # facet by location, minimum abundance = 5
-plot_taxa_abundance(
+plot_taxa_abund(
   data = ants_L1,
   facet_var = "location_id",
   min_abundance = 5,
   trans = "log1p")
 
 # color by location, only include taxa with > 10 occurrences
-plot_taxa_abundance(
+plot_taxa_abund(
   data = ants_L1,
   color_var = "location_id",
   trans = "log10")
@@ -584,7 +584,7 @@ ants_L1 %>%
   flatten_data() %>% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") %>%
-  plot_taxa_abundance(trans = "log1p",
+  plot_taxa_abund(trans = "log1p",
                       min_abundance = 10)
 
 
