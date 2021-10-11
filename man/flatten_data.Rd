@@ -7,7 +7,7 @@
 flatten_data(data)
 }
 \arguments{
-\item{data}{(list) An ecocomDP formatted dataset or a named list of ecocomDP tables.}
+\item{data}{(list) The dataset object returned by \code{read_data()}, or a named list of ecocoomDP tables.}
 }
 \value{
 (tbl_df, tbl, data.frame) A single flat table created by joining and spreading all \code{tables}, except the observation table. See details for more information on this "flat" format.
@@ -16,7 +16,7 @@ flatten_data(data)
 Flatten an ecocomDP dataset
 }
 \details{
-"flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" an L1 ecocomDP dataset can be consistently spread due to the frequent occurrence of L0 source datasets with > 1 core observation variable.
+The "flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" an L1 ecocomDP dataset can be consistently spread due to the frequent occurrence of L0 source datasets with > 1 core observation variable.
 }
 \note{
 Warnings/Errors from \code{flatten_data()} can most often be fixed by addressing any validation issues reported by \code{read_data()} (e.g. non-unique composite keys).
@@ -24,7 +24,13 @@ Warnings/Errors from \code{flatten_data()} can most often be fixed by addressing
 Ancillary identifiers are dropped from the returned object.
 }
 \examples{
+# Flatten a dataset object
 flat <- flatten_data(ants_L1)
+flat
+
+# Flatten a list of tables
+tables <- ants_L1$tables
+flat <- flatten_data(tables)
 flat
 
 }
