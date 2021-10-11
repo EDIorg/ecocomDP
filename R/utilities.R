@@ -468,7 +468,7 @@ coerce_table_classes <- function(tbl, name, cls) {
 #' 
 #' @description The \code{data} parameter, used by a few functions in the ecocomDP package, can accept different object types. \code{detect_data_type()} identifies the object type, which the calling function typically uses in some flow control logic.
 #' 
-#' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, or a table containing the columns of the observation table.
+#' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of ecocoomDP tables, or a table containing columns of the ecocomDP observation table.
 #' 
 #' @return (character) The type of \code{data}, which is one of:
 #' \itemize{

@@ -7,7 +7,7 @@
 detect_data_type(data)
 }
 \arguments{
-\item{data}{(list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, or a table containing the columns of the observation table.}
+\item{data}{(list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of ecocoomDP tables, or a table containing columns of the ecocomDP observation table.}
 }
 \value{
 (character) The type of \code{data}, which is one of:
