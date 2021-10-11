@@ -48,11 +48,11 @@ plot_taxa_accum_sites <- function(
   data_type <- detect_data_type(data)
   
   
-  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+  if(data_type == "table" && all(req_col_names %in% names(data))){
     observation <- data %>% dplyr::distinct()
     if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
   
-  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+  }else if(data_type == "table" && !all(req_col_names %in% names(data))){
     stop("please provide a valid ecocomDP dataset or table that includes columns from an ecocomDP 'observation' table")
   
   }else if(data_type == "dataset_old"){
@@ -163,11 +163,11 @@ plot_taxa_accum_time <- function(
   data_type <- detect_data_type(data)
   
   
-  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+  if(data_type == "table" && all(req_col_names %in% names(data))){
     observation <- data %>% dplyr::distinct()
     if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
     
-  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+  }else if(data_type == "table" && !all(req_col_names %in% names(data))){
     stop("please provide a valid ecocomDP dataset or table that includes columns from an ecocomDP 'observation' table")
     
   }else if(data_type == "dataset_old"){
@@ -332,11 +332,11 @@ plot_taxa_diversity <- function(
   data_type <- detect_data_type(data)
   
   
-  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+  if(data_type == "table" && all(req_col_names %in% names(data))){
     observation <- data %>% dplyr::distinct()
     if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
     
-  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+  }else if(data_type == "table" && !all(req_col_names %in% names(data))){
     stop("please provide a valid ecocomDP dataset or table that includes columns from an ecocomDP 'observation' table")
     
   }else if(data_type == "dataset_old"){
@@ -530,11 +530,11 @@ plot_sample_space_time <- function(
   data_type <- detect_data_type(data)
   
   
-  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+  if(data_type == "table" && all(req_col_names %in% names(data))){
     observation <- data %>% dplyr::distinct()
     if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
     
-  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+  }else if(data_type == "table" && !all(req_col_names %in% names(data))){
     stop("please provide a valid ecocomDP dataset or table that includes columns from an ecocomDP 'observation' table")
     
   }else if(data_type == "dataset_old"){
@@ -677,12 +677,12 @@ plot_taxa_shared_sites <- function(
   # detect data type, extract observation table
   data_type <- detect_data_type(data)
   
-  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+  if(data_type == "table" && all(req_col_names %in% names(data))){
     observation <- data %>% dplyr::distinct()
     observation <- observation[,req_col_names]
     if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
     
-  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+  }else if(data_type == "table" && !all(req_col_names %in% names(data))){
     stop("please provide a valid ecocomDP dataset or table that includes columns from an ecocomDP 'observation' table")
     
   }else if(data_type == "dataset_old"){
@@ -907,12 +907,12 @@ plot_taxa_rank <- function(
   # detect data type, extract observation table
   data_type <- detect_data_type(data)
   
-  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+  if(data_type == "table" && all(req_col_names %in% names(data))){
     data_long <- data %>% dplyr::distinct()
     data_long <- data_long[,req_col_names]
     if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
     
-  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+  }else if(data_type == "table" && !all(req_col_names %in% names(data))){
     stop("please provide a valid ecocomDP dataset or a table that includes the columns present in the ecocomDP 'observation' and 'taxon' tables")
     
   }else if(data_type == "dataset_old"){
@@ -1025,12 +1025,12 @@ plot_taxa_occur_freq <- function(
   # detect data type, extract observation table
   data_type <- detect_data_type(data)
   
-  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+  if(data_type == "table" && all(req_col_names %in% names(data))){
     data_long <- data %>% dplyr::distinct()
     # data_long <- data_long[,req_col_names]
     if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
     
-  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+  }else if(data_type == "table" && !all(req_col_names %in% names(data))){
     stop("please provide a valid ecocomDP dataset or a table that includes the columns present in the ecocomDP 'observation' and 'taxon' tables")
     
   }else if(data_type == "dataset_old"){
@@ -1212,11 +1212,11 @@ plot_taxa_abund <- function(
   # detect data type, extract observation table
   data_type <- detect_data_type(data)
   
-  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+  if(data_type == "table" && all(req_col_names %in% names(data))){
     flat_data <- data %>% dplyr::distinct()
     if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
     
-  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+  }else if(data_type == "table" && !all(req_col_names %in% names(data))){
     stop("please provide a valid ecocomDP dataset or a table that includes the columns present in the ecocomDP 'observation' and 'taxon' tables")
     
   }else if(data_type == "dataset_old"){
@@ -1364,11 +1364,11 @@ plot_sites <- function(
   # detect data type, extract observation table
   data_type <- detect_data_type(data)
   
-  if(data_type == "flat_table" && all(req_col_names %in% names(data))){
+  if(data_type == "table" && all(req_col_names %in% names(data))){
     flat_data <- data %>% dplyr::distinct()
     if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
     
-  }else if(data_type == "flat_table" && !all(req_col_names %in% names(data))){
+  }else if(data_type == "table" && !all(req_col_names %in% names(data))){
     stop("please provide a valid ecocomDP dataset or a table that includes the columns present in the ecocomDP 'observation' and 'taxon' tables")
     
   }else if(data_type == "dataset_old"){

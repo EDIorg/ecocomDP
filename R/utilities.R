@@ -464,6 +464,68 @@ coerce_table_classes <- function(tbl, name, cls) {
 
 
 
+#' Detect the type of object input to the \code{data} parameter
+#' 
+#' @description The \code{data} parameter, used by a few functions in the ecocomDP package, can accept different object types. \code{detect_data_type()} identifies the object type, which the calling function typically uses in some flow control logic.
+#' 
+#' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, or a table containing the columns of the observation table.
+#' 
+#' @return (character) The type of \code{data}, which is one of:
+#' \itemize{
+#'   \item "dataset": The default return of \code{read_data()}
+#'   \item "list_of_datasets": > 1 "dataset"
+#'   \item "table": A flat table
+#'   \item "list_of_tables": The named list of L1 tables (i.e. read_data()$tables)
+#'   \item "dataset_old": The old, and since deprecated, return of \code{read_data()}
+#'   \item "list_of_datasets_old": > 1 "dataset_old"
+#'   \item "unrecognized": Not a recognized (i.e. supported) type
+#' }
+#' 
+detect_data_type <- function(data){
+  table_names <- unique(read_criteria()$table)
+  # dataset
+  if((class(data)=="list") && ("tables" %in% names(data))){
+    if (sum(names(data) == "tables") == 1) {
+      return("dataset")
+    }
+  }
+  # list_of_datasets
+  if ((class(data)=="list") && (length(data) > 1)) {
+    res <- lapply(data, function(x) {"tables" %in% names(x)})
+    if (all(unlist(res))) {
+      return("list_of_datasets")
+    }
+  }
+  # table
+  if(all(class(data) %in% c("data.frame", "tbl_df", "tbl"))){
+    return("table")
+  }
+  # list_of_tables
+  if((class(data)=="list") && any(table_names %in% names(data))){
+    return("list_of_tables")
+  }
+  # dataset_old
+  is_dataset_old <- function(x) {
+    res <- (class(x)=="list") && (length(x) == 1) && ("tables" %in% names(x[[1]]))
+    return(res)
+  }
+  if(is_dataset_old(data)) {
+    return("dataset_old")
+  }
+  # list_of_dataset_old
+  if (all(unlist(lapply(data, is_dataset_old)))) {
+    return("list_of_datasets_old")
+  }
+  # unrecognized
+  return("unrecognized")
+}
+
+
+
+
+
+
+
 
 # Detect field delimiter of file
 #

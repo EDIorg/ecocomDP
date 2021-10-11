@@ -2,6 +2,56 @@ context("utilities.R")
 
 library(ecocomDP)
 
+# detect_data_type ------------------------------------------------------------
+
+testthat::test_that("Possible returns from detect_data_type()", {
+  
+  # dataset (valid)
+  dataset_new <- ants_L1[[1]]
+  dataset_new$id <- names(ants_L1)
+  expect_equal(detect_data_type(dataset_new), "dataset")
+  # dataset (unrecognized)
+  dataset_new$tables <- NULL
+  expect_equal(detect_data_type(dataset_new), "unrecognized")
+  
+  # list_of_datasets (valid)
+  dataset_new <- ants_L1[[1]]
+  dataset_new$id <- names(ants_L1)
+  list_of_datasets <- list(dataset_new, dataset_new)
+  expect_equal(detect_data_type(list_of_datasets), "list_of_datasets")
+  # list_of_datasets (unrecognized)
+  list_of_datasets[[1]]$tables <- NULL
+  expect_equal(detect_data_type(list_of_datasets), "unrecognized")
+  
+  # table (valid)
+  table <- ants_L1[[1]]$tables$observation
+  expect_equal(detect_data_type(table), "table")
+  # table (unrecognized)
+  table <- table$observation_id
+  expect_equal(detect_data_type(table), "unrecognized")
+  
+  # list_of_tables (valid)
+  list_of_tables <- ants_L1[[1]]$tables
+  expect_equal(detect_data_type(list_of_tables), "list_of_tables")
+  # list_of_tables (unrecognized)
+  names(list_of_tables) <- rep("bad_table_name", length(list_of_tables))
+  expect_equal(detect_data_type(list_of_tables), "unrecognized")
+  
+  # dataset_old (valid)
+  dataset_old <- ants_L1
+  expect_equal(detect_data_type(dataset_old), "dataset_old")
+  # Not testing invalid forms because everything else at this point would 
+  # be a recognized type or unrecognized
+  
+  # list_of_datasets_old (valid)
+  dataset_old <- ants_L1
+  list_of_datasets_old <- list(dataset_old, dataset_old)
+  expect_equal(detect_data_type(list_of_datasets_old), "list_of_datasets_old")
+  # Not testing invalid forms because everything else at this point would 
+  # be a recognized type or unrecognized
+  
+})
+
 # detect_delimiter() - Primary method -----------------------------------------
 
 testthat::test_that("Primary method of detect_delimiter()", {
