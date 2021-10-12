@@ -7,7 +7,7 @@
 detect_data_type(data)
 }
 \arguments{
-\item{data}{(list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of ecocoomDP tables, or a table containing columns of the ecocomDP observation table.}
+\item{data}{(list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation table, or a flat table containing columns of the observation table.}
 }
 \value{
 (character) The type of \code{data}, which is one of:
@@ -18,8 +18,9 @@ detect_data_type(data)
   \item "list_of_tables": The named list of L1 tables (i.e. read_data()$tables)
   \item "dataset_old": The old, and since deprecated, return of \code{read_data()}
   \item "list_of_datasets_old": > 1 "dataset_old"
-  \item "unrecognized": Not a recognized (i.e. supported) type
 }
+
+Unrecognized types will thorw an error.
 }
 \description{
 The \code{data} parameter, used by a few functions in the ecocomDP package, can accept different object types. \code{detect_data_type()} identifies the object type, which the calling function typically uses in some flow control logic.

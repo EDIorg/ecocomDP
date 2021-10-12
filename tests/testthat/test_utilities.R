@@ -12,7 +12,7 @@ testthat::test_that("Possible returns from detect_data_type()", {
   expect_equal(detect_data_type(dataset_new), "dataset")
   # dataset (unrecognized)
   dataset_new$tables <- NULL
-  expect_equal(detect_data_type(dataset_new), "unrecognized")
+  expect_error(detect_data_type(dataset_new), regexp = "Unrecognized.")
   
   # list_of_datasets (valid)
   dataset_new <- ants_L1[[1]]
@@ -21,21 +21,21 @@ testthat::test_that("Possible returns from detect_data_type()", {
   expect_equal(detect_data_type(list_of_datasets), "list_of_datasets")
   # list_of_datasets (unrecognized)
   list_of_datasets[[1]]$tables <- NULL
-  expect_equal(detect_data_type(list_of_datasets), "unrecognized")
+  expect_error(detect_data_type(list_of_datasets), regexp = "Unrecognized.")
   
   # table (valid)
   table <- ants_L1[[1]]$tables$observation
   expect_equal(detect_data_type(table), "table")
   # table (unrecognized)
   table <- table$observation_id
-  expect_equal(detect_data_type(table), "unrecognized")
+  expect_error(detect_data_type(table), regexp = "Unrecognized.")
   
   # list_of_tables (valid)
   list_of_tables <- ants_L1[[1]]$tables
   expect_equal(detect_data_type(list_of_tables), "list_of_tables")
   # list_of_tables (unrecognized)
   names(list_of_tables) <- rep("bad_table_name", length(list_of_tables))
-  expect_equal(detect_data_type(list_of_tables), "unrecognized")
+  expect_error(detect_data_type(list_of_tables), regexp = "Unrecognized.")
   
   # dataset_old (valid)
   dataset_old <- ants_L1

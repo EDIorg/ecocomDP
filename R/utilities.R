@@ -468,7 +468,7 @@ coerce_table_classes <- function(tbl, name, cls) {
 #' 
 #' @description The \code{data} parameter, used by a few functions in the ecocomDP package, can accept different object types. \code{detect_data_type()} identifies the object type, which the calling function typically uses in some flow control logic.
 #' 
-#' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of ecocoomDP tables, or a table containing columns of the ecocomDP observation table.
+#' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation table, or a flat table containing columns of the observation table.
 #' 
 #' @return (character) The type of \code{data}, which is one of:
 #' \itemize{
@@ -478,8 +478,9 @@ coerce_table_classes <- function(tbl, name, cls) {
 #'   \item "list_of_tables": The named list of L1 tables (i.e. read_data()$tables)
 #'   \item "dataset_old": The old, and since deprecated, return of \code{read_data()}
 #'   \item "list_of_datasets_old": > 1 "dataset_old"
-#'   \item "unrecognized": Not a recognized (i.e. supported) type
 #' }
+#' 
+#' Unrecognized types will thorw an error.
 #' 
 detect_data_type <- function(data){
   table_names <- unique(read_criteria()$table)
@@ -517,7 +518,7 @@ detect_data_type <- function(data){
     return("list_of_datasets_old")
   }
   # unrecognized
-  return("unrecognized")
+  stop("Unrecognized data type", call. = FALSE)
 }
 
 
@@ -1118,6 +1119,49 @@ ping_edi <- function() {
 
 
 
+
+
+
+#' Get the observation table from a \code{data} argument
+#' 
+#' @description Several functions operate on the observation table but accept a broader set of inputs via the \code{data} parameter. This helper function does that.
+#'
+#' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation table, or a flat table containing columns of the observation table.
+#'
+#' @return (tbl_df, tbl, data.frame) The observation table, if it can be found, otherwise \code{NULL}.
+#' 
+#' @noRd
+#'
+get_observation_table <- function(data) {
+  criteria <- dplyr::filter(read_criteria(), table == "observation")
+  obs_cols <- na.omit(criteria$column)
+  if (detect_data_type(data) == "dataset") {
+    table <- data$tables$observation
+  } else if (detect_data_type(data) == "table") {
+    browser()
+  } else if (detect_data_type(data) == "dataset_old") {
+    browser()
+  } 
+  
+  
+  if(detect_data_type(data) == "table" && all(obs_cols %in% names(data))){
+    observation <- data %>% dplyr::distinct()
+    if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
+    
+  }else if(data_type == "table" && !all(obs_cols %in% names(data))){
+    stop("please provide a valid ecocomDP dataset or table that includes columns from an ecocomDP 'observation' table")
+    
+  }else if(data_type == "dataset_old"){
+    observation <- data[[1]]$tables$observation
+    if(is.na(id)) id <- names(data)
+    
+  }else if(data_type == "dataset"){
+    observation <- data$tables$observation
+    if(is.na(id)) id <- data$id
+  }else{
+    return(NULL)
+  }
+}
 
 
 
