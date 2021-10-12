@@ -510,15 +510,15 @@ detect_data_type <- function(data){
     res <- (class(x)=="list") && (length(x) == 1) && ("tables" %in% names(x[[1]]))
     return(res)
   }
-  if(is_dataset_old(data)) {
+  if (is_dataset_old(data)) {
     return("dataset_old")
   }
   # list_of_dataset_old
-  if (all(unlist(lapply(data, is_dataset_old)))) {
+  if (!is.null(data) & all(unlist(lapply(data, is_dataset_old)))) {
     return("list_of_datasets_old")
   }
   # unrecognized
-  stop("Unrecognized data type", call. = FALSE)
+  stop('Input to "data" is not one of the supported types.', call. = FALSE)
 }
 
 
@@ -913,6 +913,81 @@ get_eol <- function(path, file.name, os){
 
 
 
+#' Get the dataset \code{id} from a \code{data} argument
+#' 
+#' @description Several functions use the \code{id} parameter. This helper function gets the \code{id} if it can be found in \code{data}.
+#'
+#' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation table, or a flat table containing columns of the observation table.
+#'
+#' @return (character) The dataset identifier
+#' 
+#' @noRd
+#'
+get_id <- function(data) {
+  # Get the id from allowed object types and return NA if missing
+  if (detect_data_type(data) == "dataset") {
+    res <- data$id
+    if (is.null(res)) {
+      res <- NA_character_
+    }
+  } else if (detect_data_type(data) == "dataset_old") {
+    res <- names(data)
+    if (is.null(res)) {
+      res <- NA_character_
+    }
+  } else {
+    res <- NA_character_
+  }
+  return(res)
+}
+
+
+
+
+
+
+
+
+#' Get the observation table from a \code{data} argument
+#' 
+#' @description Several functions operate on the observation table but accept a broader set of inputs via the \code{data} parameter. This helper function does that.
+#'
+#' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation table, or a flat table containing columns of the observation table.
+#'
+#' @return (tbl_df, tbl, data.frame) The observation table.
+#' 
+#' @noRd
+#'
+get_observation_table <- function(data) {
+  # Get the observation table from allowed object types and error if missing
+  if (detect_data_type(data) == "dataset") {
+    table <- data$tables[["observation"]]
+  } else if (detect_data_type(data) == "list_of_tables") {
+    table <- data[["observation"]]
+  } else if (detect_data_type(data) == "dataset_old") {
+    table <- data[[1]]$tables[["observation"]]
+  }
+  if (is.null(table)) {
+    stop('Input argument "data" does not contain the observation table', 
+         call. = FALSE)
+  }
+  if (detect_data_type(data) == "table") {
+    table <- data
+  }
+  # Extract all columns of the observation table and error if missing
+  criteria <- dplyr::filter(read_criteria(), table == "observation")
+  obs_cols <- na.omit(criteria$column)
+  res <- dplyr::select(table, dplyr::all_of(obs_cols))
+  return(res)
+}
+
+
+
+
+
+
+
+
 # Does dataset ID belong to EDI?
 #
 # @param id (character) Dataset identifier 
@@ -1112,54 +1187,6 @@ ping_edi <- function() {
          " hours, then there is an unexpected issue that will be resolved ",
          "shortly. Our apologies for the inconvenience. Please try again ",
          "later.", call. = FALSE)
-  }
-}
-
-
-
-
-
-
-
-
-#' Get the observation table from a \code{data} argument
-#' 
-#' @description Several functions operate on the observation table but accept a broader set of inputs via the \code{data} parameter. This helper function does that.
-#'
-#' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation table, or a flat table containing columns of the observation table.
-#'
-#' @return (tbl_df, tbl, data.frame) The observation table, if it can be found, otherwise \code{NULL}.
-#' 
-#' @noRd
-#'
-get_observation_table <- function(data) {
-  criteria <- dplyr::filter(read_criteria(), table == "observation")
-  obs_cols <- na.omit(criteria$column)
-  if (detect_data_type(data) == "dataset") {
-    table <- data$tables$observation
-  } else if (detect_data_type(data) == "table") {
-    browser()
-  } else if (detect_data_type(data) == "dataset_old") {
-    browser()
-  } 
-  
-  
-  if(detect_data_type(data) == "table" && all(obs_cols %in% names(data))){
-    observation <- data %>% dplyr::distinct()
-    if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
-    
-  }else if(data_type == "table" && !all(obs_cols %in% names(data))){
-    stop("please provide a valid ecocomDP dataset or table that includes columns from an ecocomDP 'observation' table")
-    
-  }else if(data_type == "dataset_old"){
-    observation <- data[[1]]$tables$observation
-    if(is.na(id)) id <- names(data)
-    
-  }else if(data_type == "dataset"){
-    observation <- data$tables$observation
-    if(is.na(id)) id <- data$id
-  }else{
-    return(NULL)
   }
 }
 

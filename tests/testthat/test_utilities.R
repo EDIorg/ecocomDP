@@ -12,7 +12,7 @@ testthat::test_that("Possible returns from detect_data_type()", {
   expect_equal(detect_data_type(dataset_new), "dataset")
   # dataset (unrecognized)
   dataset_new$tables <- NULL
-  expect_error(detect_data_type(dataset_new), regexp = "Unrecognized.")
+  expect_error(detect_data_type(dataset_new), regexp = "not one")
   
   # list_of_datasets (valid)
   dataset_new <- ants_L1[[1]]
@@ -21,21 +21,21 @@ testthat::test_that("Possible returns from detect_data_type()", {
   expect_equal(detect_data_type(list_of_datasets), "list_of_datasets")
   # list_of_datasets (unrecognized)
   list_of_datasets[[1]]$tables <- NULL
-  expect_error(detect_data_type(list_of_datasets), regexp = "Unrecognized.")
+  expect_error(detect_data_type(list_of_datasets), regexp = "not one")
   
   # table (valid)
   table <- ants_L1[[1]]$tables$observation
   expect_equal(detect_data_type(table), "table")
   # table (unrecognized)
   table <- table$observation_id
-  expect_error(detect_data_type(table), regexp = "Unrecognized.")
+  expect_error(detect_data_type(table), regexp = "not one")
   
   # list_of_tables (valid)
   list_of_tables <- ants_L1[[1]]$tables
   expect_equal(detect_data_type(list_of_tables), "list_of_tables")
   # list_of_tables (unrecognized)
   names(list_of_tables) <- rep("bad_table_name", length(list_of_tables))
-  expect_error(detect_data_type(list_of_tables), regexp = "Unrecognized.")
+  expect_error(detect_data_type(list_of_tables), regexp = "not one")
   
   # dataset_old (valid)
   dataset_old <- ants_L1
@@ -61,6 +61,64 @@ testthat::test_that("Primary method of detect_delimiter()", {
   seps <- stringr::str_extract_all(msg, "(?<=(sep=')).+(?='[:blank:])")
   sep <- unique(unlist(seps))
   expect_length(sep, 1)
+})
+
+# get_id ----------------------------------------------------------------------
+
+testthat::test_that("Possible inputs to get_id()", {
+  # dataset
+  dataset <- ants_L1[[1]]
+  dataset$id <- names(ants_L1)
+  expect_true(nchar(get_id(dataset)) > 1)
+  # dataset_old
+  dataset_old <- ants_L1
+  expect_true(nchar(get_id(dataset_old)) > 1)
+  # Unsupported type
+  expect_equal(get_id(ants_L1[[1]]$tables), NA_character_)
+})
+
+# get_observation_table -------------------------------------------------------
+
+testthat::test_that("Possible inputs to get_observation_table()", {
+  
+  # dataset (valid)
+  x <- ants_L1[[1]]
+  res <- get_observation_table(x)
+  expect_true("data.frame" %in% class(res))
+  # dataset (missing observation table)
+  x <- ants_L1[[1]]
+  x$tables$observation <- NULL
+  expect_error(get_observation_table(x), "does not contain")
+  
+  # list_of_tables (valid)
+  x <- ants_L1[[1]]$tables
+  res <- get_observation_table(x)
+  expect_true("data.frame" %in% class(res))
+  # list_of_tables (missing observation table)
+  x <- ants_L1[[1]]$tables
+  x$observation <- NULL
+  expect_error(get_observation_table(x), "does not contain")
+  
+  # table (valid)
+  x <- ants_L1[[1]]$tables$observation
+  res <- get_observation_table(x)
+  expect_true("data.frame" %in% class(res))
+  # table (invalid; NULL)
+  expect_error(get_observation_table(NULL), "not one of")
+  
+  # dataset_old (valid)
+  x <- ants_L1
+  res <- get_observation_table(x)
+  expect_true("data.frame" %in% class(res))
+  # dataset_old (missing observation table)
+  x[[1]]$tables$observation <- NULL
+  expect_error(get_observation_table(x), regexp = "does not contain")
+})
+
+testthat::test_that("Expected columns; get_observation_table()", {
+  # table (valid)
+  x <- ants_L1[[1]]$tables$observation[, 1:3]
+  expect_error(get_observation_table(x))
 })
 
 # is_edi(), is_neon() ---------------------------------------------------------
