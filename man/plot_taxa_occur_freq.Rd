@@ -15,13 +15,13 @@ plot_taxa_occur_freq(
 )
 }
 \arguments{
-\item{data}{(list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, a flattened ecocomDP dataset, or any flat table containing the columns present in both the ecocomDP observation and taxon tables.}
+\item{data}{(list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation and taxon tables, or a flat table containing columns of the observation and taxon tables.}
 
-\item{id}{(character) Identifier of dataset to be used in plot subtitles.}
+\item{id}{(character) Identifier of dataset to be used in plot subtitles. Is automatically assigned when \code{data} is a dataset object containing the \code{id} field, or is a table containing the package_id column.}
 
 \item{min_occurrence}{(numeric) Minimum number of occurrences allowed for taxa included in the plot.}
 
-\item{facet_var}{(character) Name of column to use for faceting.}
+\item{facet_var}{(character) Name of column to use for faceting. Must be a column of the observation or taxon table.}
 
 \item{color_var}{(character) Name of column to use for plot colors.}
 
@@ -35,32 +35,40 @@ plot_taxa_occur_freq(
 \description{
 Plot stacked taxa by site
 }
+\details{
+The \code{data} parameter accepts a range of input types but ultimately requires the 13 columns of the combined observation and taxon tables.
+}
 \examples{
 \dontrun{
-# plot ecocomDP formatted dataset
-plot_taxa_occur_freq(ants_L1)
+# Read a dataset of interest
+dataset <- read_data("edi.193.5")
 
-# plot flattened ecocomDP dataset
-plot_taxa_occur_freq(flatten_data(ants_L1))
+# Plot the dataset
+plot_taxa_occur_freq(dataset)
 
-# facet by location color by taxon_rank
+# Facet by location and color by taxon_rank
 plot_taxa_occur_freq(
-  data = ants_L1,
-  facet_var = "location_id",
+  data = dataset, 
+  facet_var = "location_id", 
   color_var = "taxon_rank")
 
-# color by location, only include taxa with > 10 occurrences
+# Color by location and only include taxa with > 10 occurrences
 plot_taxa_occur_freq(
-  data = ants_L1,
+  data = dataset,
   color_var = "location_id",
   min_occurrence = 5)
 
-# tidy syntax, filter data by date
-ants_L1 \%>\% 
+# Flatten, manipulate, then plot
+dataset \%>\% 
   flatten_data() \%>\% 
-  dplyr::filter(
-    lubridate::as_date(datetime) > "2003-07-01") \%>\%
+  dplyr::filter(lubridate::as_date(datetime) > "2003-07-01") \%>\%
   plot_taxa_occur_freq()
 }
+
+# Plot the example dataset
+plot_taxa_occur_freq(
+  data = dataset,
+  color_var = "location_id",
+  min_occurrence = 5)
 
 }

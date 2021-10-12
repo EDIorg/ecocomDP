@@ -4,12 +4,14 @@
 \alias{plot_taxa_shared_sites}
 \title{Plot number of unique taxa shared across sites}
 \usage{
-plot_taxa_shared_sites(data, id = NA_character_)
+plot_taxa_shared_sites(data, id = NA_character_, observation = NULL)
 }
 \arguments{
-\item{data}{(list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, an ecocomDP observation table, or any table containing the columns present in an ecocomDP observation table.}
+\item{data}{(list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation table, or a flat table containing columns of the observation table.}
 
-\item{id}{(character) Identifier of dataset to be used in plot subtitles.}
+\item{id}{(character) Identifier of dataset to be used in plot subtitles. Is automatically assigned when \code{data} is a dataset object containing the \code{id} field, or is a table containing the package_id column.}
+
+\item{observation}{(tbl_df, tbl, data.frame) DEPRECATED: Use \code{data} instead.}
 }
 \value{
 (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
@@ -17,30 +19,29 @@ plot_taxa_shared_sites(data, id = NA_character_)
 \description{
 Plot number of unique taxa shared across sites
 }
+\details{
+The \code{data} parameter accepts a range of input types but ultimately requires the 9 columns of the observation table.
+}
 \examples{
 \dontrun{
-# plot ecocomDP formatted dataset
-plot_taxa_shared_sites(ants_L1)
+# Read a dataset of interest
+dataset <- read_data("edi.193.5")
 
-# plot flattened ecocomDP dataset
-plot_taxa_shared_sites(flatten_data(ants_L1))
+# Plot the dataset
+plot_taxa_shared_sites(dataset)
 
-# plot ecocomDP observation table
-plot_taxa_shared_sites(ants_L1[[1]]$tables$observation)
-
-# tidy syntax, filter data by date
-ants_L1 \%>\% 
+# Flatten the dataset, manipulate, then plot
+dataset \%>\% 
   flatten_data() \%>\% 
-  dplyr::filter(
-    lubridate::as_date(datetime) > "2003-07-01") \%>\%
+  dplyr::filter(lubridate::as_date(datetime) > "2003-07-01") \%>\%
+  dplyr::filter(as.numeric(location_id) > 4) \%>\%
   plot_taxa_shared_sites()
-
-# tidy syntax, filter data by site ID
-ants_L1 \%>\% 
-  flatten_data() \%>\% 
-  dplyr::filter(
-    as.numeric(location_id) > 4) \%>\%
-  plot_taxa_shared_sites()
+  
+# Plot from the observation table directly
+plot_taxa_shared_sites(dataset$tables$observation)
 }
+
+# Plot the example dataset
+plot_taxa_shared_sites(ants_L1)
 
 }

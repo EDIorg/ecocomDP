@@ -297,7 +297,23 @@ testthat::test_that("plot_*()", {
   expect_null(validate_arguments("plot", as.list(list(alpha = 1))))         # is between 0 and 1
   expect_error(validate_arguments("plot", as.list(list(alpha = -1))))
   expect_error(validate_arguments("plot", as.list(list(alpha = 2))))
+  # time_window_size
+  expect_null(validate_arguments("plot", as.list(list(time_window_size = "day"))))
+  expect_null(validate_arguments("plot", as.list(list(time_window_size = "year"))))
+  expect_error(
+    object = validate_arguments("plot", as.list(list(time_window_size = "month"))), 
+    regexp = 'must be \"day\" or \"year\"')
+  # facet_scales
+  expect_null(validate_arguments("plot", as.list(list(facet_scales = "free"))))
+  expect_null(validate_arguments("plot", as.list(list(facet_scales = "fixed"))))
+  expect_null(validate_arguments("plot", as.list(list(facet_scales = "free_x"))))
+  expect_null(validate_arguments("plot", as.list(list(facet_scales = "free_y"))))
+  expect_error(
+    object = validate_arguments("plot", as.list(list(facet_scales = "month"))), 
+    regexp = 'must be')
 })
+
+
 
 # read_data() -----------------------------------------------------------------
 

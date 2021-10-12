@@ -12,13 +12,15 @@ plot_taxa_diversity(
 )
 }
 \arguments{
-\item{data}{(list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, an ecocomDP observation table, or any table containing the columns present in an ecocomDP observation table.}
+\item{data}{(list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation table, or a flat table containing columns of the observation table.}
 
-\item{id}{(character) Identifier of dataset to be used in plot subtitles.}
+\item{id}{(character) Identifier of dataset to be used in plot subtitles. Is automatically assigned when \code{data} is a dataset object containing the \code{id} field, or is a table containing the package_id column.}
 
-\item{time_window_size}{(character) Define the time window over which to aggregate observations for calculating richness}
+\item{time_window_size}{(character) Define the time window over which to aggregate observations for calculating richness. Can be: "day" or "year"}
 
 \item{alpha}{(numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.}
+
+\item{observation}{(tbl_df, tbl, data.frame) DEPRECATED: Use \code{data} instead.}
 }
 \value{
 (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
@@ -26,47 +28,32 @@ plot_taxa_diversity(
 \description{
 Plot diversity (taxa richness) through time
 }
+\details{
+The \code{data} parameter accepts a range of input types but ultimately requires the 9 columns of the observation table.
+}
 \examples{
 \dontrun{
-# plot richness through time for ecocomDP formatted dataset by 
-# observation date
-plot_taxa_diversity(ants_L1)
+# Read a dataset of interest
+dataset <- read_data("edi.193.5")
 
-# plot richness through time for ecocomDP formatted dataset by 
-# aggregating observations within a year
-plot_taxa_diversity(
-  data = ants_L1,
-  time_window_size = "year")
+# Plot the dataset
+plot_taxa_diversity(dataset)
 
-# plot richness through time for ecocomDP observation table
-plot_taxa_diversity(ants_L1[[1]]$tables$observation)
+# Plot the dataset with observations aggregated by year
+plot_taxa_diversity(dataset, time_window_size = "year")
 
-# plot richness through time for flattened ecocomDP dataset 
-plot_taxa_diversity(flatten_data(ants_L1))
-
-
-# Using Tidy syntax:
-# plot ecocomDP formatted dataset richness through time by 
-# observation date
-ants_L1 \%>\% plot_taxa_diversity()
-
-ants_L1 \%>\% plot_taxa_diversity(time_window_size = "day")
-
-# plot ecocomDP formatted dataset richness through time 
-# aggregating observations within a month
-ants_L1 \%>\% plot_taxa_diversity(time_window_size = "month")
-
-# plot ecocomDP formatted dataset richness through time 
-# aggregating observations within a year
-ants_L1 \%>\% plot_taxa_diversity(time_window_size = "year")
-
-# tidy syntax, filter data by date
-ants_L1 \%>\% 
+# Flatten the dataset, manipulate, then plot
+dataset \%>\% 
   flatten_data() \%>\% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2007-01-01") \%>\%
-  plot_taxa_diversity(
-    time_window_size = "year")
+  plot_taxa_diversity()
+  
+# Plot from the observation table directly
+plot_taxa_diversity(dataset$tables$observation)
 }
+
+# Plot the example dataset
+plot_taxa_diversity(ants_L1)
 
 }

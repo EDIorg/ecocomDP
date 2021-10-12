@@ -155,6 +155,19 @@ validate_arguments <- function(fun.name, fun.args) {
         stop("Intput 'alpha' should be 0-1.", call. = FALSE)
       }
     }
+    # time_window_size
+    if (!is.null(fun.args$time_window_size)) {
+      if (!fun.args$time_window_size %in% c("day", "year")) {
+        stop('Intput "time_window_size" must be "day" or "year"', call. = FALSE)
+      }
+    }
+    # facet_scales
+    if (!is.null(fun.args$facet_scales)) {
+      if (!fun.args$facet_scales %in% c("free", "fixed", "free_x", "free_y")) {
+        stop('Intput "facet_scales" must be "free", "fixed", "free_x", or ',
+             '"free_y"', call. = FALSE)
+      }
+    }
   }
   
   # search_data() -------------------------------------------------------------

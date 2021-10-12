@@ -5,7 +5,7 @@
 \title{Plot abundances by event_id}
 \usage{
 plot_taxa_abund(
-  data = NULL,
+  data,
   id = NA_character_,
   min_abundance = 0,
   trans = "identity",
@@ -16,15 +16,15 @@ plot_taxa_abund(
 )
 }
 \arguments{
-\item{data}{(list or tbl_df, tbl, data.frame) An ecocomDP formatted dataset, a flattened ecocomDP dataset, or any flat table containing the columns present in both the ecocomDP observation and taxon tables.}
+\item{data}{(list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation and taxon tables, or a flat table containing columns of the observation and taxon tables.}
 
-\item{id}{(character) Identifier of dataset to be used in plot subtitles.}
+\item{id}{(character) Identifier of dataset to be used in plot subtitles. Is automatically assigned when \code{data} is a dataset object containing the \code{id} field, or is a table containing the package_id column.}
 
 \item{min_abundance}{(numeric) Minimum abundance allowed for observations of taxa included in the plot.}
 
 \item{trans}{(character, "identity" is default, "log1p" is x+1 transform) For continuous scales, the name of a transformation object or the object itself. Built-in transformations include "asn", "atanh", "boxcox", "date", "exp", "hms", "identity", "log", "log10", "log1p", "log2", "logit", "modulus", "probability", "probit", "pseudo_log", "reciprocal", "reverse", "sqrt" and "time".}
 
-\item{facet_var}{(character) Name of column to use for faceting.}
+\item{facet_var}{(character) Name of column to use for faceting. Must be a column of the observation or taxon table.}
 
 \item{color_var}{(character) Name of column to use for plot colors.}
 
@@ -38,43 +38,50 @@ plot_taxa_abund(
 \description{
 Plot abundances by event_id
 }
+\details{
+The \code{data} parameter accepts a range of input types but ultimately requires the 13 columns of the combined observation and taxon tables.
+}
 \examples{
 \dontrun{
-# plot ecocomDP formatted dataset
-plot_taxa_abund(
-  dataset = ants_L1)
+# Read a dataset of interest
+dataset <- read_data("edi.193.5")
 
-# plot flattened ecocomDP dataset, log(x+1) transform abundances
-plot_taxa_abund(
-  flat_data = flatten_dataset(ants_L1),
-  trans = "log1p")
+# Plot the dataset
+plot_taxa_abund(dataset)
 
-# facet by location color by taxon_rank, log 10 transformed
+# Plot with log(x+1) transformed abundances
+plot_taxa_abund(dataset, trans = "log1p")
+
+# Facet by location, color by taxon_rank, with log 10 transformed abundances
 plot_taxa_abund(
-  dataset = ants_L1,
+  data = dataset,
   facet_var = "location_id",
   color_var = "taxon_rank",
   trans = "log10")
 
-# facet by location, only plot taxa of rank = "species"
+# Facet by location, plot "species" ranks, with minimum occurrence
 plot_taxa_abund(
-  dataset = ants_L1,
+  data = dataset,
   facet_var = "location_id",
-  rank = "Species", min_occurrence = 5,
+  rank = "Species", 
+  min_occurrence = 5,
   trans = "log1p")
 
-# color by location, only include taxa with > 10 occurrences
+# Color by location, only include taxa with > 10 occurrences
 plot_taxa_abund(
-  dataset = ants_L1,
+  data = dataset,
   color_var = "location_id",
+  min_occurrence = 10,
   trans = "log10")
 
-# tidy syntax, filter data by date
-ants_L1 \%>\% 
+# Flatten, manipulate, and plot
+dataset \%>\% 
   flatten_dataset() \%>\% 
-  dplyr::filter(
-    lubridate::as_date(datetime) > "2003-07-01") \%>\%
-  plot_taxa_abund(flat_data = .,
-                      trans = "log1p")
+  dplyr::filter(lubridate::as_date(datetime) > "2003-07-01") \%>\%
+  plot_taxa_abund(data = ., trans = "log1p")
 }
+
+# Plot the example dataset
+plot_taxa_abund(dataset)
+
 }

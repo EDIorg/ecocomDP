@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_taxa.R
 \name{plot_taxa_sample_time}
 \alias{plot_taxa_sample_time}
-\title{DEPRECATED. This is the alias for the previous name for plot_sample_space_time}
+\title{Plot dates and times samples were taken (DEPRECATED)}
 \usage{
 plot_taxa_sample_time(observation, id = NA_character_, alpha = 1)
 }
@@ -17,11 +17,5 @@ plot_taxa_sample_time(observation, id = NA_character_, alpha = 1)
 (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
 }
 \description{
-DEPRECATED. This is the alias for the previous name for plot_sample_space_time
-}
-\examples{
-\dontrun{
-# plot ecocomDP formatted dataset
-plot_taxa_sample_time(ants_L1[[1]]$tables$observation)
-}
+Plot dates and times samples were taken (DEPRECATED)
 }
