@@ -972,7 +972,7 @@ get_observation_table <- function(data) {
          call. = FALSE)
   }
   if (detect_data_type(data) == "table") {
-    table <- data
+    table <- data %>% dplyr::distinct()
   }
   # Extract all columns of the observation table and error if missing
   criteria <- dplyr::filter(read_criteria(), table == "observation")
