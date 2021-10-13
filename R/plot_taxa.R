@@ -54,7 +54,10 @@ format_for_comm_plots <- function(observation, id) {
     dplyr::mutate_at(dplyr::vars(SITE_ID), as.character)
   dswide <- dslong %>%                                        # wide form
     dplyr::select(-VARIABLE_UNITS) %>%
-    tidyr::pivot_wider(names_from = VARIABLE_NAME, values_from = VALUE)
+    tidyr::pivot_wider(
+      names_from = VARIABLE_NAME, 
+      values_from = VALUE,
+      values_fn = mean) #average across non-unique observations. 
   res <- list(
     id = id,
     dslong = dslong,
@@ -611,6 +614,8 @@ plot_taxa_sample_time <- function(observation, id = NA_character_, alpha = 1) {
 plot_taxa_shared_sites <- function(data,
                                    id = NA_character_,
                                    observation = NULL){
+  
+  
   # Warn about deprecated observation parameter (remove after 2022-10-18)
   if (!is.null(observation)) {
     data <- observation
@@ -618,14 +623,19 @@ plot_taxa_shared_sites <- function(data,
             call. = FALSE)
   }
   # Get observation table and id from data input if possible
-  observation <- get_observation_table(data)
-  if (!is.na(id)) {
+  observation <- get_observation_table(data) %>% dplyr::distinct()
+  if (is.na(id)) {
     id <- get_id(data)
   }
+  
+
   # Validate inputs and construct intermediate format for plotting
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)
   heat_pal_spectral <- grDevices::colorRampPalette(rev( RColorBrewer::brewer.pal(11, "Spectral")))
+  
+  
+
   # Count taxa shared between sites in a site by taxa matrix
   shared.species <- function(comm) {
     sites <- comm[, 1]
@@ -639,6 +649,9 @@ plot_taxa_shared_sites <- function(data,
     }
     return(site.pairs)
   }
+  
+  
+
   # aggregate years by cumulative abundances
   comm.cumul <- ds$dswide %>% 
     dplyr::group_by(SITE_ID) %>% 
@@ -658,6 +671,10 @@ plot_taxa_shared_sites <- function(data,
   } else if (uniy >= 60) {
     txty <- 4
   }
+  
+  
+
+  
   # Plot
   p <- ggplot2::ggplot(shared.taxa, ggplot2::aes(x = site1, y = site2, fill = shared)) +
     ggplot2::geom_raster() +

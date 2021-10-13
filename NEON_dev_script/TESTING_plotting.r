@@ -331,6 +331,14 @@ ants_L1 %>%
 ###########################################################
 ###########################################################
 # plot shared taxa across sites -- this seems to work fine
+my_dataset <- read_data(
+  id = "neon.ecocomdp.20120.001.001",
+  site= c('COMO','LECO'), 
+  startdate = "2017-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
 
 plot_taxa_shared_sites(
   data = my_dataset[[1]]$tables$observation,
@@ -345,6 +353,13 @@ plot_taxa_shared_sites(
 
 plot_taxa_shared_sites(
   data = ants_L1)
+
+
+neon_data <- ecocomDP::read_data(
+  id = "neon.ecocomdp.20120.001.001",
+  site = c('ARIK','CARI','MAYF'))
+
+plot_taxa_shared_sites(neon_data)
 
 ###########################################################
 
