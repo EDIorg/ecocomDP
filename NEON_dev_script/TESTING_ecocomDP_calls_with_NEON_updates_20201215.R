@@ -89,21 +89,21 @@ my_result_back_in <- read_from_files(data.path = "C:/Users/esokol/Documents/Git/
 #dupes for obs_id below -- dups have different taxon_ids 
 # "9ec05998-a868-4eb8-8691-3c28a025f358"
 # "9a93953e-9260-4b43-95e9-b05a55338f08"
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
 
-my_result_read_data[[1]]$tables$dataset_summary
+my_result_read_data$tables$dataset_summary
 
-names(my_result_read_data[[1]]$tables)
-names(my_result_read_data[[1]]$metadata)
-names(my_result_read_data[[1]]$metadata$orig_NEON_data_product_info)
+names(my_result_read_data$tables)
+names(my_result_read_data$metadata)
+names(my_result_read_data$metadata$orig_NEON_data_product_info)
 
 
-View(my_result_read_data[[1]]$tables$observation)
+View(my_result_read_data$tables$observation)
 
 # check for repeated observations -- Colin's validation seems to be getting false positives here
-obs_tab <- my_result_read_data[[1]]$tables$observation
+obs_tab <- my_result_read_data$tables$observation
 obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))) %>% 
   summarize(
     n_values = length(value),
@@ -112,13 +112,13 @@ obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))) %>%
   dplyr::filter(n_values > 1)
 
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
 
-my_result_read_data[[1]]$validation_issues
+my_result_read_data$validation_issues
 
 
 
@@ -147,20 +147,20 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-my_result_read_data[[1]]$tables$dataset_summary
-my_result_read_data[[1]]$tables$location %>% as.data.frame()
-my_result_read_data[[1]]$tables$location_ancillary %>% as.data.frame() %>% head()
-my_result_read_data[[1]]$tables$taxon %>% as.data.frame() %>% head()
-my_result_read_data[[1]]$tables$observation %>% as.data.frame() %>% head()
-my_result_read_data[[1]]$tables$observation_ancillary %>% as.data.frame() %>% head()
+my_result_read_data$tables$dataset_summary
+my_result_read_data$tables$location %>% as.data.frame()
+my_result_read_data$tables$location_ancillary %>% as.data.frame() %>% head()
+my_result_read_data$tables$taxon %>% as.data.frame() %>% head()
+my_result_read_data$tables$observation %>% as.data.frame() %>% head()
+my_result_read_data$tables$observation_ancillary %>% as.data.frame() %>% head()
 
-View(my_result_read_data[[1]]$tables$observation)
+View(my_result_read_data$tables$observation)
 
 # check for repeated observations -- Colin's validation seems to be getting false positives here
-obs_tab <- my_result_read_data[[1]]$tables$observation
+obs_tab <- my_result_read_data$tables$observation
 obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))) %>% 
   summarize(
     n_values = length(value),
@@ -169,18 +169,18 @@ obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))) %>%
   dplyr::filter(n_values > 1)
 
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
 
-my_result_read_data[[1]]$validation_issues
+my_result_read_data$validation_issues
 
 
 # prob_rec <- observation_ancillary_long %>% dplyr::filter(event_id == "SUGG.20170710.PHYTOPLANKTON.2")
 
-obs_anci <- my_result_read_data[[1]]$tables$observation_ancillary
+obs_anci <- my_result_read_data$tables$observation_ancillary
 obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
 
 
@@ -210,23 +210,23 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
+my_result_read_data$validation_issues
 
-my_result_read_data[[1]]$tables$observation_ancillary %>% filter(variable_name == 'release') %>% select(value) %>% unique()
+my_result_read_data$tables$observation_ancillary %>% filter(variable_name == 'release') %>% select(value) %>% unique()
 
-names(my_result_read_data[[1]]$tables)
+names(my_result_read_data$tables)
 
-my_result_read_data[[1]]$tables$dataset_summary
-my_result_read_data[[1]]$tables$location %>% as.data.frame()
-my_result_read_data[[1]]$tables$location_ancillary %>% as.data.frame() %>% head()
-my_result_read_data[[1]]$tables$taxon %>% as.data.frame() %>% head()
-my_result_read_data[[1]]$tables$observation %>% as.data.frame() %>% head()
-my_result_read_data[[1]]$tables$observation_ancillary %>% as.data.frame() %>% head()
+my_result_read_data$tables$dataset_summary
+my_result_read_data$tables$location %>% as.data.frame()
+my_result_read_data$tables$location_ancillary %>% as.data.frame() %>% head()
+my_result_read_data$tables$taxon %>% as.data.frame() %>% head()
+my_result_read_data$tables$observation %>% as.data.frame() %>% head()
+my_result_read_data$tables$observation_ancillary %>% as.data.frame() %>% head()
 
-View(my_result_read_data[[1]]$tables$observation)
+View(my_result_read_data$tables$observation)
 
 # check for repeated observations -- Colin's validation seems to be getting false positives here
-obs_tab <- my_result_read_data[[1]]$tables$observation
+obs_tab <- my_result_read_data$tables$observation
 obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))) %>% 
   summarize(
     n_values = length(value),
@@ -235,13 +235,13 @@ obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))) %>%
   dplyr::filter(n_values > 1)
 
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
 
-obs_anci <- my_result_read_data[[1]]$tables$observation_ancillary
+obs_anci <- my_result_read_data$tables$observation_ancillary
 obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
 
 
@@ -271,22 +271,22 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-names(my_result_read_data[[1]]$tables)
+names(my_result_read_data$tables)
 
-my_result_read_data[[1]]$tables$dataset_summary
-my_result_read_data[[1]]$tables$location %>% as.data.frame()
-my_result_read_data[[1]]$tables$location_ancillary %>% as.data.frame() %>% head()
-my_result_read_data[[1]]$tables$taxon %>% as.data.frame() %>% head()
-my_result_read_data[[1]]$tables$observation %>% as.data.frame() %>% head()
-my_result_read_data[[1]]$tables$observation_ancillary %>% as.data.frame() %>% head()
+my_result_read_data$tables$dataset_summary
+my_result_read_data$tables$location %>% as.data.frame()
+my_result_read_data$tables$location_ancillary %>% as.data.frame() %>% head()
+my_result_read_data$tables$taxon %>% as.data.frame() %>% head()
+my_result_read_data$tables$observation %>% as.data.frame() %>% head()
+my_result_read_data$tables$observation_ancillary %>% as.data.frame() %>% head()
 
-View(my_result_read_data[[1]]$tables$observation)
+View(my_result_read_data$tables$observation)
 
 # check for repeated observations -- Colin's validation seems to be getting false positives here
-obs_tab <- my_result_read_data[[1]]$tables$observation
+obs_tab <- my_result_read_data$tables$observation
 
 
 obs_summary_tab <- obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))) %>% 
@@ -297,13 +297,13 @@ obs_summary_tab <- obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))
   dplyr::filter(n_values > 1)
 # there appear to be dups, but I think they're real, have different uids and vals, but same taxa and event_id
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
 
-obs_anci <- my_result_read_data[[1]]$tables$observation_ancillary
+obs_anci <- my_result_read_data$tables$observation_ancillary
 obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
 
 
@@ -335,16 +335,16 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-names(my_result_read_data[[1]]$tables)
-names(my_result_read_data[[1]]$metadata)
-names(my_result_read_data[[1]]$metadata$orig_NEON_data_product_info)
-my_result_read_data[[1]]$metadata$data_package_info
+names(my_result_read_data$tables)
+names(my_result_read_data$metadata)
+names(my_result_read_data$metadata$orig_NEON_data_product_info)
+my_result_read_data$metadata$data_package_info
 
 # check for repeated observations -- Colin's validation seems to be getting false positives here
-obs_tab <- my_result_read_data[[1]]$tables$observation
+obs_tab <- my_result_read_data$tables$observation
 head(as.data.frame(obs_tab))
 
 obs_summary_tab <- obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))) %>% 
@@ -355,13 +355,13 @@ obs_summary_tab <- obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))
   dplyr::filter(n_values > 1)
 
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
 
-obs_anci <- my_result_read_data[[1]]$tables$observation_ancillary
+obs_anci <- my_result_read_data$tables$observation_ancillary
 obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
 
 ###############################################
@@ -390,14 +390,14 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
 
-names(my_result_read_data[[1]]$tables)
+names(my_result_read_data$tables)
 
 # check for repeated observations -- Colin's validation seems to be getting false positives here
-obs_tab <- my_result_read_data[[1]]$tables$observation
+obs_tab <- my_result_read_data$tables$observation
 head(as.data.frame(obs_tab))
 
 
@@ -409,13 +409,13 @@ obs_summary_tab <- obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))
   dplyr::filter(n_values > 1)
 
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
 
-obs_anci <- my_result_read_data[[1]]$tables$observation_ancillary
+obs_anci <- my_result_read_data$tables$observation_ancillary
 obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
 
 ###############################################
@@ -446,13 +446,13 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
 
-names(my_result_read_data[[1]]$tables)
+names(my_result_read_data$tables)
 
-obs_tab <- my_result_read_data[[1]]$tables$observation
+obs_tab <- my_result_read_data$tables$observation
 head(as.data.frame(obs_tab))
 
 
@@ -464,13 +464,13 @@ obs_summary_tab <- obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))
   dplyr::filter(n_values > 1)
 print(obs_summary_tab)
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
 
-obs_anci <- my_result_read_data[[1]]$tables$observation_ancillary
+obs_anci <- my_result_read_data$tables$observation_ancillary
 obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
 
 ###############################################
@@ -499,13 +499,13 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
   
   
-names(my_result_read_data[[1]]$tables)
+names(my_result_read_data$tables)
 
-obs_tab <- my_result_read_data[[1]]$tables$observation
+obs_tab <- my_result_read_data$tables$observation
 head(as.data.frame(obs_tab))
 
 
@@ -517,13 +517,13 @@ obs_summary_tab <- obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))
   dplyr::filter(n_values > 1)
 print(obs_summary_tab)
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
 
-obs_anci <- my_result_read_data[[1]]$tables$observation_ancillary
+obs_anci <- my_result_read_data$tables$observation_ancillary
 obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
 
 ###############################################
@@ -552,12 +552,12 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-names(my_result_read_data[[1]]$tables)
+names(my_result_read_data$tables)
 
-obs_tab <- my_result_read_data[[1]]$tables$observation
+obs_tab <- my_result_read_data$tables$observation
 head(as.data.frame(obs_tab))
 
 
@@ -569,13 +569,13 @@ obs_summary_tab <- obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))
   dplyr::filter(n_values > 1)
 print(obs_summary_tab)
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
 
-obs_anci <- my_result_read_data[[1]]$tables$observation_ancillary
+obs_anci <- my_result_read_data$tables$observation_ancillary
 obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
 
 
@@ -600,13 +600,13 @@ my_result_read_data <- read_data(
   id = "neon.ecocomdp.10093.001.001",
   neon.data.read.path = "my_result/DP1.10093.001_20210320222321.RDS")
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
 
-names(my_result_read_data[[1]]$tables)
+names(my_result_read_data$tables)
 
-obs_tab <- my_result_read_data[[1]]$tables$observation
+obs_tab <- my_result_read_data$tables$observation
 head(as.data.frame(obs_tab))
 
 
@@ -618,13 +618,13 @@ obs_summary_tab <- obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))
   dplyr::filter(n_values > 1)
 print(obs_summary_tab)
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
 
-obs_anci <- my_result_read_data[[1]]$tables$observation_ancillary
+obs_anci <- my_result_read_data$tables$observation_ancillary
 obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
 
 
@@ -654,13 +654,13 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
 
-names(my_result_read_data[[1]]$tables)
+names(my_result_read_data$tables)
 
-obs_tab <- my_result_read_data[[1]]$tables$observation
+obs_tab <- my_result_read_data$tables$observation
 head(as.data.frame(obs_tab))
 
 
@@ -672,13 +672,13 @@ obs_summary_tab <- obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))
   dplyr::filter(n_values > 1)
 print(obs_summary_tab)
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
 
-obs_anci <- my_result_read_data[[1]]$tables$observation_ancillary
+obs_anci <- my_result_read_data$tables$observation_ancillary
 obs_anci$observation_ancillary_id %>% duplicated() %>% sum()
 
 ###############################################
@@ -707,13 +707,13 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
 
-names(my_result_read_data[[1]]$tables)
+names(my_result_read_data$tables)
 
-obs_tab <- my_result_read_data[[1]]$tables$observation
+obs_tab <- my_result_read_data$tables$observation
 head(as.data.frame(obs_tab))
 
 
@@ -725,11 +725,11 @@ obs_summary_tab <- obs_tab %>% group_by_at(vars(-c(observation_id, value, unit))
   dplyr::filter(n_values > 1)
 print(obs_summary_tab)
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
 
-obs_anci <- my_result_read_data[[1]]$tables$observation_ancillary
+obs_anci <- my_result_read_data$tables$observation_ancillary
 obs_anci$observation_ancillary_id %>% duplicated() %>% sum()

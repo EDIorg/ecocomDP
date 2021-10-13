@@ -267,9 +267,12 @@ validate_arguments <- function(fun.name, fun.args) {
     }
     # dataset
     if (!is.null(fun.args$dataset)) {
-      validate_dataset_structure(fun.args$dataset)                               # has expected structure
+      if (detect_data_type(fun.args$dataset) == "dataset") {
+        validate_dataset_structure(fun.args$dataset)
+      } else if (detect_data_type(fun.args$dataset) == "dataset_old") {
+        validate_dataset_structure_old(fun.args$dataset)
+      }
     }
-    
   }
   
   # read_data() ---------------------------------------------------------------
@@ -396,6 +399,14 @@ validate_arguments <- function(fun.name, fun.args) {
         stop("Input 'type' should be '.rds' or '.csv'.", call. = FALSE)
       }
     }
+    # dataset
+    if (!is.null(fun.args$dataset)) {
+      frmt <- suppressWarnings(detect_data_type(fun.args$dataset))
+      if (frmt %in% c("dataset_old", "list_of_dataset_old")) {
+        stop('Input "dataset" format is deprecated. Use the new format instead.',
+             call. = FALSE)
+      }
+    }
   }
   
 }
@@ -492,8 +503,35 @@ validate_dataset_structure <- function(dataset) {
   criteria <- read_criteria()
   res <- c()
   res <- c(res, tryCatch(is.list(dataset), error = function(cond) {FALSE})) # is a list
-  res <- c(res, tryCatch(is.character(names(dataset)), error = function(cond) {FALSE})) # 1st level name is id
-  res <- c(res, tryCatch("tables" %in% names(dataset[[1]]), error = function(cond) {FALSE})) # 2nd level has tables
+  res <- c(res, tryCatch(is.character(dataset$id), error = function(cond) {FALSE})) # has id
+  res <- c(res, tryCatch("tables" %in% names(dataset), error = function(cond) {FALSE})) # has tables
+  res <- c(res, tryCatch(all(names(dataset$tables) %in% unique(criteria$table)), error = function(cond) {FALSE})) # table names are valid
+  res <- c(res, tryCatch(all(unlist(lapply(dataset$tables, is.data.frame))), error = function(cond) {FALSE})) # tables are data.frames
+  if (!all(res)) {
+    stop("Input 'dataset' has invalid structure. See return from read_data() ",
+         "for more details.", call. = F)
+  }
+}
+
+
+
+
+
+
+
+# Validate dataset structure old
+#
+# @param dataset (list) Data object returned by \code{read_data()} (? list of named datapackage$tables)
+#
+# @details Returns an error if \code{dataset} is malformed
+#
+validate_dataset_structure_old <- function(dataset) {
+  # TODO Remove this function after 2022-10-18
+  criteria <- read_criteria()
+  res <- c()
+  res <- c(res, tryCatch(is.list(dataset), error = function(cond) {FALSE})) # is a list
+  res <- c(res, tryCatch(is.character(names(dataset)), error = function(cond) {FALSE})) # has id
+  res <- c(res, tryCatch("tables" %in% names(dataset[[1]]), error = function(cond) {FALSE})) # has tables
   res <- c(res, tryCatch(all(names(dataset[[1]]$tables) %in% unique(criteria$table)), error = function(cond) {FALSE})) # table names are valid
   res <- c(res, tryCatch(all(unlist(lapply(dataset[[1]]$tables, is.data.frame))), error = function(cond) {FALSE})) # tables are data.frames
   if (!all(res)) {

@@ -56,7 +56,7 @@ convert_to_dwca <- function(path,
   # Load data -----------------------------------------------------------------
   
   d <- read_data(source_id)
-  d <- d[[1]]$tables
+  d <- d$tables
   
   # Convert tables ------------------------------------------------------------
   

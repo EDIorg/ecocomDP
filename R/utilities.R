@@ -1644,7 +1644,7 @@ url_env <- function(environment){
 trim_data_for_test <- function(dataset) {
   # Remove variable_mapping so validate_mapped_id() doesn't overload target 
   # APIs
-  dataset[[1]]$tables$variable_mapping <- NULL
+  dataset$tables$variable_mapping <- NULL
   return(dataset)
 }
 

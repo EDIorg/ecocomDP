@@ -42,10 +42,10 @@ my_result_read_data <- read_data(
 
 # list.files("my_result/")
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_ecocomDP() %>% 
   as.data.frame()
 
@@ -83,10 +83,10 @@ my_result_read_data <- read_data(
 
 # list.files("my_result/")
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_ecocomDP() %>% 
   as.data.frame()
 
@@ -109,8 +109,8 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.10003.001.001",
@@ -131,8 +131,8 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.10022.001.002",
@@ -152,8 +152,8 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.10043.001.001",
@@ -173,8 +173,8 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.10058.001.001",
@@ -194,8 +194,8 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
 
 my_result_read_data <- read_data(
@@ -216,8 +216,8 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.10092.001.001",
@@ -237,8 +237,8 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
   
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.10093.001.001",
@@ -258,8 +258,8 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.20107.001.001",
@@ -279,8 +279,8 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.20120.001.001",
@@ -300,8 +300,8 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.20166.001.001",
@@ -321,8 +321,8 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.20219.001.001",

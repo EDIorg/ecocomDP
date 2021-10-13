@@ -24,7 +24,8 @@
 #' flat
 #' 
 flatten_data <- function(data) {
-  validate_arguments(fun.name = "flatten_data", fun.args = as.list(environment()))
+  # TODO Refactor this validation check
+  # validate_arguments(fun.name = "flatten_data", fun.args = as.list(environment()))
   if (detect_data_type(data) == "dataset") {
     res <- flatten_tables(data$tables)
   } else if (detect_data_type(data) == "list_of_tables") {
