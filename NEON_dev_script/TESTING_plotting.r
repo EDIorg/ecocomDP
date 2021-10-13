@@ -486,6 +486,7 @@ plot_taxa_occur_freq(
 # color by location, only include taxa with > 10 occurrences
 plot_taxa_occur_freq(
   data = ants_L1,
+  facet_var = "location_id",
   color_var = "location_id",
   min_occurrence = 5)
 

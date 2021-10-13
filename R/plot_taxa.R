@@ -855,6 +855,8 @@ plot_taxa_occur_freq <- function(data,
   req_col_names <- c("observation_id","event_id","package_id","location_id",
                      "datetime","taxon_id","variable_name","value",
                      "taxon_name")
+  
+  
   # detect data type, extract observation table
   data_type <- detect_data_type(data)
   if(data_type == "table" && all(req_col_names %in% names(data))){
@@ -873,29 +875,53 @@ plot_taxa_occur_freq <- function(data,
     stop("No plotting method currently implemented for this data format")
   }
   
+  
+  
   # Validate inputs
   # TODO min_occurrence, color_var, facet_var
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  
+
+  
+  
   # plot title and subtitle text
   plot_title = "Taxa occurrence frequencies"
   plot_subtitle <- paste0("data package id: ",id)
   if(!is.na(min_occurrence) && min_occurrence > 0) plot_subtitle <- paste0(plot_subtitle,
                                              "\ntaxa with >= ", min_occurrence, " occurrences")
-  # make plot data
+  # calculate occurrences
   data_working <- data_long %>%
     dplyr::filter(.data$value > 0) %>%
     dplyr::mutate(occurrence = 1)
+  
   col_select_list <- c("event_id","taxon_name","occurrence",
-                       color_var, facet_var) %>% stats::na.omit()
+                       color_var, facet_var) %>% 
+    stats::na.omit() %>% 
+    unique()
+  
   data_working <- data_working[,col_select_list] %>% 
     dplyr::distinct()
-  data_occurrence <- data_working %>%
+  
+  # detemine which taxa meet minimum occurrence threshold in dataset
+  data_occurrence_total_filtered <- data_working %>%
+    dplyr::group_by(.data$taxon_name) %>%
+    dplyr::summarize(
+      n_occurrences = length(.data$occurrence)) %>%
+    dplyr::filter(.data$n_occurrences >= min_occurrence)
+  
+
+  # calculate occurrence by event_id for plotting
+  data_occurrence_by_group <- data_working %>%
+    dplyr::filter(
+      .data$taxon_name %in% data_occurrence_total_filtered$taxon_name) %>%
     dplyr::group_by(
       dplyr::across(
         -c(.data$event_id, .data$occurrence))) %>%
     dplyr::summarize(
-        n_occurrences = length(.data$occurrence)) %>%
-    dplyr::filter(.data$n_occurrences >= min_occurrence)
+        n_occurrences = length(.data$occurrence))
+  
+  data_occurrence <- data_occurrence_by_group
+  
   # Scale font size
   uniy <- length(unique(data_occurrence$taxon_name))
   if (uniy < 30) {
