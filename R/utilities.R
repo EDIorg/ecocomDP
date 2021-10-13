@@ -511,6 +511,8 @@ detect_data_type <- function(data){
     return(res)
   }
   if (is_dataset_old(data)) {
+    warning('Input to "data" is an old and deprecated format. Please use the ',
+            'new format instead. See ?read_data for more info.', call. = FALSE)
     return("dataset_old")
   }
   # list_of_dataset_old
