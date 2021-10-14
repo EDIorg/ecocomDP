@@ -278,7 +278,13 @@ A dataset often has multiple levels of observation (i.e. spatial scales of obser
 *   If there are finer levels of observation, they should not be grouped on and they should go into observation_ancillary.
 *   If a habitat or other special variable corresponds to a physical location identifier (plot, subplot, transect, etc.), use the physical location identifier to group locations.
     *   The habitat or special variable then belongs in location_ancillary.
-    
+
+### Determining the Meaningful Level of Observation (Visual Examples)
+The following visual demonstrates how different experimental designs can change the Meaningful Level of Observation in a study.
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('./MLO_final_long.png')
+```    
+
 ## Frequency of Survey {#frequency_of_survey}
 
 The Frequency of Survey refers to the temporal frequency of events over the course of a study.
