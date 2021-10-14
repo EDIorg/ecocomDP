@@ -319,7 +319,10 @@ plot_taxa_accum_time <- function(data,
 plot_taxa_diversity <- function(data,
                                 id = NA_character_,
                                 time_window_size = "day",
+                                observation = NULL,
                                 alpha = 1){
+  
+
   # Warn about deprecated observation parameter (remove after 2022-10-18)
   if (!is.null(observation)) {
     data <- observation
@@ -331,8 +334,12 @@ plot_taxa_diversity <- function(data,
   if (!is.na(id)) {
     id <- get_id(data)
   }
+  
   # Validate inputs and construct intermediate format for plotting
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  
+
+  
   # Richness by location id
   richness_by_location <- observation %>%
     dplyr::filter(value > 0) %>%
@@ -915,9 +922,6 @@ plot_taxa_occur_freq <- function(data,
     dplyr::distinct()
   
 
-  # browser()
-  
-  
   # detemine which taxa meet minimum occurrence threshold in dataset
   data_occurrence_total_filtered <- data_working %>%
     dplyr::group_by(.data$taxon_name) %>%
@@ -925,8 +929,7 @@ plot_taxa_occur_freq <- function(data,
       n_occurrences = length(.data$occurrence)) %>%
     dplyr::filter(.data$n_occurrences >= min_occurrence)
   
-  # browser()
-  
+
   # calculate occurrence by location_id and event_id for plotting
   data_occurrence_by_group <- data_working %>%
     dplyr::distinct() %>%
@@ -939,16 +942,10 @@ plot_taxa_occur_freq <- function(data,
         )
       )
     ) %>%
-    #     -c(.data$event_id, .data$location_id ,.data$occurrence))) %>%
-    # dplyr::group_by(
-    #     dplyr::across(
-    #       dplyr::all_of(unique(stats::na.omit(c(color_var, facet_var))))
-    #     ), .add = TRUE) %>%
     dplyr::summarize(
         n_occurrences = length(.data$occurrence))
   
-  # browser()
-  
+
   data_occurrence <- data_occurrence_by_group
   
   # Scale font size

@@ -311,8 +311,6 @@ flat
 Visually explore a dataset with some basic plots:
 
 ```{r fig.height=4, fig.width=7}
-dataset_1 <- ants_L1
-
 plot_taxa_accum_time(dataset_1)
 
 plot_taxa_diversity(dataset_1)
