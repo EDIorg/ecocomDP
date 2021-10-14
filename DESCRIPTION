@@ -94,7 +94,7 @@ Imports:
     tools,
     utils,
     uuid (>= 0.1-4),
-    xml2 (>= 1.3.0)
+    xml2 (>= 1.3.0),
 Suggests:
     knitr,
     mime (>= 0.9),
@@ -102,7 +102,11 @@ Suggests:
     ritis (>= 1.0.0),
     taxize (<= 0.9.99),
     testthat,
-    worrms (>= 0.4.2)
+    worrms (>= 0.4.2),
+    ggrepel,
+    usmap,
+    maptools,
+    rgdal
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1
 Language: en-US
