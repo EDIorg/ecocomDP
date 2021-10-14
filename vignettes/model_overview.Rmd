@@ -35,9 +35,9 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-This document describes the 8 ecocomDP tables and their contents. Four tables are required (observation, location, taxon, and dataset_summary). Each main table (observation, location, taxon) has an optional ancillary table for additional information. These are included because primary research typically contain related measurements which may be of interest during analysis. The dataset_summary table is populated from the observation table contents, and the variable_mapping table holds URIs and labels for external measurement dictionaries.
+This document describes the eight ecocomDP tables and their contents. Four tables are required (observation, location, taxon, and dataset_summary). Each main table (observation, location, taxon) has an optional ancillary table for additional information. These are included because primary research typically contains related measurements which may be of interest during analysis. The dataset_summary table is populated from the observation table contents, and the variable_mapping table holds URIs and labels for external measurement dictionaries.
 
-An example ecocomDP dataset is [here](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=193) and a graphic showing all tables and their relationships is available [here](https://github.com/EDIorg/ecocomDP/blob/master/model/table_visualization.md). 
+An example ecocomDP dataset is [here](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=193) and a graphic showing all tables and their relationships is available [here](#vis). 
 
 ## Tables {#tables}
 
@@ -74,7 +74,7 @@ Description: This is the core table, which holds the observations being analyzed
 
 ### Table: location {#location}
 
-Description: Identifying information about a place (lonitude, latitude, elevation). The table is self-referencing so that sites can be nested.
+Description: Identifying information about a place (longitude, latitude, elevation). The table is self-referencing so that sites can be nested.
 
 #### Columns
 
@@ -90,7 +90,7 @@ Description: Identifying information about a place (lonitude, latitude, elevatio
 
 ### Table: taxon {#taxon}
 
-Description: Identifying information about a taxon (e.g. name, id and system).
+Description: Identifying information about a taxon (e.g. name, id, and system).
 
 #### Columns
 
