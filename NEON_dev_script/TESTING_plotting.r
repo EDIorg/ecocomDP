@@ -331,6 +331,14 @@ ants_L1 %>%
 ###########################################################
 ###########################################################
 # plot shared taxa across sites -- this seems to work fine
+my_dataset <- read_data(
+  id = "neon.ecocomdp.20120.001.001",
+  site= c('COMO','LECO'), 
+  startdate = "2017-06",
+  enddate = "2019-09",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
 
 plot_taxa_shared_sites(
   data = my_dataset$tables$observation,
@@ -345,6 +353,13 @@ plot_taxa_shared_sites(
 
 plot_taxa_shared_sites(
   data = ants_L1)
+
+
+neon_data <- ecocomDP::read_data(
+  id = "neon.ecocomdp.20120.001.001",
+  site = c('ARIK','CARI','MAYF'))
+
+plot_taxa_shared_sites(neon_data)
 
 ###########################################################
 
@@ -457,9 +472,9 @@ plot_taxa_occur_freq(
 plot_taxa_occur_freq(
   data = my_dataset,
   facet_var = "location_id",
-  min_occurrence = 20)
+  min_occurrence = 30)
 
-# different way sto make the same plot
+# different ways to make the same plot
 plot_taxa_occur_freq(
   data = my_dataset)
 
@@ -486,6 +501,7 @@ plot_taxa_occur_freq(
 # color by location, only include taxa with > 10 occurrences
 plot_taxa_occur_freq(
   data = ants_L1,
+  facet_var = "location_id",
   color_var = "location_id",
   min_occurrence = 5)
 
@@ -527,7 +543,7 @@ plot_taxa_abund(
 plot_taxa_abund(
   data = my_dataset,
   facet_var = "location_id",
-  min_abundance = 10,
+  min_relative_abundance = 0.01,
   trans = "log1p")
 
 # color by location, only include taxa with > 10 occurrences
@@ -543,7 +559,7 @@ my_dataset %>%
     !grepl("^SUGG", location_id)) %>%
   plot_taxa_abund(
     trans = "log1p",
-    min_abundance = 2,
+    min_relative_abundance = 0.005,
     facet_var = "location_id")
 
 
@@ -551,41 +567,45 @@ my_dataset %>%
 
 ###########################################################
 
+# Read a dataset of interest
+dataset <- ants_L1
+
 # plot ecocomDP formatted dataset
-plot_taxa_abund(ants_L1)
+plot_taxa_abund(dataset)
 
 # plot flattened ecocomDP dataset, log(x+1) transform abundances
 plot_taxa_abund(
-  data = flatten_data(ants_L1),
+  data = flatten_data(dataset),
   trans = "log1p")
 
 # facet by location color by taxon_rank, log 10 transformed
 plot_taxa_abund(
-  data = ants_L1,
+  data = dataset,
   facet_var = "location_id",
   color_var = "taxon_rank",
   trans = "log10")
 
-# facet by location, minimum abundance = 5
+# facet by location, minimum rel. abund = 0.05
 plot_taxa_abund(
-  data = ants_L1,
+  data = dataset,
   facet_var = "location_id",
-  min_abundance = 5,
+  min_relative_abundance = 0.05,
   trans = "log1p")
 
-# color by location, only include taxa with > 10 occurrences
+# color by location, log 10 transform
 plot_taxa_abund(
-  data = ants_L1,
+  data = dataset,
   color_var = "location_id",
   trans = "log10")
 
 # tidy syntax, filter data by date
-ants_L1 %>% 
+dataset %>% 
   flatten_data() %>% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") %>%
-  plot_taxa_abund(trans = "log1p",
-                      min_abundance = 10)
+  plot_taxa_abund(
+    trans = "log1p",
+    min_relative_abundance = 0.01)
 
 
 

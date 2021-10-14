@@ -2,12 +2,12 @@
 % Please edit documentation in R/plot_taxa.R
 \name{plot_taxa_abund}
 \alias{plot_taxa_abund}
-\title{Plot abundances by event_id}
+\title{Plot mean taxa abundances per 'observation_id'}
 \usage{
 plot_taxa_abund(
   data,
   id = NA_character_,
-  min_abundance = 0,
+  min_relative_abundance = 0,
   trans = "identity",
   facet_var = NA_character_,
   color_var = NA_character_,
@@ -20,9 +20,9 @@ plot_taxa_abund(
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles. Is automatically assigned when \code{data} is a dataset object containing the \code{id} field, or is a table containing the package_id column.}
 
-\item{min_abundance}{(numeric) Minimum abundance allowed for observations of taxa included in the plot.}
+\item{min_relative_abundance}{(numeric) Minimum relative abundance allowed for taxa included in the plot; a value between 0 and 1, inclusive.}
 
-\item{trans}{(character, "identity" is default, "log1p" is x+1 transform) For continuous scales, the name of a transformation object or the object itself. Built-in transformations include "asn", "atanh", "boxcox", "date", "exp", "hms", "identity", "log", "log10", "log1p", "log2", "logit", "modulus", "probability", "probit", "pseudo_log", "reciprocal", "reverse", "sqrt" and "time".}
+\item{trans}{(character) Define the transform applied to the response variable; "identity" is default, "log1p" is x+1 transform. Built-in transformations include "asn", "atanh", "boxcox", "date", "exp", "hms", "identity", "log", "log10", "log1p", "log2", "logit", "modulus", "probability", "probit", "pseudo_log", "reciprocal", "reverse", "sqrt" and "time".}
 
 \item{facet_var}{(character) Name of column to use for faceting. Must be a column of the observation or taxon table.}
 
@@ -36,7 +36,7 @@ plot_taxa_abund(
 (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
 }
 \description{
-Plot abundances by event_id
+Plot taxon abundances averaged across observation records for each taxon. Abundances are reported using the units provided in the dataset. In some cases, these counts are not standardized to sampling effort.
 }
 \details{
 The \code{data} parameter accepts a range of input types but ultimately requires the 13 columns of the combined observation and taxon tables.
@@ -46,42 +46,42 @@ The \code{data} parameter accepts a range of input types but ultimately requires
 # Read a dataset of interest
 dataset <- read_data("edi.193.5")
 
-# Plot the dataset
+# plot ecocomDP formatted dataset
 plot_taxa_abund(dataset)
 
-# Plot with log(x+1) transformed abundances
-plot_taxa_abund(dataset, trans = "log1p")
+# plot flattened ecocomDP dataset, log(x+1) transform abundances
+plot_taxa_abund(
+  data = flatten_data(dataset),
+  trans = "log1p")
 
-# Facet by location, color by taxon_rank, with log 10 transformed abundances
+# facet by location color by taxon_rank, log 10 transform
 plot_taxa_abund(
   data = dataset,
   facet_var = "location_id",
   color_var = "taxon_rank",
   trans = "log10")
 
-# Facet by location, plot "species" ranks, with minimum occurrence
+# facet by location, minimum rel. abund = 0.05, log 10 transform
 plot_taxa_abund(
   data = dataset,
   facet_var = "location_id",
-  rank = "Species", 
-  min_occurrence = 5,
+  min_relative_abundance = 0.05,
   trans = "log1p")
 
-# Color by location, only include taxa with > 10 occurrences
+# color by location, log 10 transform
 plot_taxa_abund(
   data = dataset,
   color_var = "location_id",
-  min_occurrence = 10,
   trans = "log10")
 
-# Flatten, manipulate, and plot
+# tidy syntax, flatten then filter data by date
 dataset \%>\% 
-  flatten_dataset() \%>\% 
-  dplyr::filter(lubridate::as_date(datetime) > "2003-07-01") \%>\%
-  plot_taxa_abund(data = ., trans = "log1p")
+  flatten_data() \%>\% 
+  dplyr::filter(
+    lubridate::as_date(datetime) > "2003-07-01") \%>\%
+  plot_taxa_abund(
+    trans = "log1p",
+    min_relative_abundance = 0.01)
 }
-
-# Plot the example dataset
-plot_taxa_abund(dataset)
 
 }

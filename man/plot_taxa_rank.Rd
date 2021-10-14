@@ -27,7 +27,7 @@ plot_taxa_rank(
 (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
 }
 \description{
-Plot taxa ranks
+Plot the number of observations that use each taxonomic rank in the dataset.
 }
 \details{
 The \code{data} parameter accepts a range of input types but ultimately requires the 13 columns of the combined observation and taxon tables.
