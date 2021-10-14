@@ -306,6 +306,12 @@ The Frequency of Survey refers to the temporal frequency of events over the cour
     *   It is possible that the Frequency of Survey is not explicitly stated in the L0 metadata and can not be determined patterns in the L0 data.
         *   If this is the case, you should omit the event_id column entirely.
 
+### Frequency of Survey (Visual Examples)
+The following visual illustrates examples of common Frequencies of Survey and how they can be used to assign event_ids. Each timeline in a subsection represents a different possible manifestation of the Frequency of Survey.
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('./LevelOfSurvey_final_long.png')
+```
+
 ## Value-Added Features {#value_added_features}
 
 Value added information is anything that an ecocomDP creator intentionally adds to the L1 dataset to improve its findability, accessibility, interoperability, or reusability (see [FAIR Principles](https://www.go-fair.org/fair-principles/)). This information does not come from the L0 dataset directly but rather is derived from it. Since the rule of thumb regarding L1 creation is to rearrange but not alter the L0 dataset, supplementing a dataset with value added information must be done carefully and within the constraints of the following rules:
