@@ -157,8 +157,8 @@ validate_arguments <- function(fun.name, fun.args) {
     }
     # time_window_size
     if (!is.null(fun.args$time_window_size)) {
-      if (!fun.args$time_window_size %in% c("day", "year")) {
-        stop('Intput "time_window_size" must be "day" or "year"', call. = FALSE)
+      if (!fun.args$time_window_size %in% c("day", "month", "year")) {
+        stop('Intput "time_window_size" must be "day", "month",or "year"', call. = FALSE)
       }
     }
     # facet_scales

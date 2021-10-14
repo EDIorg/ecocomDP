@@ -8,6 +8,7 @@ plot_taxa_diversity(
   data,
   id = NA_character_,
   time_window_size = "day",
+  observation = NULL,
   alpha = 1
 )
 }
@@ -18,9 +19,9 @@ plot_taxa_diversity(
 
 \item{time_window_size}{(character) Define the time window over which to aggregate observations for calculating richness. Can be: "day" or "year"}
 
-\item{alpha}{(numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.}
-
 \item{observation}{(tbl_df, tbl, data.frame) DEPRECATED: Use \code{data} instead.}
+
+\item{alpha}{(numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.}
 }
 \value{
 (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
