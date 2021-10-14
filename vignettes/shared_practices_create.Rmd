@@ -3,6 +3,7 @@ title: "Shared Practices for Creating an ecocomDP Dataset"
 output:
   rmarkdown::html_vignette:
     toc: true
+    fig_caption: yes
 vignette: >
   %\VignetteIndexEntry{Shared Practices for Creating an ecocomDP Dataset}
   %\VignetteEngine{knitr::rmarkdown}
@@ -191,19 +192,18 @@ Store identifying information about a place (longitude, latitude, elevation) in 
 #### latitude and longitude
 
 *   Each row of the location table should contain a latitude and longitude value describing a point location. This information should be in the L0 dataset (e.g. metadata, data tables, or other entities). Sometimes there is geographic information at a different spatial scale than the listed locations. Follow these recommendations for determining the correct coordinates to provide:
-    *   The L0 dataset only has areas/polygons (instead of point locations) at a location. In such cases, use the centroid of each area (A).
-    *   The L0 dataset only has point locations at finer spatial scale than a location. In such cases, use centroid of the constituent coordinates (e.g. centroid of transects within a site) (B).
-    *   The L0 dataset only has point locations at a coarser level than a location. In such cases, transpose coarser coordinates to the location (e.g. each plot within a site would get the site’s coordinates) (C).
-    *   The L0 dataset only has an area/polygon at a coarser level than a location. In such cases, use the centroid of the area/polygon as coordinates for the location (D).
-    *   The L0 dataset has incomplete but accurate point locations for some locations. In such cases, the one-to-one matching of geographic coverage with some of the locations is best. The L1 user may be able to infer coverage to other adjacent locations with coordinates and elevations having NA values (E).
-    *   Coordinates of location vary with each observation (e.g. specific coordinates where a plankton tow was done within the boundaries of an established/static station, [edi.338.2](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=338&revision=2)) (F).
+    *   The L0 dataset only has areas/polygons (instead of point locations) at a location. In such cases, use the centroid of each area (Figure 1A).
+    *   The L0 dataset only has point locations at finer spatial scale than a location. In such cases, use centroid of the constituent coordinates (e.g. centroid of transects within a site) (Figure 1B)\ref{fig:myfig}.
+    *   The L0 dataset only has point locations at a coarser level than a location. In such cases, transpose coarser coordinates to the location (e.g. each plot within a site would get the site’s coordinates) (Figure 1C).
+    *   The L0 dataset only has an area/polygon at a coarser level than a location. In such cases, use the centroid of the area/polygon as coordinates for the location (Figure 1D).
+    *   The L0 dataset has incomplete but accurate point locations for some locations. In such cases, the one-to-one matching of geographic coverage with some of the locations is best. The L1 user may be able to infer coverage to other adjacent locations with coordinates and elevations having NA values (Figure 1E).
+    *   Coordinates of location vary with each observation (e.g. specific coordinates where a plankton tow was done within the boundaries of an established/static station, [edi.338.2](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=338&revision=2)) (Figure 1F).
         *   First, take the average across the entire dataset of all observation coordinate corresponding to each location_name.
         *   Second, in the location_ancillary table, list the exact coordinates for each date by including the datetime field. If this raises non-unique composite key issues (from `validate_data()`), then see the [observation_ancillary](#observation_ancillary) section.
 
-```{r echo=FALSE, out.width='95%', fig.align="right"}
+```{r echo=FALSE, out.width='100%', fig.align="center", fig.cap='Figure 1. Mapping coordinates between spatial scales.'}
 knitr::include_graphics('./coords_final_wide.png')
 ```    
-
 
 ### taxon
 
@@ -271,7 +271,7 @@ A dataset often has multiple levels of observation (i.e. spatial scales of obser
 *   If there is only one level of observation, then it is the meaningful level of observation
 *   If there are multiple levels of observation, only one should be deemed meaningful. Consider the following:
     *   Always defer to any explicit statement of the meaningful level of observation from the L0 metadata.
-    *   If not explicitly stated in the L0 metadata, determine if there are changing habitats, experimental treatments, or elevations across any levels of observation. 
+    *   If not explicitly stated in the L0 metadata, determine if there are changing habitats, experimental treatments, or elevations across any levels of observation, as demonstrated in [Figure 2.](#fig2) 
         *   If habitats or special variables do not change across any of the levels of observation, then the coarsest level of observation should be deemed meaningful.
         *   If habitats or “special variables” change across a single one of the levels of observation, then that level should be deemed meaningful.
         *   If habitats or special variables change across multiple levels, the finest resolution level where they change is deemed meaningful.
@@ -284,9 +284,8 @@ A dataset often has multiple levels of observation (i.e. spatial scales of obser
 *   If a habitat or other special variable corresponds to a physical location identifier (plot, subplot, transect, etc.), use the physical location identifier to group locations.
     *   The habitat or special variable then belongs in location_ancillary.
 
-### Determining the Meaningful Level of Observation (Visual Examples)
-The following visual demonstrates how different experimental designs can change the Meaningful Level of Observation in a study.
-```{r echo=FALSE, out.width='90%', fig.align='center'}
+### Determining the Meaningful Level of Observation (Visual Examples) {#fig2}
+```{r echo=FALSE, out.width='90%', fig.align='center', fig.cap = 'Figure 2. Varying experimental conditions change the meaningful level of observation in a study.'}
 knitr::include_graphics('./MLO_final_long.png')
 ```    
 
@@ -311,15 +310,14 @@ The Frequency of Survey refers to the temporal frequency of events over the cour
     *   Use the lubridate package to transform dates into weeks, months, or years:
         *   This may reveal patterns such as locations only being sampled once a year, once a month, or once a week.
     *   Graphing locations over time:
-        *   A visual aid can help you identify trickier patterns such as seasonal samplings or surveys that are roughly monthly but start and end in different months.
+        *   A visual aid can help you identify trickier patterns such as seasonal samplings or surveys that are roughly monthly but start and end in different months. [Figure 3.](#fig3) demonstrates a variety of sampling patterns that may arise at each Frequency of Survey.
     *   If you can not identify a single Frequency of Survey that is consistent throughout the entire study, attempt to determine the Frequency of Survey for each year of the study.
         *   A study may start at one sampling frequency but change once or more over time. A study that starts as an  annual survey could change to seasonal or monthly over time.
     *   It is possible that the Frequency of Survey is not explicitly stated in the L0 metadata and can not be determined patterns in the L0 data.
         *   If this is the case, you should omit the event_id column entirely.
 
-### Frequency of Survey (Visual Examples)
-The following visual illustrates examples of common Frequencies of Survey and how they can be used to assign event_ids. Each timeline in a subsection represents a different possible manifestation of the Frequency of Survey.
-```{r echo=FALSE, out.width='90%', fig.align='center'}
+### Frequency of Survey (Visual Examples) {#fig3}
+```{r echo=FALSE, out.width='90%', fig.align='center', fig.cap = 'Figure 3. Instances of Frequency of Survey on a timeline; Using Frequency of Survey to assign event_id.'}
 knitr::include_graphics('./LevelOfSurvey_final_long.png')
 ```
 
