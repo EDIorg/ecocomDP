@@ -543,7 +543,7 @@ plot_taxa_abund(
 plot_taxa_abund(
   data = my_dataset,
   facet_var = "location_id",
-  min_abundance = 10,
+  min_relative_abundance = 0.01,
   trans = "log1p")
 
 # color by location, only include taxa with > 10 occurrences
@@ -559,7 +559,7 @@ my_dataset %>%
     !grepl("^SUGG", location_id)) %>%
   plot_taxa_abund(
     trans = "log1p",
-    min_abundance = 2,
+    min_relative_abundance = 0.005,
     facet_var = "location_id")
 
 
@@ -586,7 +586,7 @@ plot_taxa_abund(
 plot_taxa_abund(
   data = ants_L1,
   facet_var = "location_id",
-  min_abundance = 5,
+  min_relative_abundance = 0.05,
   trans = "log1p")
 
 # color by location, only include taxa with > 10 occurrences
@@ -600,8 +600,9 @@ ants_L1 %>%
   flatten_data() %>% 
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") %>%
-  plot_taxa_abund(trans = "log1p",
-                      min_abundance = 10)
+  plot_taxa_abund(
+    trans = "log1p",
+    min_relative_abundance = 0.01)
 
 
 

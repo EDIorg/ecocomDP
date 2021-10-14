@@ -992,12 +992,12 @@ plot_taxa_occur_freq <- function(data,
 
 
 
-#' Plot abundances by event_id
+#' Plot mean taxon abundances
 #'
 #' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation and taxon tables, or a flat table containing columns of the observation and taxon tables.
 #' @param id (character) Identifier of dataset to be used in plot subtitles. Is automatically assigned when \code{data} is a dataset object containing the \code{id} field, or is a table containing the package_id column.
-#' @param min_abundance (numeric) Minimum abundance allowed for observations of taxa included in the plot.
-#' @param trans (character, "identity" is default, "log1p" is x+1 transform) For continuous scales, the name of a transformation object or the object itself. Built-in transformations include "asn", "atanh", "boxcox", "date", "exp", "hms", "identity", "log", "log10", "log1p", "log2", "logit", "modulus", "probability", "probit", "pseudo_log", "reciprocal", "reverse", "sqrt" and "time".
+#' @param min_relative_abundance (numeric) Minimum relative abundance allowed for taxa included in the plot; a value between 0 and 1, inclusive.
+#' @param trans (character) Define the transform applied to the response variable; "identity" is default, "log1p" is x+1 transform. Built-in transformations include "asn", "atanh", "boxcox", "date", "exp", "hms", "identity", "log", "log10", "log1p", "log2", "logit", "modulus", "probability", "probit", "pseudo_log", "reciprocal", "reverse", "sqrt" and "time".
 #' @param facet_var (character) Name of column to use for faceting. Must be a column of the observation or taxon table.
 #' @param facet_scales (character) Should scales be free ("free", default value), fixed ("fixed"), or free in one dimension ("free_x", "free_y")?
 #' @param color_var (character) Name of column to use for plot colors.
@@ -1017,48 +1017,48 @@ plot_taxa_occur_freq <- function(data,
 #' \dontrun{
 #' # Read a dataset of interest
 #' dataset <- read_data("edi.193.5")
-#' 
-#' # Plot the dataset
+#' #' 
+#' # plot ecocomDP formatted dataset
 #' plot_taxa_abund(dataset)
 #' 
-#' # Plot with log(x+1) transformed abundances
-#' plot_taxa_abund(dataset, trans = "log1p")
+#' # plot flattened ecocomDP dataset, log(x+1) transform abundances
+#' plot_taxa_abund(
+#'   data = flatten_data(dataset),
+#'   trans = "log1p")
 #' 
-#' # Facet by location, color by taxon_rank, with log 10 transformed abundances
+#' # facet by location color by taxon_rank, log 10 transformed
 #' plot_taxa_abund(
 #'   data = dataset,
 #'   facet_var = "location_id",
 #'   color_var = "taxon_rank",
 #'   trans = "log10")
 #' 
-#' # Facet by location, plot "species" ranks, with minimum occurrence
+#' # facet by location, minimum rel. abund = 0.05
 #' plot_taxa_abund(
 #'   data = dataset,
 #'   facet_var = "location_id",
-#'   rank = "Species", 
-#'   min_occurrence = 5,
+#'   min_relative_abundance = 0.05,
 #'   trans = "log1p")
 #' 
-#' # Color by location, only include taxa with > 10 occurrences
+#' # color by location, log 10 transform
 #' plot_taxa_abund(
 #'   data = dataset,
 #'   color_var = "location_id",
-#'   min_occurrence = 10,
 #'   trans = "log10")
 #' 
-#' # Flatten, manipulate, and plot
+#' # tidy syntax, filter data by date
 #' dataset %>% 
-#'   flatten_dataset() %>% 
-#'   dplyr::filter(lubridate::as_date(datetime) > "2003-07-01") %>%
-#'   plot_taxa_abund(data = ., trans = "log1p")
+#'   flatten_data() %>% 
+#'   dplyr::filter(
+#'     lubridate::as_date(datetime) > "2003-07-01") %>%
+#'   plot_taxa_abund(
+#'     trans = "log1p",
+#'     min_relative_abundance = 0.01)
 #' }
-#' 
-#' # Plot the example dataset
-#' plot_taxa_abund(dataset)
 #' 
 plot_taxa_abund <- function(data, 
                             id = NA_character_,
-                            min_abundance = 0, 
+                            min_relative_abundance = 0, 
                             trans = "identity",
                             facet_var = NA_character_,
                             color_var = NA_character_,
@@ -1089,17 +1089,32 @@ plot_taxa_abund <- function(data,
   }
   
   # Validate inputs
-  # TODO min_occurrence, color_var, facet_var
+  # TODO min_relative_abundance, color_var, facet_var
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   
-  # Continue
-  if(min_abundance > 0) flat_data <- flat_data %>%
-      dplyr::filter(.data$value >= min_abundance)
+  # filter based on min relative abund
+  if(min_relative_abundance > 0){
+    
+    RA_data_filtered <- flat_data %>% 
+      dplyr::select(.data$taxon_id, .data$value, .data$unit) %>%
+      dplyr::group_by(.data$taxon_id, .data$unit) %>%
+      dplyr::summarize(
+        sum_value = sum(.data$value, na.rm = TRUE)) %>%
+      dplyr::ungroup() %>%
+      dplyr::mutate(
+        total = sum(.data$sum_value),
+        RA = .data$sum_value / .data$total) %>%
+      dplyr::filter(.data$RA >= min_relative_abundance)
+      
+    flat_data <- flat_data %>%
+      dplyr::filter(.data$taxon_id %in% RA_data_filtered$taxon_id)
+  }
+  
   # plot title and subtitle text
-  plot_title = "Taxa abundances per 'event_id'"
+  plot_title = "Taxa abundances per 'observation_id'"
   plot_subtitle <- paste0("data package id: ",id)
-  if(!is.na(min_abundance) && min_abundance > 0) plot_subtitle <- paste0(plot_subtitle,
-                                                           "\nabundance >= ", min_abundance)
+  if(!is.na(min_relative_abundance) && min_relative_abundance > 0) plot_subtitle <- paste0(plot_subtitle,
+                                                           "\nrel. abundance >= ", min_relative_abundance)
   # Scale font size
   uniy <- length(unique(flat_data$taxon_name))
   if (uniy < 30) {

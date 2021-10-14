@@ -2,12 +2,12 @@
 % Please edit documentation in R/plot_taxa.R
 \name{plot_taxa_abund}
 \alias{plot_taxa_abund}
-\title{Plot abundances by event_id}
+\title{Plot mean taxon abundances}
 \usage{
 plot_taxa_abund(
   data,
   id = NA_character_,
-  min_abundance = 0,
+  min_relative_abundance = 0,
   trans = "identity",
   facet_var = NA_character_,
   color_var = NA_character_,
@@ -20,9 +20,9 @@ plot_taxa_abund(
 
 \item{id}{(character) Identifier of dataset to be used in plot subtitles. Is automatically assigned when \code{data} is a dataset object containing the \code{id} field, or is a table containing the package_id column.}
 
-\item{min_abundance}{(numeric) Minimum abundance allowed for observations of taxa included in the plot.}
+\item{min_relative_abundance}{(numeric) Minimum relative abundance allowed for taxa included in the plot, should be a value between 0 and 1, inclusive.}
 
-\item{trans}{(character, "identity" is default, "log1p" is x+1 transform) For continuous scales, the name of a transformation object or the object itself. Built-in transformations include "asn", "atanh", "boxcox", "date", "exp", "hms", "identity", "log", "log10", "log1p", "log2", "logit", "modulus", "probability", "probit", "pseudo_log", "reciprocal", "reverse", "sqrt" and "time".}
+\item{trans}{(character) Define the transform applied to the response variable; "identity" is default, "log1p" is x+1 transform. Built-in transformations include "asn", "atanh", "boxcox", "date", "exp", "hms", "identity", "log", "log10", "log1p", "log2", "logit", "modulus", "probability", "probit", "pseudo_log", "reciprocal", "reverse", "sqrt" and "time".}
 
 \item{facet_var}{(character) Name of column to use for faceting. Must be a column of the observation or taxon table.}
 
@@ -36,7 +36,7 @@ plot_taxa_abund(
 (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
 }
 \description{
-Plot abundances by event_id
+Plot mean taxon abundances
 }
 \details{
 The \code{data} parameter accepts a range of input types but ultimately requires the 13 columns of the combined observation and taxon tables.
@@ -64,14 +64,14 @@ plot_taxa_abund(
   data = dataset,
   facet_var = "location_id",
   rank = "Species", 
-  min_occurrence = 5,
+  min_relative_abundance = 0.05,
   trans = "log1p")
 
 # Color by location, only include taxa with > 10 occurrences
 plot_taxa_abund(
   data = dataset,
   color_var = "location_id",
-  min_occurrence = 10,
+  min_relative_abundance = 0.10,
   trans = "log10")
 
 # Flatten, manipulate, and plot
