@@ -16,17 +16,18 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(ecocomDP)
-```
+---
+
 This document assumes you understand the ecocomDP model. To learn about the model and its scope, refer to the [Model Overview vignette](model_overview.html) and the [Ecological Informatics article](https://doi.org/10.1016/j.ecoinf.2021.101374).
+
+---
 
 # Introduction
 This document delineates the practices that all creators of ecocomDP formatted datasets should adopt in order for the community to build a cohesive and interoperable collection. It contains detailed descriptions of practices, definitions of concepts, and solutions to many common issues.
 
 Early sections address important considerations for anyone thinking about converting source datasets to the ecocomDP model, then focus shifts to examination of the model components in greater detail. These shared practices are written with the intention to help simplify the conversion process.
 
-If you are new to the conversion process, we recommend reading the [Getting Started](#getting_started) and [Concepts](#concepts) sections, reviewing the [Create](create.html) and [Model Overview](https://github.com/EDIorg/ecocomDP/tree/master/model) vignettes, and referring back to this document as questions arise. A thorough understanding of the ecocomDP model and some foundational concepts will greatly simplify the conversion process.
+If you are new to the conversion process, we recommend reading the [Getting Started](#getting_started) and [Concepts](#concepts) sections, reviewing the [Create](create.html) and [Model Overview](model_overview.html) vignettes, and referring back to this document as questions arise. A thorough understanding of the ecocomDP model and some foundational concepts will greatly simplify the conversion process.
 
 Each ecocomDP dataset (Level-1; L1) is created from a raw source dataset (Level-0; L0) by a unique conversion script. Inputs are typically from the APIs of data repositories and monitoring networks, and outputs are a set of archivable files. The derived ecocomDP dataset is delivered to users in a consistent format by [`read_data()`](https://ediorg.github.io/ecocomDP/reference/read_data.html) and the conversion script provides a fully reproducible and automated routine for updating the derived dataset whenever a new version of the source data are released.
 ```{r echo=FALSE, out.width='100%'}
@@ -205,7 +206,7 @@ Store identifying information about a place (longitude, latitude, elevation) in 
 knitr::include_graphics('./coords_final_wide.png')
 ```    
 
-### taxon
+### taxon {#taxon}
 
 Store identifying information about a taxon in this table.
 
@@ -250,7 +251,7 @@ Other unforeseen issues with the L0 dataset may manifest themselves as you begin
 
 *   Use the source (L0) dataset contact for help to resolve issues. Usually they will apply a fix on short notice. If not, then proceed the best you can.
 *   Contact ecocomDP project maintainers if you have any questions regarding the creation of an L1 ecocomDP dataset that were not covered in this document.
-*   Maintain an ongoing list of “considerations” for improving the L0 dataset to share with the L0 author/manager. These are items that did not necessarily hamper production of the L1 dataset but may improve the source dataset if addressed.
+*   Maintain an ongoing list of “considerations” for improving the L0 dataset to share with the L0 dataset author/manager. These are items that did not necessarily hamper production of the L1 dataset, but may improve the L0 dataset if addressed.
 *   When non-unique composite key issues arise in validation of the location_ancillary or taxon_ancillary tables:
     *   First try to resolve this issue by utilizing the datetime column.
     *   Try to get the creator/information-manager to fix the issue in the L0 dataset.
@@ -260,7 +261,7 @@ Other unforeseen issues with the L0 dataset may manifest themselves as you begin
 # Concepts {#concepts}
 ## Levels of Observation {#levels_of_observation}
 
-A dataset often has multiple levels of observation (i.e. spatial scales of observation). Only one of those levels of observation is considered meaningful. We use “meaningful” to denote the finest spatial scale at which the observations are meant to be interpreted.
+A dataset often has multiple levels of observation (i.e. spatial scales of observation). Only one of those levels of observation is considered meaningful. We use the term “meaningful” to denote the finest spatial scale at which the observations are meant to be interpreted. 
 
 *   This is often noted by the dataset creator (but sometimes not).
 *   Could be an ecosystem or habitat within an ecosystem.
@@ -268,21 +269,22 @@ A dataset often has multiple levels of observation (i.e. spatial scales of obser
 
 ### Determining the Meaningful Level of Observation
 
-*   If there is only one level of observation, then it is the meaningful level of observation
+*   If there is only one level of observation, then it is the meaningful level of observation.
 *   If there are multiple levels of observation, only one should be deemed meaningful. Consider the following:
     *   Always defer to any explicit statement of the meaningful level of observation from the L0 metadata.
-    *   If not explicitly stated in the L0 metadata, determine if there are changing habitats, experimental treatments, or elevations across any levels of observation, as demonstrated in [Figure 2.](#fig2) 
+    *   If not explicitly stated in the L0 metadata, determine if there are changing habitats, experimental treatments, or elevations across any levels of observation (demonstrated in [Figure 2](#fig2)).
         *   If habitats or special variables do not change across any of the levels of observation, then the coarsest level of observation should be deemed meaningful.
         *   If habitats or “special variables” change across a single one of the levels of observation, then that level should be deemed meaningful.
         *   If habitats or special variables change across multiple levels, the finest resolution level where they change is deemed meaningful.
 
 ### Using the Levels of Observation to assign location_id
+We use the concept of meaningful level of observation to help assign location_ids:
 
 *   Group on the meaningful level of observation to assign location_id to the observations. The meaningful level of observation should go into the location table.
 *   If there are coarser levels of observation, they should also be grouped on when assigning location_id and go into the location table.
 *   If there are finer levels of observation, they should not be grouped on and they should go into observation_ancillary.
 *   If a habitat or other special variable corresponds to a physical location identifier (plot, subplot, transect, etc.), use the physical location identifier to group locations.
-    *   The habitat or special variable then belongs in location_ancillary.
+    *   The physical identifier belongs in the location table and the corresponding habitat or special variable belongs in the location_ancillary table.
 
 ### Determining the Meaningful Level of Observation (Visual Examples) {#fig2}
 ```{r echo=FALSE, out.width='90%', fig.align='center', fig.cap = 'Figure 2. Varying experimental conditions change the meaningful level of observation in a study.'}
@@ -301,7 +303,7 @@ The Frequency of Survey refers to the temporal frequency of events over the cour
 
 ### Determining the Frequency of Survey
 
-*   The L0 metadata is the first place to look for the Frequency of Survey.It could be explicitly stated in the title or methods as such:
+*   The L0 metadata is the first place to look for the Frequency of Survey. It could be explicitly stated in the title or methods as such:
     *   "Annual Survey of Fish off the Florida Coast"
     *   "Samples were collected once every two weeks"
 *   If the Frequency of Survey can not be determined from the L0 metadata, search for patterns in the L0 data:
@@ -310,10 +312,10 @@ The Frequency of Survey refers to the temporal frequency of events over the cour
     *   Use the lubridate package to transform dates into weeks, months, or years:
         *   This may reveal patterns such as locations only being sampled once a year, once a month, or once a week.
     *   Graphing locations over time:
-        *   A visual aid can help you identify trickier patterns such as seasonal samplings or surveys that are roughly monthly but start and end in different months. [Figure 3.](#fig3) demonstrates a variety of sampling patterns that may arise at each Frequency of Survey.
+        *   A visual aid can help you identify trickier-to-spot patterns such as seasonal samplings or surveys that are roughly monthly but start and end in different months. [Figure 3](#fig3) demonstrates a variety of sampling patterns that may arise at each Frequency of Survey.
     *   If you can not identify a single Frequency of Survey that is consistent throughout the entire study, attempt to determine the Frequency of Survey for each year of the study.
-        *   A study may start at one sampling frequency but change once or more over time. A study that starts as an  annual survey could change to seasonal or monthly over time.
-    *   It is possible that the Frequency of Survey is not explicitly stated in the L0 metadata and can not be determined patterns in the L0 data.
+        *   A study may start at one sampling frequency but change once or more over time. A study that starts as an annual survey could change to seasonal or monthly over time, or vice versa.
+    *   It is possible that the Frequency of Survey is not explicitly stated in the L0 metadata and can not readily be determined by patterns in the L0 data.
         *   If this is the case, you should omit the event_id column entirely.
 
 ### Frequency of Survey (Visual Examples) {#fig3}
@@ -323,14 +325,14 @@ knitr::include_graphics('./LevelOfSurvey_final_long.png')
 
 ## Value-Added Features {#value_added_features}
 
-Value added information is anything that an ecocomDP creator intentionally adds to the L1 dataset to improve its findability, accessibility, interoperability, or reusability (see [FAIR Principles](https://www.go-fair.org/fair-principles/)). This information does not come from the L0 dataset directly but rather is derived from it. Since the rule of thumb regarding L1 creation is to rearrange but not alter the L0 dataset, supplementing a dataset with value added information must be done carefully and within the constraints of the following rules:
+Value added information is anything that an ecocomDP creator intentionally adds to the L1 dataset to improve its findability, accessibility, interoperability, or reusability (see [FAIR Principles](https://www.go-fair.org/fair-principles/)). This information does not come from the L0 dataset directly, but instead is derived from it. Since the rule of thumb regarding L1 dataset creation is to rearrange but not alter the L0 dataset, supplementing a dataset with value added information must be done carefully and within the constraints of the following rules:
 
-*   Taxonomic coverage - Resolve taxa to an authority system and list in the taxon table only when the L0 does not resolve taxa to an authority system.
+*   Taxonomic coverage - Resolve taxa to a supported authority system and list in the taxon table *only* when the L0 dataset itself does not resolve taxa to an authority system. See [taxon](#taxon) for more details on resolving taxa to a supported authority.
 *   Annotations - Select annotations for variable_name values in the variable_mapping table. Additionally, include annotations of dataset features in the metadata. Only use annotations from the supported ontologies (see [Ontologies and Vocabularies](#ontologies) section) and always opt to use annotations that have been used in existing ecocomDP datasets (see `view_annotation_dictionary()` function).
 
 # Ontologies and Vocabularies {#ontologies}
 #### Natural observation vs. experiment/manipulation
-Users commonly filter on these. If a dataset involves a human induced experiment/manipulation (i.e. not a natural experiment/manipulation, e.g. hurricane), then add "[Manipulative experiment](https://bioportal.bioontology.org/ontologies/ECSO/?p=classes&conceptid=http://purl.dataone.org/odo/ECSO_00000506)" as an annotation using the “is_about” argument of the `create_eml()` function, e.g.:
+Users commonly filter on these. If a study involves a human induced experiment/manipulation (i.e. not a natural experiment/manipulation, e.g. hurricane), then add "[Manipulative experiment](https://bioportal.bioontology.org/ontologies/ECSO/?p=classes&conceptid=http://purl.dataone.org/odo/ECSO_00000506)" as an annotation using the “is_about” argument of the `create_eml()` function, e.g.:
 ```{r eval=FALSE}
 create_eml(..., is_about = c(`Manipulative experiment` = "http://purl.dataone.org/odo/ECSO_00000506")
 ```
@@ -340,11 +342,11 @@ create_eml(..., is_about = c(`Manipulative experiment` = "http://purl.dataone.or
 *   Supported ontologies (in descending order of preference): [DarwinCore](https://dwc.tdwg.org/terms/), [EnvO](https://sites.google.com/site/environmentontology/Browse-EnvO), [ECSO](https://bioportal.bioontology.org/ontologies/ECSO/?p=summary).
 
 # Deprecating an L1 Dataset
-Sometimes an L1 needs to be removed from circulation. To do this for an archived L1, publish an identical revision of the dataset with the following changes added manually to the metadata:
+Sometimes an L1 dataset needs to be removed from circulation. To do this for an archived L1 dataset, publish an identical revision of the dataset with the following changes added manually to the metadata:
 
 *   Add "deprecated" (lower case) to the list of keywords. 
-*   Prefix the dataset title with: "[DEPRECATED]". 
-*   Provide rationale as a new and first <para> of the dataset abstract.
+*   Prefix the dataset's title with: "[DEPRECATED]". 
+*   Provide rationale as a new and first <para> of the dataset's abstract.
 
 ```{r echo=FALSE, out.width='100%'}
 knitr::include_graphics('./deprecated.jpg')
