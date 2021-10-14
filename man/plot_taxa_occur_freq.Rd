@@ -58,17 +58,10 @@ plot_taxa_occur_freq(
   color_var = "location_id",
   min_occurrence = 5)
 
-# Flatten, manipulate, then plot
+# Flatten, filter using a time cutoff, then plot
 dataset \%>\% 
   flatten_data() \%>\% 
   dplyr::filter(lubridate::as_date(datetime) > "2003-07-01") \%>\%
   plot_taxa_occur_freq()
 }
-
-# Plot the example dataset
-plot_taxa_occur_freq(
-  data = dataset,
-  color_var = "location_id",
-  min_occurrence = 5)
-
 }

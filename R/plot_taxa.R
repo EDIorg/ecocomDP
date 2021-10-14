@@ -849,19 +849,12 @@ plot_taxa_rank <- function(data,
 #'   color_var = "location_id",
 #'   min_occurrence = 5)
 #' 
-#' # Flatten, manipulate, then plot
+#' # Flatten, filter using a time cutoff, then plot
 #' dataset %>% 
 #'   flatten_data() %>% 
 #'   dplyr::filter(lubridate::as_date(datetime) > "2003-07-01") %>%
 #'   plot_taxa_occur_freq()
 #' }
-#' 
-#' # Plot the example dataset
-#' plot_taxa_occur_freq(
-#'   data = dataset,
-#'   color_var = "location_id",
-#'   min_occurrence = 5)
-#' 
 plot_taxa_occur_freq <- function(data, 
                                  id = NA_character_,
                                  min_occurrence = 0, 
@@ -1047,14 +1040,14 @@ plot_taxa_occur_freq <- function(data,
 #'   data = flatten_data(dataset),
 #'   trans = "log1p")
 #' 
-#' # facet by location color by taxon_rank, log 10 transformed
+#' # facet by location color by taxon_rank, log 10 transform
 #' plot_taxa_abund(
 #'   data = dataset,
 #'   facet_var = "location_id",
 #'   color_var = "taxon_rank",
 #'   trans = "log10")
 #' 
-#' # facet by location, minimum rel. abund = 0.05
+#' # facet by location, minimum rel. abund = 0.05, log 10 transform
 #' plot_taxa_abund(
 #'   data = dataset,
 #'   facet_var = "location_id",
@@ -1067,7 +1060,7 @@ plot_taxa_occur_freq <- function(data,
 #'   color_var = "location_id",
 #'   trans = "log10")
 #' 
-#' # tidy syntax, filter data by date
+#' # tidy syntax, flatten then filter data by date
 #' dataset %>% 
 #'   flatten_data() %>% 
 #'   dplyr::filter(

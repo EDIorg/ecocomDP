@@ -54,14 +54,14 @@ plot_taxa_abund(
   data = flatten_data(dataset),
   trans = "log1p")
 
-# facet by location color by taxon_rank, log 10 transformed
+# facet by location color by taxon_rank, log 10 transform
 plot_taxa_abund(
   data = dataset,
   facet_var = "location_id",
   color_var = "taxon_rank",
   trans = "log10")
 
-# facet by location, minimum rel. abund = 0.05
+# facet by location, minimum rel. abund = 0.05, log 10 transform
 plot_taxa_abund(
   data = dataset,
   facet_var = "location_id",
@@ -74,7 +74,7 @@ plot_taxa_abund(
   color_var = "location_id",
   trans = "log10")
 
-# tidy syntax, filter data by date
+# tidy syntax, flatten then filter data by date
 dataset \%>\% 
   flatten_data() \%>\% 
   dplyr::filter(
