@@ -704,6 +704,8 @@ plot_taxa_shared_sites <- function(data,
 
 #' Plot taxa ranks
 #'
+#' @description Plot the number of observations that use each taxonomic rank in the dataset.
+#'
 #' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation and taxon tables, or a flat table containing columns of the observation and taxon tables.
 #' @param id (character) Identifier of dataset to be used in plot subtitles. Is automatically assigned when \code{data} is a dataset object containing the \code{id} field, or is a table containing the package_id column.
 #' @param facet_var (character) Name of column to use for faceting. Must be a column of the observation or taxon table.
@@ -785,7 +787,7 @@ plot_taxa_rank <- function(data,
       ggplot2::aes(taxon_rank)) + 
     ggplot2::labs(title = "Taxa rank frequencies in the observation table", subtitle = id) +
     ggplot2::xlab("Taxon rank") +
-    ggplot2::ylab(paste0("Number of occurrences")) +
+    ggplot2::ylab(paste0("Number of observations")) +
     ggplot2::geom_bar() +
     ggplot2::theme_bw() +
     ggplot2::coord_flip() 
@@ -805,7 +807,9 @@ plot_taxa_rank <- function(data,
 
 
 
-#' Plot stacked taxa by site
+#' Plot taxon occurrence frequencies
+#' 
+#' @description Plot taxon occurrence frequences as the number of 'event_id' by 'location_id' combinations in which a taxon is observed.
 #'
 #' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation and taxon tables, or a flat table containing columns of the observation and taxon tables.
 #' @param id (character) Identifier of dataset to be used in plot subtitles. Is automatically assigned when \code{data} is a dataset object containing the \code{id} field, or is a table containing the package_id column.
@@ -839,7 +843,7 @@ plot_taxa_rank <- function(data,
 #'   facet_var = "location_id", 
 #'   color_var = "taxon_rank")
 #' 
-#' # Color by location and only include taxa with > 10 occurrences
+#' # Color by location and only include taxa with >= 5 occurrences
 #' plot_taxa_occur_freq(
 #'   data = dataset,
 #'   color_var = "location_id",
@@ -899,8 +903,6 @@ plot_taxa_occur_freq <- function(data,
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   
 
-  
-  
   # plot title and subtitle text
   plot_title = "Taxa occurrence frequencies"
   plot_subtitle <- paste0("data package id: ",id)
@@ -911,13 +913,17 @@ plot_taxa_occur_freq <- function(data,
     dplyr::filter(.data$value > 0) %>%
     dplyr::mutate(occurrence = 1)
   
-  col_select_list <- c("event_id","taxon_name","occurrence",
+  col_select_list <- c("event_id","location_id","taxon_name","occurrence",
                        color_var, facet_var) %>% 
     stats::na.omit() %>% 
     unique()
   
   data_working <- data_working[,col_select_list] %>% 
     dplyr::distinct()
+  
+
+  # browser()
+  
   
   # detemine which taxa meet minimum occurrence threshold in dataset
   data_occurrence_total_filtered <- data_working %>%
@@ -926,16 +932,29 @@ plot_taxa_occur_freq <- function(data,
       n_occurrences = length(.data$occurrence)) %>%
     dplyr::filter(.data$n_occurrences >= min_occurrence)
   
-
-  # calculate occurrence by event_id for plotting
+  # browser()
+  
+  # calculate occurrence by location_id and event_id for plotting
   data_occurrence_by_group <- data_working %>%
+    dplyr::distinct() %>%
     dplyr::filter(
       .data$taxon_name %in% data_occurrence_total_filtered$taxon_name) %>%
     dplyr::group_by(
       dplyr::across(
-        -c(.data$event_id, .data$occurrence))) %>%
+        dplyr::all_of(
+          unique(na.omit(c("taxon_name", color_var, facet_var)))
+        )
+      )
+    ) %>%
+    #     -c(.data$event_id, .data$location_id ,.data$occurrence))) %>%
+    # dplyr::group_by(
+    #     dplyr::across(
+    #       dplyr::all_of(unique(stats::na.omit(c(color_var, facet_var))))
+    #     ), .add = TRUE) %>%
     dplyr::summarize(
         n_occurrences = length(.data$occurrence))
+  
+  # browser()
   
   data_occurrence <- data_occurrence_by_group
   
@@ -974,7 +993,7 @@ plot_taxa_occur_freq <- function(data,
   p <- p +
     ggplot2::labs(title = plot_title, subtitle = plot_subtitle) +
     ggplot2::xlab("Taxon name") +
-    ggplot2::ylab(paste0("Occurrences\n(no. 'event_ids' in which the taxon is observed)")) +
+    ggplot2::ylab(paste0("Occurrences\n(unique 'event_id' by 'location_id' occurrences)")) +
     ggplot2::geom_col() +
     ggplot2::coord_flip() +
     ggplot2::scale_x_discrete(limits = rev) +
@@ -992,7 +1011,9 @@ plot_taxa_occur_freq <- function(data,
 
 
 
-#' Plot mean taxon abundances
+#' Plot mean taxa abundances per 'observation_id'
+#' 
+#' @description Plot taxon abundances averaged across observation records for each taxon. Abundances are reported using the units provided in the dataset. In some cases, these counts are not standardized to sampling effort.
 #'
 #' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation and taxon tables, or a flat table containing columns of the observation and taxon tables.
 #' @param id (character) Identifier of dataset to be used in plot subtitles. Is automatically assigned when \code{data} is a dataset object containing the \code{id} field, or is a table containing the package_id column.
@@ -1017,7 +1038,7 @@ plot_taxa_occur_freq <- function(data,
 #' \dontrun{
 #' # Read a dataset of interest
 #' dataset <- read_data("edi.193.5")
-#' #' 
+#' 
 #' # plot ecocomDP formatted dataset
 #' plot_taxa_abund(dataset)
 #' 

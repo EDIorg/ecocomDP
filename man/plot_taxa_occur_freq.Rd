@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_taxa.R
 \name{plot_taxa_occur_freq}
 \alias{plot_taxa_occur_freq}
-\title{Plot stacked taxa by site}
+\title{Plot taxon occurrence frequencies}
 \usage{
 plot_taxa_occur_freq(
   data,
@@ -33,7 +33,7 @@ plot_taxa_occur_freq(
 (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device.
 }
 \description{
-Plot stacked taxa by site
+Plot taxon occurrence frequences as the number of 'event_id' by 'location_id' combinations in which a taxon is observed.
 }
 \details{
 The \code{data} parameter accepts a range of input types but ultimately requires the 13 columns of the combined observation and taxon tables.
@@ -52,7 +52,7 @@ plot_taxa_occur_freq(
   facet_var = "location_id", 
   color_var = "taxon_rank")
 
-# Color by location and only include taxa with > 10 occurrences
+# Color by location and only include taxa with >= 5 occurrences
 plot_taxa_occur_freq(
   data = dataset,
   color_var = "location_id",
