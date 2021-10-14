@@ -191,14 +191,19 @@ Store identifying information about a place (longitude, latitude, elevation) in 
 #### latitude and longitude
 
 *   Each row of the location table should contain a latitude and longitude value describing a point location. This information should be in the L0 dataset (e.g. metadata, data tables, or other entities). Sometimes there is geographic information at a different spatial scale than the listed locations. Follow these recommendations for determining the correct coordinates to provide:
-    *   The L0 dataset only has areas/polygons (instead of point locations) at a location. In such cases, use the centroid of each area.
-    *   The L0 dataset only has point locations at finer spatial scale than a location. In such cases, use centroid of the constituent coordinates (e.g. centroid of transects within a site).
-    *   The L0 dataset only has point locations at a coarser level than a location. In such cases, transpose coarser coordinates to the location (e.g. each plot within a site would get the site’s coordinates).
-    *   The L0 dataset only has an area/polygon at a coarser level than a location. In such cases, use the centroid of the area/polygon as coordinates for the location.
-    *   The L0 dataset has incomplete but accurate point locations for some locations. In such cases, the one-to-one matching of geographic coverage with some of the locations is best. The L1 user may be able to infer coverage to other adjacent locations with coordinates and elevations having NA values.
-    *   Coordinates of location vary with each observation (e.g. specific coordinates where a plankton tow was done within the boundaries of an established/static station, [edi.338.2](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=338&revision=2)).
+    *   The L0 dataset only has areas/polygons (instead of point locations) at a location. In such cases, use the centroid of each area (A).
+    *   The L0 dataset only has point locations at finer spatial scale than a location. In such cases, use centroid of the constituent coordinates (e.g. centroid of transects within a site) (B).
+    *   The L0 dataset only has point locations at a coarser level than a location. In such cases, transpose coarser coordinates to the location (e.g. each plot within a site would get the site’s coordinates) (C).
+    *   The L0 dataset only has an area/polygon at a coarser level than a location. In such cases, use the centroid of the area/polygon as coordinates for the location (D).
+    *   The L0 dataset has incomplete but accurate point locations for some locations. In such cases, the one-to-one matching of geographic coverage with some of the locations is best. The L1 user may be able to infer coverage to other adjacent locations with coordinates and elevations having NA values (E).
+    *   Coordinates of location vary with each observation (e.g. specific coordinates where a plankton tow was done within the boundaries of an established/static station, [edi.338.2](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=338&revision=2)) (F).
         *   First, take the average across the entire dataset of all observation coordinate corresponding to each location_name.
         *   Second, in the location_ancillary table, list the exact coordinates for each date by including the datetime field. If this raises non-unique composite key issues (from `validate_data()`), then see the [observation_ancillary](#observation_ancillary) section.
+
+```{r echo=FALSE, out.width='95%', fig.align="right"}
+knitr::include_graphics('./coords_final_wide.png')
+```    
+
 
 ### taxon
 
@@ -281,7 +286,7 @@ A dataset often has multiple levels of observation (i.e. spatial scales of obser
 
 ### Determining the Meaningful Level of Observation (Visual Examples)
 The following visual demonstrates how different experimental designs can change the Meaningful Level of Observation in a study.
-```{r echo=FALSE, out.width='100%'}
+```{r echo=FALSE, out.width='90%', fig.align='center'}
 knitr::include_graphics('./MLO_final_long.png')
 ```    
 
@@ -314,7 +319,7 @@ The Frequency of Survey refers to the temporal frequency of events over the cour
 
 ### Frequency of Survey (Visual Examples)
 The following visual illustrates examples of common Frequencies of Survey and how they can be used to assign event_ids. Each timeline in a subsection represents a different possible manifestation of the Frequency of Survey.
-```{r echo=FALSE, out.width='100%'}
+```{r echo=FALSE, out.width='90%', fig.align='center'}
 knitr::include_graphics('./LevelOfSurvey_final_long.png')
 ```
 
