@@ -7,12 +7,10 @@
 \format{
 A list of:
 \describe{
-  \item{edi.193.5}{The dataset identifier}
-    \describe{
-      \item{metadata}{See source url for metadata}
-      \item{tables}{A list of data frames, each an ecocomDP table}
-      \item{validation_issues}{Is NULL because there are no validation issues for this dataset}
-  }
+  \item{id}{The dataset identifier}
+  \item{metadata}{See source url for metadata}
+  \item{tables}{A list of data frames, each an ecocomDP table}
+  \item{validation_issues}{Is NULL because there are no validation issues for this dataset}
 }
 }
 \source{

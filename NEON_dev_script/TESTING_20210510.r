@@ -12,21 +12,21 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
-plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
+plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
 
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum())
 
-# my_result_read_data[[1]]$tables %>% base::list2env(.GlobalEnv)
+# my_result_read_data$tables %>% base::list2env(.GlobalEnv)
 # 
 # observation$observation_id %>% setdiff(observation_ancillary$observation_id)
 # observation_ancillary$observation_id %>% setdiff(observation$observation_id)
@@ -45,15 +45,15 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
-plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
+plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -76,15 +76,15 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
-plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
+plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -104,15 +104,15 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
-plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
+plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
 
 
 tab_flat %>% group_by(event_id) %>%
@@ -134,15 +134,15 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
-plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
+plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -162,15 +162,15 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
-plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
+plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -192,15 +192,15 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
-plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
+plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -222,15 +222,15 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
-plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
+plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -251,15 +251,15 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
-plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
+plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -281,15 +281,15 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
-plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
+plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -311,15 +311,15 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
-plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
+plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -342,15 +342,15 @@ my_result_read_data <- read_data(
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
-my_result_read_data[[1]]$validation_issues
-my_result_read_data[[1]]$metadata$data_package_info
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-tab_flat <- my_result_read_data[[1]]$tables %>% 
+tab_flat <- my_result_read_data$tables %>% 
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
 View(tab_flat)
-plot_taxa_sample_time(my_result_read_data[[1]]$tables$observation, names(my_result_read_data))
+plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%

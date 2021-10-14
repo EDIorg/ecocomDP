@@ -25,38 +25,38 @@ my_dataset <- read_data(
 
 # detecting data types
 ecocomDP:::detect_data_type(ants_L1)
-ecocomDP:::detect_data_type(ants_L1[[1]])
-ecocomDP:::detect_data_type(ants_L1[[1]]$tables)
-ecocomDP:::detect_data_type(ants_L1[[1]]$tables$observation)
+ecocomDP:::detect_data_type(ants_L1)
+ecocomDP:::detect_data_type(ants_L1$tables)
+ecocomDP:::detect_data_type(ants_L1$tables$observation)
 ecocomDP:::detect_data_type(list(a = ants_L1, b = ants_L1))
-ecocomDP:::detect_data_type(list(a = ants_L1[[1]], b = ants_L1[[1]]))
+ecocomDP:::detect_data_type(list(a = ants_L1, b = ants_L1))
 
 ecocomDP:::detect_data_type(my_dataset)
-ecocomDP:::detect_data_type(my_dataset[[1]])
-ecocomDP:::detect_data_type(my_dataset[[1]]$tables)
-ecocomDP:::detect_data_type(my_dataset[[1]]$tables$observation)
+ecocomDP:::detect_data_type(my_dataset)
+ecocomDP:::detect_data_type(my_dataset$tables)
+ecocomDP:::detect_data_type(my_dataset$tables$observation)
 ecocomDP:::detect_data_type(list(a = my_dataset, b = my_dataset))
-ecocomDP:::detect_data_type(list(a = my_dataset[[1]], b = my_dataset[[1]]))
+ecocomDP:::detect_data_type(list(a = my_dataset, b = my_dataset))
 
 # error out with informative message
-ecocomDP:::detect_data_type(ants_L1[[1]]$metadata)
-ecocomDP:::detect_data_type(my_dataset[[1]]$metadata)
+ecocomDP:::detect_data_type(ants_L1$metadata)
+ecocomDP:::detect_data_type(my_dataset$metadata)
 ecocomDP:::detect_data_type(list(a="a"))
 
 # this detects "list_of_datasets" -- might want to improve logic in the future?
-ecocomDP:::detect_data_type(list(a = ants_L1[[1]], b = ants_L1))
+ecocomDP:::detect_data_type(list(a = ants_L1, b = ants_L1))
 
 # test new flatten with autodetect
 flat <- flatten_data(ants_L1)
-flat <- flatten_data(ants_L1[[1]])
-flat <- flatten_data(ants_L1[[1]]$tables)
+flat <- flatten_data(ants_L1)
+flat <- flatten_data(ants_L1$tables)
 flat <- flatten_data(my_dataset)
-flat <- flatten_data(my_dataset[[1]])
-flat <- flatten_data(my_dataset[[1]]$tables)
+flat <- flatten_data(my_dataset)
+flat <- flatten_data(my_dataset$tables)
 
 # should error with message
-flat <- flatten_data(ants_L1[[1]]$validation_issues)
-flat <- flatten_data(my_dataset[[1]]$validation_issues)
+flat <- flatten_data(ants_L1$validation_issues)
+flat <- flatten_data(my_dataset$validation_issues)
 
 
 #########################################################
@@ -79,7 +79,7 @@ plot_taxa_accum_sites(flatten_data(ants_L1))
 
 # plot an ecocomDP observation table
 plot_taxa_accum_sites(
-  data = ants_L1[[1]]$tables$observation)
+  data = ants_L1$tables$observation)
 
 # tidy syntax
 ants_L1 %>% plot_taxa_accum_sites()
@@ -112,7 +112,7 @@ plot_taxa_accum_time(
   data = my_dataset)
 
 plot_taxa_accum_time(
-  data = my_dataset[[1]]$tables$observation,
+  data = my_dataset$tables$observation,
   id = names(my_dataset))
 
 plot_taxa_accum_time(
@@ -131,7 +131,7 @@ plot_taxa_accum_time(
 
 # plot ecocomDP observation table
 plot_taxa_accum_time(
-  data = ants_L1[[1]]$tables$observation)
+  data = ants_L1$tables$observation)
 
 # tidy syntax, filter data by date
 ants_L1 %>% 
@@ -159,7 +159,7 @@ ants_L1 %>%
 # this is also messed up for macroinverts -- COMO is weird
 # RENAME from "plot_taxa_diversity" to "plot_richness_time"
 plot_taxa_diversity(
-  data = my_dataset[[1]]$tables$observation,
+  data = my_dataset$tables$observation,
   id = names(my_dataset))
 
 plot_taxa_diversity(
@@ -216,7 +216,7 @@ plot_taxa_diversity(
   time_window_size = "year")
 
 # plot richness through time for ecocomDP observation table
-plot_taxa_diversity(ants_L1[[1]]$tables$observation)
+plot_taxa_diversity(ants_L1$tables$observation)
 
 # plot richness through time for flattened ecocomDP dataset 
 plot_taxa_diversity(flatten_data(ants_L1))
@@ -264,7 +264,7 @@ ants_L1 %>%
 # sample coverage by site and time
 # RENAME 
 plot_sample_space_time(
-  data = my_dataset[[1]]$tables$observation,
+  data = my_dataset$tables$observation,
   id = names(my_dataset))
 
 plot_sample_space_time(
@@ -274,7 +274,7 @@ plot_sample_space_time(
   data = my_dataset %>% flatten_data())
 
 plot_sample_space_time(
-  data = my_dataset[[1]]$tables$observation,
+  data = my_dataset$tables$observation,
   id = names(my_dataset))
 
 plot_sample_space_time(
@@ -298,7 +298,7 @@ plot_sample_space_time(ants_L1)
 plot_sample_space_time(flatten_data(ants_L1))
 
 # plot ecocomDP observation table
-plot_sample_space_time(ants_L1[[1]]$tables$observation)
+plot_sample_space_time(ants_L1$tables$observation)
 
 # tidy syntax, filter data by date
 ants_L1 %>% 
@@ -341,15 +341,15 @@ my_dataset <- read_data(
 
 
 plot_taxa_shared_sites(
-  data = my_dataset[[1]]$tables$observation,
+  data = my_dataset$tables$observation,
   id = names(my_dataset))
 
 plot_taxa_shared_sites(
   data = my_dataset)
 
 plot_taxa_shared_sites(
-  data = ants_L1[[1]]$tables$observation,
-  id = names(ants_L1))
+  data = ants_L1$tables$observation,
+  id = ants_L1$id)
 
 plot_taxa_shared_sites(
   data = ants_L1)
@@ -370,7 +370,7 @@ plot_taxa_shared_sites(ants_L1)
 plot_taxa_shared_sites(flatten_data(ants_L1))
 
 # plot ecocomDP observation table
-plot_taxa_shared_sites(ants_L1[[1]]$tables$observation)
+plot_taxa_shared_sites(ants_L1$tables$observation)
 
 # tidy syntax, filter data by date
 ants_L1 %>% 
@@ -482,7 +482,7 @@ plot_taxa_occur_freq(
   data = my_dataset %>% flatten_data())
 
 plot_taxa_occur_freq(
-  data = my_dataset[[1]]$tables %>% flatten_tables())
+  data = my_dataset$tables %>% flatten_tables())
 
 ###########################################################
 

@@ -13,3 +13,9 @@ View the collection of dataset- and attribute-level annotations
 \details{
 Use the search field to find the annotation terms and URIs.
 }
+\examples{
+\dontrun{
+view_annotation_dictionary()
+}
+    
+}
