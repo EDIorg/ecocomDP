@@ -25,7 +25,7 @@ This document assumes you understand the ecocomDP model. To learn about the mode
 # Introduction
 This document delineates the practices that all creators of ecocomDP formatted datasets should adopt in order for the community to build a cohesive and interoperable collection. It contains detailed descriptions of practices, definitions of concepts, and solutions to many common issues.
 
-Early sections address important considerations for anyone thinking about converting source datasets to the ecocomDP model, then focus shifts to examination of the model components in greater detail. These shared practices are written with the intention to help simplify the conversion process.
+Early sections address important considerations for anyone thinking about converting source datasets to the ecocomDP model, then focus shifts to an examination of the model components in greater detail. These shared practices are written with the intention to help simplify the conversion process.
 
 If you are new to the conversion process, we recommend reading the [Getting Started](#getting_started) and [Concepts](#concepts) sections, reviewing the [Create](create.html) and [Model Overview](model_overview.html) vignettes, and referring back to this document as questions arise. A thorough understanding of the ecocomDP model and some foundational concepts will greatly simplify the conversion process.
 
@@ -33,13 +33,13 @@ Each ecocomDP dataset (Level-1; L1) is created from a raw source dataset (Level-
 ```{r echo=FALSE, out.width='100%'}
 knitr::include_graphics('./workflow.jpg')
 ```
-The Level 0 (L0) dataset is the incoming original data with complete metadata. Level 1 (L1) dataset are the L0 datasets reformatted according to the predefined ecocomDP model. Researchers are able to use L1 as inputs to speed their analyses and generate Level 2 (L2) data. (Adapted from [O’Brien et al. 2021](https://doi.org/10.1016/j.ecoinf.2021.101374)).
+The Level 0 (L0) dataset is the incoming original data with complete metadata. Level 1 (L1) dataset is the L0 dataset reformatted according to the predefined ecocomDP model. Researchers are able to use L1 datasets as inputs to speed their analyses and generate Level 2 (L2) data. (Adapted from [O’Brien et al. 2021](https://doi.org/10.1016/j.ecoinf.2021.101374)).
 
 # Getting Started {#getting_started}
 ## Identifying a candidate L0 dataset
 Not all source datasets are good candidates for ecocomDP. Features of a good candidate include datasets that:
 
-*   Are about community surveys not population surveys. An [ecological community](http://www.ontobee.org/ontology/PCO?iri=http://purl.obolibrary.org/obo/PCO_0000002) is a multi-species collection of organisms of at least two different species, living in a particular area, whereas a [population](http://purl.obolibrary.org/obo/PCO_0000001) is a collection of organisms, all of the same species, that live in the same place.
+*   Are about community surveys not population surveys. An [ecological community](http://www.ontobee.org/ontology/PCO?iri=http://purl.obolibrary.org/obo/PCO_0000002) is a multi-species (at least two) collection of organisms living in a particular area, whereas a [population](http://purl.obolibrary.org/obo/PCO_0000001) is a collection of organisms, all of the same species, that live in the same place.
 *   Form long-term observation with a suggested minimum of 5 years, which can be ignored for datasets with exceptionally wide spatial extents.
 *   Have ongoing data collection and will eventually form long-term observation.
 *   Are accompanied by information rich metadata written in the [Ecological Metadata Language (EML)](https://eml.ecoinformatics.org/).
@@ -65,17 +65,17 @@ After gaining a sufficient understanding of the L0 dataset, you are ready to ass
     
 1. Modify L0 components - Modifying L0 components is only permitted in rare cases. This list highlights the L0 components and specific scenarios in which you should modify them:
 
-    *   Duplicate column names - Only change the L0 column names if they create conflicts during joins (i.e. two L0 tables having the same column names) or share the name with an L1 column name. In either case, always preserve the original column name. Append a  prefix or suffix to the original column name so that it is distinct but still recognizable enough to be used as a reference to the L0 metadata.
+    *   Duplicate column names - Only change the L0 column names if they create conflicts during joins (i.e. two L0 tables having the same column names) or share the name with an L1 table's column name. In either case, always preserve the original column name. Append a  prefix or suffix to the original column name so that it is distinct but still recognizable enough to be used as a reference to the L0 metadata.
     *   Non-point locations - Currently, only point coordinates are accepted by the ecocomDP model; use the centroid of bounding areas if presented with non-point locations.
     *   Datetime formats - Conversion of datetimes to the ecocomDP standard is required (e.g. YYYY-MM-DD hh:mm:ss or a subset thereof). Always combine Year, Month, Day, and time columns to the temporal level of observation (e.g. [edi.334.2](https://portal.edirepository.org/nis/metadataviewer?packageid=edi.334.2)).
-    *   Missing value codes - Missing value codes that are explicitly declared in the metadata should be converted to NA. When not declared but unambiguously interpretable as a missing value (e.g. “” in a comments field) then convert to NA. If it is ambiguous, don’t modify the L0 data.
+    *   Missing value codes - Missing value codes that are explicitly declared in the L0 metadata should be converted to NA. When not declared but unambiguously interpretable as a missing value (e.g. “” in a comments field) then convert to NA. If it is ambiguous, don’t modify the L0 data.
     *   Different temporal resolution among the L0 tables creates a joining/stacking issue. To solve it, assign the coarsest temporal resolution to the datetime field of all the L0 tables, then store the more precise datetime variables in the observation_ancillary table (e.g. [edi.291.2](https://portal.edirepository.org/nis/metadataviewer?packageid=edi.291.2)). 
 
 1. Omit L0 data - ecocomDP is a flexible model but can’t handle everything. Convert as much as possible and drop the remainder. If content is dropped, then describe what and why using comments in the conversion script. Some guidelines for when you should drop content:
 
-    *   If it is necessary to drop observations (rows), see the section [Omitting rows](#omitting_rows)
-    *   If it can be derived from the preserved content (e.g. year can be derived from date, a taxa’s common name can be derived from it’s species name) then you can drop it from the L1 dataset if it does not fit the model (i.e. L1 data tables don’t pass validation).
-    *   If it is ancillary information to data in one of the L1 ancillary tables that does not have a simple one-to-one rowise relationship, then it is too far removed from the core content of the L1. (e.g. A temperature sensor collects environmental data that supports the core observations. This temperature data belongs in the observation_ancillary table. If maintenance information for the temperature sensor is included, it could be omitted from the L1 dataset because it cannot be linked to the temperature observations within the model.) However, if the data is so important that it shouldn’t be dropped, then append a suffix to the supporting data’s original variable name that references the ancillary data (e.g. ancillary data “Site” has supporting data “lat” and “lon”. The variables “Site”, “lat_Site” and “lon_Site” all belong in ancillary data).
+    *   If it is necessary to drop observations (rows), see the section [Omitting rows](#omitting_rows).
+    *   If it can be derived from the preserved content (e.g. year can be derived from date, a taxa’s common name can be derived from its species name) then you can drop it from the L1 dataset if it does not fit the model (i.e. L1 data tables don’t pass validation).
+    *   If it is ancillary information to data in one of the L1 ancillary tables that does not have a simple one-to-one, row-wise relationship, then it is too far removed from the core content of the L1 dataset. (e.g. A temperature sensor collects environmental data that supports the core observations. This temperature data belongs in the observation_ancillary table. If maintenance information for the temperature sensor is included, it could be omitted from the L1 dataset because it cannot be linked to the temperature observations within the model.) However, if the data is so important that it shouldn’t be dropped, then append a suffix to the supporting data’s original variable name that references the ancillary data (e.g. ancillary data “Site” has supporting data “lat” and “lon”. The variables “Site”, “lat_Site” and “lon_Site” all belong in ancillary data).
     *   Large surveys, sampling campaigns, and experiments will occasionally include information that is not central to the community ecology aspect of the L0 dataset (e.g. [edi.115.2](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=115&revision=2), [edi.247.3](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=247&revision=3)). See the section [Omitting tables](#omitting_tables) to determine if or how you should omit entire data tables from the L1 dataset.
     
 If the above options don’t solve the issue, then don’t convert it. There are many more datasets out there in the world to convert!
@@ -89,14 +89,14 @@ When an L0 dataset is really valuable, but issues with the dataset (e.g. changes
 ### Omitting tables {#omitting_tables}
 You may decide that only a subset of the data tables within an L0 dataset are well-suited to the ecocomDP format. In this case you have the option to omit entire data tables and only convert those that will fit the model.
 
-When determining which tables to convert and which to omit, first identify which table(s) contain the “core” observation information. This will be the backbone of the L0 flat table. Once the flat table is instantiated around the core observation, determine the shared keys by which to join the other L0 tables. The following types of variables are examples of common keys shared between data tables:
+When determining which tables to convert and which to omit, first identify which table(s) contain the “core” observation information. This will be the backbone of the intermediate "flat" table. Once the flat table is instantiated around the core observation, determine the shared keys by which to join the other L0 tables. The following types of variables are examples of common keys shared between data tables:
 
 *   Time (a column for year, month, day, date, or combination).
 *   Location (a column for site, plot, transect, or combination). 
 *   Taxonomic information ( a species, scientific name, common name, or similar column).
 *   Other shared variables.
 
-If you encounter tables that can’t be joined to the core observation information, possibly because they focus on a different time/space/taxon entirely, omit these problematic tables completely. Apply the following changes to the conversion script to highlight the table omission:
+If you encounter tables that can’t be joined to the core observation information, possibly because they focus on a different time/location/taxon entirely, omit these problematic tables. Apply the following changes to the conversion script to highlight the table omission:
 
 *   In the “Join and flatten source data” section of the create_ecocomDP function definition, write a brief comment that highlights and justifies the decision to trim the L0 tables (i.e. `# atmospheric_gas_concentrations table did not share a key with the bird_count table and was omitted`).
 *   Append `message(paste0("This L1 dataset is derived from a trimmed version of ", source_id, "with omitted tables"))` below the `create_eml()` function call in the `create_ecocomDP()` function definition.
@@ -114,7 +114,7 @@ To convert an L0 dataset, implement the following processes in your conversion s
 *   Validate L1 tables with `validate_data()`
 *   Create EML metadata with `create_eml()`
 
-For details on the processes within the conversion script, see the [Create Vignette](create.html).
+For details on the processes within the conversion script, see the [Create vignette](create.html).
 
 ## Basics
 ### Do's
@@ -146,30 +146,30 @@ For details on the processes within the conversion script, see the [Create Vigne
 *   Don’t call the create_ecocomDP() function from within the conversion script. Otherwise the automated maintenance routine won’t be able to control the function call (i.e. input arguments and when it runs).
 
 ## Resolving Issues in the L1 Tables
-Refer to this section to resolve specific issues while creating the L1 tables. For more in-depth descriptions on these tables and their columns, see the [Model Overview Vignette](model_overview.html).
+Refer to this section to resolve specific issues while creating the L1 tables. For more in-depth descriptions on these tables and their columns, see the [Model Overview vignette](model_overview.html).
 
 ### observation
-Store the core observations being analyzed in this table. Observations must be linked to a taxon and to a location. 
+Store the core observations being analyzed in this table. Observations must be linked to a taxon and to a location. Linking to ancillary observations is optional.
 
 #### event_id
 
 *   If an L0 dataset contains values corresponding to the survey/event number, always use these values. 
-*   If the dataset does not contain values corresponding to the survey/event number, group observations by the frequency of survey (see (Frequency of Survey)[#frequency_of_survey] for more information) and programmatically assign an event_id. Note: Always arrange the dataset chronologically before assigning event_id; event_ids should correspond chronologically to surveys.
-*   If the frequency of survey can not be determined accurately from the metadata or from patterns in the L0 data, omit the event_id column entirely.
+*   If the L0 dataset does not contain values corresponding to the survey/event number, group observations by the Frequency of Survey (see (Frequency of Survey)[#frequency_of_survey] section for more information) and programmatically assign an event_id. Note: Always arrange the intermediate "flat" table chronologically before assigning event_id; event_ids should correspond chronologically to surveys.
+*   If the Frequency of Survey can not be determined accurately from the L0 metadata or from patterns in the L0 data tables, omit the event_id column entirely.
 
 #### datetime
 
-*   If the L0 data tables do not contain a date or datetime column, but instead have start_date and end_date columns, use the date from the start_date column to assign datetime in the observation table. Additionally, preserve start_date and end_date as-is in the observation_ancillary table.
+*   If the L0 data tables do not contain a date or datetime column but instead have start_date and end_date columns, use the date from the start_date column to assign datetime in the observation table. Additionally, store start_date and end_date as-is in the observation_ancillary table.
 
 #### taxon_id
 
-*   If variables (columns) in L0 data tables are individual species, gather (e.g. `tidyr::pivot_longer()`) into columns of values and taxon_names, and manually add the variable_name and unit columns to describe the measurement. Use the column description and units from the L0 metadata.
+*   If variables (columns) in L0 data tables are individual species, gather (e.g. `tidyr::pivot_longer()`) into columns of values and taxon_names. Manually add the variable_name and unit columns to describe the measurement. Use the column description and units from the L0 metadata, if applicable.
 
 #### variable_name
 
 *   Every dataset has a core observation. In certain cases, it is acceptable to have multiple core observation variables.
     *   If a derivation of abundance/count (areal density, biomass, etc.) is provided along with raw abundance/counts, both variables constitute core observations.
-    *   Core observations (e.g. abundance/counts) that are subdivided into smaller classified groups should constitute their own core observation.
+    *   Core observations (e.g. abundance/counts) that are subdivided into smaller classified groups constitute their own core observations.
         *   Example: L0 dataset has organism counts spread across columns “lessThan2mm”, “2to5mm”, and “greaterThan5mm”. These columns should be preserved as-is, not aggregated into a single count column. (e.g. [edi.248.2](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=248&revision=2), which is classified by size class and method).
     *   If core observations are missing associated counts, but each row clearly represents an observation of a single taxon, manually assign these three columns:
         *   A variable_name column populated with the value “count” for every observation.
@@ -182,8 +182,8 @@ Store identifying information about a place (longitude, latitude, elevation) in 
 #### location_id 
 
 *   If an L0 dataset contains id values corresponding to the location, always opt to use these values (i.e. don’t assign your own).
-*   If an L0 dataset does not contain location identifiers they should be formed by grouping on the location name at the meaningful level of observation (see [Levels of Observation](#levels_of_observation) section).
-*   If an L0 dataset does not contain location identifiers or names corresponding to location at the meaningful level of observation and the entire study occurs at the same location, a location_id of 1 and a logical location_name derived from the L0 metadata should be assigned to each observation.
+*   If an L0 dataset does not contain location identifiers then assign them by grouping on the location name at the meaningful level of observation (see [Levels of Observation](#levels_of_observation) section).
+*   If an L0 dataset does not contain location identifiers or names corresponding to location at the meaningful level of observation and the entire study occurs at the same location, assign a location_id of 1 and a logical location_name derived from the L0 metadata to each observation.
 *   If an L0 dataset does not contain location identifiers or names corresponding to location at the meaningful level of observation, determine a unique constraint among the sampling location attributes (e.g. latitude, longitude) and use that to create a sampling location_id.
 
 #### location_name
@@ -217,27 +217,27 @@ Store identifying information about a taxon in this table.
 
 ### dataset_summary
 
-Store summary info calculated from incoming data in this table.
+Store summary info about the L1 dataset in this table.
 
 *   To calculate temporal metrics of the dataset when resolution is only at year, add “01-01” (e.g. “1999-01-01”) to create a vector of dates so the `calc_*()` funcs can be used. Do not use this vector of modified and arbitrary dates in any of the datetime columns of the other tables, these should remain YYYY formatted.
 *   In the case that date is present for a fraction of observations but a coarser grain (e.g. YYYY) is present for all observations, create a composite date column using date for observations where it exists and coarser grain reformatted as YYYY-MM-DD elsewhere.
 
 ### observation_ancillary {#observation_ancillary}
 
-Store variables that pertain directly to observations in this table (plot or transect identifiers, measurement times, environmental conditions, field notes, etc.).
+Store ancillary information about an observational event for context (e.g. plot or transect identifiers, measurement times, environmental conditions, field notes, etc.).
 
 *   Additionally, store location or core taxa variables in this table if they cause non-unique constraint validation issues in their own respective ancillary tables. This should be thought of as a temporary solution (see [General Issues](#general_issues)).
 
 ### location_ancillary
 
-Store variables that pertain directly to the locations in the location table in this table (treatments, habitats, etc.).
+Store additional information about a place that does not change frequently (e.g. lake area or depth, experimental treatment, habitat). Features that change frequently are more closely related to the observational event, and are thus kept in the observation_ancillary table. Ancillary observations are linked through the location_id, and one location_id may have many ancillary observations about it.
 
 *   If these site-specific variables change through time, use the datetime column to avoid creating non-unique composite keys.
 *   If site-specific variables change through time but the dates associated with the variable do not align with observation datetimes, round the date associated with the changing variable forward to the next observation date (e.g. [edi.253.3](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=253&revision=3)).
 
 ### taxon_ancillary
 
-Store taxon information that pertains to the core taxa in this table.
+Store additional info about an organism that does not change frequently (e.g. trophic level). Features that change frequently are probably observations. Ancillary observations are linked through the taxon_id, which may have many ancillary observations about it.
 
 *   In the case where taxon-specific information changes through time (i.e. a different common name or description is used), make use of the datetime column to avoid creating non-unique composite keys. 
 
