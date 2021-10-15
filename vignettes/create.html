@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Create ecocomDP Data</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Create ecocomDP Data</h1>
+
+
+
+<p>Each ecocomDP dataset (Level-1; L1) is created from a source dataset (Level-0; L0) by a unique processing function. Inputs are typically from the APIs of data repositories and monitoring networks, and outputs can be a list of R objects or a set of archivable files. The output form you choose may depend on multiple factors including the source data license (it may prohibit archive) and the overall processing time (on-demand processing may be prohibitively long). In either case, the derived ecocomDP dataset is delivered to users in a consistent format by <code>read_data()</code> and the processing function provides a fully reproducible and automated routine for updating the derived dataset whenever a new version of the source data are released.</p>
+<p>Below is an example function that reads a source dataset from the Environmental Data Initiative (EDI) repository and converts it into an ecocomDP dataset, which in turn is archived in EDI. For an example of creating an ecocomDP dataset on-demand (i.e. not archived), see the map_neon_data_to_ecocomDP.R source code.</p>
+<p>Use <code>view_diagram()</code> and <code>view_descriptions()</code> for an overview of ecocomDP table relationships and requirements.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ecocomDP)</span></code></pre></div>
+<div id="for-archive-in-a-data-repository" class="section level2">
+<h2>For archive in a data repository</h2>
+<div id="example-function" class="section level4">
+<h4>Example function:</h4>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># This function converts source dataset &quot;knb-lter-hfr.118&quot; (archived in the EDI</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Data Repository) to ecocomDP dataset &quot;edi.193&quot; (also archived in EDI)</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Arguments:</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># path        Where the ecocomDP tables will be written</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># source_id   Identifier of the source dataset</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># derived_id  Identifier of the derived dataset</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># url         The URL by which the derived tables and metadata can be accessed </span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#             by a data repository. This argument is used when automating the </span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#             repository publication step, but not used when manually </span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#             publishing.</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Value:</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># tables      (.csv) ecocomDP tables</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># metadata    (.xml) EML metadata for tables</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Details:</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co">#             This function facilitates automated updates to the derived </span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co">#             &quot;edi.193&quot; whenever new data are added to the source </span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co">#             &quot;knb-lter-hrf.118&quot;. The framework executing this maintenance </span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co">#             routine is hosted on a remote server and jumps into action </span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">#             whenever an update notification is received for </span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">#             &quot;knb-lter-hrf.118&quot;. The maintenance routine parses the </span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co">#             notification to get the arguments to create_ecocomDP().</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Landing page to source dataset &quot;knb-lter-hfr.118&quot;:</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co"># https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-hfr&amp;identifier=118</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Landing page to derived dataset &quot;edi.193&quot;:</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co"># https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=193</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------------------------------------------</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Libraries used by this function</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ecocomDP)</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xml2)</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(EDIutils)       <span class="co"># remotes::install_github(&quot;EDIorg/EDIutils&quot;)</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(taxonomyCleanr) <span class="co"># remotes::install_github(&quot;EDIorg/taxonomyCleanr&quot;)</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>create_ecocomDP <span class="ot">&lt;-</span> <span class="cf">function</span>(path,</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>                            source_id, </span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>                            derived_id, </span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>                            <span class="at">url =</span> <span class="cn">NULL</span>) {</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Read source dataset -------------------------------------------------------</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The source dataset is about ant communities and their functional traits </span></span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>  <span class="co"># changing in response to an invasive species. Observations are made across </span></span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>  <span class="co"># habitat types within the Harvard Experimental Forest. The dataset consists </span></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>  <span class="co"># of a primary table listing abundances at sites through time, and an </span></span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ancillary table listing physical and functional traits of observed species.</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Read the source dataset from EDI</span></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>  eml <span class="ot">&lt;-</span> EDIutils<span class="sc">::</span><span class="fu">api_read_metadata</span>(source_id)</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> EDIutils<span class="sc">::</span><span class="fu">read_tables</span>(</span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">eml =</span> eml, </span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.white =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>    <span class="at">na.strings =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>    <span class="at">convert.missing.value =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>    <span class="at">add.units =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>  ants <span class="ot">&lt;-</span> data<span class="sc">$</span><span class="st">`</span><span class="at">hf118-01-ants.csv</span><span class="st">`</span></span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>  traits <span class="ot">&lt;-</span> data<span class="sc">$</span><span class="st">`</span><span class="at">hf118-02-functional-traits.csv</span><span class="st">`</span></span>
+<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>  ants<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">ymd</span>(ants<span class="sc">$</span>date)</span>
+<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Join and flatten the source dataset ---------------------------------------</span></span>
+<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Joining all source data and relevant metadata into one big flat table </span></span>
+<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>  <span class="co"># simplifies parsing into ecocomDP tables and facilitates referential </span></span>
+<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>  <span class="co"># integrity in the process.</span></span>
+<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove duplicate data from the ancillary table and join on species &quot;code&quot;</span></span>
+<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>  traits <span class="ot">&lt;-</span> traits <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>genus, <span class="sc">-</span>species)</span>
+<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>  traits <span class="ot">&lt;-</span> traits <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">code =</span> species.code)</span>
+<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>  wide <span class="ot">&lt;-</span> <span class="fu">left_join</span>(ants, traits, <span class="at">by =</span> <span class="st">&quot;code&quot;</span>)</span>
+<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert wide format to &quot;flat&quot; format. This is the wide form but gathered on </span></span>
+<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>  <span class="co"># core observation variables, which are often &gt; 1 in source datasets. This </span></span>
+<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>  <span class="co"># &quot;flat&quot; table is the &quot;widest&quot; ecocomDP datasets can be consistently returned </span></span>
+<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>  <span class="co"># to by the ecocomDP::flatten_data() function, and is the input format </span></span>
+<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>  <span class="co"># required by the &quot;create table&quot; helpers we&#39;ll meet shortly. This dataset </span></span>
+<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>  <span class="co"># only has one core observation variable, &quot;abundance&quot;, so gathering really </span></span>
+<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>  <span class="co"># only entails a change of column names.</span></span>
+<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>  wide <span class="ot">&lt;-</span> wide <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">value_abundance =</span> abundance)</span>
+<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>  flat <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(</span>
+<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>    wide,</span>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">matches</span>(<span class="st">&quot;abundance&quot;</span>), </span>
+<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">&quot;.value&quot;</span>, <span class="st">&quot;variable_name&quot;</span>), </span>
+<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_sep =</span> <span class="st">&#39;</span><span class="sc">\\</span><span class="st">_&#39;</span>)</span>
+<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We&#39;re now in a good place to begin adding columns of the ecocomDP tables </span></span>
+<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a>  <span class="co"># we can create from this source dataset. We&#39;ll begin with the observation </span></span>
+<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a>  <span class="co"># table.</span></span>
+<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add columns for the observation table -------------------------------------</span></span>
+<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The frequency and timing of surveys (events) varied throughout the history </span></span>
+<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a>  <span class="co"># of this dataset and are uniquely identifiable by grouping sample dates by </span></span>
+<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a>  <span class="co"># year and month.</span></span>
+<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a>  flat<span class="sc">$</span>event_id <span class="ot">&lt;-</span> flat <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(<span class="at">month =</span> <span class="fu">floor_date</span>(flat<span class="sc">$</span>date, <span class="st">&quot;month&quot;</span>),</span>
+<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a>                                     year) <span class="sc">%&gt;%</span> <span class="fu">group_indices</span>()</span>
+<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a>  flat <span class="ot">&lt;-</span> flat <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(event_id)</span>
+<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Observations are made in plots, which are nested in blocks. Unique </span></span>
+<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a>  <span class="co"># combinations of these form a location</span></span>
+<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a>  flat<span class="sc">$</span>location_id <span class="ot">&lt;-</span> flat <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(plot, block) <span class="sc">%&gt;%</span> <span class="fu">group_indices</span>()</span>
+<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Each row of the flattened source dataset represents an observation of taxa </span></span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a>  <span class="co"># abundance and should have a unique ID for reference</span></span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a>  flat<span class="sc">$</span>observation_id <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fu">nrow</span>(flat))</span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add columns for the location table ----------------------------------------</span></span>
+<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ideally, the source dataset would include latitude, longitude, and </span></span>
+<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a>  <span class="co"># elevation for each location_id, but all we have are coordinates for the </span></span>
+<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a>  <span class="co"># area encompassing all sampling locations. The best we can do here is use </span></span>
+<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the middle of the bounding box and mean of the bounding elevations.</span></span>
+<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a>  geocov <span class="ot">&lt;-</span> <span class="fu">xml_find_all</span>(eml, <span class="st">&quot;.//geographicCoverage&quot;</span>)</span>
+<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a>  north <span class="ot">&lt;-</span> <span class="fu">xml_double</span>(<span class="fu">xml_find_all</span>(geocov, <span class="st">&#39;.//northBoundingCoordinate&#39;</span>))</span>
+<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a>  east <span class="ot">&lt;-</span> <span class="fu">xml_double</span>(<span class="fu">xml_find_all</span>(geocov, <span class="st">&#39;.//eastBoundingCoordinate&#39;</span>))</span>
+<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a>  south <span class="ot">&lt;-</span> <span class="fu">xml_double</span>(<span class="fu">xml_find_all</span>(geocov, <span class="st">&#39;.//southBoundingCoordinate&#39;</span>))</span>
+<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a>  west <span class="ot">&lt;-</span> <span class="fu">xml_double</span>(<span class="fu">xml_find_all</span>(geocov, <span class="st">&#39;.//westBoundingCoordinate&#39;</span>))</span>
+<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a>  elev_max <span class="ot">&lt;-</span> <span class="fu">xml_double</span>(<span class="fu">xml_find_all</span>(geocov, <span class="st">&#39;.//altitudeMaximum&#39;</span>))</span>
+<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a>  elev_min <span class="ot">&lt;-</span> <span class="fu">xml_double</span>(<span class="fu">xml_find_all</span>(geocov, <span class="st">&#39;.//altitudeMinimum&#39;</span>))</span>
+<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a>  flat<span class="sc">$</span>latitude <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">c</span>(north, south))</span>
+<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a>  flat<span class="sc">$</span>longitude <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">c</span>(east, west))</span>
+<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a>  flat<span class="sc">$</span>elevation <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">c</span>(elev_max, elev_min))</span>
+<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add columns for the taxon table -------------------------------------------</span></span>
+<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Taxonomic entities of this dataset are comprised of unique genus and </span></span>
+<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a>  <span class="co"># species pairs</span></span>
+<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a>  flat <span class="ot">&lt;-</span> flat <span class="sc">%&gt;%</span> </span>
+<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">taxon_name =</span> <span class="fu">trimws</span>(<span class="fu">paste</span>(genus, species))) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>genus, <span class="sc">-</span>species)</span>
+<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a>  flat<span class="sc">$</span>taxon_id <span class="ot">&lt;-</span> flat <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(taxon_name) <span class="sc">%&gt;%</span> <span class="fu">group_indices</span>()</span>
+<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a>  <span class="co"># While not required, resolving taxonomic entities to an authority system </span></span>
+<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a>  <span class="co"># improves the discoverability and interoperability of the ecocomDP dataset. </span></span>
+<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a>  <span class="co"># We can resolve taxa by sending names through taxonomyCleanr for direct </span></span>
+<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a>  <span class="co"># matches against the Integrated Taxonomic Information System </span></span>
+<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a>  <span class="co"># (ITIS; https://www.itis.gov/).</span></span>
+<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a>  taxa_resolved <span class="ot">&lt;-</span> taxonomyCleanr<span class="sc">::</span><span class="fu">resolve_sci_taxa</span>(</span>
+<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">unique</span>(flat<span class="sc">$</span>taxon_name),</span>
+<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a>    <span class="at">data.sources =</span> <span class="dv">3</span>)</span>
+<span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a>  taxa_resolved <span class="ot">&lt;-</span> taxa_resolved <span class="sc">%&gt;%</span></span>
+<span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(taxa, rank, authority, authority_id) <span class="sc">%&gt;%</span></span>
+<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">taxon_rank =</span> rank,</span>
+<span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a>           <span class="at">taxon_name =</span> taxa,</span>
+<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a>           <span class="at">authority_system =</span> authority,</span>
+<span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a>           <span class="at">authority_taxon_id =</span> authority_id)</span>
+<span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-172"><a href="#cb2-172" aria-hidden="true" tabindex="-1"></a>  flat <span class="ot">&lt;-</span> <span class="fu">left_join</span>(flat, taxa_resolved, <span class="at">by =</span> <span class="st">&quot;taxon_name&quot;</span>)</span>
+<span id="cb2-173"><a href="#cb2-173" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-174"><a href="#cb2-174" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add columns for the dataset_summary table ---------------------------------</span></span>
+<span id="cb2-175"><a href="#cb2-175" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-176"><a href="#cb2-176" aria-hidden="true" tabindex="-1"></a>  dates <span class="ot">&lt;-</span> flat<span class="sc">$</span>date <span class="sc">%&gt;%</span> stats<span class="sc">::</span><span class="fu">na.omit</span>() <span class="sc">%&gt;%</span> <span class="fu">sort</span>()</span>
+<span id="cb2-177"><a href="#cb2-177" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-178"><a href="#cb2-178" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Use the calc_*() helper functions for consistency</span></span>
+<span id="cb2-179"><a href="#cb2-179" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a>  flat<span class="sc">$</span>package_id <span class="ot">&lt;-</span> derived_id</span>
+<span id="cb2-181"><a href="#cb2-181" aria-hidden="true" tabindex="-1"></a>  flat<span class="sc">$</span>original_package_id <span class="ot">&lt;-</span> source_id</span>
+<span id="cb2-182"><a href="#cb2-182" aria-hidden="true" tabindex="-1"></a>  flat<span class="sc">$</span>length_of_survey_years <span class="ot">&lt;-</span> ecocomDP<span class="sc">::</span><span class="fu">calc_length_of_survey_years</span>(dates)</span>
+<span id="cb2-183"><a href="#cb2-183" aria-hidden="true" tabindex="-1"></a>  flat<span class="sc">$</span>number_of_years_sampled <span class="ot">&lt;-</span> ecocomDP<span class="sc">::</span><span class="fu">calc_number_of_years_sampled</span>(dates)</span>
+<span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a>  flat<span class="sc">$</span>std_dev_interval_betw_years <span class="ot">&lt;-</span> </span>
+<span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a>    ecocomDP<span class="sc">::</span><span class="fu">calc_std_dev_interval_betw_years</span>(dates)</span>
+<span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a>  flat<span class="sc">$</span>max_num_taxa <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">unique</span>(flat<span class="sc">$</span>taxon_name))</span>
+<span id="cb2-187"><a href="#cb2-187" aria-hidden="true" tabindex="-1"></a>  flat<span class="sc">$</span>geo_extent_bounding_box_m2 <span class="ot">&lt;-</span> </span>
+<span id="cb2-188"><a href="#cb2-188" aria-hidden="true" tabindex="-1"></a>    ecocomDP<span class="sc">::</span><span class="fu">calc_geo_extent_bounding_box_m2</span>(west, east, north, south)</span>
+<span id="cb2-189"><a href="#cb2-189" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-190"><a href="#cb2-190" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Odds and ends -------------------------------------------------------------</span></span>
+<span id="cb2-191"><a href="#cb2-191" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-192"><a href="#cb2-192" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Rename source columns with an ecocomDP equivalent (date to datetime)</span></span>
+<span id="cb2-193"><a href="#cb2-193" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-194"><a href="#cb2-194" aria-hidden="true" tabindex="-1"></a>  flat <span class="ot">&lt;-</span> flat <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">datetime =</span> date)</span>
+<span id="cb2-195"><a href="#cb2-195" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-196"><a href="#cb2-196" aria-hidden="true" tabindex="-1"></a>  <span class="co"># The hard work is done! The flat table contains all the source data and </span></span>
+<span id="cb2-197"><a href="#cb2-197" aria-hidden="true" tabindex="-1"></a>  <span class="co"># more! We can now use the &quot;create&quot; functions to parse this table into the </span></span>
+<span id="cb2-198"><a href="#cb2-198" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ecocomDP tables.</span></span>
+<span id="cb2-199"><a href="#cb2-199" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-200"><a href="#cb2-200" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Parse flat into ecocomDP tables -------------------------------------------</span></span>
+<span id="cb2-201"><a href="#cb2-201" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-202"><a href="#cb2-202" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Each ecocomDP table has an associated &quot;create&quot; function. Begin with the </span></span>
+<span id="cb2-203"><a href="#cb2-203" aria-hidden="true" tabindex="-1"></a>  <span class="co"># core required tables.</span></span>
+<span id="cb2-204"><a href="#cb2-204" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-205"><a href="#cb2-205" aria-hidden="true" tabindex="-1"></a>  observation <span class="ot">&lt;-</span> ecocomDP<span class="sc">::</span><span class="fu">create_observation</span>(</span>
+<span id="cb2-206"><a href="#cb2-206" aria-hidden="true" tabindex="-1"></a>    <span class="at">L0_flat =</span> flat, </span>
+<span id="cb2-207"><a href="#cb2-207" aria-hidden="true" tabindex="-1"></a>    <span class="at">observation_id =</span> <span class="st">&quot;observation_id&quot;</span>, </span>
+<span id="cb2-208"><a href="#cb2-208" aria-hidden="true" tabindex="-1"></a>    <span class="at">event_id =</span> <span class="st">&quot;event_id&quot;</span>, </span>
+<span id="cb2-209"><a href="#cb2-209" aria-hidden="true" tabindex="-1"></a>    <span class="at">package_id =</span> <span class="st">&quot;package_id&quot;</span>,</span>
+<span id="cb2-210"><a href="#cb2-210" aria-hidden="true" tabindex="-1"></a>    <span class="at">location_id =</span> <span class="st">&quot;location_id&quot;</span>, </span>
+<span id="cb2-211"><a href="#cb2-211" aria-hidden="true" tabindex="-1"></a>    <span class="at">datetime =</span> <span class="st">&quot;datetime&quot;</span>, </span>
+<span id="cb2-212"><a href="#cb2-212" aria-hidden="true" tabindex="-1"></a>    <span class="at">taxon_id =</span> <span class="st">&quot;taxon_id&quot;</span>, </span>
+<span id="cb2-213"><a href="#cb2-213" aria-hidden="true" tabindex="-1"></a>    <span class="at">variable_name =</span> <span class="st">&quot;variable_name&quot;</span>,</span>
+<span id="cb2-214"><a href="#cb2-214" aria-hidden="true" tabindex="-1"></a>    <span class="at">value =</span> <span class="st">&quot;value&quot;</span>,</span>
+<span id="cb2-215"><a href="#cb2-215" aria-hidden="true" tabindex="-1"></a>    <span class="at">unit =</span> <span class="st">&quot;unit&quot;</span>)</span>
+<span id="cb2-216"><a href="#cb2-216" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-217"><a href="#cb2-217" aria-hidden="true" tabindex="-1"></a>  location <span class="ot">&lt;-</span> ecocomDP<span class="sc">::</span><span class="fu">create_location</span>(</span>
+<span id="cb2-218"><a href="#cb2-218" aria-hidden="true" tabindex="-1"></a>    <span class="at">L0_flat =</span> flat, </span>
+<span id="cb2-219"><a href="#cb2-219" aria-hidden="true" tabindex="-1"></a>    <span class="at">location_id =</span> <span class="st">&quot;location_id&quot;</span>, </span>
+<span id="cb2-220"><a href="#cb2-220" aria-hidden="true" tabindex="-1"></a>    <span class="at">location_name =</span> <span class="fu">c</span>(<span class="st">&quot;block&quot;</span>, <span class="st">&quot;plot&quot;</span>), </span>
+<span id="cb2-221"><a href="#cb2-221" aria-hidden="true" tabindex="-1"></a>    <span class="at">latitude =</span> <span class="st">&quot;latitude&quot;</span>, </span>
+<span id="cb2-222"><a href="#cb2-222" aria-hidden="true" tabindex="-1"></a>    <span class="at">longitude =</span> <span class="st">&quot;longitude&quot;</span>, </span>
+<span id="cb2-223"><a href="#cb2-223" aria-hidden="true" tabindex="-1"></a>    <span class="at">elevation =</span> <span class="st">&quot;elevation&quot;</span>)</span>
+<span id="cb2-224"><a href="#cb2-224" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-225"><a href="#cb2-225" aria-hidden="true" tabindex="-1"></a>  taxon <span class="ot">&lt;-</span> ecocomDP<span class="sc">::</span><span class="fu">create_taxon</span>(</span>
+<span id="cb2-226"><a href="#cb2-226" aria-hidden="true" tabindex="-1"></a>    <span class="at">L0_flat =</span> flat, </span>
+<span id="cb2-227"><a href="#cb2-227" aria-hidden="true" tabindex="-1"></a>    <span class="at">taxon_id =</span> <span class="st">&quot;taxon_id&quot;</span>, </span>
+<span id="cb2-228"><a href="#cb2-228" aria-hidden="true" tabindex="-1"></a>    <span class="at">taxon_rank =</span> <span class="st">&quot;taxon_rank&quot;</span>, </span>
+<span id="cb2-229"><a href="#cb2-229" aria-hidden="true" tabindex="-1"></a>    <span class="at">taxon_name =</span> <span class="st">&quot;taxon_name&quot;</span>, </span>
+<span id="cb2-230"><a href="#cb2-230" aria-hidden="true" tabindex="-1"></a>    <span class="at">authority_system =</span> <span class="st">&quot;authority_system&quot;</span>, </span>
+<span id="cb2-231"><a href="#cb2-231" aria-hidden="true" tabindex="-1"></a>    <span class="at">authority_taxon_id =</span> <span class="st">&quot;authority_taxon_id&quot;</span>)</span>
+<span id="cb2-232"><a href="#cb2-232" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-233"><a href="#cb2-233" aria-hidden="true" tabindex="-1"></a>  dataset_summary <span class="ot">&lt;-</span> ecocomDP<span class="sc">::</span><span class="fu">create_dataset_summary</span>(</span>
+<span id="cb2-234"><a href="#cb2-234" aria-hidden="true" tabindex="-1"></a>    <span class="at">L0_flat =</span> flat, </span>
+<span id="cb2-235"><a href="#cb2-235" aria-hidden="true" tabindex="-1"></a>    <span class="at">package_id =</span> <span class="st">&quot;package_id&quot;</span>, </span>
+<span id="cb2-236"><a href="#cb2-236" aria-hidden="true" tabindex="-1"></a>    <span class="at">original_package_id =</span> <span class="st">&quot;original_package_id&quot;</span>, </span>
+<span id="cb2-237"><a href="#cb2-237" aria-hidden="true" tabindex="-1"></a>    <span class="at">length_of_survey_years =</span> <span class="st">&quot;length_of_survey_years&quot;</span>,</span>
+<span id="cb2-238"><a href="#cb2-238" aria-hidden="true" tabindex="-1"></a>    <span class="at">number_of_years_sampled =</span> <span class="st">&quot;number_of_years_sampled&quot;</span>, </span>
+<span id="cb2-239"><a href="#cb2-239" aria-hidden="true" tabindex="-1"></a>    <span class="at">std_dev_interval_betw_years =</span> <span class="st">&quot;std_dev_interval_betw_years&quot;</span>, </span>
+<span id="cb2-240"><a href="#cb2-240" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_num_taxa =</span> <span class="st">&quot;max_num_taxa&quot;</span>, </span>
+<span id="cb2-241"><a href="#cb2-241" aria-hidden="true" tabindex="-1"></a>    <span class="at">geo_extent_bounding_box_m2 =</span> <span class="st">&quot;geo_extent_bounding_box_m2&quot;</span>)</span>
+<span id="cb2-242"><a href="#cb2-242" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-243"><a href="#cb2-243" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create the ancillary ecocomDP tables. These are optional, but should be </span></span>
+<span id="cb2-244"><a href="#cb2-244" aria-hidden="true" tabindex="-1"></a>  <span class="co"># included if possible.</span></span>
+<span id="cb2-245"><a href="#cb2-245" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-246"><a href="#cb2-246" aria-hidden="true" tabindex="-1"></a>  observation_ancillary <span class="ot">&lt;-</span> ecocomDP<span class="sc">::</span><span class="fu">create_observation_ancillary</span>(</span>
+<span id="cb2-247"><a href="#cb2-247" aria-hidden="true" tabindex="-1"></a>    <span class="at">L0_flat =</span> flat,</span>
+<span id="cb2-248"><a href="#cb2-248" aria-hidden="true" tabindex="-1"></a>    <span class="at">observation_id =</span> <span class="st">&quot;observation_id&quot;</span>, </span>
+<span id="cb2-249"><a href="#cb2-249" aria-hidden="true" tabindex="-1"></a>    <span class="at">variable_name =</span> <span class="fu">c</span>(<span class="st">&quot;trap.type&quot;</span>, <span class="st">&quot;trap.num&quot;</span>, <span class="st">&quot;moose.cage&quot;</span>))</span>
+<span id="cb2-250"><a href="#cb2-250" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-251"><a href="#cb2-251" aria-hidden="true" tabindex="-1"></a>  location_ancillary <span class="ot">&lt;-</span> ecocomDP<span class="sc">::</span><span class="fu">create_location_ancillary</span>(</span>
+<span id="cb2-252"><a href="#cb2-252" aria-hidden="true" tabindex="-1"></a>    <span class="at">L0_flat =</span> flat,</span>
+<span id="cb2-253"><a href="#cb2-253" aria-hidden="true" tabindex="-1"></a>    <span class="at">location_id =</span> <span class="st">&quot;location_id&quot;</span>,</span>
+<span id="cb2-254"><a href="#cb2-254" aria-hidden="true" tabindex="-1"></a>    <span class="at">variable_name =</span> <span class="st">&quot;treatment&quot;</span>)</span>
+<span id="cb2-255"><a href="#cb2-255" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-256"><a href="#cb2-256" aria-hidden="true" tabindex="-1"></a>  taxon_ancillary <span class="ot">&lt;-</span> ecocomDP<span class="sc">::</span><span class="fu">create_taxon_ancillary</span>(</span>
+<span id="cb2-257"><a href="#cb2-257" aria-hidden="true" tabindex="-1"></a>    <span class="at">L0_flat =</span> flat,</span>
+<span id="cb2-258"><a href="#cb2-258" aria-hidden="true" tabindex="-1"></a>    <span class="at">taxon_id =</span> <span class="st">&quot;taxon_id&quot;</span>,</span>
+<span id="cb2-259"><a href="#cb2-259" aria-hidden="true" tabindex="-1"></a>    <span class="at">variable_name =</span> <span class="fu">c</span>(</span>
+<span id="cb2-260"><a href="#cb2-260" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;subfamily&quot;</span>, <span class="st">&quot;hl&quot;</span>, <span class="st">&quot;rel&quot;</span>, <span class="st">&quot;rll&quot;</span>, <span class="st">&quot;colony.size&quot;</span>, </span>
+<span id="cb2-261"><a href="#cb2-261" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;feeding.preference&quot;</span>, <span class="st">&quot;nest.substrate&quot;</span>, <span class="st">&quot;primary.habitat&quot;</span>, </span>
+<span id="cb2-262"><a href="#cb2-262" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;secondary.habitat&quot;</span>, <span class="st">&quot;seed.disperser&quot;</span>, <span class="st">&quot;slavemaker.sp&quot;</span>, </span>
+<span id="cb2-263"><a href="#cb2-263" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;behavior&quot;</span>, <span class="st">&quot;biogeographic.affinity&quot;</span>, <span class="st">&quot;source&quot;</span>),</span>
+<span id="cb2-264"><a href="#cb2-264" aria-hidden="true" tabindex="-1"></a>    <span class="at">unit =</span> <span class="fu">c</span>(<span class="st">&quot;unit_hl&quot;</span>, <span class="st">&quot;unit_rel&quot;</span>, <span class="st">&quot;unit_rll&quot;</span>))</span>
+<span id="cb2-265"><a href="#cb2-265" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-266"><a href="#cb2-266" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create the variable_mapping table. This is optional but highly recommended </span></span>
+<span id="cb2-267"><a href="#cb2-267" aria-hidden="true" tabindex="-1"></a>  <span class="co"># as it provides unambiguous definitions to variables and facilitates </span></span>
+<span id="cb2-268"><a href="#cb2-268" aria-hidden="true" tabindex="-1"></a>  <span class="co"># integration with other ecocomDP datasets.</span></span>
+<span id="cb2-269"><a href="#cb2-269" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-270"><a href="#cb2-270" aria-hidden="true" tabindex="-1"></a>  variable_mapping <span class="ot">&lt;-</span> ecocomDP<span class="sc">::</span><span class="fu">create_variable_mapping</span>(</span>
+<span id="cb2-271"><a href="#cb2-271" aria-hidden="true" tabindex="-1"></a>    <span class="at">observation =</span> observation,</span>
+<span id="cb2-272"><a href="#cb2-272" aria-hidden="true" tabindex="-1"></a>    <span class="at">observation_ancillary =</span> observation_ancillary,</span>
+<span id="cb2-273"><a href="#cb2-273" aria-hidden="true" tabindex="-1"></a>    <span class="at">location_ancillary =</span> location_ancillary, </span>
+<span id="cb2-274"><a href="#cb2-274" aria-hidden="true" tabindex="-1"></a>    <span class="at">taxon_ancillary =</span> taxon_ancillary)</span>
+<span id="cb2-275"><a href="#cb2-275" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-276"><a href="#cb2-276" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> variable_mapping<span class="sc">$</span>variable_name <span class="sc">==</span> <span class="st">&#39;abundance&#39;</span></span>
+<span id="cb2-277"><a href="#cb2-277" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_system[i] <span class="ot">&lt;-</span> <span class="st">&#39;Darwin Core&#39;</span></span>
+<span id="cb2-278"><a href="#cb2-278" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_id[i] <span class="ot">&lt;-</span> <span class="st">&#39;http://rs.tdwg.org/dwc/terms/individualCount&#39;</span></span>
+<span id="cb2-279"><a href="#cb2-279" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_label[i] <span class="ot">&lt;-</span> <span class="st">&#39;individualCount&#39;</span></span>
+<span id="cb2-280"><a href="#cb2-280" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-281"><a href="#cb2-281" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> variable_mapping<span class="sc">$</span>variable_name <span class="sc">==</span> <span class="st">&#39;treatment&#39;</span></span>
+<span id="cb2-282"><a href="#cb2-282" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_system[i] <span class="ot">&lt;-</span> <span class="st">&#39;The Ecosystem Ontology&#39;</span></span>
+<span id="cb2-283"><a href="#cb2-283" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_id[i] <span class="ot">&lt;-</span> <span class="st">&#39;http://purl.dataone.org/odo/ECSO_00000506&#39;</span></span>
+<span id="cb2-284"><a href="#cb2-284" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_label[i] <span class="ot">&lt;-</span> <span class="st">&#39;Manipulative experiment&#39;</span></span>
+<span id="cb2-285"><a href="#cb2-285" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-286"><a href="#cb2-286" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> variable_mapping<span class="sc">$</span>variable_name <span class="sc">==</span> <span class="st">&#39;trap.type&#39;</span></span>
+<span id="cb2-287"><a href="#cb2-287" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_system[i] <span class="ot">&lt;-</span> <span class="st">&#39;The Ecosystem Ontology&#39;</span></span>
+<span id="cb2-288"><a href="#cb2-288" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_id[i] <span class="ot">&lt;-</span> <span class="st">&#39;http://purl.dataone.org/odo/ECSO_00001591&#39;</span></span>
+<span id="cb2-289"><a href="#cb2-289" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_label[i] <span class="ot">&lt;-</span> <span class="st">&#39;type of trap&#39;</span></span>
+<span id="cb2-290"><a href="#cb2-290" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-291"><a href="#cb2-291" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> variable_mapping<span class="sc">$</span>variable_name <span class="sc">==</span> <span class="st">&#39;hl&#39;</span></span>
+<span id="cb2-292"><a href="#cb2-292" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_system[i] <span class="ot">&lt;-</span> <span class="st">&#39;Darwin Core&#39;</span></span>
+<span id="cb2-293"><a href="#cb2-293" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_id[i] <span class="ot">&lt;-</span> <span class="st">&#39;http://rs.tdwg.org/dwc/terms/measurementType&#39;</span></span>
+<span id="cb2-294"><a href="#cb2-294" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_label[i] <span class="ot">&lt;-</span> <span class="st">&#39;measurementType&#39;</span></span>
+<span id="cb2-295"><a href="#cb2-295" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-296"><a href="#cb2-296" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> variable_mapping<span class="sc">$</span>variable_name <span class="sc">==</span> <span class="st">&#39;rel&#39;</span></span>
+<span id="cb2-297"><a href="#cb2-297" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_system[i] <span class="ot">&lt;-</span> <span class="st">&#39;Darwin Core&#39;</span></span>
+<span id="cb2-298"><a href="#cb2-298" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_id[i] <span class="ot">&lt;-</span> <span class="st">&#39;http://rs.tdwg.org/dwc/terms/measurementType&#39;</span></span>
+<span id="cb2-299"><a href="#cb2-299" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_label[i] <span class="ot">&lt;-</span> <span class="st">&#39;measurementType&#39;</span></span>
+<span id="cb2-300"><a href="#cb2-300" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-301"><a href="#cb2-301" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> variable_mapping<span class="sc">$</span>variable_name <span class="sc">==</span> <span class="st">&#39;rll&#39;</span></span>
+<span id="cb2-302"><a href="#cb2-302" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_system[i] <span class="ot">&lt;-</span> <span class="st">&#39;Darwin Core&#39;</span></span>
+<span id="cb2-303"><a href="#cb2-303" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_id[i] <span class="ot">&lt;-</span> <span class="st">&#39;http://rs.tdwg.org/dwc/terms/measurementType&#39;</span></span>
+<span id="cb2-304"><a href="#cb2-304" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_label[i] <span class="ot">&lt;-</span> <span class="st">&#39;measurementType&#39;</span></span>
+<span id="cb2-305"><a href="#cb2-305" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-306"><a href="#cb2-306" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> variable_mapping<span class="sc">$</span>variable_name <span class="sc">==</span> <span class="st">&#39;colony.size&#39;</span></span>
+<span id="cb2-307"><a href="#cb2-307" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_system[i] <span class="ot">&lt;-</span> <span class="st">&#39;The Ecosystem Ontology&#39;</span></span>
+<span id="cb2-308"><a href="#cb2-308" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_id[i] <span class="ot">&lt;-</span> <span class="st">&#39;http://purl.dataone.org/odo/ECSO_00000311&#39;</span></span>
+<span id="cb2-309"><a href="#cb2-309" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_label[i] <span class="ot">&lt;-</span> <span class="st">&#39;Population&#39;</span></span>
+<span id="cb2-310"><a href="#cb2-310" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-311"><a href="#cb2-311" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> variable_mapping<span class="sc">$</span>variable_name <span class="sc">==</span> <span class="st">&#39;feeding.preference&#39;</span></span>
+<span id="cb2-312"><a href="#cb2-312" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_system[i] <span class="ot">&lt;-</span> <span class="st">&#39;Darwin Core&#39;</span></span>
+<span id="cb2-313"><a href="#cb2-313" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_id[i] <span class="ot">&lt;-</span> <span class="st">&#39;http://rs.tdwg.org/dwc/terms/behavior&#39;</span></span>
+<span id="cb2-314"><a href="#cb2-314" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_label[i] <span class="ot">&lt;-</span> <span class="st">&#39;behavior&#39;</span></span>
+<span id="cb2-315"><a href="#cb2-315" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-316"><a href="#cb2-316" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> variable_mapping<span class="sc">$</span>variable_name <span class="sc">==</span> <span class="st">&#39;primary.habitat&#39;</span></span>
+<span id="cb2-317"><a href="#cb2-317" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_system[i] <span class="ot">&lt;-</span> <span class="st">&#39;The Ecosystem Ontology&#39;</span></span>
+<span id="cb2-318"><a href="#cb2-318" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_id[i] <span class="ot">&lt;-</span> <span class="st">&#39;http://purl.dataone.org/odo/ECSO_00002736&#39;</span></span>
+<span id="cb2-319"><a href="#cb2-319" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_label[i] <span class="ot">&lt;-</span> <span class="st">&#39;type of habitat&#39;</span></span>
+<span id="cb2-320"><a href="#cb2-320" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-321"><a href="#cb2-321" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> variable_mapping<span class="sc">$</span>variable_name <span class="sc">==</span> <span class="st">&#39;secondary.habitat&#39;</span></span>
+<span id="cb2-322"><a href="#cb2-322" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_system[i] <span class="ot">&lt;-</span> <span class="st">&#39;The Ecosystem Ontology&#39;</span></span>
+<span id="cb2-323"><a href="#cb2-323" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_id[i] <span class="ot">&lt;-</span> <span class="st">&#39;http://purl.dataone.org/odo/ECSO_00002736&#39;</span></span>
+<span id="cb2-324"><a href="#cb2-324" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_label[i] <span class="ot">&lt;-</span> <span class="st">&#39;type of habitat&#39;</span></span>
+<span id="cb2-325"><a href="#cb2-325" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-326"><a href="#cb2-326" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> variable_mapping<span class="sc">$</span>variable_name <span class="sc">==</span> <span class="st">&#39;seed.disperser&#39;</span></span>
+<span id="cb2-327"><a href="#cb2-327" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_system[i] <span class="ot">&lt;-</span> <span class="st">&#39;Darwin Core&#39;</span></span>
+<span id="cb2-328"><a href="#cb2-328" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_id[i] <span class="ot">&lt;-</span> <span class="st">&#39;http://rs.tdwg.org/dwc/terms/behavior&#39;</span></span>
+<span id="cb2-329"><a href="#cb2-329" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_label[i] <span class="ot">&lt;-</span> <span class="st">&#39;behavior&#39;</span></span>
+<span id="cb2-330"><a href="#cb2-330" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-331"><a href="#cb2-331" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> variable_mapping<span class="sc">$</span>variable_name <span class="sc">==</span> <span class="st">&#39;slavemaker.sp&#39;</span></span>
+<span id="cb2-332"><a href="#cb2-332" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_system[i] <span class="ot">&lt;-</span> <span class="st">&#39;Darwin Core&#39;</span></span>
+<span id="cb2-333"><a href="#cb2-333" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_id[i] <span class="ot">&lt;-</span> <span class="st">&#39;http://rs.tdwg.org/dwc/terms/behavior&#39;</span></span>
+<span id="cb2-334"><a href="#cb2-334" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_label[i] <span class="ot">&lt;-</span> <span class="st">&#39;behavior&#39;</span></span>
+<span id="cb2-335"><a href="#cb2-335" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-336"><a href="#cb2-336" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> variable_mapping<span class="sc">$</span>variable_name <span class="sc">==</span> <span class="st">&#39;behavior&#39;</span></span>
+<span id="cb2-337"><a href="#cb2-337" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_system[i] <span class="ot">&lt;-</span> <span class="st">&#39;Darwin Core&#39;</span></span>
+<span id="cb2-338"><a href="#cb2-338" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_id[i] <span class="ot">&lt;-</span> <span class="st">&#39;http://rs.tdwg.org/dwc/terms/behavior&#39;</span></span>
+<span id="cb2-339"><a href="#cb2-339" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_label[i] <span class="ot">&lt;-</span> <span class="st">&#39;behavior&#39;</span></span>
+<span id="cb2-340"><a href="#cb2-340" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-341"><a href="#cb2-341" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> variable_mapping<span class="sc">$</span>variable_name <span class="sc">==</span> <span class="st">&#39;biogeographic.affinity&#39;</span></span>
+<span id="cb2-342"><a href="#cb2-342" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_system[i] <span class="ot">&lt;-</span> <span class="st">&#39;The Ecosystem Ontology&#39;</span></span>
+<span id="cb2-343"><a href="#cb2-343" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_id[i] <span class="ot">&lt;-</span> <span class="st">&#39;http://purl.dataone.org/odo/ECSO_00002736&#39;</span></span>
+<span id="cb2-344"><a href="#cb2-344" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_label[i] <span class="ot">&lt;-</span> <span class="st">&#39;type of habitat&#39;</span></span>
+<span id="cb2-345"><a href="#cb2-345" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-346"><a href="#cb2-346" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> variable_mapping<span class="sc">$</span>variable_name <span class="sc">==</span> <span class="st">&#39;source&#39;</span></span>
+<span id="cb2-347"><a href="#cb2-347" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_system[i] <span class="ot">&lt;-</span> <span class="st">&#39;Darwin Core&#39;</span></span>
+<span id="cb2-348"><a href="#cb2-348" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_id[i] <span class="ot">&lt;-</span> <span class="st">&#39;http://purl.org/dc/terms/references&#39;</span></span>
+<span id="cb2-349"><a href="#cb2-349" aria-hidden="true" tabindex="-1"></a>  variable_mapping<span class="sc">$</span>mapped_label[i] <span class="ot">&lt;-</span> <span class="st">&#39;references&#39;</span></span>
+<span id="cb2-350"><a href="#cb2-350" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-351"><a href="#cb2-351" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Write tables to file</span></span>
+<span id="cb2-352"><a href="#cb2-352" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-353"><a href="#cb2-353" aria-hidden="true" tabindex="-1"></a>  ecocomDP<span class="sc">::</span><span class="fu">write_tables</span>(</span>
+<span id="cb2-354"><a href="#cb2-354" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> path, </span>
+<span id="cb2-355"><a href="#cb2-355" aria-hidden="true" tabindex="-1"></a>    <span class="at">observation =</span> observation, </span>
+<span id="cb2-356"><a href="#cb2-356" aria-hidden="true" tabindex="-1"></a>    <span class="at">location =</span> location,</span>
+<span id="cb2-357"><a href="#cb2-357" aria-hidden="true" tabindex="-1"></a>    <span class="at">taxon =</span> taxon,</span>
+<span id="cb2-358"><a href="#cb2-358" aria-hidden="true" tabindex="-1"></a>    <span class="at">dataset_summary =</span> dataset_summary, </span>
+<span id="cb2-359"><a href="#cb2-359" aria-hidden="true" tabindex="-1"></a>    <span class="at">observation_ancillary =</span> observation_ancillary,</span>
+<span id="cb2-360"><a href="#cb2-360" aria-hidden="true" tabindex="-1"></a>    <span class="at">location_ancillary =</span> location_ancillary, </span>
+<span id="cb2-361"><a href="#cb2-361" aria-hidden="true" tabindex="-1"></a>    <span class="at">taxon_ancillary =</span> taxon_ancillary, </span>
+<span id="cb2-362"><a href="#cb2-362" aria-hidden="true" tabindex="-1"></a>    <span class="at">variable_mapping =</span> variable_mapping)</span>
+<span id="cb2-363"><a href="#cb2-363" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-364"><a href="#cb2-364" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Validate tables -----------------------------------------------------------</span></span>
+<span id="cb2-365"><a href="#cb2-365" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-366"><a href="#cb2-366" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Validation checks ensure the derived set of tables comply with the ecocomDP</span></span>
+<span id="cb2-367"><a href="#cb2-367" aria-hidden="true" tabindex="-1"></a>  <span class="co"># model. Any issues at this point </span></span>
+<span id="cb2-368"><a href="#cb2-368" aria-hidden="true" tabindex="-1"></a>  <span class="co"># should be addressed in the lines of code above, the tables rewritten, and </span></span>
+<span id="cb2-369"><a href="#cb2-369" aria-hidden="true" tabindex="-1"></a>  <span class="co"># another round of validation, to be certain the fix worked.</span></span>
+<span id="cb2-370"><a href="#cb2-370" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-371"><a href="#cb2-371" aria-hidden="true" tabindex="-1"></a>  issues <span class="ot">&lt;-</span> ecocomDP<span class="sc">::</span><span class="fu">validate_data</span>(<span class="at">path =</span> path)</span>
+<span id="cb2-372"><a href="#cb2-372" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-373"><a href="#cb2-373" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create metadata -----------------------------------------------------------</span></span>
+<span id="cb2-374"><a href="#cb2-374" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-375"><a href="#cb2-375" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Before publishing the derived ecocomDP dataset, we need to describe it. The </span></span>
+<span id="cb2-376"><a href="#cb2-376" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create_eml() function does this all for us. It knows the structure of the </span></span>
+<span id="cb2-377"><a href="#cb2-377" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ecocomDP model and applies standardized table descriptions and mixes in </span></span>
+<span id="cb2-378"><a href="#cb2-378" aria-hidden="true" tabindex="-1"></a>  <span class="co"># important elements of the source dataset metadata for purposes of </span></span>
+<span id="cb2-379"><a href="#cb2-379" aria-hidden="true" tabindex="-1"></a>  <span class="co"># communication and provenance tracking.</span></span>
+<span id="cb2-380"><a href="#cb2-380" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-381"><a href="#cb2-381" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert &quot;dataset level keywords&quot; listed in the source to &quot;dataset level </span></span>
+<span id="cb2-382"><a href="#cb2-382" aria-hidden="true" tabindex="-1"></a>  <span class="co"># annotations&quot; in the derived. The predicate &quot;is about&quot; is used, which </span></span>
+<span id="cb2-383"><a href="#cb2-383" aria-hidden="true" tabindex="-1"></a>  <span class="co"># results in an annotation that reads &quot;This dataset is about &#39;species </span></span>
+<span id="cb2-384"><a href="#cb2-384" aria-hidden="true" tabindex="-1"></a>  <span class="co"># abundance&#39;&quot;, &quot;This dataset is about an ecological &#39;Community&#39;&quot;, etc. All </span></span>
+<span id="cb2-385"><a href="#cb2-385" aria-hidden="true" tabindex="-1"></a>  <span class="co"># source datasets involving a human induced manipulative experiment, not a </span></span>
+<span id="cb2-386"><a href="#cb2-386" aria-hidden="true" tabindex="-1"></a>  <span class="co"># natural disturbance/experiment, should include the &quot;Manipulative </span></span>
+<span id="cb2-387"><a href="#cb2-387" aria-hidden="true" tabindex="-1"></a>  <span class="co"># experiment&quot; annotation below to enable searching on this term.</span></span>
+<span id="cb2-388"><a href="#cb2-388" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-389"><a href="#cb2-389" aria-hidden="true" tabindex="-1"></a>  dataset_annotations <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb2-390"><a href="#cb2-390" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">species abundance</span><span class="st">`</span> <span class="ot">=</span> </span>
+<span id="cb2-391"><a href="#cb2-391" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;http://purl.dataone.org/odo/ECSO_00001688&quot;</span>,</span>
+<span id="cb2-392"><a href="#cb2-392" aria-hidden="true" tabindex="-1"></a>    <span class="at">Community =</span> </span>
+<span id="cb2-393"><a href="#cb2-393" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;http://purl.dataone.org/odo/ECSO_00000310&quot;</span>,</span>
+<span id="cb2-394"><a href="#cb2-394" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Manipulative experiment</span><span class="st">`</span> <span class="ot">=</span> </span>
+<span id="cb2-395"><a href="#cb2-395" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;http://purl.dataone.org/odo/ECSO_00000506&quot;</span>,</span>
+<span id="cb2-396"><a href="#cb2-396" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">level of ecological disturbance</span><span class="st">`</span> <span class="ot">=</span> </span>
+<span id="cb2-397"><a href="#cb2-397" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;http://purl.dataone.org/odo/ECSO_00002588&quot;</span>,</span>
+<span id="cb2-398"><a href="#cb2-398" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">type of ecological disturbance</span><span class="st">`</span> <span class="ot">=</span> </span>
+<span id="cb2-399"><a href="#cb2-399" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;http://purl.dataone.org/odo/ECSO_00002589&quot;</span>)</span>
+<span id="cb2-400"><a href="#cb2-400" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-401"><a href="#cb2-401" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add contact information for the author of this script and dataset</span></span>
+<span id="cb2-402"><a href="#cb2-402" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-403"><a href="#cb2-403" aria-hidden="true" tabindex="-1"></a>  additional_contact <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-404"><a href="#cb2-404" aria-hidden="true" tabindex="-1"></a>    <span class="at">givenName =</span> <span class="st">&#39;Colin&#39;</span>,</span>
+<span id="cb2-405"><a href="#cb2-405" aria-hidden="true" tabindex="-1"></a>    <span class="at">surName =</span> <span class="st">&#39;Smith&#39;</span>,</span>
+<span id="cb2-406"><a href="#cb2-406" aria-hidden="true" tabindex="-1"></a>    <span class="at">organizationName =</span> <span class="st">&#39;Environmental Data Initiative&#39;</span>,</span>
+<span id="cb2-407"><a href="#cb2-407" aria-hidden="true" tabindex="-1"></a>    <span class="at">electronicMailAddress =</span> <span class="st">&#39;ecocomdp@gmail.com&#39;</span>,</span>
+<span id="cb2-408"><a href="#cb2-408" aria-hidden="true" tabindex="-1"></a>    <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-409"><a href="#cb2-409" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-410"><a href="#cb2-410" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Create EML metadata</span></span>
+<span id="cb2-411"><a href="#cb2-411" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-412"><a href="#cb2-412" aria-hidden="true" tabindex="-1"></a>  eml <span class="ot">&lt;-</span> ecocomDP<span class="sc">::</span><span class="fu">create_eml</span>(</span>
+<span id="cb2-413"><a href="#cb2-413" aria-hidden="true" tabindex="-1"></a>    <span class="at">path =</span> path,</span>
+<span id="cb2-414"><a href="#cb2-414" aria-hidden="true" tabindex="-1"></a>    <span class="at">source_id =</span> source_id,</span>
+<span id="cb2-415"><a href="#cb2-415" aria-hidden="true" tabindex="-1"></a>    <span class="at">derived_id =</span> derived_id,</span>
+<span id="cb2-416"><a href="#cb2-416" aria-hidden="true" tabindex="-1"></a>    <span class="at">is_about =</span> dataset_annotations,</span>
+<span id="cb2-417"><a href="#cb2-417" aria-hidden="true" tabindex="-1"></a>    <span class="at">script =</span> <span class="st">&quot;create_ecocomDP.R&quot;</span>,</span>
+<span id="cb2-418"><a href="#cb2-418" aria-hidden="true" tabindex="-1"></a>    <span class="at">script_description =</span> </span>
+<span id="cb2-419"><a href="#cb2-419" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;A function for converting knb-lter-hrf.118 to ecocomDP&quot;</span>,</span>
+<span id="cb2-420"><a href="#cb2-420" aria-hidden="true" tabindex="-1"></a>    <span class="at">contact =</span> additional_contact,</span>
+<span id="cb2-421"><a href="#cb2-421" aria-hidden="true" tabindex="-1"></a>    <span class="at">user_id =</span> <span class="st">&#39;ecocomdp&#39;</span>,</span>
+<span id="cb2-422"><a href="#cb2-422" aria-hidden="true" tabindex="-1"></a>    <span class="at">user_domain =</span> <span class="st">&#39;EDI&#39;</span>,</span>
+<span id="cb2-423"><a href="#cb2-423" aria-hidden="true" tabindex="-1"></a>    <span class="at">basis_of_record =</span> <span class="st">&quot;HumanObservation&quot;</span>)</span>
+<span id="cb2-424"><a href="#cb2-424" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-425"><a href="#cb2-425" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="example-function-call" class="section level4">
+<h4>Example function call:</h4>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Create directory for tables and metadata</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>mypath <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">tempdir</span>(), <span class="st">&quot;/edi_193&quot;</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(mypath)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create ecocomDP dataset &quot;edi.193.5&quot; from source dataset &quot;knb-lter-hfr.118.33&quot;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">create_ecocomDP</span>(</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> mypath, </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">source_id =</span> <span class="st">&quot;knb-lter-hfr.118.33&quot;</span>, </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">derived_id =</span> <span class="st">&quot;edi.193.5&quot;</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Retrieving EML for data package knb-lter-hfr.118.33</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [0%] Downloaded 0 bytes...</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [0%] Downloaded 0 bytes...</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Aphaenogaster picea&quot;</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Camponotus novaeboracensis&quot;</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Aphaenogaster fulva&quot;</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Temnothorax longispinosus&quot;</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Stenemma impar&quot;</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Stenemma diecki&quot;</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Camponotus pennsylvanicus&quot;</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Lasius americanus&quot;</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Myrmica punctiventris&quot;</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Lasius nearcticus&quot;</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Formica subaenescens&quot;</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Lasius umbratus&quot;</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Formica subsericea&quot;</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Formica aserva&quot;</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Formica neogagates&quot;</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Camponotus nearcticus&quot;</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Ponera pennsylvanica&quot;</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Stenamma brevicorne&quot;</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Lasius claviger&quot;</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Stenamma impar&quot;</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Temnothorax lognispinosus&quot;</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Stenamma diecki&quot;</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Camponotus herculeanus&quot;</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Lasius speculiventris&quot;</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Stenamma schmitti&quot;</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Lasius neoniger&quot;</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Camponotus pennsylvanica&quot;</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Tapinoma sessile&quot;</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Myrmica AF-smi&quot;</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Formica neorufibarbis&quot;</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Myrmica incompleta&quot;</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Formica argentea&quot;</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Myrmica AF-scu&quot;</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Formica dolosa&quot;</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Formica subintegra&quot;</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Formica incerta&quot;</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Myrmica nearctica&quot;</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Formica pergandei&quot;</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Formica lasioides&quot;</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Myrmica pinetorum&quot;</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Leptothorax canadensis&quot;</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Myrmica detritinodis&quot;</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Myrmecina americana&quot;</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Crematogaster lineolata&quot;</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Lasius interjectus&quot;</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Camponotus chromaiodes&quot;</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Formica pallidefulva&quot;</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Temnothorax ambiguus&quot;</span></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Lasius subglaber&quot;</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Formica rubicunda&quot;</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Lasius brevicornis&quot;</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Lasius aphidicolus&quot;</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Searching ITIS for &quot;Formica integra&quot;</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Writing tables to file:</span></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   observation</span></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   location</span></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   taxon</span></span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   dataset_summary</span></span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   observation_ancillary</span></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   location_ancillary</span></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   taxon_ancillary</span></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   variable_mapping</span></span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;</span></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Validating edi_193:</span></span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Required tables</span></span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Column names</span></span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Required columns</span></span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Column classes</span></span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Datetime formats</span></span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Primary keys</span></span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Composite keys</span></span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Referential integrity</span></span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Latitude and longitude format</span></span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Latitude and longitude range</span></span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Elevation</span></span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   variable_mapping</span></span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;</span></span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Creating EML for derived data package (edi.193.5)</span></span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Reading EML of L0 data package knb-lter-hfr.118.33</span></span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Creating EML of L1 data package edi.193.5</span></span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Updating:</span></span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;eml&gt;</span></span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dataset&gt;</span></span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     &lt;alternateIdentifier&gt;</span></span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     &lt;title&gt;</span></span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     &lt;pubDate&gt;</span></span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     &lt;keywordSet&gt;</span></span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     &lt;contact&gt;</span></span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     &lt;methods&gt;</span></span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     &lt;dataTable&gt;</span></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     &lt;otherEntity&gt;</span></span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     &lt;annotations&gt;</span></span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &lt;/eml&gt;</span></span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Writing EML</span></span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Validating EML</span></span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Validation passed :)</span></span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Done.</span></span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a><span class="co"># The working directory contains a valid set of ecocomDP tables and metadata, </span></span>
+<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a><span class="co"># which is ready for upload to EDI (or any other EML based repository)</span></span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a><span class="fu">dir</span>(mypath)</span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;create_ecocomDP.R&quot;        </span></span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [2] &quot;dataset_summary.csv&quot;      </span></span>
+<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [3] &quot;edi.193.5.xml&quot;            </span></span>
+<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [4] &quot;location.csv&quot;             </span></span>
+<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [5] &quot;location_ancillary.csv&quot;   </span></span>
+<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [6] &quot;observation.csv&quot;          </span></span>
+<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [7] &quot;observation_ancillary.csv&quot;</span></span>
+<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [8] &quot;taxon.csv&quot;                </span></span>
+<span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [9] &quot;taxon_ancillary.csv&quot;      </span></span>
+<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [10] &quot;variable_mapping.csv&quot;</span></span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
