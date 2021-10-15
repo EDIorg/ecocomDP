@@ -1770,50 +1770,6 @@ validate_path <- function(path){
 
 
 
-#' View descriptions and requirements of ecocomDP tables
-#' 
-#' @return (NULL) Opens a webpage, in your default browser, with a list of descriptions and requirements of the ecocomDP tables
-#'
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' view_descriptions()
-#' }
-#' 
-view_descriptions <- function() {
-  utils::browseURL("https://github.com/EDIorg/ecocomDP/blob/master/model/table_description.md")
-}
-
-
-
-
-
-
-
-
-#' View diagram of ecocomDP tables and relationships
-#' 
-#' @return (NULL) Opens a webpage, in your default browser, with a diagram keys and linkages among ecocomDP tables
-#'
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' view_diagram()
-#' }
-#' 
-view_diagram <- function() {
-  utils::browseURL("https://github.com/EDIorg/ecocomDP/blob/master/model/table_visualization.md")
-}
-
-
-
-
-
-
-
-
 # Search for an LTER Controlled Vocabulary term
 #
 # @param x 
