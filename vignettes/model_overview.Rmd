@@ -1,8 +1,8 @@
 ---
-title: "Model Overview"
+title: "ecocomDP Model Overview"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{model_overview}
+  %\VignetteIndexEntry{Model Overview}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 #### Contents
 
-*   [The authoritative set of table descriptions, relationships, and requirements](#main)
+*   [Table descriptions, relationships, and requirements](#main)
     *   [Tables](#tables)
         *   [observation](#observation)
         *   [location](#location)
@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
         *   [location_ancillary](#location_ancillary)
         *   [taxon_ancillary](#taxon_ancillary)
         *   [variable_mapping](#variable_mapping)
-*   [A visualization of table contents and relationships](#vis)
+*   [Entity Relationship Diagram](#vis)
 
 ---
 
@@ -193,7 +193,7 @@ This optional table holds mappings (or relations) between variable names in the 
 | mapped_id     | character | no| NA	| Identifier of the definition in mapped_system.	| SDN:P07::CFSN0721 	|
 | mapped_label  | character | no| NA	| Label for variable_name in mapped_system.	|  depth  	|
 ---
-# Visualization of table contents and relationships {#vis}
+# Entity Relationship Diagram {#vis}
 
 ```{r echo=FALSE, out.width='100%'}
 knitr::include_graphics('./model.png')

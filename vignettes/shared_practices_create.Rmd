@@ -1,11 +1,11 @@
 ---
-title: "Shared Practices for Creating an ecocomDP Dataset"
+title: "Shared Practices for Creating ecocomDP Data"
 output:
   rmarkdown::html_vignette:
     toc: true
     fig_caption: yes
 vignette: >
-  %\VignetteIndexEntry{Shared Practices for Creating an ecocomDP Dataset}
+  %\VignetteIndexEntry{Shared Practices for Creating ecocomDP Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 ---
 
-This document assumes you understand the ecocomDP model. To learn about the model and its scope, refer to the [Model Overview vignette](model_overview.html) and the [Ecological Informatics article](https://doi.org/10.1016/j.ecoinf.2021.101374).
+This document assumes you understand the ecocomDP model. To learn about the model and its scope, refer to the [Model Overview Vignette](model_overview.html) and the [Ecological Informatics Article](https://doi.org/10.1016/j.ecoinf.2021.101374).
 
 ---
 

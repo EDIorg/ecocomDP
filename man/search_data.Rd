@@ -2,7 +2,7 @@
 % Please edit documentation in R/search_data.R
 \name{search_data}
 \alias{search_data}
-\title{Search across all ecocomDP datasets}
+\title{Search published data}
 \usage{
 search_data(text, taxa, num_taxa, num_years, sd_years, area, boolean = "AND")
 }
@@ -39,7 +39,7 @@ search_data(text, taxa, num_taxa, num_years, sd_years, area, boolean = "AND")
     }
 }
 \description{
-Search across all ecocomDP datasets
+Search published data
 }
 \details{
 Currently, to accommodate multiple L1 versions of NEON data products, search results for a NEON L0 will also list all the L1 versions available for the match. This method is based on the assumption that the summary data among L1 versions is the same, which may need to be addressed in the future. A list of L0 and corresponding L1 identifiers are listed in /inst/L1_versions.txt. Each L1 version is accompanied by qualifying text that's appended to the title, abstract, and descriptions for comprehension of the differences among L1 versions.

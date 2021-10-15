@@ -1,4 +1,4 @@
-#' Flatten an ecocomDP dataset
+#' Flatten a dataset
 #' 
 #' @param data (list) The dataset object returned by \code{read_data()}, or a named list of ecocoomDP tables.
 #'

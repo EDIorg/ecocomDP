@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_data.R
 \name{read_data}
 \alias{read_data}
-\title{Read an ecocomDP dataset}
+\title{Read published data}
 \usage{
 read_data(
   id = NULL,
@@ -66,7 +66,7 @@ read_data(
 }
 }
 \description{
-Read an ecocomDP dataset
+Read published data
 }
 \details{
 Validation checks are applied to each dataset ensuring it complies with the ecocomDP model. A warning is issued when any validation checks fail. All datasets are returned, even if they fail validation.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_eml.R
 \name{create_eml}
 \alias{create_eml}
-\title{Create EML metadata for an ecocomDP dataset}
+\title{Create EML metadata}
 \usage{
 create_eml(
   path,
@@ -51,7 +51,7 @@ create_eml(
 An EML metadata file.
 }
 \description{
-Create EML metadata for an ecocomDP dataset
+Create EML metadata
 }
 \details{
 This function creates an EML record for an ecocomDP by combining metadata from \code{source_id} with boiler-plate metadata describing the ecocomDP model. Changes to the \code{source_id} EML include:

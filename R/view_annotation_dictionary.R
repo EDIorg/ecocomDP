@@ -1,4 +1,4 @@
-#' Browse ecocomDP's dictionary for annotating datasets and attributes
+#' Annotations of published data
 #'
 #' @description  
 #'     View the collection of dataset- and attribute-level annotations

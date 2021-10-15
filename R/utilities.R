@@ -2015,7 +2015,7 @@ vocab_resolve_terms <- function(x, cv, messages = FALSE, interactive = FALSE){
 
 
 
-#' Write ecocomDP tables to file
+#' Write tables to file
 #'
 #' @param path (character) A path to the directory in which the files will be written.
 #' @param sep (character) Field delimiter to use when writing files. Default is comma.

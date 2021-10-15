@@ -1,4 +1,4 @@
-#' Validate a dataset against the ecocomDP model
+#' Validate tables against the model
 #' 
 #' @param dataset (list) A dataset of the structure returned by \code{read_data()}.
 #' @param path (character) Path to a directory containing ecocomDP tables as files.

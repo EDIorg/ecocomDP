@@ -3,7 +3,7 @@
 \docType{data}
 \name{ants_L1}
 \alias{ants_L1}
-\title{The ecocomDP version of EDI data package knb-lter-hfr.118.33}
+\title{The ecocomDP (L1) version of EDI data package knb-lter-hfr.118.33}
 \format{
 A list of:
 \describe{

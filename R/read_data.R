@@ -1,4 +1,4 @@
-#' Read an ecocomDP dataset
+#' Read published data
 #'
 #' @param id (character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search_data()} output. Older versions of datasets can be read, but a warning is issued.
 #' @param parse_datetime (logical) Parse datetime values if TRUE, otherwise return as character strings.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/view_annotation_dictionary.R
 \name{view_annotation_dictionary}
 \alias{view_annotation_dictionary}
-\title{Browse ecocomDP's dictionary for annotating datasets and attributes}
+\title{Annotations of published data}
 \usage{
 view_annotation_dictionary()
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/save_data.R
 \name{save_data}
 \alias{save_data}
-\title{Save an ecocomDP dataset}
+\title{Save a dataset}
 \usage{
 save_data(dataset, path, type = ".rds", name = NULL)
 }
@@ -20,7 +20,7 @@ save_data(dataset, path, type = ".rds", name = NULL)
     \item{.csv}{If \code{type = ".csv"}, then an set of .csv files are written to a sub-directory of \code{path} named after the data package/product ID.}
 }
 \description{
-Save an ecocomDP dataset
+Save a dataset
 }
 \note{
 Subsequent calls won't overwrite files or directories

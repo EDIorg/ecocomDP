@@ -2,7 +2,7 @@
 % Please edit documentation in R/validate_data.R
 \name{validate_data}
 \alias{validate_data}
-\title{Validate a dataset against the ecocomDP model}
+\title{Validate tables against the model}
 \usage{
 validate_data(dataset = NULL, path = NULL)
 }
@@ -15,7 +15,7 @@ validate_data(dataset = NULL, path = NULL)
 (list) If any checks fail, then a list of validation issues are returned along with a warning. If no issues are found then NULL is returned.
 }
 \description{
-Validate a dataset against the ecocomDP model
+Validate tables against the model
 }
 \details{
 Validation checks:

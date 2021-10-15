@@ -1,4 +1,4 @@
-#' Create EML metadata for an ecocomDP dataset
+#' Create EML metadata
 #' 
 #' @param path (character) Path to the directory containing ecocomDP tables, conversion script, and where EML metadata will be written.
 #' @param source_id (character) Identifier of a data package published in a supported repository. Currently, the EDI Data Repository is supported.

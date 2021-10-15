@@ -1,4 +1,4 @@
-#' Save an ecocomDP dataset
+#' Save a dataset
 #'
 #' @param dataset (list) One or more datasets of the structure returned by \code{read_data()}. Name of the \code{dataset} object will become the file name if \code{name} is not used.
 #' @param path (character) Path to the directory in which \code{dataset} will be written.

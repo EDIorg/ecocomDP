@@ -1,4 +1,4 @@
-#' Convert an ecocomDP dataset to a Darwin Core Archive dataset
+#' Convert a dataset to the Darwin Core Archive format
 #'
 #' @param path (character) Path to which the DwC-A data objects and EML will be written.
 #' @param core_name (character) The central table of the DwC-A dataset being created. Can be: "event" (event core). Occurrence core is not yet supported.

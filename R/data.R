@@ -60,7 +60,7 @@
 
 
 
-#' The ecocomDP version of EDI data package knb-lter-hfr.118.33
+#' The ecocomDP (L1) version of EDI data package knb-lter-hfr.118.33
 #'
 #' The the ecocomDP (L1) formatted version of EDI data package knb-lter-hfr.118.33 (Ant Assemblages in Hemlock Removal Experiment at Harvard Forest since 2003) read from the EDI API with \code{read_data(id = "edi.193.5")}. Use this dataset as an input to data "use" functions.
 #'
