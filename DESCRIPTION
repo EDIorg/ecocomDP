@@ -1,6 +1,6 @@
 Package: ecocomDP
 Type: Package
-Title: Tools to create, use, and convert ecocomDP data.
+Title: Tools to create, use, and convert ecocomDP data
 Description: Work with the Ecological Community Data Design Pattern. 'ecocomDP' 
     is a flexible data model for harmonizing ecological community surveys, in a 
     research question agnostic format, from source data published across 
