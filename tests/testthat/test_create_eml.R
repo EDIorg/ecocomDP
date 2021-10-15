@@ -10,7 +10,7 @@ testthat::test_that("Creates valid EML", {
   # Create directory with ecocomDP tables for create_eml()
   mypath <- paste0(tempdir(), "/data")
   dir.create(mypath)
-  inpts <- c(ants_L1[[1]]$tables, path = mypath)
+  inpts <- c(ants_L1$tables, path = mypath)
   inpts$taxon$authority_system <- NA_character_ # Reduce func run time by minimizing web API calls
   inpts$taxon$authority_taxon_id <- NA_character_
   do.call(write_tables, inpts)

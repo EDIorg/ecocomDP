@@ -1,5 +1,5 @@
 ---
-title: "Create"
+title: "Create ecocomDP Data"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Create}

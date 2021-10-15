@@ -2,7 +2,7 @@
 % Please edit documentation in R/flatten_data.R
 \name{flatten_data}
 \alias{flatten_data}
-\title{Flatten an ecocomDP dataset}
+\title{Flatten a dataset}
 \usage{
 flatten_data(data)
 }
@@ -13,7 +13,7 @@ flatten_data(data)
 (tbl_df, tbl, data.frame) A single flat table created by joining and spreading all \code{tables}, except the observation table. See details for more information on this "flat" format.
 }
 \description{
-Flatten an ecocomDP dataset
+Flatten a dataset
 }
 \details{
 The "flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" an L1 ecocomDP dataset can be consistently spread due to the frequent occurrence of L0 source datasets with > 1 core observation variable.

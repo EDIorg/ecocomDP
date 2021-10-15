@@ -1,4 +1,4 @@
-#' Browse ecocomDP's dictionary for annotating datasets and attributes
+#' Annotations of published data
 #'
 #' @description  
 #'     View the collection of dataset- and attribute-level annotations
@@ -6,10 +6,14 @@
 #'     
 #' @details
 #'     Use the search field to find the annotation terms and URIs.
-#'                             
-#' @export     
 #'     
-
+#' @export
+#' 
+#' @examples 
+#' \dontrun{
+#' view_annotation_dictionary()
+#' }
+#'     
 view_annotation_dictionary <- function(){
   
   ping_edi() # Warn if EDI is down

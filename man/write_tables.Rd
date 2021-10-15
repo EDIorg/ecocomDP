@@ -2,7 +2,7 @@
 % Please edit documentation in R/utilities.R
 \name{write_tables}
 \alias{write_tables}
-\title{Write ecocomDP tables to file}
+\title{Write tables to file}
 \usage{
 write_tables(
   path,
@@ -42,7 +42,7 @@ write_tables(
 ecocomDP tables as \code{sep} delimited files
 }
 \description{
-Write ecocomDP tables to file
+Write tables to file
 }
 \examples{
 # Create directory for the tables

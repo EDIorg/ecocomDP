@@ -1,4 +1,4 @@
-#' Validate a dataset against the ecocomDP model
+#' Validate tables against the model
 #' 
 #' @param dataset (list) A dataset of the structure returned by \code{read_data()}.
 #' @param path (character) Path to a directory containing ecocomDP tables as files.
@@ -34,14 +34,14 @@
 #' dir.create(mydir)
 #' write_tables(
 #'   path = mydir,
-#'   observation = ants_L1$edi.193.5$tables$observation, 
-#'   observation_ancillary = ants_L1$edi.193.5$tables$observation_ancillary,
-#'   location = ants_L1$edi.193.5$tables$location,
-#'   location_ancillary = ants_L1$edi.193.5$tables$location_ancillary,
-#'   taxon = ants_L1$edi.193.5$tables$taxon,
-#'   taxon_ancillary = ants_L1$edi.193.5$tables$taxon_ancillary,
-#'   dataset_summary = ants_L1$edi.193.5$tables$dataset_summary,
-#'   variable_mapping = ants_L1$edi.193.5$tables$variable_mapping)
+#'   observation = ants_L1$tables$observation, 
+#'   observation_ancillary = ants_L1$tables$observation_ancillary,
+#'   location = ants_L1$tables$location,
+#'   location_ancillary = ants_L1$tables$location_ancillary,
+#'   taxon = ants_L1$tables$taxon,
+#'   taxon_ancillary = ants_L1$tables$taxon_ancillary,
+#'   dataset_summary = ants_L1$tables$dataset_summary,
+#'   variable_mapping = ants_L1$tables$variable_mapping)
 #' 
 #' # Validate
 #' validate_data(path = mydir)
@@ -67,8 +67,8 @@ validate_data <- function(
   } else {
     d <- dataset
   }
-  id <- names(d)
-  d <- d[[1]]$tables # validation runs on tables, don't need other dataset components
+  id <- d$id
+  d <- d$tables # validation runs on tables, don't need other dataset components
 
   # Validate data
   # Get package/product ID from the dataset_summary table since this function
@@ -747,34 +747,44 @@ validate_variable_mapping <- function(data.list) {
 
 
 
-# Check mapped_id
-# 
-# @param data.list
-#     (list of data frames) A named list of data frames, each of which is an 
-#     ecocomDP table.
-#
-# @return 
-#     (character) If mapped_id does not resolve with a status of 200, then a message is returned.
-#
+#' Check mapped_id
+#' 
+#' @param data.list (list) A named list of data frames, each of which is an ecocomDP table.
+#'
+#' @return (character) If mapped_id does not resolve with a status of 200, then a message is returned.
+#' 
+#' @details This function is slow to execute due to API calls for each variable listed in the variable_mapping table. To shorten wait times for \code{read_data()} operations against the archive of resolvable annotations, this function only executes during:
+#' \itemize{
+#'   \item the validation step of the "create ecocomDP dataset" workflow (i.e. when \code{validate_data()} is called with a \code{path} argument).
+#'   \item a direct call from a unit test
+#' }
+#'     
+#' @noRd
+#'
 validate_mapped_id <- function(data.list) {
-  if ("variable_mapping" %in% names(data.list)) {
-    message("  mapped_id")
-    output <- lapply(
-      unique(data.list$variable_mapping$mapped_id),
-      function(m_id) {
-        m_id <- trimws(m_id)
-        i <- try(httr::GET(m_id)$status, silent = T)
-        if (i != 200 & !is.na(m_id)) {
-          paste(m_id)
-        }
-      })
-    output <- unlist(output)
-    if (!is.null(output)) {
-      output <- paste0("Variable mapping. The variable_mapping table has ",
-                       "these mapped_id values that don't resolve: ",
-                       paste(unlist(output), collapse = ", "))
+  callstack <- as.character(sys.calls())
+  continue <- any(stringr::str_detect(callstack, "validate_data\\(path")) | # when checking files at path
+    any(stringr::str_detect(callstack, "test_that\\(")) # when unit testing
+  if (continue) {
+    if ("variable_mapping" %in% names(data.list)) {
+      message("  mapped_id")
+      output <- lapply(
+        unique(data.list$variable_mapping$mapped_id),
+        function(m_id) {
+          m_id <- trimws(m_id)
+          i <- try(httr::GET(m_id)$status, silent = T)
+          if (i != 200 & !is.na(m_id)) {
+            paste(m_id)
+          }
+        })
+      output <- unlist(output)
+      if (!is.null(output)) {
+        output <- paste0("Variable mapping. The variable_mapping table has ",
+                         "these mapped_id values that don't resolve: ",
+                         paste(unlist(output), collapse = ", "))
+      }
+      return(output)
     }
-    return(output)
   }
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/create_eml.R
 \name{create_eml}
 \alias{create_eml}
-\title{Create EML metadata for an ecocomDP dataset}
+\title{Create EML metadata}
 \usage{
 create_eml(
   path,
@@ -51,7 +51,7 @@ create_eml(
 An EML metadata file.
 }
 \description{
-Create EML metadata for an ecocomDP dataset
+Create EML metadata
 }
 \details{
 This function creates an EML record for an ecocomDP by combining metadata from \code{source_id} with boiler-plate metadata describing the ecocomDP model. Changes to the \code{source_id} EML include:
@@ -77,10 +77,9 @@ This function creates an EML record for an ecocomDP by combining metadata from \
 # Create directory with ecocomDP tables for create_eml()
 mypath <- paste0(tempdir(), "/data")
 dir.create(mypath)
-inpts <- c(ants_L1$edi.193.5$tables, path = mypath)
+inpts <- c(ants_L1$tables, path = mypath)
 do.call(write_tables, inpts)
 file.copy(system.file("extdata", "create_ecocomDP.R", package = "ecocomDP"), mypath)
-
 dir(mypath)
 
 # Describe, with annotations, what the source L0 dataset "is about"
@@ -95,7 +94,7 @@ additional_contact <- data.frame(
   givenName = 'Colin',
   surName = 'Smith',
   organizationName = 'Environmental Data Initiative',
-  electronicMailAddress = 'ecocomdp@gmail.com',
+  electronicMailAddress = 'csmith@mail.com',
   stringsAsFactors = FALSE)
 
 # Create EML
@@ -112,7 +111,7 @@ eml <- create_eml(
   basis_of_record = "HumanObservation")
 
 dir(mypath)
-# View(eml)
+View(eml)
 
 # Clean up
 unlink(mypath, recursive = TRUE)

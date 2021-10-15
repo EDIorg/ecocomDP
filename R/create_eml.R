@@ -1,4 +1,4 @@
-#' Create EML metadata for an ecocomDP dataset
+#' Create EML metadata
 #' 
 #' @param path (character) Path to the directory containing ecocomDP tables, conversion script, and where EML metadata will be written.
 #' @param source_id (character) Identifier of a data package published in a supported repository. Currently, the EDI Data Repository is supported.
@@ -45,10 +45,9 @@
 #' # Create directory with ecocomDP tables for create_eml()
 #' mypath <- paste0(tempdir(), "/data")
 #' dir.create(mypath)
-#' inpts <- c(ants_L1$edi.193.5$tables, path = mypath)
+#' inpts <- c(ants_L1$tables, path = mypath)
 #' do.call(write_tables, inpts)
 #' file.copy(system.file("extdata", "create_ecocomDP.R", package = "ecocomDP"), mypath)
-#' 
 #' dir(mypath)
 #' 
 #' # Describe, with annotations, what the source L0 dataset "is about"
@@ -63,7 +62,7 @@
 #'   givenName = 'Colin',
 #'   surName = 'Smith',
 #'   organizationName = 'Environmental Data Initiative',
-#'   electronicMailAddress = 'ecocomdp@gmail.com',
+#'   electronicMailAddress = 'csmith@mail.com',
 #'   stringsAsFactors = FALSE)
 #' 
 #' # Create EML
@@ -80,7 +79,7 @@
 #'   basis_of_record = "HumanObservation")
 #' 
 #' dir(mypath)
-#' # View(eml)
+#' View(eml)
 #' 
 #' # Clean up
 #' unlink(mypath, recursive = TRUE)

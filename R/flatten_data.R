@@ -1,4 +1,4 @@
-#' Flatten an ecocomDP dataset
+#' Flatten a dataset
 #' 
 #' @param data (list) The dataset object returned by \code{read_data()}, or a named list of ecocoomDP tables.
 #'
@@ -25,7 +25,7 @@
 #' 
 flatten_data <- function(data) {
   
-  # ERS: validation not currently working for my test cases so commenting out
+  # TODO Refactor this validation check
   # validate_arguments(fun.name = "flatten_data", fun.args = as.list(environment()))
   
   if (detect_data_type(data) == "dataset") {

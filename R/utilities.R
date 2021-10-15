@@ -1644,7 +1644,7 @@ url_env <- function(environment){
 trim_data_for_test <- function(dataset) {
   # Remove variable_mapping so validate_mapped_id() doesn't overload target 
   # APIs
-  dataset[[1]]$tables$variable_mapping <- NULL
+  dataset$tables$variable_mapping <- NULL
   return(dataset)
 }
 
@@ -1762,50 +1762,6 @@ validate_path <- function(path){
   
 }
 
-
-
-
-
-
-
-
-
-#' View descriptions and requirements of ecocomDP tables
-#' 
-#' @return (NULL) Opens a webpage, in your default browser, with a list of descriptions and requirements of the ecocomDP tables
-#'
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' view_descriptions()
-#' }
-#' 
-view_descriptions <- function() {
-  utils::browseURL("https://github.com/EDIorg/ecocomDP/blob/master/model/table_description.md")
-}
-
-
-
-
-
-
-
-
-#' View diagram of ecocomDP tables and relationships
-#' 
-#' @return (NULL) Opens a webpage, in your default browser, with a diagram keys and linkages among ecocomDP tables
-#'
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' view_diagram()
-#' }
-#' 
-view_diagram <- function() {
-  utils::browseURL("https://github.com/EDIorg/ecocomDP/blob/master/model/table_visualization.md")
-}
 
 
 
@@ -2059,7 +2015,7 @@ vocab_resolve_terms <- function(x, cv, messages = FALSE, interactive = FALSE){
 
 
 
-#' Write ecocomDP tables to file
+#' Write tables to file
 #'
 #' @param path (character) A path to the directory in which the files will be written.
 #' @param sep (character) Field delimiter to use when writing files. Default is comma.

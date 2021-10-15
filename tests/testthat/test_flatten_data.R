@@ -1,7 +1,5 @@
 context("flatten_data()")
 
-library(ecocomDP)
-
 # Compare L0 flat and L1 flat - The column names and values of the L0 flat and L1 flattened tables should match, with an exception:
 # 1.) Primary keys, row identifiers, of the ancillary tables are now present.
 
@@ -12,14 +10,14 @@ testthat::test_that("Column presence", {
     # Parameterize
     if (i == "df") { # test w/data.frame
       L0_flat <- as.data.frame(ants_L0_flat)
-      for (tbl in names(ants_L1[[1]]$tables)) {
-        ants_L1[[1]]$tables[[tbl]] <- as.data.frame(ants_L1[[1]]$tables[[tbl]])
+      for (tbl in names(ants_L1$tables)) {
+        ants_L1$tables[[tbl]] <- as.data.frame(ants_L1$tables[[tbl]])
       }
     } else {      # test w/tibble
       L0_flat <- ants_L0_flat
     }
     crit <- read_criteria()
-    L1_flat <- ecocomDP::flatten_data(ants_L1[[1]]$tables)
+    L1_flat <- flatten_data(ants_L1$tables)
     # Adjust L0 flat to our expectations
     L0_flat$location_name <- NA_character_        # Add exception
     # TEST: All L0 flat columns (with above exceptions) should be in L1 flat
@@ -38,14 +36,14 @@ testthat::test_that("Column classes", {
     # Parameterize
     if (i == "df") { # test w/data.frame
       L0_flat <- as.data.frame(ants_L0_flat)
-      for (tbl in names(ants_L1[[1]]$tables)) {
-        ants_L1[[1]]$tables[[tbl]] <- as.data.frame(ants_L1[[1]]$tables[[tbl]])
+      for (tbl in names(ants_L1$tables)) {
+        ants_L1$tables[[tbl]] <- as.data.frame(ants_L1$tables[[tbl]])
       }
     } else {      # test w/tibble
       L0_flat <- ants_L0_flat
     }
     crit <- read_criteria()
-    L1_flat <- ecocomDP::flatten_data(ants_L1[[1]]$tables)
+    L1_flat <- flatten_data(ants_L1$tables)
     # TEST: flatten_data() applies a set of "smart" class coercions to return numeric values stored in the L1 as character back to their original numeric class. The following code tests that column classifications in L1 should be "similar" to those in L0.
     L0_classes <- unlist(lapply(L0_flat, class))
     L1_classes <- unlist(lapply(L1_flat, class))
@@ -74,7 +72,7 @@ testthat::test_that("Column classes", {
 #   # Parameterize
 #   crit <- read_criteria()
 #   L0_flat <- ants_L0_flat
-#   L1_flat <- ecocomDP::flatten_data(ants_L1[[1]]$tables)
+#   L1_flat <- ecocomDP::flatten_data(ants_L1$tables)
 #   # Adjust L0 flat to our expectations
 #   L0_flat <- L0_flat %>% 
 #     dplyr::select(-block) %>%           # A higher level location lost when flattened
@@ -92,15 +90,15 @@ testthat::test_that("Non-required columns", {
   for (i in c("df", "tbbl")) {
     # Parameterize
     if (i == "df") { # test w/data.frame
-      for (tbl in names(ants_L1[[1]]$tables)) {
-        ants_L1[[1]]$tables[[tbl]] <- as.data.frame(ants_L1[[1]]$tables[[tbl]])
+      for (tbl in names(ants_L1$tables)) {
+        ants_L1$tables[[tbl]] <- as.data.frame(ants_L1$tables[[tbl]])
       }
     }
     # Parameterize
     crit <- read_criteria() %>% 
       dplyr::filter(required == TRUE, !is.na(column)) %>%
       dplyr::select(table, column)
-    tbls <- ants_L1[[1]]$tables
+    tbls <- ants_L1$tables
     # Throw out all non-required columns
     for (tname in names(tbls)) {
       rqd <- crit$column[crit$table %in% tname]
