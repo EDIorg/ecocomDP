@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 ---
 
-This document assumes you understand the ecocomDP model. To learn about the model and its scope, refer to the [Model Overview Vignette](model_overview.html) and the [Ecological Informatics Article](https://doi.org/10.1016/j.ecoinf.2021.101374).
+This document assumes you understand the ecocomDP model. To learn about the model and its scope, refer to the [Model Overview Vignette](https://ediorg.github.io/ecocomDP/articles/model_overview.html) and the [Ecological Informatics Article](https://doi.org/10.1016/j.ecoinf.2021.101374).
 
 ---
 
@@ -27,7 +27,7 @@ This document delineates the practices that all creators of ecocomDP formatted d
 
 Early sections address important considerations for anyone thinking about converting source datasets to the ecocomDP model, then focus shifts to an examination of the model components in greater detail. These shared practices are written with the intention to help simplify the conversion process.
 
-If you are new to the conversion process, we recommend reading the [Getting Started](#getting_started) and [Concepts](#concepts) sections, reviewing the [Create](create.html) and [Model Overview](model_overview.html) vignettes, and referring back to this document as questions arise. A thorough understanding of the ecocomDP model and some foundational concepts will greatly simplify the conversion process.
+If you are new to the conversion process, we recommend reading the [Getting Started](#getting_started) and [Concepts](#concepts) sections, reviewing the [Create](https://ediorg.github.io/ecocomDP/articles/create.html) and [Model Overview](https://ediorg.github.io/ecocomDP/articles/model_overview.html) vignettes, and referring back to this document as questions arise. A thorough understanding of the ecocomDP model and some foundational concepts will greatly simplify the conversion process.
 
 Each ecocomDP dataset (Level-1; L1) is created from a raw source dataset (Level-0; L0) by a unique conversion script. Inputs are typically from the APIs of data repositories and monitoring networks, and outputs are a set of archivable files. The derived ecocomDP dataset is delivered to users in a consistent format by [`read_data()`](https://ediorg.github.io/ecocomDP/reference/read_data.html) and the conversion script provides a fully reproducible and automated routine for updating the derived dataset whenever a new version of the source data are released.
 ```{r echo=FALSE, out.width='100%', fig.cap='Figure 1. The Level 0 (L0) dataset is the incoming original data with complete metadata. Level 1 (L1) dataset is the L0 dataset reformatted according to the predefined ecocomDP model. Researchers are able to use L1 datasets as inputs to speed their analyses and generate Level 2 (L2) data. (Adapted from [O’Brien et al. 2021](https://doi.org/10.1016/j.ecoinf.2021.101374)).'}
@@ -113,7 +113,7 @@ To convert an L0 dataset, implement the following processes in your conversion s
 *   Validate L1 tables with `validate_data()`
 *   Create EML metadata with `create_eml()`
 
-For details on the processes within the conversion script, see the [Create vignette](create.html).
+For details on the processes within the conversion script, see the [Create vignette](https://ediorg.github.io/ecocomDP/articles/create.html).
 
 ## Basics
 ### Do's
@@ -145,7 +145,7 @@ For details on the processes within the conversion script, see the [Create vigne
 *   Don’t call the create_ecocomDP() function from within the conversion script. Otherwise the automated maintenance routine won’t be able to control the function call (i.e. input arguments and when it runs).
 
 ## Resolving Issues in the L1 Tables
-Refer to this section to resolve specific issues while creating the L1 tables. For more in-depth descriptions on these tables and their columns, see the [Model Overview vignette](model_overview.html).
+Refer to this section to resolve specific issues while creating the L1 tables. For more in-depth descriptions on these tables and their columns, see the [Model Overview vignette](https://ediorg.github.io/ecocomDP/articles/model_overview.html).
 
 ### observation
 Store the core observations being analyzed in this table. Observations must be linked to a taxon and to a location. Linking to ancillary observations is optional.
