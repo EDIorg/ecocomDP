@@ -21,7 +21,7 @@
 txcl_get_authority <- function(taxon, data.source){
   
   # Tell user what authority is being queried
-  gnr_list <- load_gnr_datasources()
+  gnr_list <- txcl_load_gnr_datasources()
   use_i <- gnr_list[ , 'id'] == data.source
   message('Searching ', gnr_list[use_i, 'title'],' for "',taxon,'"')
   
@@ -830,15 +830,15 @@ txcl_optimize_match <- function(x, data.sources){
     
     # Does taxon resolve to data.sources[j]?
     gnrr <- try(
-      get_authority(taxon = x,
-                    data.source = as.character(data.sources[j])),
+      txcl_get_authority(taxon = x,
+                         data.source = as.character(data.sources[j])),
       silent = TRUE)
     
     # Try for ID and rank if GNR didn't error, then add results
     if (class(gnrr) != "try-error") {
       id <- try(
         suppressWarnings(
-          get_id(taxon = x, authority = gnrr$authority)),
+          txcl_get_id(taxon = x, authority = gnrr$authority)),
         silent = TRUE)
       if (class(id) != "try-error") {
         output$authority_id[j] <- id$taxon_id
@@ -1153,12 +1153,6 @@ txcl_resolve_sci_taxa <- function(x = NULL, data.sources, path = NULL){
   
   validate_arguments("txcl_resolve_sci_taxa", as.list(environment()))
   
-  # Read taxa_map.csv -------------------------------------------------------
-  
-  if (!is.null(path)){
-    taxa_map <- read_taxa_map(path)
-  }
-  
   # Create taxa list ----------------------------------------------------------
   
   if (!is.null(path)) {
@@ -1185,7 +1179,7 @@ txcl_resolve_sci_taxa <- function(x = NULL, data.sources, path = NULL){
   
   r <- lapply(
     unique(taxa_list$taxa),
-    optimize_match,
+    txcl_optimize_match,
     data.sources = data.sources)
   
   # Update taxa_map.csv -----------------------------------------------------
@@ -1222,19 +1216,6 @@ txcl_resolve_sci_taxa <- function(x = NULL, data.sources, path = NULL){
       'authority_id',
       'score')
     taxa_map <- cbind(taxa_list, r)
-  }
-  
-  # Document provenance -----------------------------------------------------
-  
-  if (!is.null(path)) {
-    lib_path <- dirname(
-      system.file('/taxa_map_resolve_sci_taxa/taxa_map.csv',
-                  package = 'taxonomyCleanr'))
-    if (!missing(path)){
-      if (path != lib_path){
-        write_taxa_map(x = taxa_map, path = path)
-      }
-    }
   }
   
   # Return --------------------------------------------------------------------

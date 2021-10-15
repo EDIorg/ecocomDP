@@ -938,7 +938,7 @@ plot_taxa_occur_freq <- function(data,
     dplyr::group_by(
       dplyr::across(
         dplyr::all_of(
-          unique(na.omit(c("taxon_name", color_var, facet_var)))
+          unique(stats::na.omit(c("taxon_name", color_var, facet_var)))
         )
       )
     ) %>%
