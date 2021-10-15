@@ -113,7 +113,7 @@ plot_taxa_accum_time(
 
 plot_taxa_accum_time(
   data = my_dataset$tables$observation,
-  id = names(my_dataset))
+  id = my_dataset$id)
 
 plot_taxa_accum_time(
   data = my_dataset %>% flatten_data())
@@ -160,7 +160,7 @@ ants_L1 %>%
 # RENAME from "plot_taxa_diversity" to "plot_richness_time"
 plot_taxa_diversity(
   data = my_dataset$tables$observation,
-  id = names(my_dataset))
+  id = my_dataset$id)
 
 plot_taxa_diversity(
   data = my_dataset)
@@ -265,7 +265,7 @@ ants_L1 %>%
 # RENAME 
 plot_sample_space_time(
   data = my_dataset$tables$observation,
-  id = names(my_dataset))
+  id = my_dataset$id)
 
 plot_sample_space_time(
   data = my_dataset)
@@ -342,7 +342,7 @@ my_dataset <- read_data(
 
 plot_taxa_shared_sites(
   data = my_dataset$tables$observation,
-  id = names(my_dataset))
+  id = my_dataset$id)
 
 plot_taxa_shared_sites(
   data = my_dataset)

@@ -119,12 +119,22 @@ plot_taxa_accum_sites <- function(data,
     data <- observation
     warning('Input argument "observation" is deprecated, use "data" instead', 
             call. = FALSE)
+    
+    # get data package id from dataset object
+    if (is.na(id)) {
+      id <- get_id(data)
+    }
   }
+  
   # Get observation table and id from data input if possible
   observation <- get_observation_table(data)
-  if (!is.na(id)) {
-    id <- get_id(data)
+  
+  # if id is still missing, get it from observation table
+  if (is.na(id)){
+    id <- paste(unique(observation$package_id), collapse = "|")
   }
+  
+  
   # Validate inputs and construct intermediate format for plotting
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)
@@ -211,17 +221,27 @@ plot_taxa_accum_time <- function(data,
                                  id = NA_character_, 
                                  alpha = 1, 
                                  observation = NULL){
+
   # Warn about deprecated observation parameter (remove after 2022-10-18)
   if (!is.null(observation)) {
     data <- observation
     warning('Input argument "observation" is deprecated, use "data" instead', 
             call. = FALSE)
+    
+    # get data package id from dataset object
+    if (is.na(id)) {
+      id <- get_id(data)
+    }
   }
+  
   # Get observation table and id from data input if possible
   observation <- get_observation_table(data)
-  if (!is.na(id)) {
-    id <- get_id(data)
+  
+  # if id is still missing, get it from observation table
+  if (is.na(id)){
+    id <- paste(unique(observation$package_id), collapse = "|")
   }
+  
   # Validate inputs and construct intermediate format for plotting
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)
@@ -328,11 +348,19 @@ plot_taxa_diversity <- function(data,
     data <- observation
     warning('Input argument "observation" is deprecated, use "data" instead', 
             call. = FALSE)
+    
+    # get data package id from dataset object
+    if (is.na(id)) {
+      id <- get_id(data)
+    }
   }
+  
   # Get observation table and id from data input if possible
   observation <- get_observation_table(data)
-  if (!is.na(id)) {
-    id <- get_id(data)
+  
+  # if id is still missing, get it from observation table
+  if (is.na(id)){
+    id <- paste(unique(observation$package_id), collapse = "|")
   }
   
   # Validate inputs and construct intermediate format for plotting
@@ -501,12 +529,21 @@ plot_sample_space_time <- function(data,
     data <- observation
     warning('Input argument "observation" is deprecated, use "data" instead', 
             call. = FALSE)
+    
+    # get data package id from dataset object
+    if (is.na(id)) {
+      id <- get_id(data)
+    }
   }
+  
   # Get observation table and id from data input if possible
   observation <- get_observation_table(data)
-  if (!is.na(id)) {
-    id <- get_id(data)
+  
+  # if id is still missing, get it from observation table
+  if (is.na(id)){
+    id <- paste(unique(observation$package_id), collapse = "|")
   }
+  
   # Validate inputs and construct intermediate format for plotting
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   # summarize data for plot
@@ -628,11 +665,19 @@ plot_taxa_shared_sites <- function(data,
     data <- observation
     warning('Input argument "observation" is deprecated, use "data" instead', 
             call. = FALSE)
+    
+    # get data package id from dataset object
+    if (is.na(id)) {
+      id <- get_id(data)
+    }
   }
+  
   # Get observation table and id from data input if possible
-  observation <- get_observation_table(data) %>% dplyr::distinct()
-  if (is.na(id)) {
-    id <- get_id(data)
+  observation <- get_observation_table(data)
+  
+  # if id is still missing, get it from observation table
+  if (is.na(id)){
+    id <- paste(unique(observation$package_id), collapse = "|")
   }
   
 
@@ -905,7 +950,7 @@ plot_taxa_occur_freq <- function(data,
 
   # plot title and subtitle text
   plot_title = "Taxa occurrence frequencies"
-  plot_subtitle <- paste0("data package id: ",id)
+  plot_subtitle <- id
   if(!is.na(min_occurrence) && min_occurrence > 0) plot_subtitle <- paste0(plot_subtitle,
                                              "\ntaxa with >= ", min_occurrence, " occurrences")
   # calculate occurrences
@@ -1123,7 +1168,7 @@ plot_taxa_abund <- function(data,
   
   # plot title and subtitle text
   plot_title = "Taxa abundances per 'observation_id'"
-  plot_subtitle <- paste0("data package id: ",id)
+  plot_subtitle <- id
   if(!is.na(min_relative_abundance) && min_relative_abundance > 0) plot_subtitle <- paste0(plot_subtitle,
                                                            "\nrel. abundance >= ", min_relative_abundance)
   # Scale font size

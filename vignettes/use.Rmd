@@ -336,5 +336,4 @@ datasets <- read_data(from = mypath)
 #>   Latitude and longitude range
 #>   Elevation
 #>   variable_mapping
-
 ```
