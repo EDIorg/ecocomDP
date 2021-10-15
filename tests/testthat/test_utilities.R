@@ -109,6 +109,7 @@ testthat::test_that("Possible inputs to get_observation_table()", {
   x <- ants_L1$tables$observation
   res <- get_observation_table(x)
   expect_true("data.frame" %in% class(res))
+  
   # table (invalid; NULL)
   expect_error(get_observation_table(NULL), "not one of")
   

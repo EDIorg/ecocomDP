@@ -485,13 +485,13 @@ coerce_table_classes <- function(tbl, name, cls) {
 detect_data_type <- function(data){
   table_names <- unique(read_criteria()$table)
   # dataset
-  if((class(data)=="list") && ("tables" %in% names(data))){
+  if (("list" %in% class(data)) & ("tables" %in% names(data))) {
     if (sum(names(data) == "tables") == 1) {
       return("dataset")
     }
   }
   # list_of_datasets
-  if ((class(data)=="list") && (length(data) > 1)) {
+  if (("list" %in% class(data)) & (length(data) > 1)) {
     res <- lapply(data, function(x) {"tables" %in% names(x)})
     if (all(unlist(res))) {
       return("list_of_datasets")
@@ -502,13 +502,22 @@ detect_data_type <- function(data){
     return("table")
   }
   # list_of_tables
-  if((class(data)=="list") && any(table_names %in% names(data))){
+  if(("list" %in% class(data)) & any(table_names %in% names(data))) {
     return("list_of_tables")
   }
   # dataset_old
   is_dataset_old <- function(x) {
-    res <- (class(x)=="list") && (length(x) == 1) && ("tables" %in% names(x[[1]]))
-    return(res)
+    if ("list" %in% class(x)) {
+      if ("tables" %in% names(x)) {
+        return(FALSE)
+      }
+      if (length(x) == 1) {
+        if ("tables" %in% names(x[[1]])) {
+          return(TRUE)
+        }
+      }
+    }
+    return(FALSE)
   }
   if (is_dataset_old(data)) {
     warning('Input to "data" is an old and deprecated format. Please use the ',
@@ -978,7 +987,7 @@ get_observation_table <- function(data) {
   }
   # Extract all columns of the observation table and error if missing
   criteria <- dplyr::filter(read_criteria(), table == "observation")
-  obs_cols <- na.omit(criteria$column)
+  obs_cols <- stats::na.omit(criteria$column)
   res <- dplyr::select(table, dplyr::all_of(obs_cols))
   return(res)
 }

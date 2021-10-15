@@ -51,13 +51,13 @@ testthat::test_that("Reads from source APIs", {
     for (i in names(d$tables)) { # tables are data.frames
       expect_true(class(d$tables[[i]]) == "data.frame")
     }
+    expect_true( # datetimes are parsed (this is a check on NEON mapping functions)
+      all(
+        class(d$tables$observation$datetime) %in% c("POSIXct", "POSIXt")))
+    expect_equal(
+      class(d$tables$location_ancillary$datetime),
+      "Date")
   }
-  expect_true( # datetimes are parsed (this is a check on NEON mapping functions)
-    all(
-      class(d$tables$observation$datetime) %in% c("POSIXct", "POSIXt")))
-  expect_equal(
-    class(d$tables$location_ancillary$datetime),
-    "Date")
 })
 
 
