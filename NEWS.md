@@ -4,7 +4,7 @@
 * Release new plotting functions for taxonomic and geographic exploration.
 * Allow multiple input types to the new `data` parameter of "use" functions (supercedes `dataset`), thereby simplifying and accelerating exploratory manipulation and plotting.
 * Reformat dataset object returned by `read_data()`. Generally, this simplifies dataset indexing and usage within iteration contexts. It removes a layer of nesting and places the dataset id at the same level as metadata, tables, and validation_issues.
-* Release new `view_annotation_dictionary f`unction. This feature will allow ecocomDP creators to view the semantic annotations for existing ecocomDP datasets. Annotation dictionary is published as an EDI data package to apply occasional updates.
+* Release new `annotation_dictionary()` function. This feature will allow ecocomDP creators to view the semantic annotations for existing ecocomDP datasets. Annotation dictionary is published as an EDI data package to apply occasional updates.
 * Release new `validate_mapped_id()` function. Ensures values listed under /variable_mapping/mapped_id resolve without error
 * Release new Model Overview vignette. The model overview vignette consists of the authoritative set of table descriptions, relationships, and requirements for the ecocomDP model and a visualization of table contents and relationships.
 * Release new Shared Practices Vignette. This document delineates the practices that all creators of ecocomDP formatted datasets should adopt in order for the community to build a cohesive and interoperable collection. It contains detailed descriptions of practices, definitions of concepts, and solutions to many common issues.

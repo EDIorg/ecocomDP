@@ -11,10 +11,10 @@
 #' 
 #' @examples 
 #' \dontrun{
-#' view_annotation_dictionary()
+#' View(annotation_dictionary())
 #' }
 #'     
-view_annotation_dictionary <- function(){
+annotation_dictionary <- function(){
   
   ping_edi() # Warn if EDI is down
   
@@ -39,5 +39,5 @@ view_annotation_dictionary <- function(){
          file = paste0(tempdir(), "/annotation_dictionary_table.rda"), 
          version = 3)
   }
-  utils::View(ecocomDP_annotation_dictionary)
+  return(ecocomDP_annotation_dictionary)
 } 
