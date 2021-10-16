@@ -596,6 +596,8 @@ plot_sample_space_time <- function(data,
 
 #' Plot dates and times samples were taken (DEPRECATED)
 #' 
+#' @description This function has been deprecated. Use \code{plot_sample_space_time()} instead.
+#' 
 #' @param observation (tbl_df, tbl, data.frame) The observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.

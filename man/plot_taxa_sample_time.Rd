@@ -17,5 +17,5 @@ plot_taxa_sample_time(observation, id = NA_character_, alpha = 1)
 (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
 }
 \description{
-Plot dates and times samples were taken (DEPRECATED)
+This function has been deprecated. Use \code{plot_sample_space_time()} instead.
 }

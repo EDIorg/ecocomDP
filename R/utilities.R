@@ -482,6 +482,8 @@ coerce_table_classes <- function(tbl, name, cls) {
 #' 
 #' Unrecognized types will thorw an error.
 #' 
+#' @noRd
+#' 
 detect_data_type <- function(data){
   table_names <- unique(read_criteria()$table)
   # dataset
