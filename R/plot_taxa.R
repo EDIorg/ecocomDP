@@ -1114,6 +1114,9 @@ plot_taxa_occur_freq <- function(data,
 #'     min_relative_abundance = 0.01)
 #' }
 #' 
+#' # Plot the example dataset
+#' plot_taxa_abund(ants_L1)
+#' 
 plot_taxa_abund <- function(data, 
                             id = NA_character_,
                             min_relative_abundance = 0, 
@@ -1122,7 +1125,6 @@ plot_taxa_abund <- function(data,
                             color_var = NA_character_,
                             facet_scales = "free",
                             alpha = 1) {
-  
   # TODO: Convert this unreadable block of code to a function like get_observation_table()
   # TODO: Call get_id()
   # required col names in flat data
@@ -1145,7 +1147,6 @@ plot_taxa_abund <- function(data,
   }else{
     stop("No plotting method currently implemented for this data format")
   }
-  
   # Validate inputs
   # TODO min_relative_abundance, color_var, facet_var
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
@@ -1310,7 +1311,7 @@ plot_sites <- function(data,
       .data$location_name,
       .data$package_id) %>%
     dplyr::distinct()
-  transformed_cleaned <- usmap::usmap_transform(cleaned)
+  transformed_cleaned <- suppressWarnings(usmap::usmap_transform(cleaned))
   usmap::plot_usmap(color = "grey") + 
     ggplot2::geom_point(
       data = transformed_cleaned,
