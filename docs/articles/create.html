@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Create • ecocomDP</title>
+<title>Create ecocomDP Data • ecocomDP</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Create">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Create ecocomDP Data">
 <meta property="og:description" content="ecocomDP">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -55,6 +55,12 @@
     </li>
     <li>
       <a href="../articles/convert.html">Convert</a>
+    </li>
+    <li>
+      <a href="../articles/model_overview.html">Model Overview</a>
+    </li>
+    <li>
+      <a href="../articles/shared_practices_create.html">Shared Practices (Create)</a>
     </li>
   </ul>
 </li>
@@ -82,7 +88,7 @@
       </header><script src="create_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Create</h1>
+      <h1 data-toc-skip>Create ecocomDP Data</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/EDIorg/ecocomDP/blob/master/vignettes/create.Rmd"><code>vignettes/create.Rmd</code></a></small>
@@ -94,7 +100,7 @@
     
 <p>Each ecocomDP dataset (Level-1; L1) is created from a source dataset (Level-0; L0) by a unique processing function. Inputs are typically from the APIs of data repositories and monitoring networks, and outputs can be a list of R objects or a set of archivable files. The output form you choose may depend on multiple factors including the source data license (it may prohibit archive) and the overall processing time (on-demand processing may be prohibitively long). In either case, the derived ecocomDP dataset is delivered to users in a consistent format by <code><a href="../reference/read_data.html">read_data()</a></code> and the processing function provides a fully reproducible and automated routine for updating the derived dataset whenever a new version of the source data are released.</p>
 <p>Below is an example function that reads a source dataset from the Environmental Data Initiative (EDI) repository and converts it into an ecocomDP dataset, which in turn is archived in EDI. For an example of creating an ecocomDP dataset on-demand (i.e. not archived), see the map_neon_data_to_ecocomDP.R source code.</p>
-<p>Use <code><a href="../reference/view_diagram.html">view_diagram()</a></code> and <code><a href="../reference/view_descriptions.html">view_descriptions()</a></code> for an overview of ecocomDP table relationships and requirements.</p>
+<p>Use <code>view_diagram()</code> and <code>view_descriptions()</code> for an overview of ecocomDP table relationships and requirements.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EDIorg/ecocomDP">ecocomDP</a></span><span class="op">)</span></code></pre></div>
 <div id="for-archive-in-a-data-repository" class="section level2">
@@ -295,11 +301,9 @@
   
   <span class="co"># Odds and ends -------------------------------------------------------------</span>
   
-  <span class="co"># Rename source columns with an ecocomDP equivalent (date to datetime) and </span>
-  <span class="co"># remove columns of redundant information  (year can be recalculated from </span>
-  <span class="co"># datetime and code was a key that no longer has use).</span>
+  <span class="co"># Rename source columns with an ecocomDP equivalent (date to datetime)</span>
   
-  <span class="va">flat</span> <span class="op">&lt;-</span> <span class="va">flat</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>datetime <span class="op">=</span> <span class="va">date</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">year</span>, <span class="op">-</span><span class="va">code</span><span class="op">)</span>
+  <span class="va">flat</span> <span class="op">&lt;-</span> <span class="va">flat</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>datetime <span class="op">=</span> <span class="va">date</span><span class="op">)</span>
   
   <span class="co"># The hard work is done! The flat table contains all the source data and </span>
   <span class="co"># more! We can now use the "create" functions to parse this table into the </span>
@@ -489,16 +493,16 @@
   <span class="co"># Convert "dataset level keywords" listed in the source to "dataset level </span>
   <span class="co"># annotations" in the derived. The predicate "is about" is used, which </span>
   <span class="co"># results in an annotation that reads "This dataset is about 'species </span>
-  <span class="co"># abundance'", "This dataset is about 'Population'", etc. All source datasets</span>
-  <span class="co"># involving a human induced manipulative experiment, not a natural </span>
-  <span class="co"># disturbance/experiment, should include the "Manipulative experiment" </span>
-  <span class="co"># annotation below to enable searching on this term.</span>
+  <span class="co"># abundance'", "This dataset is about an ecological 'Community'", etc. All </span>
+  <span class="co"># source datasets involving a human induced manipulative experiment, not a </span>
+  <span class="co"># natural disturbance/experiment, should include the "Manipulative </span>
+  <span class="co"># experiment" annotation below to enable searching on this term.</span>
   
   <span class="va">dataset_annotations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
     `species abundance` <span class="op">=</span> 
       <span class="st">"http://purl.dataone.org/odo/ECSO_00001688"</span>,
-    Population <span class="op">=</span> 
-      <span class="st">"http://purl.dataone.org/odo/ECSO_00000311"</span>,
+    Community <span class="op">=</span> 
+      <span class="st">"http://purl.dataone.org/odo/ECSO_00000310"</span>,
     `Manipulative experiment` <span class="op">=</span> 
       <span class="st">"http://purl.dataone.org/odo/ECSO_00000506"</span>,
     `level of ecological disturbance` <span class="op">=</span> 

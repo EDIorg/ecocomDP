@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -95,6 +95,12 @@
     </li>
     <li>
       <a href="../articles/convert.html">Convert</a>
+    </li>
+    <li>
+      <a href="../articles/model_overview.html">Model Overview</a>
+    </li>
+    <li>
+      <a href="../articles/shared_practices_create.html">Shared Practices (Create)</a>
     </li>
   </ul>
 </li>
@@ -126,13 +132,48 @@
       <small>Source: <a href='https://github.com/EDIorg/ecocomDP/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="ecocomdp-110" class="section level1">
-<h1 class="page-header" data-toc-text="1.1.0">
-<a href="#ecocomdp-110" class="anchor"></a>ecocomDP 1.1.0<small> 2021-07-31 </small>
+    <div id="ecocomdp-120" class="section level1">
+<h1 class="page-header" data-toc-text="1.2.0">
+<a href="#ecocomdp-120" class="anchor"></a>ecocomDP 1.2.0<small> 2021-10-18 </small>
 </h1>
 <div id="enhancements" class="section level2">
 <h2 class="hasAnchor">
 <a href="#enhancements" class="anchor"></a>Enhancements</h2>
+<ul>
+<li>Release new plotting functions for taxonomic and geographic exploration.</li>
+<li>Allow multiple input types to the new <code>data</code> parameter of “use” functions (supercedes <code>dataset</code>), thereby simplifying and accelerating exploratory manipulation and plotting.</li>
+<li>Reformat dataset object returned by <code><a href="../reference/read_data.html">read_data()</a></code>. Generally, this simplifies dataset indexing and usage within iteration contexts. It removes a layer of nesting and places the dataset id at the same level as metadata, tables, and validation_issues.</li>
+<li>Release new <code><a href="../reference/annotation_dictionary.html">annotation_dictionary()</a></code> function. This feature will allow ecocomDP creators to view the semantic annotations for existing ecocomDP datasets. Annotation dictionary is published as an EDI data package to apply occasional updates.</li>
+<li>Release new <code>validate_mapped_id()</code> function. Ensures values listed under /variable_mapping/mapped_id resolve without error</li>
+<li>Release new Model Overview vignette. The model overview vignette consists of the authoritative set of table descriptions, relationships, and requirements for the ecocomDP model and a visualization of table contents and relationships.</li>
+<li>Release new Shared Practices Vignette. This document delineates the practices that all creators of ecocomDP formatted datasets should adopt in order for the community to build a cohesive and interoperable collection. It contains detailed descriptions of practices, definitions of concepts, and solutions to many common issues.</li>
+</ul>
+</div>
+<div id="fixes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#fixes" class="anchor"></a>Fixes</h2>
+<ul>
+<li>Prevent L1 EML from inheriting L0 provenance and additional metadata, these should not be inherited by the L1 in <code><a href="../reference/create_eml.html">create_eml()</a></code>
+</li>
+</ul>
+</div>
+<div id="deprecation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#deprecation" class="anchor"></a>Deprecation</h2>
+<ul>
+<li>Discourage use of the <code>observation</code> parameter of plotting functions and replace it with the more flexible <code>data</code> parameter (see above). These changes are backwards compatible with previous releases.</li>
+<li>Discourage use of <code><a href="../reference/plot_taxa_sample_time.html">plot_taxa_sample_time()</a></code> in favor of <code><a href="../reference/plot_sample_space_time.html">plot_sample_space_time()</a></code>. These changes are backwards compatible with previous releases.</li>
+<li>Discourage use of the previous <code>dataset</code> object returned by <code><a href="../reference/read_data.html">read_data()</a></code> in favor of a new one. See details above. These changes are backwards compatible with previous releases.</li>
+</ul>
+</div>
+</div>
+    <div id="ecocomdp-110" class="section level1">
+<h1 class="page-header" data-toc-text="1.1.0">
+<a href="#ecocomdp-110" class="anchor"></a>ecocomDP 1.1.0<small> 2021-07-31 </small>
+</h1>
+<div id="enhancements-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#enhancements-1" class="anchor"></a>Enhancements</h2>
 <ul>
 <li>Link to ecocomDP article.</li>
 <li>Enable full return of L0 location columns in <code><a href="../reference/flatten_data.html">flatten_data()</a></code>.</li>
@@ -140,9 +181,9 @@
 <li>Check create_ecocomDP.R for expected function and associated arguments in <code><a href="../reference/create_eml.html">create_eml()</a></code>.</li>
 </ul>
 </div>
-<div id="fixes" class="section level2">
+<div id="fixes-1" class="section level2">
 <h2 class="hasAnchor">
-<a href="#fixes" class="anchor"></a>Fixes</h2>
+<a href="#fixes-1" class="anchor"></a>Fixes</h2>
 <ul>
 <li>Fix alignment of categorical variable names and definitions in <code><a href="../reference/create_eml.html">create_eml()</a></code>.</li>
 <li>Allow only one basisOfRecord in <code><a href="../reference/create_eml.html">create_eml()</a></code>.</li>
