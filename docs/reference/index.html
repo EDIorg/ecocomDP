@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -95,6 +95,12 @@
     </li>
     <li>
       <a href="../articles/convert.html">Convert</a>
+    </li>
+    <li>
+      <a href="../articles/model_overview.html">Model Overview</a>
+    </li>
+    <li>
+      <a href="../articles/shared_practices_create.html">Shared Practices (Create)</a>
     </li>
   </ul>
 </li>
@@ -137,7 +143,7 @@
       <tr>
         <th colspan="2">
           <h2 id="section-create" class="hasAnchor"><a href="#section-create" class="anchor"></a>Create</h2>
-          <p class="section-desc"><p>Create ecocomDP tables and metadata</p></p>
+          <p class="section-desc"><p>Create tables, validate, and write metadata</p></p>
         </th>
       </tr>
       
@@ -196,27 +202,27 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="write_tables.html">write_tables()</a></code> </p>
+        </td>
+        <td><p>Write tables to file</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="validate_data.html">validate_data()</a></code> </p>
         </td>
-        <td><p>Validate a dataset against the ecocomDP model</p></td>
+        <td><p>Validate tables against the model</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="create_eml.html">create_eml()</a></code> </p>
         </td>
-        <td><p>Create EML metadata for an ecocomDP dataset</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="write_tables.html">write_tables()</a></code> </p>
-        </td>
-        <td><p>Write ecocomDP tables to file</p></td>
+        <td><p>Create EML metadata</p></td>
       </tr>
     </tbody><tbody>
       <tr>
         <th colspan="2">
           <h2 id="section-use" class="hasAnchor"><a href="#section-use" class="anchor"></a>Use</h2>
-          <p class="section-desc"><p>Use ecocomDP datasets</p></p>
+          <p class="section-desc"><p>Search, read, manipulate, plot, and save data</p></p>
         </th>
       </tr>
       
@@ -229,31 +235,37 @@
         <td>
           <p><code><a href="search_data.html">search_data()</a></code> </p>
         </td>
-        <td><p>Search across all ecocomDP datasets</p></td>
+        <td><p>Search published data</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="read_data.html">read_data()</a></code> </p>
         </td>
-        <td><p>Read an ecocomDP dataset</p></td>
+        <td><p>Read published data</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="save_data.html">save_data()</a></code> </p>
+          <p><code><a href="flatten_data.html">flatten_data()</a></code> </p>
         </td>
-        <td><p>Save an ecocomDP dataset</p></td>
+        <td><p>Flatten a dataset</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="plot_taxa_sample_time.html">plot_taxa_sample_time()</a></code> </p>
+          <p><code><a href="plot_sample_space_time.html">plot_sample_space_time()</a></code> </p>
         </td>
-        <td><p>Plot dates and times samples were taken</p></td>
+        <td><p>Plot dates and times samples were collected or observations were made</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="plot_taxa_diversity.html">plot_taxa_diversity()</a></code> </p>
+          <p><code><a href="plot_sites.html">plot_sites()</a></code> </p>
         </td>
-        <td><p>Plot diversity (taxa richness) through time</p></td>
+        <td><p>Plot sites on US map</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plot_taxa_abund.html">plot_taxa_abund()</a></code> </p>
+        </td>
+        <td><p>Plot mean taxa abundances per 'observation_id'</p></td>
       </tr><tr>
         
         <td>
@@ -269,21 +281,39 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="plot_taxa_diversity.html">plot_taxa_diversity()</a></code> </p>
+        </td>
+        <td><p>Plot diversity (taxa richness) through time</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plot_taxa_occur_freq.html">plot_taxa_occur_freq()</a></code> </p>
+        </td>
+        <td><p>Plot taxon occurrence frequencies</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plot_taxa_rank.html">plot_taxa_rank()</a></code> </p>
+        </td>
+        <td><p>Plot taxa ranks</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="plot_taxa_shared_sites.html">plot_taxa_shared_sites()</a></code> </p>
         </td>
         <td><p>Plot number of unique taxa shared across sites</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="flatten_data.html">flatten_data()</a></code> </p>
+          <p><code><a href="save_data.html">save_data()</a></code> </p>
         </td>
-        <td><p>Flatten an ecocomDP dataset</p></td>
+        <td><p>Save a dataset</p></td>
       </tr>
     </tbody><tbody>
       <tr>
         <th colspan="2">
           <h2 id="section-convert" class="hasAnchor"><a href="#section-convert" class="anchor"></a>Convert</h2>
-          <p class="section-desc"><p>Convert ecocomDP datasets to other model formats</p></p>
+          <p class="section-desc"><p>Convert to other model formats</p></p>
         </th>
       </tr>
       
@@ -296,7 +326,7 @@
         <td>
           <p><code><a href="convert_to_dwca.html">convert_to_dwca()</a></code> </p>
         </td>
-        <td><p>Convert an ecocomDP dataset to a Darwin Core Archive dataset</p></td>
+        <td><p>Convert a dataset to the Darwin Core Archive format</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -311,18 +341,6 @@
       
       
       <tr>
-        
-        <td>
-          <p><code><a href="view_diagram.html">view_diagram()</a></code> </p>
-        </td>
-        <td><p>View diagram of ecocomDP tables and relationships</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="view_descriptions.html">view_descriptions()</a></code> </p>
-        </td>
-        <td><p>View descriptions and requirements of ecocomDP tables</p></td>
-      </tr><tr>
         
         <td>
           <p><code><a href="calc_geo_extent_bounding_box_m2.html">calc_geo_extent_bounding_box_m2()</a></code> </p>
@@ -346,11 +364,17 @@
           <p><code><a href="calc_std_dev_interval_betw_years.html">calc_std_dev_interval_betw_years()</a></code> </p>
         </td>
         <td><p>Calculate std_dev_interval_betw_years for the dataset_summary table</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="annotation_dictionary.html">annotation_dictionary()</a></code> </p>
+        </td>
+        <td><p>Annotations of published data</p></td>
       </tr>
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-data" class="hasAnchor"><a href="#section-data" class="anchor"></a>Data</h2>
+          <h2 id="section-example-data" class="hasAnchor"><a href="#section-example-data" class="anchor"></a>Example data</h2>
           <p class="section-desc"><p>Example data</p></p>
         </th>
       </tr>
@@ -370,7 +394,7 @@
         <td>
           <p><code><a href="ants_L1.html">ants_L1</a></code> </p>
         </td>
-        <td><p>The ecocomDP version of EDI data package knb-lter-hfr.118.33</p></td>
+        <td><p>The ecocomDP (L1) version of EDI data package knb-lter-hfr.118.33</p></td>
       </tr>
     </tbody>
     </table>
