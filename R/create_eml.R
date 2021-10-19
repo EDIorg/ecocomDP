@@ -1,4 +1,4 @@
-#' Create EML metadata for an ecocomDP dataset
+#' Create EML metadata
 #' 
 #' @param path (character) Path to the directory containing ecocomDP tables, conversion script, and where EML metadata will be written.
 #' @param source_id (character) Identifier of a data package published in a supported repository. Currently, the EDI Data Repository is supported.
@@ -45,10 +45,9 @@
 #' # Create directory with ecocomDP tables for create_eml()
 #' mypath <- paste0(tempdir(), "/data")
 #' dir.create(mypath)
-#' inpts <- c(ants_L1$edi.193.5$tables, path = mypath)
+#' inpts <- c(ants_L1$tables, path = mypath)
 #' do.call(write_tables, inpts)
 #' file.copy(system.file("extdata", "create_ecocomDP.R", package = "ecocomDP"), mypath)
-#' 
 #' dir(mypath)
 #' 
 #' # Describe, with annotations, what the source L0 dataset "is about"
@@ -63,7 +62,7 @@
 #'   givenName = 'Colin',
 #'   surName = 'Smith',
 #'   organizationName = 'Environmental Data Initiative',
-#'   electronicMailAddress = 'ecocomdp@gmail.com',
+#'   electronicMailAddress = 'csmith@mail.com',
 #'   stringsAsFactors = FALSE)
 #' 
 #' # Create EML
@@ -80,7 +79,7 @@
 #'   basis_of_record = "HumanObservation")
 #' 
 #' dir(mypath)
-#' # View(eml)
+#' View(eml)
 #' 
 #' # Clean up
 #' unlink(mypath, recursive = TRUE)
@@ -208,7 +207,7 @@ create_eml <- function(path,
   eml_L0 <- EML::read_eml(url_parent)
   xml_L0 <- suppressMessages(read_eml(source_id))
   
-  # Remove L0 data entities. These should not be inherited by the L1.
+  # Remove L0 elements that should not be inherited by the L1
   
   eml_L0$dataset$dataTable <- NULL
   eml_L0$dataset$spatialRaster <- NULL
@@ -216,6 +215,8 @@ create_eml <- function(path,
   eml_L0$dataset$storedProcedure <- NULL
   eml_L0$dataset$view <- NULL
   eml_L0$dataset$otherEntity <- NULL
+  
+  eml_L0$additionalMetadata <- NULL
   
   # Create L1 EML -------------------------------------------------------------
   
@@ -662,10 +663,16 @@ create_eml <- function(path,
   provenance_L1 <- list(
     dataSource = r$dataSource,
     description = r$description)
+  # Remove any provenance nodes from the L0 metadata, otherwise they will be
+  # transferred to the L1 metadata, which would be an inaccurate representation
+  # of the provenance chain.
+  method_steps <- xml2::xml_find_all(xml_L0, "./dataset/methods/methodStep")
+  prov <- unlist(lapply(method_steps, is_prov))
+  eml_L0$dataset$methods$methodStep <- eml_L0$dataset$methods$methodStep[!prov]
   # Combine L1 methods, L0 methods, and L0 provenance
   eml_L0$dataset$methods$methodStep <- c(
     list(methods_L1),
-    list(eml_L0$data$methods$methodStep),
+    list(eml_L0$dataset$methods$methodStep),
     list(provenance_L1))
   
   # Update <dataTable> --------------------------------------------------------

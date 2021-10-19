@@ -13,49 +13,6 @@ test_data <- ants_L1
 # Load validation criteria for tables and columns
 criteria <- read_criteria()
 
-# validate_table_names() ------------------------------------------------------
-
-# TODO: This test fails devtools::check() but passes devtools::test()
-# testthat::test_that("validate_table_names()", {
-#   
-#   file.copy(
-#     system.file("/data", package = "ecocomDP"),
-#     tempdir(),
-#     recursive = TRUE)
-#   
-#   # Valid tables result in a corresponding list of table names
-#   
-#   r <- validate_table_names(paste0(tempdir(), "/data"))
-#   
-#   expect_equal(
-#     r, 
-#     dir(
-#       system.file("/data", package = "ecocomDP"), 
-#       pattern = "Ant_Assemblages_"))
-#   
-#   # More than one study name results in a character string
-#   
-#   file.rename(
-#     from = paste0(
-#       tempdir(), 
-#       "/data/Ant_Assemblages_in_Hemlock_Removal_Experiment_dataset_summary.csv"),
-#     to = paste0(
-#       tempdir(), 
-#       "/data/Ant_Assemblages_dataset_summary.csv"))
-#   
-#   expect_error(
-#     validate_table_names(paste0(tempdir(), "/data")),
-#     regexp = "File names. More than one study name found. Unique study")
-#   
-#   # Clean up
-#   
-#   unlink(
-#     paste0(tempdir(), "/data"), 
-#     recursive = TRUE, 
-#     force = TRUE)
-#   
-# })
-
 # validate_table_presence() ---------------------------------------------------
 
 testthat::test_that("validate_table_presence()", {
@@ -63,17 +20,17 @@ testthat::test_that("validate_table_presence()", {
     # Parameterize
     test_data <- ants_L1
     if (i == "df") { # test w/data.frame
-      for (tbl in names(test_data[[1]]$tables)) {
-        test_data[[1]]$tables[[tbl]] <- as.data.frame(test_data[[1]]$tables[[tbl]])
+      for (tbl in names(test_data$tables)) {
+        test_data$tables[[tbl]] <- as.data.frame(test_data$tables[[tbl]])
       }
     }
-    d <- test_data[[1]]$tables
+    d <- test_data$tables
     # Return message when all required tables are present.
     expect_null(validate_table_presence(d))
     # Return character string when required tables are missing.
     required_tables <- criteria$table[is.na(criteria$column) & criteria$required]
     for (i in required_tables) {
-      d <- test_data[[1]]$tables
+      d <- test_data$tables
       d[i] <- NULL
       r <- validate_table_presence(d)
       expect_true(
@@ -89,16 +46,16 @@ testthat::test_that("validate_column_names()", {
     # Parameterize
     test_data <- ants_L1
     if (i == "df") { # test w/data.frame
-      for (tbl in names(test_data[[1]]$tables)) {
-        test_data[[1]]$tables[[tbl]] <- as.data.frame(test_data[[1]]$tables[[tbl]])
+      for (tbl in names(test_data$tables)) {
+        test_data$tables[[tbl]] <- as.data.frame(test_data$tables[[tbl]])
       }
     }
-    d <- test_data[[1]]$tables
+    d <- test_data$tables
     # Return message when column spelling is correct.
     expect_null(validate_column_names(d))
     # Return character string when column spelling is incorrect.
     for (table in names(d)) {
-      d <- test_data[[1]]$tables
+      d <- test_data$tables
       invalid_names <- names(d[[table]])
       invalid_names[1:2] <- c("invalid_colname_1", "invalid_colname_2")
       names(d[[table]]) <- invalid_names
@@ -119,11 +76,11 @@ testthat::test_that("validate_column_presence()", {
     # Parameterize
     test_data <- ants_L1
     if (i == "df") { # test w/data.frame
-      for (tbl in names(test_data[[1]]$tables)) {
-        test_data[[1]]$tables[[tbl]] <- as.data.frame(test_data[[1]]$tables[[tbl]])
+      for (tbl in names(test_data$tables)) {
+        test_data$tables[[tbl]] <- as.data.frame(test_data$tables[[tbl]])
       }
     }
-    d <- test_data[[1]]$tables
+    d <- test_data$tables
     # Return message when required columns are present.
     expect_null(validate_column_presence(d))
     # Return character string when required columns are missing.
@@ -131,7 +88,7 @@ testthat::test_that("validate_column_presence()", {
       required_columns <- criteria$column[
         !is.na(criteria$column) & criteria$table == table & criteria$required]
       for (column in required_columns) {
-        d <- test_data[[1]]$tables
+        d <- test_data$tables
         d[[table]][[column]] <- NULL
         expect_true(
           stringr::str_detect(
@@ -150,16 +107,16 @@ testthat::test_that("validate_datetime()", {
     # Parameterize
     test_data <- ants_L1
     if (i == "df") { # test w/data.frame
-      for (tbl in names(test_data[[1]]$tables)) {
-        test_data[[1]]$tables[[tbl]] <- as.data.frame(test_data[[1]]$tables[[tbl]])
+      for (tbl in names(test_data$tables)) {
+        test_data$tables[[tbl]] <- as.data.frame(test_data$tables[[tbl]])
       }
     }
-    d <- test_data[[1]]$tables
+    d <- test_data$tables
     # Return message when datetime formats are valid.
     expect_null(validate_datetime(d))
     # Return character string when datetime formats are invalid.
     for (table in names(d)) {
-      d <- test_data[[1]]$tables
+      d <- test_data$tables
       datetime_columns <- criteria$column[
         !is.na(criteria$column) & 
           criteria$table == table & 
@@ -188,19 +145,19 @@ testthat::test_that("validate_column_classes()", {
     # Parameterize
     test_data <- ants_L1
     if (i == "df") { # test w/data.frame
-      for (tbl in names(test_data[[1]]$tables)) {
-        test_data[[1]]$tables[[tbl]] <- as.data.frame(test_data[[1]]$tables[[tbl]])
+      for (tbl in names(test_data$tables)) {
+        test_data$tables[[tbl]] <- as.data.frame(test_data$tables[[tbl]])
       }
     }
-    d <- test_data[[1]]$tables
+    d <- test_data$tables
     # Return message when column classes are valid.
     expect_null(validate_column_classes(d))
     # Return character string when column classes are invalid.
     for (table in names(d)) {
-      d <- test_data[[1]]$tables
+      d <- test_data$tables
       table_columns <- colnames(d[[table]])
       for (column in table_columns) {
-        d <- test_data[[1]]$tables
+        d <- test_data$tables
         d[[table]][[column]] <- as.logical(d[[table]][[column]])
         if (column != "datetime") {
           expect_true(
@@ -221,17 +178,17 @@ testthat::test_that("validate_primary_keys()", {
     # Parameterize
     test_data <- ants_L1
     if (i == "df") { # test w/data.frame
-      for (tbl in names(test_data[[1]]$tables)) {
-        test_data[[1]]$tables[[tbl]] <- as.data.frame(test_data[[1]]$tables[[tbl]])
+      for (tbl in names(test_data$tables)) {
+        test_data$tables[[tbl]] <- as.data.frame(test_data$tables[[tbl]])
       }
     }
-    d <- test_data[[1]]$tables
+    d <- test_data$tables
     # Unique primary keys result in message.
     expect_null(validate_primary_keys(d))
     # Non-unique primary keys result in character string.
     d$dataset_summary <- NULL
     for (table in names(d)) {
-      d <- test_data[[1]]$tables
+      d <- test_data$tables
       primary_key_columns <- criteria$column[
         !is.na(criteria$column) & 
           criteria$table == table & 
@@ -255,16 +212,16 @@ testthat::test_that("validate_composite_keys()", {
     # Parameterize
     test_data <- ants_L1
     if (i == "df") { # test w/data.frame
-      for (tbl in names(test_data[[1]]$tables)) {
-        test_data[[1]]$tables[[tbl]] <- as.data.frame(test_data[[1]]$tables[[tbl]])
+      for (tbl in names(test_data$tables)) {
+        test_data$tables[[tbl]] <- as.data.frame(test_data$tables[[tbl]])
       }
     }
-    d <- test_data[[1]]$tables
+    d <- test_data$tables
     # Unique composite keys result in message.
     expect_null(validate_composite_keys(d))
     # Non-unique composite keys result in character string.
     for (table in names(d)) {
-      d <- test_data[[1]]$tables
+      d <- test_data$tables
       composite_key_columns <- criteria$column[
         !is.na(criteria$column) & 
           criteria$table == table & 
@@ -293,16 +250,16 @@ testthat::test_that("validate_referential_integrity()", {
     # Parameterize
     test_data <- ants_L1
     if (i == "df") { # test w/data.frame
-      for (tbl in names(test_data[[1]]$tables)) {
-        test_data[[1]]$tables[[tbl]] <- as.data.frame(test_data[[1]]$tables[[tbl]])
+      for (tbl in names(test_data$tables)) {
+        test_data$tables[[tbl]] <- as.data.frame(test_data$tables[[tbl]])
       }
     }
-    d <- test_data[[1]]$tables
+    d <- test_data$tables
     # Valid referential integrity results in message.
     expect_null(validate_referential_integrity(d))
     # Invalid referential integrity results in character string.
     for (table in names(d)) {
-      d <- test_data[[1]]$tables
+      d <- test_data$tables
       primary_key <- criteria$column[
         (criteria$table == table) & 
           !is.na(criteria$column) & 
@@ -313,7 +270,7 @@ testthat::test_that("validate_referential_integrity()", {
           (criteria$column == primary_key)]
       for (fk_table in foreign_key_table) {
         if (fk_table != table) {
-          d <- test_data[[1]]$tables
+          d <- test_data$tables
           d[[fk_table]][[primary_key]][1] <- "invalid_foreign_key"
           expect_true(
             stringr::str_detect(
@@ -342,16 +299,16 @@ testthat::test_that("validate_latitude_longitude_format()", {
     # Parameterize
     test_data <- ants_L1
     if (i == "df") { # test w/data.frame
-      for (tbl in names(test_data[[1]]$tables)) {
-        test_data[[1]]$tables[[tbl]] <- as.data.frame(test_data[[1]]$tables[[tbl]])
+      for (tbl in names(test_data$tables)) {
+        test_data$tables[[tbl]] <- as.data.frame(test_data$tables[[tbl]])
       }
     }
-    d <- test_data[[1]]$tables
+    d <- test_data$tables
     # Valid latitude and longitude results in message.
     expect_null(validate_latitude_longitude_format(d))
     # Invalid latitude and longitude results in character string.
     for (i in c("latitude", "longitude")) {
-      d <- test_data[[1]]$tables
+      d <- test_data$tables
       d$location[[i]][1:2] <- "invalid_coordinate"
       expect_true(
         stringr::str_detect(
@@ -368,16 +325,16 @@ testthat::test_that("validate_latitude_longitude_range()", {
     # Parameterize
     test_data <- ants_L1
     if (i == "df") { # test w/data.frame
-      for (tbl in names(test_data[[1]]$tables)) {
-        test_data[[1]]$tables[[tbl]] <- as.data.frame(test_data[[1]]$tables[[tbl]])
+      for (tbl in names(test_data$tables)) {
+        test_data$tables[[tbl]] <- as.data.frame(test_data$tables[[tbl]])
       }
     }
-    d <- test_data[[1]]$tables
+    d <- test_data$tables
     # Valid latitude and longitude results in message.
     expect_null(validate_latitude_longitude_range(d))
     # Invalid latitude and longitude results in character string.
     for (i in c("latitude", "longitude")) {
-      d <- test_data[[1]]$tables
+      d <- test_data$tables
       if (i == "latitude") {
         d$location[[i]][3:4] <- c(100, -100)
         expect_true(
@@ -406,11 +363,11 @@ testthat::test_that("validate_elevation()", {
     # Parameterize
     test_data <- ants_L1
     if (i == "df") { # test w/data.frame
-      for (tbl in names(test_data[[1]]$tables)) {
-        test_data[[1]]$tables[[tbl]] <- as.data.frame(test_data[[1]]$tables[[tbl]])
+      for (tbl in names(test_data$tables)) {
+        test_data$tables[[tbl]] <- as.data.frame(test_data$tables[[tbl]])
       }
     }
-    d <- test_data[[1]]$tables
+    d <- test_data$tables
     # Valid elevation results in message.
     expect_null(validate_elevation(d))
     # Invalid elevation results in character string.
@@ -432,17 +389,17 @@ testthat::test_that("validate_variable_mapping()", {
     # Parameterize
     test_data <- ants_L1
     if (i == "df") { # test w/data.frame
-      for (tbl in names(test_data[[1]]$tables)) {
-        test_data[[1]]$tables[[tbl]] <- as.data.frame(test_data[[1]]$tables[[tbl]])
+      for (tbl in names(test_data$tables)) {
+        test_data$tables[[tbl]] <- as.data.frame(test_data$tables[[tbl]])
       }
     }
-    d <- test_data[[1]]$tables
+    d <- test_data$tables
     # Valid variable_mapping results in message.
     expect_null(validate_variable_mapping(d))
     # variable_name in variable_mapping but missing from the referenced table
     # results in character string
     for (tbl in unique(d$variable_mapping$table_name)) {
-      d <- test_data[[1]]$tables
+      d <- test_data$tables
       i <- d$variable_mapping$table_name %in% tbl
       tblvars <- d$variable_mapping$variable_name[i]
       d$variable_mapping$variable_name[i] <- paste0("var_", seq(length(tblvars)))
@@ -451,8 +408,35 @@ testthat::test_that("validate_variable_mapping()", {
           validate_variable_mapping(d),
           paste0(
             "Variable mapping. The variable_mapping table has these ",
-            "variable_name values without a match in the ", tbl, " table: +.")))
+            "variable_name values without a match in the ", tbl, " table: .+")))
     }
+  }
+})
+
+
+# validate_mapped_id() --------------------------------------------------------
+
+testthat::test_that("validate_mapped_id()", {
+  
+  testthat::skip_on_cran()
+  
+  for (i in c("df", "tbbl")) {
+    # Parameterize
+    test_data <- ants_L1
+    if (i == "df") { # test w/data.frame
+      for (tbl in names(test_data$tables)) {
+        test_data$tables[[tbl]] <- as.data.frame(test_data$tables[[tbl]])
+      }
+    }
+    d <- test_data$tables
+    d$variable_mapping <- d$variable_mapping[1, ]
+    # Valid mapped_id results in message.
+    expect_null(validate_mapped_id(d))
+    # Invalid mapped_id results in character string
+    d$variable_mapping$mapped_id <- "shttp://rs.tdwg.org/dwc/terms/measurementType"
+    resp <- validate_mapped_id(d)
+    res <- stringr::str_detect(resp, "mapped_id values that don't resolve:.+")
+    expect_true(res)
   }
 })
 
@@ -461,10 +445,10 @@ testthat::test_that("validate_variable_mapping()", {
 testthat::test_that("validate_data", {
   for (i in c("df", "tbbl")) {
     # Parameterize
-    test_data <- ants_L1
+    test_data <- trim_data_for_test(ants_L1)
     if (i == "df") { # test w/data.frame
-      for (tbl in names(test_data[[1]]$tables)) {
-        test_data[[1]]$tables[[tbl]] <- as.data.frame(test_data[[1]]$tables[[tbl]])
+      for (tbl in names(test_data$tables)) {
+        test_data$tables[[tbl]] <- as.data.frame(test_data$tables[[tbl]])
       }
     }
     d <- test_data
@@ -473,34 +457,34 @@ testthat::test_that("validate_data", {
     # error.
     
     # Create issue for validate_table_presence()
-    d[[1]]$tables$dataset_summary <- NULL
+    d$tables$dataset_summary <- NULL
     # Create issue for validate_column_presence()
-    d[[1]]$tables$taxon$taxon_name <- NULL
+    d$tables$taxon$taxon_name <- NULL
     # Create issue for validate_datetime()
-    d[[1]]$tables$location_ancillary$datetime <- as.character(d[[1]]$tables$location_ancillary$datetime)
-    d[[1]]$tables$location_ancillary$datetime[1] <- "08/22/2020"
+    d$tables$location_ancillary$datetime <- as.character(d$tables$location_ancillary$datetime)
+    d$tables$location_ancillary$datetime[1] <- "08/22/2020"
     # Create issue for validate_column_classes()
-    d[[1]]$tables$location$latitude <- as.character(d[[1]]$tables$location$latitude)
+    d$tables$location$latitude <- as.character(d$tables$location$latitude)
     # Create issue for validate_primary_keys()
-    d[[1]]$tables$taxon$taxon_id[2] <- d[[1]]$tables$taxon$taxon_id[1]
+    d$tables$taxon$taxon_id[2] <- d$tables$taxon$taxon_id[1]
     # Create issue for validate_composite_keys()
-    d[[1]]$tables$location_ancillary$location_id[3] <- d[[1]]$tables$location_ancillary$location_id[2]
-    d[[1]]$tables$location_ancillary$datetime[3] <- d[[1]]$tables$location_ancillary$datetime[2]
-    d[[1]]$tables$location_ancillary$variable_name[3] <- d[[1]]$tables$location_ancillary$variable_name[2]
+    d$tables$location_ancillary$location_id[3] <- d$tables$location_ancillary$location_id[2]
+    d$tables$location_ancillary$datetime[3] <- d$tables$location_ancillary$datetime[2]
+    d$tables$location_ancillary$variable_name[3] <- d$tables$location_ancillary$variable_name[2]
     # Create issue for validate_referential_integrity()
-    d[[1]]$tables$observation$observation_id[1] <- "invalid_foreign_key"
-    d[[1]]$tables$observation$package_id[1] <- "invalid_foreign_key"
-    d[[1]]$tables$observation$location_id[1] <- "invalid_foreign_key"
-    d[[1]]$tables$observation$taxon_id[1] <- "invalid_foreign_key"
+    d$tables$observation$observation_id[1] <- "invalid_foreign_key"
+    d$tables$observation$package_id[1] <- "invalid_foreign_key"
+    d$tables$observation$location_id[1] <- "invalid_foreign_key"
+    d$tables$observation$taxon_id[1] <- "invalid_foreign_key"
     # Create issue for validate_latitude_longitude_format()
-    d[[1]]$tables$location$latitude[3] <- "invalid_coordinate_format"
-    d[[1]]$tables$location$longitude[3] <- "invalid_coordinate_format"
+    d$tables$location$latitude[3] <- "invalid_coordinate_format"
+    d$tables$location$longitude[3] <- "invalid_coordinate_format"
     # Create issue for validate_latitude_longitude_format()
-    d[[1]]$tables$location$latitude[4] <- -100
-    d[[1]]$tables$location$longitude[4] <- -190
+    d$tables$location$latitude[4] <- -100
+    d$tables$location$longitude[4] <- -190
     # Create issue for validate_elevation()
-    d[[1]]$tables$location$elevation[4] <- 8849
-    d[[1]]$tables$location$elevation[5] <- -10985
+    d$tables$location$elevation[4] <- 8849
+    d$tables$location$elevation[5] <- -10985
     
     issues <- suppressWarnings(validate_data(dataset = d))
     expect_equal(length(issues), 17)

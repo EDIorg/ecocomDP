@@ -1,5 +1,5 @@
 ---
-title: "Convert"
+title: "Convert ecocomDP Data to Another Model Format"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Convert}
@@ -16,7 +16,7 @@ options(tibble.print_min = 4L, tibble.print_max = 4L)
 library(ecocomDP)
 ```
 
-Converting an ecocomDP dataset to another model format can be as simple as calling a single function. Currently, we support conversion to the Darwin Core Archive (DwC-A) Event Core.
+Converting ecocomDP data to another model format can be as simple as calling a single function. We currently support conversion to the Darwin Core Archive (DwC-A) Event Core.
 
 ## DwC-A Event Core
 

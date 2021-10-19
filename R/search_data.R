@@ -1,4 +1,4 @@
-#' Search across all ecocomDP datasets
+#' Search published data
 #' 
 #' @param text (character) Text to search for in dataset titles, descriptions, and abstracts. Datasets matching any exact words or phrase will be returned. Can be a regular expression as used by \code{stringr::str_detect()}. Is not case sensitive. Works with \code{boolean}.
 #' @param taxa (character) Taxonomic rank values to search on. The full taxonomic hierarchy of each taxa in a dataset is searchable for EDI (including common names) but not yet NEON, in which cases the lowest level rank value is searchable.

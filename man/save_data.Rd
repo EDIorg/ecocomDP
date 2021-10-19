@@ -2,7 +2,7 @@
 % Please edit documentation in R/save_data.R
 \name{save_data}
 \alias{save_data}
-\title{Save an ecocomDP dataset}
+\title{Save a dataset}
 \usage{
 save_data(dataset, path, type = ".rds", name = NULL)
 }
@@ -20,31 +20,35 @@ save_data(dataset, path, type = ".rds", name = NULL)
     \item{.csv}{If \code{type = ".csv"}, then an set of .csv files are written to a sub-directory of \code{path} named after the data package/product ID.}
 }
 \description{
-Save an ecocomDP dataset
+Save a dataset
 }
 \note{
 Subsequent calls won't overwrite files or directories
 }
 \examples{
-# Create a list of datasets
-datasets <- c(ants_L1, ants_L1, ants_L1)  # 3 of the same, with different names
-names(datasets) <- c("ds1", "ds2", "ds3")
-
 # Create directory for the data
 mypath <- paste0(tempdir(), "/data")
 dir.create(mypath)
 
 # Save as .rds
-save_data(datasets, mypath)
+save_data(ants_L1, mypath)
 dir(mypath)
 
 # Save as .rds with the name "mydata"
-save_data(datasets, mypath, name = "mydata")
+save_data(ants_L1, mypath, name = "mydata")
 dir(mypath)
 
 # Save as .csv
-save_data(datasets, mypath, type = ".csv")
+save_data(ants_L1, mypath, type = ".csv")
 dir(mypath)
+
+\dontrun{
+# Save multiple datasets
+ids <- c("edi.193.5", "edi.303.2", "edi.290.2")
+datasets <- lapply(ids, read_data)
+save_data(datasets, mypath)
+dir(mypath)
+}
 
 # Clean up
 unlink(mypath, recursive = TRUE)

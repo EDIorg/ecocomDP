@@ -1,5 +1,5 @@
 ---
-title: "Use"
+title: "Use ecocomDP Data"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Use}
@@ -12,7 +12,7 @@ knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 options(tibble.print_min = 4L, tibble.print_max = 4L)
 ```
 
-A set of "use" functions help you search, read, save, plot, and flatten ecocomDP datasets.
+A set of "use" functions help you search, read, manipulate, plot, and save ecocomDP data.
 
 ```{r, eval=FALSE, setup}
 library(ecocomDP)
@@ -24,7 +24,7 @@ library(ecocomDP)
 
 ## Search
 
-Find datasets of interest by searching on one or more query parameters. 
+Find data of interest by searching on one or more query parameters. 
 
 All available datasets are returned with an empty call to `search_data()`:
 
@@ -114,9 +114,9 @@ r$title
 
 See `?search_data` for additional query parameters.
 
-## Read and Save
+## Read
 
-Read datasets from host APIs to get the newest authoritative version, save local copies for manipulation, and re-read local copies to resume saved work.
+Read data from host APIs to get the newest authoritative version.
 
 Read from the host API:
 
@@ -199,15 +199,60 @@ dataset_2 <- read_data(
 #>   variable_mapping
 ```
 
-A dataset is returned as a list of metadata, tables, and validation issues (if there are any). The dataset ID is assigned to the top level for reference.
+A data are returned as a list of metadata, tables, and validation issues (if there are any). The dataset identifier is at the top of this list.
 
-```{r}
+```{r include=FALSE}
 dataset_1 <- ants_L1
 ```
 
 ```{r}
 str(dataset_1)
 ```
+
+## Manipulate
+
+Working with a "flattened" dataset simplifies common tasks (select, filter, arrange, group, summarize). A "flat" version is where all tables have been joined and spread wide except for the core observation variables, which remain in long form.
+
+```{r}
+flat <- flatten_data(dataset_1)
+flat
+```
+
+## Plot
+
+Visually explore data with the plotting functions:
+
+```{r fig.height=4, fig.width=7}
+plot_taxa_accum_time(flat)
+
+plot_taxa_diversity(flat)
+plot_taxa_diversity(flat, time_window_size = "month")
+plot_taxa_diversity(flat, time_window_size = "year")
+
+plot_sample_space_time(flat)
+
+plot_taxa_shared_sites(flat)
+
+plot_taxa_rank(flat, facet_var = "location_id")
+
+plot_taxa_occur_freq(
+  data = flat,
+  facet_var = "location_id",
+  color_var = "taxon_rank")
+
+plot_taxa_abund(
+  data = flat,
+  facet_var = "location_id",
+  color_var = "taxon_rank",
+  trans = "log10")
+
+plot_sites(flat)
+```
+
+
+## Save
+
+Save local copies and read them back in later.
 
 Save a local copy as .rds:
 
@@ -216,17 +261,11 @@ datasets <- c(ants_L1, ants_L1)
 ```
 
 ```{r, eval=FALSE}
-datasets <- c(dataset_1, dataset_2)
+datasets <- list(dataset_1, dataset_2)
 mypath <- paste0(tempdir(), "/data")
 dir.create(mypath)
 
 save_data(datasets, mypath)
-```
-
-Save a local copy as .csv:
-
-```{r, eval=FALSE}
-save_data(datasets, mypath, type = ".csv")
 ```
 
 Read a local copy from .rds
@@ -261,6 +300,12 @@ datasets <- read_data(from = paste0(mypath, "/datasets.rds"))
 #>   variable_mapping
 ```
 
+Save a local copy as .csv:
+
+```{r, eval=FALSE}
+save_data(datasets, mypath, type = ".csv")
+```
+
 Read a local copy from .csv:
 
 ```{r, eval=FALSE}
@@ -291,29 +336,4 @@ datasets <- read_data(from = mypath)
 #>   Latitude and longitude range
 #>   Elevation
 #>   variable_mapping
-
-```
-
-## Plot
-
-Visually explore a dataset with some basic plots:
-
-```{r fig.height=4, fig.width=7}
-observation_table <- datasets[[1]]$tables$observation
-dataset_id <- names(datasets[1])
-
-plot_taxa_sample_time(observation_table, dataset_id)
-plot_taxa_diversity(observation_table, dataset_id)
-plot_taxa_accum_sites(observation_table, dataset_id)
-plot_taxa_accum_time(observation_table, dataset_id)
-plot_taxa_shared_sites(observation_table, dataset_id)
-```
-
-## Flatten
-
-Working with a "flat" version of a dataset may be your preference at times. A "flat" version is where all tables have been joined and spread wide except for the core observation variables, which remain in long form.
-
-```{r}
-flat <- flatten_data(datasets[[1]]$tables)
-flat
 ```

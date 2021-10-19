@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_data.R
 \name{read_data}
 \alias{read_data}
-\title{Read an ecocomDP dataset}
+\title{Read published data}
 \usage{
 read_data(
   id = NULL,
@@ -19,7 +19,8 @@ read_data(
   neon.data.save.dir = NULL,
   neon.data.read.path = NULL,
   ...,
-  from = NULL
+  from = NULL,
+  format = "new"
 )
 }
 \arguments{
@@ -52,21 +53,20 @@ read_data(
 \item{...}{For NEON data, other arguments to \code{neonUtilities::loadByProduct()}}
 
 \item{from}{(character) Full path of file to be read (if .rds), or path to directory containing saved datasets (if .csv).}
+
+\item{format}{(character) Format of returned object, which can be: "new" (the new implementation) or "old" (the original implementation; deprecated). In the new format, the top most level of nesting containing the "id" field has been moved to the same level as the "tables", "metadata", and "validation_issues" fields.}
 }
 \value{
-(list) with the structure:
-    \itemize{
-      \item id - Dataset identifier
-        \itemize{
-          \item metadata - List of info about the dataset. NOTE: This object is underdevelopment and content may change in future releases.
-          \item tables - List of dataset tables as data.frames.
-          \item validation_issues - List of validation issues. If the dataset fails any validation checks, 
-    then descriptions of each issue are listed here.
-      }
-    }
+(list) A dataset with the structure:
+\itemize{
+  \item id - Dataset identifier
+  \item metadata - List of info about the dataset. NOTE: This object is underdevelopment and content may change in future releases.
+  \item tables - List of dataset tables as data.frames.
+  \item validation_issues - List of validation issues. If the dataset fails any validation checks, then descriptions of each issue are listed here.
+}
 }
 \description{
-Read an ecocomDP dataset
+Read published data
 }
 \details{
 Validation checks are applied to each dataset ensuring it complies with the ecocomDP model. A warning is issued when any validation checks fail. All datasets are returned, even if they fail validation.
@@ -88,50 +88,30 @@ This function may not work between 01:00 - 03:00 UTC on Wednesdays due to regula
 \dontrun{
 # Read from EDI
 dataset <- read_data("edi.193.5")
-# str(dataset)
-}
+str(dataset, max.level = 2)
 
-\dontrun{
 # Read from NEON (full dataset)
 dataset <- read_data("neon.ecocomdp.20120.001.001")
-}
 
-\dontrun{
 # Read from NEON with filters (partial dataset)
 dataset <- read_data(
-  id = "neon.ecocomdp.20120.001.001", 
-  site = c("COMO", "LECO", "SUGG"),
-  startdate = "2017-06", 
-  enddate = "2019-09",
-  check.size = FALSE)
-}
+ id = "neon.ecocomdp.20120.001.001", 
+ site = c("COMO", "LECO", "SUGG"),
+ startdate = "2017-06", 
+ enddate = "2019-09",
+ check.size = FALSE)
 
-\dontrun{
 # Read with datetimes as character
 dataset <- read_data("edi.193.5", parse_datetime = FALSE)
-is.character(dataset$edi.193.5$tables$observation$datetime)
+is.character(dataset$tables$observation$datetime)
+
+# Read from saved .rds
+save_data(dataset, tempdir())
+dataset <- read_data(from = paste0(tempdir(), "/dataset.rds"))
+
+# Read from saved .csv
+save_data(dataset, tempdir(), type = ".csv")# Save as .csv
+dataset <- read_data(from = tempdir())
 }
-
-# Save a list of datasets for reading
-datasets <- c(ants_L1, ants_L1, ants_L1)  # 3 of the same, w/different names
-names(datasets) <- c("ds1", "ds2", "ds3")
-mypath <- paste0(tempdir(), "/datasets")      # A place for saving
-dir.create(mypath)
-save_data(datasets, mypath)               # Save as .rds
-save_data(datasets, mypath, type = ".csv")# Save as .csv
-
-# Read from local .rds
-datasets <- read_data(from = paste0(mypath, "/datasets.rds"))
-
-# Read from local .csv
-datasets <- read_data(from = mypath)
-
-# A dataset is returned as a list of metadata, tables, and validation issues
-# (if there are any). The dataset ID is assigned to the top level for 
-# reference.
-str(datasets[1])
-
-# Clean up
-unlink(mypath, recursive = TRUE)
 
 }

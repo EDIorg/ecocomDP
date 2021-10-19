@@ -2,7 +2,7 @@
 % Please edit documentation in R/validate_data.R
 \name{validate_data}
 \alias{validate_data}
-\title{Validate a dataset against the ecocomDP model}
+\title{Validate tables against the model}
 \usage{
 validate_data(dataset = NULL, path = NULL)
 }
@@ -15,7 +15,7 @@ validate_data(dataset = NULL, path = NULL)
 (list) If any checks fail, then a list of validation issues are returned along with a warning. If no issues are found then NULL is returned.
 }
 \description{
-Validate a dataset against the ecocomDP model
+Validate tables against the model
 }
 \details{
 Validation checks:
@@ -33,30 +33,33 @@ Validation checks:
        \item Coordinate range - Values are within -90 to 90 and -180 to 180.
        \item Elevation - Values are less than Mount Everest (8848 m) and greater than Mariana Trench (-10984 m).
        \item Variable mapping - variable_name is in table_name.
+       \item Mapped_id - values in mapped_id are valid URIs
    }
 }
 \note{
 This function is used by ecocomDP creators (to ensure what has been created is valid), maintainers (to improve the quality of archived ecocomDP datasets), and users (to ensure the data being used is free of error).
 }
 \examples{
+\dontrun{
 # Write a set of ecocomDP tables to file for validation
 mydir <- paste0(tempdir(), "/dataset")
 dir.create(mydir)
 write_tables(
   path = mydir,
-  observation = ants_L1$edi.193.5$tables$observation, 
-  observation_ancillary = ants_L1$edi.193.5$tables$observation_ancillary,
-  location = ants_L1$edi.193.5$tables$location,
-  location_ancillary = ants_L1$edi.193.5$tables$location_ancillary,
-  taxon = ants_L1$edi.193.5$tables$taxon,
-  taxon_ancillary = ants_L1$edi.193.5$tables$taxon_ancillary,
-  dataset_summary = ants_L1$edi.193.5$tables$dataset_summary,
-  variable_mapping = ants_L1$edi.193.5$tables$variable_mapping)
+  observation = ants_L1$tables$observation, 
+  observation_ancillary = ants_L1$tables$observation_ancillary,
+  location = ants_L1$tables$location,
+  location_ancillary = ants_L1$tables$location_ancillary,
+  taxon = ants_L1$tables$taxon,
+  taxon_ancillary = ants_L1$tables$taxon_ancillary,
+  dataset_summary = ants_L1$tables$dataset_summary,
+  variable_mapping = ants_L1$tables$variable_mapping)
 
 # Validate
 validate_data(path = mydir)
 
 # Clean up
 unlink(mydir, recursive = TRUE)
+}
 
 }

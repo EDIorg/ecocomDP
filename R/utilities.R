@@ -464,6 +464,82 @@ coerce_table_classes <- function(tbl, name, cls) {
 
 
 
+#' Detect the type of object input to the \code{data} parameter
+#' 
+#' @description The \code{data} parameter, used by a few functions in the ecocomDP package, can accept different object types. \code{detect_data_type()} identifies the object type, which the calling function typically uses in some flow control logic.
+#' 
+#' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation table, or a flat table containing columns of the observation table.
+#' 
+#' @return (character) The type of \code{data}, which is one of:
+#' \itemize{
+#'   \item "dataset": The default return of \code{read_data()}
+#'   \item "list_of_datasets": > 1 "dataset"
+#'   \item "table": A flat table
+#'   \item "list_of_tables": The named list of L1 tables (i.e. read_data()$tables)
+#'   \item "dataset_old": The old, and since deprecated, return of \code{read_data()}
+#'   \item "list_of_datasets_old": > 1 "dataset_old"
+#' }
+#' 
+#' Unrecognized types will thorw an error.
+#' 
+#' @noRd
+#' 
+detect_data_type <- function(data){
+  table_names <- unique(read_criteria()$table)
+  # dataset
+  if (("list" %in% class(data)) & ("tables" %in% names(data))) {
+    if (sum(names(data) == "tables") == 1) {
+      return("dataset")
+    }
+  }
+  # list_of_datasets
+  if (("list" %in% class(data)) & (length(data) > 1)) {
+    res <- lapply(data, function(x) {"tables" %in% names(x)})
+    if (all(unlist(res))) {
+      return("list_of_datasets")
+    }
+  }
+  # table
+  if(all(class(data) %in% c("data.frame", "tbl_df", "tbl"))){
+    return("table")
+  }
+  # list_of_tables
+  if(("list" %in% class(data)) & any(table_names %in% names(data))) {
+    return("list_of_tables")
+  }
+  # dataset_old
+  is_dataset_old <- function(x) {
+    if ("list" %in% class(x)) {
+      if ("tables" %in% names(x)) {
+        return(FALSE)
+      }
+      if (length(x) == 1) {
+        if ("tables" %in% names(x[[1]])) {
+          return(TRUE)
+        }
+      }
+    }
+    return(FALSE)
+  }
+  if (is_dataset_old(data)) {
+    warning('Input to "data" is an old and deprecated format. Please use the ',
+            'new format instead. See ?read_data for more info.', call. = FALSE)
+    return("dataset_old")
+  }
+  # list_of_dataset_old
+  if (!is.null(data) & all(unlist(lapply(data, is_dataset_old)))) {
+    return("list_of_datasets_old")
+  }
+  # unrecognized
+  stop('Input to "data" is not one of the supported types.', call. = FALSE)
+}
+
+
+
+
+
+
+
 
 # Detect field delimiter of file
 #
@@ -850,6 +926,81 @@ get_eol <- function(path, file.name, os){
 
 
 
+#' Get the dataset \code{id} from a \code{data} argument
+#' 
+#' @description Several functions use the \code{id} parameter. This helper function gets the \code{id} if it can be found in \code{data}.
+#'
+#' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation table, or a flat table containing columns of the observation table.
+#'
+#' @return (character) The dataset identifier
+#' 
+#' @noRd
+#'
+get_id <- function(data) {
+  # Get the id from allowed object types and return NA if missing
+  if (detect_data_type(data) == "dataset") {
+    res <- data$id
+    if (is.null(res)) {
+      res <- NA_character_
+    }
+  } else if (detect_data_type(data) == "dataset_old") {
+    res <- names(data)
+    if (is.null(res)) {
+      res <- NA_character_
+    }
+  } else {
+    res <- NA_character_
+  }
+  return(res)
+}
+
+
+
+
+
+
+
+
+#' Get the observation table from a \code{data} argument
+#' 
+#' @description Several functions operate on the observation table but accept a broader set of inputs via the \code{data} parameter. This helper function does that.
+#'
+#' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation table, or a flat table containing columns of the observation table.
+#'
+#' @return (tbl_df, tbl, data.frame) The observation table.
+#' 
+#' @noRd
+#'
+get_observation_table <- function(data) {
+  # Get the observation table from allowed object types and error if missing
+  if (detect_data_type(data) == "dataset") {
+    table <- data$tables[["observation"]]
+  } else if (detect_data_type(data) == "list_of_tables") {
+    table <- data[["observation"]]
+  } else if (detect_data_type(data) == "dataset_old") {
+    table <- data[[1]]$tables[["observation"]]
+  }
+  if (is.null(table)) {
+    stop('Input argument "data" does not contain the observation table', 
+         call. = FALSE)
+  }
+  if (detect_data_type(data) == "table") {
+    table <- data %>% dplyr::distinct()
+  }
+  # Extract all columns of the observation table and error if missing
+  criteria <- dplyr::filter(read_criteria(), table == "observation")
+  obs_cols <- stats::na.omit(criteria$column)
+  res <- dplyr::select(table, dplyr::all_of(obs_cols))
+  return(res)
+}
+
+
+
+
+
+
+
+
 # Does dataset ID belong to EDI?
 #
 # @param id (character) Dataset identifier 
@@ -1051,11 +1202,6 @@ ping_edi <- function() {
          "later.", call. = FALSE)
   }
 }
-
-
-
-
-
 
 
 
@@ -1500,6 +1646,26 @@ url_env <- function(environment){
 
 
 
+# Trim data object for faster tests
+#
+# @param dataset (list) Data list object returned by \code{read_data()}
+#
+# @return (list of data frames) \code{data.list} with some content removed. 
+#
+trim_data_for_test <- function(dataset) {
+  # Remove variable_mapping so validate_mapped_id() doesn't overload target 
+  # APIs
+  dataset$tables$variable_mapping <- NULL
+  return(dataset)
+}
+
+
+
+
+
+
+
+
 # Validate file names
 #
 # @description  
@@ -1607,50 +1773,6 @@ validate_path <- function(path){
   
 }
 
-
-
-
-
-
-
-
-
-#' View descriptions and requirements of ecocomDP tables
-#' 
-#' @return (NULL) Opens a webpage, in your default browser, with a list of descriptions and requirements of the ecocomDP tables
-#'
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' view_descriptions()
-#' }
-#' 
-view_descriptions <- function() {
-  utils::browseURL("https://github.com/EDIorg/ecocomDP/blob/master/model/table_description.md")
-}
-
-
-
-
-
-
-
-
-#' View diagram of ecocomDP tables and relationships
-#' 
-#' @return (NULL) Opens a webpage, in your default browser, with a diagram keys and linkages among ecocomDP tables
-#'
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' view_diagram()
-#' }
-#' 
-view_diagram <- function() {
-  utils::browseURL("https://github.com/EDIorg/ecocomDP/blob/master/model/table_visualization.md")
-}
 
 
 
@@ -1904,7 +2026,7 @@ vocab_resolve_terms <- function(x, cv, messages = FALSE, interactive = FALSE){
 
 
 
-#' Write ecocomDP tables to file
+#' Write tables to file
 #'
 #' @param path (character) A path to the directory in which the files will be written.
 #' @param sep (character) Field delimiter to use when writing files. Default is comma.

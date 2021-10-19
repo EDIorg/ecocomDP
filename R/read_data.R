@@ -1,4 +1,4 @@
-#' Read an ecocomDP dataset
+#' Read published data
 #'
 #' @param id (character) Identifier of dataset to read. Identifiers are listed in the "id" column of the \code{search_data()} output. Older versions of datasets can be read, but a warning is issued.
 #' @param parse_datetime (logical) Parse datetime values if TRUE, otherwise return as character strings.
@@ -15,18 +15,15 @@
 #' @param neon.data.read.path (character) For NEON data, an optional and experimental argument (i.e. may not be supported in future releases), defining a path to read in an .rds file of 'stacked NEON data' from \code{neonUtilities::loadByProduct()}. See details below for more information.
 #' @param ... For NEON data, other arguments to \code{neonUtilities::loadByProduct()}
 #' @param from (character) Full path of file to be read (if .rds), or path to directory containing saved datasets (if .csv).
+#' @param format (character) Format of returned object, which can be: "new" (the new implementation) or "old" (the original implementation; deprecated). In the new format, the top most level of nesting containing the "id" field has been moved to the same level as the "tables", "metadata", and "validation_issues" fields.
 #'     
-#' @return
-#'     (list) with the structure:
-#'     \itemize{
-#'       \item id - Dataset identifier
-#'         \itemize{
-#'           \item metadata - List of info about the dataset. NOTE: This object is underdevelopment and content may change in future releases.
-#'           \item tables - List of dataset tables as data.frames.
-#'           \item validation_issues - List of validation issues. If the dataset fails any validation checks, 
-#'     then descriptions of each issue are listed here.
-#'       }
-#'     }
+#' @return (list) A dataset with the structure:
+#' \itemize{
+#'   \item id - Dataset identifier
+#'   \item metadata - List of info about the dataset. NOTE: This object is underdevelopment and content may change in future releases.
+#'   \item tables - List of dataset tables as data.frames.
+#'   \item validation_issues - List of validation issues. If the dataset fails any validation checks, then descriptions of each issue are listed here.
+#' }
 #' 
 #' @note This function may not work between 01:00 - 03:00 UTC on Wednesdays due to regular maintenance of the EDI Data Repository.
 #' 
@@ -49,58 +46,39 @@
 #' \dontrun{
 #' # Read from EDI
 #' dataset <- read_data("edi.193.5")
-#' # str(dataset)
-#' }
+#' str(dataset, max.level = 2)
 #' 
-#' \dontrun{
 #' # Read from NEON (full dataset)
 #' dataset <- read_data("neon.ecocomdp.20120.001.001")
-#' }
 #' 
-#' \dontrun{
 #' # Read from NEON with filters (partial dataset)
 #' dataset <- read_data(
-#'   id = "neon.ecocomdp.20120.001.001", 
-#'   site = c("COMO", "LECO", "SUGG"),
-#'   startdate = "2017-06", 
-#'   enddate = "2019-09",
-#'   check.size = FALSE)
-#' }
+#'  id = "neon.ecocomdp.20120.001.001", 
+#'  site = c("COMO", "LECO", "SUGG"),
+#'  startdate = "2017-06", 
+#'  enddate = "2019-09",
+#'  check.size = FALSE)
 #' 
-#' \dontrun{
 #' # Read with datetimes as character
 #' dataset <- read_data("edi.193.5", parse_datetime = FALSE)
-#' is.character(dataset$edi.193.5$tables$observation$datetime)
+#' is.character(dataset$tables$observation$datetime)
+#' 
+#' # Read from saved .rds
+#' save_data(dataset, tempdir())
+#' dataset <- read_data(from = paste0(tempdir(), "/dataset.rds"))
+#' 
+#' # Read from saved .csv
+#' save_data(dataset, tempdir(), type = ".csv")# Save as .csv
+#' dataset <- read_data(from = tempdir())
 #' }
-#' 
-#' # Save a list of datasets for reading
-#' datasets <- c(ants_L1, ants_L1, ants_L1)  # 3 of the same, w/different names
-#' names(datasets) <- c("ds1", "ds2", "ds3")
-#' mypath <- paste0(tempdir(), "/datasets")      # A place for saving
-#' dir.create(mypath)
-#' save_data(datasets, mypath)               # Save as .rds
-#' save_data(datasets, mypath, type = ".csv")# Save as .csv
-#' 
-#' # Read from local .rds
-#' datasets <- read_data(from = paste0(mypath, "/datasets.rds"))
-#' 
-#' # Read from local .csv
-#' datasets <- read_data(from = mypath)
-#' 
-#' # A dataset is returned as a list of metadata, tables, and validation issues
-#' # (if there are any). The dataset ID is assigned to the top level for 
-#' # reference.
-#' str(datasets[1])
-#' 
-#' # Clean up
-#' unlink(mypath, recursive = TRUE)
 #' 
 read_data <- function(id = NULL, parse_datetime = TRUE, 
                       unique_keys = FALSE, site = "all", 
                       startdate = NA, enddate = NA, package = "basic", 
                       check.size = FALSE, nCores = 1, forceParallel = FALSE, 
                       token = NA, neon.data.save.dir = NULL, 
-                      neon.data.read.path = NULL, ..., from = NULL) {
+                      neon.data.read.path = NULL, ..., from = NULL,
+                      format = "new") {
   
   # Validate input arguments --------------------------------------------------
 
@@ -240,24 +218,48 @@ read_data <- function(id = NULL, parse_datetime = TRUE,
     }
   }
 
+  # Control returned structure ------------------------------------------------
+  
+  if (format == "new") {
+    if (suppressWarnings(detect_data_type(d)) == "dataset_old")  {
+      d <- c(id = names(d), d[[1]])
+    } else if (detect_data_type(d) == "list_of_datasets") {
+      for (i in 1:length(d)) {
+        d[[i]] <- c(id = names(d[i]), d[[i]])
+      }
+      d <- unname(d)
+    }
+  } else if (format == "old") {
+    warning('The old format is deprecated. Please use the new format instead.',
+            call. = FALSE)
+  }
+  
   # Validate ------------------------------------------------------------------
 
   callstack <- as.character(sys.calls())
   if (!any(stringr::str_detect(callstack, "validate_data\\("))) { # don't validate if read_data() is called from validate()
-    for (i in 1:length(d)) {
-      d[[i]]$validation_issues <- validate_data(dataset = d[i])
+    if (format == "new") {
+      if (detect_data_type(d) == "dataset")  {
+        d$validation_issues <- validate_data(dataset = d)
+      } else if (detect_data_type(d) == "list_of_datasets") {
+        for (i in 1:length(d)) {
+          d[[i]]$validation_issues <- validate_data(dataset = d[[i]])
+        }
+      }
+    } else if (format == "old") {
+      # Validation only runs on the new format, so fake it and assign issues to the return object
+      # TODO: Remove this 2022-10-18
+      if (detect_data_type(d) == "dataset_old")  {
+        mock_new <- d
+        mock_new[[1]]$id <- names(d)
+        mock_new <- mock_new[[1]]
+        d[[1]]$validation_issues <- validate_data(dataset = mock_new)
+      } else if (detect_data_type(d) == "list_of_datasets_old") {
+        for (i in 1:length(d)) {
+          d[[i]]$validation_issues <- validate_data(dataset = d[[i]])
+        }
+      }
     }
-  }
-  
-  # Support legacy versions ---------------------------------------------------
-  
-  if (exists("event_id") && !is.null(event_id)) {
-    d[[1]]$tables$observation_ancillary$observation_id <- as.character(event_id)
-    nms <- colnames(d[[1]]$tables$observation_ancillary)
-    nms[nms == "observation_id"] <- "event_id"
-    colnames(d[[1]]$tables$observation_ancillary) <- nms
-    i <- stringr::str_detect(d[[1]]$validation_issues, "observation_ancillary")
-    d[[1]]$validation_issues[[i]] <- NULL # observation_ancillary related issues can be prohibitively long, so remove as a convenience
   }
   
   # Return --------------------------------------------------------------------
@@ -426,12 +428,30 @@ read_from_files <- function(data.path) {
           }))
       dirs_w_tables <- dirs[i]
       d <- read_dir(dirs_w_tables)
+      return(d)
     } else {
       stop("No identifiable L1 tables at ", data.path, call. = FALSE)
       d <- NULL
     }
-    
   }
+  
+  # Downstream code of read_data() use the "old" format, so need to convert
+  # back to it here
+  # TODO: Remove this block of code on 2022-10-18
+  if (suppressWarnings(detect_data_type(d)) == "dataset") {
+    id <- d$id
+    d$id <- NULL
+    d <- list(d)
+    names(d) <- id
+  } else if (suppressWarnings(detect_data_type(d)) == "list_of_datasets") {
+    ids <- c()
+    for (i in 1:length(d)) {
+      ids <- c(ids, d[[i]]$id)
+      d[[i]]$id <- NULL
+    }
+    names(d) <- ids
+  }
+  
   return(d)
 }
 
@@ -482,7 +502,7 @@ read_dir <- function(paths) {
       return(res)
     })
   d <- unlist(d, recursive = FALSE)
-  if (length(paths) != 0){         # Get id from dir if nested (use case of reading from save_data(..., type = .csv))
+  if (length(paths) != 0){ # Get id from dir if nested (use case of reading from save_data(..., type = .csv))
     names(d) <- basename(paths)
   } else {
     package_id <- d[[1]]$tables$dataset_summary$package_id

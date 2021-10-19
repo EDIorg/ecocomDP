@@ -4,14 +4,16 @@
 \alias{plot_taxa_accum_sites}
 \title{Plot taxa accumulation by site accumulation}
 \usage{
-plot_taxa_accum_sites(observation, id, alpha = 1)
+plot_taxa_accum_sites(data, id = NA_character_, alpha = 1, observation = NULL)
 }
 \arguments{
-\item{observation}{(tbl_df, tbl, data.frame) The observation table.}
+\item{data}{(list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation table, or a flat table containing columns of the observation table.}
 
-\item{id}{(character) Identifier of dataset to be used in plot subtitles.}
+\item{id}{(character) Identifier of dataset to be used in plot subtitles. Is automatically assigned when \code{data} is a dataset object containing the \code{id} field, or is a table containing the package_id column.}
 
 \item{alpha}{(numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.}
+
+\item{observation}{(tbl_df, tbl, data.frame) DEPRECATED: Use \code{data} instead.}
 }
 \value{
 (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
@@ -19,10 +21,28 @@ plot_taxa_accum_sites(observation, id, alpha = 1)
 \description{
 Plot taxa accumulation by site accumulation
 }
+\details{
+The \code{data} parameter accepts a range of input types but ultimately requires the 9 columns of the observation table.
+}
 \examples{
-observation <- ants_L1[[1]]$tables$observation
-id <- names(ants_L1)
+\dontrun{
+# Read a dataset of interest
+dataset <- read_data("edi.193.5")
 
-plot_taxa_accum_sites(observation, id)
+# Plot the dataset
+plot_taxa_accum_sites(dataset)
+
+# Flatten the dataset, manipulate, then plot
+dataset \%>\% 
+  flatten_data() \%>\% 
+  dplyr::filter(lubridate::as_date(datetime) > "2003-07-01") \%>\%
+  plot_taxa_accum_sites()
+  
+# Plot from the observation table directly
+plot_taxa_accum_sites(dataset$tables$observation)
+}
+
+# Plot the example dataset
+plot_taxa_accum_sites(ants_L1)
 
 }

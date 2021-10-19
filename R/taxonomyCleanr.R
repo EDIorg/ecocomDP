@@ -20,58 +20,30 @@
 #
 txcl_get_authority <- function(taxon, data.source){
   
-  # Resolve taxa to authority -------------------------------------------------
-  
+  # Tell user what authority is being queried
   gnr_list <- txcl_load_gnr_datasources()
   use_i <- gnr_list[ , 'id'] == data.source
+  message('Searching ', gnr_list[use_i, 'title'],' for "',taxon,'"')
   
-  message(
-    paste0(
-      'Searching ',
-      gnr_list[use_i, 'title'],
-      ' for "',
-      taxon,
-      '"'
-    )
-  )
-  
-  # Call Global Names Resolver (GNR)
-  
-  query <- suppressWarnings(
-    as.data.frame(
-      taxize::gnr_resolve(
-        paste0(taxon, '*'),
-        resolve_once = T,
-        canonical = T,
-        best_match_only = T,
-        preferred_data_sources = as.character(data.source))))
-  
-  # Return output -------------------------------------------------------------
-  
-  if (nrow(query) == 0){
-    list(
-      'resolved_name' =  NA_character_,
-      'authority' = NA_character_,
-      'score' = NA_character_)
+  # User Global Names Resolver to see if the taxon can be found in data.source
+  resp <- suppressWarnings(
+    taxize::gnr_resolve(sci = taxon,
+                        data_source_ids = as.character(data.source),
+                        resolve_once = TRUE,
+                        canonical = TRUE,
+                        best_match_only = TRUE))
+  # Parse response and return and first item found
+  if (nrow(resp) != 0) {
+    res <- list(resolved_name = resp$matched_name2[1],
+                authority = gnr_list$title[use_i],
+                score = resp$score[1])
+    return(res)
   } else {
-    if (query[1, 'matched_name2'] == ""){
-      query[1, 'matched_name2'] <- NA_character_
-    }
-    if (query[1, 'data_source_title'] == ""){
-      query[1, 'data_source_title'] <- NA_character_
-    }
-    if (query[1, 'score'] == "NaN"){
-      query[1, 'score'] <- NA_character_
-    }
-    
-    # Return
-    
-    list(
-      'resolved_name' =  query[1, 'matched_name2'],
-      'authority' = gnr_list$title[gnr_list$id == data.source],
-      'score' = query[1, 'score'])
+    res <- list(resolved_name =  NA_character_,
+                authority = NA_character_,
+                score = NA_character_)
+    return(res)
   }
-  
 }
 
 
@@ -775,6 +747,7 @@ txcl_make_taxonomicCoverage <- function(
   taxa.clean <- taxa.clean[!missing_names]
   authority <- authority[!missing_names]
   authority.id <- authority.id[!missing_names]
+  rank <- rank[!missing_names]
   
   # Create taxonomicCoverage --------------------------------------------------
   
@@ -842,93 +815,56 @@ txcl_make_taxonomicCoverage <- function(
 #
 txcl_optimize_match <- function(x, data.sources){
   
+  # Initialize output
   output <- data.frame(
     taxa_clean = rep(NA_character_, length(data.sources)),
     rank = rep(NA_character_, length(data.sources)),
     authority = rep(NA_character_, length(data.sources)),
     authority_id = rep(NA_character_, length(data.sources)),
     score = rep(NA_character_, length(data.sources)),
-    stringsAsFactors = F)
+    stringsAsFactors = FALSE)
   
+  # Iterate overall sources and stop on the first match
   j <- 1
-  
-  while (j != (length(data.sources)+1)){
+  while (j != (length(data.sources)+1)) {
     
-    # Resolve name, authority, and score
-    
-    out_auth <- try(
-      txcl_get_authority(
-        taxon = x,
-        data.source = as.character(data.sources[j])),
+    # Does taxon resolve to data.sources[j]?
+    gnrr <- try(
+      txcl_get_authority(taxon = x,
+                         data.source = as.character(data.sources[j])),
       silent = TRUE)
     
-    # Resolve ID, and rank
-    
-    if (class(out_auth) != "try-error") {
-      if (!is.na(out_auth['resolved_name']) & !is.na(out_auth['authority'])) {
-        out_id <- try(
-          suppressWarnings(
-            txcl_get_id(
-              taxon = out_auth['resolved_name'],
-              authority = out_auth['authority'])),
-          silent = TRUE)
-        if (class(out_id) == "try-error") {
-          out_id <- list(
-            'taxon_id' = NA_character_,
-            'taxon_rank' = NA_character_)
-        }
-      } else {
-        out_id <- list(
-          'taxon_id' = NA_character_,
-          'taxon_rank' = NA_character_)
+    # Try for ID and rank if GNR didn't error, then add results
+    if (class(gnrr) != "try-error") {
+      id <- try(
+        suppressWarnings(
+          txcl_get_id(taxon = x, authority = gnrr$authority)),
+        silent = TRUE)
+      if (class(id) != "try-error") {
+        output$authority_id[j] <- id$taxon_id
+        output$rank[j] <- id$taxon_rank
+        output$taxa_clean[j] <- x
+        output$authority[j] <- gnrr$authority
+        output$score[j] <- gnrr$score
       }
-    } else {
-      out_auth <- list(
-        'resolved_name' =  NA_character_,
-        'authority' = NA_character_,
-        'score' = NA_character_)
     }
     
-    # Parse results into output data frame
-    
-    output[j, 'taxa_clean'] <- out_auth['resolved_name']
-    output[j, 'rank'] <- out_id['taxon_rank']
-    output[j, 'authority'] <- out_auth['authority']
-    output[j, 'authority_id'] <- out_id['taxon_id']
-    output[j, 'score'] <- out_auth['score']
-    
-    # Stop if a successful match has been made to save redundant effort
-    
-    if (!is.na(output[j, 'authority_id'])) {
+    # Continue with next data.source if no results were found in this one
+    if (!is.na(output$authority_id[j])) {
       j <- length(data.sources) + 1
     } else {
       j <- j + 1
     }
-    
   }
   
-  # Get best match
-  
-  if (sum(is.na(output[ , 'authority_id'])) == nrow(output)){
-    if (sum(is.na(output[ , 'authority'])) != nrow(output)){
-      output <- output[!is.na(output[ , 'authority']), ]
-      output <- output[1, ]
-    } else {
-      output <- output[1, ]
-    }
+  # Return the first match otherwise NAs
+  resolved <- !is.na(output$authority_id)
+  if (any(resolved)) {
+    output <- output[resolved, ]
   } else {
-    output <- output[!is.na(output[ , 'authority_id']), ]
+    output <- output[1, ]
   }
-  
-  # Return
-  
-  list(
-    output[1, 'taxa_clean'],
-    output[1, 'rank'],
-    output[1, 'authority'],
-    output[1, 'authority_id'],
-    output[1, 'score']
-  )
+  return(output)
   
 }
 
@@ -1220,7 +1156,6 @@ txcl_resolve_sci_taxa <- function(x = NULL, data.sources, path = NULL){
   # Create taxa list ----------------------------------------------------------
   
   if (!is.null(path)) {
-    
     taxa_list <- data.frame(
       index = seq(nrow(taxa_map)),
       taxa = rep(NA_character_, nrow(taxa_map)),
@@ -1232,15 +1167,12 @@ txcl_resolve_sci_taxa <- function(x = NULL, data.sources, path = NULL){
     taxa_list$taxa[use_i] <- taxa_map$taxa_replacement[use_i]
     use_i <- !is.na(taxa_map$taxa_removed) | !is.na(taxa_map$authority_id)
     taxa_list <- taxa_list[!use_i, ]
-    
   } else {
-    
     taxa_list <- data.frame(
       index = seq(length(x)),
       taxa = rep(NA_character_, length(x)),
       stringsAsFactors = F)
     taxa_list$taxa <- x
-    
   }
   
   # Optimize match ------------------------------------------------------------
@@ -1253,7 +1185,6 @@ txcl_resolve_sci_taxa <- function(x = NULL, data.sources, path = NULL){
   # Update taxa_map.csv -----------------------------------------------------
   
   if (!is.null(path)) {
-    
     r <- data.frame(
       matrix(
         unlist(r),
@@ -1271,9 +1202,7 @@ txcl_resolve_sci_taxa <- function(x = NULL, data.sources, path = NULL){
     taxa_map[rj$index, c("taxa_clean", "rank", "authority", "authority_id", "score")] <-
       dplyr::select(rj, -taxa, -index)
     taxa_map$rank <- stringr::str_to_title(taxa_map$rank)
-    
   } else {
-    
     r <- data.frame(
       matrix(
         unlist(r),
@@ -1287,12 +1216,11 @@ txcl_resolve_sci_taxa <- function(x = NULL, data.sources, path = NULL){
       'authority_id',
       'score')
     taxa_map <- cbind(taxa_list, r)
-    
   }
   
   # Return --------------------------------------------------------------------
   
-  taxa_map
+  return(taxa_map)
   
 }
 

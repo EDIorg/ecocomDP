@@ -52,7 +52,7 @@
         "totalLength", "totalSampledArea", "totalSerialBouts", "totalWeight",
         "towsTrapsVolume", "trapCoordinate", "trapHours", "trapID", "trapStatus",
         "trappingDays", "uid", "unidentifiedCount", "value", "variable_name", "weight", "year",
-        "zooMaximumLength", "zooMeanLength", "zooMinimumLength")
+        "zooMaximumLength", "zooMeanLength", "zooMinimumLength", "annotation_dictionary_table")
     )
   
   

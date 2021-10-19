@@ -1,10 +1,1 @@
-attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanation
-observation_id	Identifier assigned to each unique observation.	character			NA	Not available
-event_id	"Identifier assigned to each unique sampling event. References the event_id field of the observation_ancillary table, if it exists."	character			NA	Not available
-package_id	Identifier of this data package. References the package_id field of the dataset_summary table.	character			NA	Not available
-location_id	A reference to a location. References the location_id field of the location table.	character			NA	Not available
-datetime	Date and time of the observation.	Date			NA	Not available
-taxon_id	A reference to a taxon. References the taxon_id field of the taxon table.	character			NA	Not available
-variable_name	Name of the measured variable.	categorical			NA	Not available
-value	Value of the measured variable.	numeric	dimensionless		NA	Not available
-unit	Unit of the measured variable.	character			NA	Not available
+attributeName	attributeDefinition	class	unit	dateTimeFormatString	missingValueCode	missingValueCodeExplanationobservation_id	Identifier assigned to each unique observation.	character			NA	Not availableevent_id	Identifier assigned to each unique sampling event.	character			NA	Not availablepackage_id	Identifier of this data package. References the package_id field of the dataset_summary table.	character			NA	Not availablelocation_id	A reference to a location. References the location_id field of the location table.	character			NA	Not availabledatetime	Date and time of the observation.	Date			NA	Not availabletaxon_id	A reference to a taxon. References the taxon_id field of the taxon table.	character			NA	Not availablevariable_name	Name of the measured variable.	categorical			NA	Not availablevalue	Value of the measured variable.	numeric	dimensionless		NA	Not availableunit	Unit of the measured variable.	character			NA	Not available

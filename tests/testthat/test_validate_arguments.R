@@ -274,19 +274,19 @@ testthat::test_that("flatten_data()", {
   # expected input
   expect_null(
     validate_arguments("flatten_data", 
-                       as.list(list(tables = ants_L1[[1]]$tables))))
+                       as.list(list(tables = ants_L1$tables))))
   # bad names
-  badnms <- names(ants_L1[[1]]$tables)
+  badnms <- names(ants_L1$tables)
   badnms[1] <- "a bad name"
-  names(ants_L1[[1]]$tables) <- badnms
+  names(ants_L1$tables) <- badnms
   expect_error(
     validate_arguments("flatten_data", 
-                       as.list(list(tables = ants_L1[[1]]$tables))), 
+                       as.list(list(tables = ants_L1$tables))), 
     regexp = "Unrecognized tables")
   # invalid structure
   expect_error(
     validate_arguments("flatten_data", 
-                       as.list(list(tables = ants_L1[[1]]$tables$taxon))), 
+                       as.list(list(tables = ants_L1$tables$taxon))), 
     regexp = "Input 'tables' should be a list")
 })
 
@@ -297,7 +297,24 @@ testthat::test_that("plot_*()", {
   expect_null(validate_arguments("plot", as.list(list(alpha = 1))))         # is between 0 and 1
   expect_error(validate_arguments("plot", as.list(list(alpha = -1))))
   expect_error(validate_arguments("plot", as.list(list(alpha = 2))))
+  # time_window_size
+  expect_null(validate_arguments("plot", as.list(list(time_window_size = "day"))))
+  expect_null(validate_arguments("plot", as.list(list(time_window_size = "month"))))
+  expect_null(validate_arguments("plot", as.list(list(time_window_size = "year"))))
+  expect_error(
+    object = validate_arguments("plot", as.list(list(time_window_size = "invalid"))), 
+    regexp = 'must be \"day\", \"month\",or \"year\"')
+  # facet_scales
+  expect_null(validate_arguments("plot", as.list(list(facet_scales = "free"))))
+  expect_null(validate_arguments("plot", as.list(list(facet_scales = "fixed"))))
+  expect_null(validate_arguments("plot", as.list(list(facet_scales = "free_x"))))
+  expect_null(validate_arguments("plot", as.list(list(facet_scales = "free_y"))))
+  expect_error(
+    object = validate_arguments("plot", as.list(list(facet_scales = "month"))), 
+    regexp = 'must be')
 })
+
+
 
 # read_data() -----------------------------------------------------------------
 
@@ -416,6 +433,15 @@ testthat::test_that("save_data()", {
   expect_error(
     validate_arguments("save_data", as.list(list(type = "invalid value"))),
     regexp = "Input 'type' should be '.rds' or '.csv'.")
+  # dataset
+  d_old <- ants_L1
+  d_old$id <- NULL
+  d_old <- list(d_old)
+  names(d_old) <- "edi.193.5"
+  arglist <- as.list(list(dataset = d_old))
+  expect_error(
+    object = validate_arguments("save_data", arglist),
+    regexp = "format is deprecated")
 })
 
 # search_data() ---------------------------------------------------------------
@@ -525,14 +551,14 @@ testthat::test_that("validate_dataset_structure()", {
   d <- unname(test_data)                       # 1st level name is id
   expect_error(validate_dataset_structure(d))
   d <- test_data                               # 2nd level has tables
-  names(d[[1]]) <- c("metadata", "invalid name", "validation_issues")
+  names(d) <- c("id", "metadata", "invalid name", "validation_issues")
   expect_error(validate_dataset_structure(d))
   d <- test_data                               # table names are valid
-  nms <- names(d[[1]]$tables)
+  nms <- names(d$tables)
   nms[1] <- "invalid name"
-  names(d[[1]]$tables) <- nms
+  names(d$tables) <- nms
   expect_error(validate_dataset_structure(d))
   d <- test_data                               # tables are data.frames
-  d[[1]]$tables[[1]] <- as.list(d[[1]]$tables[[1]])
+  d$tables[[1]] <- as.list(d$tables[[1]])
   expect_error(validate_dataset_structure(d))
 })

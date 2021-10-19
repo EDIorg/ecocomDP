@@ -2,7 +2,7 @@
 % Please edit documentation in R/convert_to_dwca.R
 \name{convert_to_dwca}
 \alias{convert_to_dwca}
-\title{Convert an ecocomDP dataset to a Darwin Core Archive dataset}
+\title{Convert a dataset to the Darwin Core Archive format}
 \usage{
 convert_to_dwca(
   path,
@@ -33,7 +33,7 @@ convert_to_dwca(
 DwC-A tables, meta.xml, and corresponding EML metadata.
 }
 \description{
-Convert an ecocomDP dataset to a Darwin Core Archive dataset
+Convert a dataset to the Darwin Core Archive format
 }
 \details{
 Reads in an ecocomDP dataset from a supported repository and converts it to a DwC-A package.

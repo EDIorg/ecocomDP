@@ -2,9 +2,9 @@
 % Please edit documentation in R/plot_taxa.R
 \name{plot_taxa_sample_time}
 \alias{plot_taxa_sample_time}
-\title{Plot dates and times samples were taken}
+\title{Plot dates and times samples were taken (DEPRECATED)}
 \usage{
-plot_taxa_sample_time(observation, id, alpha = 1)
+plot_taxa_sample_time(observation, id = NA_character_, alpha = 1)
 }
 \arguments{
 \item{observation}{(tbl_df, tbl, data.frame) The observation table.}
@@ -17,12 +17,5 @@ plot_taxa_sample_time(observation, id, alpha = 1)
 (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
 }
 \description{
-Plot dates and times samples were taken
-}
-\examples{
-observation <- ants_L1[[1]]$tables$observation
-id <- names(ants_L1)
-
-plot_taxa_sample_time(observation, id)
-
+This function has been deprecated. Use \code{plot_sample_space_time()} instead.
 }

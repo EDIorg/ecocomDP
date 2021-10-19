@@ -1,5 +1,5 @@
 ---
-title: "Create"
+title: "Create ecocomDP Data"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Create}
@@ -220,11 +220,9 @@ create_ecocomDP <- function(path,
   
   # Odds and ends -------------------------------------------------------------
   
-  # Rename source columns with an ecocomDP equivalent (date to datetime) and 
-  # remove columns of redundant information  (year can be recalculated from 
-  # datetime and code was a key that no longer has use).
+  # Rename source columns with an ecocomDP equivalent (date to datetime)
   
-  flat <- flat %>% rename(datetime = date) %>% select(-year, -code)
+  flat <- flat %>% rename(datetime = date)
   
   # The hard work is done! The flat table contains all the source data and 
   # more! We can now use the "create" functions to parse this table into the 
@@ -414,16 +412,16 @@ create_ecocomDP <- function(path,
   # Convert "dataset level keywords" listed in the source to "dataset level 
   # annotations" in the derived. The predicate "is about" is used, which 
   # results in an annotation that reads "This dataset is about 'species 
-  # abundance'", "This dataset is about 'Population'", etc. All source datasets
-  # involving a human induced manipulative experiment, not a natural 
-  # disturbance/experiment, should include the "Manipulative experiment" 
-  # annotation below to enable searching on this term.
+  # abundance'", "This dataset is about an ecological 'Community'", etc. All 
+  # source datasets involving a human induced manipulative experiment, not a 
+  # natural disturbance/experiment, should include the "Manipulative 
+  # experiment" annotation below to enable searching on this term.
   
   dataset_annotations <- c(
     `species abundance` = 
       "http://purl.dataone.org/odo/ECSO_00001688",
-    Population = 
-      "http://purl.dataone.org/odo/ECSO_00000311",
+    Community = 
+      "http://purl.dataone.org/odo/ECSO_00000310",
     `Manipulative experiment` = 
       "http://purl.dataone.org/odo/ECSO_00000506",
     `level of ecological disturbance` = 
