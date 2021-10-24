@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -96,6 +96,12 @@
     </li>
     <li>
       <a href="../articles/convert.html">Convert</a>
+    </li>
+    <li>
+      <a href="../articles/model_overview.html">Model Overview</a>
+    </li>
+    <li>
+      <a href="../articles/shared_practices_create.html">Shared Practices (Create)</a>
     </li>
   </ul>
 </li>
@@ -132,34 +138,56 @@
     <p>Plot taxa accumulation through time</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_taxa_accum_time</span><span class='op'>(</span><span class='va'>observation</span>, <span class='va'>id</span>, alpha <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>plot_taxa_accum_time</span><span class='op'>(</span><span class='va'>data</span>, id <span class='op'>=</span> <span class='cn'>NA_character_</span>, alpha <span class='op'>=</span> <span class='fl'>1</span>, observation <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>observation</th>
-      <td><p>(tbl_df, tbl, data.frame) The observation table.</p></td>
+      <th>data</th>
+      <td><p>(list or tbl_df, tbl, data.frame) The dataset object returned by <code><a href='read_data.html'>read_data()</a></code>, a named list of tables containing the observation table, or a flat table containing columns of the observation table.</p></td>
     </tr>
     <tr>
       <th>id</th>
-      <td><p>(character) Identifier of dataset to be used in plot subtitles.</p></td>
+      <td><p>(character) Identifier of dataset to be used in plot subtitles. Is automatically assigned when <code>data</code> is a dataset object containing the <code>id</code> field, or is a table containing the package_id column.</p></td>
     </tr>
     <tr>
       <th>alpha</th>
       <td><p>(numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100% opaque. Default is 1.</p></td>
+    </tr>
+    <tr>
+      <th>observation</th>
+      <td><p>(tbl_df, tbl, data.frame) DEPRECATED: Use <code>data</code> instead.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>(gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The <code>data</code> parameter accepts a range of input types but ultimately requires the 9 columns of the observation table.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>observation</span> <span class='op'>&lt;-</span> <span class='va'>ants_L1</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>observation</span>
-<span class='va'>id</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>ants_L1</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'># Read a dataset of interest</span>
+<span class='va'>dataset</span> <span class='op'>&lt;-</span> <span class='fu'><a href='read_data.html'>read_data</a></span><span class='op'>(</span><span class='st'>"edi.193.5"</span><span class='op'>)</span>
 
-<span class='fu'>plot_taxa_accum_time</span><span class='op'>(</span><span class='va'>observation</span>, <span class='va'>id</span><span class='op'>)</span>
+<span class='co'># Plot the dataset</span>
+<span class='fu'>plot_taxa_accum_time</span><span class='op'>(</span><span class='va'>dataset</span><span class='op'>)</span>
+
+<span class='co'># Flatten the dataset, manipulate, then plot</span>
+<span class='va'>dataset</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='flatten_data.html'>flatten_data</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='https://lubridate.tidyverse.org/reference/as_date.html'>as_date</a></span><span class='op'>(</span><span class='va'>datetime</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='st'>"2003-07-01"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>plot_taxa_accum_time</span><span class='op'>(</span><span class='op'>)</span>
+  
+<span class='co'># Plot from the observation table directly</span>
+<span class='fu'>plot_taxa_accum_time</span><span class='op'>(</span><span class='va'>dataset</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>observation</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='co'># Plot the example dataset</span>
+<span class='fu'>plot_taxa_accum_time</span><span class='op'>(</span><span class='va'>ants_L1</span><span class='op'>)</span>
 </div><div class='img'><img src='plot_taxa_accum_time-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>

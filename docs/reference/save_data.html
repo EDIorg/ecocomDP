@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Save an ecocomDP dataset — save_data • ecocomDP</title>
+<title>Save a dataset — save_data • ecocomDP</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Save an ecocomDP dataset — save_data" />
-<meta property="og:description" content="Save an ecocomDP dataset" />
+<meta property="og:title" content="Save a dataset — save_data" />
+<meta property="og:description" content="Save a dataset" />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -96,6 +96,12 @@
     </li>
     <li>
       <a href="../articles/convert.html">Convert</a>
+    </li>
+    <li>
+      <a href="../articles/model_overview.html">Model Overview</a>
+    </li>
+    <li>
+      <a href="../articles/shared_practices_create.html">Shared Practices (Create)</a>
     </li>
   </ul>
 </li>
@@ -123,13 +129,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Save an ecocomDP dataset</h1>
+    <h1>Save a dataset</h1>
     <small class="dont-index">Source: <a href='https://github.com/EDIorg/ecocomDP/blob/master/R/save_data.R'><code>R/save_data.R</code></a></small>
     <div class="hidden name"><code>save_data.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Save an ecocomDP dataset</p>
+    <p>Save a dataset</p>
     </div>
 
     <pre class="usage"><span class='fu'>save_data</span><span class='op'>(</span><span class='va'>dataset</span>, <span class='va'>path</span>, type <span class='op'>=</span> <span class='st'>".rds"</span>, name <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
@@ -167,26 +173,30 @@
     <p>Subsequent calls won't overwrite files or directories</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Create a list of datasets</span>
-<span class='va'>datasets</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>ants_L1</span>, <span class='va'>ants_L1</span>, <span class='va'>ants_L1</span><span class='op'>)</span>  <span class='co'># 3 of the same, with different names</span>
-<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>datasets</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ds1"</span>, <span class='st'>"ds2"</span>, <span class='st'>"ds3"</span><span class='op'>)</span>
-
-<span class='co'># Create directory for the data</span>
+    <pre class="examples"><div class='input'><span class='co'># Create directory for the data</span>
 <span class='va'>mypath</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"/data"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='op'>(</span><span class='va'>mypath</span><span class='op'>)</span>
 
 <span class='co'># Save as .rds</span>
-<span class='fu'>save_data</span><span class='op'>(</span><span class='va'>datasets</span>, <span class='va'>mypath</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Writing datasets.rds to C:\Users\Colin\AppData\Local\Temp\RtmpUJY6gK/data</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>dir</a></span><span class='op'>(</span><span class='va'>mypath</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "datasets.rds"</div><div class='input'>
+<span class='fu'>save_data</span><span class='op'>(</span><span class='va'>ants_L1</span>, <span class='va'>mypath</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Writing ants_L1.rds to C:\Users\Colin\AppData\Local\Temp\RtmpsNoMEE/data</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>dir</a></span><span class='op'>(</span><span class='va'>mypath</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "ants_L1.rds"</div><div class='input'>
 <span class='co'># Save as .rds with the name "mydata"</span>
-<span class='fu'>save_data</span><span class='op'>(</span><span class='va'>datasets</span>, <span class='va'>mypath</span>, name <span class='op'>=</span> <span class='st'>"mydata"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Writing mydata.rds to C:\Users\Colin\AppData\Local\Temp\RtmpUJY6gK/data</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>dir</a></span><span class='op'>(</span><span class='va'>mypath</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "datasets.rds" "mydata.rds"  </div><div class='input'>
+<span class='fu'>save_data</span><span class='op'>(</span><span class='va'>ants_L1</span>, <span class='va'>mypath</span>, name <span class='op'>=</span> <span class='st'>"mydata"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Writing mydata.rds to C:\Users\Colin\AppData\Local\Temp\RtmpsNoMEE/data</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>dir</a></span><span class='op'>(</span><span class='va'>mypath</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "ants_L1.rds" "mydata.rds" </div><div class='input'>
 <span class='co'># Save as .csv</span>
-<span class='fu'>save_data</span><span class='op'>(</span><span class='va'>datasets</span>, <span class='va'>mypath</span>, type <span class='op'>=</span> <span class='st'>".csv"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Writing ds1, ds2, ds3 as .csv to C:\Users\Colin\AppData\Local\Temp\RtmpUJY6gK/data</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>dir</a></span><span class='op'>(</span><span class='va'>mypath</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "datasets.rds" "ds1"          "ds2"          "ds3"          "mydata.rds"  </div><div class='input'>
+<span class='fu'>save_data</span><span class='op'>(</span><span class='va'>ants_L1</span>, <span class='va'>mypath</span>, type <span class='op'>=</span> <span class='st'>".csv"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Writing edi.193.5 as .csv to C:\Users\Colin\AppData\Local\Temp\RtmpsNoMEE/data</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>dir</a></span><span class='op'>(</span><span class='va'>mypath</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "ants_L1.rds" "edi.193.5"   "mydata.rds" </div><div class='input'>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'># Save multiple datasets</span>
+<span class='va'>ids</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"edi.193.5"</span>, <span class='st'>"edi.303.2"</span>, <span class='st'>"edi.290.2"</span><span class='op'>)</span>
+<span class='va'>datasets</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>ids</span>, <span class='va'>read_data</span><span class='op'>)</span>
+<span class='fu'>save_data</span><span class='op'>(</span><span class='va'>datasets</span>, <span class='va'>mypath</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>dir</a></span><span class='op'>(</span><span class='va'>mypath</span><span class='op'>)</span>
+<span class='op'>}</span>
+
 <span class='co'># Clean up</span>
 <span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span><span class='op'>(</span><span class='va'>mypath</span>, recursive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
