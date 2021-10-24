@@ -64,4 +64,7 @@ dataset \%>\%
   dplyr::filter(lubridate::as_date(datetime) > "2003-07-01") \%>\%
   plot_taxa_occur_freq()
 }
+# Plot the example dataset
+plot_taxa_occur_freq(ants_L1)
+
 }

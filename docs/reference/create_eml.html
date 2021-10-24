@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create EML metadata for an ecocomDP dataset — create_eml • ecocomDP</title>
+<title>Create EML metadata — create_eml • ecocomDP</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Create EML metadata for an ecocomDP dataset — create_eml" />
-<meta property="og:description" content="Create EML metadata for an ecocomDP dataset" />
+<meta property="og:title" content="Create EML metadata — create_eml" />
+<meta property="og:description" content="Create EML metadata" />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -96,6 +96,12 @@
     </li>
     <li>
       <a href="../articles/convert.html">Convert</a>
+    </li>
+    <li>
+      <a href="../articles/model_overview.html">Model Overview</a>
+    </li>
+    <li>
+      <a href="../articles/shared_practices_create.html">Shared Practices (Create)</a>
     </li>
   </ul>
 </li>
@@ -123,13 +129,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create EML metadata for an ecocomDP dataset</h1>
+    <h1>Create EML metadata</h1>
     <small class="dont-index">Source: <a href='https://github.com/EDIorg/ecocomDP/blob/master/R/create_eml.R'><code>R/create_eml.R</code></a></small>
     <div class="hidden name"><code>create_eml.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create EML metadata for an ecocomDP dataset</p>
+    <p>Create EML metadata</p>
     </div>
 
     <pre class="usage"><span class='fu'>create_eml</span><span class='op'>(</span>
@@ -227,10 +233,9 @@
 <span class='co'># Create directory with ecocomDP tables for create_eml()</span>
 <span class='va'>mypath</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"/data"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='op'>(</span><span class='va'>mypath</span><span class='op'>)</span>
-<span class='va'>inpts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>edi.193.5</span><span class='op'>$</span><span class='va'>tables</span>, path <span class='op'>=</span> <span class='va'>mypath</span><span class='op'>)</span>
+<span class='va'>inpts</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>tables</span>, path <span class='op'>=</span> <span class='va'>mypath</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/do.call.html'>do.call</a></span><span class='op'>(</span><span class='va'>write_tables</span>, <span class='va'>inpts</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/files.html'>file.copy</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"create_ecocomDP.R"</span>, package <span class='op'>=</span> <span class='st'>"ecocomDP"</span><span class='op'>)</span>, <span class='va'>mypath</span><span class='op'>)</span>
-
 <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>dir</a></span><span class='op'>(</span><span class='va'>mypath</span><span class='op'>)</span>
 
 <span class='co'># Describe, with annotations, what the source L0 dataset "is about"</span>
@@ -245,7 +250,7 @@
   givenName <span class='op'>=</span> <span class='st'>'Colin'</span>,
   surName <span class='op'>=</span> <span class='st'>'Smith'</span>,
   organizationName <span class='op'>=</span> <span class='st'>'Environmental Data Initiative'</span>,
-  electronicMailAddress <span class='op'>=</span> <span class='st'>'ecocomdp@gmail.com'</span>,
+  electronicMailAddress <span class='op'>=</span> <span class='st'>'csmith@mail.com'</span>,
   stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='co'># Create EML</span>
@@ -262,7 +267,7 @@
   basis_of_record <span class='op'>=</span> <span class='st'>"HumanObservation"</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>dir</a></span><span class='op'>(</span><span class='va'>mypath</span><span class='op'>)</span>
-<span class='co'># View(eml)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/View.html'>View</a></span><span class='op'>(</span><span class='va'>eml</span><span class='op'>)</span>
 
 <span class='co'># Clean up</span>
 <span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span><span class='op'>(</span><span class='va'>mypath</span>, recursive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>

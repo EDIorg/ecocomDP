@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Flatten an ecocomDP dataset — flatten_data • ecocomDP</title>
+<title>Flatten a dataset — flatten_data • ecocomDP</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Flatten an ecocomDP dataset — flatten_data" />
-<meta property="og:description" content="Flatten an ecocomDP dataset" />
+<meta property="og:title" content="Flatten a dataset — flatten_data" />
+<meta property="og:description" content="Flatten a dataset" />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -96,6 +96,12 @@
     </li>
     <li>
       <a href="../articles/convert.html">Convert</a>
+    </li>
+    <li>
+      <a href="../articles/model_overview.html">Model Overview</a>
+    </li>
+    <li>
+      <a href="../articles/shared_practices_create.html">Shared Practices (Create)</a>
     </li>
   </ul>
 </li>
@@ -123,23 +129,23 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Flatten an ecocomDP dataset</h1>
+    <h1>Flatten a dataset</h1>
     <small class="dont-index">Source: <a href='https://github.com/EDIorg/ecocomDP/blob/master/R/flatten_data.R'><code>R/flatten_data.R</code></a></small>
     <div class="hidden name"><code>flatten_data.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Flatten an ecocomDP dataset</p>
+    <p>Flatten a dataset</p>
     </div>
 
-    <pre class="usage"><span class='fu'>flatten_data</span><span class='op'>(</span><span class='va'>tables</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>flatten_data</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>tables</th>
-      <td><p>(list of tbl_df, tbl, data.frame) A named list of ecocomDP tables.</p></td>
+      <th>data</th>
+      <td><p>(list) The dataset object returned by <code><a href='read_data.html'>read_data()</a></code>, or a named list of ecocoomDP tables.</p></td>
     </tr>
     </table>
 
@@ -148,17 +154,39 @@
     <p>(tbl_df, tbl, data.frame) A single flat table created by joining and spreading all <code>tables</code>, except the observation table. See details for more information on this "flat" format.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>"flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" an L1 ecocomDP dataset can be consistently spread due to the frequent occurrence of L0 source datasets with &gt; 1 core observation variable.</p>
+    <p>The "flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" an L1 ecocomDP dataset can be consistently spread due to the frequent occurrence of L0 source datasets with &gt; 1 core observation variable.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>Warnings/Errors from <code>flatten_data()</code> can most often be fixed by addressing any validation issues reported by <code><a href='read_data.html'>read_data()</a></code> (e.g. non-unique composite keys).</p>
 <p>Ancillary identifiers are dropped from the returned object.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>dataset</span> <span class='op'>&lt;-</span> <span class='va'>ants_L1</span>
-
-<span class='va'>flat</span> <span class='op'>&lt;-</span> <span class='fu'>flatten_data</span><span class='op'>(</span><span class='va'>dataset</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>)</span>
-
+    <pre class="examples"><div class='input'><span class='co'># Flatten a dataset object</span>
+<span class='va'>flat</span> <span class='op'>&lt;-</span> <span class='fu'>flatten_data</span><span class='op'>(</span><span class='va'>ants_L1</span><span class='op'>)</span>
+<span class='va'>flat</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2,931 x 46</span>
+#&gt;    observation_id event_id datetime   variable_name value unit   trap.type
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;date&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    
+#&gt; <span style='color: #BCBCBC;'> 1</span> 1              1        2003-06-01 abundance         2 number bait     
+#&gt; <span style='color: #BCBCBC;'> 2</span> 2              1        2003-06-01 abundance         2 number bait     
+#&gt; <span style='color: #BCBCBC;'> 3</span> 3              1        2003-06-01 abundance         1 number bait     
+#&gt; <span style='color: #BCBCBC;'> 4</span> 4              1        2003-06-01 abundance         2 number bait     
+#&gt; <span style='color: #BCBCBC;'> 5</span> 5              1        2003-06-01 abundance         1 number hand     
+#&gt; <span style='color: #BCBCBC;'> 6</span> 6              1        2003-06-01 abundance         1 number hand     
+#&gt; <span style='color: #BCBCBC;'> 7</span> 7              1        2003-06-01 abundance         1 number hand     
+#&gt; <span style='color: #BCBCBC;'> 8</span> 8              1        2003-06-01 abundance         1 number hand     
+#&gt; <span style='color: #BCBCBC;'> 9</span> 9              1        2003-06-01 abundance         1 number hand     
+#&gt; <span style='color: #BCBCBC;'>10</span> 10             1        2003-06-01 abundance         1 number litter   
+#&gt; <span style='color: #949494;'># ... with 2,921 more rows, and 39 more variables: trap.num &lt;chr&gt;,</span>
+#&gt; <span style='color: #949494;'>#   moose.cage &lt;chr&gt;, location_id &lt;chr&gt;, location_name &lt;chr&gt;, block &lt;chr&gt;,</span>
+#&gt; <span style='color: #949494;'>#   plot &lt;chr&gt;, latitude &lt;dbl&gt;, longitude &lt;dbl&gt;, elevation &lt;dbl&gt;,</span>
+#&gt; <span style='color: #949494;'>#   treatment &lt;chr&gt;, taxon_id &lt;chr&gt;, taxon_rank &lt;chr&gt;, taxon_name &lt;chr&gt;,</span>
+#&gt; <span style='color: #949494;'>#   authority_system &lt;chr&gt;, authority_taxon_id &lt;chr&gt;, behavior &lt;chr&gt;,</span>
+#&gt; <span style='color: #949494;'>#   biogeographic.affinity &lt;chr&gt;, colony.size &lt;chr&gt;, feeding.preference &lt;chr&gt;,</span>
+#&gt; <span style='color: #949494;'>#   hl &lt;dbl&gt;, unit_hl &lt;chr&gt;, nest.substrate &lt;chr&gt;, primary.habitat &lt;chr&gt;, ...</span></div><div class='input'>
+<span class='co'># Flatten a list of tables</span>
+<span class='va'>tables</span> <span class='op'>&lt;-</span> <span class='va'>ants_L1</span><span class='op'>$</span><span class='va'>tables</span>
+<span class='va'>flat</span> <span class='op'>&lt;-</span> <span class='fu'>flatten_data</span><span class='op'>(</span><span class='va'>tables</span><span class='op'>)</span>
 <span class='va'>flat</span>
 </div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 2,931 x 46</span>
 #&gt;    observation_id event_id datetime   variable_name value unit   trap.type

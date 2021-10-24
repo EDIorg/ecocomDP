@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculate number_of_years_sampled for the dataset_summary table — calc_number_of_years_sampled • ecocomDP</title>
+<title>Annotations of published data — annotation_dictionary • ecocomDP</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="Calculate number_of_years_sampled for the dataset_summary table — calc_number_of_years_sampled" />
-<meta property="og:description" content="Calculate number_of_years_sampled for the dataset_summary table" />
+<meta property="og:title" content="Annotations of published data — annotation_dictionary" />
+<meta property="og:description" content="View the collection of dataset- and attribute-level annotations
+    from existing ecocomDP datasets." />
 
 
 
@@ -129,30 +130,29 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate number_of_years_sampled for the dataset_summary table</h1>
-    <small class="dont-index">Source: <a href='https://github.com/EDIorg/ecocomDP/blob/master/R/create_dataset_summary.R'><code>R/create_dataset_summary.R</code></a></small>
-    <div class="hidden name"><code>calc_number_of_years_sampled.Rd</code></div>
+    <h1>Annotations of published data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/EDIorg/ecocomDP/blob/master/R/annotation_dictionary.R'><code>R/annotation_dictionary.R</code></a></small>
+    <div class="hidden name"><code>annotation_dictionary.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Calculate number_of_years_sampled for the dataset_summary table</p>
+    <p>View the collection of dataset- and attribute-level annotations
+    from existing ecocomDP datasets.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>calc_number_of_years_sampled</span><span class='op'>(</span><span class='va'>dates</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>annotation_dictionary</span><span class='op'>(</span><span class='op'>)</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>dates</th>
-      <td><p>(Date) Dates from the L0 source dataset encompassing the entire study duration.</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>(numeric) Number of survey years in which a sample was taken.</p>
+    <p>Use the search field to find the annotation terms and URIs.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/View.html'>View</a></span><span class='op'>(</span><span class='fu'>annotation_dictionary</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+    
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

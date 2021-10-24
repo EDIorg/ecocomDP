@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>The ecocomDP version of EDI data package knb-lter-hfr.118.33 — ants_L1 • ecocomDP</title>
+<title>The ecocomDP (L1) version of EDI data package knb-lter-hfr.118.33 — ants_L1 • ecocomDP</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="The ecocomDP version of EDI data package knb-lter-hfr.118.33 — ants_L1" />
+<meta property="og:title" content="The ecocomDP (L1) version of EDI data package knb-lter-hfr.118.33 — ants_L1" />
 <meta property="og:description" content="The the ecocomDP (L1) formatted version of EDI data package knb-lter-hfr.118.33 (Ant Assemblages in Hemlock Removal Experiment at Harvard Forest since 2003) read from the EDI API with read_data(id = &quot;edi.193.5&quot;). Use this dataset as an input to data &quot;use&quot; functions." />
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -96,6 +96,12 @@
     </li>
     <li>
       <a href="../articles/convert.html">Convert</a>
+    </li>
+    <li>
+      <a href="../articles/model_overview.html">Model Overview</a>
+    </li>
+    <li>
+      <a href="../articles/shared_practices_create.html">Shared Practices (Create)</a>
     </li>
   </ul>
 </li>
@@ -123,7 +129,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>The ecocomDP version of EDI data package knb-lter-hfr.118.33</h1>
+    <h1>The ecocomDP (L1) version of EDI data package knb-lter-hfr.118.33</h1>
     <small class="dont-index">Source: <a href='https://github.com/EDIorg/ecocomDP/blob/master/R/data.R'><code>R/data.R</code></a></small>
     <div class="hidden name"><code>ants_L1.Rd</code></div>
     </div>
@@ -138,12 +144,10 @@
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
     <p>A list of:</p><dl>
-  <dt>edi.193.5</dt><dd><p>The dataset identifier</p></dd>
-    
-      
-      
-      
-  
+  <dt>id</dt><dd><p>The dataset identifier</p></dd>
+  <dt>metadata</dt><dd><p>See source url for metadata</p></dd>
+  <dt>tables</dt><dd><p>A list of data frames, each an ecocomDP table</p></dd>
+  <dt>validation_issues</dt><dd><p>Is NULL because there are no validation issues for this dataset</p></dd>
 
 </dl>
 

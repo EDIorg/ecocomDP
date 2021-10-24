@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculate number_of_years_sampled for the dataset_summary table — calc_number_of_years_sampled • ecocomDP</title>
+<title>Plot dates and times samples were collected or observations were made — plot_sample_space_time • ecocomDP</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Calculate number_of_years_sampled for the dataset_summary table — calc_number_of_years_sampled" />
-<meta property="og:description" content="Calculate number_of_years_sampled for the dataset_summary table" />
+<meta property="og:title" content="Plot dates and times samples were collected or observations were made — plot_sample_space_time" />
+<meta property="og:description" content="Plot dates and times samples were collected or observations were made" />
 
 
 
@@ -129,30 +129,65 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate number_of_years_sampled for the dataset_summary table</h1>
-    <small class="dont-index">Source: <a href='https://github.com/EDIorg/ecocomDP/blob/master/R/create_dataset_summary.R'><code>R/create_dataset_summary.R</code></a></small>
-    <div class="hidden name"><code>calc_number_of_years_sampled.Rd</code></div>
+    <h1>Plot dates and times samples were collected or observations were made</h1>
+    <small class="dont-index">Source: <a href='https://github.com/EDIorg/ecocomDP/blob/master/R/plot_taxa.R'><code>R/plot_taxa.R</code></a></small>
+    <div class="hidden name"><code>plot_sample_space_time.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Calculate number_of_years_sampled for the dataset_summary table</p>
+    <p>Plot dates and times samples were collected or observations were made</p>
     </div>
 
-    <pre class="usage"><span class='fu'>calc_number_of_years_sampled</span><span class='op'>(</span><span class='va'>dates</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>plot_sample_space_time</span><span class='op'>(</span><span class='va'>data</span>, id <span class='op'>=</span> <span class='cn'>NA_character_</span>, alpha <span class='op'>=</span> <span class='fl'>1</span>, observation <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>dates</th>
-      <td><p>(Date) Dates from the L0 source dataset encompassing the entire study duration.</p></td>
+      <th>data</th>
+      <td><p>(list or tbl_df, tbl, data.frame) The dataset object returned by <code><a href='read_data.html'>read_data()</a></code>, a named list of tables containing the observation table, or a flat table containing columns of the observation table.</p></td>
+    </tr>
+    <tr>
+      <th>id</th>
+      <td><p>(character) Identifier of dataset to be used in plot subtitles. Is automatically assigned when <code>data</code> is a dataset object containing the <code>id</code> field, or is a table containing the package_id column.</p></td>
+    </tr>
+    <tr>
+      <th>alpha</th>
+      <td><p>(numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100% opaque. Default is 1.</p></td>
+    </tr>
+    <tr>
+      <th>observation</th>
+      <td><p>(tbl_df, tbl, data.frame) DEPRECATED: Use <code>data</code> instead.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>(numeric) Number of survey years in which a sample was taken.</p>
+    <p>(gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p>The <code>data</code> parameter accepts a range of input types but ultimately requires the 9 columns of the observation table.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'># Read a dataset of interest</span>
+<span class='va'>dataset</span> <span class='op'>&lt;-</span> <span class='fu'><a href='read_data.html'>read_data</a></span><span class='op'>(</span><span class='st'>"edi.193.5"</span><span class='op'>)</span>
+
+<span class='co'># Plot the dataset</span>
+<span class='fu'>plot_sample_space_time</span><span class='op'>(</span><span class='va'>dataset</span><span class='op'>)</span>
+
+<span class='co'># Flatten the dataset, manipulate, then plot</span>
+<span class='va'>dataset</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='flatten_data.html'>flatten_data</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='https://lubridate.tidyverse.org/reference/as_date.html'>as_date</a></span><span class='op'>(</span><span class='va'>datetime</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='st'>"2003-07-01"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>location_id</span><span class='op'>)</span> <span class='op'>&gt;</span> <span class='fl'>4</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>plot_sample_space_time</span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='co'># Plot the example dataset</span>
+<span class='fu'>plot_sample_space_time</span><span class='op'>(</span><span class='va'>ants_L1</span><span class='op'>)</span>
+</div><div class='img'><img src='plot_sample_space_time-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

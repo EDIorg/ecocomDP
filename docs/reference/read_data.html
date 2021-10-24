@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Read an ecocomDP dataset — read_data • ecocomDP</title>
+<title>Read published data — read_data • ecocomDP</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Read an ecocomDP dataset — read_data" />
-<meta property="og:description" content="Read an ecocomDP dataset" />
+<meta property="og:title" content="Read published data — read_data" />
+<meta property="og:description" content="Read published data" />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -96,6 +96,12 @@
     </li>
     <li>
       <a href="../articles/convert.html">Convert</a>
+    </li>
+    <li>
+      <a href="../articles/model_overview.html">Model Overview</a>
+    </li>
+    <li>
+      <a href="../articles/shared_practices_create.html">Shared Practices (Create)</a>
     </li>
   </ul>
 </li>
@@ -123,13 +129,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Read an ecocomDP dataset</h1>
+    <h1>Read published data</h1>
     <small class="dont-index">Source: <a href='https://github.com/EDIorg/ecocomDP/blob/master/R/read_data.R'><code>R/read_data.R</code></a></small>
     <div class="hidden name"><code>read_data.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Read an ecocomDP dataset</p>
+    <p>Read published data</p>
     </div>
 
     <pre class="usage"><span class='fu'>read_data</span><span class='op'>(</span>
@@ -147,7 +153,8 @@
   neon.data.save.dir <span class='op'>=</span> <span class='cn'>NULL</span>,
   neon.data.read.path <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>,
-  from <span class='op'>=</span> <span class='cn'>NULL</span>
+  from <span class='op'>=</span> <span class='cn'>NULL</span>,
+  format <span class='op'>=</span> <span class='st'>"new"</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -213,17 +220,19 @@
       <th>from</th>
       <td><p>(character) Full path of file to be read (if .rds), or path to directory containing saved datasets (if .csv).</p></td>
     </tr>
+    <tr>
+      <th>format</th>
+      <td><p>(character) Format of returned object, which can be: "new" (the new implementation) or "old" (the original implementation; deprecated). In the new format, the top most level of nesting containing the "id" field has been moved to the same level as the "tables", "metadata", and "validation_issues" fields.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>(list) with the structure:</p><ul>
-<li><p>id - Dataset identifier</p><ul>
+    <p>(list) A dataset with the structure:</p><ul>
+<li><p>id - Dataset identifier</p></li>
 <li><p>metadata - List of info about the dataset. NOTE: This object is underdevelopment and content may change in future releases.</p></li>
 <li><p>tables - List of dataset tables as data.frames.</p></li>
-<li><p>validation_issues - List of validation issues. If the dataset fails any validation checks, 
-    then descriptions of each issue are listed here.</p></li>
-</ul></li>
+<li><p>validation_issues - List of validation issues. If the dataset fails any validation checks, then descriptions of each issue are listed here.</p></li>
 </ul>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -243,113 +252,31 @@
     <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Read from EDI</span>
 <span class='va'>dataset</span> <span class='op'>&lt;-</span> <span class='fu'>read_data</span><span class='op'>(</span><span class='st'>"edi.193.5"</span><span class='op'>)</span>
-<span class='co'># str(dataset)</span>
-<span class='op'>}</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>dataset</span>, max.level <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Read from NEON (full dataset)</span>
 <span class='va'>dataset</span> <span class='op'>&lt;-</span> <span class='fu'>read_data</span><span class='op'>(</span><span class='st'>"neon.ecocomdp.20120.001.001"</span><span class='op'>)</span>
-<span class='op'>}</span>
 
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Read from NEON with filters (partial dataset)</span>
 <span class='va'>dataset</span> <span class='op'>&lt;-</span> <span class='fu'>read_data</span><span class='op'>(</span>
-  id <span class='op'>=</span> <span class='st'>"neon.ecocomdp.20120.001.001"</span>, 
-  site <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"COMO"</span>, <span class='st'>"LECO"</span>, <span class='st'>"SUGG"</span><span class='op'>)</span>,
-  startdate <span class='op'>=</span> <span class='st'>"2017-06"</span>, 
-  enddate <span class='op'>=</span> <span class='st'>"2019-09"</span>,
-  check.size <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='op'>}</span>
+ id <span class='op'>=</span> <span class='st'>"neon.ecocomdp.20120.001.001"</span>, 
+ site <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"COMO"</span>, <span class='st'>"LECO"</span>, <span class='st'>"SUGG"</span><span class='op'>)</span>,
+ startdate <span class='op'>=</span> <span class='st'>"2017-06"</span>, 
+ enddate <span class='op'>=</span> <span class='st'>"2019-09"</span>,
+ check.size <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Read with datetimes as character</span>
 <span class='va'>dataset</span> <span class='op'>&lt;-</span> <span class='fu'>read_data</span><span class='op'>(</span><span class='st'>"edi.193.5"</span>, parse_datetime <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>dataset</span><span class='op'>$</span><span class='va'>edi.193.5</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>observation</span><span class='op'>$</span><span class='va'>datetime</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>dataset</span><span class='op'>$</span><span class='va'>tables</span><span class='op'>$</span><span class='va'>observation</span><span class='op'>$</span><span class='va'>datetime</span><span class='op'>)</span>
+
+<span class='co'># Read from saved .rds</span>
+<span class='fu'><a href='save_data.html'>save_data</a></span><span class='op'>(</span><span class='va'>dataset</span>, <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>dataset</span> <span class='op'>&lt;-</span> <span class='fu'>read_data</span><span class='op'>(</span>from <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"/dataset.rds"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='co'># Read from saved .csv</span>
+<span class='fu'><a href='save_data.html'>save_data</a></span><span class='op'>(</span><span class='va'>dataset</span>, <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, type <span class='op'>=</span> <span class='st'>".csv"</span><span class='op'>)</span><span class='co'># Save as .csv</span>
+<span class='va'>dataset</span> <span class='op'>&lt;-</span> <span class='fu'>read_data</span><span class='op'>(</span>from <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
-
-<span class='co'># Save a list of datasets for reading</span>
-<span class='va'>datasets</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>ants_L1</span>, <span class='va'>ants_L1</span>, <span class='va'>ants_L1</span><span class='op'>)</span>  <span class='co'># 3 of the same, w/different names</span>
-<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>datasets</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ds1"</span>, <span class='st'>"ds2"</span>, <span class='st'>"ds3"</span><span class='op'>)</span>
-<span class='va'>mypath</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"/datasets"</span><span class='op'>)</span>      <span class='co'># A place for saving</span>
-<span class='fu'><a href='https://rdrr.io/r/base/files2.html'>dir.create</a></span><span class='op'>(</span><span class='va'>mypath</span><span class='op'>)</span>
-<span class='fu'><a href='save_data.html'>save_data</a></span><span class='op'>(</span><span class='va'>datasets</span>, <span class='va'>mypath</span><span class='op'>)</span>               <span class='co'># Save as .rds</span>
-</div><div class='output co'>#&gt; <span class='message'>Writing datasets.rds to C:\Users\Colin\AppData\Local\Temp\RtmpUJY6gK/datasets</span></div><div class='input'><span class='fu'><a href='save_data.html'>save_data</a></span><span class='op'>(</span><span class='va'>datasets</span>, <span class='va'>mypath</span>, type <span class='op'>=</span> <span class='st'>".csv"</span><span class='op'>)</span><span class='co'># Save as .csv</span>
-</div><div class='output co'>#&gt; <span class='message'>Writing ds1, ds2, ds3 as .csv to C:\Users\Colin\AppData\Local\Temp\RtmpUJY6gK/datasets</span></div><div class='input'>
-<span class='co'># Read from local .rds</span>
-<span class='va'>datasets</span> <span class='op'>&lt;-</span> <span class='fu'>read_data</span><span class='op'>(</span>from <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='va'>mypath</span>, <span class='st'>"/datasets.rds"</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'># Read from local .csv</span>
-<span class='va'>datasets</span> <span class='op'>&lt;-</span> <span class='fu'>read_data</span><span class='op'>(</span>from <span class='op'>=</span> <span class='va'>mypath</span><span class='op'>)</span>
-
-<span class='co'># A dataset is returned as a list of metadata, tables, and validation issues</span>
-<span class='co'># (if there are any). The dataset ID is assigned to the top level for </span>
-<span class='co'># reference.</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>datasets</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; List of 1
-#&gt;  $ ds1:List of 2
-#&gt;   ..$ metadata: NULL
-#&gt;   ..$ tables  :List of 8
-#&gt;   .. ..$ location             :'data.frame':	10 obs. of  6 variables:
-#&gt;   .. .. ..$ location_id       : chr [1:10] "a1" "a2" "1" "2" ...
-#&gt;   .. .. ..$ location_name     : chr [1:10] "block__Ridge" "block__Valley" "plot__1" "plot__2" ...
-#&gt;   .. .. ..$ latitude          : num [1:10] NA NA 42.5 42.5 42.5 ...
-#&gt;   .. .. ..$ longitude         : num [1:10] NA NA -72.2 -72.2 -72.2 ...
-#&gt;   .. .. ..$ elevation         : num [1:10] NA NA 220 220 220 220 220 220 220 220
-#&gt;   .. .. ..$ parent_location_id: chr [1:10] NA NA "a2" "a2" ...
-#&gt;   .. ..$ taxon                :'data.frame':	53 obs. of  5 variables:
-#&gt;   .. .. ..$ taxon_id          : chr [1:53] "1" "2" "3" "4" ...
-#&gt;   .. .. ..$ taxon_rank        : chr [1:53] "Species" "Species" "Species" "Species" ...
-#&gt;   .. .. ..$ taxon_name        : chr [1:53] "Aphaenogaster fulva" "Aphaenogaster picea" "Camponotus chromaiodes" "Camponotus herculeanus" ...
-#&gt;   .. .. ..$ authority_system  : chr [1:53] "ITIS" "ITIS" "ITIS" "ITIS" ...
-#&gt;   .. .. ..$ authority_taxon_id: chr [1:53] "578383" "578440" "575766" "575995" ...
-#&gt;   .. ..$ observation          :'data.frame':	2931 obs. of  9 variables:
-#&gt;   .. .. ..$ observation_id: chr [1:2931] "1" "2" "3" "4" ...
-#&gt;   .. .. ..$ event_id      : chr [1:2931] "1" "1" "1" "1" ...
-#&gt;   .. .. ..$ package_id    : chr [1:2931] "edi.193.5" "edi.193.5" "edi.193.5" "edi.193.5" ...
-#&gt;   .. .. ..$ location_id   : chr [1:2931] "4" "4" "4" "4" ...
-#&gt;   .. .. ..$ datetime      : Date[1:2931], format: "2003-06-01" ...
-#&gt;   .. .. ..$ taxon_id      : chr [1:2931] "1" "2" "53" "2" ...
-#&gt;   .. .. ..$ variable_name : chr [1:2931] "abundance" "abundance" "abundance" "abundance" ...
-#&gt;   .. .. ..$ value         : num [1:2931] 2 2 1 2 1 1 1 1 1 1 ...
-#&gt;   .. .. ..$ unit          : chr [1:2931] "number" "number" "number" "number" ...
-#&gt;   .. ..$ location_ancillary   :'data.frame':	8 obs. of  6 variables:
-#&gt;   .. .. ..$ location_ancillary_id: chr [1:8] "1" "2" "3" "4" ...
-#&gt;   .. .. ..$ location_id          : chr [1:8] "1" "2" "3" "4" ...
-#&gt;   .. .. ..$ datetime             : Date[1:8], format: NA ...
-#&gt;   .. .. ..$ variable_name        : chr [1:8] "treatment" "treatment" "treatment" "treatment" ...
-#&gt;   .. .. ..$ value                : chr [1:8] "Girdled" "Logged" "HemlockControl" "Logged" ...
-#&gt;   .. .. ..$ unit                 : chr [1:8] NA NA NA NA ...
-#&gt;   .. ..$ taxon_ancillary      :'data.frame':	742 obs. of  7 variables:
-#&gt;   .. .. ..$ taxon_ancillary_id: chr [1:742] "1" "2" "3" "4" ...
-#&gt;   .. .. ..$ taxon_id          : chr [1:742] "1" "1" "1" "1" ...
-#&gt;   .. .. ..$ datetime          : Date[1:742], format: NA ...
-#&gt;   .. .. ..$ variable_name     : chr [1:742] "subfamily" "hl" "rel" "rll" ...
-#&gt;   .. .. ..$ value             : chr [1:742] "Myrmicinae" "1.1582" "0.172681748" "1.323778277" ...
-#&gt;   .. .. ..$ unit              : chr [1:742] NA "millimeter" "millimeter" "millimeter" ...
-#&gt;   .. .. ..$ author            : chr [1:742] NA NA NA NA ...
-#&gt;   .. ..$ observation_ancillary:'data.frame':	8793 obs. of  5 variables:
-#&gt;   .. .. ..$ observation_ancillary_id: chr [1:8793] "1" "2" "3" "4" ...
-#&gt;   .. .. ..$ observation_id          : chr [1:8793] "1" "1" "1" "2" ...
-#&gt;   .. .. ..$ variable_name           : chr [1:8793] "trap.type" "trap.num" "moose.cage" "trap.type" ...
-#&gt;   .. .. ..$ value                   : chr [1:8793] "bait" "1 hour" NA "bait" ...
-#&gt;   .. .. ..$ unit                    : chr [1:8793] NA NA NA NA ...
-#&gt;   .. ..$ dataset_summary      :'data.frame':	1 obs. of  7 variables:
-#&gt;   .. .. ..$ package_id                 : chr "edi.193.5"
-#&gt;   .. .. ..$ original_package_id        : chr "knb-lter-hfr.118.33"
-#&gt;   .. .. ..$ length_of_survey_years     : num 15
-#&gt;   .. .. ..$ number_of_years_sampled    : num 13
-#&gt;   .. .. ..$ std_dev_interval_betw_years: num 0.67
-#&gt;   .. .. ..$ max_num_taxa               : num 53
-#&gt;   .. .. ..$ geo_extent_bounding_box_m2 : num 913451
-#&gt;   .. ..$ variable_mapping     :'data.frame':	19 obs. of  6 variables:
-#&gt;   .. .. ..$ variable_mapping_id: chr [1:19] "1" "2" "3" "4" ...
-#&gt;   .. .. ..$ table_name         : chr [1:19] "observation" "observation_ancillary" "observation_ancillary" "observation_ancillary" ...
-#&gt;   .. .. ..$ variable_name      : chr [1:19] "abundance" "trap.type" "trap.num" "moose.cage" ...
-#&gt;   .. .. ..$ mapped_system      : chr [1:19] "Darwin Core" "The Ecosystem Ontology" NA NA ...
-#&gt;   .. .. ..$ mapped_id          : chr [1:19] "http://rs.tdwg.org/dwc/terms/individualCount" "http://purl.dataone.org/odo/ECSO_00001591" NA NA ...
-#&gt;   .. .. ..$ mapped_label       : chr [1:19] "individualCount" "type of trap" NA NA ...</div><div class='input'>
-<span class='co'># Clean up</span>
-<span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span><span class='op'>(</span><span class='va'>mypath</span>, recursive <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 </div></pre>
   </div>
