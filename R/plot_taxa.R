@@ -909,6 +909,9 @@ plot_taxa_rank <- function(data,
 #'   dplyr::filter(lubridate::as_date(datetime) > "2003-07-01") %>%
 #'   plot_taxa_occur_freq()
 #' }
+#' # Plot the example dataset
+#' plot_taxa_occur_freq(ants_L1)
+#' 
 plot_taxa_occur_freq <- function(data, 
                                  id = NA_character_,
                                  min_occurrence = 0, 
