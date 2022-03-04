@@ -1314,15 +1314,15 @@ plot_sites <- function(data,
       .data$location_name,
       .data$package_id) %>%
     dplyr::distinct()
-  transformed_cleaned <- suppressWarnings(usmap::usmap_transform(cleaned))
+  transformed_cleaned <- suppressWarnings(usmap::usmap_transform(cleaned, input_names = c("longitude", "latitude")))
   usmap::plot_usmap(color = "grey") + 
     ggplot2::geom_point(
       data = transformed_cleaned,
-      ggplot2::aes(x = .data$longitude.1, y = .data$latitude.1, size = 20),
+      ggplot2::aes(x = .data$x, y = .data$x, size = 20),
       color = "red", alpha = alpha) +
     ggrepel::geom_text_repel(
       data = transformed_cleaned,
-      aes(x = .data$longitude.1, y = .data$latitude.1, label = .data$location_name),
+      aes(x = .data$x, y = .data$y, label = .data$location_name),
       size = 3, max.overlaps = Inf) +
     ggplot2::xlab("Longitude") +
     ggplot2::ylab(paste0("Latitude")) +
