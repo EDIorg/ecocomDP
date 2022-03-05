@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/EDIorg/ecocomDP",
   "issueTracker": "https://github.com/EDIorg/ecocomDP/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -247,6 +247,7 @@
       "@type": "SoftwareApplication",
       "identifier": "usmap",
       "name": "usmap",
+      "version": ">= 0.6.0",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -530,5 +531,5 @@
   },
   "readme": "https://github.com/EDIorg/ecocomDP/blob/master/README.md",
   "relatedLink": "https://CRAN.R-project.org/package=ecocomDP",
-  "fileSize": "4664.009KB"
+  "fileSize": "2647.027KB"
 }
