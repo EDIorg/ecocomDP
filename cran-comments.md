@@ -1,5 +1,6 @@
 ## Revision
-This release fixes breaking changes introduced by the suggested usmap package.
+This release fixes breaking changes introduced by the suggested usmap package 
+and makes one minor performance improvement to a non-exported function.
 
 ## Test environments
 * local Windows install, R 4.1.0
