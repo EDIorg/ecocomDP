@@ -1,4 +1,7 @@
-# ecocomDP 1.2.0.9000
+# ecocomDP 1.2.1
+
+## Fixes
+* Fix `plot_sites()` to work with version 0.6.0 of the usmap package. See issue [#136](https://github.com/EDIorg/ecocomDP/issues/136).
 
 # ecocomDP 1.2.0
 
