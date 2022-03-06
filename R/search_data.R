@@ -177,7 +177,8 @@ search_data <- function(text, taxa, num_taxa, num_years, sd_years,
                 tolower(d[[i]]$taxa[[k]]$taxa),
                 tolower(taxa))), 
             silent = TRUE)
-          if (class(taxa_i[k]) == "try-error") {
+          if (methods::is(taxa_i[k], "try-error")) {
+          # if (class(taxa_i[k]) == "try-error") {
             taxa_i[k] <- FALSE
           }
         } else if (boolean == "OR") {
@@ -186,7 +187,7 @@ search_data <- function(text, taxa, num_taxa, num_years, sd_years,
               tolower(d[[i]]$taxa[[k]]$taxa),
               tolower(paste(taxa, collapse = "|"))),
             silent = TRUE)
-          if (class(taxa_i[k]) == "try-error") {
+          if (methods::is(taxa_i[k], "try-error")) {
             taxa_i[k] <- FALSE
           }
         }

@@ -340,7 +340,7 @@ not_all_NAs <- function(x) {
 #
 dup_fxn <- function(x){
   x <- unlist(x)
-  if(class(x) == "numeric"){
+  if (methods::is(x, "numeric")){
     message(paste0("WARNING: duplicate values observed for during pivot_wider. Duplicates will be averaged."))
     return(mean(x, na.rm = TRUE))
   }else{

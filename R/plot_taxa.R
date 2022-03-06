@@ -1318,7 +1318,7 @@ plot_sites <- function(data,
   usmap::plot_usmap(color = "grey") + 
     ggplot2::geom_point(
       data = transformed_cleaned,
-      ggplot2::aes(x = .data$x, y = .data$x, size = 20),
+      ggplot2::aes(x = .data$x, y = .data$y, size = 20),
       color = "red", alpha = alpha) +
     ggrepel::geom_text_repel(
       data = transformed_cleaned,

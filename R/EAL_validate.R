@@ -559,7 +559,8 @@ annotate_eml <- function(
       pos <- match(name, names(x))
       if (!is.na(pos)) return(x[[pos]])
       for (el in x) {
-        if (class(el) == "list") {
+        if (methods::is(el, "list")) {
+        # if (class(el) == "list") {
           out <- Recall(el, name)
           if (!is.null(out)) return(out)
         }

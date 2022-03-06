@@ -922,7 +922,7 @@ txcl_optimize_match_common <- function(x, data.sources){
           authority = data.sources[j])),
       silent = TRUE)
     
-    if (class(out_id) == "try-error") {
+    if (methods::is(out_id, "try-error")) {
       out_id <- list(
         'taxon_id' = NA_character_,
         'taxon_rank' = NA_character_,
