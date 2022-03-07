@@ -419,6 +419,11 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "methods",
+      "name": "methods"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "neonUtilities",
       "name": "neonUtilities",
       "version": ">= 2.1.1",
@@ -531,5 +536,5 @@
   },
   "readme": "https://github.com/EDIorg/ecocomDP/blob/master/README.md",
   "relatedLink": "https://CRAN.R-project.org/package=ecocomDP",
-  "fileSize": "2647.027KB"
+  "fileSize": "2647.156KB"
 }
