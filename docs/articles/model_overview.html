@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -41,7 +43,7 @@
   <a href="../reference/index.html">Functions</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -70,7 +72,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/EDIorg/ecocomDP/">
+  <a href="https://github.com/EDIorg/ecocomDP/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -85,13 +87,13 @@
 
       
 
-      </header><script src="model_overview_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>ecocomDP Model Overview</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/EDIorg/ecocomDP/blob/master/vignettes/model_overview.Rmd"><code>vignettes/model_overview.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/EDIorg/ecocomDP/blob/HEAD/vignettes/model_overview.Rmd" class="external-link"><code>vignettes/model_overview.Rmd</code></a></small>
       <div class="hidden name"><code>model_overview.Rmd</code></div>
 
     </div>
@@ -99,9 +101,9 @@
     
     
 <hr>
-<div id="contents" class="section level4">
-<h4 class="hasAnchor">
-<a href="#contents" class="anchor"></a>Contents</h4>
+<div class="section level5">
+<h5 id="contents">Contents<a class="anchor" aria-label="anchor" href="#contents"></a>
+</h5>
 <ul>
 <li>
 <a href="#main">Table descriptions, relationships, and requirements</a>
@@ -125,18 +127,18 @@
 </ul>
 <hr>
 </div>
-<div id="main" class="section level1">
-<h1 class="hasAnchor">
-<a href="#main" class="anchor"></a>Table descriptions, relationships, and requirements</h1>
-<div id="overview" class="section level2">
-<h2 class="hasAnchor">
-<a href="#overview" class="anchor"></a>Overview</h2>
+<div class="section level2">
+<h2 id="main">Table descriptions, relationships, and requirements<a class="anchor" aria-label="anchor" href="#main"></a>
+</h2>
+<div class="section level3">
+<h3 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h3>
 <p>This document describes the eight ecocomDP tables and their contents. Four tables are required (observation, location, taxon, and dataset_summary). Each main table (observation, location, taxon) has an optional ancillary table for additional information. These are included because primary research typically contains related measurements which may be of interest during analysis. The dataset_summary table is populated from the observation table contents, and the variable_mapping table holds URIs and labels for external measurement dictionaries.</p>
-<p>An example ecocomDP dataset is <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=193">here</a> and a graphic showing all tables and their relationships is available <a href="#vis">here</a>.</p>
+<p>An example ecocomDP dataset is <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=193" class="external-link">here</a> and a graphic showing all tables and their relationships is available <a href="#vis">here</a>.</p>
 </div>
-<div id="tables" class="section level2">
-<h2 class="hasAnchor">
-<a href="#tables" class="anchor"></a>Tables</h2>
+<div class="section level3">
+<h3 id="tables">Tables<a class="anchor" aria-label="anchor" href="#tables"></a>
+</h3>
 <table class="table">
 <colgroup>
 <col width="18%">
@@ -201,13 +203,13 @@
 </tr>
 </tbody>
 </table>
-<div id="observation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#observation" class="anchor"></a>Table: observation</h3>
+<div class="section level4">
+<h4 id="observation">Table: observation<a class="anchor" aria-label="anchor" href="#observation"></a>
+</h4>
 <p>Description: This is the core table, which holds the observations being analyzed (e.g. organism abundance or density). Observations must be linked to a taxon and to a location. Linking to ancillary observations is optional.</p>
-<div id="columns" class="section level4">
-<h4 class="hasAnchor">
-<a href="#columns" class="anchor"></a>Columns</h4>
+<div class="section level5">
+<h5 id="columns">Columns<a class="anchor" aria-label="anchor" href="#columns"></a>
+</h5>
 <table class="table">
 <colgroup>
 <col width="16%">
@@ -302,13 +304,13 @@
 </table>
 </div>
 </div>
-<div id="location" class="section level3">
-<h3 class="hasAnchor">
-<a href="#location" class="anchor"></a>Table: location</h3>
+<div class="section level4">
+<h4 id="location">Table: location<a class="anchor" aria-label="anchor" href="#location"></a>
+</h4>
 <p>Description: Identifying information about a place (longitude, latitude, elevation). The table is self-referencing so that sites can be nested.</p>
-<div id="columns-1" class="section level4">
-<h4 class="hasAnchor">
-<a href="#columns-1" class="anchor"></a>Columns</h4>
+<div class="section level5">
+<h5 id="columns-1">Columns<a class="anchor" aria-label="anchor" href="#columns-1"></a>
+</h5>
 <table class="table">
 <colgroup>
 <col width="17%">
@@ -379,13 +381,13 @@
 </table>
 </div>
 </div>
-<div id="taxon" class="section level3">
-<h3 class="hasAnchor">
-<a href="#taxon" class="anchor"></a>Table: taxon</h3>
+<div class="section level4">
+<h4 id="taxon">Table: taxon<a class="anchor" aria-label="anchor" href="#taxon"></a>
+</h4>
 <p>Description: Identifying information about a taxon (e.g. name, id, and system).</p>
-<div id="columns-2" class="section level4">
-<h4 class="hasAnchor">
-<a href="#columns-2" class="anchor"></a>Columns</h4>
+<div class="section level5">
+<h5 id="columns-2">Columns<a class="anchor" aria-label="anchor" href="#columns-2"></a>
+</h5>
 <table class="table">
 <colgroup>
 <col width="17%">
@@ -448,13 +450,13 @@
 </table>
 </div>
 </div>
-<div id="dataset_summary" class="section level3">
-<h3 class="hasAnchor">
-<a href="#dataset_summary" class="anchor"></a>Table: dataset_summary</h3>
+<div class="section level4">
+<h4 id="dataset_summary">Table: dataset_summary<a class="anchor" aria-label="anchor" href="#dataset_summary"></a>
+</h4>
 <p>Description: Summary info about the dataset.</p>
-<div id="columns-3" class="section level4">
-<h4 class="hasAnchor">
-<a href="#columns-3" class="anchor"></a>Columns</h4>
+<div class="section level5">
+<h5 id="columns-3">Columns<a class="anchor" aria-label="anchor" href="#columns-3"></a>
+</h5>
 <table class="table">
 <colgroup>
 <col width="16%">
@@ -533,13 +535,13 @@
 </table>
 </div>
 </div>
-<div id="observation_ancillary" class="section level3">
-<h3 class="hasAnchor">
-<a href="#observation_ancillary" class="anchor"></a>Table: observation_ancillary</h3>
+<div class="section level4">
+<h4 id="observation_ancillary">Table: observation_ancillary<a class="anchor" aria-label="anchor" href="#observation_ancillary"></a>
+</h4>
 <p>Description: Ancillary information about an observational event for context. These are very often environmental driver data in analyses (e.g. water depth, height of a tower, temperature of medium).</p>
-<div id="columns-4" class="section level4">
-<h4 class="hasAnchor">
-<a href="#columns-4" class="anchor"></a>Columns</h4>
+<div class="section level5">
+<h5 id="columns-4">Columns<a class="anchor" aria-label="anchor" href="#columns-4"></a>
+</h5>
 <table class="table">
 <colgroup>
 <col width="16%">
@@ -602,13 +604,13 @@
 </table>
 </div>
 </div>
-<div id="location_ancillary" class="section level3">
-<h3 class="hasAnchor">
-<a href="#location_ancillary" class="anchor"></a>Table: location_ancillary</h3>
+<div class="section level4">
+<h4 id="location_ancillary">Table: location_ancillary<a class="anchor" aria-label="anchor" href="#location_ancillary"></a>
+</h4>
 <p>Description: Additional information about a place that does not change frequently (e.g. lake area or depth, experimental treatment). Features that change frequently are more closely related to the observational event, and are thus kept in the observation_ancillary table. Ancillary observations are linked through the location_id, and one location_id may have many ancillary observations about it.</p>
-<div id="columns-5" class="section level4">
-<h4 class="hasAnchor">
-<a href="#columns-5" class="anchor"></a>Columns</h4>
+<div class="section level5">
+<h5 id="columns-5">Columns<a class="anchor" aria-label="anchor" href="#columns-5"></a>
+</h5>
 <table class="table">
 <colgroup>
 <col width="17%">
@@ -679,13 +681,13 @@
 </table>
 </div>
 </div>
-<div id="taxon_ancillary" class="section level3">
-<h3 class="hasAnchor">
-<a href="#taxon_ancillary" class="anchor"></a>Table: taxon_ancillary</h3>
+<div class="section level4">
+<h4 id="taxon_ancillary">Table: taxon_ancillary<a class="anchor" aria-label="anchor" href="#taxon_ancillary"></a>
+</h4>
 <p>Description: Additional info about an organism that does not change frequently (e.g. trophic level). Features that change frequently are probably observations. Ancillary observations are linked through the taxon_id, which may have many ancillary observations about it.</p>
-<div id="columns-6" class="section level4">
-<h4 class="hasAnchor">
-<a href="#columns-6" class="anchor"></a>Columns</h4>
+<div class="section level5">
+<h5 id="columns-6">Columns<a class="anchor" aria-label="anchor" href="#columns-6"></a>
+</h5>
 <table class="table">
 <colgroup>
 <col width="16%">
@@ -764,9 +766,9 @@
 </table>
 </div>
 </div>
-<div id="variable_mapping" class="section level3">
-<h3 class="hasAnchor">
-<a href="#variable_mapping" class="anchor"></a>Table: variable_mapping</h3>
+<div class="section level4">
+<h4 id="variable_mapping">Table: variable_mapping<a class="anchor" aria-label="anchor" href="#variable_mapping"></a>
+</h4>
 <p>Description: Information linking a variable_name used in a table to an external definition.</p>
 <p>This optional table holds mappings (or relations) between variable names in the data tables and measurement definitions external to the data package. This table has multiple uses:</p>
 <ul>
@@ -774,9 +776,9 @@
 <li>code can use this table to to create EML code-definition pairs or annotations in metadata</li>
 <li>a single column in a data table may have mappings to multiple dictionaries, by including multiple rows for it</li>
 </ul>
-<div id="columns-7" class="section level4">
-<h4 class="hasAnchor">
-<a href="#columns-7" class="anchor"></a>Columns</h4>
+<div class="section level5">
+<h5 id="columns-7">Columns<a class="anchor" aria-label="anchor" href="#columns-7"></a>
+</h5>
 <table class="table">
 <colgroup>
 <col width="16%">
@@ -850,9 +852,9 @@
 </div>
 </div>
 </div>
-<div id="vis" class="section level1">
-<h1 class="hasAnchor">
-<a href="#vis" class="anchor"></a>Entity Relationship Diagram</h1>
+<div class="section level2">
+<h2 id="vis">Entity Relationship Diagram<a class="anchor" aria-label="anchor" href="#vis"></a>
+</h2>
 <p><img src="model.png" width="100%"> Figure 1: The optional tables are partly transparent. The primary key for each table is the id (column named “table_name_id”, with a green background. Columns that (as a group) should be unique within the table, have a yellow background. Many:many relationships are shown with dotted lines (side note: if this model were implemented in a relational database, each many:many relationship would require an intermediate table).</p>
 </div>
   </div>
@@ -868,11 +870,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Colin Smith, Eric Sokol, Margaret O'Brien.</p>
+  <p></p>
+<p>Developed by Colin Smith, Eric Sokol, Margaret O’Brien.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -880,6 +884,8 @@
 
   
 
+
+  
 
   </body>
 </html>

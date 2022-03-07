@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -41,7 +43,7 @@
   <a href="../reference/index.html">Functions</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -70,7 +72,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/EDIorg/ecocomDP/">
+  <a href="https://github.com/EDIorg/ecocomDP/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -85,13 +87,13 @@
 
       
 
-      </header><script src="use_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Use ecocomDP Data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/EDIorg/ecocomDP/blob/master/vignettes/use.Rmd"><code>vignettes/use.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/EDIorg/ecocomDP/blob/HEAD/vignettes/use.Rmd" class="external-link"><code>vignettes/use.Rmd</code></a></small>
       <div class="hidden name"><code>use.Rmd</code></div>
 
     </div>
@@ -100,10 +102,10 @@
     
 <p>A set of “use” functions help you search, read, manipulate, plot, and save ecocomDP data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EDIorg/ecocomDP">ecocomDP</a></span><span class="op">)</span></code></pre></div>
-<div id="search" class="section level2">
-<h2 class="hasAnchor">
-<a href="#search" class="anchor"></a>Search</h2>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EDIorg/ecocomDP" class="external-link">ecocomDP</a></span><span class="op">)</span></code></pre></div>
+<div class="section level2">
+<h2 id="search">Search<a class="anchor" aria-label="anchor" href="#search"></a>
+</h2>
 <p>Find data of interest by searching on one or more query parameters.</p>
 <p>All available datasets are returned with an empty call to <code><a href="../reference/search_data.html">search_data()</a></code>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -131,7 +133,7 @@
 <span class="co">#&gt; #   source_id_url &lt;chr&gt;</span></code></pre></div>
 <p>The “num_years” parameter lets you find datasets within a range of sampling years. Datasets with 20 to 40 years of sampling:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/search_data.html">search_data</a></span><span class="op">(</span>num_years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/search_data.html">search_data</a></span><span class="op">(</span>num_years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 22 x 11</span>
 <span class="co">#&gt;   source id     title  description abstract  years sampling_interv~ sites url   </span>
 <span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;lgl&gt;       &lt;chr&gt;     &lt;int&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; </span>
@@ -143,7 +145,7 @@
 <span class="co">#&gt; #   source_id_url &lt;chr&gt;</span></code></pre></div>
 <p>The “area” parameter facilitates searches by geographic regions. Datasets originating from the Northeast United States:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/search_data.html">search_data</a></span><span class="op">(</span>area <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">47</span>, <span class="op">-</span><span class="fl">70</span>, <span class="fl">38</span>, <span class="op">-</span><span class="fl">90</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/search_data.html">search_data</a></span><span class="op">(</span>area <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">47</span>, <span class="op">-</span><span class="fl">70</span>, <span class="fl">38</span>, <span class="op">-</span><span class="fl">90</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 55 x 11</span>
 <span class="co">#&gt;   source id     title  description abstract  years sampling_interv~ sites url   </span>
 <span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;            &lt;chr&gt; &lt;chr&gt; </span>
@@ -155,7 +157,7 @@
 <span class="co">#&gt; #   source_id_url &lt;chr&gt;</span></code></pre></div>
 <p>Combine query parameters to narrow results:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/search_data.html">search_data</a></span><span class="op">(</span>taxa <span class="op">=</span> <span class="st">"Insecta"</span>, num_years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">100</span><span class="op">)</span>, area <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">47</span>, <span class="op">-</span><span class="fl">70</span>, <span class="fl">38</span>, <span class="op">-</span><span class="fl">90</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/search_data.html">search_data</a></span><span class="op">(</span>taxa <span class="op">=</span> <span class="st">"Insecta"</span>, num_years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">100</span><span class="op">)</span>, area <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">47</span>, <span class="op">-</span><span class="fl">70</span>, <span class="fl">38</span>, <span class="op">-</span><span class="fl">90</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 4 x 11</span>
 <span class="co">#&gt;   source id     title  description abstract  years sampling_interv~ sites url   </span>
 <span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;  &lt;lgl&gt;       &lt;chr&gt;     &lt;int&gt;            &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; </span>
@@ -166,7 +168,7 @@
 <span class="co">#&gt; # ... with 2 more variables: source_id &lt;chr&gt;, source_id_url &lt;chr&gt;</span></code></pre></div>
 <p>Assign results to a variable and learn more:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_data.html">search_data</a></span><span class="op">(</span>taxa <span class="op">=</span> <span class="st">"Insecta"</span>, num_years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">100</span><span class="op">)</span>, area <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">47</span>, <span class="op">-</span><span class="fl">70</span>, <span class="fl">38</span>, <span class="op">-</span><span class="fl">90</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_data.html">search_data</a></span><span class="op">(</span>taxa <span class="op">=</span> <span class="st">"Insecta"</span>, num_years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">100</span><span class="op">)</span>, area <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">47</span>, <span class="op">-</span><span class="fl">70</span>, <span class="fl">38</span>, <span class="op">-</span><span class="fl">90</span><span class="op">)</span><span class="op">)</span>
 <span class="va">r</span><span class="op">$</span><span class="va">title</span>
 <span class="co">#&gt; [1] "CGR02 Sweep Sampling of Grasshoppers on Konza Prairie LTER watersheds (Reformatted to ecocomDP Design Pattern)"         </span>
 <span class="co">#&gt; [2] "North Temperate Lakes LTER: Pelagic Macroinvertebrate Summary 1983 - current (Reformatted to ecocomDP Design Pattern)"  </span>
@@ -174,9 +176,9 @@
 <span class="co">#&gt; [4] "North Temperate Lakes LTER: Pelagic Macroinvertebrate Abundance 1983 - current (Reformatted to ecocomDP Design Pattern)"</span></code></pre></div>
 <p>See <code><a href="../reference/search_data.html">?search_data</a></code> for additional query parameters.</p>
 </div>
-<div id="read" class="section level2">
-<h2 class="hasAnchor">
-<a href="#read" class="anchor"></a>Read</h2>
+<div class="section level2">
+<h2 id="read">Read<a class="anchor" aria-label="anchor" href="#read"></a>
+</h2>
 <p>Read data from host APIs to get the newest authoritative version.</p>
 <p>Read from the host API:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -208,7 +210,7 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dataset_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_data.html">read_data</a></span><span class="op">(</span>
   id <span class="op">=</span> <span class="st">"neon.ecocomdp.20120.001.001"</span>, 
-  site <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"COMO"</span>, <span class="st">"LECO"</span>, <span class="st">"SUGG"</span><span class="op">)</span>,
+  site <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"COMO"</span>, <span class="st">"LECO"</span>, <span class="st">"SUGG"</span><span class="op">)</span>,
   startdate <span class="op">=</span> <span class="st">"2017-06"</span>, 
   enddate <span class="op">=</span> <span class="st">"2019-09"</span>,
   check.size <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
@@ -255,7 +257,7 @@
 <span class="co">#&gt;   variable_mapping</span></code></pre></div>
 <p>A data are returned as a list of metadata, tables, and validation issues (if there are any). The dataset identifier is at the top of this list.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">dataset_1</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">dataset_1</span><span class="op">)</span>
 <span class="co">#&gt; List of 4</span>
 <span class="co">#&gt;  $ id               : chr "edi.193.5"</span>
 <span class="co">#&gt;  $ metadata         :List of 1</span>
@@ -322,31 +324,31 @@
 <span class="co">#&gt;   .. ..$ mapped_label       : chr [1:19] "individualCount" "type of trap" NA NA ...</span>
 <span class="co">#&gt;  $ validation_issues: list()</span></code></pre></div>
 </div>
-<div id="manipulate" class="section level2">
-<h2 class="hasAnchor">
-<a href="#manipulate" class="anchor"></a>Manipulate</h2>
+<div class="section level2">
+<h2 id="manipulate">Manipulate<a class="anchor" aria-label="anchor" href="#manipulate"></a>
+</h2>
 <p>Working with a “flattened” dataset simplifies common tasks (select, filter, arrange, group, summarize). A “flat” version is where all tables have been joined and spread wide except for the core observation variables, which remain in long form.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">flat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/flatten_data.html">flatten_data</a></span><span class="op">(</span><span class="va">dataset_1</span><span class="op">)</span>
 <span class="va">flat</span>
-<span class="co">#&gt; # A tibble: 2,931 x 46</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,931 x 46</span></span>
 <span class="co">#&gt;   observation_id event_id datetime   variable_name value unit   trap.type</span>
-<span class="co">#&gt;   &lt;chr&gt;          &lt;chr&gt;    &lt;date&gt;     &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;    </span>
-<span class="co">#&gt; 1 1              1        2003-06-01 abundance         2 number bait     </span>
-<span class="co">#&gt; 2 2              1        2003-06-01 abundance         2 number bait     </span>
-<span class="co">#&gt; 3 3              1        2003-06-01 abundance         1 number bait     </span>
-<span class="co">#&gt; 4 4              1        2003-06-01 abundance         2 number bait     </span>
-<span class="co">#&gt; # ... with 2,927 more rows, and 39 more variables: trap.num &lt;chr&gt;,</span>
-<span class="co">#&gt; #   moose.cage &lt;chr&gt;, location_id &lt;chr&gt;, location_name &lt;chr&gt;, block &lt;chr&gt;,</span>
-<span class="co">#&gt; #   plot &lt;chr&gt;, latitude &lt;dbl&gt;, longitude &lt;dbl&gt;, elevation &lt;dbl&gt;,</span>
-<span class="co">#&gt; #   treatment &lt;chr&gt;, taxon_id &lt;chr&gt;, taxon_rank &lt;chr&gt;, taxon_name &lt;chr&gt;,</span>
-<span class="co">#&gt; #   authority_system &lt;chr&gt;, authority_taxon_id &lt;chr&gt;, behavior &lt;chr&gt;,</span>
-<span class="co">#&gt; #   biogeographic.affinity &lt;chr&gt;, colony.size &lt;chr&gt;, feeding.preference &lt;chr&gt;,</span>
-<span class="co">#&gt; #   hl &lt;dbl&gt;, unit_hl &lt;chr&gt;, nest.substrate &lt;chr&gt;, primary.habitat &lt;chr&gt;, ...</span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1              1        2003-06-01 abundance         2 number bait     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> 2              1        2003-06-01 abundance         2 number bait     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> 3              1        2003-06-01 abundance         1 number bait     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> 4              1        2003-06-01 abundance         2 number bait     </span>
+<span class="co">#&gt; <span style="color: #949494;"># ... with 2,927 more rows, and 39 more variables: trap.num &lt;chr&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   moose.cage &lt;chr&gt;, location_id &lt;chr&gt;, location_name &lt;chr&gt;, block &lt;chr&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   plot &lt;chr&gt;, latitude &lt;dbl&gt;, longitude &lt;dbl&gt;, elevation &lt;dbl&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   treatment &lt;chr&gt;, taxon_id &lt;chr&gt;, taxon_rank &lt;chr&gt;, taxon_name &lt;chr&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   authority_system &lt;chr&gt;, authority_taxon_id &lt;chr&gt;, behavior &lt;chr&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   biogeographic.affinity &lt;chr&gt;, colony.size &lt;chr&gt;, feeding.preference &lt;chr&gt;,</span></span>
+<span class="co">#&gt; <span style="color: #949494;">#   hl &lt;dbl&gt;, unit_hl &lt;chr&gt;, nest.substrate &lt;chr&gt;, primary.habitat &lt;chr&gt;, ...</span></span></code></pre></div>
 </div>
-<div id="plot" class="section level2">
-<h2 class="hasAnchor">
-<a href="#plot" class="anchor"></a>Plot</h2>
+<div class="section level2">
+<h2 id="plot">Plot<a class="anchor" aria-label="anchor" href="#plot"></a>
+</h2>
 <p>Visually explore data with the plotting functions:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_taxa_accum_time.html">plot_taxa_accum_time</a></span><span class="op">(</span><span class="va">flat</span><span class="op">)</span></code></pre></div>
@@ -391,25 +393,23 @@
 <p><img src="use_files/figure-html/unnamed-chunk-14-9.png" width="672"></p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="fu"><a href="../reference/plot_sites.html">plot_sites</a></span><span class="op">(</span><span class="va">flat</span><span class="op">)</span>
-<span class="co">#&gt; Warning in showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj =</span>
-<span class="co">#&gt; prefer_proj): Discarded datum unknown in Proj4 definition</span></code></pre></div>
+<span class="fu"><a href="../reference/plot_sites.html">plot_sites</a></span><span class="op">(</span><span class="va">flat</span><span class="op">)</span></code></pre></div>
 <p><img src="use_files/figure-html/unnamed-chunk-14-10.png" width="672"></p>
 </div>
-<div id="save" class="section level2">
-<h2 class="hasAnchor">
-<a href="#save" class="anchor"></a>Save</h2>
+<div class="section level2">
+<h2 id="save">Save<a class="anchor" aria-label="anchor" href="#save"></a>
+</h2>
 <p>Save local copies and read them back in later.</p>
 <p>Save a local copy as .rds:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">dataset_1</span>, <span class="va">dataset_2</span><span class="op">)</span>
-<span class="va">mypath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"/data"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="va">mypath</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">dataset_1</span>, <span class="va">dataset_2</span><span class="op">)</span>
+<span class="va">mypath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"/data"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">mypath</span><span class="op">)</span>
 
 <span class="fu"><a href="../reference/save_data.html">save_data</a></span><span class="op">(</span><span class="va">datasets</span>, <span class="va">mypath</span><span class="op">)</span></code></pre></div>
 <p>Read a local copy from .rds</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_data.html">read_data</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="va">mypath</span>, <span class="st">"/datasets.rds"</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">datasets</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_data.html">read_data</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">mypath</span>, <span class="st">"/datasets.rds"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Validating edi.193.5:</span>
 <span class="co">#&gt;   Required tables</span>
 <span class="co">#&gt;   Column names</span>
@@ -482,11 +482,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Colin Smith, Eric Sokol, Margaret O'Brien.</p>
+  <p></p>
+<p>Developed by Colin Smith, Eric Sokol, Margaret O’Brien.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -494,6 +496,8 @@
 
   
 
+
+  
 
   </body>
 </html>

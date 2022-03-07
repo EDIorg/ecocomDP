@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ecocomDP</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
       </span>
     </div>
 
@@ -41,7 +43,7 @@
   <a href="../reference/index.html">Functions</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -70,7 +72,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/EDIorg/ecocomDP/">
+  <a href="https://github.com/EDIorg/ecocomDP/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -85,13 +87,13 @@
 
       
 
-      </header><script src="shared_practices_create_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Shared Practices for Creating ecocomDP Data</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/EDIorg/ecocomDP/blob/master/vignettes/shared_practices_create.Rmd"><code>vignettes/shared_practices_create.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/EDIorg/ecocomDP/blob/HEAD/vignettes/shared_practices_create.Rmd" class="external-link"><code>vignettes/shared_practices_create.Rmd</code></a></small>
       <div class="hidden name"><code>shared_practices_create.Rmd</code></div>
 
     </div>
@@ -99,39 +101,39 @@
     
     
 <hr>
-<p>This document assumes you understand the ecocomDP model. To learn about the model and its scope, refer to the <a href="https://ediorg.github.io/ecocomDP/articles/model_overview.html">Model Overview Vignette</a> and the <a href="https://doi.org/10.1016/j.ecoinf.2021.101374">Ecological Informatics Article</a>.</p>
+<p>This document assumes you understand the ecocomDP model. To learn about the model and its scope, refer to the <a href="https://ediorg.github.io/ecocomDP/articles/model_overview.html" class="external-link">Model Overview Vignette</a> and the <a href="https://doi.org/10.1016/j.ecoinf.2021.101374" class="external-link">Ecological Informatics Article</a>.</p>
 <hr>
-<div id="introduction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h1>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>This document delineates the practices that all creators of ecocomDP formatted datasets should adopt in order for the community to build a cohesive and interoperable collection. It contains detailed descriptions of practices, definitions of concepts, and solutions to many common issues.</p>
 <p>Early sections address important considerations for anyone thinking about converting source datasets to the ecocomDP model, then focus shifts to an examination of the model components in greater detail. These shared practices are written with the intention to help simplify the conversion process.</p>
-<p>If you are new to the conversion process, we recommend reading the <a href="#getting_started">Getting Started</a> and <a href="#concepts">Concepts</a> sections, reviewing the <a href="https://ediorg.github.io/ecocomDP/articles/create.html">Create</a> and <a href="https://ediorg.github.io/ecocomDP/articles/model_overview.html">Model Overview</a> vignettes, and referring back to this document as questions arise. A thorough understanding of the ecocomDP model and some foundational concepts will greatly simplify the conversion process.</p>
-Each ecocomDP dataset (Level-1; L1) is created from a raw source dataset (Level-0; L0) by a unique conversion script. Inputs are typically from the APIs of data repositories and monitoring networks, and outputs are a set of archivable files. The derived ecocomDP dataset is delivered to users in a consistent format by <a href="https://ediorg.github.io/ecocomDP/reference/read_data.html"><code>read_data()</code></a> and the conversion script provides a fully reproducible and automated routine for updating the derived dataset whenever a new version of the source data are released.
+<p>If you are new to the conversion process, we recommend reading the <a href="#getting_started">Getting Started</a> and <a href="#concepts">Concepts</a> sections, reviewing the <a href="https://ediorg.github.io/ecocomDP/articles/create.html" class="external-link">Create</a> and <a href="https://ediorg.github.io/ecocomDP/articles/model_overview.html" class="external-link">Model Overview</a> vignettes, and referring back to this document as questions arise. A thorough understanding of the ecocomDP model and some foundational concepts will greatly simplify the conversion process.</p>
+Each ecocomDP dataset (Level-1; L1) is created from a raw source dataset (Level-0; L0) by a unique conversion script. Inputs are typically from the APIs of data repositories and monitoring networks, and outputs are a set of archivable files. The derived ecocomDP dataset is delivered to users in a consistent format by <a href="https://ediorg.github.io/ecocomDP/reference/read_data.html" class="external-link"><code>read_data()</code></a> and the conversion script provides a fully reproducible and automated routine for updating the derived dataset whenever a new version of the source data are released.
 <div class="figure">
 <img src="workflow.png" alt="Figure 1. The Level 0 (L0) dataset is the incoming original data with complete metadata. Level 1 (L1) dataset is the L0 dataset reformatted according to the predefined ecocomDP model. Researchers are able to use L1 datasets as inputs to speed their analyses and generate Level 2 (L2) data. (Adapted from [O’Brien et al. 2021](https://doi.org/10.1016/j.ecoinf.2021.101374))." width="100%"><p class="caption">
-Figure 1. The Level 0 (L0) dataset is the incoming original data with complete metadata. Level 1 (L1) dataset is the L0 dataset reformatted according to the predefined ecocomDP model. Researchers are able to use L1 datasets as inputs to speed their analyses and generate Level 2 (L2) data. (Adapted from <a href="https://doi.org/10.1016/j.ecoinf.2021.101374">O’Brien et al. 2021</a>).
+Figure 1. The Level 0 (L0) dataset is the incoming original data with complete metadata. Level 1 (L1) dataset is the L0 dataset reformatted according to the predefined ecocomDP model. Researchers are able to use L1 datasets as inputs to speed their analyses and generate Level 2 (L2) data. (Adapted from <a href="https://doi.org/10.1016/j.ecoinf.2021.101374" class="external-link">O’Brien et al. 2021</a>).
 </p>
 </div>
 </div>
-<div id="getting_started" class="section level1">
-<h1 class="hasAnchor">
-<a href="#getting_started" class="anchor"></a>Getting Started</h1>
-<div id="identifying-a-candidate-l0-dataset" class="section level2">
-<h2 class="hasAnchor">
-<a href="#identifying-a-candidate-l0-dataset" class="anchor"></a>Identifying a candidate L0 dataset</h2>
+<div class="section level2">
+<h2 id="getting_started">Getting Started<a class="anchor" aria-label="anchor" href="#getting_started"></a>
+</h2>
+<div class="section level3">
+<h3 id="identifying-a-candidate-l0-dataset">Identifying a candidate L0 dataset<a class="anchor" aria-label="anchor" href="#identifying-a-candidate-l0-dataset"></a>
+</h3>
 <p>Not all source datasets are good candidates for ecocomDP. Features of a good candidate include datasets that:</p>
 <ul>
-<li>Are about community surveys not population surveys. An <a href="http://www.ontobee.org/ontology/PCO?iri=http://purl.obolibrary.org/obo/PCO_0000002">ecological community</a> is a multi-species (at least two) collection of organisms living in a particular area, whereas a <a href="http://purl.obolibrary.org/obo/PCO_0000001">population</a> is a collection of organisms, all of the same species, that live in the same place.</li>
+<li>Are about community surveys not population surveys. An <a href="http://www.ontobee.org/ontology/PCO?iri=http://purl.obolibrary.org/obo/PCO_0000002" class="external-link">ecological community</a> is a multi-species (at least two) collection of organisms living in a particular area, whereas a <a href="http://purl.obolibrary.org/obo/PCO_0000001" class="external-link">population</a> is a collection of organisms, all of the same species, that live in the same place.</li>
 <li>Form long-term observation with a suggested minimum of 5 years, which can be ignored for datasets with exceptionally wide spatial extents.</li>
 <li>Have ongoing data collection and will eventually form long-term observation.</li>
-<li>Are accompanied by information rich metadata written in the <a href="https://eml.ecoinformatics.org/">Ecological Metadata Language (EML)</a>.</li>
+<li>Are accompanied by information rich metadata written in the <a href="https://eml.ecoinformatics.org/" class="external-link">Ecological Metadata Language (EML)</a>.</li>
 <li>Have data and metadata that are programmatically accessible from a trustworthy, stable, and persistent host (i.e. repository or other web-accessible data provider).</li>
 </ul>
 </div>
-<div id="understanding-the-l0-dataset" class="section level2">
-<h2 class="hasAnchor">
-<a href="#understanding-the-l0-dataset" class="anchor"></a>Understanding the L0 dataset</h2>
+<div class="section level3">
+<h3 id="understanding-the-l0-dataset">Understanding the L0 dataset<a class="anchor" aria-label="anchor" href="#understanding-the-l0-dataset"></a>
+</h3>
 <p>A thorough understanding of the L0 dataset is required before actually performing any transformations. To gain understanding of an L0 dataset we recommend:</p>
 <ul>
 <li>Reading the abstract, methods, and keywords to gain insights into the scope, structure, and temporal and spatial scales of the study.</li>
@@ -140,9 +142,9 @@ Figure 1. The Level 0 (L0) dataset is the incoming original data with complete m
 </ul>
 <p>Major issues at this point may suggest the amount of work required to convert the L0 dataset to the ecocomDP model is not worth it.</p>
 </div>
-<div id="resolving-issues" class="section level2">
-<h2 class="hasAnchor">
-<a href="#resolving-issues" class="anchor"></a>Resolving issues</h2>
+<div class="section level3">
+<h3 id="resolving-issues">Resolving issues<a class="anchor" aria-label="anchor" href="#resolving-issues"></a>
+</h3>
 <p>After gaining a sufficient understanding of the L0 dataset, you are ready to assess, and hopefully resolve, any issues that are obvious from the start. To help draw out some of these apparent issues, you may want to create a high-level plan for combining the L0 tables (i.e. Row-wise bindings or joined with shared keys?) and mapping their columns to the L1 ecocomDP model. Here are some solutions (ordered by priority) for resolving issues at this stage in the creation process:</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -150,7 +152,7 @@ Figure 1. The Level 0 (L0) dataset is the incoming original data with complete m
 <ul>
 <li>If the L0 dataset contains a column entirely of NAs, the conversion script should be written so that the L0 variable will populate the correct L1 table if it is ever filled in a future revision.</li>
 <li>When the structure of the L0 dataset (column names, codes used for species, etc.) prevents optimal L1 dataset creation, proceed with writing the conversion script and then provide feedback to the L0 author/manager. Ensure that your conversion script will have the functionality to handle revisions to the L0 dataset.</li>
-<li>Make use of the <code><a href="https://rdrr.io/r/base/message.html">message()</a></code> function to alert ecocomDP script maintainers to sections of code that could improve in future L0 dataset updates.</li>
+<li>Make use of the <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code> function to alert ecocomDP script maintainers to sections of code that could improve in future L0 dataset updates.</li>
 </ul>
 </li>
 <li>
@@ -158,9 +160,9 @@ Figure 1. The Level 0 (L0) dataset is the incoming original data with complete m
 <ul>
 <li>Duplicate column names - Only change the L0 column names if they create conflicts during joins (i.e. two L0 tables having the same column names) or share the name with an L1 table’s column name. In either case, always preserve the original column name. Append a prefix or suffix to the original column name so that it is distinct but still recognizable enough to be used as a reference to the L0 metadata.</li>
 <li>Non-point locations - Currently, only point coordinates are accepted by the ecocomDP model; use the centroid of bounding areas if presented with non-point locations.</li>
-<li>Datetime formats - Conversion of datetimes to the ecocomDP standard is required (e.g. YYYY-MM-DD hh:mm:ss or a subset thereof). Always combine Year, Month, Day, and time columns to the temporal level of observation (e.g. <a href="https://portal.edirepository.org/nis/metadataviewer?packageid=edi.334.2">edi.334.2</a>).</li>
+<li>Datetime formats - Conversion of datetimes to the ecocomDP standard is required (e.g. YYYY-MM-DD hh:mm:ss or a subset thereof). Always combine Year, Month, Day, and time columns to the temporal level of observation (e.g. <a href="https://portal.edirepository.org/nis/metadataviewer?packageid=edi.334.2" class="external-link">edi.334.2</a>).</li>
 <li>Missing value codes - Missing value codes that are explicitly declared in the L0 metadata should be converted to NA. When not declared but unambiguously interpretable as a missing value (e.g. “” in a comments field) then convert to NA. If it is ambiguous, don’t modify the L0 data.</li>
-<li>Different temporal resolution among the L0 tables creates a joining/stacking issue. To solve it, assign the coarsest temporal resolution to the datetime field of all the L0 tables, then store the more precise datetime variables in the observation_ancillary table (e.g. <a href="https://portal.edirepository.org/nis/metadataviewer?packageid=edi.291.2">edi.291.2</a>).</li>
+<li>Different temporal resolution among the L0 tables creates a joining/stacking issue. To solve it, assign the coarsest temporal resolution to the datetime field of all the L0 tables, then store the more precise datetime variables in the observation_ancillary table (e.g. <a href="https://portal.edirepository.org/nis/metadataviewer?packageid=edi.291.2" class="external-link">edi.291.2</a>).</li>
 </ul>
 </li>
 <li>
@@ -169,23 +171,23 @@ Figure 1. The Level 0 (L0) dataset is the incoming original data with complete m
 <li>If it is necessary to drop observations (rows), see the section <a href="#omitting_rows">Omitting rows</a>.</li>
 <li>If it can be derived from the preserved content (e.g. year can be derived from date, a taxa’s common name can be derived from its species name) then you can drop it from the L1 dataset if it does not fit the model (i.e. L1 data tables don’t pass validation).</li>
 <li>If it is ancillary information to data in one of the L1 ancillary tables that does not have a simple one-to-one, row-wise relationship, then it is too far removed from the core content of the L1 dataset. (e.g. A temperature sensor collects environmental data that supports the core observations. This temperature data belongs in the observation_ancillary table. If maintenance information for the temperature sensor is included, it could be omitted from the L1 dataset because it cannot be linked to the temperature observations within the model.) However, if the data is so important that it shouldn’t be dropped, then append a suffix to the supporting data’s original variable name that references the ancillary data (e.g. ancillary data “Site” has supporting data “lat” and “lon”. The variables “Site”, “lat_Site” and “lon_Site” all belong in ancillary data).</li>
-<li>Large surveys, sampling campaigns, and experiments will occasionally include information that is not central to the community ecology aspect of the L0 dataset (e.g. <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=115&amp;revision=2">edi.115.2</a>, <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=247&amp;revision=3">edi.247.3</a>). See the section <a href="#omitting_tables">Omitting tables</a> to determine if or how you should omit entire data tables from the L1 dataset.</li>
+<li>Large surveys, sampling campaigns, and experiments will occasionally include information that is not central to the community ecology aspect of the L0 dataset (e.g. <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=115&amp;revision=2" class="external-link">edi.115.2</a>, <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=247&amp;revision=3" class="external-link">edi.247.3</a>). See the section <a href="#omitting_tables">Omitting tables</a> to determine if or how you should omit entire data tables from the L1 dataset.</li>
 </ul>
 </li>
 </ol>
 <p>If the above options don’t solve the issue, then don’t convert it. There are many more datasets out there in the world to convert!</p>
-<div id="omitting_rows" class="section level3">
-<h3 class="hasAnchor">
-<a href="#omitting_rows" class="anchor"></a>Omitting rows</h3>
-<p>When an L0 dataset is really valuable, but issues with the dataset (e.g. changes in temporal or spatial resolution across observations; <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=251&amp;revision=2">edi.251.2</a>) prevent conversion, the best option may be to convert a subset of the observations to the ecocomDP format. Follow these steps for omitting rows from the L0 dataset:</p>
+<div class="section level4">
+<h4 id="omitting_rows">Omitting rows<a class="anchor" aria-label="anchor" href="#omitting_rows"></a>
+</h4>
+<p>When an L0 dataset is really valuable, but issues with the dataset (e.g. changes in temporal or spatial resolution across observations; <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=251&amp;revision=2" class="external-link">edi.251.2</a>) prevent conversion, the best option may be to convert a subset of the observations to the ecocomDP format. Follow these steps for omitting rows from the L0 dataset:</p>
 <ul>
-<li>Append <code><a href="https://rdrr.io/r/base/message.html">message(paste0("This L1 dataset is derived from a version of ", source_id, "with omitted rows."))</a></code> below the <code><a href="../reference/create_eml.html">create_eml()</a></code> function call in the <code>create_ecocomDP()</code> function definition.</li>
+<li>Append <code>message(paste0("This L1 dataset is derived from a version of ", source_id, "with omitted rows."))</code> below the <code><a href="../reference/create_eml.html">create_eml()</a></code> function call in the <code>create_ecocomDP()</code> function definition.</li>
 <li>After omitting rows, there may be residual columns that only applied to the now-omitted rows. You can remove these columns, but do not remove columns outside of this context.</li>
 </ul>
 </div>
-<div id="omitting_tables" class="section level3">
-<h3 class="hasAnchor">
-<a href="#omitting_tables" class="anchor"></a>Omitting tables</h3>
+<div class="section level4">
+<h4 id="omitting_tables">Omitting tables<a class="anchor" aria-label="anchor" href="#omitting_tables"></a>
+</h4>
 <p>You may decide that only a subset of the data tables within an L0 dataset are well-suited to the ecocomDP format. In this case you have the option to omit entire data tables and only convert those that will fit the model.</p>
 <p>When determining which tables to convert and which to omit, first identify which table(s) contain the “core” observation information. This will be the backbone of the intermediate “flat” table. Once the flat table is instantiated around the core observation, determine the shared keys by which to join the other L0 tables. The following types of variables are examples of common keys shared between data tables:</p>
 <ul>
@@ -197,16 +199,16 @@ Figure 1. The Level 0 (L0) dataset is the incoming original data with complete m
 <p>If you encounter tables that can’t be joined to the core observation information, possibly because they focus on a different time/location/taxon entirely, omit these problematic tables. Apply the following changes to the conversion script to highlight the table omission:</p>
 <ul>
 <li>In the “Join and flatten source data” section of the create_ecocomDP function definition, write a brief comment that highlights and justifies the decision to trim the L0 tables (i.e. <code># atmospheric_gas_concentrations table did not share a key with the bird_count table and was omitted</code>).</li>
-<li>Append <code><a href="https://rdrr.io/r/base/message.html">message(paste0("This L1 dataset is derived from a trimmed version of ", source_id, "with omitted tables"))</a></code> below the <code><a href="../reference/create_eml.html">create_eml()</a></code> function call in the <code>create_ecocomDP()</code> function definition.</li>
+<li>Append <code>message(paste0("This L1 dataset is derived from a trimmed version of ", source_id, "with omitted tables"))</code> below the <code><a href="../reference/create_eml.html">create_eml()</a></code> function call in the <code>create_ecocomDP()</code> function definition.</li>
 </ul>
 </div>
 </div>
 </div>
-<div id="creating-the-conversion-script" class="section level1">
-<h1 class="hasAnchor">
-<a href="#creating-the-conversion-script" class="anchor"></a>Creating the Conversion Script</h1>
+<div class="section level2">
+<h2 id="creating-the-conversion-script">Creating the Conversion Script<a class="anchor" aria-label="anchor" href="#creating-the-conversion-script"></a>
+</h2>
 <p>Write a conversion script to create an ecocomDP dataset from a standard set of minimal inputs (i.e. arguments to the <code>create_ecocomDP()</code> function). The conversion script should have some tolerance (i.e. error handling) for re-running the script at a later time on a changed source dataset. The script should utilize functionality that will either handle a revised source dataset or alert the ecocomDP script maintainers and provide them with enough information to quickly diagnose and fix any problems.</p>
-<p>Currently, only the EDI Data Repository is recognized by the ecocomDP project. If you would like support extended to your data repository, then please place a request in the <a href="https://github.com/EDIorg/ecocomDP/issues">ecocomDP project issue tracker</a> and we will add the supporting code to index and read ecocomDP datasets from your repository.</p>
+<p>Currently, only the EDI Data Repository is recognized by the ecocomDP project. If you would like support extended to your data repository, then please place a request in the <a href="https://github.com/EDIorg/ecocomDP/issues" class="external-link">ecocomDP project issue tracker</a> and we will add the supporting code to index and read ecocomDP datasets from your repository.</p>
 <p>To convert an L0 dataset, implement the following processes in your conversion script:</p>
 <ul>
 <li>Join source data and relevant content into a single “flat” table.</li>
@@ -218,18 +220,18 @@ Figure 1. The Level 0 (L0) dataset is the incoming original data with complete m
 <li>Create EML metadata with <code><a href="../reference/create_eml.html">create_eml()</a></code>
 </li>
 </ul>
-<p>For details on the processes within the conversion script, see the <a href="https://ediorg.github.io/ecocomDP/articles/create.html">Create vignette</a>.</p>
-<div id="basics" class="section level2">
-<h2 class="hasAnchor">
-<a href="#basics" class="anchor"></a>Basics</h2>
-<div id="dos" class="section level3">
-<h3 class="hasAnchor">
-<a href="#dos" class="anchor"></a>Do’s</h3>
+<p>For details on the processes within the conversion script, see the <a href="https://ediorg.github.io/ecocomDP/articles/create.html" class="external-link">Create vignette</a>.</p>
+<div class="section level3">
+<h3 id="basics">Basics<a class="anchor" aria-label="anchor" href="#basics"></a>
+</h3>
+<div class="section level4">
+<h4 id="dos">Do’s<a class="anchor" aria-label="anchor" href="#dos"></a>
+</h4>
 <ul>
 <li>R is the only supported language.</li>
 <li>Every ecocomDP dataset must be fully created from the R script named “create_ecocomDP.R”; this is the conversion script.</li>
-<li>The only code in the conversion script should be the <code><a href="https://rdrr.io/r/base/library.html">library()</a></code> calls, the main function definition, and supporting function definitions outside of the <code>create_ecocomDP()</code> function.</li>
-<li>Explicitly state the dependencies of the function as <code><a href="https://rdrr.io/r/base/library.html">library()</a></code> calls for each (e.g. <code><a href="https://dplyr.tidyverse.org">library(dplyr)</a></code>)</li>
+<li>The only code in the conversion script should be the <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code> calls, the main function definition, and supporting function definitions outside of the <code>create_ecocomDP()</code> function.</li>
+<li>Explicitly state the dependencies of the function as <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code> calls for each (e.g. <code><a href="https://dplyr.tidyverse.org" class="external-link">library(dplyr)</a></code>)</li>
 <li>Use the function name “create_ecocomDP” (i.e. <code>create_ecocomDP &lt;- function(...) {...}</code> and only use the allowed set of arguments:
 <ul>
 <li>
@@ -246,68 +248,68 @@ Figure 1. The Level 0 (L0) dataset is the incoming original data with complete m
 <li>Convert missing value codes to NA. This is the ecocomDP standard.</li>
 <li>Whenever possible, programmatically insert information from the L0 metadata rather than manually copying and pasting. This facilitates the low effort transfer from a revised source dataset to the derived dataset, enabling automated maintenance.</li>
 <li>Comment your code liberally describing “what” and “why” so that future maintainers don’t have to spend as much time learning the nuances of the data.</li>
-<li>Use messaging (i.e. <code><a href="https://rdrr.io/r/base/message.html">message()</a></code>) and section headers (ctrl-shift-R in RStudio) at the beginning of each major code block to help maintainers with debugging, should it be needed.</li>
+<li>Use messaging (i.e. <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code>) and section headers (ctrl-shift-R in RStudio) at the beginning of each major code block to help maintainers with debugging, should it be needed.</li>
 </ul>
 </div>
-<div id="donts" class="section level3">
-<h3 class="hasAnchor">
-<a href="#donts" class="anchor"></a>Don’ts</h3>
+<div class="section level4">
+<h4 id="donts">Don’ts<a class="anchor" aria-label="anchor" href="#donts"></a>
+</h4>
 <ul>
 <li>The rule of thumb is to never change the L0 dataset; only restructure/reformat:
 <ul>
 <li>See <a href="#value_added_features">Value-Added Features</a> for acceptable information to add.</li>
 <li>Do not average or modify values. Users (e.g., synthesis working groups) will perform these calculations for their own needs.</li>
-<li>Don’t change data types if it results in loss of data (e.g. coercing numeric characters interspersed with character codes, where coercion transforms the codes to NA; <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=115&amp;revision=2">edi.115.2</a>)</li>
+<li>Don’t change data types if it results in loss of data (e.g. coercing numeric characters interspersed with character codes, where coercion transforms the codes to NA; <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=115&amp;revision=2" class="external-link">edi.115.2</a>)</li>
 <li>Don’t index by position, always index column by name (e.g. <code>data$temp</code> not <code>data[[3]]</code>). The order of columns may change in revised L0 datasets which will cause problems if indexed by position but not if indexed by name.</li>
 <li>Don’t drop data from the L0. Even redundant information should not be removed.</li>
 </ul>
 </li>
-<li>Never call <code><a href="https://rdrr.io/r/base/rm.html">rm(list = ls())</a></code> in the scripts. This will remove the global environment needed by automated maintenance routines.</li>
+<li>Never call <code>rm(list = ls())</code> in the scripts. This will remove the global environment needed by automated maintenance routines.</li>
 <li>Don’t call the create_ecocomDP() function from within the conversion script. Otherwise the automated maintenance routine won’t be able to control the function call (i.e. input arguments and when it runs).</li>
 </ul>
 </div>
 </div>
-<div id="resolving-issues-in-the-l1-tables" class="section level2">
-<h2 class="hasAnchor">
-<a href="#resolving-issues-in-the-l1-tables" class="anchor"></a>Resolving Issues in the L1 Tables</h2>
-<p>Refer to this section to resolve specific issues while creating the L1 tables. For more in-depth descriptions on these tables and their columns, see the <a href="https://ediorg.github.io/ecocomDP/articles/model_overview.html">Model Overview vignette</a>.</p>
-<div id="observation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#observation" class="anchor"></a>observation</h3>
+<div class="section level3">
+<h3 id="resolving-issues-in-the-l1-tables">Resolving Issues in the L1 Tables<a class="anchor" aria-label="anchor" href="#resolving-issues-in-the-l1-tables"></a>
+</h3>
+<p>Refer to this section to resolve specific issues while creating the L1 tables. For more in-depth descriptions on these tables and their columns, see the <a href="https://ediorg.github.io/ecocomDP/articles/model_overview.html" class="external-link">Model Overview vignette</a>.</p>
+<div class="section level4">
+<h4 id="observation">observation<a class="anchor" aria-label="anchor" href="#observation"></a>
+</h4>
 <p>Store the core observations being analyzed in this table. Observations must be linked to a taxon and to a location. Linking to ancillary observations is optional.</p>
-<div id="event_id" class="section level4">
-<h4 class="hasAnchor">
-<a href="#event_id" class="anchor"></a>event_id</h4>
+<div class="section level5">
+<h5 id="event_id">event_id<a class="anchor" aria-label="anchor" href="#event_id"></a>
+</h5>
 <ul>
 <li>If an L0 dataset contains values corresponding to the survey/event number, always use these values.</li>
 <li>If the L0 dataset does not contain values corresponding to the survey/event number, group observations by the Frequency of Survey (see (Frequency of Survey)[#frequency_of_survey] section for more information) and programmatically assign an event_id. Note: Always arrange the intermediate “flat” table chronologically before assigning event_id; event_ids should correspond chronologically to surveys.</li>
 <li>If the Frequency of Survey can not be determined accurately from the L0 metadata or from patterns in the L0 data tables, omit the event_id column entirely.</li>
 </ul>
 </div>
-<div id="datetime" class="section level4">
-<h4 class="hasAnchor">
-<a href="#datetime" class="anchor"></a>datetime</h4>
+<div class="section level5">
+<h5 id="datetime">datetime<a class="anchor" aria-label="anchor" href="#datetime"></a>
+</h5>
 <ul>
 <li>If the L0 data tables do not contain a date or datetime column but instead have start_date and end_date columns, use the date from the start_date column to assign datetime in the observation table. Additionally, store start_date and end_date as-is in the observation_ancillary table.</li>
 </ul>
 </div>
-<div id="taxon_id" class="section level4">
-<h4 class="hasAnchor">
-<a href="#taxon_id" class="anchor"></a>taxon_id</h4>
+<div class="section level5">
+<h5 id="taxon_id">taxon_id<a class="anchor" aria-label="anchor" href="#taxon_id"></a>
+</h5>
 <ul>
-<li>If variables (columns) in L0 data tables are individual species, gather (e.g. <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">tidyr::pivot_longer()</a></code>) into columns of values and taxon_names. Manually add the variable_name and unit columns to describe the measurement. Use the column description and units from the L0 metadata, if applicable.</li>
+<li>If variables (columns) in L0 data tables are individual species, gather (e.g. <code><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">tidyr::pivot_longer()</a></code>) into columns of values and taxon_names. Manually add the variable_name and unit columns to describe the measurement. Use the column description and units from the L0 metadata, if applicable.</li>
 </ul>
 </div>
-<div id="variable_name" class="section level4">
-<h4 class="hasAnchor">
-<a href="#variable_name" class="anchor"></a>variable_name</h4>
+<div class="section level5">
+<h5 id="variable_name">variable_name<a class="anchor" aria-label="anchor" href="#variable_name"></a>
+</h5>
 <ul>
 <li>Every dataset has a core observation. In certain cases, it is acceptable to have multiple core observation variables.
 <ul>
 <li>If a derivation of abundance/count (areal density, biomass, etc.) is provided along with raw abundance/counts, both variables constitute core observations.</li>
 <li>Core observations (e.g. abundance/counts) that are subdivided into smaller classified groups constitute their own core observations.
 <ul>
-<li>Example: L0 dataset has organism counts spread across columns “lessThan2mm”, “2to5mm”, and “greaterThan5mm”. These columns should be preserved as-is, not aggregated into a single count column. (e.g. <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=248&amp;revision=2">edi.248.2</a>, which is classified by size class and method).</li>
+<li>Example: L0 dataset has organism counts spread across columns “lessThan2mm”, “2to5mm”, and “greaterThan5mm”. These columns should be preserved as-is, not aggregated into a single count column. (e.g. <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=248&amp;revision=2" class="external-link">edi.248.2</a>, which is classified by size class and method).</li>
 </ul>
 </li>
 <li>If core observations are missing associated counts, but each row clearly represents an observation of a single taxon, manually assign these three columns:
@@ -322,13 +324,13 @@ Figure 1. The Level 0 (L0) dataset is the incoming original data with complete m
 </ul>
 </div>
 </div>
-<div id="location" class="section level3">
-<h3 class="hasAnchor">
-<a href="#location" class="anchor"></a>location</h3>
+<div class="section level4">
+<h4 id="location">location<a class="anchor" aria-label="anchor" href="#location"></a>
+</h4>
 <p>Store identifying information about a place (longitude, latitude, elevation) in this table. This table is self-referencing so that sites can be nested.</p>
-<div id="location_id" class="section level4">
-<h4 class="hasAnchor">
-<a href="#location_id" class="anchor"></a>location_id</h4>
+<div class="section level5">
+<h5 id="location_id">location_id<a class="anchor" aria-label="anchor" href="#location_id"></a>
+</h5>
 <ul>
 <li>If an L0 dataset contains id values corresponding to the location, always opt to use these values (i.e. don’t assign your own).</li>
 <li>If an L0 dataset does not contain location identifiers then assign them by grouping on the location name at the meaningful level of observation (see <a href="#levels_of_observation">Levels of Observation</a> section).</li>
@@ -336,16 +338,16 @@ Figure 1. The Level 0 (L0) dataset is the incoming original data with complete m
 <li>If an L0 dataset does not contain location identifiers or names corresponding to location at the meaningful level of observation, determine a unique constraint among the sampling location attributes (e.g. latitude, longitude) and use that to create a sampling location_id.</li>
 </ul>
 </div>
-<div id="location_name" class="section level4">
-<h4 class="hasAnchor">
-<a href="#location_name" class="anchor"></a>location_name</h4>
+<div class="section level5">
+<h5 id="location_name">location_name<a class="anchor" aria-label="anchor" href="#location_name"></a>
+</h5>
 <ul>
 <li>If an L0 dataset does not contain names corresponding to location at the level of observation, a name derived from the L0 metadata should be assigned to each observation.</li>
 </ul>
 </div>
-<div id="latitude-and-longitude" class="section level4">
-<h4 class="hasAnchor">
-<a href="#latitude-and-longitude" class="anchor"></a>latitude and longitude</h4>
+<div class="section level5">
+<h5 id="latitude-and-longitude">latitude and longitude<a class="anchor" aria-label="anchor" href="#latitude-and-longitude"></a>
+</h5>
 <ul>
 <li>Each row of the location table should contain a latitude and longitude value describing a point location. This information should be in the L0 dataset (e.g. metadata, data tables, or other entities). Sometimes there is geographic information at a different spatial scale than the listed locations. Follow these recommendations for determining the correct coordinates to provide:
 <ul>
@@ -354,7 +356,7 @@ Figure 1. The Level 0 (L0) dataset is the incoming original data with complete m
 <li>The L0 dataset only has point locations at a coarser level than a location. In such cases, transpose coarser coordinates to the location (e.g. each plot within a site would get the site’s coordinates) (Figure 2C).</li>
 <li>The L0 dataset only has an area/polygon at a coarser level than a location. In such cases, use the centroid of the area/polygon as coordinates for the location (Figure 2D).</li>
 <li>The L0 dataset has incomplete but accurate point locations for some locations. In such cases, the one-to-one matching of geographic coverage with some of the locations is best. The L1 user may be able to infer coverage to other adjacent locations with coordinates and elevations having NA values (Figure 2E).</li>
-<li>Coordinates of location vary with each observation (e.g. specific coordinates where a plankton tow was done within the boundaries of an established/static station, <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=338&amp;revision=2">edi.338.2</a>) (Figure 2F).
+<li>Coordinates of location vary with each observation (e.g. specific coordinates where a plankton tow was done within the boundaries of an established/static station, <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=338&amp;revision=2" class="external-link">edi.338.2</a>) (Figure 2F).
 <ul>
 <li>First, take the average across the entire dataset of all observation coordinate corresponding to each location_name.</li>
 <li>Second, in the location_ancillary table, list the exact coordinates for each date by including the datetime field. If this raises non-unique composite key issues (from <code><a href="../reference/validate_data.html">validate_data()</a></code>), then see the <a href="#observation_ancillary">observation_ancillary</a> section.</li>
@@ -370,62 +372,62 @@ Figure 2. Mapping coordinates between spatial scales.
 </div>
 </div>
 </div>
-<div id="taxon" class="section level3">
-<h3 class="hasAnchor">
-<a href="#taxon" class="anchor"></a>taxon</h3>
+<div class="section level4">
+<h4 id="taxon">taxon<a class="anchor" aria-label="anchor" href="#taxon"></a>
+</h4>
 <p>Store identifying information about a taxon in this table.</p>
 <ul>
 <li>Only core observation taxonomy belongs in the taxon table.
 <ul>
-<li>Store ancillary taxon information (i.e. species that were not the focus of the study) in the observation_ancillary table. E.g. In a community ecology survey of arthropods, the species of tree where the specimen was found is recorded in the “Substrate” column. The range of species in the substrate columns are not the taxonomic focus of the survey so they belong in the observation_ancillary table (e.g. <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=248&amp;revision=2">edi.248.2</a>).</li>
+<li>Store ancillary taxon information (i.e. species that were not the focus of the study) in the observation_ancillary table. E.g. In a community ecology survey of arthropods, the species of tree where the specimen was found is recorded in the “Substrate” column. The range of species in the substrate columns are not the taxonomic focus of the survey so they belong in the observation_ancillary table (e.g. <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=248&amp;revision=2" class="external-link">edi.248.2</a>).</li>
 </ul>
 </li>
-<li>Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. <a href="https://www.itis.gov/">ITIS</a>, <a href="http://www.marinespecies.org/">WORMS</a>, or <a href="https://www.gbif.org/">GBIF</a>), will have their full taxonomic hierarchy expanded, including any common names for each level. If you would like support extended to a different authority, then please open an <a href="https://github.com/EDIorg/ecocomDP/issues">issue in the project GitHub</a>.</li>
-<li>If the taxon name in the L0 data tables is accompanied by a note (e.g. “Acanthaster planci (1m away)” vs.”Acanthaster planci”), list the verbatim name as-is in the taxon table. In this case, preserving the name avoids changing the L0 data and maintains emphasis of some feature that the L0 dataset creator wanted to highlight (<a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=194&amp;revision=3">edi.194.3</a>).</li>
+<li>Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. <a href="https://www.itis.gov/" class="external-link">ITIS</a>, <a href="https://www.marinespecies.org/" class="external-link">WORMS</a>, or <a href="https://www.gbif.org/" class="external-link">GBIF</a>), will have their full taxonomic hierarchy expanded, including any common names for each level. If you would like support extended to a different authority, then please open an <a href="https://github.com/EDIorg/ecocomDP/issues" class="external-link">issue in the project GitHub</a>.</li>
+<li>If the taxon name in the L0 data tables is accompanied by a note (e.g. “Acanthaster planci (1m away)” vs.”Acanthaster planci”), list the verbatim name as-is in the taxon table. In this case, preserving the name avoids changing the L0 data and maintains emphasis of some feature that the L0 dataset creator wanted to highlight (<a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=194&amp;revision=3" class="external-link">edi.194.3</a>).</li>
 </ul>
 </div>
-<div id="dataset_summary" class="section level3">
-<h3 class="hasAnchor">
-<a href="#dataset_summary" class="anchor"></a>dataset_summary</h3>
+<div class="section level4">
+<h4 id="dataset_summary">dataset_summary<a class="anchor" aria-label="anchor" href="#dataset_summary"></a>
+</h4>
 <p>Store summary info about the L1 dataset in this table.</p>
 <ul>
 <li>To calculate temporal metrics of the dataset when resolution is only at year, add “01-01” (e.g. “1999-01-01”) to create a vector of dates so the <code>calc_*()</code> funcs can be used. Do not use this vector of modified and arbitrary dates in any of the datetime columns of the other tables, these should remain YYYY formatted.</li>
 <li>In the case that date is present for a fraction of observations but a coarser grain (e.g. YYYY) is present for all observations, create a composite date column using date for observations where it exists and coarser grain reformatted as YYYY-MM-DD elsewhere.</li>
 </ul>
 </div>
-<div id="observation_ancillary" class="section level3">
-<h3 class="hasAnchor">
-<a href="#observation_ancillary" class="anchor"></a>observation_ancillary</h3>
+<div class="section level4">
+<h4 id="observation_ancillary">observation_ancillary<a class="anchor" aria-label="anchor" href="#observation_ancillary"></a>
+</h4>
 <p>Store ancillary information about an observational event for context (e.g. plot or transect identifiers, measurement times, environmental conditions, field notes, etc.).</p>
 <ul>
 <li>Additionally, store location or core taxa variables in this table if they cause non-unique constraint validation issues in their own respective ancillary tables. This should be thought of as a temporary solution (see <a href="#general_issues">General Issues</a>).</li>
 </ul>
 </div>
-<div id="location_ancillary" class="section level3">
-<h3 class="hasAnchor">
-<a href="#location_ancillary" class="anchor"></a>location_ancillary</h3>
+<div class="section level4">
+<h4 id="location_ancillary">location_ancillary<a class="anchor" aria-label="anchor" href="#location_ancillary"></a>
+</h4>
 <p>Store additional information about a place that does not change frequently (e.g. lake area or depth, experimental treatment, habitat). Features that change frequently are more closely related to the observational event, and are thus kept in the observation_ancillary table. Ancillary observations are linked through the location_id, and one location_id may have many ancillary observations about it.</p>
 <ul>
 <li>If these site-specific variables change through time, use the datetime column to avoid creating non-unique composite keys.</li>
-<li>If site-specific variables change through time but the dates associated with the variable do not align with observation datetimes, round the date associated with the changing variable forward to the next observation date (e.g. <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=253&amp;revision=3">edi.253.3</a>).</li>
+<li>If site-specific variables change through time but the dates associated with the variable do not align with observation datetimes, round the date associated with the changing variable forward to the next observation date (e.g. <a href="https://portal.edirepository.org/nis/mapbrowse?scope=edi&amp;identifier=253&amp;revision=3" class="external-link">edi.253.3</a>).</li>
 </ul>
 </div>
-<div id="taxon_ancillary" class="section level3">
-<h3 class="hasAnchor">
-<a href="#taxon_ancillary" class="anchor"></a>taxon_ancillary</h3>
+<div class="section level4">
+<h4 id="taxon_ancillary">taxon_ancillary<a class="anchor" aria-label="anchor" href="#taxon_ancillary"></a>
+</h4>
 <p>Store additional info about an organism that does not change frequently (e.g. trophic level). Features that change frequently are probably observations. Ancillary observations are linked through the taxon_id, which may have many ancillary observations about it.</p>
 <ul>
 <li>In the case where taxon-specific information changes through time (i.e. a different common name or description is used), make use of the datetime column to avoid creating non-unique composite keys.</li>
 </ul>
 </div>
-<div id="variable_mapping" class="section level3">
-<h3 class="hasAnchor">
-<a href="#variable_mapping" class="anchor"></a>variable_mapping</h3>
+<div class="section level4">
+<h4 id="variable_mapping">variable_mapping<a class="anchor" aria-label="anchor" href="#variable_mapping"></a>
+</h4>
 <p>Link information from the variable_name columns of the observation, observation_ancillary, location_ancillary, and taxon_ancillary tables to external definitions in this table. See <a href="#ontologies">Ontologies and Vocabularies</a> section for details.</p>
 </div>
-<div id="general_issues" class="section level3">
-<h3 class="hasAnchor">
-<a href="#general_issues" class="anchor"></a>General Issues</h3>
+<div class="section level4">
+<h4 id="general_issues">General Issues<a class="anchor" aria-label="anchor" href="#general_issues"></a>
+</h4>
 <p>Other unforeseen issues with the L0 dataset may manifest themselves as you begin to create an ecocomDP (L1) formatted dataset. See the following suggestions for handling some common issues:</p>
 <ul>
 <li>Use the source (L0) dataset contact for help to resolve issues. Usually they will apply a fix on short notice. If not, then proceed the best you can.</li>
@@ -436,28 +438,28 @@ Figure 2. Mapping coordinates between spatial scales.
 <li>First try to resolve this issue by utilizing the datetime column.</li>
 <li>Try to get the creator/information-manager to fix the issue in the L0 dataset.</li>
 <li>If this can’t be done in good time, a temporary solution is to move the problematic variable_name to observation_ancillary (which can handle everything).</li>
-<li>This solution should be accompanied by a <code><a href="https://rdrr.io/r/base/warning.html">warning()</a></code>, with a description of the issue, in the <code>create_ecocomDP()</code> function so that the next time this function runs, as a part of the maintenance routine, the logfile will prompt the maintainer to check for implementation of the L0 fix and adjust the <code>create_ecocomDP()</code> function accordingly.</li>
+<li>This solution should be accompanied by a <code><a href="https://rdrr.io/r/base/warning.html" class="external-link">warning()</a></code>, with a description of the issue, in the <code>create_ecocomDP()</code> function so that the next time this function runs, as a part of the maintenance routine, the logfile will prompt the maintainer to check for implementation of the L0 fix and adjust the <code>create_ecocomDP()</code> function accordingly.</li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 </div>
-<div id="concepts" class="section level1">
-<h1 class="hasAnchor">
-<a href="#concepts" class="anchor"></a>Concepts</h1>
-<div id="levels_of_observation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#levels_of_observation" class="anchor"></a>Levels of Observation</h2>
+<div class="section level2">
+<h2 id="concepts">Concepts<a class="anchor" aria-label="anchor" href="#concepts"></a>
+</h2>
+<div class="section level3">
+<h3 id="levels_of_observation">Levels of Observation<a class="anchor" aria-label="anchor" href="#levels_of_observation"></a>
+</h3>
 <p>A dataset often has multiple levels of observation (i.e. spatial scales of observation). Only one of those levels of observation is considered meaningful. We use the term “meaningful” to denote the finest spatial scale at which the observations are meant to be interpreted.</p>
 <ul>
 <li>This is often noted by the dataset creator (but sometimes not).</li>
 <li>Could be an ecosystem or habitat within an ecosystem.</li>
 <li>Or possibly “special variables” of a study that lead to expected variation across observations (e.g. differing treatments, changing elevations).</li>
 </ul>
-<div id="determining-the-meaningful-level-of-observation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#determining-the-meaningful-level-of-observation" class="anchor"></a>Determining the Meaningful Level of Observation</h3>
+<div class="section level4">
+<h4 id="determining-the-meaningful-level-of-observation">Determining the Meaningful Level of Observation<a class="anchor" aria-label="anchor" href="#determining-the-meaningful-level-of-observation"></a>
+</h4>
 <ul>
 <li>If there is only one level of observation, then it is the meaningful level of observation.</li>
 <li>If there are multiple levels of observation, only one should be deemed meaningful. Consider the following:
@@ -474,9 +476,9 @@ Figure 2. Mapping coordinates between spatial scales.
 </li>
 </ul>
 </div>
-<div id="using-the-levels-of-observation-to-assign-location_id" class="section level3">
-<h3 class="hasAnchor">
-<a href="#using-the-levels-of-observation-to-assign-location_id" class="anchor"></a>Using the Levels of Observation to assign location_id</h3>
+<div class="section level4">
+<h4 id="using-the-levels-of-observation-to-assign-location_id">Using the Levels of Observation to assign location_id<a class="anchor" aria-label="anchor" href="#using-the-levels-of-observation-to-assign-location_id"></a>
+</h4>
 <p>We use the concept of meaningful level of observation to help assign location_ids:</p>
 <ul>
 <li>Group on the meaningful level of observation to assign location_id to the observations. The meaningful level of observation should go into the location table.</li>
@@ -489,9 +491,9 @@ Figure 2. Mapping coordinates between spatial scales.
 </li>
 </ul>
 </div>
-<div id="fig3" class="section level3">
-<h3 class="hasAnchor">
-<a href="#fig3" class="anchor"></a>Determining the Meaningful Level of Observation (Visual Examples)</h3>
+<div class="section level4">
+<h4 id="fig3">Determining the Meaningful Level of Observation (Visual Examples)<a class="anchor" aria-label="anchor" href="#fig3"></a>
+</h4>
 <div class="figure" style="text-align: center">
 <img src="MLO_final_long2.png" alt="Figure 3. Varying experimental conditions change the meaningful level of observation in a study." width="90%"><p class="caption">
 Figure 3. Varying experimental conditions change the meaningful level of observation in a study.
@@ -499,9 +501,9 @@ Figure 3. Varying experimental conditions change the meaningful level of observa
 </div>
 </div>
 </div>
-<div id="frequency_of_survey" class="section level2">
-<h2 class="hasAnchor">
-<a href="#frequency_of_survey" class="anchor"></a>Frequency of Survey</h2>
+<div class="section level3">
+<h3 id="frequency_of_survey">Frequency of Survey<a class="anchor" aria-label="anchor" href="#frequency_of_survey"></a>
+</h3>
 <p>The Frequency of Survey refers to the temporal frequency of events over the course of a study.</p>
 <ul>
 <li>An event is a survey in the ecological sense: a sampling of the community at one or more locations.</li>
@@ -513,9 +515,9 @@ Figure 3. Varying experimental conditions change the meaningful level of observa
 </ul>
 </li>
 </ul>
-<div id="determining-the-frequency-of-survey" class="section level3">
-<h3 class="hasAnchor">
-<a href="#determining-the-frequency-of-survey" class="anchor"></a>Determining the Frequency of Survey</h3>
+<div class="section level4">
+<h4 id="determining-the-frequency-of-survey">Determining the Frequency of Survey<a class="anchor" aria-label="anchor" href="#determining-the-frequency-of-survey"></a>
+</h4>
 <ul>
 <li>The L0 metadata is the first place to look for the Frequency of Survey. It could be explicitly stated in the title or methods as such:
 <ul>
@@ -554,9 +556,9 @@ Figure 3. Varying experimental conditions change the meaningful level of observa
 </li>
 </ul>
 </div>
-<div id="fig4" class="section level3">
-<h3 class="hasAnchor">
-<a href="#fig4" class="anchor"></a>Frequency of Survey (Visual Examples)</h3>
+<div class="section level4">
+<h4 id="fig4">Frequency of Survey (Visual Examples)<a class="anchor" aria-label="anchor" href="#fig4"></a>
+</h4>
 <div class="figure" style="text-align: center">
 <img src="LevelOfSurvey_final_long2.png" alt="Figure 4. Instances of Frequency of Survey on a timeline; Using Frequency of Survey to assign event_id." width="90%"><p class="caption">
 Figure 4. Instances of Frequency of Survey on a timeline; Using Frequency of Survey to assign event_id.
@@ -564,36 +566,36 @@ Figure 4. Instances of Frequency of Survey on a timeline; Using Frequency of Sur
 </div>
 </div>
 </div>
-<div id="value_added_features" class="section level2">
-<h2 class="hasAnchor">
-<a href="#value_added_features" class="anchor"></a>Value-Added Features</h2>
-<p>Value added information is anything that an ecocomDP creator intentionally adds to the L1 dataset to improve its findability, accessibility, interoperability, or reusability (see <a href="https://www.go-fair.org/fair-principles/">FAIR Principles</a>). This information does not come from the L0 dataset directly, but instead is derived from it. Since the rule of thumb regarding L1 dataset creation is to rearrange but not alter the L0 dataset, supplementing a dataset with value added information must be done carefully and within the constraints of the following rules:</p>
+<div class="section level3">
+<h3 id="value_added_features">Value-Added Features<a class="anchor" aria-label="anchor" href="#value_added_features"></a>
+</h3>
+<p>Value added information is anything that an ecocomDP creator intentionally adds to the L1 dataset to improve its findability, accessibility, interoperability, or reusability (see <a href="https://www.go-fair.org/fair-principles/" class="external-link">FAIR Principles</a>). This information does not come from the L0 dataset directly, but instead is derived from it. Since the rule of thumb regarding L1 dataset creation is to rearrange but not alter the L0 dataset, supplementing a dataset with value added information must be done carefully and within the constraints of the following rules:</p>
 <ul>
 <li>Taxonomic coverage - Resolve taxa to a supported authority system and list in the taxon table <em>only</em> when the L0 dataset itself does not resolve taxa to an authority system. See <a href="#taxon">taxon</a> for more details on resolving taxa to a supported authority.</li>
 <li>Annotations - Select annotations for variable_name values in the variable_mapping table. Additionally, include annotations of dataset features in the metadata. Only use annotations from the supported ontologies (see <a href="#ontologies">Ontologies and Vocabularies</a> section) and always opt to use annotations that have been used in existing ecocomDP datasets (see <code><a href="../reference/annotation_dictionary.html">annotation_dictionary()</a></code> function).</li>
 </ul>
 </div>
 </div>
-<div id="ontologies" class="section level1">
-<h1 class="hasAnchor">
-<a href="#ontologies" class="anchor"></a>Ontologies and Vocabularies</h1>
-<div id="natural-observation-vs--experimentmanipulation" class="section level4">
-<h4 class="hasAnchor">
-<a href="#natural-observation-vs--experimentmanipulation" class="anchor"></a>Natural observation vs. experiment/manipulation</h4>
-<p>Users commonly filter on these. If a study involves a human induced experiment/manipulation (i.e. not a natural experiment/manipulation, e.g. hurricane), then add “<a href="https://bioportal.bioontology.org/ontologies/ECSO/?p=classes&amp;conceptid=http://purl.dataone.org/odo/ECSO_00000506">Manipulative experiment</a>” as an annotation using the “is_about” argument of the <code><a href="../reference/create_eml.html">create_eml()</a></code> function, e.g.:</p>
+<div class="section level2">
+<h2 id="ontologies">Ontologies and Vocabularies<a class="anchor" aria-label="anchor" href="#ontologies"></a>
+</h2>
+<div class="section level5">
+<h5 id="natural-observation-vs--experimentmanipulation">Natural observation vs. experiment/manipulation<a class="anchor" aria-label="anchor" href="#natural-observation-vs--experimentmanipulation"></a>
+</h5>
+<p>Users commonly filter on these. If a study involves a human induced experiment/manipulation (i.e. not a natural experiment/manipulation, e.g. hurricane), then add “<a href="https://bioportal.bioontology.org/ontologies/ECSO/?p=classes&amp;conceptid=http://purl.dataone.org/odo/ECSO_00000506" class="external-link">Manipulative experiment</a>” as an annotation using the “is_about” argument of the <code><a href="../reference/create_eml.html">create_eml()</a></code> function, e.g.:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">create_eml</span>(..., <span class="at">is_about =</span> <span class="fu">c</span>(<span class="st">`</span><span class="at">Manipulative experiment</span><span class="st">`</span> <span class="ot">=</span> <span class="st">"http://purl.dataone.org/odo/ECSO_00000506"</span>)</span></code></pre></div>
 </div>
-<div id="for-annotation-of-metadata-and-use-in-the-variable_mapping-table" class="section level4">
-<h4 class="hasAnchor">
-<a href="#for-annotation-of-metadata-and-use-in-the-variable_mapping-table" class="anchor"></a>For annotation of metadata and use in the variable_mapping table</h4>
+<div class="section level5">
+<h5 id="for-annotation-of-metadata-and-use-in-the-variable_mapping-table">For annotation of metadata and use in the variable_mapping table<a class="anchor" aria-label="anchor" href="#for-annotation-of-metadata-and-use-in-the-variable_mapping-table"></a>
+</h5>
 <ul>
-<li>Supported ontologies (in descending order of preference): <a href="https://dwc.tdwg.org/terms/">DarwinCore</a>, <a href="https://sites.google.com/site/environmentontology/Browse-EnvO">EnvO</a>, <a href="https://bioportal.bioontology.org/ontologies/ECSO/?p=summary">ECSO</a>.</li>
+<li>Supported ontologies (in descending order of preference): <a href="https://dwc.tdwg.org/terms/" class="external-link">DarwinCore</a>, <a href="https://sites.google.com/site/environmentontology/Browse-EnvO" class="external-link">EnvO</a>, <a href="https://bioportal.bioontology.org/ontologies/ECSO/?p=summary" class="external-link">ECSO</a>.</li>
 </ul>
 </div>
 </div>
-<div id="deprecating-an-l1-dataset" class="section level1">
-<h1 class="hasAnchor">
-<a href="#deprecating-an-l1-dataset" class="anchor"></a>Deprecating an L1 Dataset</h1>
+<div class="section level2">
+<h2 id="deprecating-an-l1-dataset">Deprecating an L1 Dataset<a class="anchor" aria-label="anchor" href="#deprecating-an-l1-dataset"></a>
+</h2>
 <p>Sometimes an L1 dataset needs to be removed from circulation. To do this for an archived L1 dataset, publish an identical revision of the dataset with the following changes added manually to the metadata:</p>
 <ul>
 <li>Add “deprecated” (lower case) to the list of keywords.</li>
@@ -622,11 +624,13 @@ Figure 5. The metadata of a deprecated L1 dataset.
 
 
       <footer><div class="copyright">
-  <p>Developed by Colin Smith, Eric Sokol, Margaret O'Brien.</p>
+  <p></p>
+<p>Developed by Colin Smith, Eric Sokol, Margaret O’Brien.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -634,6 +638,8 @@ Figure 5. The metadata of a deprecated L1 dataset.
 
   
 
+
+  
 
   </body>
 </html>
