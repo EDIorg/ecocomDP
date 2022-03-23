@@ -40,6 +40,7 @@ Validation checks:
 This function is used by ecocomDP creators (to ensure what has been created is valid), maintainers (to improve the quality of archived ecocomDP datasets), and users (to ensure the data being used is free of error).
 }
 \examples{
+\dontrun{
 # Write a set of ecocomDP tables to file for validation
 mydir <- paste0(tempdir(), "/dataset")
 dir.create(mydir)
@@ -59,5 +60,6 @@ validate_data(path = mydir)
 
 # Clean up
 unlink(mydir, recursive = TRUE)
+}
 
 }

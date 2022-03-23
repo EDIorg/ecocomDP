@@ -1,13 +1,13 @@
 Package: ecocomDP
 Type: Package
-Title: Tools to create, use, and convert ecocomDP data
+Title: Tools to Create, Use, and Convert ecocomDP Data
 Description: Work with the Ecological Community Data Design Pattern. 'ecocomDP' 
     is a flexible data model for harmonizing ecological community surveys, in a 
     research question agnostic format, from source data published across 
     repositories, and with methods that keep the derived data up-to-date as the 
     underlying sources change. Described in O'Brien et al. (2021), 
     <doi:10.1016/j.ecoinf.2021.101374>.
-Version: 1.2.0
+Version: 1.2.1.9000
 Authors@R: 
     c(person(given = "Colin",
              family = "Smith", 
@@ -90,6 +90,7 @@ Imports:
     httr (>= 1.3.1),
     lubridate (>= 1.7.4),
     magrittr,
+    methods,
     neonUtilities (>= 2.1.1),
     rlang,
     rmarkdown,
@@ -109,7 +110,7 @@ Suggests:
     testthat,
     worrms (>= 0.4.2),
     ggrepel,
-    usmap,
+    usmap (>= 0.6.0),
     maptools,
     rgdal
 VignetteBuilder: knitr

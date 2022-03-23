@@ -210,9 +210,10 @@ validate_taxonomic_coverage_authority_system <- function(x) {
   authorities_supported <- c(
     'Catalogue of Life', 'ITIS', 'Integrated Taxonomic Information System',
     'https://www.itis.gov/', 'https://www.itis.gov', 'https://itis.gov', 
-    'itis', 'World Register of Marine Species', 'WORMS', 
-    'http://www.marinespecies.org/', 'http://www.marinespecies.org', 
-    'http://marinespecies.org', 'worms', 'GBIF Backbone Taxonomy', 'GBIF', 
+    'itis', 'World Register of Marine Species', 'WORMS', 'https://www.marinespecies.org/', 
+    'http://www.marinespecies.org', 'http://marinespecies.org',
+    'http://www.marinespecies.org/', 'https://www.marinespecies.org', 
+    'https://marinespecies.org', 'worms', 'GBIF Backbone Taxonomy', 'GBIF', 
     'gbif', 'https://gbif.org', 'Tropicos - Missouri Botanical Garden')
   authorities_found <- 
     x$template$taxonomic_coverage.txt$content$authority_system
@@ -558,7 +559,8 @@ annotate_eml <- function(
       pos <- match(name, names(x))
       if (!is.na(pos)) return(x[[pos]])
       for (el in x) {
-        if (class(el) == "list") {
+        if (methods::is(el, "list")) {
+        # if (class(el) == "list") {
           out <- Recall(el, name)
           if (!is.null(out)) return(out)
         }

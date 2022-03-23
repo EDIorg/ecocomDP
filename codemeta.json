@@ -5,12 +5,12 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "ecocomDP",
-  "description": "Tools to create, use, and convert 'ecocomDP' datasets. 'ecocomDP' is a dataset design pattern for harmonizing ecological community surveys in a research question agnostic format, from source datasets published across multiple repositories, and with methods that keep the derived datasets up-to-date as the underlying sources change. Described in O'Brien et al. (2021), <doi:10.1016/j.ecoinf.2021.101374>.",
-  "name": "ecocomDP: Work with Datasets in the Ecological Community Design Pattern",
+  "description": "Work with the Ecological Community Data Design Pattern. 'ecocomDP' \n    is a flexible data model for harmonizing ecological community surveys, in a \n    research question agnostic format, from source data published across \n    repositories, and with methods that keep the derived data up-to-date as the \n    underlying sources change. Described in O'Brien et al. (2021), \n    <doi:10.1016/j.ecoinf.2021.101374>.",
+  "name": "ecocomDP: Tools to Create, Use, and Convert ecocomDP Data",
   "codeRepository": "https://github.com/EDIorg/ecocomDP",
   "issueTracker": "https://github.com/EDIorg/ecocomDP/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.1.0",
+  "version": "1.2.1",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -114,6 +114,12 @@
       "@type": "Person",
       "givenName": "Thilina",
       "familyName": "Surasinghe"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Kyle",
+      "familyName": "Zollo-Venecek",
+      "@id": "https://orcid.org/0000-0002-1615-590X"
     }
   ],
   "copyrightHolder": [
@@ -224,6 +230,55 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=worrms"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "ggrepel",
+      "name": "ggrepel",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ggrepel"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "usmap",
+      "name": "usmap",
+      "version": ">= 0.6.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=usmap"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "maptools",
+      "name": "maptools",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=maptools"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "rgdal",
+      "name": "rgdal",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rgdal"
     }
   ],
   "softwareRequirements": [
@@ -364,6 +419,11 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "methods",
+      "name": "methods"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "neonUtilities",
       "name": "neonUtilities",
       "version": ">= 2.1.1",
@@ -476,5 +536,5 @@
   },
   "readme": "https://github.com/EDIorg/ecocomDP/blob/master/README.md",
   "relatedLink": "https://CRAN.R-project.org/package=ecocomDP",
-  "fileSize": "984.127KB"
+  "fileSize": "2647.156KB"
 }

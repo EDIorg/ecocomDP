@@ -78,7 +78,7 @@ txcl_get_authority <- function(taxon, data.source){
 #     Supported authorities are recognized by a controlled set of representations.
 #     \itemize{
 #     \item ITIS can be: "ITIS", "itis", "Integrated Taxonomic Information System", or "https://www.itis.gov/".
-#     \item WORMS can be: "WORMS", "worms", "World Register of Marine Species", or "http://www.marinespecies.org/".
+#     \item WORMS can be: "WORMS", "worms", "World Register of Marine Species", or "https://www.marinespecies.org/".
 #     \item GBIF can be: "GBIF", "gbif", "GBIF Backbone Taxonomy", or "https://gbif.org".
 #     }
 #
@@ -99,6 +99,7 @@ txcl_get_classification <- function(taxa.clean,
       'itis',
       'World Register of Marine Species',
       'WORMS',
+      'https://www.marinespecies.org/',
       'http://www.marinespecies.org/',
       'worms',
       'GBIF Backbone Taxonomy',
@@ -112,6 +113,7 @@ txcl_get_classification <- function(taxa.clean,
       'itis',
       'itis',
       'itis',
+      'worms',
       'worms',
       'worms',
       'worms',
@@ -187,7 +189,7 @@ txcl_get_classification <- function(taxa.clean,
             if (authority == "itis") {
               provider <- "https://itis.gov"
             } else if (authority == "worms") {
-              provider <- "http://marinespecies.org"
+              provider <- "https://marinespecies.org"
             } else if (authority == "gbif") {
               provider <- "https://gbif.org"
             }  else {
@@ -920,7 +922,7 @@ txcl_optimize_match_common <- function(x, data.sources){
           authority = data.sources[j])),
       silent = TRUE)
     
-    if (class(out_id) == "try-error") {
+    if (methods::is(out_id, "try-error")) {
       out_id <- list(
         'taxon_id' = NA_character_,
         'taxon_rank' = NA_character_,

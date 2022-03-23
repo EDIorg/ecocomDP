@@ -35,7 +35,7 @@ Create the taxon table
 \details{
 This function collects specified columns from \code{L0_flat} and returns distinct rows.
 
-Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. \href{https://www.itis.gov/}{ITIS}, \href{http://www.marinespecies.org/}{WORMS}, or \href{https://gbif.org}{GBIF}), will have their full taxonomic hierarchy expanded, including any common names for each level.
+Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. \href{https://www.itis.gov/}{ITIS}, \href{https://www.marinespecies.org/}{WORMS}, or \href{https://gbif.org}{GBIF}), will have their full taxonomic hierarchy expanded, including any common names for each level.
 
 "flat" format refers to the fully joined source L0 dataset in "wide" form with the exception of the core observation variables, which are in "long" form (i.e. using the variable_name, value, unit columns of the observation table). This "flat" format is the "widest" an L1 ecocomDP dataset can be consistently spread due to the frequent occurrence of L0 source datasets with > 1 core observation variable.
 }

@@ -84,4 +84,7 @@ dataset \%>\%
     min_relative_abundance = 0.01)
 }
 
+# Plot the example dataset
+plot_taxa_abund(ants_L1)
+
 }

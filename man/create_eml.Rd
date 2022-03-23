@@ -70,7 +70,7 @@ This function creates an EML record for an ecocomDP by combining metadata from \
         \item \strong{<annotations>} Adds boilerplate annotations describing the ecocomDP at the dataset, entity, and entity attribute levels.
     }
     
-    Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. \href{https://www.itis.gov/}{ITIS}, \href{http://www.marinespecies.org/}{WORMS}, or \href{https://gbif.org}{GBIF}), will have their full taxonomic hierarchy expanded, including any common names for each level.
+    Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. \href{https://www.itis.gov/}{ITIS}, \href{https://www.marinespecies.org/}{WORMS}, or \href{https://gbif.org}{GBIF}), will have their full taxonomic hierarchy expanded, including any common names for each level.
 }
 \examples{
 \dontrun{

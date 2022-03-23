@@ -29,6 +29,7 @@
 #' @export
 #'    
 #' @examples 
+#' \dontrun{
 #' # Write a set of ecocomDP tables to file for validation
 #' mydir <- paste0(tempdir(), "/dataset")
 #' dir.create(mydir)
@@ -48,6 +49,7 @@
 #' 
 #' # Clean up
 #' unlink(mydir, recursive = TRUE)
+#' }
 #'
 validate_data <- function(
   dataset = NULL,

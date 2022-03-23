@@ -1152,7 +1152,7 @@ EAL_make_eml <- function(
         for (i in which(tbl_attr$class == "numeric")) {
           a <- x$data.table[[k]]$content[[tbl_attr$attributeName[i]]][
             !is.na(x$data.table[[k]]$content[[tbl_attr$attributeName[i]]])]
-          if (class(a) == "integer64") { # An exception for integer64 - Does not behave like a "numeric". Can remove this if we remove the data.table lib dependency
+          if (methods::is(a, "integer64")) { # An exception for integer64 - Does not behave like a "numeric". Can remove this if we remove the data.table lib dependency
             a <- as.numeric(a)
           }
           a <- a[a != tbl_attr$missingValueCode[i]]
@@ -1227,8 +1227,7 @@ EAL_make_eml <- function(
             numHeaderLines = "1",
             recordDelimiter = get_eol(
               path = data.path,
-              file.name = k,
-              os = detect_os()),
+              file.name = k),
             attributeOrientation = "column",
             url = "placeholder"))
         
