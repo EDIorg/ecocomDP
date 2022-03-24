@@ -49,19 +49,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
     dplyr::distinct()
   
   
-  # if("mos_subsampling" %in% names(mos_allTabs)){
-  #   mos_subsampling <- mos_allTabs$mos_subsampling %>%
-  #     dplyr::mutate(
-  #       setDate = as.character(setDate),
-  #       collectDate = as.character(collectDate)) %>%
-  #     dplyr::mutate_all(list(~dplyr::na_if(.,""))) %>%
-  #     tidyr::drop_na(dplyr::all_of(cols_oi_subsamp)) %>%
-  #     dplyr::mutate_if(is.factor, as.character) %>% 
-  #     dplyr::distinct()
-  # }
-  
-  
-  mos_sorting <- mos_allTabs$mos_sorting %>% 
+   mos_sorting <- mos_allTabs$mos_sorting %>% 
     dplyr::mutate (
       setDate = as.character(setDate),
       collectDate = as.character(collectDate), 
@@ -72,17 +60,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
     dplyr::distinct()
   
   
-  # mos_archivepooling <- mos_allTabs$mos_archivepooling %>% 
-  #   dplyr::mutate(
-  #     startCollectDate = as.character(startCollectDate),
-  #     endCollectDate = as.character(endCollectDate)) %>% 
-  #   dplyr::mutate_all(list(~dplyr::na_if(.,""))) %>% 
-  #   tidyr::drop_na(dplyr::all_of(cols_oi_arch)) %>%
-  #   dplyr::mutate_if(is.factor, as.character) %>% 
-  #   dplyr::distinct()
-  
-  
-  mos_expertTaxonomistIDProcessed <- mos_allTabs$mos_expertTaxonomistIDProcessed %>% 
+   mos_expertTaxonomistIDProcessed <- mos_allTabs$mos_expertTaxonomistIDProcessed %>% 
     dplyr::mutate(
       setDate= as.character(setDate),
       collectDate = as.character(collectDate), 
@@ -92,20 +70,6 @@ map_neon.ecocomdp.10043.001.001 <- function(
     dplyr::mutate_if(is.factor, as.character) %>% 
     dplyr::distinct()
   
-  
-  
-  
-  
-  # # Look for duplicate sampleIDs #
-  # length(which(duplicated(mos_trapping$sampleID)))  # 0
-  # length(which(duplicated(mos_sorting$subsampleID))) # 0
-  # length(which(duplicated(mos_archivepooling$archiveID))) # 0
-  
-  
-  
-  # # Make sure no "upstream" records are missing primary "downstream" reference
-  # length(which(!mos_sorting$sampleID %in% mos_trapping$sampleID))  # 0
-  # length(which(!mos_expertTaxonomistIDProcessed$subsampleID %in% mos_sorting$subsampleID))  # 0
   
   
   
@@ -133,27 +97,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
   if(!"remarks" %in% names(mos_dat)) mos_dat[,"remarks"] <- NA_character_
   if(!"dataQF" %in% names(mos_dat)) mos_dat[,"dataQF"] <- NA_character_
   
-  # mos_dat <- mos_dat %>%
-  #   dplyr::rename(sampCondition_sorting = sampleCondition.x,
-  #                 sampCondition_trapping = sampleCondition.y,
-  #                 remarks_sorting = remarks,
-  #                 dataQF_trapping = dataQF)
-  
-  
-  
-  
-  # # Verify sample barcode consistency before removing one column
-  # which(mos_dat$sampleCode.x != mos_dat$sampleCode.y)
-  # # Consistency is fine with barcodes
-  
-  
-  
-  
-  
-  # 
-  # mos_dat <- dplyr::rename(mos_dat,sampleCode = sampleCode.x) %>% 
-  #   dplyr::select(-sampleCode.y)
-  
+
   
   # Join expert ID data --
   mos_dat <- mos_dat %>%
@@ -162,16 +106,6 @@ map_neon.ecocomdp.10043.001.001 <- function(
       -c(collectDate,domainID,namedLocation,plotID,setDate,siteID,targetTaxaPresent)),
       by = c('subsampleID',"subsampleCode"),
       suffix = c("","_expertID")) 
-  
-  
-  
-  
-  
-  
-  # # Verify sample barcode and labName consistency before removing one column
-  # which(mos_dat$subsampleCode.x != mos_dat$subsampleCode.y)
-  # which(mos_dat$laboratoryName.x != mos_dat$laboratoryName.y)
-  
   
   
   
@@ -186,46 +120,9 @@ map_neon.ecocomdp.10043.001.001 <- function(
         round(individualCount * (totalWeight/subsampleWeight)), NA))
   
   
+
   
-  # # Add subsampling data --
-  # if("mos_subsampling" %in% names(mos_allTabs)){
-  #   mos_subsampling <- mos_subsampling[
-  #     ,names(mos_subsampling) %in% 
-  #       c("subsampleID","subsampleIDCode","archiveID","archiveIDCode")] %>%
-  #     dplyr::distinct()
-  #   
-  #   mos_dat_2 <- mos_dat %>%
-  #     dplyr::left_join(
-  #       mos_subsampling,
-  #       by = 'subsampleID') %>% dplyr::distinct()
-  # }
-  
-  # 
-  # # Add archive data --
-  # mos_dat <- mos_dat %>%
-  #   dplyr::left_join(
-  #     dplyr::select(mos_archivepooling,-c(domainID,uid,namedLocation,siteID)),
-  #     by = 'archiveID')
-  
-  
-  
-  
-  
-  
-  # # Verify sample barcode consistency before removing one column
-  # which(mos_dat$archiveIDCode.x != mos_dat$archiveIDCode.y)
-  
-  # Consistency is fine with barcodes
-  
-  
-  
-  
-  
-  # 
-  #   mos_dat <- dplyr::rename(mos_dat,archiveIDCode = archiveIDCode.x) %>% 
-  #     dplyr::select(-archiveIDCode.y)
-  
-  
+ 
   # exclude records with taxonID is NA and remove dups
   mos_dat <- mos_dat %>%
     dplyr::filter(
