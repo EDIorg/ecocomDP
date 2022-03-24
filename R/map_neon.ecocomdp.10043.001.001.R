@@ -30,12 +30,14 @@ map_neon.ecocomdp.10043.001.001 <- function(
   # Define important data colums
   cols_oi_trap <- c('collectDate','eventID','namedLocation','sampleID')
   cols_oi_sort <- c('collectDate','sampleID','namedLocation','subsampleID')
+  cols_oi_subsamp <- c('collectDate','subsampleID','archiveID')
   cols_oi_arch <- c('startCollectDate','archiveID','namedLocation')
   cols_oi_exp_proc <- c('collectDate','subsampleID','namedLocation')
   
   
   
   # Remove rows with missing important data, replacing blank with NA and factors with characters
+  
   
   mos_trapping <- mos_allTabs$mos_trapping %>%
     dplyr::mutate(
@@ -47,7 +49,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
     dplyr::distinct()
   
   
-  mos_sorting <- mos_allTabs$mos_sorting %>% 
+   mos_sorting <- mos_allTabs$mos_sorting %>% 
     dplyr::mutate (
       setDate = as.character(setDate),
       collectDate = as.character(collectDate), 
@@ -58,17 +60,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
     dplyr::distinct()
   
   
-  mos_archivepooling <- mos_allTabs$mos_archivepooling %>% 
-    dplyr::mutate(
-      startCollectDate = as.character(startCollectDate),
-      endCollectDate = as.character(endCollectDate)) %>% 
-    dplyr::mutate_all(list(~dplyr::na_if(.,""))) %>% 
-    tidyr::drop_na(dplyr::all_of(cols_oi_arch)) %>%
-    dplyr::mutate_if(is.factor, as.character) %>% 
-    dplyr::distinct()
-  
-  
-  mos_expertTaxonomistIDProcessed <- mos_allTabs$mos_expertTaxonomistIDProcessed %>% 
+   mos_expertTaxonomistIDProcessed <- mos_allTabs$mos_expertTaxonomistIDProcessed %>% 
     dplyr::mutate(
       setDate= as.character(setDate),
       collectDate = as.character(collectDate), 
@@ -81,22 +73,6 @@ map_neon.ecocomdp.10043.001.001 <- function(
   
   
   
-  
-
-  
-  # # Look for duplicate sampleIDs #
-  # length(which(duplicated(mos_trapping$sampleID)))  # 0
-  # length(which(duplicated(mos_sorting$subsampleID))) # 0
-  # length(which(duplicated(mos_archivepooling$archiveID))) # 0
-  
-  
-  
-  # # Make sure no "upstream" records are missing primary "downstream" reference
-  # length(which(!mos_sorting$sampleID %in% mos_trapping$sampleID))  # 0
-  # length(which(!mos_expertTaxonomistIDProcessed$subsampleID %in% mos_sorting$subsampleID))  # 0
-
-  
-  
   # Clear expertTaxonomist:individualCount if it is 0 and there is no taxonID. These aren't ID'ed samples
   mos_expertTaxonomistIDProcessed$individualCount[
     mos_expertTaxonomistIDProcessed$individualCount == 0 & 
@@ -106,95 +82,47 @@ map_neon.ecocomdp.10043.001.001 <- function(
   ####
   # Join data
   
+  
+  
   # Add trapping info to sorting table 
   # Note - 59 trapping records have no associated sorting record and don't come through the left_join (even though targetTaxaPresent was set to Y or U)
   mos_dat <- mos_sorting %>%
     dplyr::select(-c(uid,collectDate, domainID, namedLocation, plotID, 
                      setDate, siteID)) %>%
-    dplyr::left_join(dplyr::select(mos_trapping,-uid),by = 'sampleID') 
+    dplyr::left_join(dplyr::select(mos_trapping,-uid),
+                     by = c("sampleID", "sampleCode"),
+                     # by = "sampleID",
+                     suffix = c("_sorting","_trapping")) 
   
   if(!"remarks" %in% names(mos_dat)) mos_dat[,"remarks"] <- NA_character_
   if(!"dataQF" %in% names(mos_dat)) mos_dat[,"dataQF"] <- NA_character_
   
-  mos_dat <- mos_dat %>%
-    dplyr::rename(sampCondition_sorting = sampleCondition.x,
-                  sampCondition_trapping = sampleCondition.y,
-                  remarks_sorting = remarks,
-                  dataQF_trapping = dataQF)
-  
-  
 
-  
-  # # Verify sample barcode consistency before removing one column
-  # which(mos_dat$sampleCode.x != mos_dat$sampleCode.y)
-  # # Consistency is fine with barcodes
-  
-  
-
-  
-  
-  
-  mos_dat <- dplyr::rename(mos_dat,sampleCode = sampleCode.x) %>% 
-    dplyr::select(-sampleCode.y)
-  
   
   # Join expert ID data --
   mos_dat <- mos_dat %>%
     dplyr::left_join(dplyr::select(
       mos_expertTaxonomistIDProcessed,
       -c(collectDate,domainID,namedLocation,plotID,setDate,siteID,targetTaxaPresent)),
-                     by='subsampleID') %>%
-    dplyr::rename(remarks_expertID = remarks)
+      by = c('subsampleID',"subsampleCode"),
+      suffix = c("","_expertID")) 
   
   
-  
-  
-  
-
-  # # Verify sample barcode and labName consistency before removing one column
-  # which(mos_dat$subsampleCode.x != mos_dat$subsampleCode.y)
-  # which(mos_dat$laboratoryName.x != mos_dat$laboratoryName.y)
-  
-  
-
   
   
   
   # Rename columns and add estimated total individuals for each subsample/species/sex with identification, where applicable
   #  Estimated total individuals = # individuals iD'ed * (total subsample weight/ subsample weight)
-  mos_dat <- dplyr::rename(mos_dat,subsampleCode = subsampleCode.x, 
-                           laboratoryName = laboratoryName.x) %>% 
-    dplyr::select(-c(subsampleCode.y, laboratoryName.y)) %>%
+  mos_dat <- mos_dat %>%
     dplyr::mutate(
       estimated_totIndividuals = ifelse(
         !is.na(individualCount),
         round(individualCount * (totalWeight/subsampleWeight)), NA))
   
   
-  # Add archive data --
-  mos_dat <- mos_dat %>%
-    dplyr::left_join(
-      dplyr::select(mos_archivepooling,-c(domainID,uid,namedLocation,siteID)),
-      by = 'archiveID')
-  
-  
-  
-  
-  
 
-  # # Verify sample barcode consistency before removing one column
-  # which(mos_dat$archiveIDCode.x != mos_dat$archiveIDCode.y)
   
-  # Consistency is fine with barcodes
-  
-  
-  
-  
-  
-
-  mos_dat <- dplyr::rename(mos_dat,archiveIDCode = archiveIDCode.x) %>% 
-    dplyr::select(-archiveIDCode.y)
-  
+ 
   # exclude records with taxonID is NA and remove dups
   mos_dat <- mos_dat %>%
     dplyr::filter(
@@ -206,8 +134,9 @@ map_neon.ecocomdp.10043.001.001 <- function(
   
   
   
-
-
+  
+  
+  
   #location ----
   table_location_raw <- mos_dat %>%
     dplyr::select(domainID, siteID, namedLocation, 
@@ -226,7 +155,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
   
   
   
-
+  
   # taxon ----
   table_taxon <- mos_dat %>%
     dplyr::select(taxonID, taxonRank, scientificName,identificationReferences) %>%
@@ -246,9 +175,9 @@ map_neon.ecocomdp.10043.001.001 <- function(
     dplyr::summarize(
       authority_system = paste(authority_system, collapse = "; "))
   
-
   
-
+  
+  
   
   
   # observation ----
@@ -266,9 +195,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
       neon_event_id = eventID,
       location_id = namedLocation,
       datetime = collectDate,
-      taxon_id = taxonID,
-      release = release.x,
-      publicationDate = publicationDate.x) %>%
+      taxon_id = taxonID) %>%
     dplyr::mutate(
       package_id = my_package_id,
       event_id = sampleID) %>%
@@ -319,12 +246,12 @@ map_neon.ecocomdp.10043.001.001 <- function(
       )
     ) %>%
     dplyr::distinct()
-      
+  
   
   
   # make data summary table ----
   years_in_data <- table_observation$datetime %>% lubridate::year()
-  years_in_data %>% ordered()
+  # years_in_data %>% ordered()
   
   table_dataset_summary <- data.frame(
     package_id = table_observation$package_id[1],
@@ -337,7 +264,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
   )
   
   
-
+  
   # return ----
   # list of tables to be returned, with standardized names for elements
   out_list <- list(
