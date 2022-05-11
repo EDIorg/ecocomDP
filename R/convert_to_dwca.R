@@ -165,17 +165,25 @@ create_tables_dwca_event_core <- function(
   # Define new cols specifically needed for DwC-A
   obs_loc_tax$lsid <- NA_character_
   obs_loc_tax$dc_occurrence_id <- NA_character_
-  obs_loc_tax$dc_samplingprotocol <-NA_character_
-  obs_loc_tax$dc_event_id <-NA_character_
-  obs_loc_tax$dc_dataset_name <-NA_character_
+  obs_loc_tax$dc_samplingprotocol <- NA_character_
+  obs_loc_tax$dc_event_id <- NA_character_
+  obs_loc_tax$dc_dataset_name <- NA_character_
   
   # comb_id 
+  
+  # FIXME Create id column (row numbers)
+  browser()
+  
+  # FIXME Refactor occurrenceID according to notes
+  browser()
   obs_loc_tax$dc_occurrence_id <- paste(
     "occ",
     derived_id,
     seq(nrow(obs_loc_tax)),
     sep = '.')
   
+  # FIXME Reuse id column for eventID
+  browser()
   obs_loc_tax$dc_event_id <- paste(
     derived_id,
     obs_loc_tax$event_id,
@@ -242,6 +250,9 @@ create_tables_dwca_event_core <- function(
   
   # Create event --------------------------------------------------------------
   
+  # FIXME reference id column of obs_loc_tax
+  browser()
+  
   event_table <- data.frame(
     id = seq(nrow(obs_loc_tax)),
     eventID = obs_loc_tax$dc_event_id,
@@ -258,6 +269,11 @@ create_tables_dwca_event_core <- function(
     event_table)
   
   # Create occurrence ---------------------------------------------------------
+  
+  # FIXME 
+  # - reference id column of obs_loc_tax
+  # - Remove eventID column
+  browser()
   
   occurrence_table <- data.frame(
     id = seq(nrow(obs_loc_tax)),
@@ -279,6 +295,9 @@ create_tables_dwca_event_core <- function(
     .keep_all = TRUE)
   
   # Create extendedmeasurementorfact ------------------------------------------
+  
+  # FIXME reference id column of obs_loc_tax
+  browser()
   
   extendedmeasurementorfact_table <- data.frame(
     id = seq(nrow(obs_loc_tax)),
@@ -655,6 +674,9 @@ make_eml_dwca <- function(path,
     xml2::xml_find_all(xml_L0, ".//abstract//para"))
   eml_L1$dataset$abstract <- NULL
   
+  # FIXME Move L2_para after L0_para
+  browser()
+  
   # Create L2 abstract
   eml_L1$dataset$abstract$para <- c(
     list(L2_para),
@@ -696,6 +718,11 @@ make_eml_dwca <- function(path,
   
   methods_L2 <- eml_L2$dataset$methods$methodStep[1]
   eml_L2$dataset$methods$methodStep[[1]] <- NULL
+  
+  # FIXME Add URL to L0 landing page using regex on the methods_L2 object. 
+  # To facilitate, it may be good to add boiler plate text to the L2 method metadata template
+  # How are URLs to sources obtained? We don't want to do anything that precludes adoption by other repositories.
+  browser()
   
   provenance_L1 <- suppressMessages(
     api_get_provenance_metadata(
