@@ -1,10 +1,12 @@
 # ecocomDP 1.2.1.9000
 
+## Fixes
+* Fix NEON mosquito mapping error in internal function `map_neon.ecocomdp.10043.001.001` that resulted from an update to the NEON "Mosquitoes sampled from CO2 traps" (DP1.10043.001) data model that affects the 2022 data release (and later). The fix is backwards compatible to older NEON data releases and also fixes a problem that resulted in pulling duplicate records from the mos_archivepooling table (archive records are no longer accessed using ecocomDP). 
+
 # ecocomDP 1.2.1
 
 ## Fixes
 * Fix `plot_sites()` to work with version 0.6.0 of the usmap package. See issue [#136](https://github.com/EDIorg/ecocomDP/issues/136).
-* Fix NEON mosquito mapping error in internal function `map_neon.ecocomdp.10043.001.001` that resulted from an update to the NEON "Mosquitoes sampled from CO2 traps" (DP1.10043.001) data model that affects the 2022 data release (and later). The fix is backwards compatible to older NEON data releases and also fixes a problem that resulted in pulling duplicate records from the mos_archivepooling table (archive records are no longer accessed using ecocomDP). 
 
 # ecocomDP 1.2.0
 
