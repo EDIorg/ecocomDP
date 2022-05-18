@@ -163,31 +163,19 @@ create_tables_dwca_event_core <- function(
   # Create computed vectors:
   
   # Define new cols specifically needed for DwC-A
+  obs_loc_tax$id <- seq_along(obs_loc_tax$observation_id)
   obs_loc_tax$lsid <- NA_character_
-  obs_loc_tax$dc_occurrence_id <- NA_character_
+  obs_loc_tax$dc_occurrence_id <- paste(
+    obs_loc_tax$id, 
+    obs_loc_tax$taxon_id,
+    obs_loc_tax$observation_id,
+    sep = "_"
+  )
   obs_loc_tax$dc_samplingprotocol <- NA_character_
-  obs_loc_tax$dc_event_id <- NA_character_
+  obs_loc_tax$dc_event_id <- obs_loc_tax$id
   obs_loc_tax$dc_dataset_name <- NA_character_
   
-  # comb_id 
-  
-  # FIXME Create id column (row numbers)
-  browser()
-  
-  # FIXME Refactor occurrenceID according to notes
-  browser()
-  obs_loc_tax$dc_occurrence_id <- paste(
-    "occ",
-    derived_id,
-    seq(nrow(obs_loc_tax)),
-    sep = '.')
-  
-  # FIXME Reuse id column for eventID
-  browser()
-  obs_loc_tax$dc_event_id <- paste(
-    derived_id,
-    obs_loc_tax$event_id,
-    sep = '.')
+  # comb_id
   
   # Use the DOI of the L1 and construct as: "See methods in DOI"
   obs_loc_tax$dc_samplingprotocol <- paste0(
@@ -250,11 +238,8 @@ create_tables_dwca_event_core <- function(
   
   # Create event --------------------------------------------------------------
   
-  # FIXME reference id column of obs_loc_tax
-  browser()
-  
   event_table <- data.frame(
-    id = seq(nrow(obs_loc_tax)),
+    id = obs_loc_tax$id,
     eventID = obs_loc_tax$dc_event_id,
     datasetName = dc_dataset_name,
     samplingProtocol = obs_loc_tax$dc_samplingprotocol,
@@ -270,14 +255,8 @@ create_tables_dwca_event_core <- function(
   
   # Create occurrence ---------------------------------------------------------
   
-  # FIXME 
-  # - reference id column of obs_loc_tax
-  # - Remove eventID column
-  browser()
-  
   occurrence_table <- data.frame(
-    id = seq(nrow(obs_loc_tax)),
-    eventID = obs_loc_tax$dc_event_id,
+    id = obs_loc_tax$id,
     occurrenceID = obs_loc_tax$dc_occurrence_id,
     basisOfRecord = obs_loc_tax$dc_basisofrecord,
     scientificName = obs_loc_tax$taxon_name,
@@ -290,18 +269,14 @@ create_tables_dwca_event_core <- function(
   # redundancy
   occurrence_table <- dplyr::distinct_at(
     occurrence_table, 
-    .vars = c("eventID", "basisOfRecord", "scientificName", "taxonID",
+    .vars = c("basisOfRecord", "scientificName", "taxonID",
               "nameAccordingTo", "scientificNameID"),
     .keep_all = TRUE)
   
   # Create extendedmeasurementorfact ------------------------------------------
   
-  # FIXME reference id column of obs_loc_tax
-  browser()
-  
   extendedmeasurementorfact_table <- data.frame(
-    id = seq(nrow(obs_loc_tax)),
-    eventID = obs_loc_tax$dc_event_id,
+    id = obs_loc_tax$id,
     occurrenceID = obs_loc_tax$dc_occurrence_id,
     measurementType = obs_loc_tax$variable_name,
     measurementTypeID = NA_character_,
@@ -658,29 +633,27 @@ make_eml_dwca <- function(path,
   
   message("    <abstract>")
   
-  # Add links to L0 and L1 data packages
-  eml_L2$dataset$abstract$para[[1]] <- stringr::str_replace(
-    eml_L2$dataset$abstract$para[[1]], 
-    "L0_PACKAGE_URL", 
-    url_grandparent)
-  eml_L2$dataset$abstract$para[[1]] <- stringr::str_replace(
-    eml_L2$dataset$abstract$para[[1]], 
-    "L1_PACKAGE_URL", 
-    url_parent)
+  # Constructing the L2 abstract paragraph here because "<ulink>" required by 
+  # GBIF, gets mangled when reading from file with EML::set_TextType()
   
-  # Parse para from xml object because emld parsing is irregular
-  L2_para <- eml_L2$dataset$abstract$para[[1]]
+  L2_para <- paste0(
+    "This data package is formatted as a Darwin Core Archive (DwC-A, event ",
+    "core). For more information on Darwin Core see ",
+    "<ulink>https://www.tdwg.org/standards/dwc/</ulink>. This Level 2 data ",
+    "package was derived from the Level 1 data package found here: <ulink>",
+    url_parent, "</ulink>, which was derived from the Level 0 data package ",
+    "found here: <ulink>", url_grandparent, "</ulink>. The abstract above was",
+    " extracted from the Level 0 data package and is included for context."
+  )
+  
   L0_para <- xml2::xml_text(
     xml2::xml_find_all(xml_L0, ".//abstract//para"))
   eml_L1$dataset$abstract <- NULL
   
-  # FIXME Move L2_para after L0_para
-  browser()
-  
   # Create L2 abstract
   eml_L1$dataset$abstract$para <- c(
-    list(L2_para),
-    list(L0_para))
+    list(L0_para),
+    list(L2_para))
   
   # Update <keywordSet> -------------------------------------------------------
   
@@ -703,26 +676,51 @@ make_eml_dwca <- function(path,
   
   # Update <intellectualRights> -----------------------------------------------
   
-  # Use parent intellectual rights or CC0 if none exists
-  if (is.null(eml_L1$dataset$intellectualRights)) {
-    message("    <intellectualRights>")
-    eml_L1$dataset$intellectualRights <- eml_L2$dataset$intellectualRights
-  }
+  # FIXME Are we keeping the original license or adding our own? Any change
+  # here should also be applied to create_eml() for the L1.
+  
+  message("    <intellectualRights>")
+  eml_L1$dataset$intellectualRights <- list(
+    para = paste0(
+      "This data package is released to the public domain under Creative ",
+      "Commons CC0 1.0 No Rights Reserved (see: ",
+      "<ulink>https://creativecommons.org/publicdomain/zero/1.0/</ulink>). ",
+      "It is considered professional etiquette to provide attribution of ",
+      "the original work if this data package is shared in whole or by ",
+      "individual components. A generic citation is provided for this data ",
+      "package on the website ",
+      "<ulink>https://portal.edirepository.org</ulink> (herein website) ",
+      "in the summary metadata page. Communication (and collaboration) with ",
+      "the creators of this data package is recommended to prevent duplicate ",
+      "research or publication. This data package (and its components) is ",
+      "made available as is and with no warranty of accuracy or fitness for ",
+      "use. The creators of this data package and the website shall not be ",
+      "liable for any damages resulting from misinterpretation or misuse of ",
+      "the data package or its components. Periodic updates of this data ",
+      "package may be available from the website. Thank you."
+    )
+  )
   
   # Update <methods> ----------------------------------------------------------
   
   message("    <methods>")
   
-  # Parse components to be reordered and recombined. Parse para from xml 
-  # object because emld parsing is irregular
+  # Constructing the L2 methods paragraph here because "<ulink>" required by 
+  # GBIF, gets mangled when reading from file with EML::set_methods()
   
-  methods_L2 <- eml_L2$dataset$methods$methodStep[1]
-  eml_L2$dataset$methods$methodStep[[1]] <- NULL
-  
-  # FIXME Add URL to L0 landing page using regex on the methods_L2 object. 
-  # To facilitate, it may be good to add boiler plate text to the L2 method metadata template
-  # How are URLs to sources obtained? We don't want to do anything that precludes adoption by other repositories.
-  browser()
+  methods_L2 <- list(
+    description = list(
+      para = paste0(
+        "This data package is a child (Level 2) of the parent data package ",
+        "(Level 1: <ulink>", url_parent, "</ulink>), and listed in the ",
+        "dataSource element below. This Level 2 data package was created ",
+        "using the convert_to_dwca() function of the ecocomDP R library: ",
+        "<ulink>https://github.com/EDIorg/ecocomDP</ulink>. Methods of the ",
+        "Level 0 original source dataset (<ulink>", url_grandparent, 
+        "</ulink>) are included below for context:"
+      )
+    )
+  )
   
   provenance_L1 <- suppressMessages(
     api_get_provenance_metadata(
