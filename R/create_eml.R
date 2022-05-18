@@ -521,6 +521,10 @@ create_eml <- function(path,
   # user_domain here expands editing permission to the creator of the DwC-A 
   # data package this EML will be apart of.
   
+  if (length(unlist(eml_L0$access$allow)) == 2) { # prevent single allow issue
+    eml_L0$access$allow <- list(eml_L0$access$allow,eml_L0$access$allow)
+  }
+  
   eml_L0$access$allow <- unique(
     c(eml_L0$access$allow, 
       eml_L1$access$allow))
