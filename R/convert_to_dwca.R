@@ -88,9 +88,15 @@ convert_to_dwca <- function(path,
   # Write meta.xml ------------------------------------------------------------
   
   if (core_name == "event") {
-    file.copy(
-      from = system.file("extdata", "/dwca_event_core/meta.xml", package = "ecocomDP"),
-      to = path)
+    meta <- xml2::read_xml(
+      system.file(
+        "extdata", "/dwca_event_core/meta.xml", 
+        package = "ecocomDP"
+      )
+    )
+    meta_file <- paste0(derived_id, ".xml")
+    xml2::xml_set_attr(x = meta, attr = "metadata", value = meta_file)
+    xml2::write_xml(meta, file = paste0(path, "/meta.xml"))
   } else if (core_name == "occurrence") {
     # file.copy(
     #   from = system.file("/dwca_occurrence_core/meta.xml", package = "ecocomDP"),
