@@ -169,7 +169,7 @@ create_tables_dwca_event_core <- function(
   # Create computed vectors:
   
   # Define new cols specifically needed for DwC-A
-  obs_loc_tax$id <- seq_along(obs_loc_tax$observation_id)
+  obs_loc_tax$id <- obs_loc_tax$observation_id
   obs_loc_tax$lsid <- NA_character_
   obs_loc_tax$dc_occurrence_id <- paste(
     obs_loc_tax$id, 
@@ -178,7 +178,7 @@ create_tables_dwca_event_core <- function(
     sep = "_"
   )
   obs_loc_tax$dc_samplingprotocol <- NA_character_
-  obs_loc_tax$dc_event_id <- obs_loc_tax$id
+  obs_loc_tax$dc_event_id <- obs_loc_tax$event_id
   obs_loc_tax$dc_dataset_name <- NA_character_
   
   # comb_id
@@ -245,8 +245,8 @@ create_tables_dwca_event_core <- function(
   # Create event --------------------------------------------------------------
   
   event_table <- data.frame(
-    id = obs_loc_tax$id,
-    eventID = obs_loc_tax$dc_event_id,
+    id = obs_loc_tax$event_id,
+    eventID = obs_loc_tax$event_id,
     datasetName = dc_dataset_name,
     samplingProtocol = obs_loc_tax$dc_samplingprotocol,
     eventDate = obs_loc_tax$datetime,
@@ -256,13 +256,12 @@ create_tables_dwca_event_core <- function(
     stringsAsFactors = FALSE)
   
   # Unique event_table based on all columns
-  event_table <- unique.data.frame(
-    event_table)
+  event_table <- unique.data.frame(event_table)
   
   # Create occurrence ---------------------------------------------------------
   
   occurrence_table <- data.frame(
-    id = obs_loc_tax$id,
+    id = obs_loc_tax$event_id,
     occurrenceID = obs_loc_tax$dc_occurrence_id,
     basisOfRecord = obs_loc_tax$dc_basisofrecord,
     scientificName = obs_loc_tax$taxon_name,
@@ -271,18 +270,18 @@ create_tables_dwca_event_core <- function(
     scientificNameID = obs_loc_tax$lsid,
     stringsAsFactors = FALSE)
   
-  # Unique occurrence_table based on all columns except occurrenceID to reduce
-  # redundancy
-  occurrence_table <- dplyr::distinct_at(
-    occurrence_table, 
-    .vars = c("basisOfRecord", "scientificName", "taxonID",
-              "nameAccordingTo", "scientificNameID"),
-    .keep_all = TRUE)
+  # # Unique occurrence_table based on all columns except occurrenceID to reduce
+  # # redundancy
+  # occurrence_table <- dplyr::distinct_at(
+  #   occurrence_table, 
+  #   .vars = c("basisOfRecord", "scientificName", "taxonID",
+  #             "nameAccordingTo", "scientificNameID"),
+  #   .keep_all = TRUE)
   
   # Create extendedmeasurementorfact ------------------------------------------
   
   extendedmeasurementorfact_table <- data.frame(
-    id = obs_loc_tax$id,
+    id = obs_loc_tax$event_id,
     occurrenceID = obs_loc_tax$dc_occurrence_id,
     measurementType = obs_loc_tax$variable_name,
     measurementTypeID = NA_character_,
