@@ -282,6 +282,7 @@ create_tables_dwca_event_core <- function(
   
   extendedmeasurementorfact_table <- data.frame(
     id = obs_loc_tax$event_id,
+    measurementID = seq_along(obs_loc_tax$event_id),
     occurrenceID = obs_loc_tax$dc_occurrence_id,
     measurementType = obs_loc_tax$variable_name,
     measurementTypeID = NA_character_,
