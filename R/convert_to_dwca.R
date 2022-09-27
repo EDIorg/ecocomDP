@@ -172,7 +172,7 @@ create_tables_dwca_event_core <- function(
   obs_loc_tax$id <- obs_loc_tax$observation_id
   obs_loc_tax$lsid <- NA_character_
   obs_loc_tax$dc_occurrence_id <- paste(
-    obs_loc_tax$id, 
+    obs_loc_tax$event_id, 
     obs_loc_tax$taxon_id,
     obs_loc_tax$observation_id,
     sep = "_"
