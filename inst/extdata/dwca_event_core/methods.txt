@@ -1,1 +1,0 @@
-This data package is a child (Level 2) of the parent data package (Level 1) listed in the dataSource element below. This Level 2 data package was created using the convert_to_dwca() function of the ecocomDP R library: https://github.com/EDIorg/ecocomDP. Methods of the Level 0 (original source dataset) are included for context:
