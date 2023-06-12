@@ -1296,7 +1296,7 @@ plot_sites <- function(
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
 
   # check for suggested packages that are required for this function to work
-  suggs <- c("ggrepel", "usmap","maps")
+  suggs <- c("ggrepel", "usmap","maps","sf")
   suggsmissing <- !unlist(lapply(suggs, requireNamespace, quietly = TRUE))
   if (any(suggsmissing)) {
     stop("Packages ", paste(suggs, collapse = ", "), " are required for ",
