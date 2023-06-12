@@ -2,7 +2,7 @@
 title: "Create ecocomDP Data"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Create}
+  %\VignetteIndexEntry{Create ecocomDP Data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -2,7 +2,7 @@
 title: "Convert ecocomDP Data to Another Model Format"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Convert}
+  %\VignetteIndexEntry{Convert ecocomDP Data to Another Model Format}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
