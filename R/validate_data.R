@@ -490,7 +490,7 @@ validate_composite_keys <- function(data.list) {
         composite_columns <- composite_columns[                   # expected columns may be missing
           composite_columns %in% colnames(data.list[[x]])]
         if (length(composite_columns) > 0) {
-          d <- dplyr::select(data.list[[x]], composite_columns)
+          d <- dplyr::select(data.list[[x]], any_of(composite_columns))
           duplicates <- seq(nrow(d))[duplicated.data.frame(d)]
           if (length(duplicates) > 0) {
             paste0(

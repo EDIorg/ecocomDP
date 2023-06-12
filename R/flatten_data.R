@@ -149,7 +149,7 @@ flatten_tables <- function(tables){
     }
     # Sort, move location_id to beginning of location cols
     last_col <- colnames(all_merged)[last_col]
-    all_merged <- all_merged %>% 
+    all_merged <- all_merged %>%
       relocate(location_id, .after = last_col)
   }
   
@@ -191,7 +191,7 @@ flatten_tables <- function(tables){
         by = "taxon_id")
     # Sort, move taxon_id to beginning of taxon cols
     last_col <- colnames(all_merged)[last_col]
-    all_merged <- all_merged %>% 
+    all_merged <- all_merged %>%
       relocate(taxon_id, .after = last_col)
   }
   
@@ -217,7 +217,8 @@ flatten_tables <- function(tables){
         by = "package_id")
     # Sort, move package_id to beginning of dataset_summary cols
     last_col <- colnames(all_merged)[last_col]
-    all_merged <- all_merged %>% 
+    colnames(all_merged)
+    all_merged <- all_merged %>%
       relocate(package_id, .after = last_col)
   }
   
@@ -274,7 +275,7 @@ flatten_ancillary <- function(ancillary_table) {
     vars <- c(vars, "datetime")
   }
   df <- ancillary_table %>% 
-    dplyr::select(vars) %>%
+    dplyr::select(any_of(vars)) %>%
     tidyr::pivot_wider(names_from = variable_name, 
                        values_from = value)
   # Add units
@@ -511,7 +512,8 @@ flatten_location <- function(location) {
   
   # Reorder location columns in terms of nesting (from high to low) for user understanding
   col_order <- c("location_id", "location_name", nesting_order, "latitude", "longitude", "elevation")
-  location_new <- dplyr::relocate(location_new, col_order)
+  location_new <- dplyr::relocate(location_new, any_of(col_order))
+  
   
   # Return location_colnames so coerce_all_merged() knows which to coerce to "character" class
   res <- list(location_flat = location_new,
