@@ -389,12 +389,13 @@ make_eml_dwca <- function(path,
   # Validate inputs -----------------------------------------------------------
   
   # The parent data package should exist
-  missing_parent_data_package <- suppressWarnings(
-    stringr::str_detect(
-      suppressMessages(
-        api_read_metadata(source_id, environment)), 
-      "Unable to access metadata for packageId:"))
-  if (missing_parent_data_package) {
+  parent_data_package_eml <- suppressMessages(
+    api_read_metadata(source_id, environment)
+  )
+  if (typeof(parent_data_package_eml) == "character") {
+    # A type of character indicates there was a failure in reading the parent 
+    # data package EML (we are expecting a list of XML elements), and therefore 
+    # cannot proceed with processing.
     stop(
       "The L1 data package '", source_id, "' does not exist.",
       call. = FALSE)
