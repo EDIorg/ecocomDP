@@ -1363,7 +1363,9 @@ plot_sites <- function(
     theme_bw() +
     ggrepel::geom_text_repel(
       data = cleaned,
-      aes(x = longitude, y = latitude, label = location_name),
+      aes(x = .data$longitude, 
+          y = .data$latitude, 
+          label = .data$location_name),
       size = 3, max.overlaps = Inf) +
     ggplot2::xlab("Longitude") +
     ggplot2::ylab("Latitude") +
