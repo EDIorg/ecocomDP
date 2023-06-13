@@ -33,8 +33,8 @@ dataset <- read_data("edi.193.5")
 plot_sample_space_time(dataset)
 
 # Flatten the dataset, manipulate, then plot
-dataset \%>\% 
-  flatten_data() \%>\% 
+dataset \%>\%
+  flatten_data() \%>\%
   dplyr::filter(lubridate::as_date(datetime) > "2003-07-01") \%>\%
   dplyr::filter(as.numeric(location_id) > 4) \%>\%
   plot_sample_space_time()

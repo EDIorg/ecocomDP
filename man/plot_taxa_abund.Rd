@@ -75,8 +75,8 @@ plot_taxa_abund(
   trans = "log10")
 
 # tidy syntax, flatten then filter data by date
-dataset \%>\% 
-  flatten_data() \%>\% 
+dataset \%>\%
+  flatten_data() \%>\%
   dplyr::filter(
     lubridate::as_date(datetime) > "2003-07-01") \%>\%
   plot_taxa_abund(

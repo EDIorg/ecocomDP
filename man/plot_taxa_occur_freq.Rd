@@ -48,8 +48,8 @@ plot_taxa_occur_freq(dataset)
 
 # Facet by location and color by taxon_rank
 plot_taxa_occur_freq(
-  data = dataset, 
-  facet_var = "location_id", 
+  data = dataset,
+  facet_var = "location_id",
   color_var = "taxon_rank")
 
 # Color by location and only include taxa with >= 5 occurrences
@@ -59,8 +59,8 @@ plot_taxa_occur_freq(
   min_occurrence = 5)
 
 # Flatten, filter using a time cutoff, then plot
-dataset \%>\% 
-  flatten_data() \%>\% 
+dataset \%>\%
+  flatten_data() \%>\%
   dplyr::filter(lubridate::as_date(datetime) > "2003-07-01") \%>\%
   plot_taxa_occur_freq()
 }

@@ -31,12 +31,12 @@ dataset <- read_data("edi.193.5")
 plot_taxa_shared_sites(dataset)
 
 # Flatten the dataset, manipulate, then plot
-dataset \%>\% 
-  flatten_data() \%>\% 
+dataset \%>\%
+  flatten_data() \%>\%
   dplyr::filter(lubridate::as_date(datetime) > "2003-07-01") \%>\%
   dplyr::filter(as.numeric(location_id) > 4) \%>\%
   plot_taxa_shared_sites()
-  
+
 # Plot from the observation table directly
 plot_taxa_shared_sites(dataset$tables$observation)
 }

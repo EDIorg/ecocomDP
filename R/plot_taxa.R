@@ -1232,18 +1232,13 @@ plot_taxa_abund <- function(data,
 
 
 
-
-
-
-
-#' Work-in-progress upgraded plot_sites
+#' Plot sites on US map
 #'
 #' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation and taxon tables, or a flat table containing columns of the observation and location tables.
 #' @param id (character) Identifier of dataset to be used in plot subtitles. Is automatically assigned when \code{data} is a dataset object containing the \code{id} field, or is a table containing the package_id column.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' @param color_var (character) Argument to assign colors to the points on the plot
 #' @param shape_var (character) Argument to assign shapes to the points on the plot
-#' @param size_var (character) Argument to assign size to the points on the plot
 #'
 #' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
 #'
@@ -1253,50 +1248,52 @@ plot_taxa_abund <- function(data,
 #'
 #' @examples
 #' \dontrun{
-#'
-#'
+#' library(dplyr)
 #'
 #' # Read a dataset of interest
 #' dataset <- read_data("edi.193.5")
-#'
+#' 
 #' # Plot the dataset
 #' plot_sites(dataset)
-#'
+#' 
 #' # Flatten dataset then plot
 #' dataset %>%
 #'   flatten_data() %>%
 #'   plot_sites()
+#' 
+#' # Download a NEON dataset
+#' dataset2 <- read_data(
+#'   id = "neon.ecocomdp.20120.001.001",
+#'   site= c('COMO','LECO'), 
+#'   startdate = "2017-06",
+#'   enddate = "2021-03",
+#'   token = Sys.getenv("NEON_TOKEN"), # option to use a NEON token
+#'   check.size = FALSE)
+#' 
+#' # flatten datasets
+#' flattened_data1 <- dataset %>% flatten_data()
+#' flattened_data2 <- dataset2 %>% flatten_data()
+#' 
+#' # stack datasets
+#' stacked_data <- bind_rows(flattened_data1,flattened_data2)
+#' 
+#' # plot stacked datasets
+#' plot_sites(stacked_data)
 #' }
-#'
-#'#Plot stacked datasets
-#'
-#'dataset2 <- read_data(ants_L1)
-#'
-#'flattened_data1 = flatten_data(dataset)
-#'flattened_data2 = flatten_data(dataset2)
-#'
-#'stacked_data = dplyr::bind_rows(dataset,dataset2)
-#'
-#'plot_sites(stacked_data)
-#'
 #'
 #' # Plot the example dataset
 #' plot_sites(ants_L1)
 #'
-#'
-#'
-
 plot_sites <- function(
     data,
     id = NA_character_,
     alpha = 1,
     color_var = "package_id",
-    shape_var = "package_id",
-    size_var = 3){
+    shape_var = "package_id"){
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
-
+  
   # check for suggested packages that are required for this function to work
-  suggs <- c("ggrepel", "usmap","maps","sf")
+  suggs <- c("ggrepel", "usmap", "maps", "sf")
   suggsmissing <- !unlist(lapply(suggs, requireNamespace, quietly = TRUE))
   if (any(suggsmissing)) {
     stop("Packages ", paste(suggs, collapse = ", "), " are required for ",
@@ -1304,16 +1301,16 @@ plot_sites <- function(
          paste(suggs[suggsmissing], collapse = ", "), " are not installed.",
          call. = FALSE)
   }
-
+  
   # TODO: Convert this unreadable block of code to a function like get_observation_table()
   # TODO: Call get_id()
   # required col names in flat data
   req_col_names <- c("observation_id","event_id","package_id","location_id",
                      "datetime","taxon_id","variable_name","value",
                      "location_id","location_name","longitude","latitude")
-
+  
   # detect data type, extract observation table
-
+  
   data_type <- detect_data_type(data)
   if(data_type == "table" && all(req_col_names %in% names(data))){
     flat_data <- data %>% dplyr::distinct()
@@ -1329,7 +1326,7 @@ plot_sites <- function(
   }else{
     stop("No plotting method currently implemented for this data format")
   }
-
+  
   cleaned <- flat_data %>%
     dplyr::select(
       "longitude",
@@ -1338,14 +1335,25 @@ plot_sites <- function(
       "package_id"
     ) %>%
     dplyr::distinct()
-
+  
   cleaned$location_abbrv = substr(cleaned$location_name, 1, 4)
-
+  
   world <- map_data("world")
-
-  plot <- ggplot() +
+  
+  # Set legend position
+  legend_position <- "right"
+  if(length(unique(flat_data[color_var])) == 1 & 
+     length(unique(flat_data[shape_var])) == 1){
+    legend_position <- "none"
+  }
+    
+  
+  # make plot object
+  p <- ggplot() +
     geom_polygon(data = world, aes(x = long, y = lat, group = group), fill = "grey") +
-    geom_point(data = flat_data, aes(x = longitude, y = latitude, color = .data[[color_var]], shape = .data[[shape_var]], size = 3)) +
+    geom_point(data = flat_data, aes(x = longitude, y = latitude, 
+                                     color = .data[[color_var]], 
+                                     shape = .data[[shape_var]])) +
     labs(x = "Longitude", y = "Latitude", color = color_var) +
     ggtitle("US Map with Coordinates") +
     theme_bw() +
@@ -1356,9 +1364,8 @@ plot_sites <- function(
     ggplot2::xlab("Longitude") +
     ggplot2::ylab("Latitude") +
     ggplot2::labs(title = "Map of sites", subtitle = id) +
-    ggplot2::theme(legend.position = "right") +
+    ggplot2::theme(legend.position = legend_position) +
     coord_cartesian(xlim = c(-165, -40), ylim = c(15, 75))
 
-  return(plot)
-
+  return(p)
 }
