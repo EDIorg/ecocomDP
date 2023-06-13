@@ -9,7 +9,8 @@ plot_sites(
   id = NA_character_,
   alpha = 1,
   color_var = "package_id",
-  shape_var = "package_id"
+  shape_var = "package_id",
+  labels = TRUE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ plot_sites(
 \item{color_var}{(character) Argument to assign colors to the points on the plot}
 
 \item{shape_var}{(character) Argument to assign shapes to the points on the plot}
+
+\item{labels}{(logical) Argument to show labels of each US state. Default is TRUE.}
 }
 \value{
 (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device

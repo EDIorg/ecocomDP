@@ -1239,6 +1239,7 @@ plot_taxa_abund <- function(data,
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
 #' @param color_var (character) Argument to assign colors to the points on the plot
 #' @param shape_var (character) Argument to assign shapes to the points on the plot
+#' @param labels (logical) Argument to show labels of each US state. Default is TRUE.
 #'
 #' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
 #'
@@ -1289,7 +1290,9 @@ plot_sites <- function(
     id = NA_character_,
     alpha = 1,
     color_var = "package_id",
-    shape_var = "package_id"){
+    shape_var = "package_id",
+    labels = TRUE){
+  
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   
   # check for suggested packages that are required for this function to work

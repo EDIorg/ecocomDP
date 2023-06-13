@@ -111,7 +111,8 @@ Suggests:
     worrms (>= 0.4.2),
     ggrepel,
     usmap (>= 0.6.1),
-    sf (>= 1.0.9)
+    sf (>= 1.0.9),
+    maps
 VignetteBuilder: knitr
 RoxygenNote: 7.2.3
 Language: en-US
