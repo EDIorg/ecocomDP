@@ -1342,8 +1342,8 @@ plot_sites <- function(
   
   # Set legend position
   legend_position <- "right"
-  if(length(unique(flat_data[color_var])) == 1 & 
-     length(unique(flat_data[shape_var])) == 1){
+  if(length(unlist(unique(flat_data[,color_var]))) == 1 & 
+     length(unlist(unique(flat_data[,shape_var]))) == 1){
     legend_position <- "none"
   }
     
@@ -1353,7 +1353,8 @@ plot_sites <- function(
     geom_polygon(data = world, aes(x = long, y = lat, group = group), fill = "grey") +
     geom_point(data = flat_data, aes(x = longitude, y = latitude, 
                                      color = .data[[color_var]], 
-                                     shape = .data[[shape_var]])) +
+                                     shape = .data[[shape_var]]),
+               size = 3) +
     labs(x = "Longitude", y = "Latitude", color = color_var) +
     ggtitle("US Map with Coordinates") +
     theme_bw() +
