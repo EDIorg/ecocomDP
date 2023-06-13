@@ -46,7 +46,7 @@ make_neon_location_table <- function(loc_info, loc_col_names){
 
   # code to handle updated create_location (updated 18 Sep 2020 in create_location branch)
   # this code no longer necessary as of 23 July 2021, but leaving in just in case
-  if(class(table_location) == "list" &&
+  if("list" %in% class(table_location) &&
      "location" %in% names(table_location)){
     
     table_location <- table_location$location %>%

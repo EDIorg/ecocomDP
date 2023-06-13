@@ -837,12 +837,12 @@ txcl_optimize_match <- function(x, data.sources){
       silent = TRUE)
     
     # Try for ID and rank if GNR didn't error, then add results
-    if (class(gnrr) != "try-error") {
+    if (!("try-error" %in% class(gnrr))) {
       id <- try(
         suppressWarnings(
           txcl_get_id(taxon = x, authority = gnrr$authority)),
         silent = TRUE)
-      if (class(id) != "try-error") {
+      if (!("try-error" %in% class(id))) {
         output$authority_id[j] <- id$taxon_id
         output$rank[j] <- id$taxon_rank
         output$taxa_clean[j] <- x
