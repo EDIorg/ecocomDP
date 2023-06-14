@@ -1289,9 +1289,9 @@ plot_sites <- function(
     data,
     id = NA_character_,
     alpha = 1,
+    labels = TRUE,
     color_var = "package_id",
-    shape_var = "package_id",
-    labels = TRUE){
+    shape_var = "package_id"){
   
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   
