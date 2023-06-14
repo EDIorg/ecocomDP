@@ -44,12 +44,12 @@ plot_taxa_diversity(dataset)
 plot_taxa_diversity(dataset, time_window_size = "year")
 
 # Flatten the dataset, manipulate, then plot
-dataset \%>\% 
-  flatten_data() \%>\% 
+dataset \%>\%
+  flatten_data() \%>\%
   dplyr::filter(
     lubridate::as_date(datetime) > "2007-01-01") \%>\%
   plot_taxa_diversity()
-  
+
 # Plot from the observation table directly
 plot_taxa_diversity(dataset$tables$observation)
 }

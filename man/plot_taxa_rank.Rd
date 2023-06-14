@@ -37,7 +37,7 @@ The \code{data} parameter accepts a range of input types but ultimately requires
 # Read a dataset of interest
 dataset <- read_data(
   id = "neon.ecocomdp.20120.001.001",
-  site= c('COMO','LECO'), 
+  site= c('COMO','LECO'),
   startdate = "2017-06",
   enddate = "2019-09",
   check.size = FALSE)
@@ -49,8 +49,8 @@ plot_taxa_rank(dataset)
 plot_taxa_rank(dataset, facet_var = "location_id")
 
 # Flatten the dataset, manipulate, then plot
-dataset \%>\% 
-  flatten_data() \%>\% 
+dataset \%>\%
+  flatten_data() \%>\%
   dplyr::filter(lubridate::as_date(datetime) > "2003-07-01") \%>\%
   dplyr::filter(grepl("COMO",location_id)) \%>\%
   plot_taxa_rank()
