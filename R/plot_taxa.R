@@ -1332,10 +1332,10 @@ plot_sites <- function(
   
   cleaned <- flat_data %>%
     dplyr::select(
-      "longitude",
-      "latitude",
-      "location_name",
-      "package_id"
+      .data$longitude,
+      .data$latitude,
+      .data$location_name,
+      .data$package_id
     ) %>%
     dplyr::distinct()
   
