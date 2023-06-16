@@ -8,9 +8,9 @@ plot_sites(
   data,
   id = NA_character_,
   alpha = 1,
+  labels = TRUE,
   color_var = "package_id",
-  shape_var = "package_id",
-  labels = TRUE
+  shape_var = "package_id"
 )
 }
 \arguments{
@@ -20,11 +20,11 @@ plot_sites(
 
 \item{alpha}{(numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.}
 
+\item{labels}{(logical) Argument to show labels of each US state. Default is TRUE.}
+
 \item{color_var}{(character) Argument to assign colors to the points on the plot}
 
 \item{shape_var}{(character) Argument to assign shapes to the points on the plot}
-
-\item{labels}{(logical) Argument to show labels of each US state. Default is TRUE.}
 }
 \value{
 (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
@@ -38,7 +38,6 @@ The \code{data} parameter accepts a range of input types but ultimately requires
 \examples{
 \dontrun{
 library(dplyr)
-
 # Read a dataset of interest
 dataset <- read_data("edi.193.5")
 
@@ -47,26 +46,23 @@ plot_sites(dataset)
 
 # Flatten dataset then plot
 dataset \%>\%
-  flatten_data() \%>\%
-  plot_sites()
+ flatten_data() \%>\%
+ plot_sites()
 
 # Download a NEON dataset
 dataset2 <- read_data(
-  id = "neon.ecocomdp.20120.001.001",
-  site= c('COMO','LECO'), 
-  startdate = "2017-06",
-  enddate = "2021-03",
-  token = Sys.getenv("NEON_TOKEN"), # option to use a NEON token
-  check.size = FALSE)
+ id = "neon.ecocomdp.20120.001.001",
+ site= c('COMO','LECO'), 
+ startdate = "2017-06",
+ enddate = "2021-03",
+ token = Sys.getenv("NEON_TOKEN"), # option to use a NEON token
+ check.size = FALSE)
 
-# flatten datasets
+# Combine the two datasets and plot. This requires the datasets be first
+# flattened and then stacked.
 flattened_data1 <- dataset \%>\% flatten_data()
 flattened_data2 <- dataset2 \%>\% flatten_data()
-
-# stack datasets
 stacked_data <- bind_rows(flattened_data1,flattened_data2)
-
-# plot stacked datasets
 plot_sites(stacked_data)
 }
 

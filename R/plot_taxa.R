@@ -1250,7 +1250,6 @@ plot_taxa_abund <- function(data,
 #' @examples
 #' \dontrun{
 #' library(dplyr)
-#'
 #' # Read a dataset of interest
 #' dataset <- read_data("edi.193.5")
 #' 
@@ -1259,26 +1258,23 @@ plot_taxa_abund <- function(data,
 #' 
 #' # Flatten dataset then plot
 #' dataset %>%
-#'   flatten_data() %>%
-#'   plot_sites()
+#'  flatten_data() %>%
+#'  plot_sites()
 #' 
 #' # Download a NEON dataset
 #' dataset2 <- read_data(
-#'   id = "neon.ecocomdp.20120.001.001",
-#'   site= c('COMO','LECO'), 
-#'   startdate = "2017-06",
-#'   enddate = "2021-03",
-#'   token = Sys.getenv("NEON_TOKEN"), # option to use a NEON token
-#'   check.size = FALSE)
+#'  id = "neon.ecocomdp.20120.001.001",
+#'  site= c('COMO','LECO'), 
+#'  startdate = "2017-06",
+#'  enddate = "2021-03",
+#'  token = Sys.getenv("NEON_TOKEN"), # option to use a NEON token
+#'  check.size = FALSE)
 #' 
-#' # flatten datasets
+#' # Combine the two datasets and plot. This requires the datasets be first
+#' # flattened and then stacked.
 #' flattened_data1 <- dataset %>% flatten_data()
 #' flattened_data2 <- dataset2 %>% flatten_data()
-#' 
-#' # stack datasets
 #' stacked_data <- bind_rows(flattened_data1,flattened_data2)
-#' 
-#' # plot stacked datasets
 #' plot_sites(stacked_data)
 #' }
 #'
