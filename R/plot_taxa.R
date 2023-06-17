@@ -1349,8 +1349,8 @@ plot_sites <- function(
   
   # make plot object
   p <- ggplot() +
-    geom_polygon(data = world, aes(x = long, y = lat, group = group), fill = "grey") +
-    geom_point(data = flat_data, aes(x = longitude, y = latitude, 
+    geom_polygon(data = world, aes(x = .data$long, y = .data$lat, group = .data$group), fill = "grey") +
+    geom_point(data = flat_data, aes(x = .data$longitude, y = .data$latitude, 
                                      color = .data[[color_var]], 
                                      shape = .data[[shape_var]]),
                size = 3) +
