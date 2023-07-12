@@ -36,9 +36,10 @@ create_location_ancillary <- function(L0_flat,
   cols_to_gather <- c(location_id, datetime, variable_name)
   res <- L0_flat %>%
     dplyr::select(all_of(cols_to_gather)) %>%
-    dplyr::mutate(across(variable_name, as.character)) %>% # ancillary table variable_name needs character coercion
-    tidyr::pivot_longer(variable_name, names_to = "variable_name", values_to = "value") %>%
+    dplyr::mutate(across(any_of(variable_name), as.character)) %>% # ancillary table variable_name needs character coercion
+    tidyr::pivot_longer(any_of(variable_name), names_to = "variable_name", values_to = "value") %>%
     dplyr::arrange(location_id)
+  
   # add units
   res <- add_units(L0_flat, res, unit)
   # add missing cols

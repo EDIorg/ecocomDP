@@ -68,7 +68,7 @@ create_location <- function(L0_flat,
     lowest <- location_name[length(location_name)] # Lowest level
     if (current != lowest) {
       ids <- loc_wide %>%
-        dplyr::group_by(dplyr::across(current_and_higher)) %>% 
+        dplyr::group_by(dplyr::across(any_of(current_and_higher))) %>% 
         dplyr::group_indices() %>% 
         paste0(letters[i], .)
       loc_wide[[paste0(current, "_id")]] <- ids
@@ -97,9 +97,9 @@ create_location <- function(L0_flat,
         res$parent_location_id <- NA_character_
       }
       # Apply standard col names
-      res <- res %>% dplyr::rename(location_name = current)
+      res <- res %>% dplyr::rename(location_name = any_of(current))
       if (paste0(current, "_id") %in% colnames(res)) {
-        res <- res %>% dplyr::rename(location_id = paste0(current, "_id"))
+        res <- res %>% dplyr::rename(location_id = any_of(paste0(current, "_id")))
       }
       # Sort for human readability
       res <- sort_by_alphanumeric(x = res, col = "location_id")
@@ -222,7 +222,7 @@ create_location_deprecated <- function(L0_flat,
     lowest <- location_name[length(location_name)] # Lowest level
     if (current != lowest) {
       ids <- loc_wide %>%
-        dplyr::group_by(dplyr::across(current_and_higher)) %>% 
+        dplyr::group_by(dplyr::across(any_of(current_and_higher))) %>% 
         dplyr::group_indices() %>% 
         paste0(letters[i], .)
       loc_wide[[paste0(current, "_id")]] <- ids
@@ -251,9 +251,9 @@ create_location_deprecated <- function(L0_flat,
         res$parent_location_id <- NA_character_
       }
       # Apply standard col names
-      res <- res %>% dplyr::rename(location_name = current)
+      res <- res %>% dplyr::rename(location_name = any_of(current))
       if (paste0(current, "_id") %in% colnames(res)) {
-        res <- res %>% dplyr::rename(location_id = paste0(current, "_id"))
+        res <- res %>% dplyr::rename(location_id = any_of(paste0(current, "_id")))
       }
       # Only need unique rows
       res <- unique.data.frame(res)

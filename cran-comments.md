@@ -1,76 +1,58 @@
 ## Revision
-This release fixes failing CRAN Checks and makes one minor performance 
-improvement to a non-exported function.
+This release fixes failing CRAN Checks and two additional issues.
 
 ## Test environments
-* local Windows install, R 4.1.0
-* x86_64-w64-mingw32 (64-bit), (win-builder), R 4.0.5
-* x86_64-w64-mingw32 (64-bit), (win-builder), R 4.1.2
-* x86_64-w64-mingw32 (64-bit), (win-builder), R-dev (2022-03-03 r81847 ucrt)
-* Windows Server 2008 R2 SP1, 32/64 bit (R-hub), R 4.1.2
-* Windows Server 2008 R2 SP1, 32/64 bit (R-hub), R-devel (2022-02-21 r81789 ucrt)
-* macOS 10.13.6 High Sierra, (R-hub), R 4.1.1
-* Debian Linux, GCC (R-hub), R 4.1.2
-* Ubuntu Linux 20.04.1 LTS, GCC (R-hub), R 4.1.2
-* Ubuntu Linux 20.04.1 LTS, GCC (R-hub), R-devel (2022-02-06 r81658)
-* Fedora Linux, clang, gfortran (R-hub), R-devel (2022-02-06 r81658)
+* x86_64-w64-mingw32 (64-bit), (win-builder), R 4.2.3 (2023-03-15 ucrt)
+* x86_64-w64-mingw32 (64-bit), (win-builder), R 4.3.1 (2023-06-16 ucrt)
+* x86_64-w64-mingw32 (64-bit), (win-builder), R-dev (2023-06-17 r84564 ucrt)
+* x86_64-w64-mingw32 (R-hub), R 4.3.0 (2023-04-21 ucrt)
+* x86_64-w64-mingw32 (R-hub), R-devel (2023-05-01 r84363 ucrt)
+* aarch64-apple-darwin20, (local machine), R 4.3.0
+* x86_64-pc-linux-gnu Debian (R-hub), R 4.2.2 (2022-11-10 r83330)
+* x86_64-pc-linux-gnu Ubuntu (R-hub), 4.3.0 (2023-04-21)
+* x86_64-pc-linux-gnu Ubuntu (R-hub), R-devel (2023-06-09 r84528)
+* x86_64-pc-linux-gnu Fedora (R-hub), R-devel (2023-06-09 r84528)
 
 ## R CMD check results
-0 ERROR | 0 WARNINGS | 2 NOTES
+0 ERROR | 0 WARNINGS | 4 NOTES
 
-* Found the following (possibly) invalid URLs:
-  URL: https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=194&revision=3
-    From: inst/doc/shared_practices_create.html
-    Status: 503
-    Message: Service Unavailable
-  URL: https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=247&revision=3
-    From: inst/doc/shared_practices_create.html
-    Status: 503
-    Message: Service Unavailable
-  URL: https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=248&revision=2
-    From: inst/doc/shared_practices_create.html
-    Status: 503
-    Message: Service Unavailable
-  URL: https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=251&revision=2
-    From: inst/doc/shared_practices_create.html
-    Status: 503
-    Message: Service Unavailable
-  URL: https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=253&revision=3
-    From: inst/doc/shared_practices_create.html
-    Status: 503
-    Message: Service Unavailable
-  URL: https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=338&revision=2
-    From: inst/doc/shared_practices_create.html
-    Status: 503
-    Message: Service Unavailable
-  URL: https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-hfr&identifier=118&revision=33
-    From: man/ants_L0_flat.Rd
-    Status: 503
-    Message: Service Unavailable
-  URL: https://portal.edirepository.org/nis/metadataviewer?packageid=edi.291.2
-    From: inst/doc/shared_practices_create.html
-    Status: 503
-    Message: Service Unavailable
-  URL: https://portal.edirepository.org/nis/metadataviewer?packageid=edi.334.2
-    From: inst/doc/shared_practices_create.html
-    Status: 503
-    Message: Service Unavailable
+* checking for non-standard things in the check directory ... NOTE
+Found the following files/directories:
+  ''NULL''
 
-These URLs are not invalid. They all resolve on major web browsers without error
-(i.e. Google Chrome, Mozilla Firefox, Microsoft Edge, Internet Explorer). These 
-URLs reference the landing pages of data sources in the Environmental Data 
-Initiative Repository. This note occurs in two test environments (win-builder 
-R 4.1.2, and win-builder R-devel 2022-03-04 r81849 ucrt).
+This note appears to be an issue with the R-hub platform. This note occurs on:
+* x86_64-w64-mingw32 (R-hub), R 4.3.0 (2023-04-21 ucrt)
+* x86_64-w64-mingw32 (R-hub), R-devel (2023-05-01 r84363 ucrt)
+For more information see [here](https://github.com/r-hub/rhub/issues/560).
 
 * checking for detritus in the temp directory ... NOTE
 Found the following files/directories:
   'lastMiKTeXException'
-  
-This note occurs in one test environment (Windows, R-hub, R-devel 
-(2022-02-21 r81789 ucrt)) and appears to be related to the virtual machine
-configuration.
+
+This note is a recognized bug on R-hub test platforms. This note occurs on:
+* x86_64-w64-mingw32 (R-hub), R 4.3.0 (2023-04-21 ucrt)
+* x86_64-w64-mingw32 (R-hub), R-devel (2023-05-01 r84363 ucrt)
+For more information see [here](https://community.rstudio.com/t/prep-error-during-rhub-check-for-cran/159467).
+
+* checking HTML version of manual ... NOTE
+Skipping checking HTML validation: no command 'tidy' found
+
+This note appears to be an issue with the R-hub test platform. This note occurs on:
+* x86_64-pc-linux-gnu Fedora (R-hub), R-devel (2023-06-09 r84528)
+* x86_64-pc-linux-gnu Ubuntu (R-hub), R-devel (2023-06-09 r84528)
+* x86_64-pc-linux-gnu Ubuntu (R-hub), 4.3.0 (2023-04-21)
+For more information see [here](https://stackoverflow.com/questions/74857062/rhub-cran-check-keeps-giving-html-note-on-fedora-test-no-command-tidy-found).
+
+* checking examples ... [25s/55s] NOTE
+Examples with CPU (user + system) or elapsed time > 5s
+user system elapsed
+plot_sites 3.198 0.110 7.257
+plot_taxa_abund 3.182 0.013 7.063
+
+This note indicates a couple plotting functions are taking a little more time than is optimal. We think the overage time is acceptable since it is on the order of seconds. This note occurs on:
+* x86_64-pc-linux-gnu Ubuntu (R-hub), R-devel (2023-06-09 r84528)
 
 ## Downstream dependencies
-There are currently no downstream dependencies for this package
+There are currently no downstream dependencies for this package.
 
-Thanks! :)
+Many thanks for your work! :)

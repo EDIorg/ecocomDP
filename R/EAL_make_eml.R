@@ -882,7 +882,7 @@ EAL_make_eml <- function(
           authority.id = x$template$taxonomic_coverage.txt$content$authority_id,
           write.file = F)),
       silent = T)
-    if (class(tc) != "try-error") {
+    if (!("try-error" %in% class(tc))) {
       eml$dataset$coverage$taxonomicCoverage$taxonomicClassification <- tc$taxonomicClassification
     }
   }

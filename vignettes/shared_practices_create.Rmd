@@ -38,7 +38,7 @@ knitr::include_graphics('./workflow.png')
 ## Identifying a candidate L0 dataset
 Not all source datasets are good candidates for ecocomDP. Features of a good candidate include datasets that:
 
-*   Are about community surveys not population surveys. An [ecological community](http://www.ontobee.org/ontology/PCO?iri=http://purl.obolibrary.org/obo/PCO_0000002) is a multi-species (at least two) collection of organisms living in a particular area, whereas a [population](http://purl.obolibrary.org/obo/PCO_0000001) is a collection of organisms, all of the same species, that live in the same place.
+*   Are about community surveys not population surveys. An [ecological community](http://purl.obolibrary.org/obo/PCO_0000002) is a multi-species (at least two) collection of organisms living in a particular area, whereas a [population](http://purl.obolibrary.org/obo/PCO_0000001) is a collection of organisms, all of the same species, that live in the same place.
 *   Form long-term observation with a suggested minimum of 5 years, which can be ignored for datasets with exceptionally wide spatial extents.
 *   Have ongoing data collection and will eventually form long-term observation.
 *   Are accompanied by information rich metadata written in the [Ecological Metadata Language (EML)](https://eml.ecoinformatics.org/).

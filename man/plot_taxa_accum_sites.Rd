@@ -33,11 +33,11 @@ dataset <- read_data("edi.193.5")
 plot_taxa_accum_sites(dataset)
 
 # Flatten the dataset, manipulate, then plot
-dataset \%>\% 
-  flatten_data() \%>\% 
+dataset \%>\%
+  flatten_data() \%>\%
   dplyr::filter(lubridate::as_date(datetime) > "2003-07-01") \%>\%
   plot_taxa_accum_sites()
-  
+
 # Plot from the observation table directly
 plot_taxa_accum_sites(dataset$tables$observation)
 }
