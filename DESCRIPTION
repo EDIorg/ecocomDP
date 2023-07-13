@@ -104,7 +104,8 @@ Imports:
     tools,
     utils,
     uuid,
-    xml2
+    xml2,
+    neonOS
 Suggests:
     knitr,
     mime,

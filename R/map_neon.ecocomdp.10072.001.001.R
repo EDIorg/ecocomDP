@@ -10,15 +10,17 @@ map_neon.ecocomdp.10072.001.001 <- function(
   neon.data.product.id = "DP1.10072.001",
   ...){
   
-  ### This code downloads, unzips and restructures small mammal data (raw abundances) from NEON
+  
+  ### This code restructures small mammal data (raw abundances) from NEON
+  ### which has been downloaded using neonUtilities::loadByProduct() 
   ### for each NEON site, we provide mammal raw abundance aggregated per day (across all years),
   ### per month (bout) (across all years), and per year
   
-  #NEON target taxon group is SMALL_MAMMALS
+  #NEON target taxon group is SMALL_MAMMALS ----
   neon_method_id <- "neon.ecocomdp.10072.001.001"
   
   
-  # make sure neon.data.list matches the method
+  # make sure neon.data.list matches the method ----
   if(!any(grepl(
     neon.data.product.id %>% gsub("^DP1\\.","",.) %>% gsub("\\.001$","",.), 
     names(neon.data.list)))) stop(
@@ -28,81 +30,96 @@ map_neon.ecocomdp.10072.001.001 <- function(
       neon_method_id)
   
   
-  ### Get the Data
+  ### Get the Data ----
   d <- neon.data.list
   
   
-  dat.mam <- dplyr::mutate(d$mam_pertrapnight,
-                          collectDate = lubridate::ymd(collectDate),
-                          year = lubridate::year(collectDate),
-                          month = lubridate::month(collectDate),
-                          day = lubridate::day(collectDate),
-                          # Since data collection usually takes place on several consecutive
-                          # days within a given month, we consider each month to be a separate bout
-                          bout = paste(year, month, sep = "_")) %>%
+  # Join perplotnight data with pertrapnight data ----
+  mamjn <- dplyr::inner_join(
+    d$mam_perplotnight, d$mam_pertrapnight,
+    by = c("nightuid","domainID","siteID","plotID","namedLocation",
+           "collectDate","endDate"), 
+    multiple = "all",
+    suffix = c("_perplotnight","_pertrapnight"))
+  
+  
+  
+  # Cleam up joined data ----
+  # pull out year, month, and day
+  # create bout IDs
+  dat.mam <- mamjn %>%
+    dplyr::mutate(
+      year = lubridate::year(collectDate),
+      month = lubridate::month(collectDate),
+      day = lubridate::day(collectDate),
+      #bouts are designated by eventID in perplotnight table.  If that entry is missing
+      #bout is estimated as the year_month
+      bout = ifelse(is.na(eventID), paste(year, month, sep = "_"), eventID)) %>%
     tidyr::as_tibble() %>%
     dplyr::group_by(nightuid) %>%
-    dplyr::mutate(n_trap_nights_per_night_uid = length(unique(trapCoordinate))) %>%
-    # dplyr::ungroup() %>%
-    # dplyr::group_by(bout) %>%
-    # dplyr::mutate(n_trap_nights_per_bout = sum(unique(trapCoordinate))) %>%
-    dplyr::ungroup()
+    dplyr::mutate(
+      n_trap_nights_per_night_uid = length(unique(trapCoordinate))) %>%
+    dplyr::ungroup() %>%
+    ### Aummarize raw abundances per day, month (bout), and year
+    ### We keep scientificName of NA or blank (no captures) at this point
+    dplyr::mutate(
+      scientificName = ifelse(scientificName == "", NA, scientificName))
   
-  # table(dat.mam$plotType) # all distributed
   
-  ### Here we provide the code that summarizes raw abundances per day, month (bout), and year
-  ### We keep scientificName of NA or blank (no captures) at this point
-  # dat.mam <- filter(dat.mam, scientificName != "") #, !is.na(scientificName))
-  dat.mam <- dplyr::mutate(dat.mam, scientificName = ifelse(scientificName == "", NA, scientificName))
+  # Get taxon table ----
+  # Download the taxon table using neonOS
+  mam.tax <- neonOS::getTaxonList(taxonType="SMALL_MAMMAL", 
+                                  recordReturnLimit=1000, verbose=T)
+  #G et a list of target taxa:
+  targetTaxa <- mam.tax %>% 
+    filter(taxonProtocolCategory == "target") %>% 
+    select(taxonID, scientificName)
   
+  
+  # Filter out unwanted records ----
   ### Remove species that are bycatch (non-target), dead, or escapted while processing
   ### remove all where the fate of the individual, unless marked and released, is
   ### 'dead' = dead, 'escaped' = escaped while handling, 'nontarget' = released, non-target species,
-  ### should 'released' (= target or opportunistic species released without full processing) be also removed?
-  ## D Li: probably not, released have 64,400 records and processed only have 7,365
   
-  # table(dat.mam$fate)
-  # dat.mam <- dplyr::filter(dat.mam, !fate %in% c("dead", "escaped", "nontarget"))
-  # dat.mam <- dplyr::filter(dat.mam, fate != "released")
-  dat.mam <- dplyr::filter(dat.mam, trapStatus %in% c("5 - capture","4 - more than 1 capture in one trap"))
-  
-  # unique(dat.mam$scientificName)
-  # group_by(dat.mam, taxonRank) %>% tally() # mostly are sp and genus level
-  
-  dat.mam <- dplyr::filter(dat.mam, taxonRank %in% c("genus", "species", "subspecies", NA))
-  
-  ### Remove recaptures -- Y and U (unknown); only retain N
-  # table(dat.mam$recapture)
-  # sum(is.na(dat.mam$recapture))
-  
-  # dat.mam <- dplyr::filter(dat.mam, recapture == "N" | is.na(recapture))
-  
-  # filter out recaptures within a bout, but not all recaptures
-  dat.mam <- dat.mam %>%
+  dat.mam <- dat.mam %>% 
+    dplyr::filter(
+      trapStatus %in% c("5 - capture","4 - more than 1 capture in one trap")) %>%
+    #SP NOTE/QUESTION FOR ERIC: I added speciesGroup to capture the species complexes that are
+    #impossible to distinguish in some regions (e.g., PELEPEMA)
+    #SP The first filtering step gets rid of unprocessed individuals since they don't have taxonIDs at a useful level
+    dplyr::filter(
+      taxonRank %in% c("genus", "species", "subspecies", "speciesGroup",NA),
+      taxonID %in% targetTaxa$taxonID) %>%
+    # filter out recaptures within a bout, but not all recaptures
     dplyr::group_by(bout) %>%
     dplyr::filter(!duplicated(tagID)) %>%
     dplyr::ungroup()
   
-  ### Get raw abundances per day
+  ### Select and clean up columns to carry forward
   data_small_mammal <- dat.mam %>%
-    dplyr::select(uid, nightuid, bout,
-                  n_trap_nights_per_night_uid,
-                  domainID, siteID, plotID, namedLocation, plotType,
-                  collectDate,
-                  nlcdClass, decimalLatitude,
-                  decimalLongitude, geodeticDatum, coordinateUncertainty,
-                  elevation, elevationUncertainty, 
-                  trapCoordinate, trapStatus, 
-                  year, month,
-                  day, taxonID, scientificName, taxonRank, identificationReferences,
-                  nativeStatusCode, sex, lifeStage,
-                  pregnancyStatus, tailLength, totalLength, weight,
-                  release, publicationDate) %>%
+    dplyr::select(
+      uid_pertrapnight,
+      nightuid, bout,
+      n_trap_nights_per_night_uid,
+      domainID, siteID, plotID, namedLocation, plotType,
+      collectDate,
+      nlcdClass, decimalLatitude,
+      decimalLongitude, geodeticDatum, coordinateUncertainty,
+      elevation, elevationUncertainty, 
+      trapCoordinate, trapStatus, 
+      year, month,
+      day, taxonID, scientificName, taxonRank, identificationReferences,
+      nativeStatusCode, sex, lifeStage,
+      pregnancyStatus, tailLength, totalLength, weight,
+      release_pertrapnight, publicationDate_pertrapnight) %>%
+    dplyr::rename(uid = uid_pertrapnight, 
+                  release = release_pertrapnight, 
+                  publicationDate = publicationDate_pertrapnight) %>%
     dplyr::filter(!is.na(taxonID)) %>%
     dplyr::distinct()
   
   
-
+  
   #location ----
   table_location_raw <- data_small_mammal %>%
     dplyr::select(domainID, siteID, plotID, plotType, namedLocation, 
@@ -129,12 +146,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
     my_token <- NA
   }
   
-  # get SMALL_MAMMAL taxon table from NEON
-  neon_taxon_table <- neonUtilities::getTaxonTable(
-    taxonType = "SMALL_MAMMAL", token = my_token) %>%
-    dplyr::filter(taxonID %in% unique(stats::na.omit(data_small_mammal$taxonID)))
-  
-  table_taxon <- neon_taxon_table %>%
+  table_taxon <- mam.tax %>%
     dplyr::select(taxonID, taxonRank, scientificName, nameAccordingToID) %>%
     dplyr::distinct() %>% 
     dplyr::filter(!is.na(taxonID)) %>%
@@ -148,7 +160,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
                   authority_system) 
   
   
-
+  
   # observation ----
   
   my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
@@ -185,14 +197,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
       n_nights_per_bout = length(unique(nightuid))) %>%
     dplyr::ungroup()
   
-  #DSNY_004 2016 has 6 nights?
-  # table_event %>% dplyr::filter(plotID == "DSNY_004", year == 2016, month == 11) %>%
-  #   as.data.frame()
-  
-  
-    
-  
-  
+  # calculate counts
   table_raw_counts <- table_observation_all %>%
     dplyr::select(
       event_id,
@@ -208,14 +213,19 @@ map_neon.ecocomdp.10072.001.001 <- function(
       release = paste(unique(release), collapse = "|"), 
       publicationDate= paste(unique(publicationDate), collapse = "|")) 
   
+  # standardize counts to sampling effort
   table_event_counts <- table_event %>%
-    dplyr::left_join(table_raw_counts, by = "event_id") %>%
+    dplyr::left_join(
+      table_raw_counts, 
+      by = "event_id",
+      multiple = "all") %>%
     dplyr::mutate(
       observation_id = paste0("obs_",1:nrow(.)),
       value = 100 * raw_count / n_trap_nights_per_bout_per_plot,
       variable_name = "count",
       unit = "unique individuals per 100 trap nights per plot per month")
   
+  # format and select columns for observation table
   table_observation <- table_event_counts %>%
     dplyr::select(
       observation_id,
@@ -231,9 +241,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
     dplyr::distinct() %>%
     dplyr::filter(!is.na(taxon_id))
   
-
-
-  
+  # put remaining columns in the observation_ancillary table
   table_observation_ancillary <- make_neon_ancillary_observation_table(
     obs_wide = table_event_counts,
     ancillary_var_names = c(
@@ -276,6 +284,5 @@ map_neon.ecocomdp.10072.001.001 <- function(
     dataset_summary = table_dataset_summary)
   
   return(out_list)
-
 }
   
