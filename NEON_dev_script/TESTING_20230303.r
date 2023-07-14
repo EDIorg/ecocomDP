@@ -171,7 +171,7 @@ tab_flat <- my_result_read_data$tables %>%
   as.data.frame()
 
 View(tab_flat)
-plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
+plot_sample_space_time(my_result_read_data$tables$observation, my_result_read_data$id)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -229,7 +229,7 @@ tab_flat <- my_result_read_data$tables %>%
   as.data.frame()
 
 View(tab_flat)
-plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
+plot_sample_space_time(my_result_read_data$tables$observation, my_result_read_data$id)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -238,32 +238,38 @@ tab_flat %>% group_by(event_id) %>%
 ###############################################
 ###############################################
 
-# TICK -- event_id maps to neon sampleID
-# also record neon_event_id -- which has multiple samplesIDs
-# should be no dup in taxa by lifestage combos within a sample/event_id
-# coungs should be summed among lifestages within a sample
+# # TICK -- event_id maps to neon sampleID
+# # also record neon_event_id -- which has multiple samplesIDs
+# # should be no dup in taxa by lifestage combos within a sample/event_id
+# # coungs should be summed among lifestages within a sample
+# 
+# my_result_read_data <- read_data(
+#   id = "neon.ecocomdp.10093.001.001",
+#   site= c("NIWO","DSNY", "BART"), 
+#   startdate = "2016-01",
+#   enddate = "2017-11",
+#   token = Sys.getenv("NEON_TOKEN"),
+#   check.size = FALSE)
+# 
 
-my_result_read_data <- read_data(
-  id = "neon.ecocomdp.10093.001.001",
-  site= c("NIWO","DSNY", "BART"), 
-  startdate = "2016-01",
-  enddate = "2017-11",
-  token = Sys.getenv("NEON_TOKEN"),
-  check.size = FALSE)
+#Error in UseMethod("filter") :
+# no applicable method for 'filter' applied to an object of class "NULL"
 
-my_result_read_data$validation_issues
-my_result_read_data$metadata$data_package_info
 
-tab_flat <- my_result_read_data$tables %>% 
-  ecocomDP::flatten_data() %>% 
-  as.data.frame()
 
-View(tab_flat)
-plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
-
-tab_flat %>% group_by(event_id) %>%
-  summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
-  dplyr::filter(no_dup_taxa > 0)
+# my_result_read_data$validation_issues
+# my_result_read_data$metadata$data_package_info
+# 
+# tab_flat <- my_result_read_data$tables %>% 
+#   ecocomDP::flatten_data() %>% 
+#   as.data.frame()
+# 
+# View(tab_flat)
+# plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
+# 
+# tab_flat %>% group_by(event_id) %>%
+#   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
+#   dplyr::filter(no_dup_taxa > 0)
 
 ###############################################
 ###############################################
@@ -274,11 +280,12 @@ tab_flat %>% group_by(event_id) %>%
 
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.20107.001.001",
-  site = c(c('COMO','LECO')),
+  site = c(c('ARIK','LECO')),
   startdate = "2016-01",
   enddate = "2018-11",
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
+
 
 my_result_read_data$validation_issues
 my_result_read_data$metadata$data_package_info
@@ -288,11 +295,13 @@ tab_flat <- my_result_read_data$tables %>%
   as.data.frame()
 
 View(tab_flat)
-plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
+plot_sample_space_time(my_result_read_data$tables$observation, my_result_read_data$id)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
   dplyr::filter(no_dup_taxa > 0)
+
+# NOTE: still some dup taxa
 
 ###############################################
 ###############################################

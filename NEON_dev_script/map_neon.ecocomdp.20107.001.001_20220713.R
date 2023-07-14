@@ -1,3 +1,21 @@
+neon.data.list <- neonUtilities::loadByProduct(
+  dpID = "DP1.20107.001",
+  site = c(c('COMO','LECO')),
+  startdate = "2016-01",
+  enddate = "2018-11",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+neon.data.product.id = "DP1.20107.001"
+
+my_token <- Sys.getenv("NEON_TOKEN")
+
+map_neon.ecocomdp.20107.001.001(
+  neon.data.list = neon.data.list,
+  token = Sys.getenv("NEON_TOKEN")
+)
+
+
 ##############################################################################################
 ##############################################################################################
 
@@ -265,7 +283,7 @@ map_neon.ecocomdp.20107.001.001 <- function(
   data_fish = dplyr::filter(data_fish, !is.na(taxonID)) %>%
     dplyr::distinct()
   
-  
+ 
   #location ----
   table_location_raw <- data_fish %>%
     dplyr::select(domainID, siteID, namedLocation, 
@@ -318,7 +336,7 @@ map_neon.ecocomdp.20107.001.001 <- function(
       unit = "catch per unit effort") 
   
   
-  
+
   
   
   table_observation <- table_observation_wide_all %>%
@@ -335,7 +353,7 @@ map_neon.ecocomdp.20107.001.001 <- function(
     dplyr::filter(!is.na(taxon_id))
   
   
-  
+
   
   table_observation_ancillary <- make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
