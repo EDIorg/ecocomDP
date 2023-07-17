@@ -3,39 +3,34 @@
 
 # BIRD -- event_id maps to NEON eventID
 # NOTE: taxa need to be added within event_id to get abundances per event
-# -- failure
-# Error in UseMethod("filter") : 
-# no applicable method for 'filter' applied to an object of class "NULL"
-# In addition: Warning message:
-#   In class(table_location) == "list" && "location" %in% names(table_location) :
-#   'length(x) = 3 > 1' in coercion to 'logical(1)'
 
-# my_result_read_data <- read_data(
-#   id = "neon.ecocomdp.10003.001.001",
-#   site= c("NIWO","DSNY"), 
-#   startdate = "2016-01",
-#   enddate = "2017-11",
-#   token = Sys.getenv("NEON_TOKEN"),
-#   check.size = FALSE)
-# 
-# my_result_read_data$validation_issues
-# my_result_read_data$metadata$data_package_info
-# 
-# tab_flat <- my_result_read_data$tables %>% 
-#   flatten_data() %>% 
-#   as.data.frame()
-# 
-# View(tab_flat)
-# plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
-# 
-# 
-# tab_flat %>% group_by(event_id) %>%
-#   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum())
+my_result_read_data <- read_data(
+  id = "neon.ecocomdp.10003.001.001",
+  site= c("NIWO","DSNY"),
+  startdate = "2016-01",
+  enddate = "2017-11",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
 
-# my_result_read_data$tables %>% base::list2env(.GlobalEnv)
-# 
-# observation$observation_id %>% setdiff(observation_ancillary$observation_id)
-# observation_ancillary$observation_id %>% setdiff(observation$observation_id)
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
+
+tab_flat <- my_result_read_data$tables %>%
+  flatten_data() %>%
+  as.data.frame()
+
+View(tab_flat)
+plot_sample_space_time(my_result_read_data$tables$observation, 
+                       my_result_read_data$id)
+
+
+tab_flat %>% group_by(event_id) %>%
+  summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum())
+
+my_result_read_data$tables %>% base::list2env(.GlobalEnv)
+
+observation$observation_id %>% setdiff(observation_ancillary$observation_id)
+observation_ancillary$observation_id %>% setdiff(observation$observation_id)
 
 ###############################################
 ###############################################
@@ -118,35 +113,30 @@ tab_flat %>% group_by(event_id) %>%
 # MOSQUITO -- event_id maps to NEON sampleID, neon_event_id maps to eventID
 # no dup taxa expected within event_id, but some do exist. 
 
-# my_result_read_data <- read_data(
-#   id = "neon.ecocomdp.10043.001.001",
-#   site= c("NIWO","DSNY"), 
-#   startdate = "2016-01",
-#   enddate = "2017-11",
-#   token = Sys.getenv("NEON_TOKEN"),
-#   check.size = FALSE)
-# # 
-# # Error in `mutate()`:
-# #   ℹ In argument: `decimalLatitude = (structure(function (..., .x = ..1, .y = ..2, . = ..1)
-# #     ...`.
-# #     Caused by error in `dplyr::na_if()`:
-# #       ! Can't convert `y` <character> to match type of `x` <double>.
-# # Run `rlang::last_error()` to see where the error occurred.
-#     
-# my_result_read_data$validation_issues
-# my_result_read_data$metadata$data_package_info
-# 
-# tab_flat <- my_result_read_data$tables %>% 
-#   ecocomDP::flatten_data() %>% 
-#   as.data.frame()
-# 
-# View(tab_flat)
-# plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
-# 
-# 
-# tab_flat %>% group_by(event_id) %>%
-#   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
-#   dplyr::filter(no_dup_taxa > 0)
+my_result_read_data <- read_data(
+  id = "neon.ecocomdp.10043.001.001",
+  site= c("NIWO","DSNY"),
+  startdate = "2016-01",
+  enddate = "2017-11",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
+
+tab_flat <- my_result_read_data$tables %>%
+  ecocomDP::flatten_data() %>%
+  as.data.frame()
+
+View(tab_flat)
+plot_sample_space_time(my_result_read_data$tables$observation)
+
+
+tab_flat %>% group_by(event_id) %>%
+  summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
+  dplyr::filter(no_dup_taxa > 0)
+# an issue with a handful of duplicates
 
 ###############################################
 ###############################################
@@ -295,7 +285,7 @@ tab_flat <- my_result_read_data$tables %>%
   as.data.frame()
 
 View(tab_flat)
-plot_sample_space_time(my_result_read_data$tables$observation, my_result_read_data$id)
+plot_sample_space_time(my_result_read_data$tables$observation)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%

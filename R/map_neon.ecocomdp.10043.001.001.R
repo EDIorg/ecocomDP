@@ -43,33 +43,49 @@ map_neon.ecocomdp.10043.001.001 <- function(
     dplyr::mutate(
       setDate = as.character(setDate),
       collectDate = as.character(collectDate)) %>%
-    dplyr::mutate_all(list(~dplyr::na_if(.,""))) %>%
     tidyr::drop_na(dplyr::all_of(cols_oi_trap)) %>%
     dplyr::mutate_if(is.factor, as.character) %>% 
     dplyr::distinct()
   
   
-   mos_sorting <- mos_allTabs$mos_sorting %>% 
+  if("mos_subsampling" %in% names(mos_allTabs)){
+    mos_subsampling <- mos_allTabs$mos_subsampling %>%
+      dplyr::mutate(
+        setDate = as.character(setDate),
+        collectDate = as.character(collectDate)) %>%
+      tidyr::drop_na(dplyr::all_of(cols_oi_subsamp)) %>%
+      dplyr::mutate_if(is.factor, as.character) %>% 
+      dplyr::distinct()
+  }
+  
+  
+  mos_sorting <- mos_allTabs$mos_sorting %>% 
     dplyr::mutate (
       setDate = as.character(setDate),
       collectDate = as.character(collectDate), 
       sortDate = as.character(sortDate)) %>% 
-    dplyr::mutate_all(list(~dplyr::na_if(.,""))) %>% 
     tidyr::drop_na(dplyr::all_of(cols_oi_sort)) %>%
     dplyr::mutate_if(is.factor, as.character) %>% 
     dplyr::distinct()
   
   
-   mos_expertTaxonomistIDProcessed <- mos_allTabs$mos_expertTaxonomistIDProcessed %>% 
+  mos_archivepooling <- mos_allTabs$mos_archivepooling %>% 
+    dplyr::mutate(
+      startCollectDate = as.character(startCollectDate),
+      endCollectDate = as.character(endCollectDate)) %>% 
+    tidyr::drop_na(dplyr::all_of(cols_oi_arch)) %>%
+    dplyr::mutate_if(is.factor, as.character) %>% 
+    dplyr::distinct()
+  
+  
+  mos_expertTaxonomistIDProcessed <- mos_allTabs$mos_expertTaxonomistIDProcessed %>% 
     dplyr::mutate(
       setDate= as.character(setDate),
       collectDate = as.character(collectDate), 
       identifiedDate = as.character(identifiedDate)) %>% 
-    dplyr::mutate_all(list(~dplyr::na_if(.,""))) %>% 
     tidyr::drop_na(dplyr::all_of(cols_oi_exp_proc)) %>%
     dplyr::mutate_if(is.factor, as.character) %>% 
     dplyr::distinct()
-  
   
   
   
@@ -80,7 +96,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
   
   
   ####
-  # Join data
+  # Join data ----
   
   
   
@@ -97,7 +113,8 @@ map_neon.ecocomdp.10043.001.001 <- function(
   if(!"remarks" %in% names(mos_dat)) mos_dat[,"remarks"] <- NA_character_
   if(!"dataQF" %in% names(mos_dat)) mos_dat[,"dataQF"] <- NA_character_
   
-
+  
+  
   
   # Join expert ID data --
   mos_dat <- mos_dat %>%
@@ -105,8 +122,8 @@ map_neon.ecocomdp.10043.001.001 <- function(
       mos_expertTaxonomistIDProcessed,
       -c(collectDate,domainID,namedLocation,plotID,setDate,siteID,targetTaxaPresent)),
       by = c('subsampleID',"subsampleCode"),
-      suffix = c("","_expertID")) 
-  
+      suffix = c("","_expertID"),
+      multiple = "all") 
   
   
   
@@ -117,12 +134,11 @@ map_neon.ecocomdp.10043.001.001 <- function(
     dplyr::mutate(
       estimated_totIndividuals = ifelse(
         !is.na(individualCount),
-        round(individualCount * (totalWeight/subsampleWeight)), NA))
+        round(individualCount / proportionIdentified), NA))
   
   
-
   
- 
+  
   # exclude records with taxonID is NA and remove dups
   mos_dat <- mos_dat %>%
     dplyr::filter(
@@ -157,23 +173,52 @@ map_neon.ecocomdp.10043.001.001 <- function(
   
   
   # taxon ----
-  table_taxon <- mos_dat %>%
-    dplyr::select(taxonID, taxonRank, scientificName,identificationReferences) %>%
-    
+  
+  # Old version: Get taxon info from published data product
+  # table_taxon <- mos_dat %>%
+  #   dplyr::select(taxonID, taxonRank, scientificName, identificationReferences) %>%
+  #   
+  #   dplyr::distinct() %>% 
+  #   dplyr::rename(taxon_id = taxonID,
+  #                 taxon_rank = taxonRank,
+  #                 taxon_name = scientificName,
+  #                 authority_system = identificationReferences) %>%
+  #   dplyr::select(taxon_id,
+  #                 taxon_rank,
+  #                 taxon_name,
+  #                 authority_system) %>%
+  #   dplyr::filter(!is.na(taxon_id)) %>%
+  #   # concatenate different references for same taxonID
+  #   dplyr::group_by(taxon_id, taxon_rank, taxon_name) %>%
+  #   dplyr::summarize(
+  #     authority_system = paste(authority_system, collapse = "; "))
+  
+  
+  my_dots <- list(...)
+  
+  if("token" %in% names(my_dots)){
+    my_token <- my_dots$token
+  }else{
+    my_token <- NA
+  }
+  
+  # get mo taxon table from NEON
+  neon_mos_taxon_table <- neonOS::getTaxonList(
+    taxonType = "MOSQUITO", 
+    token = my_token) %>%
+    dplyr::filter(taxonID %in% mos_dat$taxonID)
+  
+  table_taxon <- neon_mos_taxon_table %>%
+    dplyr::select(taxonID, taxonRank, scientificName, nameAccordingToID) %>%
     dplyr::distinct() %>% 
     dplyr::rename(taxon_id = taxonID,
                   taxon_rank = taxonRank,
                   taxon_name = scientificName,
-                  authority_system = identificationReferences) %>%
+                  authority_system = nameAccordingToID) %>%
     dplyr::select(taxon_id,
                   taxon_rank,
                   taxon_name,
-                  authority_system) %>%
-    dplyr::filter(!is.na(taxon_id)) %>%
-    # concatenate different references for same taxonID
-    dplyr::group_by(taxon_id, taxon_rank, taxon_name) %>%
-    dplyr::summarize(
-      authority_system = paste(authority_system, collapse = "; "))
+                  authority_system) 
   
   
   
@@ -188,7 +233,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
   
   table_observation_raw <- mos_dat %>% 
     dplyr::mutate(variable_name = "abundance",
-                  value = (individualCount/subsampleWeight) * totalWeight / trapHours,
+                  value = (individualCount/proportionIdentified) / trapHours,
                   unit = "count per trap hour") %>% 
     dplyr::rename(
       observation_id = uid,
@@ -225,9 +270,10 @@ map_neon.ecocomdp.10043.001.001 <- function(
       "sortDate",
       "sampleID",
       "subsampleID",
-      "totalWeight", #grams
-      "subsampleWeight", #grams
-      "weightBelowDetection",
+      "proportionIdentified", #published instead of totalWeight and subsampleWeight
+      # "totalWeight", #grams #no longer published by NEON
+      # "subsampleWeight", #grams #no longer published by NEON
+      # "weightBelowDetection", #no longer published by NEON
       "laboratoryName",
       "trapHours", #hours
       "samplingProtocolVersion",
