@@ -1,3 +1,10 @@
+# # test install from my dev repo
+# detach(packages:ecocomDP)
+# remotes::install_github("sokole/ecocomDP@development")
+# library(ecocomDP)
+
+library(tidyverse)
+
 ###############################################
 ###############################################
 
@@ -19,9 +26,8 @@ tab_flat <- my_result_read_data$tables %>%
   flatten_data() %>%
   as.data.frame()
 
-View(tab_flat)
-plot_sample_space_time(my_result_read_data$tables$observation, 
-                       my_result_read_data$id)
+# View(tab_flat)
+plot_sample_space_time(my_result_read_data$tables$observation)
 
 
 tab_flat %>% group_by(event_id) %>%
@@ -63,7 +69,7 @@ tab_flat <- my_result_read_data$tables %>%
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
-View(tab_flat)
+# View(tab_flat)
 plot_sample_space_time(my_result_read_data)
 
 tab_flat %>% group_by(event_id) %>%
@@ -129,7 +135,7 @@ tab_flat <- my_result_read_data$tables %>%
   ecocomDP::flatten_data() %>%
   as.data.frame()
 
-View(tab_flat)
+# View(tab_flat)
 plot_sample_space_time(my_result_read_data$tables$observation)
 
 
@@ -160,8 +166,8 @@ tab_flat <- my_result_read_data$tables %>%
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
-View(tab_flat)
-plot_sample_space_time(my_result_read_data$tables$observation, my_result_read_data$id)
+# View(tab_flat)
+plot_sample_space_time(my_result_read_data$tables$observation)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -188,8 +194,8 @@ tab_flat <- my_result_read_data$tables %>%
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
-View(tab_flat)
-plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
+# View(tab_flat)
+plot_sample_space_time(my_result_read_data$tables$observation)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -218,8 +224,8 @@ tab_flat <- my_result_read_data$tables %>%
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
-View(tab_flat)
-plot_sample_space_time(my_result_read_data$tables$observation, my_result_read_data$id)
+# View(tab_flat)
+plot_sample_space_time(my_result_read_data$tables$observation)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -284,7 +290,7 @@ tab_flat <- my_result_read_data$tables %>%
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
-View(tab_flat)
+# View(tab_flat)
 plot_sample_space_time(my_result_read_data$tables$observation)
 
 tab_flat %>% group_by(event_id) %>%
@@ -316,8 +322,8 @@ tab_flat <- my_result_read_data$tables %>%
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
-View(tab_flat)
-plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
+# View(tab_flat)
+plot_sample_space_time(my_result_read_data$tables$observation)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -331,11 +337,12 @@ tab_flat %>% group_by(event_id) %>%
 # no dup taxa should occur within an event_id/neon_sample_id -- but have been seeing some
 # shoudl we add dup taxa densities together?
 
+# takes a long time to run, look into taxon tab creation and ancillary tab creation
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.20166.001.001",
   site = c('COMO','SUGG'), 
   startdate = "2017-06",
-  enddate = "2019-09",
+  enddate = "2018-09",
   token = Sys.getenv("NEON_TOKEN"),
   check.size = FALSE)
 
@@ -346,8 +353,8 @@ tab_flat <- my_result_read_data$tables %>%
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
-View(tab_flat)
-plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
+# View(tab_flat)
+plot_sample_space_time(my_result_read_data$tables$observation)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -377,8 +384,8 @@ tab_flat <- my_result_read_data$tables %>%
   ecocomDP::flatten_data() %>% 
   as.data.frame()
 
-View(tab_flat)
-plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
+# View(tab_flat)
+plot_sample_space_time(my_result_read_data$tables$observation)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
