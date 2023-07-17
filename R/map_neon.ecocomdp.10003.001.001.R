@@ -25,33 +25,36 @@ map_neon.ecocomdp.10003.001.001 <- function(
   
   
   allTabs_bird <- neon.data.list
-
   
-  # allTabs_bird = neonUtilities::loadByProduct(dpID = neon.data.product.id, package = "expanded", ...)
-  # saveRDS(allTabs_bird, file = "~/Documents/allTabs_bird.rds")
-  # allTabs_bird = readRDS("~/Documents/allTabs_bird.rds")
+  
+  # extract NEON data tables from list object ---- 
   allTabs_bird$brd_countdata <- tidyr::as_tibble(allTabs_bird$brd_countdata)
+  
   allTabs_bird$brd_perpoint <- tidyr::as_tibble(allTabs_bird$brd_perpoint)
-  data_bird <- dplyr::left_join(allTabs_bird$brd_countdata,
-                               dplyr::select(allTabs_bird$brd_perpoint, -uid,
-                                             -startDate))
+  
+  data_bird <- dplyr::left_join(
+    allTabs_bird$brd_countdata,
+    dplyr::select(allTabs_bird$brd_perpoint, 
+                  -uid,
+                  -startDate))
   
   # table(data_bird$samplingImpractical) # all NA
   # table(data_bird$samplingImpracticalRemarks)
   
-  data_bird <- dplyr::select(data_bird, 
-                             # -uid, 
-                             -identifiedBy, 
-                             # -eventID, # it is just plotID, pointID, startDate
-                             -measuredBy,
-                             -samplingImpractical, -samplingImpracticalRemarks)
+  data_bird <- dplyr::select(
+    data_bird, 
+    # -uid, 
+    -identifiedBy, 
+    # -eventID, # it is just plotID, pointID, startDate
+    -measuredBy,
+    -samplingImpractical, -samplingImpracticalRemarks)
   
   
-
-
+  
+  
   
   #location ----
-
+  
   
   table_location_raw <- data_bird %>%
     dplyr::select(domainID, siteID, plotID, namedLocation, 
@@ -82,8 +85,9 @@ map_neon.ecocomdp.10003.001.001 <- function(
   }
   
   # get bird taxon table from NEON
-  neon_bird_taxon_table <- neonUtilities::getTaxonTable(
-    taxonType = "BIRD", token = my_token) %>%
+  neon_bird_taxon_table <- neonOS::getTaxonList(
+    taxonType = "BIRD", 
+    token = my_token) %>%
     dplyr::filter(taxonID %in% data_bird$taxonID)
   
   table_taxon <- neon_bird_taxon_table %>%
@@ -97,13 +101,14 @@ map_neon.ecocomdp.10003.001.001 <- function(
                   taxon_rank,
                   taxon_name,
                   authority_system) 
-
   
   
-
-
+  
+  
+  
   # observation ----
-  my_package_id = paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  my_package_id = paste0(
+    neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
   
   table_observation_wide_all <- data_bird %>%
     # dplyr::rename(location_id, plotID, trapID) %>%
@@ -132,7 +137,7 @@ map_neon.ecocomdp.10003.001.001 <- function(
       variable_name,
       value,
       unit)
-
+  
   table_observation_ancillary <- make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
@@ -159,7 +164,7 @@ map_neon.ecocomdp.10003.001.001 <- function(
       "remarks",
       "release",
       "publicationDate"))
-
+  
   # data summary ----
   # make dataset_summary -- required table
   
