@@ -806,7 +806,7 @@ plot_taxa_shared_sites <- function(data,
 plot_taxa_rank <- function(data,
                            id = NA_character_,
                            facet_var = NA_character_,
-                           facet_scales = "free",
+                           facet_scales = "free_x",
                            alpha = 1) {
 
   # TODO: Convert this unreadable block of code to a function like get_observation_table()
@@ -832,14 +832,35 @@ plot_taxa_rank <- function(data,
   }else{
     stop("No plotting method currently implemented for this data format")
   }
-
+  
   # Validate inputs
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  
+  # ordered taxon ranks
+  rank_list_ordered <- c(
+    "kingdom", "subkingdom", "infrakingdom",
+    "superphylum", "phylum", "subphylum", "infraphylum",
+    "superdivision", "division", "subdivision", "infradivision", "parvdivision", 
+    "superclass", "class", "subclass", "infraclass", 
+    "superorder", "order", "suborder", "infraorder", 
+    "section", "subsection", 
+    "superfamily", "family", "subfamily", 
+    "tribe", "subtribe", 
+    "genus", "subgenus", "species", "subspecies", 
+    "variety", "subvariety", "form", "subform", 
+    "stirp", "morph", "aberration", "race") %>% 
+    rev()
+  
   # Plot
   p <- data_long %>%
+    dplyr::mutate(
+      taxon_rank = tolower(taxon_rank) %>%
+        factor(levels = rank_list_ordered, ordered = TRUE)) %>%
     ggplot2::ggplot(
       ggplot2::aes(taxon_rank)) +
-    ggplot2::labs(title = "Taxa rank frequencies in the observation table", subtitle = id) +
+    ggplot2::labs(
+      title = "Taxa rank frequencies in the observation table", 
+      subtitle = id) +
     ggplot2::xlab("Taxon rank") +
     ggplot2::ylab(paste0("Number of observations")) +
     ggplot2::geom_bar() +
