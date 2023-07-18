@@ -25,20 +25,20 @@ format_for_comm_plots <- function(observation, id) {
                                      unit == varname$unit[1])
     }
   }
-
+  
   # Methods used by this processing don't require aggregation of non-unique observations, so drop duplicates without warning
   dups <- observation %>% dplyr::select(-observation_id, -value, -event_id) %>% duplicated()
   if (any(dups)) {
     observation <- observation[!dups, ]
   }
-
+  
   # Use dates
   if (is.character(observation$datetime)) {
     warning("Input datetimes are character strings. Accuracy may be improved",
             " if inputs are parsed before calling plot_data().", call. = FALSE)
   }
   observation$datetime <- lubridate::date(observation$datetime)
-
+  
   obs <- observation
   taxon_count <- data.frame(
     OBSERVATION_TYPE = "TAXON_COUNT",
@@ -48,7 +48,7 @@ format_for_comm_plots <- function(observation, id) {
     VARIABLE_UNITS = obs$variable_name,
     VALUE = obs$value,
     stringsAsFactors = FALSE)
-
+  
   dslong <- taxon_count %>%                                   # long form
     dplyr::mutate_at(dplyr::vars(c(VALUE)), as.numeric) %>%
     dplyr::mutate_at(dplyr::vars(SITE_ID), as.character)
@@ -119,22 +119,22 @@ plot_taxa_accum_sites <- function(data,
     data <- observation
     warning('Input argument "observation" is deprecated, use "data" instead',
             call. = FALSE)
-
+    
     # get data package id from dataset object
     if (is.na(id)) {
       id <- get_id(data)
     }
   }
-
+  
   # Get observation table and id from data input if possible
   observation <- get_observation_table(data)
-
+  
   # if id is still missing, get it from observation table
   if (is.na(id)){
     id <- paste(unique(observation$package_id), collapse = "|")
   }
-
-
+  
+  
   # Validate inputs and construct intermediate format for plotting
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)
@@ -162,14 +162,17 @@ plot_taxa_accum_sites <- function(data,
   comm.dat <- ds$dslong %>% arrange(SITE_ID) # order by site
   no.taxa.space <- calc_cuml_taxa_space(comm.dat)
   no.taxa.space$no.site <- as.numeric(rownames(no.taxa.space))
+  
   # Plot
-  ggplot2::ggplot(data = no.taxa.space, ggplot2::aes(x = no.site, y = no.taxa)) +
+  p <- ggplot2::ggplot(data = no.taxa.space, ggplot2::aes(x = no.site, y = no.taxa)) +
     ggplot2::geom_point() +
     ggplot2::geom_line() +
     ggplot2::labs(title = "Taxa accumulation by site accumulation", subtitle = ds$id) +
     ggplot2::xlab("Cumulative number of sites") +
     ggplot2::ylab(paste0("Cumulative number of taxa")) +
     ggplot2::theme_bw()
+  
+  return(p)
 }
 
 
@@ -221,27 +224,27 @@ plot_taxa_accum_time <- function(data,
                                  id = NA_character_,
                                  alpha = 1,
                                  observation = NULL){
-
+  
   # Warn about deprecated observation parameter (remove after 2022-10-18)
   if (!is.null(observation)) {
     data <- observation
     warning('Input argument "observation" is deprecated, use "data" instead',
             call. = FALSE)
-
+    
     # get data package id from dataset object
     if (is.na(id)) {
       id <- get_id(data)
     }
   }
-
+  
   # Get observation table and id from data input if possible
   observation <- get_observation_table(data)
-
+  
   # if id is still missing, get it from observation table
   if (is.na(id)){
     id <- paste(unique(observation$package_id), collapse = "|")
   }
-
+  
   # Validate inputs and construct intermediate format for plotting
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)
@@ -269,7 +272,7 @@ plot_taxa_accum_time <- function(data,
   cuml.taxa.all.sites <- cuml.taxa.fun(
     ex = ds$dslong %>% dplyr::arrange(DATE))   # taxa accumulation across all sites pooled together
   # Plot
-  ggplot2::ggplot() +
+  p <- ggplot2::ggplot() +
     ggplot2::geom_point(
       data = cuml.taxa.all.sites,
       ggplot2::aes(x = year, y = no.taxa, fill = "")) +
@@ -284,6 +287,8 @@ plot_taxa_accum_time <- function(data,
     ggplot2::ylim(c(0, max(cuml.taxa.all.sites$no.taxa))) +
     ggplot2::theme_bw() +
     theme(axis.text.x = element_text(angle = 45, hjust=1))
+  
+  return(p)
 }
 
 
@@ -341,33 +346,33 @@ plot_taxa_diversity <- function(data,
                                 time_window_size = "day",
                                 observation = NULL,
                                 alpha = 1){
-
-
+  
+  
   # Warn about deprecated observation parameter (remove after 2022-10-18)
   if (!is.null(observation)) {
     data <- observation
     warning('Input argument "observation" is deprecated, use "data" instead',
             call. = FALSE)
-
+    
     # get data package id from dataset object
     if (is.na(id)) {
       id <- get_id(data)
     }
   }
-
+  
   # Get observation table and id from data input if possible
   observation <- get_observation_table(data)
-
+  
   # if id is still missing, get it from observation table
   if (is.na(id)){
     id <- paste(unique(observation$package_id), collapse = "|")
   }
-
+  
   # Validate inputs and construct intermediate format for plotting
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
-
-
-
+  
+  
+  
   # Richness by location id
   richness_by_location <- observation %>%
     dplyr::filter(value > 0) %>%
@@ -426,11 +431,11 @@ plot_taxa_diversity <- function(data,
     richness_by_location <- richness_by_location %>%
       dplyr::mutate(
         datetime = paste0(.data$datetime, "-01-01") %>%
-      lubridate::as_date())
+          lubridate::as_date())
     total_richness <- total_richness %>%
       dplyr::mutate(
         datetime = paste0(.data$datetime, "-01-01") %>%
-      lubridate::as_date())
+          lubridate::as_date())
   }
   # Plot
   ggplot2::ggplot() +
@@ -489,6 +494,8 @@ plot_taxa_diversity <- function(data,
 #' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation table, or a flat table containing columns of the observation table.
 #' @param id (character) Identifier of dataset to be used in plot subtitles. Is automatically assigned when \code{data} is a dataset object containing the \code{id} field, or is a table containing the package_id column.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
+#' @param color_var (character) Name of column to use to assign colors to the points on the plot
+#' @param shape_var (character) Name of column to use to assign shapes to the points on the plot
 #' @param observation (tbl_df, tbl, data.frame) DEPRECATED: Use \code{data} instead.
 #'
 #' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
@@ -523,39 +530,85 @@ plot_taxa_diversity <- function(data,
 plot_sample_space_time <- function(data,
                                    id = NA_character_,
                                    alpha = 1,
+                                   color_var = "package_id",
+                                   shape_var = "package_id",
                                    observation = NULL) {
   # Warn about deprecated observation parameter (remove after 2022-10-18)
   if (!is.null(observation)) {
     data <- observation
     warning('Input argument "observation" is deprecated, use "data" instead',
             call. = FALSE)
-
+    
     # get data package id from dataset object
     if (is.na(id)) {
       id <- get_id(data)
     }
   }
-
-  # Get observation table and id from data input if possible
-  observation <- get_observation_table(data)
-
+  
+  # # Get observation table and id from data input if possible
+  # observation <- get_observation_table(data)
+  
+  # required col names in flat data
+  req_col_names <- c("observation_id","event_id","package_id","location_id",
+                     "datetime","taxon_id","variable_name","value",
+                     "taxon_rank")
+  
+  
+  # detect data type, extract observation table
+  data_type <- detect_data_type(data)
+  if(data_type == "table" && all(req_col_names %in% names(data))){
+    data_long <- data %>% dplyr::distinct()
+    # data_long <- data_long[,req_col_names]
+    if(is.na(id)) id <- paste(unique(data$package_id), collapse = " | ")
+  }else if(data_type == "table" && !all(req_col_names %in% names(data))){
+    stop("please provide a valid ecocomDP dataset or a table that includes the columns present in the ecocomDP 'observation' and 'taxon' tables")
+  }else if(data_type == "dataset_old"){
+    data_long <- flatten_data(data)
+    if(is.na(id)) id <- names(data)
+  }else if(data_type == "dataset"){
+    data_long <- flatten_data(data)
+    if(is.na(id)) id <- data$id
+  }else{
+    stop("No plotting method currently implemented for this data format")
+  }
+  
+  
+  # assing data_long to observation -- legacy of how old fxn was written
+  observation <- data_long
+  
+  # Validate inputs
+  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  
+  
   # if id is still missing, get it from observation table
   if (is.na(id)){
     id <- paste(unique(observation$package_id), collapse = "|")
   }
-
-  # Validate inputs and construct intermediate format for plotting
-  validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
+  
+  
+  
   # summarize data for plot
   obs_summary <- observation %>%
     # truncate time and just use dates
     dplyr::mutate(datetime = .data$datetime %>%
                     lubridate::as_date() %>%
                     lubridate::ymd()) %>%
-    dplyr::select(.data$event_id, .data$location_id, .data$datetime) %>%
-    dplyr::group_by(.data$location_id, .data$datetime) %>%
+    dplyr::select(
+      all_of(c("event_id","location_id","datetime",
+               color_var, shape_var))) %>%
+    dplyr::group_by(
+      across(
+        all_of(unique(
+          c("location_id","datetime", 
+            color_var, shape_var))))) %>%
     dplyr::summarize(
-      `Sampling\nevents` = .data$event_id %>% unique %>% length)
+      `Sampling\nevents` = .data$event_id %>% 
+        unique %>% 
+        length %>%
+        as.integer)
+  
+  
+  
   # Scale font size
   uniy <- length(unique(obs_summary$location_id))
   if (uniy < 30) {
@@ -565,11 +618,18 @@ plot_sample_space_time <- function(data,
   } else if (uniy >= 60) {
     txty <- 4
   }
+  
+  
+  
   # Plot
-  ggplot2::ggplot() +
+  p <- ggplot2::ggplot() +
     ggplot2::geom_point(
       data = obs_summary,
-      ggplot2::aes(x = datetime, y = location_id, size = .data$`Sampling\nevents`),
+      ggplot2::aes(x = datetime, 
+                   y = location_id, 
+                   size = .data$`Sampling\nevents`,
+                   color = .data[[color_var]], 
+                   shape = .data[[shape_var]]),
       alpha = alpha) +
     ggplot2::theme_bw() +
     ggplot2::labs(title = "Sample times by location", subtitle = id) +
@@ -579,12 +639,24 @@ plot_sample_space_time <- function(data,
       date_labels = "%Y",
       date_breaks = "1 year",
       date_minor_breaks = "1 month"
-      ) +
+    ) +
     ggplot2::theme_bw() +
     ggplot2::theme(
       axis.text.y.left = ggplot2::element_text(size = txty),
       plot.margin = ggplot2::margin(0.1, 0.25, 0.1, 0.1, "in"),
       axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+  
+  
+  # do not plot legend for variables that only have one level
+  if(length(unlist(unique(obs_summary[,color_var]))) == 1){
+    p <- p + ggplot2::guides(color = "none")}
+  if(length(unlist(unique(obs_summary[,shape_var]))) == 1){
+    p <- p + ggplot2::guides(shape = "none")}
+  if(length(unlist(unique(obs_summary[,"Sampling\nevents"]))) == 1){ 
+    p <- p + ggplot2::guides(size = "none")}
+  
+  # return ggplot object
+  return(p)
 }
 
 
@@ -660,36 +732,36 @@ plot_taxa_sample_time <- function(observation, id = NA_character_, alpha = 1) {
 plot_taxa_shared_sites <- function(data,
                                    id = NA_character_,
                                    observation = NULL){
-
-
+  
+  
   # Warn about deprecated observation parameter (remove after 2022-10-18)
   if (!is.null(observation)) {
     data <- observation
     warning('Input argument "observation" is deprecated, use "data" instead',
             call. = FALSE)
-
+    
     # get data package id from dataset object
     if (is.na(id)) {
       id <- get_id(data)
     }
   }
-
+  
   # Get observation table and id from data input if possible
   observation <- get_observation_table(data)
-
+  
   # if id is still missing, get it from observation table
   if (is.na(id)){
     id <- paste(unique(observation$package_id), collapse = "|")
   }
-
-
+  
+  
   # Validate inputs and construct intermediate format for plotting
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   ds <- format_for_comm_plots(observation, id)
   heat_pal_spectral <- grDevices::colorRampPalette(rev( RColorBrewer::brewer.pal(11, "Spectral")))
-
-
-
+  
+  
+  
   # Count taxa shared between sites in a site by taxa matrix
   shared.species <- function(comm) {
     sites <- comm[, 1]
@@ -703,9 +775,9 @@ plot_taxa_shared_sites <- function(data,
     }
     return(site.pairs)
   }
-
-
-
+  
+  
+  
   # aggregate years by cumulative abundances
   comm.cumul <- ds$dswide %>%
     dplyr::group_by(SITE_ID) %>%
@@ -725,10 +797,8 @@ plot_taxa_shared_sites <- function(data,
   } else if (uniy >= 60) {
     txty <- 4
   }
-
-
-
-
+  
+  
   # Plot
   p <- ggplot2::ggplot(shared.taxa, ggplot2::aes(x = site1, y = site2, fill = shared)) +
     ggplot2::geom_raster() +
@@ -746,7 +816,8 @@ plot_taxa_shared_sites <- function(data,
   } else {
     p <- p + ggplot2::annotate("text", x = shared.taxa$site1, y = shared.taxa$site2, label = shared.taxa$shared, size = txty)
   }
-  p
+  
+  return(p)
 }
 
 
@@ -808,7 +879,7 @@ plot_taxa_rank <- function(data,
                            facet_var = NA_character_,
                            facet_scales = "free_x",
                            alpha = 1) {
-
+  
   # TODO: Convert this unreadable block of code to a function like get_observation_table()
   # TODO: Call get_id()
   # required col names in flat data
@@ -832,7 +903,7 @@ plot_taxa_rank <- function(data,
   }else{
     stop("No plotting method currently implemented for this data format")
   }
-
+  
   # Validate inputs
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
   
@@ -940,15 +1011,15 @@ plot_taxa_occur_freq <- function(data,
                                  color_var = NA_character_,
                                  facet_scales = "free",
                                  alpha = 1) {
-
+  
   # TODO: Convert this unreadable block of code to a function like get_observation_table()
   # TODO: Call get_id()
   # required col names in flat data
   req_col_names <- c("observation_id","event_id","package_id","location_id",
                      "datetime","taxon_id","variable_name","value",
                      "taxon_name")
-
-
+  
+  
   # detect data type, extract observation table
   data_type <- detect_data_type(data)
   if(data_type == "table" && all(req_col_names %in% names(data))){
@@ -966,41 +1037,41 @@ plot_taxa_occur_freq <- function(data,
   }else{
     stop("No plotting method currently implemented for this data format")
   }
-
-
-
+  
+  
+  
   # Validate inputs
   # TODO min_occurrence, color_var, facet_var
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
-
-
+  
+  
   # plot title and subtitle text
   plot_title = "Taxa occurrence frequencies"
   plot_subtitle <- id
   if(!is.na(min_occurrence) && min_occurrence > 0) plot_subtitle <- paste0(plot_subtitle,
-                                             "\ntaxa with >= ", min_occurrence, " occurrences")
+                                                                           "\ntaxa with >= ", min_occurrence, " occurrences")
   # calculate occurrences
   data_working <- data_long %>%
     dplyr::filter(.data$value > 0) %>%
     dplyr::mutate(occurrence = 1)
-
+  
   col_select_list <- c("event_id","location_id","taxon_name","occurrence",
                        color_var, facet_var) %>%
     stats::na.omit() %>%
     unique()
-
+  
   data_working <- data_working[,col_select_list] %>%
     dplyr::distinct()
-
-
+  
+  
   # detemine which taxa meet minimum occurrence threshold in dataset
   data_occurrence_total_filtered <- data_working %>%
     dplyr::group_by(.data$taxon_name) %>%
     dplyr::summarize(
       n_occurrences = length(.data$occurrence)) %>%
     dplyr::filter(.data$n_occurrences >= min_occurrence)
-
-
+  
+  
   # calculate occurrence by location_id and event_id for plotting
   data_occurrence_by_group <- data_working %>%
     dplyr::distinct() %>%
@@ -1014,11 +1085,11 @@ plot_taxa_occur_freq <- function(data,
       )
     ) %>%
     dplyr::summarize(
-        n_occurrences = length(.data$occurrence))
-
-
+      n_occurrences = length(.data$occurrence))
+  
+  
   data_occurrence <- data_occurrence_by_group
-
+  
   # Scale font size
   uniy <- length(unique(data_occurrence$taxon_name))
   if (uniy < 30) {
@@ -1174,10 +1245,10 @@ plot_taxa_abund <- function(data,
   # Validate inputs
   # TODO min_relative_abundance, color_var, facet_var
   validate_arguments(fun.name = "plot", fun.args = as.list(environment()))
-
+  
   # filter based on min relative abund
   if(min_relative_abundance > 0){
-
+    
     RA_data_filtered <- flat_data %>%
       dplyr::select(.data$taxon_id, .data$value, .data$unit) %>%
       dplyr::group_by(.data$taxon_id, .data$unit) %>%
@@ -1188,16 +1259,16 @@ plot_taxa_abund <- function(data,
         total = sum(.data$sum_value),
         RA = .data$sum_value / .data$total) %>%
       dplyr::filter(.data$RA >= min_relative_abundance)
-
+    
     flat_data <- flat_data %>%
       dplyr::filter(.data$taxon_id %in% RA_data_filtered$taxon_id)
   }
-
+  
   # plot title and subtitle text
   plot_title = "Taxa abundances per 'observation_id'"
   plot_subtitle <- id
   if(!is.na(min_relative_abundance) && min_relative_abundance > 0) plot_subtitle <- paste0(plot_subtitle,
-                                                           "\nrel. abundance >= ", min_relative_abundance)
+                                                                                           "\nrel. abundance >= ", min_relative_abundance)
   # Scale font size
   uniy <- length(unique(flat_data$taxon_name))
   if (uniy < 30) {
@@ -1258,8 +1329,8 @@ plot_taxa_abund <- function(data,
 #' @param data (list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation and taxon tables, or a flat table containing columns of the observation and location tables.
 #' @param id (character) Identifier of dataset to be used in plot subtitles. Is automatically assigned when \code{data} is a dataset object containing the \code{id} field, or is a table containing the package_id column.
 #' @param alpha (numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.
-#' @param color_var (character) Argument to assign colors to the points on the plot
-#' @param shape_var (character) Argument to assign shapes to the points on the plot
+#' @param color_var (character) Name of column to use to assign colors to the points on the plot
+#' @param shape_var (character) Name of column to use to assign shapes to the points on the plot
 #' @param labels (logical) Argument to show labels of each US state. Default is TRUE.
 #'
 #' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
@@ -1366,7 +1437,7 @@ plot_sites <- function(
      length(unlist(unique(flat_data[,shape_var]))) == 1){
     legend_position <- "none"
   }
-    
+  
   
   # make plot object
   p <- ggplot() +
@@ -1389,6 +1460,6 @@ plot_sites <- function(
     ggplot2::labs(title = "Map of sites", subtitle = id) +
     ggplot2::theme(legend.position = legend_position) +
     coord_cartesian(xlim = c(-165, -40), ylim = c(15, 75))
-
+  
   return(p)
 }

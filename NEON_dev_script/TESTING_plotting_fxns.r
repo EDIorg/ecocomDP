@@ -58,16 +58,43 @@ stacked_data <- bind_rows(
 
 # plot stacked data ----
 
-stacked_data %>% plot_taxa_rank(facet_var = "package_id")
-# need to impose similar case on different datasets, maybe handle in plotting function
-
+# testing plot_sample_space_time
 stacked_data %>% plot_sample_space_time()
+
+stacked_data %>% plot_sample_space_time() +
+  ggplot2::theme(legend.position = "none")
+
+neon_data_list %>% plot_sample_space_time()
+edi_data_list %>% plot_sample_space_time()
+
+
+flat_neon %>% plot_sample_space_time()
+flat_edi %>% plot_sample_space_time()
+
+flat_neon %>% plot_sample_space_time(color_var = "location_id")
+flat_edi %>% plot_sample_space_time(shape_var = "location_id")
 # need to allow plotting parameters
 
+# help files example
+# Read a dataset of interest
+dataset <- read_data("edi.193.5")
 
+# Plot the dataset
+plot_sample_space_time(dataset)
+
+# Flatten the dataset, manipulate, then plot
+dataset %>%
+  flatten_data() %>%
+  dplyr::filter(lubridate::as_date(datetime) > "2003-07-01") %>%
+  dplyr::filter(as.numeric(location_id) > 4) %>%
+  plot_sample_space_time()
+
+ants_L1 %>% plot_sample_space_time(color_var = "location_id")
 
 #########################################
 # plotting fxns that seem good
+
+stacked_data %>% plot_taxa_rank(facet_var = "package_id")
 
 my_plot <- stacked_data %>% plot_sites() 
 print(my_plot)
