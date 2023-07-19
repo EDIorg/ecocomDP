@@ -76,8 +76,7 @@ tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
   dplyr::filter(no_dup_taxa > 0)
 
-# tab_flat %>% filter(event_id == "ABBY_003.E.20200811")
-# seems to be true dups in the sorting table?
+# seems to be true dups in the sorting table? -- dups resolved as of 7/18/2023
 
 ###############################################
 ###############################################
@@ -136,13 +135,13 @@ tab_flat <- my_result_read_data$tables %>%
   as.data.frame()
 
 # View(tab_flat)
-plot_sample_space_time(my_result_read_data$tables$observation)
+plot_sample_space_time(my_result_read_data)
 
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
   dplyr::filter(no_dup_taxa > 0)
-# an issue with a handful of duplicates
+# an issue with a handful of duplicates -- fixed 7/19/2023 ERS
 
 ###############################################
 ###############################################
@@ -297,7 +296,7 @@ tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
   dplyr::filter(no_dup_taxa > 0)
 
-# NOTE: still some dup taxa
+# NOTE: dups resolved as of 7/19/2023
 
 ###############################################
 ###############################################
@@ -323,7 +322,7 @@ tab_flat <- my_result_read_data$tables %>%
   as.data.frame()
 
 # View(tab_flat)
-plot_sample_space_time(my_result_read_data$tables$observation)
+plot_sample_space_time(my_result_read_data)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%

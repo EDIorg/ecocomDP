@@ -9,6 +9,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
   neon.data.list,
   neon.data.product.id = "DP1.10043.001",
   ...){
+  
   #NEON target taxon group is MOSQUITO
   neon_method_id <- "neon.ecocomdp.10043.001.001"
   
@@ -128,6 +129,45 @@ map_neon.ecocomdp.10043.001.001 <- function(
   
   
   
+  # check for duplicates for taxonIDs in a sampleID, add counts together ----
+  dup_counts <- mos_dat %>%
+    dplyr::group_by(sampleID, taxonID) %>%
+    dplyr::summarize(
+      n_recs = dplyr::n(),
+      individualCount_corrected = sum(individualCount))
+  
+  # filter out recs without duplicates
+  mos_dat_no_dups <- mos_dat %>%
+    dplyr::inner_join(
+      dup_counts %>%
+        dplyr::select(
+          sampleID, taxonID, n_recs) %>%
+        dplyr::filter(
+          n_recs == 1)) %>%
+    dplyr::select(
+      -n_recs) %>%
+    dplyr::distinct()
+  
+  # join summed counts back with data
+  mos_dat_corrected_dups <- dup_counts %>%
+    dplyr::filter(n_recs > 1) %>%
+    dplyr::left_join(
+      mos_dat %>%
+        dplyr::select(-individualCount),
+      multiple = "first") %>%
+    dplyr::distinct() %>%
+    dplyr::rename(
+      individualCount = individualCount_corrected) %>%
+    dplyr::select(-n_recs)
+  
+  # combine good recs with corrected recs
+  mos_dat <- dplyr::bind_rows(
+    mos_dat_no_dups,
+    mos_dat_corrected_dups)
+  
+  
+  
+  
   # Rename columns and add estimated total individuals for each subsample/species/sex with identification, where applicable
   #  Estimated total individuals = # individuals iD'ed * (total subsample weight/ subsample weight)
   mos_dat <- mos_dat %>%
@@ -147,7 +187,6 @@ map_neon.ecocomdp.10043.001.001 <- function(
       sampleCondition == "No known compromise",
       taxonRank != "family") %>%
     dplyr::distinct()
-  
   
   
   

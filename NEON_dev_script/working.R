@@ -1,10 +1,10 @@
-neon.data.product.id = "DP1.20107.001"
+neon.data.product.id = "DP1.10043.001"
 
 # neon.data.list <- neonUtilities::loadByProduct(
 #   dpID = neon.data.product.id,
-#   site = c(c('ARIK','LECO')),
+#   site= c("NIWO","DSNY"),
 #   startdate = "2016-01",
-#   enddate = "2018-11",
+#   enddate = "2017-11",
 #   token = Sys.getenv("NEON_TOKEN"),
 #   check.size = FALSE)
 # 
@@ -17,18 +17,17 @@ my_token <- Sys.getenv("NEON_TOKEN")
 ##############################################################################################
 ##############################################################################################
 
-# @describeIn map_neon_data_to_ecocomDP This method will retrieve count data for FISH taxa from neon.data.product.id DP1.20107.001 from the NEON data portal and map to the ecocomDP format
+# @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for MOSQUITO from neon.data.product.id DP1.10043.001 from the NEON data portal and map to the ecocomDP 
 
 ##############################################################################################
-# mapping function for FISH
-map_neon.ecocomdp.20107.001.001 <- function(
+# mapping function for MOSQUITO
+map_neon.ecocomdp.10043.001.001 <- function(
     neon.data.list,
-    neon.data.product.id = "DP1.20107.001",
+    neon.data.product.id = "DP1.10043.001",
     ...){
-  
-  #NEON target taxon group is FISH
-  neon_method_id <- "neon.ecocomdp.20107.001.001"
-  
+ 
+  #NEON target taxon group is MOSQUITO
+  neon_method_id <- "neon.ecocomdp.10043.001.001"
   
   
   # make sure neon.data.list matches the method
@@ -41,309 +40,179 @@ map_neon.ecocomdp.20107.001.001 <- function(
       neon_method_id)
   
   
-  # get token from dots if available
-  my_dots <- list(...)
-  
-  if("token" %in% names(my_dots)){
-    my_token <- my_dots$token
-  }else{
-    my_token <- NA
-  }
+  # getting data ----  
+  mos_allTabs <- neon.data.list
   
   
-  # get fish taxon table ----
-  # get taxon table from API, may take a few minutes to load
-  # Fish electrofishing, gill netting, and fyke netting counts
-  # http://data.neonscience.org/data-product-view?dpCode=DP1.20107.001
-  full_taxon_fish <- neonOS::getTaxonList(
-    taxonType = "FISH", token = my_token)
-  
-  # -- make ordered taxon_rank list for a reference (subspecies is smallest rank, kingdom is largest)
-  # a much simple table with useful levels of taxonomic resolution;
-  # this might not be needed if taxon rank is extracted  from scientific names using stringr functions
-  taxon_rank_fish <- c(
-    'superclass', 'class', 'subclass', 'infraclass', 'superorder',
-    'order', 'suborder', 'infraorder', 'section', 'subsection',
-    'superfamily', 'family', 'subfamily', 'tribe', 'subtribe', 'genus',
-    'subgenus','speciesGroup','species','subspecies') %>% rev() # get the reversed version
+  # Define important data colums
+  cols_oi_trap <- c('collectDate','eventID','namedLocation','sampleID')
+  cols_oi_sort <- c('collectDate','sampleID','namedLocation','subsampleID')
+  cols_oi_subsamp <- c('collectDate','subsampleID','archiveID')
+  cols_oi_arch <- c('startCollectDate','archiveID','namedLocation')
+  cols_oi_exp_proc <- c('collectDate','subsampleID','namedLocation')
   
   
-  # get data FISH data from NEON api
-  all_fish <- neon.data.list
   
-  # The object returned by loadByProduct() is a named list of data frames.
-  # To work with each of them, select them from the list using the $ operator.
-  
-  # this joins reach-level data, you can just join by any two of these, and the results are the same, dropping the unique ID
-  # join field data table with the pass tables from all_fish
-  fsh_dat1 <- dplyr::left_join(
-    all_fish$fsh_perPass, 
-    all_fish$fsh_fieldData, 
-    by = c("reachID", "siteID"),
-    suffix = c("_perPass","_filedData"),
-    multiple = "all") %>%
-    dplyr::filter(is.na(samplingImpractical) | samplingImpractical == "") %>% #remove records where fish couldn't be collected, both na's and blank data
-    tidyr::as_tibble()
-  
-  # get rid of dupe col names and .x suffix
-  fsh_dat1 <- fsh_dat1[, !grepl("_filedData", names(fsh_dat1))]
-  names(fsh_dat1) <- gsub("_perPass", "", names(fsh_dat1))
-  
-  # add individual fish counts; perFish data = individual level per each specimen captured
-  # this joins reach-level field data with individual fish measures
-  fsh_dat_indiv <- dplyr::left_join(
-    all_fish$fsh_perFish, 
-    fsh_dat1, 
-    by = "eventID", 
-    multiple = "all") %>%
-    tidyr::as_tibble()
-  
-  # get rid of dupe col names and .x suffix
-  fsh_dat_indiv <- fsh_dat_indiv[, !grepl('\\.y', names(fsh_dat_indiv))]
-  names(fsh_dat_indiv) <- gsub('\\.x', '', names(fsh_dat_indiv))
-  
-  # fill in missing reachID from event ID
-  fsh_dat_indiv$reachID <- ifelse(is.na(fsh_dat_indiv$reachID),
-                                  substr(fsh_dat_indiv$eventID, 1, 16),
-                                  fsh_dat_indiv$reachID)
+  # Remove rows with missing important data, replacing blank with NA and factors with characters
   
   
-  # add bulk fish counts; bulk count data = The number of fish counted during bulk processing in each pass
-  # this will join all the reach-level field data with the species data with bulk counts
-  fsh_dat_bulk <- dplyr::left_join(
-    all_fish$fsh_bulkCount, 
-    fsh_dat1, by = "eventID") %>%
-    tidyr::as_tibble()
-  
-  # get rid of dupe col names and .x suffix
-  fsh_dat_bulk <- fsh_dat_bulk[, !grepl('\\.y', names(fsh_dat_bulk))]
-  names(fsh_dat_bulk) <- gsub('\\.x', '', names(fsh_dat_bulk))
-  
-  #fill in missing reachID
-  fsh_dat_bulk$reachID <- ifelse(is.na(fsh_dat_bulk$reachID),
-                                 substr(fsh_dat_bulk$eventID, 1, 16),
-                                 fsh_dat_bulk$reachID)
-  
-  # add taxonRank into fsh_dat from full_taxon_fish
-  # join the above with bulkCount dataset
-  fsh_dat_bulk <- dplyr::left_join(
-    fsh_dat_bulk, 
-    dplyr::select(
-      full_taxon_fish, taxonID, scientificName, taxonRank),
-    by = c("taxonID", "scientificName"))
-  
-  # combine indiv and bulk counts
-  fsh_dat <- dplyr::bind_rows(fsh_dat_indiv, fsh_dat_bulk)
-  
-  # add count = 1 for indiv data
-  # before row_bind, the indiv dataset did not have a col for count
-  # after bind, the bulk count col has "NAs" need to add "1", since indiv col has individual fish per row
-  fsh_dat$count <- ifelse(is.na(fsh_dat$bulkFishCount), 1, fsh_dat$bulkFishCount)
-  
-  # get all records that have rank upto subspecies, variable taxonomic resolution
-  fsh_dat_fine <- dplyr::filter(
-    fsh_dat, 
-    taxonRank %in% c("class", "family", "genus", "order", "phylum", "species", "subgenus", "subspecies"))
-  
-  # select passes with no fish were caught
-  no_fsh <- dplyr::filter(all_fish$fsh_perPass, targetTaxaPresent == "N")
-  
-  # all records from fieldData where sampling was done, where sampling was not impractical
-  fsh_sampled <- dplyr::filter(all_fish$fsh_fieldData, is.na(samplingImpractical) | samplingImpractical == "")
-  
-  #join the no-fish dataset with the field dataset where sampling was done
-  no_fsh2 <- dplyr::left_join(x = no_fsh, y = fsh_sampled, by = c("reachID", "siteID", "domainID", "namedLocation"))
-  
-  # get rid of dupe col names and .x suffix
-  no_fsh2 <- no_fsh2[, !grepl('\\.y', names(no_fsh2))]
-  names(no_fsh2) <- gsub('\\.x', '', names(no_fsh2))
-  
-  # fill in missing reachID from event ID
-  no_fsh2$reachID <- ifelse(is.na(no_fsh2$reachID),
-                            substr(no_fsh2$eventID, 1, 16),
-                            no_fsh2$reachID)
-  
-  # add a count variables, which should be zero since these are the reaches 
-  # with zero fish captures
-  no_fsh2 <- no_fsh2 %>% 
+  mos_trapping <- mos_allTabs$mos_trapping %>%
     dplyr::mutate(
-      count = rep_len(0, length.out = nrow(no_fsh2)),
-      scientificName = NA, taxonID = NA) %>%
-    dplyr::mutate(
-      dplyr::across(c("scientificName", "taxonID"), ~as.character(.)))
-  
-  # join the no_fish sampling sessions to the sampling sessions with fish
-  if(nrow(no_fsh2) > 0) fsh_dat_fine <- dplyr::bind_rows(fsh_dat_fine, no_fsh2)
-  
-  # need to convert POSIXct format into as.character and then back to date-time format
-  # then, fill in missing site ID info and missing startDate into
-  fsh_dat_fine$startDate <- dplyr::if_else(
-    is.na(fsh_dat_fine$startDate),
-    lubridate::as_datetime(substr(as.character(fsh_dat_fine$passStartTime), 1, 10)), 
-    fsh_dat_fine$startDate) # 1-10: number of characters on date
-  
-  fsh_dat_fine$siteID <- dplyr::if_else(
-    is.na(fsh_dat_fine$siteID),
-    substr(fsh_dat_fine$eventID, 1, 4), 
-    fsh_dat_fine$siteID) # four characters on site
-  
-  # grouping vars for aggregating density measurements
-  my_grouping_vars <- c(
-    'domainID','siteID','aquaticSiteType','namedLocation',
-    'startDate', 'endDate', 'reachID','eventID','samplerType', 
-    'aquaticSiteType', 
-    'netSetTime', 'netEndTime',
-    'netDeploymentTime', 'netLength', 'netDepth', 'fixedRandomReach',
-    'measuredReachLength','efTime', 'efTime2',
-    # "passStartTime", "passEndTime", 
-    'netDeploymentTime', 
-    'scientificName', 'taxonID', 'passNumber', 'taxonRank', 'targetTaxaPresent')
-  
-  my_grouping_vars <- dplyr::intersect(
-    my_grouping_vars,
-    names(fsh_dat_fine))
-  # added a few metrics to quantify catch per unit effort such as 'passNumber', efish time, net deployment time
-  
-  
-  
-  # aggregate densities for each species group, pull out year and month from StartDate
-  fsh_dat_aggregate <- fsh_dat_fine %>%
-    dplyr::select(dplyr::all_of(c(my_grouping_vars, 'count'))) %>%
-    dplyr::group_by_at(dplyr::vars(dplyr::all_of(my_grouping_vars))) %>%
-    dplyr::summarize(
-      number_of_fish = sum(count),
-      n_obs = dplyr::n()) %>%
-    dplyr::mutate(
-      year = startDate %>% lubridate::year(),
-      month = startDate %>% lubridate::month()) %>% 
-    dplyr::ungroup()
-  
-  
-  #### there should not be dups at this point
-  #### check for dups
-
-  dup_counts <- fsh_dat_aggregate %>%
-    group_by(taxonID, eventID) %>%
-    summarize(
-      n_agg_count_vals = n(),
-      agg_count_vals = paste(number_of_fish, collapse = "|"),
-      n_obs_vals = paste(n_obs, collapse = "|")
-    )
-
-  dups <- dup_counts %>%
-    filter(n_agg_count_vals > 1)
-  
-  
-  
-  
-  
-  
-  # some aquaticSiteType are NA, replace NAs if-based wildcarding namedLocation
-  # grepl is for wildcarding
-  fsh_dat_aggregate$aquaticSiteType <- dplyr::if_else(
-    is.na(fsh_dat_aggregate$aquaticSiteType),
-    dplyr::if_else(
-      grepl("fish.point", fsh_dat_aggregate$namedLocation), 'stream','lake'),
-    fsh_dat_aggregate$aquaticSiteType)
-  
-  # sampler type is also missing in a few cases, reaplace from eventID, with a wildcard
-  fsh_dat_aggregate$samplerType <- dplyr::if_else(
-    is.na(fsh_dat_aggregate$samplerType),
-    dplyr::if_else(
-      grepl("e-fisher", fsh_dat_aggregate$eventID), 
-      'electrofisher',
-      dplyr::if_else(grepl("gill", fsh_dat_aggregate$eventID), 
-                     'gill net', 'mini-fyke net')),
-    fsh_dat_aggregate$samplerType)
-  
-  
-  
-  
-  
-  # make sure that e-fish samples have "" or NA for netset and netend times, this will leave actual missing data as na
-  # change netset/netend times to a datetime format if needed: lubridate::as_datetime(fsh_xx$netSetTime, format="%Y-%m-%d T %H:%M", tz="GMT")
-  ## then calculate the netdeploymenttime (in hours) from netset and netend time
-  # to calculate pass duration (in mins) and also calculate average efish time (secs); also if efishtime is zero, --> na's
-  data_fish <-
-    fsh_dat_aggregate %>% 
-    dplyr::mutate(
-      netSetTime = dplyr::if_else(
-        condition = samplerType ==  "electrofisher" | samplerType == "two electrofishers",
-        # true = lubridate::as_datetime(NA), false = netSetTime),
-        true = NA_character_, false = as.character(netSetTime)),
-      netEndTime = dplyr::if_else(
-        condition = samplerType ==  "electrofisher" | samplerType == "two electrofishers",
-        # true = lubridate::as_datetime(NA), false = netEndTime),
-        true = NA_character_, false = as.character(netEndTime)),
-      netDeploymentTime = dplyr::case_when(
-        samplerType == grepl("electrofish", samplerType) ~ netDeploymentTime,
-        is.na(netDeploymentTime) ~ as.numeric(difftime(
-          netEndTime, netSetTime, tz = "GMT", units = "hours")),
-        TRUE ~ netDeploymentTime),
-      mean_efishtime = base::rowMeans(
-        dplyr::select(., c("efTime", "efTime2")), na.rm = T),
-      mean_efishtime = dplyr::case_when(
-        mean_efishtime == 0 ~ NA_real_,
-        TRUE ~ mean_efishtime))
-  
-  
-  
-  
-  
-  # with the above changes, we have efish time and and net duration to calculate 
-  # catch per unit effort before moving to wide format
-  # CPUE with efish time, calculated by = (total number of fish/average e-fish time 
-  # in secs * 3600) as fish captured per 1-hr of e-fishing
-  # CPUE with gill nets and fyke nets calculated by = (total number of fish/netDeployment time in hours * 24) 
-  # as fish captured per 1-day-long net deployment of e-fishing
-  data_fish <- data_fish %>% 
-    dplyr::mutate(
-      catch_per_effort = dplyr::if_else(
-        condition = samplerType ==  "electrofisher" | samplerType == "two electrofishers",
-        true = number_of_fish/mean_efishtime * 3600,
-        false = dplyr::if_else(
-          condition = samplerType ==  "mini-fyke net" | samplerType == "gill net",
-          true = number_of_fish/netDeploymentTime * 24, 
-          false = as.numeric(NA))))
-  
-  
-  
-  
-  # is this necessary? fielddata was prevoiusly joined
-  data_fish = dplyr::left_join(
-    data_fish, 
-    all_fish$fsh_fieldData %>% 
-      dplyr::select(
-        namedLocation, decimalLatitude, decimalLongitude, 
-        geodeticDatum, elevation),
-    by = "namedLocation",
-    multiple = "all") %>%
-    dplyr::filter(!is.na(taxonID)) %>%
+      setDate = as.character(setDate),
+      collectDate = as.character(collectDate)) %>%
+    tidyr::drop_na(dplyr::all_of(cols_oi_trap)) %>%
+    dplyr::mutate_if(is.factor, as.character) %>% 
     dplyr::distinct()
   
   
-  # #### there should not be dups at this point
-  # #### check for dups
-  # 
-  # dup_counts <- data_fish %>%
-  #   group_by(taxonID, eventID) %>%
-  #   summarize(
-  #     n_cpue_vals = n(),
-  #     cpue_vals = paste(catch_per_effort, collapse = "|"))
-  # 
-  # dups <- dup_counts %>%
-  #   filter(n_cpue_vals > 1)
-  # 
-  # print(dups)
+  if("mos_subsampling" %in% names(mos_allTabs)){
+    mos_subsampling <- mos_allTabs$mos_subsampling %>%
+      dplyr::mutate(
+        setDate = as.character(setDate),
+        collectDate = as.character(collectDate)) %>%
+      tidyr::drop_na(dplyr::all_of(cols_oi_subsamp)) %>%
+      dplyr::mutate_if(is.factor, as.character) %>% 
+      dplyr::distinct()
+  }
+  
+  
+  mos_sorting <- mos_allTabs$mos_sorting %>% 
+    dplyr::mutate (
+      setDate = as.character(setDate),
+      collectDate = as.character(collectDate), 
+      sortDate = as.character(sortDate)) %>% 
+    tidyr::drop_na(dplyr::all_of(cols_oi_sort)) %>%
+    dplyr::mutate_if(is.factor, as.character) %>% 
+    dplyr::distinct()
+  
+  
+  mos_archivepooling <- mos_allTabs$mos_archivepooling %>% 
+    dplyr::mutate(
+      startCollectDate = as.character(startCollectDate),
+      endCollectDate = as.character(endCollectDate)) %>% 
+    tidyr::drop_na(dplyr::all_of(cols_oi_arch)) %>%
+    dplyr::mutate_if(is.factor, as.character) %>% 
+    dplyr::distinct()
+  
+  
+  mos_expertTaxonomistIDProcessed <- mos_allTabs$mos_expertTaxonomistIDProcessed %>% 
+    dplyr::mutate(
+      setDate= as.character(setDate),
+      collectDate = as.character(collectDate), 
+      identifiedDate = as.character(identifiedDate)) %>% 
+    tidyr::drop_na(dplyr::all_of(cols_oi_exp_proc)) %>%
+    dplyr::mutate_if(is.factor, as.character) %>% 
+    dplyr::distinct()
+  
+  
+  
+  # Clear expertTaxonomist:individualCount if it is 0 and there is no taxonID. These aren't ID'ed samples
+  mos_expertTaxonomistIDProcessed$individualCount[
+    mos_expertTaxonomistIDProcessed$individualCount == 0 & 
+      is.na(mos_expertTaxonomistIDProcessed$taxonID)] <- NA
+  
+  
+  ####
+  # Join data ----
+  
+  
+  
+  # Add trapping info to sorting table 
+  # Note - 59 trapping records have no associated sorting record and don't come through the left_join (even though targetTaxaPresent was set to Y or U)
+  mos_dat <- mos_sorting %>%
+    dplyr::select(-c(uid,collectDate, domainID, namedLocation, plotID, 
+                     setDate, siteID)) %>%
+    dplyr::left_join(dplyr::select(mos_trapping,-uid),
+                     by = c("sampleID", "sampleCode"),
+                     # by = "sampleID",
+                     suffix = c("_sorting","_trapping")) 
+  
+  if(!"remarks" %in% names(mos_dat)) mos_dat[,"remarks"] <- NA_character_
+  if(!"dataQF" %in% names(mos_dat)) mos_dat[,"dataQF"] <- NA_character_
+  
+  
+  
+  
+  # Join expert ID data --
+  mos_dat <- mos_dat %>%
+    dplyr::left_join(dplyr::select(
+      mos_expertTaxonomistIDProcessed,
+      -c(collectDate,domainID,namedLocation,plotID,setDate,siteID,targetTaxaPresent)),
+      by = c('subsampleID',"subsampleCode"),
+      suffix = c("","_expertID"),
+      multiple = "all") 
+  
+  
+  
+  
+  # check for duplicates for taxonIDs in a sampleID, add counts together ----
+  dup_counts <- mos_dat %>%
+    dplyr::group_by(sampleID, taxonID) %>%
+    dplyr::summarize(
+      n_recs = dplyr::n(),
+      individualCount_corrected = sum(individualCount))
+  
+  # filter out recs without duplicates
+  mos_dat_no_dups <- mos_dat %>%
+    dplyr::inner_join(
+      dup_counts %>%
+        dplyr::select(
+          sampleID, taxonID, n_recs) %>%
+        dplyr::filter(
+          n_recs == 1)) %>%
+    dplyr::select(
+      -n_recs) %>%
+    dplyr::distinct()
+
+  # join summed counts back with data
+  mos_dat_corrected_dups <- dup_counts %>%
+    dplyr::filter(n_recs > 1) %>%
+    dplyr::left_join(
+      mos_dat %>%
+        dplyr::select(-individualCount),
+      multiple = "first") %>%
+    dplyr::distinct() %>%
+    dplyr::rename(
+      individualCount = individualCount_corrected) %>%
+    dplyr::select(-n_recs)
+  
+  # combine good recs with corrected recs
+  mos_dat <- dplyr::bind_rows(
+    mos_dat_no_dups,
+    mos_dat_corrected_dups)
+    
+
+  
+  
+  # Rename columns and add estimated total individuals for each subsample/species/sex with identification, where applicable
+  #  Estimated total individuals = # individuals iD'ed * (total subsample weight/ subsample weight)
+  mos_dat <- mos_dat %>%
+    dplyr::mutate(
+      estimated_totIndividuals = ifelse(
+        !is.na(individualCount),
+        round(individualCount / proportionIdentified), NA))
+  
+  
+  
+  
+  # exclude records with taxonID is NA and remove dups
+  mos_dat <- mos_dat %>%
+    dplyr::filter(
+      !is.na(taxonID),
+      targetTaxaPresent == "Y", # very few N or U
+      sampleCondition == "No known compromise",
+      taxonRank != "family") %>%
+    dplyr::distinct()
+  
   
   
   
   
   #location ----
-  table_location_raw <- data_fish %>%
+  table_location_raw <- mos_dat %>%
     dplyr::select(domainID, siteID, namedLocation, 
-                  decimalLatitude, decimalLongitude, elevation, 
-                  geodeticDatum, aquaticSiteType) %>%
+                  plotType, nlcdClass,
+                  decimalLatitude, decimalLongitude, elevation) %>%
     dplyr::distinct() 
   
   table_location <- make_neon_location_table(
@@ -353,97 +222,49 @@ map_neon.ecocomdp.20107.001.001 <- function(
   table_location_ancillary <- make_neon_ancillary_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"),
-    ancillary_var_names = c("namedLocation", "aquaticSiteType", "geodeticDatum"))
-  
-  
-  
-  # observation ----
-  
-  my_package_id <- paste0(
-    neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
-  
-  
-  table_observation_wide_all <- data_fish %>%
-    dplyr::left_join(
-      all_fish$fsh_perPass %>% 
-        dplyr::select(
-          eventID, 
-          publicationDate, release) %>% 
-        dplyr::distinct(),
-      by = "eventID"
-    ) %>%
-    # dplyr::rename(location_id, plotID, trapID) %>%
-    dplyr::rename(location_id = namedLocation) %>%
-    # package id
-    dplyr::mutate(
-      package_id = my_package_id) %>%
-    dplyr::rename(
-      # neon_event_id = eventID,
-      datetime = startDate, 
-      taxon_id = taxonID,
-      value = catch_per_effort) %>%
-    dplyr::mutate(
-      observation_id = paste0("obs_",1:nrow(.)), 
-      event_id = eventID,
-      # event_id = observation_id,
-      # neon_event_id = eventID,
-      variable_name = "abundance",
-      unit = "catch per unit effort") 
-  
-  
-  table_observation <- table_observation_wide_all %>%
-    dplyr::select(
-      observation_id,
-      event_id,
-      package_id,
-      location_id,
-      datetime,
-      taxon_id,
-      variable_name,
-      value,
-      unit) %>%
-    dplyr::filter(!is.na(taxon_id))
-  
-  
-  
-  
-  table_observation_ancillary <- make_neon_ancillary_observation_table(
-    obs_wide = table_observation_wide_all,
-    ancillary_var_names = c(
-      "observation_id",
-      # "neon_event_id",
-      "reachID",
-      "samplerType",
-      "habitatType",
-      "subdominantHabitatType",
-      "waterTemp",
-      "dissolvedOxygen",
-      "specificConductance",
-      "netSetTime",        
-      "netEndTime",
-      "netDeploymentTime",
-      "netLength",
-      "netDepth",
-      "fixedRandomReach",
-      "measuredReachLength",
-      "efTime",
-      "efTime2",
-      "passStartTime",
-      "passEndTime", 
-      "mean_efishtime",
-      "remarks",
-      "release",
-      "publicationDate"))
-  
+    ancillary_var_names = c("namedLocation", "nlcdClass", "plotType"))
   
   
   
   
   # taxon ----
   
-  table_taxon <- full_taxon_fish %>%
+  # Old version: Get taxon info from published data product
+  # table_taxon <- mos_dat %>%
+  #   dplyr::select(taxonID, taxonRank, scientificName, identificationReferences) %>%
+  #   
+  #   dplyr::distinct() %>% 
+  #   dplyr::rename(taxon_id = taxonID,
+  #                 taxon_rank = taxonRank,
+  #                 taxon_name = scientificName,
+  #                 authority_system = identificationReferences) %>%
+  #   dplyr::select(taxon_id,
+  #                 taxon_rank,
+  #                 taxon_name,
+  #                 authority_system) %>%
+  #   dplyr::filter(!is.na(taxon_id)) %>%
+  #   # concatenate different references for same taxonID
+  #   dplyr::group_by(taxon_id, taxon_rank, taxon_name) %>%
+  #   dplyr::summarize(
+  #     authority_system = paste(authority_system, collapse = "; "))
+  
+  
+  my_dots <- list(...)
+  
+  if("token" %in% names(my_dots)){
+    my_token <- my_dots$token
+  }else{
+    my_token <- NA
+  }
+  
+  # get mo taxon table from NEON
+  neon_mos_taxon_table <- neonOS::getTaxonList(
+    taxonType = "MOSQUITO", 
+    token = my_token) %>%
+    dplyr::filter(taxonID %in% mos_dat$taxonID)
+  
+  table_taxon <- neon_mos_taxon_table %>%
     dplyr::select(taxonID, taxonRank, scientificName, nameAccordingToID) %>%
-    dplyr::filter(taxonID %in% data_fish$taxonID) %>%
     dplyr::distinct() %>% 
     dplyr::rename(taxon_id = taxonID,
                   taxon_rank = taxonRank,
@@ -454,9 +275,82 @@ map_neon.ecocomdp.20107.001.001 <- function(
                   taxon_name,
                   authority_system) 
   
-  # data summary ----
-  # make dataset_summary -- required table
   
+  
+  
+  
+  
+  # observation ----
+  
+  my_package_id <- paste0(
+    neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
+  
+  table_observation_raw <- mos_dat %>% 
+    dplyr::mutate(variable_name = "abundance",
+                  value = (individualCount/proportionIdentified) / trapHours,
+                  unit = "count per trap hour") %>% 
+    dplyr::rename(
+      observation_id = uid,
+      neon_event_id = eventID,
+      location_id = namedLocation,
+      datetime = collectDate,
+      taxon_id = taxonID) %>%
+    dplyr::mutate(
+      package_id = my_package_id,
+      event_id = sampleID) %>%
+    dplyr::filter(!is.na(taxon_id))
+  
+  
+  
+  table_observation <- table_observation_raw %>%
+    dplyr::select(observation_id,
+                  event_id,
+                  package_id,
+                  location_id,
+                  datetime,
+                  taxon_id,
+                  variable_name,
+                  value,
+                  unit) 
+  
+  
+  
+  
+  table_observation_ancillary <- make_neon_ancillary_observation_table(
+    obs_wide = table_observation_raw,
+    ancillary_var_names = c(
+      "observation_id",
+      "neon_event_id",
+      "sortDate",
+      "sampleID",
+      "subsampleID",
+      "proportionIdentified", #published instead of totalWeight and subsampleWeight
+      # "totalWeight", #grams #no longer published by NEON
+      # "subsampleWeight", #grams #no longer published by NEON
+      # "weightBelowDetection", #no longer published by NEON
+      "laboratoryName",
+      "trapHours", #hours
+      "samplingProtocolVersion",
+      "remarks_sorting",
+      "sex",
+      "nativeStatusCode",
+      "release",
+      "publicationDate")) %>%
+    # add units where appropriate
+    dplyr::mutate(
+      unit = dplyr::case_when(
+        variable_name == "totalWeight" ~ "grams",
+        variable_name == "subsampleWeight" ~ "grams",
+        variable_name == "trapHours" ~ "hours",
+        TRUE ~ NA_character_
+      )
+    ) %>%
+    dplyr::distinct()
+  
+  
+  
+  # make data summary table ----
   years_in_data <- table_observation$datetime %>% lubridate::year()
   # years_in_data %>% ordered()
   
@@ -472,8 +366,8 @@ map_neon.ecocomdp.20107.001.001 <- function(
   
   
   
-  # return tables ----
-  
+  # return ----
+  # list of tables to be returned, with standardized names for elements
   out_list <- list(
     location = table_location,
     location_ancillary = table_location_ancillary,
@@ -482,5 +376,8 @@ map_neon.ecocomdp.20107.001.001 <- function(
     observation_ancillary = table_observation_ancillary,
     dataset_summary = table_dataset_summary)
   
+  # return out_list -- this is output from this function
   return(out_list)
-}
+  
+} # end of function
+
