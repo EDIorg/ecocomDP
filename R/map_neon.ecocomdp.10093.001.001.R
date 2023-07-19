@@ -108,15 +108,26 @@ map_neon.ecocomdp.10093.001.001 <- function(
   colnames(tck_fielddata)[colnames(tck_fielddata)=="uid"] <- "uid_field"
   colnames(tck_fielddata)[colnames(tck_fielddata)=="sampleCondition"] <- "sampleCondition_field"
   colnames(tck_fielddata)[colnames(tck_fielddata)=="remarks"] <- "remarks_field"
-  colnames(tck_fielddata)[colnames(tck_fielddata)=="dataQF"] <- "dataQF_field"
   colnames(tck_fielddata)[colnames(tck_fielddata)=="publicationDate"] <- "publicationDate_field"
   
   colnames(tck_tax_filtered)[colnames(tck_tax_filtered)=="uid"] <- "uid_tax"
   colnames(tck_tax_filtered)[colnames(tck_tax_filtered)=="sampleCondition"] <- "sampleCondition_tax"
   colnames(tck_tax_filtered)[colnames(tck_tax_filtered)=="remarks"] <- "remarks_tax"
-  colnames(tck_tax_filtered)[colnames(tck_tax_filtered)=="dataQF"] <- "dataQF_tax"
   colnames(tck_tax_filtered)[colnames(tck_tax_filtered)=="publicationDate"] <- "publicationDate_tax"
   
+  
+  if("dataQF" %in% names(tck_tax_filtered)){
+    colnames(tck_tax_filtered)[colnames(tck_tax_filtered)=="dataQF"] <- "dataQF_tax"
+  }else{
+    tck_tax_filtered[,"dataQF_tax"] <- NA_character_
+  }
+  
+  
+  if("dataQF" %in% names(tck_fielddata)){
+    colnames(tck_fielddata)[colnames(tck_fielddata)=="dataQF"] <- "dataQF_field"
+  }else{
+    tck_fielddata[,"dataQF_field"] <- NA_character_
+  }
   
   # merge counts from male/female into one adult class
   # summing male and female counts (assuming biodiversity analyses won't be sex specific)
@@ -361,7 +372,8 @@ map_neon.ecocomdp.10093.001.001 <- function(
   tck_merged = tck_merged %>% 
     dplyr::mutate(
       IXOSP2_Larva = dplyr::case_when(
-        sampleID %in% add_unknown_larvae ~ IXOSP2_Larva + totalFieldCount - totalLabCount, # add discrepancy to the order level
+        sampleID %in% add_unknown_larvae ~ 
+          IXOSP2_Larva + totalFieldCount - totalLabCount, # add discrepancy to the order level
         TRUE~IXOSP2_Larva)) 
   
   tck_merged$Discrepancy[tck_merged$sampleID %in% add_unknown_larvae] <- "FIXED"
@@ -499,7 +511,7 @@ map_neon.ecocomdp.10093.001.001 <- function(
                   -samplingImpractical, -dataQF_field, 
                   # -remarks_field, 
                   # -remarks_tax
-                  ) %>% 
+    ) %>% 
     dplyr::rename(countPending = COUNT_PENDING)
   # long form data
   
@@ -563,7 +575,7 @@ map_neon.ecocomdp.10093.001.001 <- function(
   }
   
   # get tick taxon table from NEON
-  neon_tick_taxon_table <- neonUtilities::getTaxonTable(
+  neon_tick_taxon_table <- neonOS::getTaxonList(
     taxonType = "TICK", token = my_token) %>%
     dplyr::filter(taxonID %in% data_tick$taxonID)
   
@@ -593,7 +605,7 @@ map_neon.ecocomdp.10093.001.001 <- function(
   
   
   table_observation_all <- data_tick %>%
-    dplyr::filter(!is.na(totalSampledArea) && totalSampledArea > 0) %>%
+    dplyr::filter(!is.na(totalSampledArea) & totalSampledArea > 0) %>%
     dplyr::distinct() %>%
     # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation) %>%
@@ -614,7 +626,7 @@ map_neon.ecocomdp.10093.001.001 <- function(
   
   
   
-
+  
   
   
   table_observation <- table_observation_all %>%
@@ -629,6 +641,7 @@ map_neon.ecocomdp.10093.001.001 <- function(
       value,
       unit) %>%
     dplyr::filter(!is.na(taxon_id))
+  
   
   
   

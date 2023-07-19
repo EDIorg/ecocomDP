@@ -44,15 +44,6 @@ observation_ancillary$observation_id %>% setdiff(observation$observation_id)
 #BEETLE -- event_id maps to NEON sampleID, boutID is in ancillary table
 # no expected dup taxa within event_id
 
-# # returns a warming
-# Warning message:
-#   There was 1 warning in `dplyr::mutate()`.
-# ℹ In argument: `diffTrappingDays = trappingDays - min(trappingDays)`.
-# Caused by warning in `min()`:
-#   ! no non-missing arguments to min; returning Inf 
-
-# overall, still seems to work fine
-
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.10022.001.001",
   site = c('ABBY','BARR'),
@@ -238,33 +229,31 @@ tab_flat %>% group_by(event_id) %>%
 # # should be no dup in taxa by lifestage combos within a sample/event_id
 # # coungs should be summed among lifestages within a sample
 # 
-# my_result_read_data <- read_data(
-#   id = "neon.ecocomdp.10093.001.001",
-#   site= c("NIWO","DSNY", "BART"), 
-#   startdate = "2016-01",
-#   enddate = "2017-11",
-#   token = Sys.getenv("NEON_TOKEN"),
-#   check.size = FALSE)
-# 
-
-#Error in UseMethod("filter") :
-# no applicable method for 'filter' applied to an object of class "NULL"
+my_result_read_data <- read_data(
+  id = "neon.ecocomdp.10093.001.001",
+  site = c("NIWO","DSNY", "BART"),
+  startdate = "2016-01",
+  enddate = "2017-11",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
 
 
+my_result_read_data$validation_issues
+my_result_read_data$metadata$data_package_info
 
-# my_result_read_data$validation_issues
-# my_result_read_data$metadata$data_package_info
-# 
-# tab_flat <- my_result_read_data$tables %>% 
-#   ecocomDP::flatten_data() %>% 
-#   as.data.frame()
-# 
+tab_flat <- my_result_read_data$tables %>%
+  ecocomDP::flatten_data() %>%
+  as.data.frame()
+
 # View(tab_flat)
-# plot_taxa_sample_time(my_result_read_data$tables$observation, my_result_read_data$id)
-# 
-# tab_flat %>% group_by(event_id) %>%
-#   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
-#   dplyr::filter(no_dup_taxa > 0)
+plot_sample_space_time(my_result_read_data)
+
+tab_flat %>% group_by(event_id, LifeStage) %>%
+  summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
+  dplyr::filter(no_dup_taxa > 0)
+
+# dup counts per taxon per sampleID because we keep life stage info -
+# Larva, Nymph, and Adult
 
 ###############################################
 ###############################################
@@ -384,7 +373,7 @@ tab_flat <- my_result_read_data$tables %>%
   as.data.frame()
 
 # View(tab_flat)
-plot_sample_space_time(my_result_read_data$tables$observation)
+plot_sample_space_time(my_result_read_data)
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
