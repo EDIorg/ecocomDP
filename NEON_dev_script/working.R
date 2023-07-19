@@ -1,3 +1,19 @@
+neon.data.product.id = "DP1.20107.001"
+
+# neon.data.list <- neonUtilities::loadByProduct(
+#   dpID = neon.data.product.id,
+#   site = c(c('ARIK','LECO')),
+#   startdate = "2016-01",
+#   enddate = "2018-11",
+#   token = Sys.getenv("NEON_TOKEN"),
+#   check.size = FALSE)
+# 
+# saveRDS(neon.data.list,"TEST_DATA/neon.data.list.RDS")
+
+neon.data.list <- readRDS("TEST_DATA/neon.data.list.RDS")
+
+my_token <- Sys.getenv("NEON_TOKEN")
+
 ##############################################################################################
 ##############################################################################################
 
@@ -6,10 +22,10 @@
 ##############################################################################################
 # mapping function for FISH
 map_neon.ecocomdp.20107.001.001 <- function(
-  neon.data.list,
-  neon.data.product.id = "DP1.20107.001",
-  ...){
-
+    neon.data.list,
+    neon.data.product.id = "DP1.20107.001",
+    ...){
+  
   #NEON target taxon group is FISH
   neon_method_id <- "neon.ecocomdp.20107.001.001"
   
@@ -205,7 +221,7 @@ map_neon.ecocomdp.20107.001.001 <- function(
   
   #### there should not be dups at this point
   #### check for dups
-  
+
   dup_counts <- fsh_dat_aggregate %>%
     group_by(taxonID, eventID) %>%
     summarize(
@@ -213,7 +229,7 @@ map_neon.ecocomdp.20107.001.001 <- function(
       agg_count_vals = paste(number_of_fish, collapse = "|"),
       n_obs_vals = paste(n_obs, collapse = "|")
     )
-  
+
   dups <- dup_counts %>%
     filter(n_agg_count_vals > 1)
   
