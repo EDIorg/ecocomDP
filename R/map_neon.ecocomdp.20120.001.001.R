@@ -66,59 +66,11 @@ map_neon.ecocomdp.20120.001.001 <- function(
   }
  
 
-  # location ----
-  # get relevant location info from the data
-  table_location_raw <- inv_fielddata %>%
-    dplyr::select(domainID, siteID, namedLocation, decimalLatitude,
-                  aquaticSiteType,
-                  decimalLongitude, elevation) %>%
-    dplyr::distinct() 
-  # create a location table, which has the lat long for each NEON site included in the data set
-  # start with the inv_fielddata table and pull out latitude, longitude, and elevation for each NEON site that occurs in the data
-  
-
-  table_location <- make_neon_location_table(
-    loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"))
-  
-  table_location_ancillary <- make_neon_ancillary_location_table(
-    loc_info = table_location_raw,
-    loc_col_names = c("domainID", "siteID", "namedLocation"),
-    ancillary_var_names = c("namedLocation","aquaticSiteType"))
-  
-
-  
-
-  
-  # taxon ----
-  # create a taxon table, which describes each taxonID that appears in the data set
-  # start with inv_taxonomyProcessed
-  table_taxon <- inv_taxonomyProcessed %>%
-    
-    # keep only the coluns listed below
-    dplyr::select(acceptedTaxonID, taxonRank, scientificName, identificationReferences) %>%
-    
-    # remove rows with duplicate information
-    dplyr::distinct() %>%
-    # rename some columns
-    dplyr::rename(taxon_id = acceptedTaxonID,
-           taxon_rank = taxonRank,
-           taxon_name = scientificName,
-           authority_system = identificationReferences) %>%
-    # concatenate different references for same taxonID
-    dplyr::group_by(taxon_id, taxon_rank, taxon_name) %>%
-    dplyr::summarize(
-      authority_system = paste(authority_system, collapse = "; "))
-  
-  
-
-  
-
-  
   # observation ----
   
   my_package_id <- paste0(
     neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
+  
   
   
   # Make the observation table.
@@ -163,15 +115,16 @@ map_neon.ecocomdp.20120.001.001 <- function(
       event_id = sampleID,
       neon_event_id = eventID,
       datetime = collectDate,
+      location_id = namedLocation,
       taxon_id = acceptedTaxonID) %>%
     # make a new column called package_id, assign it NA for all rows
-    dplyr::mutate(package_id = my_package_id) %>% 
-    dplyr::left_join(table_location, by = c("namedLocation" = "location_name"))
+    dplyr::mutate(package_id = my_package_id) %>%
+    # filter out invalid records
+    dplyr::filter(
+      !is.na(value),
+      value >= 0,
+      is.finite(value))
   
-  
-  
-
-    
   table_observation <- table_observation_raw %>%
     dplyr::select(observation_id, 
                   event_id, 
@@ -186,8 +139,6 @@ map_neon.ecocomdp.20120.001.001 <- function(
   
   
   
-  
-
   # ancillary observation table ----
   
   table_observation_ancillary <- make_neon_ancillary_observation_table(
@@ -209,9 +160,87 @@ map_neon.ecocomdp.20120.001.001 <- function(
       "publicationDate"))
   
   
+  
+  # location ----
+  # get relevant location info from the data
+  table_location_raw <- inv_fielddata %>%
+    dplyr::select(domainID, siteID, namedLocation, decimalLatitude,
+                  aquaticSiteType,
+                  decimalLongitude, elevation) %>%
+    dplyr::distinct() %>%
+    dplyr::filter(namedLocation %in% table_observation$location_id)
+  
+  # create a location table, which has the lat long for each NEON site included in the data set
+  # start with the inv_fielddata table and pull out latitude, longitude, and elevation for each NEON site that occurs in the data
+  
+  
+  table_location <- make_neon_location_table(
+    loc_info = table_location_raw,
+    loc_col_names = c("domainID", "siteID", "namedLocation"))
+  
+  table_location_ancillary <- make_neon_ancillary_location_table(
+    loc_info = table_location_raw,
+    loc_col_names = c("domainID", "siteID", "namedLocation"),
+    ancillary_var_names = c("namedLocation","aquaticSiteType"))
+  
+  
 
+  # taxon ----
+  # create a taxon table, which describes each taxonID that appears in the data set
+  # start with inv_taxonomyProcessed
+  
+  # This approach takes too long
+  # my_dots <- list(...)
+  # 
+  # if("token" %in% names(my_dots)){
+  #   my_token <- my_dots$token
+  # }else{
+  #   my_token <- NA
+  # }
+  # 
+  # # get macroinvert taxon table from NEON
+  # neon_inv_taxon_table <- neonOS::getTaxonList(
+  #   taxonType = "MACROINVERTEBRATE", 
+  #   token = my_token) %>%
+  #   dplyr::filter(taxonID %in% table_observation$taxon_id)
+  # 
+  # table_taxon <- neon_inv_taxon_table %>%
+  #   dplyr::select(taxonID, taxonRank, scientificName, nameAccordingToID) %>%
+  #   dplyr::distinct() %>% 
+  #   dplyr::rename(taxon_id = taxonID,
+  #                 taxon_rank = taxonRank,
+  #                 taxon_name = scientificName,
+  #                 authority_system = nameAccordingToID) %>%
+  #   dplyr::select(taxon_id,
+  #                 taxon_rank,
+  #                 taxon_name,
+  #                 authority_system) 
+  
 
-  # make dataset_summary -- required table
+  # create a taxon table, which describes each taxonID that appears in the data set
+  # start with inv_taxonomyProcessed
+  table_taxon <- inv_taxonomyProcessed %>%
+    
+    # keep only the coluns listed below
+    dplyr::select(acceptedTaxonID, taxonRank, scientificName, identificationReferences) %>%
+    
+    # remove rows with duplicate information
+    dplyr::distinct() %>%
+    # rename some columns
+    dplyr::rename(taxon_id = acceptedTaxonID,
+                  taxon_rank = taxonRank,
+                  taxon_name = scientificName,
+                  authority_system = identificationReferences) %>%
+    # concatenate different references for same taxonID
+    dplyr::group_by(taxon_id, taxon_rank, taxon_name) %>%
+    dplyr::summarize(
+      authority_system = paste(authority_system, collapse = "; ")) %>%
+    dplyr::filter(taxon_id %in% table_observation$taxon_id)
+  
+  
+  
+  
+  # make dataset_summary -- required table ----
   years_in_data <- table_observation$datetime %>% lubridate::year()
   years_in_data %>% ordered()
   

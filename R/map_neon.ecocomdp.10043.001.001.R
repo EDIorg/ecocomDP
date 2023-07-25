@@ -186,7 +186,21 @@ map_neon.ecocomdp.10043.001.001 <- function(
       targetTaxaPresent == "Y", # very few N or U
       sampleCondition == "No known compromise",
       taxonRank != "family") %>%
-    dplyr::distinct()
+    dplyr::distinct() %>%
+    
+    # remove invalde records
+    dplyr::filter(
+      is.finite(estimated_totIndividuals),
+      estimated_totIndividuals >= 0,
+      !is.na(estimated_totIndividuals),
+      
+      is.finite(proportionIdentified),
+      proportionIdentified >= 0,
+      !is.na(proportionIdentified),
+      
+      is.finite(trapHours),
+      trapHours >= 0,
+      !is.na(trapHours))
   
   
   

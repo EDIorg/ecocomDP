@@ -49,7 +49,12 @@ map_neon.ecocomdp.10003.001.001 <- function(
     -measuredBy,
     -samplingImpractical, -samplingImpracticalRemarks)
   
-  
+  # remove invalde records
+  data_bird <- data_bird %>%
+    dplyr::filter(
+    is.finite(clusterSize),
+    clusterSize >= 0,
+    !is.na(clusterSize))
   
   
   

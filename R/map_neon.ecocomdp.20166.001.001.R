@@ -125,7 +125,11 @@ map_neon.ecocomdp.20166.001.001 <- function(
       cell_density_standardized_unit = dplyr::case_when(
         algalSampleType %in% c("phytoplankton","seston") ~ "cells/mL",
         TRUE ~ "cells/cm2")) %>%
-    dplyr::filter(sampleCondition == "Condition OK")
+    dplyr::filter(
+      sampleCondition == "Condition OK",
+      !is.na(density),
+      density >= 0,
+      is.finite(density))
 
   
 
@@ -203,8 +207,8 @@ map_neon.ecocomdp.20166.001.001 <- function(
     dplyr::select(domainID, siteID, namedLocation, 
                   aquaticSiteType, 
                   decimalLatitude, decimalLongitude, elevation) %>%
-    dplyr::distinct() 
-  
+    dplyr::distinct()
+
   table_location <- make_neon_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"))
@@ -243,7 +247,8 @@ map_neon.ecocomdp.20166.001.001 <- function(
     # concatenate different references for same taxonID
     dplyr::group_by(taxon_id, taxon_rank, taxon_name) %>%
     dplyr::summarize(
-      authority_system = paste(authority_system, collapse = "; "))
+      authority_system = paste(authority_system, collapse = "; ")) %>%
+    dplyr::filter(taxon_id %in% table_observation$taxon_id)
   
   
   # make dataset_summary -- required table

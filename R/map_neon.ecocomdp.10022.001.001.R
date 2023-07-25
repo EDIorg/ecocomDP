@@ -221,6 +221,14 @@ map_neon.ecocomdp.10022.001.001 <- function(
       abundance = count,
       datetime = collectDate,
       taxon_id = taxonID) %>%
+    
+    # remove invalde records
+    dplyr::filter(
+      is.finite(abundance),
+      abundance >= 0,
+      !is.na(abundance)) %>%
+  
+    # creat required ecocomDP fields
     dplyr::mutate(
       package_id = my_package_id, 
       observation_id = paste0("obs_",1:nrow(.)),
@@ -230,10 +238,10 @@ map_neon.ecocomdp.10022.001.001 <- function(
       unit = "count per trap day") %>%
     dplyr::rowwise() %>%
     dplyr::mutate(
-      event_id = sampleID
-      # event_id = paste0(location_id, "_", trapID, "_", gsub("^(?i)[a-z]{4}_","",boutID)) #this is same as 'sampleID'
-    ) %>%
+      event_id = sampleID) %>%
     dplyr::ungroup()
+  
+
   
   # # check for dups
   # dup_check <- table_observation_raw %>% group_by(sampleID, taxon_id) %>%
@@ -283,7 +291,6 @@ map_neon.ecocomdp.10022.001.001 <- function(
   
   
   
-  
   # location ----
   # get relevant location info from the data, use neon helper functions
   # to make location and ancillary location tables
@@ -292,7 +299,8 @@ map_neon.ecocomdp.10022.001.001 <- function(
     dplyr::select(domainID, siteID, plotID, namedLocation,
                   decimalLatitude, decimalLongitude, elevation,
                   plotType, nlcdClass, geodeticDatum) %>%
-    dplyr::distinct() 
+    dplyr::distinct() %>%
+    dplyr::filter(namedLocation %in% table_observation$location_id)
   
   table_location <- make_neon_location_table(
     loc_info = table_location_raw,
@@ -307,27 +315,31 @@ map_neon.ecocomdp.10022.001.001 <- function(
   
   
   # taxonomy ----
-  # create a taxon table, which describes each taxonID that appears in the data set
-  # start with inv_taxonomyProcessed
+  my_dots <- list(...)
   
+  if("token" %in% names(my_dots)){
+    my_token <- my_dots$token
+  }else{
+    my_token <- NA
+  }
   
-  table_taxon <- beetles_counts %>%
-    
-    # keep only the coluns listed below
-    dplyr::select(taxonID, taxonRank, scientificName, identificationReferences) %>%
-    
-    # remove rows with duplicate information
-    dplyr::distinct() %>%
-    
-    # rename some columns
+  # get beetle taxon table from NEON
+  neon_bet_taxon_table <- neonOS::getTaxonList(
+    taxonType = "BEETLE", 
+    token = my_token) %>%
+    dplyr::filter(taxonID %in% table_observation$taxon_id)
+  
+  table_taxon <- neon_bet_taxon_table %>%
+    dplyr::select(taxonID, taxonRank, scientificName, nameAccordingToID) %>%
+    dplyr::distinct() %>% 
     dplyr::rename(taxon_id = taxonID,
                   taxon_rank = taxonRank,
                   taxon_name = scientificName,
-                  authority_system = identificationReferences) %>%
-    # concatenate different references for same taxonID
-    dplyr::group_by(taxon_id, taxon_rank, taxon_name) %>%
-    dplyr::summarise(
-      authority_system = paste(unique(c(authority_system)), collapse = "; "))
+                  authority_system = nameAccordingToID) %>%
+    dplyr::select(taxon_id,
+                  taxon_rank,
+                  taxon_name,
+                  authority_system) 
   
   
   

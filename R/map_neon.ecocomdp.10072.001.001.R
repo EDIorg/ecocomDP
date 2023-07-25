@@ -115,7 +115,11 @@ map_neon.ecocomdp.10072.001.001 <- function(
     dplyr::rename(uid = uid_pertrapnight, 
                   release = release_pertrapnight, 
                   publicationDate = publicationDate_pertrapnight) %>%
-    dplyr::filter(!is.na(taxonID)) %>%
+    dplyr::filter(!is.na(taxonID),
+                  !is.na(n_trap_nights_per_night_uid),
+                  is.finite(n_trap_nights_per_night_uid),
+                  n_trap_nights_per_night_uid > 0 
+                  ) %>%
     dplyr::distinct()
   
   

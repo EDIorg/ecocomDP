@@ -41,6 +41,7 @@ map_neon.ecocomdp.20219.001.001 <- function(
     dplyr::select(-additionalCoordUncertainty) %>%
     dplyr::distinct()
   
+
   
   # Observation table
   data_zooplankton <- zoo_taxonomyProcessed %>%
@@ -59,7 +60,11 @@ map_neon.ecocomdp.20219.001.001 <- function(
     dplyr::left_join(zoo_location, by = "sampleID") %>%
     dplyr::mutate(density = adjCountPerBottle / towsTrapsVolume,
                   density_unit = "count per liter") %>%
-    dplyr::distinct()
+    dplyr::distinct() %>%
+    dplyr::filter(
+      !is.na(density),
+      is.finite(density),
+      density >= 0)
   
   
   

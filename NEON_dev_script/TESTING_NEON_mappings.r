@@ -33,6 +33,9 @@ plot_sample_space_time(my_result_read_data)
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum())
 
+tab_flat$value %>% hist()
+tab_flat$value %>% log10() %>% hist()
+
 my_result_read_data$tables %>% base::list2env(.GlobalEnv)
 
 observation$observation_id %>% setdiff(observation_ancillary$observation_id)
@@ -62,6 +65,9 @@ tab_flat <- my_result_read_data$tables %>%
 
 # View(tab_flat)
 plot_sample_space_time(my_result_read_data)
+
+tab_flat$value %>% hist()
+tab_flat$value %>% log10() %>% hist()
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -128,6 +134,8 @@ tab_flat <- my_result_read_data$tables %>%
 # View(tab_flat)
 plot_sample_space_time(my_result_read_data)
 
+tab_flat$value %>% hist()
+tab_flat$value %>% log10() %>% hist()
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -187,6 +195,9 @@ tab_flat <- my_result_read_data$tables %>%
 # View(tab_flat)
 plot_sample_space_time(my_result_read_data)
 
+tab_flat$value %>% hist()
+tab_flat$value %>% log10() %>% hist()
+
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
   dplyr::filter(no_dup_taxa > 0)
@@ -216,6 +227,9 @@ tab_flat <- my_result_read_data$tables %>%
 
 # View(tab_flat)
 plot_sample_space_time(my_result_read_data)
+
+tab_flat$value %>% hist()
+tab_flat$value %>% log10() %>% hist()
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -252,6 +266,9 @@ tab_flat %>% group_by(event_id, LifeStage) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
   dplyr::filter(no_dup_taxa > 0)
 
+tab_flat$value %>% hist()
+tab_flat$value %>% log10() %>% hist()
+
 # dup counts per taxon per sampleID because we keep life stage info -
 # Larva, Nymph, and Adult
 
@@ -280,6 +297,9 @@ tab_flat <- my_result_read_data$tables %>%
 
 # View(tab_flat)
 plot_sample_space_time(my_result_read_data)
+
+tab_flat$value %>% hist()
+tab_flat$value %>% log10() %>% hist()
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -313,6 +333,9 @@ tab_flat <- my_result_read_data$tables %>%
 # View(tab_flat)
 plot_sample_space_time(my_result_read_data)
 
+tab_flat$value %>% hist()
+tab_flat$value %>% log10() %>% hist()
+
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
   dplyr::filter(no_dup_taxa > 0)
@@ -342,7 +365,10 @@ tab_flat <- my_result_read_data$tables %>%
   as.data.frame()
 
 # View(tab_flat)
-plot_sample_space_time(my_result_read_data$tables$observation)
+plot_sample_space_time(my_result_read_data)
+
+tab_flat$value %>% hist()
+tab_flat$value %>% log10() %>% hist()
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -374,6 +400,9 @@ tab_flat <- my_result_read_data$tables %>%
 
 # View(tab_flat)
 plot_sample_space_time(my_result_read_data)
+
+tab_flat$value %>% hist()
+tab_flat$value %>% log10() %>% hist()
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%

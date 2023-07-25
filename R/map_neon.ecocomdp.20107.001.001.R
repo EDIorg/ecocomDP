@@ -303,7 +303,13 @@ map_neon.ecocomdp.20107.001.001 <- function(
     by = "namedLocation",
     multiple = "all") %>%
     dplyr::filter(!is.na(taxonID)) %>%
-    dplyr::distinct()
+    dplyr::distinct() %>%
+    
+    # remove invalid records
+    dplyr::filter(
+      is.finite(catch_per_effort),
+      catch_per_effort >= 0,
+      !is.na(catch_per_effort))
   
   
   # #### there should not be dups at this point

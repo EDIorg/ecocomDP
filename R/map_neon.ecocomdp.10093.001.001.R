@@ -540,9 +540,22 @@ map_neon.ecocomdp.10093.001.001 <- function(
   # flat data to map to ecocomDP
   data_tick <- tck_merged_final %>%
     dplyr::rename(
-      taxonID = acceptedTaxonID)
+      taxonID = acceptedTaxonID) %>%
+    dplyr::filter(
+      !is.na(totalSampledArea),
+      totalSampledArea > 0,
+      is.finite(totalSampledArea))
   
+    # replace NA counts with zeroes
+    data_tick$IndividualCount[is.na(data_tick$IndividualCount)] <- 0
   
+    # only keep records with counts that make sense
+    data_tick <- data_tick %>%
+      dplyr::filter(
+        !is.na(IndividualCount),
+        IndividualCount >= 0,
+        is.finite(IndividualCount))
+    
   #location ----
   table_location_raw <- data_tick %>%
     dplyr::select(domainID, siteID, plotID, namedLocation, 
@@ -595,9 +608,6 @@ map_neon.ecocomdp.10093.001.001 <- function(
   
   # observation ----
   
-  # replace NA counts with zeroes
-  data_tick$IndividualCount[is.na(data_tick$IndividualCount)] <- 0
-  
   my_package_id <- paste0(
     neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
   
@@ -605,7 +615,7 @@ map_neon.ecocomdp.10093.001.001 <- function(
   
   
   table_observation_all <- data_tick %>%
-    dplyr::filter(!is.na(totalSampledArea) & totalSampledArea > 0) %>%
+    # dplyr::filter(!is.na(totalSampledArea) & totalSampledArea > 0) %>%
     dplyr::distinct() %>%
     # dplyr::rename(location_id, plotID, trapID) %>%
     dplyr::rename(location_id = namedLocation) %>%
