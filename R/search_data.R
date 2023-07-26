@@ -6,8 +6,7 @@
 #' @param num_years (numeric) Minimum and maximum number of years sampled the dataset should contain. Any datasets within this range will be returned.
 #' @param sd_years (numeric) Minimum and maximum standard deviation between survey dates (in years). Any datasets within this range will be returned.
 #' @param area (numeric) Bounding coordinates within which the data should originate. Accepted values are in decimal degrees and in the order: North, East, South, West. Any datasets with overlapping areas or contained points will be returned.
-#' @param boolean (character) Boolean operator to use when searching \code{text} and 
-#'     \code{taxa}. Supported operators are: "AND", "OR". Default is "AND".
+#' @param boolean (character) Boolean operator to use when searching \code{text} and \code{taxa}. Supported operators are: "AND", "OR". Default is "AND". Note, other parameters used in a search are combined with an implicit "AND".
 #'     
 #' @note This function may not work between 01:00 - 03:00 UTC on Wednesdays due to regular maintenance of the EDI Data Repository.
 #'     

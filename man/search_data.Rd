@@ -19,8 +19,7 @@ search_data(text, taxa, num_taxa, num_years, sd_years, area, boolean = "AND")
 
 \item{area}{(numeric) Bounding coordinates within which the data should originate. Accepted values are in decimal degrees and in the order: North, East, South, West. Any datasets with overlapping areas or contained points will be returned.}
 
-\item{boolean}{(character) Boolean operator to use when searching \code{text} and 
-\code{taxa}. Supported operators are: "AND", "OR". Default is "AND".}
+\item{boolean}{(character) Boolean operator to use when searching \code{text} and \code{taxa}. Supported operators are: "AND", "OR". Default is "AND". Note, other parameters used in a search are combined with an implicit "AND".}
 }
 \value{
 (tbl_df, tbl, data.frame) Search results with these feilds:
