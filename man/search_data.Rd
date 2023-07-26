@@ -9,7 +9,7 @@ search_data(text, taxa, num_taxa, num_years, sd_years, area, boolean = "AND")
 \arguments{
 \item{text}{(character) Text to search for in dataset titles, descriptions, and abstracts. Datasets matching any exact words or phrase will be returned. Can be a regular expression as used by \code{stringr::str_detect()}. Is not case sensitive. Works with \code{boolean}.}
 
-\item{taxa}{(character) Taxonomic rank values to search on. The full taxonomic hierarchy of each taxa in a dataset is searchable for EDI (including common names) but not yet NEON, in which cases the lowest level rank value is searchable.}
+\item{taxa}{(character) Taxonomic names to search on. To effectively search the taxonomic tree, it is advisable to start with specific taxonomic names and then gradually broaden the search to higher rank levels when needed. For instance, if searching for "Astragalus gracilis" (species) doesn't produce any results, try expanding the search to "Astragalus" (Genus), "Fabaceae" (Family), and so on. This approach accounts for variations in organism identification, ensuring a more comprehensive exploration of the taxonomic hierarchy.}
 
 \item{num_taxa}{(numeric) Minimum and maximum number of taxa the dataset should contain. Any datasets within this range will be returned.}
 
@@ -19,8 +19,7 @@ search_data(text, taxa, num_taxa, num_years, sd_years, area, boolean = "AND")
 
 \item{area}{(numeric) Bounding coordinates within which the data should originate. Accepted values are in decimal degrees and in the order: North, East, South, West. Any datasets with overlapping areas or contained points will be returned.}
 
-\item{boolean}{(character) Boolean operator to use when searching \code{text} and 
-\code{taxa}. Supported operators are: "AND", "OR". Default is "AND".}
+\item{boolean}{(character) Boolean operator to use when searching \code{text} and \code{taxa}. Supported operators are: "AND", "OR". Default is "AND". Note, other parameters used in a search are combined with an implicit "AND".}
 }
 \value{
 (tbl_df, tbl, data.frame) Search results with these feilds:
