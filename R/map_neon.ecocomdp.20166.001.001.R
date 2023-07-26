@@ -69,14 +69,12 @@ map_neon.ecocomdp.20166.001.001 <- function(
   }
   
   
-  #Observation table
+  #Observation table ----
   
   ###change NA"s to 0"s in tax_long_in data for calculations only
   # tax_long_in$perBottleSampleVolume[is.na(tax_long_in$perBottleSampleVolume)] <- 0
   #join algae biomass and taxonomy data 
-
   
-
   
   # Note that observational data are in the tax table returned by the lab, 
   # however, we need "fieldSampleVolume" from the biomass table to standardize
@@ -86,20 +84,23 @@ map_neon.ecocomdp.20166.001.001 <- function(
   alg_tax_biomass <- alg_biomass %>%
     dplyr::select(parentSampleID, sampleID, fieldSampleVolume, estPerBottleSampleVolume) %>%
     dplyr::distinct() %>%
-    dplyr::left_join(tax_long_in, by = "sampleID") %>%
-    dplyr::rowwise() %>%
+    dplyr::left_join(tax_long_in, 
+                     by = "sampleID",
+                     multiple = "all") %>%
     dplyr::mutate(perBottleSampleVolume =
                     dplyr::case_when(
                       is.na(perBottleSampleVolume) ~ estPerBottleSampleVolume,
                       perBottleSampleVolume == 0 ~ estPerBottleSampleVolume,
                       perBottleSampleVolume > 0 ~ perBottleSampleVolume)) %>%
     dplyr::distinct()
+  
+  
   # alg_tax_biomass <- biomass_in %>%
   #   dplyr::select(parentSampleID, sampleID, fieldSampleVolume) %>%
   #   dplyr::distinct() %>%
   #   dplyr::left_join(tax_long_in, by = "sampleID") %>%
   #   dplyr::distinct()
-
+  
   
   
   
@@ -112,7 +113,7 @@ map_neon.ecocomdp.20166.001.001 <- function(
     dplyr::distinct()
   
   
-
+  
   # create the observation table by joining with field_data_in
   table_observation_raw <- alg_tax_biomass %>% 
     dplyr::left_join(field_data_in, by = "parentSampleID") %>%
@@ -130,9 +131,39 @@ map_neon.ecocomdp.20166.001.001 <- function(
       !is.na(density),
       density >= 0,
       is.finite(density))
-
   
-
+  # check for dups ----
+  dup_samples <- table_observation_raw %>%
+    dplyr::group_by(
+      sampleID, acceptedTaxonID) %>%
+    dplyr::summarize(
+      n_recs = dplyr::n(),
+      # unique_vals = paste(unique(density), collapse = "|"),
+      density_aggregate = sum(density)) %>%
+    dplyr::filter(n_recs > 1)
+  
+  # filter out duplicates
+  obs_raw_no_dups <- table_observation_raw %>%
+    dplyr::anti_join(
+      dup_samples %>% dplyr::select(sampleID, acceptedTaxonID))
+  
+  # for dup taxa, use summed densities
+  obs_raw_summed_dups <- dup_samples %>% 
+    dplyr::select(
+      sampleID, acceptedTaxonID, density_aggregate) %>% 
+    dplyr::left_join(
+      table_observation_raw %>% 
+        dplyr::select(-density),
+      multiple = "first") %>%
+    dplyr::rename(
+      density = density_aggregate)
+  
+  # recombine data
+  table_observation_raw <- dplyr::bind_rows(
+    obs_raw_no_dups, 
+    obs_raw_summed_dups)
+  
+  
   my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
   
   # rename fields for ecocomDP
@@ -152,9 +183,9 @@ map_neon.ecocomdp.20166.001.001 <- function(
       event_id = neon_sample_id,
       variable_name = "cell density"
     )
-
   
-
+  
+  
   # make observation table
   table_observation <- table_observation_ecocomDP %>%
     dplyr::select(
@@ -171,7 +202,7 @@ map_neon.ecocomdp.20166.001.001 <- function(
   
   
   
-
+  
   
   
   # make observation ancillary table. First convert POSIXct POSIXt classed
@@ -197,18 +228,18 @@ map_neon.ecocomdp.20166.001.001 <- function(
       "release",
       "publicationDate"))
   
-
+  
   
   # location ----
   # get relevant location info from the data, use neon helper functions 
   # to make location and ancillary location tables
-
+  
   table_location_raw <- table_observation_raw %>%
     dplyr::select(domainID, siteID, namedLocation, 
                   aquaticSiteType, 
                   decimalLatitude, decimalLongitude, elevation) %>%
     dplyr::distinct()
-
+  
   table_location <- make_neon_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "namedLocation"))
@@ -222,7 +253,7 @@ map_neon.ecocomdp.20166.001.001 <- function(
   
   
   # # Taxon table using available data
- 
+  
   table_taxon <- tax_long_in %>%
     
     # keep only the coluns listed below
@@ -255,7 +286,7 @@ map_neon.ecocomdp.20166.001.001 <- function(
   years_in_data <- table_observation$datetime %>% lubridate::year()
   # years_in_data %>% ordered()
   
- 
+  
   
   table_dataset_summary <- data.frame(
     package_id = table_observation$package_id[1],

@@ -165,7 +165,11 @@ tab_flat <- my_result_read_data$tables %>%
   as.data.frame()
 
 # View(tab_flat)
-plot_sample_space_time(my_result_read_data$tables$observation)
+plot_sample_space_time(my_result_read_data)
+
+# only look at percent cover values
+tab_flat$value %>% na.omit() %>% hist()
+tab_flat$value %>% na.omit() %>% log10() %>% hist()
 
 tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
@@ -346,9 +350,10 @@ tab_flat %>% group_by(event_id) %>%
 #ALGAE -- event_id = neon_sample_id
 # neon_event_id == NEON eventID, which has multiple samples
 # no dup taxa should occur within an event_id/neon_sample_id -- but have been seeing some
-# shoudl we add dup taxa densities together?
+# shoudl we add dup taxa densities together? -- updated to sum duplicates
 
 # takes a long time to run, look into taxon tab creation and ancillary tab creation
+# -- fixed this - was using rowwise where not necessary
 my_result_read_data <- read_data(
   id = "neon.ecocomdp.20166.001.001",
   site = c('COMO','SUGG'), 
@@ -374,7 +379,7 @@ tab_flat %>% group_by(event_id) %>%
   summarize(no_dup_taxa = taxon_id %>% duplicated() %>% sum()) %>%
   dplyr::filter(no_dup_taxa > 0)
 
-# SUGG.20171113.EPIPHYTON.8
+
 
 ###############################################
 ###############################################
