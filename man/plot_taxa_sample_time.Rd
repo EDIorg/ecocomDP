@@ -19,3 +19,4 @@ plot_taxa_sample_time(observation, id = NA_character_, alpha = 1)
 \description{
 This function has been deprecated. Use \code{plot_sample_space_time()} instead.
 }
+\keyword{internal}
