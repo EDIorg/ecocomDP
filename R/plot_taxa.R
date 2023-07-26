@@ -677,6 +677,7 @@ plot_sample_space_time <- function(data,
 #' @return (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device
 #'
 #' @export
+#' @keywords internal
 #'
 plot_taxa_sample_time <- function(observation, id = NA_character_, alpha = 1) {
   .Deprecated("plot_sample_space_time")
