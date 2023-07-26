@@ -599,8 +599,8 @@ plot_sample_space_time <- function(data,
     dplyr::group_by(
       across(
         all_of(unique(
-        c("location_id","datetime", 
-          color_var, shape_var))))) %>%
+          c("location_id","datetime", 
+            color_var, shape_var))))) %>%
     dplyr::summarize(
       `Sampling\nevents` = .data$event_id %>% 
         unique %>% 
@@ -608,7 +608,7 @@ plot_sample_space_time <- function(data,
         as.integer)
   
   
-
+  
   # Scale font size
   uniy <- length(unique(obs_summary$location_id))
   if (uniy < 30) {
@@ -620,7 +620,7 @@ plot_sample_space_time <- function(data,
   }
   
   
-
+  
   # Plot
   p <- ggplot2::ggplot() +
     ggplot2::geom_point(
@@ -646,7 +646,7 @@ plot_sample_space_time <- function(data,
       plot.margin = ggplot2::margin(0.1, 0.25, 0.1, 0.1, "in"),
       axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
   
-
+  
   # do not plot legend for variables that only have one level
   if(length(unlist(unique(obs_summary[,color_var]))) == 1){
     p <- p + ggplot2::guides(color = "none")}

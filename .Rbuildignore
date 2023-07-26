@@ -1,6 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^NEON_dev_script$
+^TEST_DATA$
 ^codemeta\.json$
 ^cran-comments\.md$
 ^README\.Rmd$

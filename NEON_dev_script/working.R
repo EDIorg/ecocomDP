@@ -1,10 +1,26 @@
+neon.data.product.id = "DP1.20166.001"
+
+# neon.data.list <- neonUtilities::loadByProduct(
+#   dpID = neon.data.product.id,
+#   site = c('COMO','SUGG'), 
+#   startdate = "2017-06",
+#   enddate = "2018-09",
+#   token = Sys.getenv("NEON_TOKEN"),
+#   check.size = FALSE)
+# 
+# saveRDS(neon.data.list,"TEST_DATA/neon.data.list.RDS")
+
+neon.data.list <- readRDS("TEST_DATA/neon.data.list.RDS")
+
+my_token <- Sys.getenv("NEON_TOKEN")
+
 ##############################################################################################
 # @describeIn map_neon_data_to_ecocomDP This method will retrieve density data for ALGAE from neon.data.product.id DP1.20166.001 (Periphyton, seston, and phytoplankton collection) from the NEON data portal and map to the ecocomDP format
 ##############################################################################################
 map_neon.ecocomdp.20166.001.001 <- function(
-  neon.data.list,
-  neon.data.product.id = "DP1.20166.001",
-  ...
+    neon.data.list,
+    neon.data.product.id = "DP1.20166.001",
+    ...
 ){
   #NEON target taxon group is ALGAE
   neon_method_id <- "neon.ecocomdp.20166.001.001"
@@ -94,7 +110,7 @@ map_neon.ecocomdp.20166.001.001 <- function(
                       perBottleSampleVolume > 0 ~ perBottleSampleVolume)) %>%
     dplyr::distinct()
   
-  
+ 
   # alg_tax_biomass <- biomass_in %>%
   #   dplyr::select(parentSampleID, sampleID, fieldSampleVolume) %>%
   #   dplyr::distinct() %>%
@@ -157,13 +173,13 @@ map_neon.ecocomdp.20166.001.001 <- function(
       multiple = "first") %>%
     dplyr::rename(
       density = density_aggregate)
-  
+    
   # recombine data
   table_observation_raw <- dplyr::bind_rows(
     obs_raw_no_dups, 
     obs_raw_summed_dups)
   
-  
+
   my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
   
   # rename fields for ecocomDP
@@ -312,3 +328,4 @@ map_neon.ecocomdp.20166.001.001 <- function(
   
   return(out_list)
 }
+

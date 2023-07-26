@@ -1,3 +1,14 @@
+neon.data.product.id <- "DP1.10043.001"
+
+neon.data.list <- neonUtilities::loadByProduct(
+  dpID = neon.data.product.id,
+  site= c("NIWO","DSNY"),
+  startdate = "2016-01",
+  enddate = "2017-11",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+
 ##############################################################################################
 ##############################################################################################
 
@@ -9,7 +20,6 @@ map_neon.ecocomdp.10043.001.001 <- function(
   neon.data.list,
   neon.data.product.id = "DP1.10043.001",
   ...){
-  
   #NEON target taxon group is MOSQUITO
   neon_method_id <- "neon.ecocomdp.10043.001.001"
   
@@ -39,7 +49,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
   
   # Remove rows with missing important data, replacing blank with NA and factors with characters
   
-  
+
   mos_trapping <- mos_allTabs$mos_trapping %>%
     dplyr::mutate(
       setDate = as.character(setDate),
@@ -88,7 +98,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
     dplyr::mutate_if(is.factor, as.character) %>% 
     dplyr::distinct()
   
-  
+
   
   # Clear expertTaxonomist:individualCount if it is 0 and there is no taxonID. These aren't ID'ed samples
   mos_expertTaxonomistIDProcessed$individualCount[
@@ -99,7 +109,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
   ####
   # Join data ----
   
-  
+
   
   # Add trapping info to sorting table 
   # Note - 59 trapping records have no associated sorting record and don't come through the left_join (even though targetTaxaPresent was set to Y or U)
@@ -122,52 +132,13 @@ map_neon.ecocomdp.10043.001.001 <- function(
     dplyr::left_join(dplyr::select(
       mos_expertTaxonomistIDProcessed,
       -c(collectDate,domainID,namedLocation,plotID,setDate,siteID,targetTaxaPresent)),
-      by = c('subsampleID',"subsampleCode"),
+                     by = c('subsampleID',"subsampleCode"),
       suffix = c("","_expertID"),
       multiple = "all") 
+ 
   
   
-  
-  
-  # check for duplicates for taxonIDs in a sampleID, add counts together ----
-  dup_counts <- mos_dat %>%
-    dplyr::group_by(sampleID, taxonID) %>%
-    dplyr::summarize(
-      n_recs = dplyr::n(),
-      individualCount_corrected = sum(individualCount))
-  
-  # filter out recs without duplicates
-  mos_dat_no_dups <- mos_dat %>%
-    dplyr::inner_join(
-      dup_counts %>%
-        dplyr::select(
-          sampleID, taxonID, n_recs) %>%
-        dplyr::filter(
-          n_recs == 1)) %>%
-    dplyr::select(
-      -n_recs) %>%
-    dplyr::distinct()
-  
-  # join summed counts back with data
-  mos_dat_corrected_dups <- dup_counts %>%
-    dplyr::filter(n_recs > 1) %>%
-    dplyr::left_join(
-      mos_dat %>%
-        dplyr::select(-individualCount),
-      multiple = "first") %>%
-    dplyr::distinct() %>%
-    dplyr::rename(
-      individualCount = individualCount_corrected) %>%
-    dplyr::select(-n_recs)
-  
-  # combine good recs with corrected recs
-  mos_dat <- dplyr::bind_rows(
-    mos_dat_no_dups,
-    mos_dat_corrected_dups)
-  
-  
-  
-  
+ 
   # Rename columns and add estimated total individuals for each subsample/species/sex with identification, where applicable
   #  Estimated total individuals = # individuals iD'ed * (total subsample weight/ subsample weight)
   mos_dat <- mos_dat %>%
@@ -176,7 +147,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
         !is.na(individualCount),
         round(individualCount / proportionIdentified), NA))
   
-  
+
   
   
   # exclude records with taxonID is NA and remove dups
@@ -186,26 +157,13 @@ map_neon.ecocomdp.10043.001.001 <- function(
       targetTaxaPresent == "Y", # very few N or U
       sampleCondition == "No known compromise",
       taxonRank != "family") %>%
-    dplyr::distinct() %>%
-    
-    # remove invalde records
-    dplyr::filter(
-      is.finite(estimated_totIndividuals),
-      estimated_totIndividuals >= 0,
-      !is.na(estimated_totIndividuals),
-      
-      is.finite(proportionIdentified),
-      proportionIdentified >= 0,
-      !is.na(proportionIdentified),
-      
-      is.finite(trapHours),
-      trapHours >= 0,
-      !is.na(trapHours))
+    dplyr::distinct()
   
   
   
+
   
-  
+
   #location ----
   table_location_raw <- mos_dat %>%
     dplyr::select(domainID, siteID, namedLocation, 
@@ -224,7 +182,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
   
   
   
-  
+
   # taxon ----
   
   # Old version: Get taxon info from published data product
@@ -273,9 +231,9 @@ map_neon.ecocomdp.10043.001.001 <- function(
                   taxon_name,
                   authority_system) 
   
+
   
-  
-  
+
   
   
   # observation ----
@@ -345,7 +303,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
       )
     ) %>%
     dplyr::distinct()
-  
+      
   
   
   # make data summary table ----
@@ -363,7 +321,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
   )
   
   
-  
+
   # return ----
   # list of tables to be returned, with standardized names for elements
   out_list <- list(

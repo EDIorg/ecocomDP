@@ -4,7 +4,14 @@
 \alias{plot_sample_space_time}
 \title{Plot dates and times samples were collected or observations were made}
 \usage{
-plot_sample_space_time(data, id = NA_character_, alpha = 1, observation = NULL)
+plot_sample_space_time(
+  data,
+  id = NA_character_,
+  alpha = 1,
+  color_var = "package_id",
+  shape_var = "package_id",
+  observation = NULL
+)
 }
 \arguments{
 \item{data}{(list or tbl_df, tbl, data.frame) The dataset object returned by \code{read_data()}, a named list of tables containing the observation table, or a flat table containing columns of the observation table.}
@@ -12,6 +19,10 @@ plot_sample_space_time(data, id = NA_character_, alpha = 1, observation = NULL)
 \item{id}{(character) Identifier of dataset to be used in plot subtitles. Is automatically assigned when \code{data} is a dataset object containing the \code{id} field, or is a table containing the package_id column.}
 
 \item{alpha}{(numeric) Alpha-transparency scale of data points. Useful when many data points overlap. Allowed values are between 0 and 1, where 1 is 100\% opaque. Default is 1.}
+
+\item{color_var}{(character) Name of column to use to assign colors to the points on the plot}
+
+\item{shape_var}{(character) Name of column to use to assign shapes to the points on the plot}
 
 \item{observation}{(tbl_df, tbl, data.frame) DEPRECATED: Use \code{data} instead.}
 }

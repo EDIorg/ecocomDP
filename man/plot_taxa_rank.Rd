@@ -8,7 +8,7 @@ plot_taxa_rank(
   data,
   id = NA_character_,
   facet_var = NA_character_,
-  facet_scales = "free",
+  facet_scales = "free_x",
   alpha = 1
 )
 }

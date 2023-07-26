@@ -22,9 +22,9 @@ plot_sites(
 
 \item{labels}{(logical) Argument to show labels of each US state. Default is TRUE.}
 
-\item{color_var}{(character) Argument to assign colors to the points on the plot}
+\item{color_var}{(character) Name of column to use to assign colors to the points on the plot}
 
-\item{shape_var}{(character) Argument to assign shapes to the points on the plot}
+\item{shape_var}{(character) Name of column to use to assign shapes to the points on the plot}
 }
 \value{
 (gg, ggplot) A gg, ggplot object if assigned to a variable, otherwise a plot to your active graphics device

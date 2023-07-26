@@ -1,3 +1,19 @@
+neon.data.product.id = "DP1.10043.001"
+
+# neon.data.list <- neonUtilities::loadByProduct(
+#   dpID = neon.data.product.id,
+#   site= c("NIWO","DSNY"),
+#   startdate = "2016-01",
+#   enddate = "2017-11",
+#   token = Sys.getenv("NEON_TOKEN"),
+#   check.size = FALSE)
+# 
+# saveRDS(neon.data.list,"TEST_DATA/neon.data.list.RDS")
+
+neon.data.list <- readRDS("TEST_DATA/neon.data.list.RDS")
+
+my_token <- Sys.getenv("NEON_TOKEN")
+
 ##############################################################################################
 ##############################################################################################
 
@@ -6,10 +22,10 @@
 ##############################################################################################
 # mapping function for MOSQUITO
 map_neon.ecocomdp.10043.001.001 <- function(
-  neon.data.list,
-  neon.data.product.id = "DP1.10043.001",
-  ...){
-  
+    neon.data.list,
+    neon.data.product.id = "DP1.10043.001",
+    ...){
+ 
   #NEON target taxon group is MOSQUITO
   neon_method_id <- "neon.ecocomdp.10043.001.001"
   
@@ -147,7 +163,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
     dplyr::select(
       -n_recs) %>%
     dplyr::distinct()
-  
+
   # join summed counts back with data
   mos_dat_corrected_dups <- dup_counts %>%
     dplyr::filter(n_recs > 1) %>%
@@ -164,8 +180,8 @@ map_neon.ecocomdp.10043.001.001 <- function(
   mos_dat <- dplyr::bind_rows(
     mos_dat_no_dups,
     mos_dat_corrected_dups)
-  
-  
+    
+
   
   
   # Rename columns and add estimated total individuals for each subsample/species/sex with identification, where applicable
@@ -186,21 +202,7 @@ map_neon.ecocomdp.10043.001.001 <- function(
       targetTaxaPresent == "Y", # very few N or U
       sampleCondition == "No known compromise",
       taxonRank != "family") %>%
-    dplyr::distinct() %>%
-    
-    # remove invalde records
-    dplyr::filter(
-      is.finite(estimated_totIndividuals),
-      estimated_totIndividuals >= 0,
-      !is.na(estimated_totIndividuals),
-      
-      is.finite(proportionIdentified),
-      proportionIdentified >= 0,
-      !is.na(proportionIdentified),
-      
-      is.finite(trapHours),
-      trapHours >= 0,
-      !is.na(trapHours))
+    dplyr::distinct()
   
   
   

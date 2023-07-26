@@ -1,3 +1,13 @@
+neon.data.list <- neonUtilities::loadByProduct(
+  dpID = "DP1.10003.001",
+  site= c("NIWO","DSNY"),
+  startdate = "2016-01",
+  enddate = "2017-11",
+  token = Sys.getenv("NEON_TOKEN"),
+  check.size = FALSE)
+
+neon.data.product.id = "DP1.10003.001"
+
 ##############################################################################################
 ##############################################################################################
 
@@ -25,7 +35,7 @@ map_neon.ecocomdp.10003.001.001 <- function(
   
   
   allTabs_bird <- neon.data.list
-  
+
   
   # extract NEON data tables from list object ---- 
   allTabs_bird$brd_countdata <- tidyr::as_tibble(allTabs_bird$brd_countdata)
@@ -49,17 +59,12 @@ map_neon.ecocomdp.10003.001.001 <- function(
     -measuredBy,
     -samplingImpractical, -samplingImpracticalRemarks)
   
-  # remove invalde records
-  data_bird <- data_bird %>%
-    dplyr::filter(
-    is.finite(clusterSize),
-    clusterSize >= 0,
-    !is.na(clusterSize))
   
-  
+
+
   
   #location ----
-  
+
   
   table_location_raw <- data_bird %>%
     dplyr::select(domainID, siteID, plotID, namedLocation, 
@@ -106,11 +111,11 @@ map_neon.ecocomdp.10003.001.001 <- function(
                   taxon_rank,
                   taxon_name,
                   authority_system) 
+
   
   
-  
-  
-  
+
+
   # observation ----
   my_package_id = paste0(
     neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
@@ -142,7 +147,7 @@ map_neon.ecocomdp.10003.001.001 <- function(
       variable_name,
       value,
       unit)
-  
+
   table_observation_ancillary <- make_neon_ancillary_observation_table(
     obs_wide = table_observation_wide_all,
     ancillary_var_names = c(
@@ -169,7 +174,7 @@ map_neon.ecocomdp.10003.001.001 <- function(
       "remarks",
       "release",
       "publicationDate"))
-  
+
   # data summary ----
   # make dataset_summary -- required table
   

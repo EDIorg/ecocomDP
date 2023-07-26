@@ -1,3 +1,23 @@
+# id = "neon.ecocomdp.10072.001.001"
+# site= c("NIWO","DSNY")
+# startdate = "2016-01"
+# enddate = "2017-11"
+# token = Sys.getenv("NEON_TOKEN")
+# check.size = FALSE
+
+my_data_list <- neonUtilities::loadByProduct(
+  startdate = "2022-06", 
+  enddate = "2022-08",
+  dpID= 'DP1.10072.001',
+  check.size = FALSE, 
+  site = c("HARV", "SCBI", "UNDE"),
+  package='basic',
+  token = Sys.getenv('NEON_TOKEN'))
+
+# neon.data.product.id = "DP1.10072.001"
+
+data_mapping_result <- map_neon.ecocomdp.10072.001.001(neon.data.list = my_data_list)
+
 ##############################################################################################
 ##############################################################################################
 
@@ -9,7 +29,6 @@ map_neon.ecocomdp.10072.001.001 <- function(
   neon.data.list,
   neon.data.product.id = "DP1.10072.001",
   ...){
-  
   
   ### This code restructures small mammal data (raw abundances) from NEON
   ### which has been downloaded using neonUtilities::loadByProduct() 
@@ -84,9 +103,9 @@ map_neon.ecocomdp.10072.001.001 <- function(
   dat.mam <- dat.mam %>% 
     dplyr::filter(
       trapStatus %in% c("5 - capture","4 - more than 1 capture in one trap")) %>%
-    #SP NOTE/QUESTION FOR ERIC: I added speciesGroup to capture the species complexes that are
-    #impossible to distinguish in some regions (e.g., PELEPEMA)
-    #SP The first filtering step gets rid of unprocessed individuals since they don't have taxonIDs at a useful level
+  #SP NOTE/QUESTION FOR ERIC: I added speciesGroup to capture the species complexes that are
+  #impossible to distinguish in some regions (e.g., PELEPEMA)
+  #SP The first filtering step gets rid of unprocessed individuals since they don't have taxonIDs at a useful level
     dplyr::filter(
       taxonRank %in% c("genus", "species", "subspecies", "speciesGroup",NA),
       taxonID %in% targetTaxa$taxonID) %>%
@@ -115,15 +134,11 @@ map_neon.ecocomdp.10072.001.001 <- function(
     dplyr::rename(uid = uid_pertrapnight, 
                   release = release_pertrapnight, 
                   publicationDate = publicationDate_pertrapnight) %>%
-    dplyr::filter(!is.na(taxonID),
-                  !is.na(n_trap_nights_per_night_uid),
-                  is.finite(n_trap_nights_per_night_uid),
-                  n_trap_nights_per_night_uid > 0 
-                  ) %>%
+    dplyr::filter(!is.na(taxonID)) %>%
     dplyr::distinct()
   
   
-  
+
   #location ----
   table_location_raw <- data_small_mammal %>%
     dplyr::select(domainID, siteID, plotID, plotType, namedLocation, 
@@ -164,7 +179,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
                   authority_system) 
   
   
-  
+
   # observation ----
   
   my_package_id <- paste0(neon_method_id, ".", format(Sys.time(), "%Y%m%d%H%M%S"))
@@ -200,7 +215,7 @@ map_neon.ecocomdp.10072.001.001 <- function(
       n_trap_nights_per_bout_per_plot = sum(n_trap_nights_per_night_uid),
       n_nights_per_bout = length(unique(nightuid))) %>%
     dplyr::ungroup()
-  
+
   # calculate counts
   table_raw_counts <- table_observation_all %>%
     dplyr::select(
@@ -288,5 +303,6 @@ map_neon.ecocomdp.10072.001.001 <- function(
     dataset_summary = table_dataset_summary)
   
   return(out_list)
+
 }
   
