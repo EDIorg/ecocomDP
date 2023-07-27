@@ -52,7 +52,10 @@
         "totalLength", "totalSampledArea", "totalSerialBouts", "totalWeight",
         "towsTrapsVolume", "trapCoordinate", "trapHours", "trapID", "trapStatus",
         "trappingDays", "uid", "unidentifiedCount", "value", "variable_name", "weight", "year",
-        "zooMaximumLength", "zooMeanLength", "zooMinimumLength", "annotation_dictionary_table")
+        "zooMaximumLength", "zooMeanLength", "zooMinimumLength", "annotation_dictionary_table",
+        "n_recs", "individualCount_corrected", "proportionIdentified", "estimated_totIndividuals",
+        "taxonProtocolCategory", "uid_pertrapnight", "release_pertrapnight", "publicationDate_pertrapnight",
+        "n_agg_count_vals", "n_recs", "density_aggregate")
     )
   
   
