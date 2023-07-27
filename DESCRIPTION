@@ -7,7 +7,7 @@ Description: Work with the Ecological Community Data Design Pattern. 'ecocomDP'
     repositories, and with methods that keep the derived data up-to-date as the 
     underlying sources change. Described in O'Brien et al. (2021), 
     <doi:10.1016/j.ecoinf.2021.101374>.
-Version: 1.2.2
+Version: 1.3.0
 Authors@R: 
     c(person(given = "Colin",
              family = "Smith", 

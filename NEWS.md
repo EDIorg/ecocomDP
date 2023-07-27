@@ -1,3 +1,13 @@
+# ecocomDP 1.3.0
+
+
+## Fixes
+* Fixed and cleaned up NEON data mapping functions to work with latest NEON data release, return abundance values that are finite and non-negative.
+* Added code to resolve duplicate taxon counts within sample/event IDs for NEON data.
+
+## Enhancements
+* Updated plotting functions.
+
 # ecocomDP 1.2.2
 
 ## Fixes
