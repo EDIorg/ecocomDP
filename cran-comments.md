@@ -1,10 +1,10 @@
 ## Revision
-This release fixes failing CRAN Checks and two additional issues.
+This release fixes data mapping issues and improves plotting functions.
 
 ## Test environments
 * x86_64-w64-mingw32 (64-bit), (win-builder), R 4.2.3 (2023-03-15 ucrt)
 * x86_64-w64-mingw32 (64-bit), (win-builder), R 4.3.1 (2023-06-16 ucrt)
-* x86_64-w64-mingw32 (64-bit), (win-builder), R-dev (2023-06-17 r84564 ucrt)
+* x86_64-w64-mingw32 (64-bit), (win-builder), R-dev (2023-07-21 r84722 ucrt)
 * x86_64-w64-mingw32 (R-hub), R 4.3.0 (2023-04-21 ucrt)
 * x86_64-w64-mingw32 (R-hub), R-devel (2023-05-01 r84363 ucrt)
 * aarch64-apple-darwin20, (local machine), R 4.3.0
@@ -31,7 +31,7 @@ Found the following files/directories:
 
 This note is a recognized bug on R-hub test platforms. This note occurs on:
 * x86_64-w64-mingw32 (R-hub), R 4.3.0 (2023-04-21 ucrt)
-* x86_64-w64-mingw32 (R-hub), R-devel (2023-05-01 r84363 ucrt)
+* x86_64-w64-mingw32 (64-bit), (win-builder), R-dev (2023-07-21 r84722 ucrt)
 For more information see [here](https://community.rstudio.com/t/prep-error-during-rhub-check-for-cran/159467).
 
 * checking HTML version of manual ... NOTE
@@ -55,4 +55,4 @@ This note indicates a couple plotting functions are taking a little more time th
 ## Downstream dependencies
 There are currently no downstream dependencies for this package.
 
-Many thanks for your work! :)
+Thank you! :)
