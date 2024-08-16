@@ -319,6 +319,7 @@ testthat::test_that("plot_*()", {
 # read_data() -----------------------------------------------------------------
 
 testthat::test_that("read_data()", {
+  testthat::skip_on_cran()
   # id
   expect_error(
     validate_arguments("read_data", as.list(list(id = 1))), 
@@ -420,6 +421,7 @@ testthat::test_that("read_data()", {
 # save_data() -----------------------------------------------------------------
 
 testthat::test_that("save_data()", {
+  testthat::skip_on_cran()
   # path
   expect_null(validate_arguments("save_data", as.list(list(path = tempdir())))) # exists
   expect_error(
