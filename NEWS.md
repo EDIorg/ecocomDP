@@ -1,3 +1,8 @@
+# ecocomDP 1.3.2
+
+## Fixes
+* Improved ping_edi() function to gracefully handle network errors and disabled network-dependent tests to align with CRAN policies and prevent CRAN check issues. See issue [#154](https://github.com/EDIorg/ecocomDP/issues/154).
+
 # ecocomDP 1.3.1
 
 ## Fixes
