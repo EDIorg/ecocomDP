@@ -1131,13 +1131,19 @@ parse_delim <- function(x){
 # Is the EDI Data Repository accessible?
 #
 ping_edi <- function() {
-  r <- httr::RETRY("GET", url = "https://pasta.lternet.edu/package/eml/edi/759") # Warn if EDI is down
-  if (httr::status_code(r) != 200) {
-    stop("The EDI Repository is down for regular maintenance (Wednesday 01:00",
-         " - 03:00 UTC). If you have reached this message outside maintenance",
-         " hours, then there is an unexpected issue that will be resolved ",
-         "shortly. Our apologies for the inconvenience. Please try again ",
-         "later.", call. = FALSE)
+  r <- tryCatch(
+    httr::RETRY("GET", url = "https://pasta.lternet.edu/package/eml/edi/759", quiet = TRUE), # Warn if EDI is down
+    error = function(e) FALSE,
+    warning = function(w) FALSE
+  )
+  if (is.logical(r)) {
+    stop(
+      "The EDI Repository is down for regular maintenance (Wednesday 01:00",
+      " - 03:00 UTC). If you have reached this message outside maintenance",
+      " hours, then there is an unexpected issue that will be resolved ",
+      "shortly. Our apologies for the inconvenience. Please try again ",
+      "later."
+    )
   }
 }
 
