@@ -12,7 +12,7 @@
    version="1.1"
    inkscape:version="1.2.1 (9c6d41e, 2022-07-14)"
    sodipodi:docname="ecocomDP.svg"
-   inkscape:export-filename="/Users/mob/Desktop/EDI_files_at_msi/EDI/thematic_standardization/ecocomDP_pop_com/git_checkouts/ecocomDP/documentation/model/ecocomDP_foo.png"
+   inkscape:export-filename="ecocomDP.png"
    inkscape:export-xdpi="300"
    inkscape:export-ydpi="300"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -82,8 +82,8 @@
      inkscape:zoom="1.1524954"
      inkscape:cx="426.89975"
      inkscape:cy="668.54931"
-     inkscape:window-x="61"
-     inkscape:window-y="25"
+     inkscape:window-x="-23"
+     inkscape:window-y="39"
      inkscape:window-maximized="0"
      inkscape:current-layer="g4240"
      inkscape:showpageshadow="2"
@@ -1009,7 +1009,7 @@
        id="text4422a"
        font-size="11.00"
        y="454.9259"
-       x="461.73984">variable_attributes</text>
+       x="461.73984">variable_attribute</text>
     <polygon
        transform="matrix(1.1167735,0,0,0.95450879,195.72786,623.59801)"
        style="fill:#bed1b8;stroke:none"
