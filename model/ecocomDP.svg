@@ -81,11 +81,11 @@
      showgrid="false"
      inkscape:zoom="1.1524954"
      inkscape:cx="426.89975"
-     inkscape:cy="668.54931"
-     inkscape:window-x="-23"
-     inkscape:window-y="39"
+     inkscape:cy="385.68484"
+     inkscape:window-x="76"
+     inkscape:window-y="31"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g4240"
+     inkscape:current-layer="g4402"
      inkscape:showpageshadow="2"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
@@ -189,6 +189,44 @@
        style="fill:none;stroke:#000000"
        id="polygon3979"
        points="165.5,-403.2 8.5,-403.2 8.5,-403.2 8.5,-422.2 165.5,-422.2 " />
+    <polygon
+       transform="translate(438.98642,701.15086)"
+       style="fill:none;stroke:#000000"
+       id="polygon4797"
+       points="165.5,-403.2 8.5,-403.2 8.5,-403.2 8.5,-422.2 165.5,-422.2 " />
+    <polygon
+       transform="translate(438.81555,720.51034)"
+       style="fill:none;stroke:#000000"
+       id="polygon4797-9"
+       points="8.5,-422.2 165.5,-422.2 165.5,-403.2 8.5,-403.2 " />
+    <text
+       style="font-size:11px;line-height:0%;font-family:Helvetica, sans-Serif;text-anchor:start"
+       id="text3981-9"
+       font-size="11.00"
+       y="310.55228"
+       x="450.34363">dataset_level_bio_organization</text>
+    <polygon
+       transform="translate(438.81554,739.38244)"
+       style="fill:none;stroke:#000000"
+       id="polygon4797-9-9"
+       points="8.5,-422.2 165.5,-422.2 165.5,-403.2 8.5,-403.2 " />
+    <polygon
+       transform="translate(438.81555,758.90529)"
+       style="fill:none;stroke:#000000"
+       id="polygon4797-9-9-4"
+       points="8.5,-403.2 8.5,-422.2 165.5,-422.2 165.5,-403.2 " />
+    <text
+       style="font-size:11px;line-height:0%;font-family:Helvetica, sans-Serif;text-anchor:start"
+       id="text3981-3"
+       font-size="11.00"
+       y="330.07513"
+       x="450.99442">observation_finest_level</text>
+    <text
+       style="font-size:11px;line-height:0%;font-family:Helvetica, sans-Serif;text-anchor:start"
+       id="text3981-30"
+       font-size="11.00"
+       y="348.94724"
+       x="449.69287">number_of_variables</text>
     <text
        style="font-size:11px;line-height:0%;font-family:Helvetica, sans-Serif;text-anchor:start"
        id="text3981"
