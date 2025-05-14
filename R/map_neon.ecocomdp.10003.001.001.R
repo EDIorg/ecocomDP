@@ -10,6 +10,10 @@ map_neon.ecocomdp.10003.001.001 <- function(
   neon.data.product.id = "DP1.10003.001",
   ...){
   
+  # devtools::install_github('NEONScience/NEON-geolocation/geoNEON', force = T) 
+  library(geoNEON)
+
+  
   #NEON target taxon group is BIRD
   neon_method_id <- "neon.ecocomdp.10003.001.001"
   
@@ -28,44 +32,69 @@ map_neon.ecocomdp.10003.001.001 <- function(
   
   
   # extract NEON data tables from list object ---- 
-  allTabs_bird$brd_countdata <- tidyr::as_tibble(allTabs_bird$brd_countdata)
+  brd_countdata <- tidyr::as_tibble(allTabs_bird$brd_countdata)
   
-  allTabs_bird$brd_perpoint <- tidyr::as_tibble(allTabs_bird$brd_perpoint)
+  brd_perpoint <- tidyr::as_tibble(allTabs_bird$brd_perpoint)
   
+  
+  # get pointID-specific location information
+  brd_perpoint_locs <- geoNEON::getLocTOS(data = brd_perpoint,
+                                        dataProd = "brd_perpoint",
+                                        token = neon_token)
+
+  # Create the event table (location for specific pointIDs)
+  brd_perpoint_mod <- brd_perpoint_locs %>% select(c(-decimalLatitude, -decimalLongitude)) %>%
+  rename(
+    locality = points,
+    eventRemarks = remarks,
+    eventDate = startDate,
+    decimalLatitude = adjDecimalLatitude,
+    decimalLongitude = adjDecimalLongitude,
+    coordinateUncertaintyInMeters = adjCoordinateUncertainty) 
+
+  brd_perpoint_mod <- brd_perpoint_mod %>%
+    mutate(minimumElevationInMeters = adjElevation,
+         maximumElevationInMeters = adjElevation,
+         countryCode = "US",
+         habitat = paste("NLCD:", nlcdClass, sep = " "),
+         samplingProtocol = paste0("https://data.neonscience.org/api/v0/documents/",
+                                   samplingProtocolVersion),
+         samplingEffort = "6 minutes",
+         sampleSizeValue = 49087.38, # sampled area actually varies based on visibility and acoustics, but this value is the area of 125 m radius circle around observer at a single sampling pointID
+         sampleSizeUnit = "square metre",
+         truncDate = lubridate::date(eventDate),
+         datasetID = "https://doi.org/10.48443/00pg-vm19"
+         )
+
+  
+  brd_perpoint_mod$eventID <- ifelse(brd_perpoint_mod$uid == "0c2a3910-fbd4-4343-a419-193a3329a8ca", "UNDE_009.B2.2021-06-10", brd_perpoint_mod$eventID) # change pointID from C3 to B2 to resolve duplicate and allow merge
+  brd_perpoint_mod$pointID <- ifelse(brd_perpoint_mod$uid == "0c2a3910-fbd4-4343-a419-193a3329a8ca", "B2", brd_perpoint_mod$pointID) # change pointID from C3 to B2 to resolve duplicate and allow merge
+
   data_bird <- dplyr::left_join(
-    allTabs_bird$brd_countdata,
-    dplyr::select(allTabs_bird$brd_perpoint, 
-                  -uid,
-                  -startDate))
+    brd_countdata,
+    dplyr::select(brd_perpoint_mod, 
+                  -uid))
+
   
   # table(data_bird$samplingImpractical) # all NA
   # table(data_bird$samplingImpracticalRemarks)
   
   data_bird <- dplyr::select(
     data_bird, 
-    # -uid, 
     -identifiedBy, 
     # -eventID, # it is just plotID, pointID, startDate
     -measuredBy,
     -samplingImpractical, -samplingImpracticalRemarks)
   
-  # remove invalde records
-  data_bird <- data_bird %>%
-    dplyr::filter(
-    is.finite(clusterSize),
-    clusterSize >= 0,
-    !is.na(clusterSize))
-  
-  
   
   #location ----
-  
   
   table_location_raw <- data_bird %>%
     dplyr::select(domainID, siteID, plotID, namedLocation, 
                   decimalLatitude, decimalLongitude, elevation, 
-                  nlcdClass, plotType, geodeticDatum) %>%
+                  habitat, plotType, geodeticDatum, samplingProtocol,samplingEffort, countryCode, datasetID, eventRemarks) %>%
     dplyr::distinct() 
+#  table_location_raw$coordinateUncertaintyInMeters <- as.character(table_location_raw$coordinateUncertaintyInMeters) # ecocomDP ancillary location table fields can't be numeric
   
   table_location <- make_neon_location_table(
     loc_info = table_location_raw,
@@ -74,20 +103,23 @@ map_neon.ecocomdp.10003.001.001 <- function(
   table_location_ancillary <- make_neon_ancillary_location_table(
     loc_info = table_location_raw,
     loc_col_names = c("domainID", "siteID", "plotID", "namedLocation"),
-    ancillary_var_names = c("namedLocation", "nlcdClass", 
-                            "plotType","geodeticDatum"))
+    ancillary_var_names = c("namedLocation", "habitat", 
+                            "plotType","geodeticDatum","samplingProtocol","samplingEffort", "countryCode", "datasetID","eventRemarks") )
+    #,"coordinateUncertaintyInMeters"))
   
   
   
   
   # taxon ----
-  my_dots <- list(...)
+  # my_dots <- list(...) # gives "Error: '...' used in an incorrect context"
+  # 
+  # if("token" %in% names(my_dots)){
+  #   my_token <- my_dots$token
+  # }else{
+  # my_token <- NA
+  # }
   
-  if("token" %in% names(my_dots)){
-    my_token <- my_dots$token
-  }else{
-    my_token <- NA
-  }
+  my_token <- Sys.getenv('NEON_PAT')
   
   # get bird taxon table from NEON
   neon_bird_taxon_table <- neonOS::getTaxonList(
@@ -96,7 +128,7 @@ map_neon.ecocomdp.10003.001.001 <- function(
     dplyr::filter(taxonID %in% data_bird$taxonID)
   
   table_taxon <- neon_bird_taxon_table %>%
-    dplyr::select(taxonID, taxonRank, scientificName, nameAccordingToID) %>%
+    dplyr::select(taxonID, taxonRank, scientificName, vernacularName, family, kingdom, nameAccordingToID) %>%
     dplyr::distinct() %>% 
     dplyr::rename(taxon_id = taxonID,
                   taxon_rank = taxonRank,
