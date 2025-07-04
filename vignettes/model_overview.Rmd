@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
         *   [observation_ancillary](#observation_ancillary)
         *   [location_ancillary](#location_ancillary)
         *   [taxon_ancillary](#taxon_ancillary)
-        *   [variable_mapping](#variable_mapping)
+        *   [variable_attribute](#variable_attribute)
 *   [Entity Relationship Diagram](#vis)
 
 ---
@@ -35,9 +35,9 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-This document describes the eight ecocomDP tables and their contents. Four tables are required (observation, location, taxon, and dataset_summary). Each main table (observation, location, taxon) has an optional ancillary table for additional information. These are included because primary research typically contains related measurements which may be of interest during analysis. The dataset_summary table is populated from the observation table contents, and the variable_mapping table holds URIs and labels for external measurement dictionaries.
+ecocomDP+ extends the original ecocomDP data design pattern to incorporate functional traits. This document describes the eight ecocomDP+ tables and their contents. Four tables are required (observation, location, taxon, and dataset_summary). Each main table (observation, location, taxon) has an optional ancillary table for additional information. These are included because primary research typically contains related measurements which may be of interest during analysis. The dataset_summary table is populated from the observation table contents, and the variable_attribute table holds URIs and labels for external measurement dictionaries. In the trait extension, the Variable_mapping table is renamed the Variable_attribute table. Furthermore, ecocomDP+ has additional rows in the Dataset_summary and Variable_attribute tables to accounts for trait metadata.
 
-An example ecocomDP dataset is [here](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=193) and a graphic showing all tables and their relationships is available [here](#vis). 
+An example ecocomDP+ dataset is in development and a graphic showing all tables and their relationships is available [here](#vis). 
 
 ## Tables {#tables}
 
@@ -50,7 +50,7 @@ An example ecocomDP dataset is [here](https://portal.edirepository.org/nis/mapbr
 | observation_ancillary  | no | observation | observation_id, variable_name  |
 | location_ancillary | no | location | location_id, datetime, variable_name |
 | taxon_ancillary | no | taxon | taxon_id, variable_name |
-| variable_mapping | no | observation, observation_ancillary, location_ancillary, taxon_ancillary | table_name, variable_name |
+| variable_attribute | no | observation, observation_ancillary, location_ancillary, taxon_ancillary | table_name, variable_name |
 
 ### Table: observation {#observation}
 
@@ -118,7 +118,10 @@ Description: Summary info about the dataset.
 | number_of_years_sampled     | integer   |yes| NA | Number of years within the period of the study that samples were taken.	| 17  	|
 | std_dev_interval_betw_years | float     |yes| NA | Standard deviation of the interval between sampling events. | 1.1  	|
 | max_num_taxa                |integer    |yes| NA |  Number of unique values in the taxon table. | 10  	|
-| geo_extent_bounding_box_m2  |float      |no| NA	| Area of the study location.	|  40 	|
+| geo_extent_bounding_box_m2  | float      |no| NA	| Area of the study location.	|  40 	|
+| Dataset_level_bio_organization  | character      |no| NA	| Level of biological organization of trait dataset	|  population 	|
+| Observation_finest_level  | character      |no| NA	| Finest level of biological organization of trait dataset	|  individual 	|
+| Number of variables  | integer      |no| NA	| Number of trait variables measured	|  2 	|
 
 
 
@@ -172,15 +175,16 @@ Description: Additional info about an organism that does not change frequently (
 
 
 
-### Table: variable_mapping {#variable_mapping}
+### Table: variable_attribute {#variable_attribute}
 
 Description: Information linking a variable_name used in a table to an external definition.
 
-This optional table holds mappings (or relations) between variable names in the data tables and measurement definitions external to the data package. This table has multiple uses: 
+This optional table holds attributes ad mappings (or relations) between variable names in the data tables and measurement definitions external to the data package. This table has multiple uses: 
 
 - provides definitions for variables in the datasets (more extensive than might be found in metadata) 
 - code can use this table to  to create EML code-definition pairs or annotations in metadata
 - a single column in a data table may have mappings to multiple dictionaries, by including multiple rows for it
+- allows for datasets that have multiple types of traits measured (e.g., body mass, foot length)
 
 #### Columns
 
@@ -192,13 +196,17 @@ This optional table holds mappings (or relations) between variable names in the 
 | mapped_system        | character | no| NA	| System defining variable_name.	|  NERC  	|
 | mapped_id     | character | no| NA	| Identifier of the definition in mapped_system.	| SDN:P07::CFSN0721 	|
 | mapped_label  | character | no| NA	| Label for variable_name in mapped_system.	|  depth  	|
+| Variable_type  | character | no| NA	| Description of type of trait measured	|  morphological  	|
 ---
 # Entity Relationship Diagram {#vis}
 
 ```{r echo=FALSE, out.width='100%'}
-knitr::include_graphics('./model.png')
+knitr::include_graphics('./traitmodel.png')
 ```
-Figure 1: The optional tables are partly transparent. The primary key for each table is the id (column named "table_name_id", with a green background. Columns that (as a group) should be unique within the table, have a yellow background. Many:many relationships are shown with dotted lines (side note: if this model were implemented in a relational database, each many:many relationship would require an intermediate table).
+Figure 1: Schema of updated ecocomDP data design pattern with the extension to accommodate traits (Amador et al. 2025). Added fields in the dataset summary table (boxed in red) allow users to include the level of biological organization, level of observation, and the number of variables associated with the trait. The variable_attribute table (previously variable_mapping table) now include variable type to indicate the type of trait measured (e.g., phenological, morphological). The optional tables are partly transparent. The primary key for each table is the id (column named "table_name_id", with a green background. Columns that (as a group) should be unique within the table, have a yellow background. Many:many relationships are shown with dotted lines (side note: if this model were implemented in a relational database, each many:many relationship would require an intermediate table).
+
+# References
+Amador LG, Ramirez-Parada TH, Park IW, Mazer SJ, Ellison AM, O'Brien M, Sokol ER, Smith CA, Davis CC, and Record S. Bridging data silos to holistically model plant macrophenology. New Phytologist. https://doi.org/10.1111/nph.70249
 
 
 
