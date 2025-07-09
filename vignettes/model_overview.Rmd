@@ -17,5 +17,6 @@ knitr::opts_chunk$set(
 ```{r child-markdown, child='../model/table_description.md'}
 ```
 
+
 ```{r child-markdown-2, child='../model/table_visualization.md'}
 ```
