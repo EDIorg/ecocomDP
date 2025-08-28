@@ -1,13 +1,12 @@
 # Table descriptions, relationships, and requirements
 
-Overview
----
+## Overview
+
 This document describes the 8 ecocomDP tables and their contents. Four tables are required (observation, location, taxon, and dataset_summary). Each main table (observation, location, taxon) has an optional ancillary table for additional information. These are included because primary research typically contain related measurements which may be of interest during analysis. The dataset_summary table is populated from the observation table contents, and the variable_mapping table holds URIs and labels for external measurement dictionaries.
 
 An example ecocomDP dataset is [here](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=193) and a graphic showing all tables and their relationships is available [here](https://github.com/EDIorg/ecocomDP/blob/master/model/table_visualization.md). 
 
-Tables
----
+## Tables
 
 | table name 	|   required?	|   references tables    | unique constraints |
 |--------------|-------------|------------------------|------------------------|
@@ -20,8 +19,7 @@ Tables
 | taxon_ancillary | no | taxon | taxon_id, variable_name |
 | variable_mapping | no | observation, observation_ancillary, location_ancillary, taxon_ancillary | table_name, variable_name |
 
-Table: observation
----
+### Table: observation
 
 Description: This is the core table, which holds the observations being analyzed (e.g. organism abundance or density). Observations must be linked to a taxon and to a location. Linking to ancillary observations is optional.
 
@@ -41,8 +39,7 @@ Columns
 
 
 
-Table: location
----
+### Table: location
 
 Description: Identifying information about a place (lonitude, latitude, elevation). The table is self-referencing so that sites can be nested.
 
@@ -58,8 +55,7 @@ Columns
 | parent_location_id	|  character | no  	|   NA| Sampling location identifier from this table for the parent of this sampling location. Presence indicates nested locations.	|  sbclter_abur_I	|
 
 
-Table: taxon
----
+### Table: taxon
 Description: Identifying information about a taxon (e.g. name, id and system).
 
 Columns
@@ -74,8 +70,8 @@ Columns
 
 
 
-Table: dataset_summary
----
+### Table: dataset_summary
+
 Description: Summary info about the dataset.
 
 Columns
@@ -92,8 +88,8 @@ Columns
 
 
 
-Table: observation_ancillary 
----
+### Table: observation_ancillary 
+
 Description: Ancillary information about an observational event for context. These are very often environmental driver data in analyses (e.g. water depth, height of a tower, temperature of medium).
 
 Columns
@@ -107,8 +103,8 @@ Columns
 | unit                     | character | no| NA	| Unit of the measured variable. |  meter 	|
 
 
-Table: location_ancillary 
----
+### Table: location_ancillary 
+
 Description: Additional information about a place that does not change frequently (e.g. lake area or depth, experimental treatment). Features that change frequently are more closely related to the observational event, and are thus kept in the observation_ancillary table. Ancillary observations are linked through the location_id, and one location_id may have many ancillary observations about it.
 
 Columns
@@ -124,8 +120,8 @@ Columns
 
 
 
-Table: taxon_ancillary
----
+### Table: taxon_ancillary
+
 Description: Additional info about an organism that does not change frequently (e.g. trophic level). Features that change frequently are probably observations. Ancillary observations are linked through the taxon_id, which may have many ancillary observations about it.
 
 Columns
@@ -142,8 +138,8 @@ Columns
 
 
 
-Table: variable_mapping 
----
+### Table: variable_mapping 
+
 Description: Information linking a variable_name used in a table to an external definition.
 
 This optional table holds mappings (or relations) between variable names in the data tables and measurement definitions external to the data package. This table has multiple uses: 
