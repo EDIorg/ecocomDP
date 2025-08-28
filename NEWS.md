@@ -1,3 +1,9 @@
+# ecocomDP 1.X.X
+
+## Documentation
+* Consolidate duplicated model documentation [#166](https://github.com/EDIorg/ecocomDP/issues/166)
+
+
 # ecocomDP 1.3.2
 
 ## Fixes
