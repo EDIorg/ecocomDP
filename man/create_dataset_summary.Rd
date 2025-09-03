@@ -12,7 +12,10 @@ create_dataset_summary(
   number_of_years_sampled,
   std_dev_interval_betw_years,
   max_num_taxa,
-  geo_extent_bounding_box_m2 = NULL
+  geo_extent_bounding_box_m2 = NULL,
+  dataset_level_bio_organization = NULL,
+  observation_finest_level = NULL,
+  number_of_variables = NULL
 )
 }
 \arguments{
@@ -31,6 +34,12 @@ create_dataset_summary(
 \item{max_num_taxa}{(character) Column in \code{L0_flat} containing the number of unique taxa in the source L0 dataset.}
 
 \item{geo_extent_bounding_box_m2}{(character) An optional column in \code{L0_flat} containing the area (in meters) of the study location, if applicable (some L0 were collected at a single point). Use \code{calc_geo_extent_bounding_box_m2()} to calculate this value.}
+
+\item{dataset_level_bio_organization}{(character) An optional column in \code{L0_flat} containing the level of biological organization of the trait dataset (e.g. population).}
+
+\item{observation_finest_level}{(character) An optional column in \code{L0_flat} containing the finest level of taxonomic resolution of the trait dataset (e.g. individual).}
+
+\item{number_of_variables}{(integer) An optional column in \code{L0_flat} containing the number of trait variables measured (e.g. 2).}
 }
 \value{
 (tbl_df, tbl, data.frame) The dataset_summary table.
@@ -54,7 +63,10 @@ dataset_summary <- create_dataset_summary(
   number_of_years_sampled = "number_of_years_sampled", 
   std_dev_interval_betw_years = "std_dev_interval_betw_years", 
   max_num_taxa = "max_num_taxa", 
-  geo_extent_bounding_box_m2 = "geo_extent_bounding_box_m2")
+  geo_extent_bounding_box_m2 = "geo_extent_bounding_box_m2",
+  dataset_level_bio_organization = "dataset_level_bio_organization",
+  observation_finest_level = "observation_finest_level",
+  number_of_variables = "number_of_variables")
 
 dataset_summary
 

@@ -27,7 +27,7 @@ create_variable_mapping(
 Create the variable_mapping table
 }
 \details{
-This function collects specified data tables, extracts unique variable_name values from each, converts into long (attribute-value) form with the table name and variable_name values to the resulting table's "table_name" and "variable_name" columns, respectively. The resulting table's "mapped_system", "mapped_id", and "mapped_label" are filled with \code{NA} and are to be manually filled.
+This function collects specified data tables, extracts unique variable_name values from each, converts into long (attribute-value) form with the table name and variable_name values to the resulting table's "table_name" and "variable_name" columns, respectively. The resulting table's "mapped_system", "mapped_id", "mapped_label", and "variable_type" are filled with \code{NA} and are to be manually filled.
 }
 \examples{
 flat <- ants_L0_flat

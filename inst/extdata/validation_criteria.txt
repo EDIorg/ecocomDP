@@ -51,6 +51,9 @@ dataset_summary	number_of_years_sampled	numeric	TRUE	FALSE	FALSE	FALSE	FALSE
 dataset_summary	std_dev_interval_betw_years	numeric	TRUE	FALSE	FALSE	FALSE	FALSE
 dataset_summary	max_num_taxa	numeric	TRUE	FALSE	FALSE	FALSE	FALSE
 dataset_summary	geo_extent_bounding_box_m2	numeric	FALSE	FALSE	FALSE	FALSE	FALSE
+dataset_summary	dataset_level_bio_organization	character	FALSE	FALSE	FALSE	FALSE	FALSE
+dataset_summary	observation_finest_level	character	FALSE	FALSE	FALSE	FALSE	FALSE
+dataset_summary	number_of_variables	numeric	FALSE	FALSE	FALSE	FALSE	FALSE
 variable_mapping	NA	NA	FALSE	NA	NA	NA	NA
 variable_mapping	variable_mapping_id	character	TRUE	TRUE	FALSE	FALSE	TRUE
 variable_mapping	table_name	character	TRUE	FALSE	FALSE	TRUE	FALSE
@@ -58,3 +61,4 @@ variable_mapping	variable_name	character	TRUE	FALSE	FALSE	TRUE	FALSE
 variable_mapping	mapped_system	character	FALSE	FALSE	FALSE	FALSE	FALSE
 variable_mapping	mapped_id	character	FALSE	FALSE	FALSE	FALSE	FALSE
 variable_mapping	mapped_label	character	FALSE	FALSE	FALSE	FALSE	FALSE
+variable_mapping	variable_type	character	FALSE	FALSE	FALSE	FALSE	FALSE

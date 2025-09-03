@@ -50,6 +50,9 @@ testthat::test_that("Non-Standard column inputs", {
     cols[cols == "std_dev_interval_betw_years"] <- "sdiby"
     cols[cols == "max_num_taxa"] <- "mnt"
     cols[cols == "geo_extent_bounding_box_m2"] <- "gebb"
+    cols[cols == "dataset_level_bio_organization"] <- "dlbo"
+    cols[cols == "observation_finest_level"] <- "ofl"
+    cols[cols == "number_of_variables"] <- "nov"
     colnames(flat) <- cols
     res <- create_dataset_summary(
       L0_flat = flat, 

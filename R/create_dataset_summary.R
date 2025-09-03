@@ -8,6 +8,9 @@
 #' @param std_dev_interval_betw_years (character) Column in \code{L0_flat} containing the standard deviation of the interval between sampling events. Use \code{calc_std_dev_interval_betw_years()} to calculate this value.
 #' @param max_num_taxa (character) Column in \code{L0_flat} containing the number of unique taxa in the source L0 dataset.
 #' @param geo_extent_bounding_box_m2 (character) An optional column in \code{L0_flat} containing the area (in meters) of the study location, if applicable (some L0 were collected at a single point). Use \code{calc_geo_extent_bounding_box_m2()} to calculate this value.
+#' @param dataset_level_bio_organization (character) An optional column in \code{L0_flat} containing the level of biological organization of the trait dataset (e.g. population).
+#' @param observation_finest_level (character) An optional column in \code{L0_flat} containing the finest level of taxonomic resolution of the trait dataset (e.g. individual).
+#' @param number_of_variables (integer) An optional column in \code{L0_flat} containing the number of trait variables measured (e.g. 2).
 #' 
 #' @details This function collects specified columns from \code{L0_flat} and returns distinct rows.
 #' 
@@ -28,7 +31,10 @@
 #'   number_of_years_sampled = "number_of_years_sampled", 
 #'   std_dev_interval_betw_years = "std_dev_interval_betw_years", 
 #'   max_num_taxa = "max_num_taxa", 
-#'   geo_extent_bounding_box_m2 = "geo_extent_bounding_box_m2")
+#'   geo_extent_bounding_box_m2 = "geo_extent_bounding_box_m2",
+#'   dataset_level_bio_organization = "dataset_level_bio_organization",
+#'   observation_finest_level = "observation_finest_level",
+#'   number_of_variables = "number_of_variables")
 #' 
 #' dataset_summary
 #' 
@@ -39,7 +45,10 @@ create_dataset_summary <- function(L0_flat,
                                    number_of_years_sampled,
                                    std_dev_interval_betw_years,
                                    max_num_taxa,
-                                   geo_extent_bounding_box_m2 = NULL) {
+                                   geo_extent_bounding_box_m2 = NULL,
+                                   dataset_level_bio_organization = NULL,
+                                   observation_finest_level = NULL,
+                                   number_of_variables = NULL) {
   
   validate_arguments(fun.name = "create_dataset_summary", fun.args = as.list(environment()))
   
@@ -47,7 +56,9 @@ create_dataset_summary <- function(L0_flat,
   # get cols
   cols_to_gather <- c(package_id, original_package_id, length_of_survey_years,
                       number_of_years_sampled, std_dev_interval_betw_years,
-                      max_num_taxa, geo_extent_bounding_box_m2)
+                      max_num_taxa, geo_extent_bounding_box_m2,
+                      dataset_level_bio_organization, observation_finest_level,
+                      number_of_variables)
   res <- L0_flat %>%
     dplyr::select(all_of(cols_to_gather)) %>%
     dplyr::distinct()
@@ -58,11 +69,22 @@ create_dataset_summary <- function(L0_flat,
   if (is.null(geo_extent_bounding_box_m2)) {
     res$geo_extent_bounding_box_m2 <- NA_character_
   }
+  if (is.null(dataset_level_bio_organization)) {
+    res$dataset_level_bio_organization <- NA_character_
+  }
+  if (is.null(observation_finest_level)) {
+    res$observation_finest_level <- NA_character_
+  }
+  if (is.null(number_of_variables)) {
+    res$number_of_variables <- NA_integer_
+  }
   # reorder
   res <- res %>%
     dplyr::select(package_id, original_package_id, length_of_survey_years,
                   number_of_years_sampled, std_dev_interval_betw_years,
-                  max_num_taxa, geo_extent_bounding_box_m2)
+                  max_num_taxa, geo_extent_bounding_box_m2, 
+                  dataset_level_bio_organization, observation_finest_level,
+                  number_of_variables)
   # coerce classes
   res <- coerce_table_classes(res, "dataset_summary", class(res))
   return(res)

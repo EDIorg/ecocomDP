@@ -5,7 +5,7 @@
 #' @param location_ancillary (tbl_df, tbl, data.frame) The optional location_ancillary table.
 #' @param taxon_ancillary (tbl_df, tbl, data.frame) The optional taxon_ancillary table.
 #' 
-#' @details This function collects specified data tables, extracts unique variable_name values from each, converts into long (attribute-value) form with the table name and variable_name values to the resulting table's "table_name" and "variable_name" columns, respectively. The resulting table's "mapped_system", "mapped_id", and "mapped_label" are filled with \code{NA} and are to be manually filled.
+#' @details This function collects specified data tables, extracts unique variable_name values from each, converts into long (attribute-value) form with the table name and variable_name values to the resulting table's "table_name" and "variable_name" columns, respectively. The resulting table's "mapped_system", "mapped_id", "mapped_label", and "variable_type" are filled with \code{NA} and are to be manually filled.
 #'
 #' @return (tbl_df, tbl, data.frame) The variable_mapping table.
 #' 
@@ -107,6 +107,7 @@ create_variable_mapping <- function(observation,
     mapped_system = rep(NA_character_, length(vars)),
     mapped_id = rep(NA_character_, length(vars)),
     mapped_label = rep(NA_character_, length(vars)),
+    variable_type = rep(NA_character_, length(vars)),
     stringsAsFactors = FALSE
   )
   
