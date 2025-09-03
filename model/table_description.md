@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the 8 ecocomDP tables and their contents. Four tables are required (observation, location, taxon, and dataset_summary). Each main table (observation, location, taxon) has an optional ancillary table for additional information. These are included because primary research typically contain related measurements which may be of interest during analysis. The dataset_summary table is populated from the observation table contents, and the variable_mapping table holds URIs and labels for external measurement dictionaries.
+This document describes the eight ecocomDP tables and their contents. Four tables are required (observation, location, taxon, and dataset_summary). Each main table (observation, location, taxon) has an optional ancillary table for additional information. These are included because primary research typically contains related measurements which may be of interest during analysis. The dataset_summary table is populated from the observation table contents, and the variable_attribute table holds URIs and labels for external measurement dictionaries.
 
 An example ecocomDP dataset is [here](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=193) and a graphic showing all tables and their relationships is available [here](https://github.com/EDIorg/ecocomDP/blob/master/model/table_visualization.md). 
 
@@ -17,7 +17,7 @@ An example ecocomDP dataset is [here](https://portal.edirepository.org/nis/mapbr
 | observation_ancillary  | no | observation | observation_id, variable_name  |
 | location_ancillary | no | location | location_id, datetime, variable_name |
 | taxon_ancillary | no | taxon | taxon_id, variable_name |
-| variable_mapping | no | observation, observation_ancillary, location_ancillary, taxon_ancillary | table_name, variable_name |
+| variable_attribute | no | observation, observation_ancillary, location_ancillary, taxon_ancillary | table_name, variable_name |
 
 ### Table: observation
 
@@ -85,6 +85,9 @@ Columns
 | std_dev_interval_betw_years | float     |yes| NA | Standard deviation of the interval between sampling events. | 1.1  	|
 | max_num_taxa                |integer    |yes| NA |  Number of unique values in the taxon table. | 10  	|
 | geo_extent_bounding_box_m2  |float      |no| NA	| Area of the study location.	|  40 	|
+| dataset_level_bio_organization  | character      |no| NA	| Level of biological organization of trait dataset	|  population 	|
+| observation_finest_level  | character      |no| NA	| Finest level of biological organization of trait dataset	|  individual 	|
+| number_of_variables  | integer      |no| NA	| Number of trait variables measured	|  2 	|
 
 
 
@@ -138,15 +141,16 @@ Columns
 
 
 
-### Table: variable_mapping 
+### Table: variable_attribute
 
 Description: Information linking a variable_name used in a table to an external definition.
 
-This optional table holds mappings (or relations) between variable names in the data tables and measurement definitions external to the data package. This table has multiple uses: 
+This optional table holds attributes and mappings (or relations) between variable names in the data tables and measurement definitions external to the data package. This table has multiple uses: 
 
 - provides definitions for variables in the datasets (more extensive than might be found in metadata) 
 - code can use this table to  to create EML code-definition pairs or annotations in metadata
 - a single column in a data table may have mappings to multiple dictionaries, by including multiple rows for it
+- allows for datasets that have multiple types of traits measured (e.g., body mass, foot length)
 
 Columns
 
@@ -158,4 +162,4 @@ Columns
 | mapped_system        | character | no| NA	| System defining variable_name.	|  NERC  	|
 | mapped_id     | character | no| NA	| Identifier of the definition in mapped_system.	| SDN:P07::CFSN0721 	|
 | mapped_label  | character | no| NA	| Label for variable_name in mapped_system.	|  depth  	|
-
+| variable_type | character | no| NA | Description of type of trait measured | morphological |
