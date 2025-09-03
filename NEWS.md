@@ -1,5 +1,14 @@
 # ecocomDP 1.X.X
 
+## Enhancements
+* This version of ecocomDP extends the original data design pattern to incorporate functional traits. In the trait extension, the variable_mapping table is renamed the variable_attribute table. Furthermore, it has additional rows in the dataset_summary and variable_attribute tables to account for trait metadata.
+
+  The updated schema follows Amador et al. 2025. Added fields in the dataset_summary table allow users to include the level of biological organization, level of observation, and the number of variables associated with the trait. The variable_attribute table (previously variable_mapping table) now includes variable type to indicate the type of trait measured (e.g., phenological, morphological).
+
+  **References**
+
+  Amador LG, Ramirez-Parada TH, Park IW, Mazer SJ, Ellison AM, O'Brien M, Sokol ER, Smith CA, Davis CC, and Record S. Bridging data silos to holistically model plant macrophenology. New Phytologist. [https://doi.org/10.1111/nph.70249](https://doi.org/10.1111/nph.70249).
+
 ## Documentation
 * Consolidate duplicated model documentation [#166](https://github.com/EDIorg/ecocomDP/issues/166)
 
