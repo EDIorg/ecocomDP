@@ -1,5 +1,8 @@
 # ecocomDP 1.X.X
 
+## Fixes
+* Remove mapped_id URI resolution check [#173](https://github.com/EDIorg/ecocomDP/issues/173)
+
 ## Documentation
 * Consolidate duplicated model documentation [#166](https://github.com/EDIorg/ecocomDP/issues/166)
 
