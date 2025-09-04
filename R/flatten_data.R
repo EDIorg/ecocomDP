@@ -84,7 +84,7 @@ flatten_tables <- function(tables){
   # 1.) "NEON location type" from location ancillary data
   # 2.) Find unique marker injected by create_location() to parse column names from values
   if("location" %in% names(tables)) {
-    last_col <- ncol(all_merged) # Index of last column for sorting
+    last_column <- ncol(all_merged) # Index of last column for sorting
     if (("location_ancillary" %in% names(tables)) & 
         ("NEON location type" %in% tables$location_ancillary$variable_name)) {
       # Approach 1: Used by NEON
@@ -148,9 +148,9 @@ flatten_tables <- function(tables){
           suffix = c("", "_location"))
     }
     # Sort, move location_id to beginning of location cols
-    last_col <- colnames(all_merged)[last_col]
+    last_column <- colnames(all_merged)[last_column]
     all_merged <- all_merged %>%
-      relocate(location_id, .after = last_col)
+      relocate(location_id, .after = all_of(last_column))
   }
   
   # Merge location_ancillary --------------------------------------------------
@@ -183,16 +183,16 @@ flatten_tables <- function(tables){
   # Merge taxon ---------------------------------------------------------------
   
   if ("taxon" %in% names(tables)) {
-    last_col <- ncol(all_merged) # Index of last column for sorting
+    last_column <- ncol(all_merged) # Index of last column for sorting
     all_merged <- all_merged %>%
       dplyr::left_join(
         tables$taxon %>%
           dplyr::select_if(not_all_NAs),
         by = "taxon_id")
     # Sort, move taxon_id to beginning of taxon cols
-    last_col <- colnames(all_merged)[last_col]
+    last_column <- colnames(all_merged)[last_column]
     all_merged <- all_merged %>%
-      relocate(taxon_id, .after = last_col)
+      relocate(taxon_id, .after = all_of(last_column))
   }
   
   # Merge taxon_ancillary -----------------------------------------------------
@@ -210,16 +210,16 @@ flatten_tables <- function(tables){
   # Merge dataset_summary -----------------------------------------------------
   
   if ("dataset_summary" %in% names(tables)) {
-    last_col <- ncol(all_merged) # Index of last column for sorting
+    last_column <- ncol(all_merged) # Index of last column for sorting
     all_merged <- all_merged %>%
       dplyr::left_join(
         tables$dataset_summary %>% dplyr::select_if(not_all_NAs), 
         by = "package_id")
     # Sort, move package_id to beginning of dataset_summary cols
-    last_col <- colnames(all_merged)[last_col]
+    last_column <- colnames(all_merged)[last_column]
     colnames(all_merged)
     all_merged <- all_merged %>%
-      relocate(package_id, .after = last_col)
+      relocate(package_id, .after = all_of(last_column))
   }
   
   # Coerce columns to correct classes -----------------------------------------
