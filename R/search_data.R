@@ -79,10 +79,15 @@ search_data <- function(text, taxa, num_taxa, num_years, sd_years,
     objurls <- stringr::str_subset(objurls, "/data/")
     objids <- stringr::str_extract(objurls, "(?<=/)[:alnum:]+$")
     objnames <- suppressMessages(
-      lapply(objids, api_read_data_entity_name, package.id = paste0("edi.759.", newrev)))
+      lapply(objids, function(id) {
+        Sys.sleep(1)
+        api_read_data_entity_name(id, package.id = paste0("edi.759.", newrev))
+      })
+    )
     objnames <- unlist(objnames)
     isdata <- !stringr::str_detect(objnames, "Function")
     objurls <- objurls[isdata]
+    objurls <- objurls[!is.na(objurls)]
     for (objurl in objurls) {
       load(url(objurl))
     }

@@ -1,6 +1,7 @@
 # ecocomDP 1.X.X
 
 ## Fixes
+* Test Suite Failures and Warnings [#172](https://github.com/EDIorg/ecocomDP/issues/173)
 * Remove mapped_id URI resolution check [#173](https://github.com/EDIorg/ecocomDP/issues/173)
 
 ## Documentation
