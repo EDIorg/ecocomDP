@@ -10,6 +10,7 @@ testthat::test_that("Creates tables, meta, and valid EML", {
   # Create directory for DwC-A outputs
   mypath <- paste0(tempdir(), "/data")
   dir.create(mypath)
+  on.exit(unlink(mypath, recursive = TRUE))
   
   # Convert an EDI published ecocomDP dataset to a DwC-A
   suppressWarnings(
@@ -27,8 +28,5 @@ testthat::test_that("Creates tables, meta, and valid EML", {
   expect_true("extendedmeasurementorfact.csv" %in% dir(mypath))
   expect_true("meta.xml" %in% dir(mypath))
   expect_true("occurrence.csv" %in% dir(mypath))
-  
-  # Clean up
-  unlink(mypath, recursive = TRUE)
 })
 

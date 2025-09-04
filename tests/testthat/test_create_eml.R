@@ -10,6 +10,7 @@ testthat::test_that("Creates valid EML", {
   # Create directory with ecocomDP tables for create_eml()
   mypath <- paste0(tempdir(), "/data")
   dir.create(mypath)
+  on.exit(unlink(mypath, recursive = TRUE))
   inpts <- c(ants_L1$tables, path = mypath)
   inpts$taxon$authority_system <- NA_character_ # Reduce func run time by minimizing web API calls
   inpts$taxon$authority_taxon_id <- NA_character_
@@ -46,8 +47,5 @@ testthat::test_that("Creates valid EML", {
   
   # Test
   expect_true(EML::eml_validate(eml))
-  
-  # Clean up
-  unlink(mypath, recursive = TRUE)
 })
 

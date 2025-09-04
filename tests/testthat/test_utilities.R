@@ -216,8 +216,8 @@ testthat::test_that("parse_datetime_from_frmt()", {
 testthat::test_that("write_tables()", {
   # Parameterize
   mypath <- paste0(tempdir(), "/data")
-  unlink(mypath, recursive = TRUE)
   dir.create(mypath)
+  on.exit(unlink(mypath, recursive = TRUE))
   flat <- ants_L0_flat
   observation <- create_observation(
     L0_flat = flat, 
@@ -242,8 +242,6 @@ testthat::test_that("write_tables()", {
   # Test
   expect_true(file.exists(paste0(mypath, "/observation.csv")))
   expect_true(file.exists(paste0(mypath, "/observation_ancillary.csv")))
-  # Clean up
-  unlink(mypath, recursive = TRUE)
 })
 
 

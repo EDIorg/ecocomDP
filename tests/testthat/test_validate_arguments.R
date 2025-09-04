@@ -22,6 +22,7 @@ testthat::test_that("create_eml()", {
   # parameterize
   testdir <- paste0(tempdir(), "/testing")
   dir.create(testdir)
+  on.exit(unlink(testdir, recursive = TRUE))
   file.copy(system.file("extdata", "create_ecocomDP.R", package = "ecocomDP"), testdir)
   
   # basis_of_record (supported types)
@@ -101,8 +102,6 @@ testthat::test_that("create_eml()", {
                          list(path = testdir,
                               script = "create_ecocomDP.R",
                               script_description = "A description."))))
-  # Clean up
-  unlink(testdir, recursive = TRUE)
 })
 
 # create_tables() -------------------------------------------------------------

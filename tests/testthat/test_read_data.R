@@ -65,7 +65,7 @@ testthat::test_that("Reads from source APIs", {
 
 testthat::test_that("Reads from 1 local .rds", {
   rdspath <- paste0(tempdir(), "/d.rds")
-  unlink(rdspath, recursive = TRUE, force = TRUE) 
+  on.exit(unlink(rdspath, recursive = TRUE, force = TRUE))
   criteria <- read_criteria()
   d <- ants_L1
   id <- d$id
@@ -87,13 +87,12 @@ testthat::test_that("Reads from 1 local .rds", {
       expect_true("data.frame" %in% class(d$tables[[i]]))
     }
   }
-  unlink(paste0(tempdir(), "/d.rds"), recursive = TRUE, force = TRUE) 
 })
 
 
 testthat::test_that("Reads from > 1 local .rds", {
   rdspath <- paste0(tempdir(), "/d.rds")
-  unlink(rdspath, recursive = TRUE, force = TRUE) 
+  on.exit(unlink(rdspath, recursive = TRUE, force = TRUE))
   criteria <- read_criteria()
   # From .rds
   d <- ants_L1
@@ -122,7 +121,6 @@ testthat::test_that("Reads from > 1 local .rds", {
       }
     }
   }
-  unlink(paste0(tempdir(), "/d.rds"), recursive = TRUE, force = TRUE) 
 })
 
 # Reads from local .csv directories -------------------------------------------
@@ -137,7 +135,7 @@ testthat::test_that("Reads from 1 local .csv directories", {
     d[[i]]$id <- ids[i]
   }
   id <- "d"
-  unlink(paste0(tempdir(),"/", ids), recursive = TRUE, force = TRUE) 
+  on.exit(unlink(paste0(tempdir(),"/", ids), recursive = TRUE, force = TRUE))
   save_data(d, tempdir(), type = ".csv")
   d <- read_data(from = tempdir())            # Has expected structure
   expect_true(is.list(d))                                                             # obj is a list
@@ -154,7 +152,6 @@ testthat::test_that("Reads from 1 local .csv directories", {
       expect_true(class(d[[i]]$tables[[j]]) == "data.frame")
     }
   }
-  unlink(paste0(tempdir(),"/", ids), recursive = TRUE, force = TRUE) 
 })
 
 testthat::test_that("Reads from > 1 local .csv directories", {
@@ -163,7 +160,7 @@ testthat::test_that("Reads from > 1 local .csv directories", {
   d <- ants_L1 # create example datasets
   ids <- d$id
   id <- "d"
-  unlink(paste0(tempdir(),"/", ids), recursive = TRUE, force = TRUE) 
+  on.exit(unlink(paste0(tempdir(),"/", ids), recursive = TRUE, force = TRUE))
   save_data(d, tempdir(), type = ".csv")
   d <- read_data(from = tempdir())            # Has expected structure
   expect_true(is.list(d))                                                             # obj is a list
@@ -178,7 +175,6 @@ testthat::test_that("Reads from > 1 local .csv directories", {
   for (j in names(d$tables)) {                                                 # tables are data.frames
     expect_true("data.frame" %in% class(d$tables[[j]]))
   }
-  unlink(paste0(tempdir(),"/", ids), recursive = TRUE, force = TRUE) 
 })
 
 # Reads tables with valid names in path ---------------------------------------
@@ -187,8 +183,8 @@ testthat::test_that("Reads tables with valid names in path", {
   # Parameterize
   mytopdir <- tempdir()
   mypath <- paste0(mytopdir, "/datasets")
-  unlink(mypath, recursive = TRUE, force = TRUE)
   dir.create(mypath)
+  on.exit(unlink(mypath, recursive = TRUE, force = TRUE))
   crit <- read_criteria()
   d <- ants_L1
   # Set up test files
@@ -198,7 +194,6 @@ testthat::test_that("Reads tables with valid names in path", {
   d_fromfile <- read_data(from = readpath)
   expect_true(all(names(d_fromfile$tables) %in% unique(crit$table)))
   expect_equal(length(d_fromfile$tables), length(dir(readpath)))
-  unlink(mypath, recursive = TRUE, force = TRUE)
 })
 
 # Ignores tables with invalid names in path -----------------------------------
@@ -207,8 +202,8 @@ testthat::test_that("Ignores tables with invalid names in path", {
   # Parameterize
   mytopdir <- tempdir()
   mypath <- paste0(mytopdir, "/datasets")
-  unlink(mypath, recursive = TRUE, force = TRUE)
   dir.create(mypath)
+  on.exit(unlink(mypath, recursive = TRUE, force = TRUE))
   crit <- read_criteria()
   d <- ants_L1
   # Set up test files
@@ -223,7 +218,6 @@ testthat::test_that("Ignores tables with invalid names in path", {
   expect_true(!any(c("1", "2") %in% names(d_fromfile$tables)))
   expect_true(all(names(d_fromfile$tables) %in% unique(crit$table)))
   expect_false(length(d_fromfile$tables) == length(dir(readpath)))
-  unlink(mypath, recursive = TRUE, force = TRUE)
 })
 
 # Has datetime parsing option -------------------------------------------------
@@ -232,6 +226,7 @@ testthat::test_that("Has datetime parsing option", {
   criteria <- read_criteria()
   d <- ants_L1
   id <- d$id
+  on.exit(unlink(paste0(tempdir(), "/d.rds"), recursive = TRUE, force = TRUE))
   save_data(d, tempdir())
   d <- suppressWarnings(
     read_data(from = paste0(tempdir(), "/d.rds"), parse_datetime = TRUE))      # not character
@@ -249,6 +244,5 @@ testthat::test_that("Has datetime parsing option", {
         expect_true(class(d$tables[[tbl]][[colname]]) == "character")
       }
   }
-  unlink(paste0(tempdir(), "/d.rds"), recursive = TRUE, force = TRUE)
 })
 

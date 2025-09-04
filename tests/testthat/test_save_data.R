@@ -8,14 +8,13 @@ testthat::test_that("1 dataset saved to format w/expected structure", {
   ids <- d$id
   # .rds
   pathrds <- paste0(tempdir(),"/d.rds")
-  unlink(pathrds, recursive = TRUE, force = TRUE)
+  on.exit(unlink(pathrds, recursive = TRUE, force = TRUE))
   save_data(d, tempdir(), type = ".rds") # .rds
   expect_true(file.exists(pathrds)) # was created
-  unlink(pathrds, recursive = TRUE, force = TRUE)
   # .csv
   pathcsv <- paste0(tempdir(),"/d")
-  unlink(pathcsv, recursive = TRUE, force = TRUE)
   dir.create(pathcsv)
+  on.exit(unlink(pathcsv, recursive = TRUE, force = TRUE))
   save_data(d, pathcsv, type = ".csv") # .csv
   expect_true(all(ids %in% dir(pathcsv))) # dir has subdirs
   r <- lapply(
@@ -27,7 +26,6 @@ testthat::test_that("1 dataset saved to format w/expected structure", {
       fext <- unique(tools::file_ext(list.files(dname))) # has file extension
       expect_equal(fext, "csv")
     })
-  unlink(pathcsv, recursive = TRUE, force = TRUE)
 })
 
 # > 1 dataset -----------------------------------------------------------------
@@ -42,13 +40,12 @@ testthat::test_that("> 1 dataset saved to format w/expected structure", {
   }
   # .rds
   pathrds <- paste0(tempdir(),"/datasets.rds")
-  unlink(pathrds, recursive = TRUE, force = TRUE)
+  on.exit(unlink(pathrds, recursive = TRUE, force = TRUE))
   save_data(datasets, tempdir(), type = ".rds") # .rds
   expect_true(file.exists(pathrds)) # was created
-  unlink(pathrds, recursive = TRUE, force = TRUE)
   # .csv
   pathcsv <- paste0(tempdir(),"/datasets")
-  unlink(pathcsv, recursive = TRUE, force = TRUE)
+  on.exit(unlink(pathcsv, recursive = TRUE, force = TRUE))
   dir.create(pathcsv)
   save_data(datasets, pathcsv, type = ".csv") # .csv
   expect_true(all(ids %in% dir(pathcsv))) # dir has subdirs
@@ -61,7 +58,6 @@ testthat::test_that("> 1 dataset saved to format w/expected structure", {
       fext <- unique(tools::file_ext(list.files(dname))) # has file extension
       expect_equal(fext, "csv")
     })
-  unlink(pathcsv, recursive = TRUE, force = TRUE)
 })
 
 # name argument ---------------------------------------------------------------
@@ -71,9 +67,8 @@ testthat::test_that("control names with name", {
   d <- ants_L1
   id <- d$id
   pathrds <- paste0(tempdir(), "/mydata.rds")
-  unlink(pathrds, recursive = TRUE, force = TRUE)
+  on.exit(unlink(pathrds, recursive = TRUE, force = TRUE))
   save_data(d, tempdir(), type = ".rds", name = "mydata")
   expect_true(file.exists(pathrds))
-  unlink(pathrds, recursive = TRUE, force = TRUE)
 })
 
