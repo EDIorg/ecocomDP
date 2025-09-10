@@ -5,3 +5,4 @@ variable_name	Name of the measured variable.	character			NA	Not available
 mapped_system	System defining variable_name.	character			NA	Not available
 mapped_id	Identifier of the definition in mapped_system.	character			NA	Not available
 mapped_label	Label for variable_name in mapped_system.	character			NA	Not available
+variable_type	variable_type	character			NA	Not available

@@ -6,3 +6,6 @@ number_of_years_sampled	Number of years within the period of the study that samp
 std_dev_interval_betw_years	Standard deviation of the interval between sampling events.	numeric	nominalYear		NA	Not available
 max_num_taxa	Number of unique values in the taxon table.	numeric	number		NA	Not available
 geo_extent_bounding_box_m2	Area of the study location.	numeric	meter		NA	Not available
+dataset_level_bio_organization	Level of biological organization of trait dataset	character			NA	Not available
+observation_finest_level	Finest level of biological organization of trait dataset	character			NA	Not available
+number_of_variables	Number of trait variables measured	numeric			NA	Not available
