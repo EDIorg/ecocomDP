@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the eight ecocomDP tables and their contents. Four tables are required (observation, location, taxon, and dataset_summary). Each main table (observation, location, taxon) has an optional ancillary table for additional information. These are included because primary research typically contains related measurements which may be of interest during analysis. The dataset_summary table is populated from the observation table contents, and the variable_attribute table holds URIs and labels for external measurement dictionaries.
+This document describes the eight ecocomDP tables and their contents. Four tables are required (observation, location, taxon, and dataset_summary). Each main table (observation, location, taxon) has an optional ancillary table for additional information. These are included because primary research typically contains related measurements which may be of interest during analysis. The dataset_summary table is populated from the observation table contents, and the variable_mapping table holds URIs and labels for external measurement dictionaries.
 
 An example ecocomDP dataset is [here](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=193) and a graphic showing all tables and their relationships is available [here](https://github.com/EDIorg/ecocomDP/blob/master/model/table_visualization.md). 
 
@@ -17,7 +17,7 @@ An example ecocomDP dataset is [here](https://portal.edirepository.org/nis/mapbr
 | observation_ancillary  | no | observation | observation_id, variable_name  |
 | location_ancillary | no | location | location_id, datetime, variable_name |
 | taxon_ancillary | no | taxon | taxon_id, variable_name |
-| variable_attribute | no | observation, observation_ancillary, location_ancillary, taxon_ancillary | table_name, variable_name |
+| variable_mapping | no | observation, observation_ancillary, location_ancillary, taxon_ancillary | table_name, variable_name |
 
 ### Table: observation
 
@@ -141,7 +141,7 @@ Columns
 
 
 
-### Table: variable_attribute
+### Table: variable_mapping
 
 Description: Information linking a variable_name used in a table to an external definition.
 
