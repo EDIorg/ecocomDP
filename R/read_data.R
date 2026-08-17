@@ -25,7 +25,9 @@
 #'   \item validation_issues - List of validation issues. If the dataset fails any validation checks, then descriptions of each issue are listed here.
 #' }
 #' 
-#' @note This function may not work between 01:00 - 03:00 UTC on Wednesdays due to regular maintenance of the EDI Data Repository.
+#' @note Access to EDI repository endpoints requires authentication. Set the environment variable \code{EDI_API_KEY} (e.g., via \code{Sys.setenv(EDI_API_KEY = "your_key")} or in your \code{.Renviron} file).
+#' 
+#' This function may not work between 01:00 - 03:00 UTC on Wednesdays due to regular maintenance of the EDI Data Repository.
 #' 
 #' @details 
 #'     Validation checks are applied to each dataset ensuring it complies with the ecocomDP model. A warning is issued when any validation checks fail. All datasets are returned, even if they fail validation.
@@ -318,7 +320,7 @@ read_data_edi <- function(id, parse_datetime = TRUE) {
     formatString = './/dateTime/formatString')
   
   eml <- suppressMessages(
-    api_read_metadata(id, environment = config.environment))
+    EDIutils::read_metadata(id, env = config.environment))
   
   for (x in names(tbl_attrs)) {
     tblnames <- xml2::xml_text(xml2::xml_find_all(eml, './/dataset/dataTable/physical/objectName'))
@@ -342,7 +344,7 @@ read_data_edi <- function(id, parse_datetime = TRUE) {
     names(tbl_attrs),
     function(x) {
       res <- data.table::fread(
-        tbl_attrs[[x]]$url)
+        add_api_key(tbl_attrs[[x]]$url))
       res <- as.data.frame(res)
       return(res)
     })

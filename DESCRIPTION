@@ -87,6 +87,7 @@ Imports:
     RColorBrewer,
     data.table,
     dplyr,
+    EDIutils (>= 3.0.0),
     EML (>= 2.0.5),
     emld (>= 0.5.1),
     geosphere,
@@ -119,5 +120,5 @@ Suggests:
     sf (>= 1.0.9),
     maps
 VignetteBuilder: knitr
-RoxygenNote: 7.2.3
 Language: en-US
+Config/roxygen2/version: 8.0.0
