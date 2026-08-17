@@ -21,3 +21,5 @@
 ^postgreSQL$
 ^GBIF$
 pkgdown/
+^\.positai$
+^\.claude$

@@ -17,7 +17,10 @@
 #' @param user_domain (character) Domain (data repository) the \code{user_id} belongs to. Currently, EDI is supported.
 #' @param basis_of_record (character) An optional argument to facilitate creation of a Darwin Core record from this dataset using \code{convert_to_dwca()}. Use this to define the Darwin Core property \href{https://dwc.tdwg.org/terms/#dwc:basisOfRecord}{basisOfRecord} as \href{http://rs.tdwg.org/dwc/terms/HumanObservation}{HumanObservation} or \href{http://rs.tdwg.org/dwc/terms/MachineObservation}{MachineObservation}.
 #' @param url (character) URL to the publicly accessible directory containing ecocomDP tables, conversion script, and EML metadata. This argument supports direct download of the data entities by a data repository and is used for automated revisioning and publication.
-#'
+#' @note Access to EDI repository endpoints requires authentication. Set the environment variable \code{EDI_API_KEY} (e.g., via \code{Sys.setenv(EDI_API_KEY = "your_key")} or in your \code{.Renviron} file).
+#' 
+#' This function may not work between 01:00 - 03:00 UTC on Wednesdays due to regular maintenance of the EDI Data Repository.
+#' 
 #' @return An EML metadata file.
 #'
 #' @details This function creates an EML record for an ecocomDP by combining metadata from \code{source_id} with boiler-plate metadata describing the ecocomDP model. Changes to the \code{source_id} EML include:
@@ -204,7 +207,7 @@ create_eml <- function(path,
       stringr::str_replace_all(source_id, "\\.", "/"))
   }
 
-  eml_L0 <- EML::read_eml(url_parent)
+  eml_L0 <- EML::read_eml(add_api_key(url_parent))
   xml_L0 <- suppressMessages(read_eml(source_id))
   
   # Remove L0 elements that should not be inherited by the L1

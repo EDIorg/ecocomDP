@@ -8,7 +8,9 @@
 #' @param area (numeric) Bounding coordinates within which the data should originate. Accepted values are in decimal degrees and in the order: North, East, South, West. Any datasets with overlapping areas or contained points will be returned.
 #' @param boolean (character) Boolean operator to use when searching \code{text} and \code{taxa}. Supported operators are: "AND", "OR". Default is "AND". Note, other parameters used in a search are combined with an implicit "AND".
 #'     
-#' @note This function may not work between 01:00 - 03:00 UTC on Wednesdays due to regular maintenance of the EDI Data Repository.
+#' @note Access to EDI repository endpoints requires authentication. Set the environment variable \code{EDI_API_KEY} (e.g., via \code{Sys.setenv(EDI_API_KEY = "your_key")} or in your \code{.Renviron} file).
+#' 
+#' This function may not work between 01:00 - 03:00 UTC on Wednesdays due to regular maintenance of the EDI Data Repository.
 #'     
 #' @return (tbl_df, tbl, data.frame) Search results with these feilds:
 #'     \itemize{
@@ -74,14 +76,14 @@ search_data <- function(text, taxa, num_taxa, num_years, sd_years,
     load(paste0(tempdir(), "/ecocomDP_search_index.rda"))
     d <- ecocomDP_search_index
   } else {
-    newrev <- suppressMessages(api_list_data_package_revisions("edi", "759", filter = "newest"))
-    objurls <- suppressMessages(api_read_data_package(paste0("edi.759.", newrev)))
+    newrev <- suppressMessages(EDIutils::list_data_package_revisions("edi", 759, filter = "newest"))
+    objurls <- suppressMessages(EDIutils::read_data_package(paste0("edi.759.", newrev)))
     objurls <- stringr::str_subset(objurls, "/data/")
     objids <- stringr::str_extract(objurls, "(?<=/)[:alnum:]+$")
     objnames <- suppressMessages(
       lapply(objids, function(id) {
         Sys.sleep(1)
-        api_read_data_entity_name(id, package.id = paste0("edi.759.", newrev))
+        EDIutils::read_data_entity_name(packageId = paste0("edi.759.", newrev), entityId = id)
       })
     )
     objnames <- unlist(objnames)
@@ -89,7 +91,9 @@ search_data <- function(text, taxa, num_taxa, num_years, sd_years,
     objurls <- objurls[isdata]
     objurls <- objurls[!is.na(objurls)]
     for (objurl in objurls) {
-      load(url(objurl))
+      con <- url(add_api_key(objurl))
+      load(con)
+      close(con)
     }
     ecocomDP_search_index <- c(summary_data_edi, summary_data_neon)
     save(ecocomDP_search_index, 

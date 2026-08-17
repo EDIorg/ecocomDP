@@ -8,7 +8,9 @@
 #' @param user_id (character) Identifier of user account associated with the data repository in which this ecocomDP dataset will be archived. Only \code{user_id} from the EDI is currently supported.
 #' @param user_domain (character) Domain (data repository) the \code{user_id} belongs to. Currently, EDI is supported.
 #' 
-#' @details Reads in an ecocomDP dataset from a supported repository and converts it to a DwC-A package.
+#' @note Access to EDI repository endpoints requires authentication. Set the environment variable \code{EDI_API_KEY} (e.g., via \code{Sys.setenv(EDI_API_KEY = "your_key")} or in your \code{.Renviron} file).
+#' 
+#' This function may not work between 01:00 - 03:00 UTC on Wednesdays due to regular maintenance of the EDI Data Repository.
 #' 
 #' @return DwC-A tables, meta.xml, and corresponding EML metadata.
 #' 
@@ -479,7 +481,7 @@ make_eml_dwca <- function(path,
       stringr::str_replace_all(source_id, "\\.", "/"))
   }
   
-  eml_L1 <- EML::read_eml(url_parent)
+  eml_L1 <- EML::read_eml(add_api_key(url_parent))
   xml_L1 <- suppressMessages(
     read_eml(source_id))
   
@@ -505,9 +507,8 @@ make_eml_dwca <- function(path,
   xml_L0 <- suppressMessages(
     read_eml(grandparent.package.id))
   
-  
   eml_L0 <- suppressMessages(
-    EML::read_eml(url_grandparent))
+    EML::read_eml(add_api_key(url_grandparent)))
   
   # Create L2 EML -------------------------------------------------------------
   # This is not a full EML record, it is only the sections of EML that will be 

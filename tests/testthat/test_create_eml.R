@@ -6,6 +6,7 @@ library(ecocomDP)
 
 testthat::test_that("Creates valid EML", {
   testthat::skip_on_cran()
+  testthat::skip_if_not(rmarkdown::pandoc_available(), "Pandoc is required for create_eml text parsing")
   
   # Create directory with ecocomDP tables for create_eml()
   mypath <- paste0(tempdir(), "/data")

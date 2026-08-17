@@ -30,6 +30,30 @@ add_units <- function(L0_flat, res, unit) {
 
 
 
+# Append EDI API key to URL if present
+#
+# @param url (character) A URL to which EDI_API_KEY should be appended if set
+#
+# @return (character) URL with key parameter appended if EDI_API_KEY is present
+#
+add_api_key <- function(url) {
+  key <- Sys.getenv("EDI_API_KEY")
+  if (key == "") {
+    return(url)
+  }
+  if (grepl("\\?", url)) {
+    if (!grepl("([?&])key=", url)) {
+      url <- paste0(url, "&key=", key)
+    }
+  } else {
+    url <- paste0(url, "?key=", key)
+  }
+  return(url)
+}
+
+
+
+
 # Get provenance metadata
 #
 # @description
@@ -49,27 +73,9 @@ add_units <- function(L0_flat, res, unit) {
 #     
 #
 api_get_provenance_metadata <- function(package.id, environment = 'production'){
-  
   message(paste('Retrieving provenance metadata for ', package.id))
-  
   ping_edi()
-  
-  r <- httr::GET(
-    url = paste0(
-      url_env(environment),
-      '.lternet.edu/package/provenance/eml/',
-      stringr::str_replace_all(package.id, '\\.', '/')
-    )
-  )
-  
-  output <- httr::content(
-    r,
-    as = 'parsed',
-    encoding = 'UTF-8'
-  )
-  
-  output
-  
+  EDIutils::get_provenance_metadata(packageId = package.id, env = environment)
 }
 
 
@@ -102,82 +108,16 @@ api_get_provenance_metadata <- function(package.id, environment = 'production'){
 #     single revision number.
 #
 api_list_data_package_revisions <- function(scope, identifier, filter = NULL, environment = 'production'){
-  
   message(paste('Retrieving data package revisions for', 
                 paste(scope, '.', identifier)))
-  
   ping_edi()
-  
-  if (is.null(filter)){
-    
-    r <- httr::GET(
-      url = paste0(
-        url_env(environment),
-        '.lternet.edu/package/eml/',
-        scope,
-        '/',
-        identifier
-      )
-    )
-    
-    r <- httr::content(
-      r,
-      as = 'text',
-      encoding = 'UTF-8'
-    )
-    
-    output <- utils::read.csv(
-      text = c(
-        'revision',
-        r
-      ),
-      as.is = T
-    )
-    
-    output <- as.character(output$revision)
-    
-  } else if (filter == 'newest'){
-    
-    r <- httr::GET(
-      url = paste0(
-        url_env(environment),
-        '.lternet.edu/package/eml/',
-        scope,
-        '/',
-        identifier,
-        '?filter=newest'
-      )
-    )
-    
-    output <- httr::content(
-      r,
-      as = 'text',
-      encoding = 'UTF-8'
-    )
-    
-  } else if (filter == 'oldest'){
-    
-    r <- httr::GET(
-      url = paste0(
-        url_env(environment),
-        '.lternet.edu/package/eml/',
-        scope,
-        '/',
-        identifier,
-        '?filter=oldest'
-      )
-    )
-    
-    output <- httr::content(
-      r,
-      as = 'text',
-      encoding = 'UTF-8'
-    )
-    
-  }
-  
-  output
-  
+  res <- EDIutils::list_data_package_revisions(
+    scope = scope, 
+    identifier = as.numeric(identifier), 
+    filter = filter, 
+    env = environment
+  )
+  as.character(res)
 }
 
 
@@ -208,39 +148,13 @@ api_list_data_package_revisions <- function(scope, identifier, filter = NULL, en
 #     (character) Data entity name
 #
 api_read_data_entity_name <- function(package.id, identifier, environment = 'production'){
-  
   message(paste('Retrieving name of', package.id, identifier))
-  
   ping_edi()
-  
-  r <- httr::GET(
-    url = paste0(
-      url_env(environment),
-      '.lternet.edu/package/name/eml/',
-      stringr::str_replace_all(package.id, '\\.', '/'),
-      '/',
-      identifier
-    )
+  EDIutils::read_data_entity_name(
+    packageId = package.id, 
+    entityId = identifier, 
+    env = environment
   )
-  
-  r <- httr::content(
-    r,
-    as = 'text',
-    encoding = 'UTF-8'
-  )
-  
-  output <- as.character(
-    utils::read.csv(
-      text = c(
-        'identifier',
-        r
-      ),
-      as.is = T
-    )$identifier
-  )
-  
-  output
-  
 }
 
 
@@ -269,37 +183,9 @@ api_read_data_entity_name <- function(package.id, identifier, environment = 'pro
 #     (character) Reference URLs.
 #     
 api_read_data_package <- function(package.id, environment = 'production'){
-  
   message(paste('Retrieving resource map for', package.id))
-  
   ping_edi()
-  
-  r <- httr::GET(
-    url = paste0(
-      url_env(environment),
-      '.lternet.edu/package/eml/',
-      stringr::str_replace_all(package.id, '\\.', '/')
-    )
-  )
-  
-  r <- httr::content(
-    r,
-    as = 'text',
-    encoding = 'UTF-8'
-  )
-  
-  output <- as.character(
-    utils::read.csv(
-      text = c(
-        'identifier',
-        r
-      ),
-      as.is = T
-    )$identifier
-  )
-  
-  output
-  
+  EDIutils::read_data_package(packageId = package.id, env = environment)
 }
 
 
@@ -326,27 +212,9 @@ api_read_data_package <- function(package.id, environment = 'production'){
 #     (character) The canonical Digital Object Identifier.
 #
 api_read_data_package_doi <- function(package.id, environment = 'production'){
-  
   message(paste('Retrieving DOI for', package.id))
-  
   ping_edi()
-  
-  r <- httr::GET(
-    url = paste0(
-      url_env(environment),
-      '.lternet.edu/package/doi/eml/',
-      stringr::str_replace_all(package.id, '\\.', '/')
-    )
-  )
-  
-  output <- httr::content(
-    r,
-    as = 'text',
-    encoding = 'UTF-8'
-  )
-  
-  output
-  
+  EDIutils::read_data_package_doi(packageId = package.id, env = environment)
 }
 
 
@@ -374,27 +242,9 @@ api_read_data_package_doi <- function(package.id, environment = 'production'){
 #     
 #
 api_read_metadata <- function(package.id, environment = 'production'){
-  
   message(paste('Retrieving EML for data package', package.id))
-  
   ping_edi()
-  
-  r <- httr::GET(
-    url = paste0(
-      url_env(environment),
-      '.lternet.edu/package/metadata/eml/',
-      stringr::str_replace_all(package.id, '\\.', '/')
-    )
-  )
-  
-  eml <- httr::content(
-    r,
-    as = 'parsed',
-    encoding = 'UTF-8'
-  )
-  
-  eml
-  
+  EDIutils::read_metadata(packageId = package.id, env = environment)
 }
 
 
@@ -1131,8 +981,9 @@ parse_delim <- function(x){
 # Is the EDI Data Repository accessible?
 #
 ping_edi <- function() {
+  url <- add_api_key("https://pasta.lternet.edu/package/eml/edi/759")
   r <- tryCatch(
-    httr::RETRY("GET", url = "https://pasta.lternet.edu/package/eml/edi/759", quiet = TRUE), # Warn if EDI is down
+    httr::RETRY("GET", url = url, quiet = TRUE), # Warn if EDI is down
     error = function(e) FALSE,
     warning = function(w) FALSE
   )
@@ -1146,6 +997,7 @@ ping_edi <- function() {
     )
   }
 }
+
 
 
 
@@ -1208,6 +1060,7 @@ get_previous_version <- function(package.id) {
 
 
 
+
 # Increment data package version number
 #
 # @param package.id (character) Data package identifier
@@ -1246,6 +1099,7 @@ increment_package_version <- function(package.id) {
 
 
 
+
 # Is empty nodeset?
 #
 # @param nodeset (xml_nodeset) Any nodeset returned by the xml2 library
@@ -1256,6 +1110,7 @@ is_empty_nodeset <- function(nodeset) {
   res <- length(nodeset) == 0
   return(res)
 }
+
 
 
 
@@ -1304,6 +1159,7 @@ join_obs_loc_tax <- function(dt_obs, dt_loc, dt_tax) {
 
 
 
+
 # Read ecocomDP criteria
 #
 # @return (data.frame) ecocomDP criteria
@@ -1313,6 +1169,7 @@ read_criteria <- function() {
     system.file('extdata', 'validation_criteria.txt', package = 'ecocomDP'))
   return(res)
 }
+
 
 
 
@@ -1355,6 +1212,7 @@ read_eml <- function(package.id) {
   return(eml)
   
 }
+
 
 
 
@@ -1491,6 +1349,7 @@ read_table_dataset_summary <- function(package.id){
         eml,
         './/dataset/dataTable/physical/distribution/online/url'))[
           stringr::str_detect(entity_name, 'dataset_summary')]
+    entity_url <- add_api_key(entity_url)
     if (entity_delimiter == ',') {
       output <- data.table::fread(entity_url)
     } else if (entity_delimiter == '\\t') {

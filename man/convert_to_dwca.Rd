@@ -35,8 +35,10 @@ DwC-A tables, meta.xml, and corresponding EML metadata.
 \description{
 Convert a dataset to the Darwin Core Archive format
 }
-\details{
-Reads in an ecocomDP dataset from a supported repository and converts it to a DwC-A package.
+\note{
+Access to EDI repository endpoints requires authentication. Set the environment variable \code{EDI_API_KEY} (e.g., via \code{Sys.setenv(EDI_API_KEY = "your_key")} or in your \code{.Renviron} file).
+
+This function may not work between 01:00 - 03:00 UTC on Wednesdays due to regular maintenance of the EDI Data Repository.
 }
 \examples{
 \dontrun{

@@ -13,6 +13,11 @@ View the collection of dataset- and attribute-level annotations
 \details{
 Use the search field to find the annotation terms and URIs.
 }
+\note{
+Access to EDI repository endpoints requires authentication. Set the environment variable \code{EDI_API_KEY} (e.g., via \code{Sys.setenv(EDI_API_KEY = "your_key")} or in your \code{.Renviron} file).
+
+This function may not work between 01:00 - 03:00 UTC on Wednesdays due to regular maintenance of the EDI Data Repository.
+}
 \examples{
 \dontrun{
 View(annotation_dictionary())
