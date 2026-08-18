@@ -22,6 +22,21 @@ library(ecocomDP)
 library(ecocomDP)
 ```
 
+## Authentication
+
+Accessing datasets from the Environmental Data Initiative (EDI) Data Repository requires an EDI API key. Set the `EDI_API_KEY` environment variable prior to calling search or read functions:
+
+```r
+# Persistent (recommended - add to ~/.Renviron and restart R):
+# usethis::edit_r_environ()
+# EDI_API_KEY="your_api_key_here"
+
+# Or per-session:
+Sys.setenv(EDI_API_KEY = "your_api_key_here")
+```
+
+To obtain a key, visit the [EDI Identity and Access Manager (IAM)](https://auth.edirepository.org/) and navigate to the [Access Keys](https://auth.edirepository.org/auth/ui/key) page.
+
 ## Search
 
 Find data of interest by searching on one or more query parameters. 

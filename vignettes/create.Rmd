@@ -20,6 +20,8 @@ Below is an example function that reads a source dataset from the Environmental 
 
 Use `view_diagram()` and `view_descriptions()` for an overview of ecocomDP table relationships and requirements.
 
+> **Note**: Reading source datasets or metadata from the EDI Data Repository requires an EDI API key. Configure the `EDI_API_KEY` environment variable in your `.Renviron` or active R session (obtainable from the [EDI Identity and Access Manager Access Keys](https://auth.edirepository.org/auth/ui/key) page).
+
 ```{r setup}
 library(ecocomDP)
 ```
