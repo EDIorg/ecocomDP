@@ -37,6 +37,40 @@ Get the latest development version:
 remotes::install_github("EDIorg/ecocomDP", ref = "development")
 ```
 
+## Authentication
+
+Accessing data from the Environmental Data Initiative (EDI) repository requires an API key.
+
+### 1. Obtain an EDI API Key
+1. Visit the [EDI Identity and Access Manager (IAM)](https://auth.edirepository.org/) and log in (or create a free account).
+2. Navigate to the [Access Keys](https://auth.edirepository.org/auth/ui/key) page.
+3. Generate a new API key (or copy an existing key).
+
+### 2. Configure `EDI_API_KEY` in R
+
+Configure your API key using any of the following methods:
+
+**Option A: Persistent Configuration (Recommended)**  
+Add `EDI_API_KEY` to your user-level `.Renviron` file so it is loaded automatically in every R session:
+```{r eval=FALSE}
+# Open your .Renviron file:
+usethis::edit_r_environ()
+
+# Add this line, save the file, and restart R:
+EDI_API_KEY="your_api_key_here"
+```
+
+**Option B: In-Session via `Sys.setenv()`**  
+Set the key in your current R session before making API calls:
+```{r eval=FALSE}
+Sys.setenv(EDI_API_KEY = "your_api_key_here")
+```
+
+**Option C: In-Session via `EDIutils`**  
+```{r eval=FALSE}
+EDIutils::login(key = "your_api_key_here")
+```
+
 ## Usage
 
 * [Create ecocomDP Data](https://ediorg.github.io/ecocomDP/articles/create.html)
