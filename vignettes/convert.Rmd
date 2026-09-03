@@ -80,7 +80,7 @@ convert_to_dwca(
 
 ```
 
-And there you have it! The DwC-A tables and metadata ready for publication in [GBIF](https://www.gbif.org/)!
+And there you have it! The DwC-A tables and metadata ready for publication in GBIF!
 
 ```{r eval=FALSE}
 dir(mypath)
