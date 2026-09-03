@@ -1369,10 +1369,10 @@ plot_taxa_abund <- function(data,
 #' flattened_data2 <- dataset2 %>% flatten_data()
 #' stacked_data <- bind_rows(flattened_data1,flattened_data2)
 #' plot_sites(stacked_data)
-#' }
-#'
+#' 
 #' # Plot the example dataset
 #' plot_sites(ants_L1)
+#' }
 #'
 plot_sites <- function(
     data,

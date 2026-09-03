@@ -6,6 +6,8 @@ library(ecocomDP)
 
 testthat::test_that("Search index is saved for future calls in session", {
   testthat::skip_on_cran()
+  testthat::skip_if_offline()
+  testthat::skip_if(Sys.getenv("EDI_API_KEY") == "", "EDI_API_KEY is not set")
   unlink(paste0(tempdir(), "/ecocomDP_search_index.rda"))
   # Doesn't exist locally at time of first call
   is_local <- "ecocomDP_search_index.rda" %in% dir(tempdir())
@@ -20,6 +22,8 @@ testthat::test_that("Search index is saved for future calls in session", {
 
 testthat::test_that("Search results have a general format", {
   testthat::skip_on_cran()
+  testthat::skip_if_offline()
+  testthat::skip_if(Sys.getenv("EDI_API_KEY") == "", "EDI_API_KEY is not set")
   r <- search_data()
   # Is a table with expected columns and classes
   expect_true(is.data.frame(r))
@@ -35,6 +39,8 @@ testthat::test_that("Search results have a general format", {
 
 testthat::test_that("Some info is expected by all sources", {
   testthat::skip_on_cran()
+  testthat::skip_if_offline()
+  testthat::skip_if(Sys.getenv("EDI_API_KEY") == "", "EDI_API_KEY is not set")
   r <- search_data()
   expect_true(all(!is.na(r$source)))
   expect_true(all(!is.na(r$id)))
@@ -47,6 +53,8 @@ testthat::test_that("Some info is expected by all sources", {
 
 testthat::test_that("Some info is source specific", {
   testthat::skip_on_cran()
+  testthat::skip_if_offline()
+  testthat::skip_if(Sys.getenv("EDI_API_KEY") == "", "EDI_API_KEY is not set")
   r <- search_data()
   r_edi<- r[is_edi(r$id), ]
   r_neon<- r[is_neon(r$id), ]
@@ -71,6 +79,8 @@ testthat::test_that("Some info is source specific", {
 
 testthat::test_that("Arguments control search patterns", {
   testthat::skip_on_cran()
+  testthat::skip_if_offline()
+  testthat::skip_if(Sys.getenv("EDI_API_KEY") == "", "EDI_API_KEY is not set")
   load(paste0(tempdir(), "/ecocomDP_search_index.rda"))
   summary_data <- ecocomDP_search_index
   # text arg searches across titles, abstracts, descriptions

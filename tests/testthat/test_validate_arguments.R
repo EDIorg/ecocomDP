@@ -325,6 +325,8 @@ testthat::test_that("read_data()", {
     regexp = "Input 'id' should be character.")
   testthat::test_that("valid id", {
     testthat::skip_on_cran()
+    testthat::skip_if_offline()
+    testthat::skip_if(Sys.getenv("EDI_API_KEY") == "", "EDI_API_KEY is not set")
     expect_error(                                                             # exists
       validate_arguments("read_data", as.list(list(id = "edi.x.x"))), 
       regexp = "Invalid identifier 'edi.x.x' cannot be read.")
@@ -352,6 +354,8 @@ testthat::test_that("read_data()", {
   # site
   testthat::test_that("Valid site", {
     testthat::skip_on_cran()
+    testthat::skip_if_offline()
+    testthat::skip_if(Sys.getenv("EDI_API_KEY") == "", "EDI_API_KEY is not set")
     expect_null(                                                                 # site exists for id
       validate_arguments("read_data", as.list(list(id = "neon.ecocomdp.20120.001.001",
                                                    site = c("ARIK")))))

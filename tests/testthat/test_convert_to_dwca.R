@@ -6,6 +6,8 @@ library(ecocomDP)
 
 testthat::test_that("Creates tables, meta, and valid EML", {
   testthat::skip_on_cran()
+  testthat::skip_if_offline()
+  testthat::skip_if(Sys.getenv("EDI_API_KEY") == "", "EDI_API_KEY is not set")
   
   # Create directory for DwC-A outputs
   mypath <- paste0(tempdir(), "/data")
