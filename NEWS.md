@@ -1,11 +1,19 @@
-# ecocomDP 1.X.X
+# ecocomDP 1.4.0
+
+## Enhancements
+* **EDI API Key Authentication**: Migrated PASTA API calls to `EDIutils (>= 3.0.0)` with support for EDI API Key authentication (`EDI_API_KEY` environment variable) across `search_data()`, `read_data()`, `convert_to_dwca()`, `create_eml()`, and `annotation_dictionary()`. Added documentation and instructions for obtaining keys from the EDI Identity and Access Manager (IAM) in README and vignettes. ([#180](https://github.com/EDIorg/ecocomDP/issues/180))
 
 ## Fixes
-* Test Suite Failures and Warnings [#172](https://github.com/EDIorg/ecocomDP/issues/173)
-* Remove mapped_id URI resolution check [#173](https://github.com/EDIorg/ecocomDP/issues/173)
+* Guarded live tests and `ping_edi()` to respect CRAN checks and missing credential environments, resolving test failures and significantly reducing test suite runtime. ([#180](https://github.com/EDIorg/ecocomDP/issues/180))
+* Resolved `dplyr::last_col` function name collision in `flatten_data()`.
+* Addressed test suite failures/warnings and ensured proper test cleanup with `on.exit()`. ([#172](https://github.com/EDIorg/ecocomDP/issues/172))
+* Removed `mapped_id` URI resolution check from validation routines. ([#173](https://github.com/EDIorg/ecocomDP/issues/173))
+* Added delay between API calls and validated entity types to prevent rate limiting.
+* Wrapped `plot_sites(ants_L1)` documentation example in `\dontrun{}` to ensure clean CRAN checks when suggested packages are absent.
 
 ## Documentation
-* Consolidate duplicated model documentation [#166](https://github.com/EDIorg/ecocomDP/issues/166)
+* Consolidated duplicated model documentation and schematics into the `model/` directory. ([#166](https://github.com/EDIorg/ecocomDP/issues/166))
+* Updated vignettes (`use.Rmd`, `create.Rmd`) and `README.Rmd` with EDI IAM authentication instructions. ([#180](https://github.com/EDIorg/ecocomDP/issues/180))
 
 
 # ecocomDP 1.3.2
