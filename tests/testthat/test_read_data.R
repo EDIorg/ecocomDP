@@ -4,6 +4,8 @@ context("read_data()")
 
 testthat::test_that("Reads from source APIs", {
   testthat::skip_on_cran()
+  testthat::skip_if_offline()
+  testthat::skip_if(Sys.getenv("EDI_API_KEY") == "", "EDI_API_KEY is not set")
   
   criteria <- read_criteria()
   # From EDI

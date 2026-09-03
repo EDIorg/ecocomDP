@@ -981,6 +981,9 @@ parse_delim <- function(x){
 # Is the EDI Data Repository accessible?
 #
 ping_edi <- function() {
+  if (identical(tolower(Sys.getenv("NOT_CRAN")), "false") || Sys.getenv("EDI_API_KEY") == "") {
+    return(invisible(NULL))
+  }
   url <- add_api_key("https://pasta.lternet.edu/package/eml/edi/759")
   r <- tryCatch(
     httr::RETRY("GET", url = url, quiet = TRUE), # Warn if EDI is down
