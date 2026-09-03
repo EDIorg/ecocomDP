@@ -70,7 +70,7 @@ This function creates an EML record for an ecocomDP by combining metadata from \
         \item \strong{<annotations>} Adds boilerplate annotations describing the ecocomDP at the dataset, entity, and entity attribute levels.
     }
     
-    Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. \href{https://www.itis.gov/}{ITIS}, \href{https://www.marinespecies.org/}{WORMS}, or \href{https://gbif.org}{GBIF}), will have their full taxonomic hierarchy expanded, including any common names for each level.
+    Taxa listed in the taxon table, and resolved to one of the supported authority systems (i.e. ITIS, WORMS, or GBIF), will have their full taxonomic hierarchy expanded, including any common names for each level.
 }
 \note{
 Access to EDI repository endpoints requires authentication. Set the environment variable \code{EDI_API_KEY} (e.g., via \code{Sys.setenv(EDI_API_KEY = "your_key")} or in your \code{.Renviron} file).

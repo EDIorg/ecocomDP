@@ -55,7 +55,7 @@ A data frame with 2931 rows and 45 variables:
 }
 }
 \source{
-\url{https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-hfr&identifier=118&revision=33}
+Data package knb-lter-hfr.118.33 from the Harvard Forest Data Archive and Environmental Data Initiative.
 }
 \usage{
 ants_L0_flat

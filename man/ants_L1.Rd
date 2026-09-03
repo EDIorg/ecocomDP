@@ -8,13 +8,13 @@
 A list of:
 \describe{
   \item{id}{The dataset identifier}
-  \item{metadata}{See source url for metadata}
+  \item{metadata}{Metadata for data package edi.193.5}
   \item{tables}{A list of data frames, each an ecocomDP table}
   \item{validation_issues}{Is NULL because there are no validation issues for this dataset}
 }
 }
 \source{
-\url{https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=193&revision=5}
+Data package edi.193.5 from the Environmental Data Initiative.
 }
 \usage{
 ants_L1

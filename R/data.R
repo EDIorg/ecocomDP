@@ -50,7 +50,7 @@
 #'   \item{max_num_taxa}{number of unique taxa in this dataset}
 #'   \item{geo_extent_bounding_box_m2}{the study area in meters squared}
 #' }
-#' @source \url{https://portal.edirepository.org/nis/mapbrowse?scope=knb-lter-hfr&identifier=118&revision=33}
+#' @source Data package knb-lter-hfr.118.33 from the Harvard Forest Data Archive and Environmental Data Initiative.
 "ants_L0_flat"
 
 
@@ -67,9 +67,9 @@
 #' @format A list of:
 #' \describe{
 #'   \item{id}{The dataset identifier}
-#'   \item{metadata}{See source url for metadata}
+#'   \item{metadata}{Metadata for data package edi.193.5}
 #'   \item{tables}{A list of data frames, each an ecocomDP table}
 #'   \item{validation_issues}{Is NULL because there are no validation issues for this dataset}
 #' }
-#' @source \url{https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=193&revision=5}
+#' @source Data package edi.193.5 from the Environmental Data Initiative.
 "ants_L1"

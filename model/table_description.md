@@ -4,7 +4,7 @@
 
 This document describes the 8 ecocomDP tables and their contents. Four tables are required (observation, location, taxon, and dataset_summary). Each main table (observation, location, taxon) has an optional ancillary table for additional information. These are included because primary research typically contain related measurements which may be of interest during analysis. The dataset_summary table is populated from the observation table contents, and the variable_mapping table holds URIs and labels for external measurement dictionaries.
 
-An example ecocomDP dataset is [here](https://portal.edirepository.org/nis/mapbrowse?scope=edi&identifier=193) and a graphic showing all tables and their relationships is available [here](https://github.com/EDIorg/ecocomDP/blob/master/model/table_visualization.md). 
+An example ecocomDP dataset is available in the EDI Data Repository (package ID: edi.193) and a graphic showing all tables and their relationships is available [here](https://github.com/EDIorg/ecocomDP/blob/master/model/table_visualization.md). 
 
 ## Tables
 
